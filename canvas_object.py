@@ -10,4 +10,7 @@ class CanvasObject(object):
 		"""
 		self._requester = requester
 		self._headers = headers
-		self.attributes = attributes
+		
+		# Initialize object attributes
+		for attribute, value in attributes.iteritems():
+			self.__setattr__(attribute, value)
