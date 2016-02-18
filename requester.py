@@ -1,3 +1,5 @@
+import requests
+
 class Requester(object):
 	"""
 	Responsible for handling HTTP requests.
@@ -11,8 +13,13 @@ class Requester(object):
 		self.base_url = base_url
 		self.access_token = access_token
 
+		# Try to establish an initial connection to Canvas
+		response = self.request('GET', 'accounts')
 
-	def request(method, endpoint, **kwargs):
+		if response.status_code != 200:
+			raise Exception('Invalid base URL or access token.')
+	
+	def request(self, method, endpoint, **kwargs):
 		"""Makes a request to the Canvas API.
 
 		:param method: string
@@ -20,21 +27,22 @@ class Requester(object):
 		"""
 		
 		if method == 'GET':
-			response = _get_request(self.base_url + endpoint, kwargs)
+			response = self._get_request(self.base_url + endpoint, kwargs)
 
 		if method == 'POST':
-			response = _post_request(self.base_url + endpoint, kwargs)
+			response = self._post_request(self.base_url + endpoint, kwargs)
 
+		return response
 
-	def _get_request(url, data):
+	def _get_request(self, url, data):
 		"""Issue a GET request to the specified endpoint with the data provided.
 		
 		:param url: string
 		:param data: dict
 		"""
-		pass
+		return requests.get(url + '?access_token=%s' % (self.access_token))
 
-	def _post_request(url, data):
+	def _post_request(self, url, data):
 		"""Issue a POST request to the specified endpoint with the data provided.
 		
 		:param url: string
