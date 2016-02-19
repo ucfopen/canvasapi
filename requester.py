@@ -20,33 +20,58 @@ class Requester(object):
         if response.status_code != 200:
             raise Exception('Invalid base URL or access token.')
 
-    def request(self, method, endpoint, **kwargs):
-        """Makes a request to the Canvas API.
+    def request(self, method, endpoint, headers={}, **kwargs):
+        """
+        Makes a request to the Canvas API.
 
         :param method: string
         :param endpoint: string
+        :param headers: dict
         """
+        full_url = self.base_url + endpoint
+
+        auth_header = {'Authorization': self.access_token}
+        headers.update(auth_header)
 
         if method == 'GET':
-            response = self._get_request(self.base_url + endpoint, kwargs)
+            response = self._get_request(full_url, headers, kwargs)
 
-        if method == 'POST':
-            response = self._post_request(self.base_url + endpoint, kwargs)
+        elif method == 'POST':
+            response = self._post_request(full_url, headers, kwargs)
+
+        elif method == 'DELETE':
+            response = self._delete_request(full_url, headers, kwargs)
 
         return response
 
-    def _get_request(self, url, data):
-        """Issue a GET request to the specified endpoint with the data provided.
+    def _get_request(self, url, headers, params={}):
+        """
+        Issue a GET request to the specified endpoint with the data provided.
 
         :param url: string
-        :param data: dict
+        :pararm headers: dict
+        :param params: dict
         """
-        return requests.get(url + '?access_token=%s' % (self.access_token))
+        return requests.get(url, headers=headers, params=params)
 
-    def _post_request(self, url, data):
-        """Issue a POST request to the specified endpoint with the data provided.
+    def _post_request(self, url, headers, params={}, data={}):
+        """
+        Issue a POST request to the specified endpoint with the data provided.
 
         :param url: string
+        :pararm headers: dict
+        :param params: dict
         :param data: dict
         """
-        pass
+        return requests.post(url, headers=headers, params=params, data=data)
+
+    def _delete_request(self, url, headers, params={}, data={}):
+        """
+        Issue a GET request to the specified endpoint with the data provided.
+
+        :param url: string
+        :pararm headers: dict
+        :param params: dict
+        :param data: dict
+        """
+        return requests.delete(url, headers=headers, params=params, data=data)

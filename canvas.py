@@ -15,7 +15,8 @@ class Canvas(object):
         self.__requester = Requester(base_url, access_token)
 
     def get_course(self, id):
-        """Retrieve a course by its ID.
+        """
+        Retrieve a course by its ID.
 
         :calls: `GET /courses/:id <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>
         :param id: int
@@ -25,5 +26,4 @@ class Canvas(object):
             'GET',
             'courses/%s' % (id)
         )
-
-        return Course(self.__requester, None, response.json())
+        return Course(self.__requester, response.json())
