@@ -30,13 +30,14 @@ class Requester(object):
         """
         full_url = self.base_url + endpoint
 
-        auth_header = {'Authorization': self.access_token}
+        auth_header = {'Authorization': 'Bearer ' + self.access_token}
         headers.update(auth_header)
 
         if method == 'GET':
             response = self._get_request(full_url, headers, kwargs)
 
         elif method == 'POST':
+            import pdb; pdb.set_trace()
             response = self._post_request(full_url, headers, kwargs)
 
         elif method == 'DELETE':
@@ -54,7 +55,7 @@ class Requester(object):
         """
         return requests.get(url, headers=headers, params=params)
 
-    def _post_request(self, url, headers, params={}, data={}):
+    def _post_request(self, url, headers, data={}):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
@@ -63,9 +64,10 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        return requests.post(url, headers=headers, params=params, data=data)
+        import pdb; pdb.set_trace()
+        return requests.post(url, headers=headers, data=data)
 
-    def _delete_request(self, url, headers, params={}, data={}):
+    def _delete_request(self, url, headers, data={}):
         """
         Issue a DELETE request to the specified endpoint with the data provided.
 
@@ -74,4 +76,4 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        return requests.delete(url, headers=headers, params=params, data=data)
+        return requests.delete(url, headers=headers, data=data)

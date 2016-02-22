@@ -3,7 +3,6 @@ import re
 
 DATE_PATTERN = re.compile('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')
 
-
 class CanvasObject(object):
     """
     Base class for all classes representing objects returned by the API.
