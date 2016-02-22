@@ -1,5 +1,6 @@
 """A collection of useful methods."""
 
+
 def combine_kwargs(**kwargs):
     """
     Combines a list of keyword arguments into a single dictionary.
