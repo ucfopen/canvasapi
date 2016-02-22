@@ -1,6 +1,5 @@
-from pycanvas import Requester
-from pycanvas import Course
-from pycanvas import util
+from pycanvas import Course, Requester
+from pycanvas.util import combine_kwargs
 
 
 class Canvas(object):
@@ -23,13 +22,11 @@ class Canvas(object):
         :param account_id: int
         :rtype: :class:`pycanvas.course.Course`
         """
-        data = util.combine_kwargs(**kwargs)
-
         response = self.__requester.request(
             'POST',
             'accounts/%s/courses' % (account_id),
             account_id=account_id,
-            **data
+            **combine_kwargs(**kwargs)
         )
         return Course(self.__requester, response.json())
 
