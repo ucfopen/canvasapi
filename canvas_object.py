@@ -13,7 +13,9 @@ class CanvasObject(object):
         :param requester: Requester
         """
         self._requester = requester
+        self.set_attributes(attributes)
 
+    def set_attributes(self, attributes):
         # Initialize object attributes
         for attribute, value in attributes.iteritems():
             self.__setattr__(attribute, value)

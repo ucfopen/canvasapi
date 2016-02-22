@@ -42,6 +42,9 @@ class Requester(object):
         elif method == 'DELETE':
             response = self._delete_request(full_url, headers, kwargs)
 
+        elif method == 'PUT':
+            response = self._put_request(full_url, headers, kwargs)
+
         return response
 
     def _get_request(self, url, headers, params={}):
@@ -75,3 +78,14 @@ class Requester(object):
         :param data: dict
         """
         return requests.delete(url, headers=headers, data=data)
+
+    def _put_request(self, url, headers, data={}):
+        """
+        Issue a PUT request to the specified endpoint with the data provided.
+
+        :param url: string
+        :pararm headers: dict
+        :param params: dict
+        :param data: dict
+        """
+        return requests.put(url, headers=headers, data=data)
