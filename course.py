@@ -12,7 +12,8 @@ class Course(CanvasObject):
             'courses/%s' % (self.id),
             event="conclude"
         )
-        return response
+        response_json = response.json()
+        return response_json.get('conclude', False)
 
     def delete(self):
         """
@@ -23,4 +24,5 @@ class Course(CanvasObject):
             'courses/%s' % (self.id),
             event="delete"
         )
-        return response
+        response_json = response.json()
+        return response_json.get('delete', False)
