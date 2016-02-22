@@ -67,7 +67,7 @@ class Requester(object):
 
     def _delete_request(self, url, headers, params={}, data={}):
         """
-        Issue a GET request to the specified endpoint with the data provided.
+        Issue a DELETE request to the specified endpoint with the data provided.
 
         :param url: string
         :pararm headers: dict
