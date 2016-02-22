@@ -2,6 +2,7 @@ from pycanvas import Requester
 from pycanvas import Course
 from pycanvas import util
 
+
 class Canvas(object):
     """
     The main class to be instantiated to provide access to Canvas's API.
@@ -24,7 +25,7 @@ class Canvas(object):
         """
         kwargs['account_id'] = account_id
         data = util.combine_kwargs(**kwargs)
-        
+
         response = self.__requester.request(
             'POST',
             'accounts/%s/courses' % (account_id),

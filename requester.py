@@ -37,7 +37,6 @@ class Requester(object):
             response = self._get_request(full_url, headers, kwargs)
 
         elif method == 'POST':
-            import pdb; pdb.set_trace()
             response = self._post_request(full_url, headers, kwargs)
 
         elif method == 'DELETE':
@@ -64,7 +63,6 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        import pdb; pdb.set_trace()
         return requests.post(url, headers=headers, data=data)
 
     def _delete_request(self, url, headers, data={}):
