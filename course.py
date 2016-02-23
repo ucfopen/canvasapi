@@ -8,7 +8,8 @@ class Course(CanvasObject):
         """
         Marks the course as concluded.
 
-        :calls: `DELETE /api/v1/courses/:id <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
+        :calls: `DELETE /api/v1/courses/:id 
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
         :rtype: bool: True if the course was concluded, False otherwise.
         """
         response = self._requester.request(
@@ -23,7 +24,8 @@ class Course(CanvasObject):
         """
         Permanently deletes the course.
 
-        :calls: `DELETE /api/v1/courses/:id <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
+        :calls: `DELETE /api/v1/courses/:id 
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
         :rtype: bool: True if the course was deleted, False otherwise.
         """
         response = self._requester.request(
@@ -38,7 +40,8 @@ class Course(CanvasObject):
         """
         Updates the course.
 
-        :calls: `PUT /api/v1/courses/:id <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`
+        :calls: `PUT /api/v1/courses/:id 
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`
         :rtype: bool: True if the course was updated, False otherwise.
         """
         try:

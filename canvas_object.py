@@ -11,12 +11,17 @@ class CanvasObject(object):
     def __init__(self, requester, attributes):
         """
         :param requester: Requester
+        :param attributes: dict
         """
         self._requester = requester
         self.set_attributes(attributes)
 
     def set_attributes(self, attributes):
-        # Initialize object attributes
+        """
+        Load this object with attributes.
+
+        :param attributes: dict
+        """
         for attribute, value in attributes.iteritems():
             self.__setattr__(attribute, value)
 
