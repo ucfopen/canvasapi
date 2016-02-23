@@ -28,4 +28,3 @@ class User(CanvasObject):
             'users/%s/page_views' % (self.id)
         )
         return response.json()
-
