@@ -1,5 +1,6 @@
 from pycanvas import Course, Requester
 from pycanvas.util import combine_kwargs
+from pycanvas.exceptions import ResourceDoesNotExist
 
 
 class Canvas(object):

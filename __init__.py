@@ -1,3 +1,4 @@
+import exceptions
 from requester import Requester
 from canvas_object import CanvasObject
 from course import Course

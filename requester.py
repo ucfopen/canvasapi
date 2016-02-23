@@ -1,3 +1,4 @@
+from pycanvas.exceptions import CanvasException, ResourceDoesNotExist
 import requests
 
 
@@ -18,7 +19,7 @@ class Requester(object):
         response = self.request('GET', 'accounts')
 
         if response.status_code != 200:
-            raise Exception('Invalid base URL or access token.')
+            raise CanvasException('Failed to connect to API. Verify base_url and access_token.')
 
     def request(self, method, endpoint, headers={}, **kwargs):
         """
@@ -44,6 +45,9 @@ class Requester(object):
 
         elif method == 'PUT':
             response = self._put_request(full_url, headers, kwargs)
+
+        if response.status_code == 404:
+            raise ResourceDoesNotExist(response.json())
 
         return response
 
