@@ -1,4 +1,4 @@
-from pycanvas import Course, Requester
+from pycanvas import Course, Requester, User
 from pycanvas.util import combine_kwargs
 
 
@@ -43,3 +43,17 @@ class Canvas(object):
             'courses/%s' % (id)
         )
         return Course(self.__requester, response.json())
+
+    def get_user(self, id):
+        """
+        Retrieve a user by their ID. 
+
+        :calls: `GET /users/:id <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`
+        :param :id int
+        :rtype: :class: `pycanvas.user.User`
+        """
+        response = self.__requester.request(
+            'GET',
+            'users/%s' % (id)
+        )
+        return User(self.__requester, response.json())
