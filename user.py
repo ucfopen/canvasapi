@@ -28,3 +28,6 @@ class User(CanvasObject):
             'users/%s/page_views' % (self.id)
         )
         return response.json()
+
+    def __str__(self):
+        return "%s" % (self.name)
