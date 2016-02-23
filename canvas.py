@@ -44,16 +44,25 @@ class Canvas(object):
         )
         return Course(self.__requester, response.json())
 
-    def get_user(self, id):
+    def get_user(self, id, id_type=None):
         """
-        Retrieve a user by their ID. 
+        Retrieve a user by their ID. id_type denotes which endpoint to try as there are
+        several different ids that can pull the same user record from Canvas. 
 
         :calls: `GET /users/:id <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`
-        :param :id int
+        :param :id str
+        :param :id_type str
         :rtype: :class: `pycanvas.user.User`
         """
-        response = self.__requester.request(
-            'GET',
-            'users/%s' % (id)
-        )
+        print id_type
+        if id_type:
+            response = self.__requester.request(
+                'GET',
+                'users/%s:%s' % (id_type, id)
+            )
+        else:
+            response = self.__requester.request(
+                'GET',
+                'users/%s' % (id)
+            )
         return User(self.__requester, response.json())
