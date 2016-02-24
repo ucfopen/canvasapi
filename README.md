@@ -1,5 +1,5 @@
 # PyCanvas
-PyCanvas is a python package that allows for simple access to the Instructure Canvas API.
+PyCanvas is a Python package that allows for simple access to the Instructure Canvas API.
 
 ## Installation
 (TODO)
