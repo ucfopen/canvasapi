@@ -42,3 +42,6 @@ class User(CanvasObject):
             'users/%s/courses' % (self.id)
         )
         return [Course(self._requester, course) for course in response.json()]
+
+    def __str__(self):
+        return "%s" % (self.name)
