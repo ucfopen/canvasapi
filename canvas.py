@@ -67,3 +67,15 @@ class Canvas(object):
                 'users/%s' % (id)
             )
         return User(self.__requester, response.json())
+
+    def enroll_user(self, id, id_type, enrollment):
+        """
+        Create a new user enrollment for a course or a section.
+
+        :calls: `POST /api/v1/courses/:course_id/enrollments 
+                <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`
+                or 
+                `POST /api/v1/sections/:section_id/enrollments
+                <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`
+        """
+        pass

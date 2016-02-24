@@ -56,19 +56,23 @@ class Course(CanvasObject):
         except Exception:
             return False
 
-    def users(self, search_term=None, **kwargs):
+    def get_users(self, **kwargs):
         """
-        Lists all users in a course.
-        If a `search_term` is provided, only returns matching users
+        Lists all users in a course. If a filter is provided (`search_term` or
+        `enrollment_type`), list only the users that matches the filter.
+
+        :calls: `GET /api/v1/courses/:course_id/users
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>`
+        :rtype: list: The list of users
         """
-        # TODO: Return user objects instead of just json
+        from user import User
+
         response = self._requester.request(
             'GET',
             'courses/%s/search_users' % (self.id),
-            search_term=search_term,
             **combine_kwargs(**kwargs)
         )
-        return response.json()
+        return [User(self._requester, user) for user in response.json()]
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.course_code, self.name)
