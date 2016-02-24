@@ -1,4 +1,4 @@
-from pycanvas import CanvasObject
+from pycanvas import CanvasObject, Course
 
 
 class User(CanvasObject):
@@ -28,3 +28,17 @@ class User(CanvasObject):
             'users/%s/page_views' % (self.id)
         )
         return response.json()
+
+    def get_courses(self):
+        """
+        Get a user's courses.
+
+        :calls: `GET /api/v1/users/:user_id/courses`
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.user_index>
+        :rtype: list
+        """
+        response = self._requester.request(
+            'GET',
+            'users/%s/courses' % (self.id)
+        )
+        return [Course(self._requester, course) for course in response.json()]
