@@ -20,6 +20,16 @@ class CanvasException(Exception):
             self.message = message
 
 
+class InvalidAccessToken(CanvasException):
+    """PyCanvas was unable to make an API connection."""
+    pass
+
+
+class PermissionError(CanvasException):
+    """PyCanvas's key is valid, but is unauthorized to access the requested resource."""
+    pass
+
+
 class ResourceDoesNotExist(CanvasException):
     """Canvas could not locate the requested resource."""
     pass
