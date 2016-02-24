@@ -8,7 +8,7 @@ class Course(CanvasObject):
         """
         Marks the course as concluded.
 
-        :calls: `DELETE /api/v1/courses/:id 
+        :calls: `DELETE /api/v1/courses/:id
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
         :rtype: bool: True if the course was concluded, False otherwise.
         """
@@ -24,7 +24,7 @@ class Course(CanvasObject):
         """
         Permanently deletes the course.
 
-        :calls: `DELETE /api/v1/courses/:id 
+        :calls: `DELETE /api/v1/courses/:id
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
         :rtype: bool: True if the course was deleted, False otherwise.
         """
@@ -40,7 +40,7 @@ class Course(CanvasObject):
         """
         Updates the course.
 
-        :calls: `PUT /api/v1/courses/:id 
+        :calls: `PUT /api/v1/courses/:id
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`
         :rtype: bool: True if the course was updated, False otherwise.
         """
@@ -53,7 +53,7 @@ class Course(CanvasObject):
 
             super(Course, self).set_attributes(response.json())
             return True
-        except Exception as e:
+        except Exception:
             return False
 
     def users(self, search_term=None, **kwargs):
@@ -69,3 +69,6 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
         return response.json()
+
+    def __str__(self):
+        return "%s %s %s" % (self.id, self.course_code, self.name)
