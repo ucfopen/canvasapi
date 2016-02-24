@@ -1,5 +1,7 @@
-from pycanvas import Course, Requester, User
-from pycanvas.util import combine_kwargs
+from course import Course
+from requester import Requester
+from user import User
+from util import combine_kwargs
 
 
 class Canvas(object):
