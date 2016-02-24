@@ -1,5 +1,5 @@
-from pycanvas import CanvasObject
-from pycanvas.util import combine_kwargs
+from canvas_object import CanvasObject
+from util import combine_kwargs
 
 
 class Course(CanvasObject):

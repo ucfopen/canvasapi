@@ -1,4 +1,4 @@
-from pycanvas import CanvasObject
+from canvas_object import CanvasObject
 
 
 class User(CanvasObject):
