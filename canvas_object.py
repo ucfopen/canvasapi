@@ -14,7 +14,7 @@ class CanvasObject(object):
         :param requester: Requester
         :param attributes: dict
         """
-        self._requester = requester
+        self.__requester = requester
         self.set_attributes(attributes)
 
     def set_attributes(self, attributes):

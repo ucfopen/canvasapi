@@ -12,7 +12,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
         :rtype: bool: True if the course was concluded, False otherwise.
         """
-        response = self._requester.request(
+        response = self.__requester.request(
             'DELETE',
             'courses/%s' % (self.id),
             event="conclude"
@@ -28,7 +28,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
         :rtype: bool: True if the course was deleted, False otherwise.
         """
-        response = self._requester.request(
+        response = self.__requester.request(
             'DELETE',
             'courses/%s' % (self.id),
             event="delete"
@@ -44,7 +44,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`
         :rtype: bool: True if the course was updated, False otherwise.
         """
-        response = self._requester.request(
+        response = self.__requester.request(
             'PUT',
             'courses/%s' % (self.id),
             **combine_kwargs(**kwargs)
@@ -55,23 +55,47 @@ class Course(CanvasObject):
 
         return 'name' in response.json()
 
+    def get_user(self, user_id, user_id_type=None):
+        """
+        Retrieve a user by their ID. id_type denotes which endpoint to try as there are
+        several different ids that can pull the same user record from Canvas.
+
+        :calls: `GET /api/v1/courses/:course_id/users/:id`
+        <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>
+        :param: user_id str
+        :param: user_id_type str
+        :rtype: :class: `pycanvas.user.User`
+        """
+        from user import User
+
+        if user_id_type:
+            uri = 'courses/%s/users/%s:%s' % (self.id, user_id_type, user_id)
+        else:
+            uri = 'courses/%s/users/%s' % (self.id, user_id)
+
+        response = self.__requester.request(
+            'GET',
+            uri
+        )
+        return User(self.__requester, response.json())
+
     def get_users(self, **kwargs):
         """
         Lists all users in a course. If a filter is provided (`search_term` or
         `enrollment_type`), list only the users that matches the filter.
 
-        :calls: `GET /api/v1/courses/:course_id/users
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>`
+        :calls: `GET /api/v1/courses/:course_id/users`
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>
         :rtype: list: The list of users
         """
         from user import User
 
-        response = self._requester.request(
+        response = self.__requester.request(
             'GET',
             'courses/%s/search_users' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return list_objs(User, self._requester, response.json())
+        return list_objs(User, self.__requester, response.json())
 
     def enroll_user(self, user, enrollment_type, **kwargs):
         """
@@ -90,13 +114,13 @@ class Course(CanvasObject):
         kwargs['enrollment[user_id]'] = user.id
         kwargs['enrollment[type]'] = enrollment_type
 
-        response = self._requester.request(
+        response = self.__requester.request(
             'POST',
             'courses/%s/enrollments' % (self.id),
             **combine_kwargs(**kwargs)
         )
 
-        return Enrollment(self._requester, response.json())
+        return Enrollment(self.__requester, response.json())
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.course_code, self.name)
@@ -112,9 +136,9 @@ class Course(CanvasObject):
         """
         from user import User
 
-        response = self._requester.request(
+        response = self.__requester.request(
             'GET',
             'courses/%s/recent_students' % (self.id),
         )
 
-        return list_objs(User, self._requester, response.json())
+        return list_objs(User, self.__requester, response.json())

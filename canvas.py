@@ -57,13 +57,12 @@ class Canvas(object):
         :rtype: :class: `pycanvas.user.User`
         """
         if id_type:
-            response = self.__requester.request(
-                'GET',
-                'users/%s:%s' % (id_type, id)
-            )
+            uri = 'users/%s:%s' % (id_type, id)
         else:
-            response = self.__requester.request(
-                'GET',
-                'users/%s' % (id)
-            )
+            uri = 'users/%s' % (id)
+
+        response = self.__requester.request(
+            'GET',
+            uri
+        )
         return User(self.__requester, response.json())
