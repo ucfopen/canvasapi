@@ -15,7 +15,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
         :rtype: bool: True if the course was concluded, False otherwise.
         """
-        response = self.__requester.request(
+        response = self._requester.request(
             'DELETE',
             'courses/%s' % (self.id),
             event="conclude"
@@ -31,7 +31,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
         :rtype: bool: True if the course was deleted, False otherwise.
         """
-        response = self.__requester.request(
+        response = self._requester.request(
             'DELETE',
             'courses/%s' % (self.id),
             event="delete"
@@ -47,7 +47,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`
         :rtype: bool: True if the course was updated, False otherwise.
         """
-        response = self.__requester.request(
+        response = self._requester.request(
             'PUT',
             'courses/%s' % (self.id),
             **combine_kwargs(**kwargs)
@@ -76,11 +76,11 @@ class Course(CanvasObject):
         else:
             uri = 'courses/%s/users/%s' % (self.id, user_id)
 
-        response = self.__requester.request(
+        response = self._requester.request(
             'GET',
             uri
         )
-        return User(self.__requester, response.json())
+        return User(self._requester, response.json())
 
     def get_users(self, **kwargs):
         """
@@ -93,12 +93,12 @@ class Course(CanvasObject):
         """
         from user import User
 
-        response = self.__requester.request(
+        response = self._requester.request(
             'GET',
             'courses/%s/search_users' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return list_objs(User, self.__requester, response.json())
+        return list_objs(User, self._requester, response.json())
 
     def enroll_user(self, user, enrollment_type, **kwargs):
         """
@@ -117,15 +117,15 @@ class Course(CanvasObject):
         kwargs['enrollment[user_id]'] = user.id
         kwargs['enrollment[type]'] = enrollment_type
 
-        response = self.__requester.request(
+        response = self._requester.request(
             'POST',
             'courses/%s/enrollments' % (self.id),
             **combine_kwargs(**kwargs)
         )
 
-        return Enrollment(self.__requester, response.json())
+        return Enrollment(self._requester, response.json())
 
-    def recent_students(self):
+    def get_recent_students(self):
         """
         Returns a list of students in the course ordered by how
         recently they have logged in.
@@ -136,9 +136,9 @@ class Course(CanvasObject):
         """
         from user import User
 
-        response = self.__requester.request(
+        response = self._requester.request(
             'GET',
-            'courses/%s/recent_students' % (self.id),
+            'courses/%s/recent_students' % (self.id)
         )
 
-        return list_objs(User, self.__requester, response.json())
+        return list_objs(User, self._requester, response.json())

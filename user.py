@@ -14,7 +14,7 @@ class User(CanvasObject):
         :calls: `GET /api/v1/user/:id <https://canvas.instructure.com/doc/api/users.html#method.profile.settings>`
         :rtype: :class: `pycanvas.user.User`
         """
-        response = self.__requester.request(
+        response = self._requester.request(
             'GET',
             'users/%s/profile' % (id)
         )
@@ -27,7 +27,7 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/page_views <https://canvas.instructure.com/doc/api/users.html#method.page_views.index>`
         :rtype :class: `pycanvas.user.User`
         """
-        response = self.__requester.request(
+        response = self._requester.request(
             'GET',
             'users/%s/page_views' % (self.id)
         )
@@ -41,8 +41,8 @@ class User(CanvasObject):
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.user_index>
         :rtype: list
         """
-        response = self.__requester.request(
+        response = self._requester.request(
             'GET',
             'users/%s/courses' % (self.id)
         )
-        return [Course(self.__requester, course) for course in response.json()]
+        return [Course(self._requester, course) for course in response.json()]
