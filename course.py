@@ -1,5 +1,5 @@
 from canvas_object import CanvasObject
-from util import combine_kwargs
+from util import combine_kwargs, list_objs
 
 
 class Course(CanvasObject):
@@ -50,11 +50,10 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-        if response.json().has_key('name'):
+        if 'name' in response.json():
             super(Course, self).set_attributes(response.json())
 
-        return response.json().has_key('name')
-
+        return 'name' in response.json()
 
     def get_users(self, **kwargs):
         """
@@ -72,31 +71,50 @@ class Course(CanvasObject):
             'courses/%s/search_users' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return [User(self._requester, user) for user in response.json()]
+        return list_objs(User, self._requester, response.json())
 
     def enroll_user(self, user, enrollment_type, **kwargs):
         """
         Create a new user enrollment for a course or a section.
 
-        :calls: `POST /api/v1/courses/:course_id/enrollments 
-                <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`
-        
+        :calls: `POST /api/v1/courses/:course_id/enrollments
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`
         :param user: the user to enroll
         :type user: :class:`pycanvas.user.User`
         :param enrollment_type: the type of enrollment
         :type enrollment_type: str
-        :rtype: bool: True if the user was enrolled, False otherwise
+        :rtype: Enrollment: object representing the enrollment
         """
+        from enrollment import Enrollment
+
         kwargs['enrollment[user_id]'] = user.id
         kwargs['enrollment[type]'] = enrollment_type
 
         response = self._requester.request(
             'POST',
-            'courses/%d/enrollments' % (self.id),
+            'courses/%s/enrollments' % (self.id),
             **combine_kwargs(**kwargs)
         )
 
-        return response.json().has_key('course_section_id')
+        return Enrollment(self._requester, response.json())
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.course_code, self.name)
+
+    def recent_students(self):
+        """
+        Returns a list of students in the course ordered by how
+        recently they have logged in.
+
+        :calls: `GET /api/v1/courses/:course_id/recent_students`
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.recent_students>
+        :rtype: list: list of User objects
+        """
+        from user import User
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/recent_students' % (self.id),
+        )
+
+        return list_objs(User, self._requester, response.json())

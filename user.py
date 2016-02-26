@@ -1,6 +1,7 @@
 from canvas_object import CanvasObject
 from course import Course
 
+
 class User(CanvasObject):
 
     def profile(self, **kwargs):
