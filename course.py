@@ -4,6 +4,9 @@ from util import combine_kwargs, list_objs
 
 class Course(CanvasObject):
 
+    def __str__(self):
+        return "%s %s %s" % (self.id, self.course_code, self.name)
+
     def conclude(self):
         """
         Marks the course as concluded.
@@ -121,9 +124,6 @@ class Course(CanvasObject):
         )
 
         return Enrollment(self.__requester, response.json())
-
-    def __str__(self):
-        return "%s %s %s" % (self.id, self.course_code, self.name)
 
     def recent_students(self):
         """

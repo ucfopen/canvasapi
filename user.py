@@ -4,6 +4,9 @@ from course import Course
 
 class User(CanvasObject):
 
+    def __str__(self):
+        return "%s" % (self.name)
+
     def profile(self, **kwargs):
         """
         Get a user's profile.
@@ -43,6 +46,3 @@ class User(CanvasObject):
             'users/%s/courses' % (self.id)
         )
         return [Course(self.__requester, course) for course in response.json()]
-
-    def __str__(self):
-        return "%s" % (self.name)
