@@ -34,17 +34,15 @@ class Requester(object):
         headers.update(auth_header)
 
         if method == 'GET':
-            response = self._get_request(full_url, headers, kwargs)
-
+            req_method = self._get_request
         elif method == 'POST':
-            response = self._post_request(full_url, headers, kwargs)
-
+            req_method = self._post_request
         elif method == 'DELETE':
-            response = self._delete_request(full_url, headers, kwargs)
-
+            req_method = self._delete_request
         elif method == 'PUT':
-            response = self._put_request(full_url, headers, kwargs)
+            req_method = self._put_request
 
+        response = req_method(full_url, headers, kwargs)
         return response
 
     def _get_request(self, url, headers, params={}):
