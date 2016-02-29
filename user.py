@@ -7,7 +7,7 @@ class User(CanvasObject):
     def __str__(self):
         return "%s" % (self.name)
 
-    def profile(self, **kwargs):
+    def get_profile(self, **kwargs):
         """
         Get a user's profile.
 
@@ -20,7 +20,7 @@ class User(CanvasObject):
         )
         return response.json()
 
-    def page_views(self):
+    def get_page_views(self):
         """
         Get a user's pageviews.
 

@@ -142,3 +142,64 @@ class Course(CanvasObject):
         )
 
         return list_objs(User, self._requester, response.json())
+
+    def preview_html(self, html):
+        """
+        Preview HTML content processed for this course.
+
+        :calls: `POST /api/v1/courses/:course_id/preview_html`
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.preview_html>
+        :param html: The HTML code to preview.
+        :type html: str
+        :rtype: str
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/%s/preview_html' % (self.id),
+            html=html
+        )
+        return response.json().get('html', '')
+
+    def get_settings(self):
+        """
+        Returns some of a course's settings.
+
+        :calls: `GET /api/v1/courses/:course_id/settings`
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.settings>
+        :rtype: dict
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/settings' % (self.id)
+        )
+        return response.json()
+
+    def update_settings(self, **kwargs):
+        """
+        Update a course's settings.
+
+        :calls: `PUT /api/v1/courses/:course_id/settings`
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.update_settings>
+        :rtype: dict
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/settings' % (self.id),
+            **kwargs
+        )
+        return response.json()
+
+    def reset(self):
+        """
+        Deletes the current course, and creates a new equivalent course
+        with no content, but all sections and users moved over.
+
+        :calls: `POST /api/v1/courses/:course_id/reset_content`
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.reset_content>
+        :rtype: Course
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/%s/reset_content' % (self.id),
+        )
+        return Course(self._requester, response.json())
