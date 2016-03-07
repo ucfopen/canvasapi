@@ -8,7 +8,7 @@ class User(CanvasObject):
         Get a user's profile.
 
         :calls: `GET /api/v1/user/:id <https://canvas.instructure.com/doc/api/users.html#method.profile.settings>`
-        :rtype: :class: `pycanvas.user.User`
+        :rtype: :class:`pycanvas.user.User`
         """
         response = self._requester.request(
             'GET',
@@ -21,7 +21,7 @@ class User(CanvasObject):
         Get a user's pageviews.
 
         :calls: `GET /api/v1/users/:user_id/page_views <https://canvas.instructure.com/doc/api/users.html#method.page_views.index>`
-        :rtype :class: `pycanvas.user.User`
+        :rtype :class:`pycanvas.user.User`
         """
         response = self._requester.request(
             'GET',

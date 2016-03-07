@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from util import combine_kwargs
+from paginated_list import PaginatedList
 
 
 class Course(CanvasObject):
@@ -56,19 +57,26 @@ class Course(CanvasObject):
         except Exception:
             return False
 
-    def users(self, search_term=None, **kwargs):
+    def get_users(self, search_term=None, **kwargs):
         """
         Lists all users in a course.
         If a `search_term` is provided, only returns matching users
+
+        :calls: `GET /api/v1/courses/:course_id/search_users
+        https://canvas.instructure.com/doc/api/courses.html#method.courses.users`
+        :rtype: :class:`PaginatedList` of :class:`User`
+
         """
-        # TODO: Return user objects instead of just json
-        response = self._requester.request(
+        from user import User
+
+        return PaginatedList(
+            User,
+            self._requester,
             'GET',
             'courses/%s/search_users' % (self.id),
-            search_term=search_term,
+            search_term = search_term,
             **combine_kwargs(**kwargs)
         )
-        return response.json()
 
     def __str__(self):
         return "%s %s %s" % (self.id, self.course_code, self.name)
