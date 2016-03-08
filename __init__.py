@@ -1,3 +1,4 @@
+import exceptions
 import canvas
 import canvas_object
 import course
