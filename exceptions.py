@@ -19,6 +19,9 @@ class CanvasException(Exception):
         else:
             self.message = message
 
+    def __str__(self):
+        return self.message
+
 
 class InvalidAccessToken(CanvasException):
     """PyCanvas was unable to make an API connection."""
