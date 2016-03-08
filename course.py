@@ -74,7 +74,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/search_users' % (self.id),
-            search_term = search_term,
+            search_term=search_term,
             **combine_kwargs(**kwargs)
         )
 
