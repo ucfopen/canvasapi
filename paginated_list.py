@@ -33,6 +33,9 @@ class PaginatedList(object):
             for element in new_elements:
                 yield element
 
+    def __repr__(self):
+        return "<PaginatedList of type %s>" % (self.__content_class.__name__)
+
     def _is_larger_than(self, index):
         return len(self.__elements) > index or self._has_next()
 
