@@ -1,3 +1,4 @@
+from pycanvas.exceptions import InvalidAccessToken, PermissionError, ResourceDoesNotExist
 import requests
 
 
@@ -15,10 +16,12 @@ class Requester(object):
         self.access_token = access_token
 
         # Try to establish an initial connection to Canvas
-        response = self.request('GET', 'accounts')
-
-        if response.status_code != 200:
-            raise Exception('Invalid base URL or access token.')
+        try:
+            self.request('GET', 'accounts')
+        except PermissionError:
+            raise InvalidAccessToken('Invalid access_token')
+        except ResourceDoesNotExist:
+            raise ResourceDoesNotExist('Invalid base_url')
 
     def request(self, method, endpoint, headers={}, **kwargs):
         """
@@ -34,16 +37,21 @@ class Requester(object):
         headers.update(auth_header)
 
         if method == 'GET':
-            response = self._get_request(full_url, headers, kwargs)
-
+            req_method = self._get_request
         elif method == 'POST':
-            response = self._post_request(full_url, headers, kwargs)
-
+            req_method = self._post_request
         elif method == 'DELETE':
-            response = self._delete_request(full_url, headers, kwargs)
-
+            req_method = self._delete_request
         elif method == 'PUT':
-            response = self._put_request(full_url, headers, kwargs)
+            req_method = self._put_request
+
+        response = req_method(full_url, headers, kwargs)
+
+        if response.status_code == 401:
+            raise PermissionError(response.json())
+
+        if response.status_code == 404:
+            raise ResourceDoesNotExist('Not Found')
 
         return response
 

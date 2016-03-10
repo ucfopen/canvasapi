@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
-from util import combine_kwargs, list_objs
+from util import combine_kwargs
+from paginated_list import PaginatedList
 
 
 class Course(CanvasObject):
@@ -67,7 +68,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>
         :param: user_id str
         :param: user_id_type str
-        :rtype: :class: `pycanvas.user.User`
+        :rtype: :class:`pycanvas.user.User`
         """
         from user import User
 
@@ -82,23 +83,25 @@ class Course(CanvasObject):
         )
         return User(self._requester, response.json())
 
-    def get_users(self, **kwargs):
+    def get_users(self, search_term=None, **kwargs):
         """
-        Lists all users in a course. If a filter is provided (`search_term` or
-        `enrollment_type`), list only the users that matches the filter.
+        Lists all users in a course.
+        If a `search_term` is provided, only returns matching users
 
-        :calls: `GET /api/v1/courses/:course_id/users`
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>
-        :rtype: list: The list of users
+        :calls: `GET /api/v1/courses/:course_id/search_users
+        https://canvas.instructure.com/doc/api/courses.html#method.courses.users`
+        :rtype: :class:`PaginatedList` of :class:`User`
+
         """
         from user import User
 
-        response = self._requester.request(
+        return PaginatedList(
+            User,
+            self._requester,
             'GET',
             'courses/%s/search_users' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return list_objs(User, self._requester, response.json())
 
     def enroll_user(self, user, enrollment_type, **kwargs):
         """
@@ -132,16 +135,16 @@ class Course(CanvasObject):
 
         :calls: `GET /api/v1/courses/:course_id/recent_students`
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.recent_students>
-        :rtype: list: list of User objects
+        :rtype: :class:`PaginatedList` of :class:`User`
         """
         from user import User
 
-        response = self._requester.request(
+        return PaginatedList(
+            User,
+            self._requester,
             'GET',
             'courses/%s/recent_students' % (self.id)
         )
-
-        return list_objs(User, self._requester, response.json())
 
     def preview_html(self, html):
         """
