@@ -46,8 +46,9 @@ class User(CanvasObject):
         """
         from course import Course
 
-        response = self._requester.request(
+        return PaginatedList(
+            Course,
+            self._requester,
             'GET',
             'users/%s/courses' % (self.id)
         )
-        return [Course(self._requester, course) for course in response.json()]

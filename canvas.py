@@ -1,4 +1,5 @@
 from course import Course
+from paginated_list import PaginatedList
 from requester import Requester
 from user import User
 from util import combine_kwargs
@@ -52,8 +53,8 @@ class Canvas(object):
         several different ids that can pull the same user record from Canvas.
 
         :calls: `GET /users/:id <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`
-        :param :id str
-        :param :id_type str
+        :param: id str
+        :param: id_type str
         :rtype: :class: `pycanvas.user.User`
         """
         if id_type:
@@ -66,3 +67,18 @@ class Canvas(object):
             uri
         )
         return User(self.__requester, response.json())
+
+    def get_courses(self):
+        """
+        Returns the list of active courses for the current user.
+
+        :calls: `GET /api/v1/courses
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.index>`
+        :rtype: :class:`PaginatedList` of :class:`Course`
+        """
+        return PaginatedList(
+            Course,
+            self.__requester,
+            'GET',
+            'courses'
+        )
