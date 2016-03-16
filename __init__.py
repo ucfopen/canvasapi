@@ -1,6 +1,7 @@
 import exceptions
 import canvas
 import canvas_object
+import assignment
 import course
 import enrollment
 import requester

@@ -40,8 +40,8 @@ class User(CanvasObject):
         """
         Get a user's courses.
 
-        :calls: `GET /api/v1/users/:user_id/courses`
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.user_index>
+        :calls: `GET /api/v1/users/:user_id/courses
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.user_index>`
         :rtype: list
         """
         from course import Course
@@ -51,4 +51,23 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/courses' % (self.id)
+        )
+
+    def get_missing_submissions(self):
+        """
+        Returns past-due assignments for which the student does not
+        have a submission.
+
+        The user sending the request must either be an admin or a parent observer using the parent app.
+        :calls: `GET /api/v1/users/:user_id/missing_submissions
+        <https://canvas.instructure.com/doc/api/users.html#method.users.missing_submissions>`
+        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            'GET',
+            'users/%s/missing_submissions' % (self.id)
         )

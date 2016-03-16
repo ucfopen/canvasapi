@@ -38,7 +38,8 @@ class Canvas(object):
         """
         Retrieve a course by its ID.
 
-        :calls: `GET /courses/:id <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`
+        :calls: `GET /courses/:id
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`
         :param course_id: int
         :rtype: :class:`pycanvas.course.Course`
         """
