@@ -137,3 +137,19 @@ class User(CanvasObject):
             hexcode=hexcode
         )
         return response.json()
+
+    def edit(self, **kwargs):
+        """
+        Modify an existing user.
+
+
+        :calls: `PUT /api/v1/users/:id
+        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_color>`
+        :rtype: :class:`User`
+        """
+        response = self._requester.request(
+            'PUT',
+            'users/%s' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return User(self._requester, response.json())
