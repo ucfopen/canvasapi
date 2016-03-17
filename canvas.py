@@ -1,4 +1,5 @@
 from course import Course
+from exceptions import RequiredFieldMissing
 from paginated_list import PaginatedList
 from requester import Requester
 from user import User
@@ -33,6 +34,28 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
         return Course(self.__requester, response.json())
+
+    def create_user(self, account_id, pseudonym, **kwargs):
+        """
+        Create and return a new user and pseudonym for an account.
+
+        :calls: `POST /api/v1/accounts/:account_id/users
+        <https://canvas.instructure.com/doc/api/users.html#method.users.create>`
+        :param account_id: int
+        :param pseudonym: dict
+        :rtype: :class: `User`
+        """
+        if isinstance(pseudonym, dict) and pseudonym.get('unique_id'):
+            kwargs['pseudonym'] = pseudonym
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'unique_id' is required.")
+
+        response = self.__requester.request(
+            'POST',
+            'accounts/%s/users' % (account_id),
+            **combine_kwargs(**kwargs)
+        )
+        return User(self.__requester, response.json())
 
     def get_course(self, course_id):
         """

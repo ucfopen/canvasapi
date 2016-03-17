@@ -58,7 +58,6 @@ class User(CanvasObject):
         Returns past-due assignments for which the student does not
         have a submission.
 
-        The user sending the request must either be an admin or a parent observer using the parent app.
         :calls: `GET /api/v1/users/:user_id/missing_submissions
         <https://canvas.instructure.com/doc/api/users.html#method.users.missing_submissions>`
         :rtype: :class:`PaginatedList` of :class:`Assignment`

@@ -13,7 +13,7 @@ class CanvasException(Exception):
 
             errors = message.get('errors', False)
             if errors:
-                self.message = ''.join(error['message'] for error in errors)
+                self.message = str(errors)
             else:
                 self.message = 'Something went wrong.'
         else:
@@ -21,6 +21,11 @@ class CanvasException(Exception):
 
     def __str__(self):
         return self.message
+
+
+class BadRequest(CanvasException):
+    """Canvas was unable to understand the request. More information may be needed."""
+    pass
 
 
 class InvalidAccessToken(CanvasException):
@@ -35,4 +40,9 @@ class PermissionError(CanvasException):
 
 class ResourceDoesNotExist(CanvasException):
     """Canvas could not locate the requested resource."""
+    pass
+
+
+class RequiredFieldMissing(CanvasException):
+    """A required field is missing."""
     pass
