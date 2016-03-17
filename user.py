@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from paginated_list import PaginatedList
+from util import combine_kwargs
 
 
 class User(CanvasObject):
@@ -12,11 +13,11 @@ class User(CanvasObject):
         Get a user's profile.
 
         :calls: `GET /api/v1/user/:id <https://canvas.instructure.com/doc/api/users.html#method.profile.settings>`
-        :rtype: :class:`pycanvas.user.User`
+        :rtype: dict
         """
         response = self._requester.request(
             'GET',
-            'users/%s/profile' % (id)
+            'users/%s/profile' % (self.id)
         )
         return response.json()
 
@@ -70,3 +71,69 @@ class User(CanvasObject):
             'GET',
             'users/%s/missing_submissions' % (self.id)
         )
+
+    def update_settings(self, **kwargs):
+        """
+        Update an existing user's settings.
+
+        :calls: `PUT /api/v1/users/:id/settings
+        <https://canvas.instructure.com/doc/api/users.html#method.users.settings>`
+        :rtype: dict
+        """
+        response = self._requester.request(
+            'PUT',
+            'users/%s/settings' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return response.json()
+
+    def get_color(self, asset_string):
+        """
+        Returns the custom colors that have been saved for a user for a given context.
+
+        The `asset_string` parameter should be in the format 'context_id', for example 'course_42'.
+
+        :calls: `GET /api/v1/users/:id/colors/:asset_string
+        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_color>`
+        :param asset_string: string
+        :rtype: dict
+        """
+        response = self._requester.request(
+            'GET',
+            'users/%s/colors/%s' % (self.id, asset_string)
+        )
+        return response.json()
+
+    def get_colors(self):
+        """
+        Returns all custom colors that have been saved for a user.
+
+        :calls: `GET /api/v1/users/:id/colors
+        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_colors>`
+        :rtype: dict
+        """
+        response = self._requester.request(
+            'GET',
+            'users/%s/colors' % (self.id)
+        )
+        return response.json()
+
+    def update_color(self, asset_string, hexcode):
+        """
+        Updates a custom color for a user for a given context. This allows colors for the calendar and elsewhere to be customized on a user basis.
+
+        The `asset_string` parameter should be in the format 'context_id', for example 'course_42'.
+        The `hexcode` parameter need not include the '#'.
+
+        :calls: `PUT /api/v1/users/:id/colors/:asset_string
+        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_color>`
+        :param asset_string: string
+        :param hexcode: string
+        :rtype: dict
+        """
+        response = self._requester.request(
+            'PUT',
+            'users/%s/colors/%s' % (self.id, asset_string),
+            hexcode=hexcode
+        )
+        return response.json()
