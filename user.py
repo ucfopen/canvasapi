@@ -126,7 +126,7 @@ class User(CanvasObject):
         The `hexcode` parameter need not include the '#'.
 
         :calls: `PUT /api/v1/users/:id/colors/:asset_string
-        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_color>`
+        <https://canvas.instructure.com/doc/api/users.html#method.users.set_custom_color>`
         :param asset_string: string
         :param hexcode: string
         :rtype: dict
@@ -144,7 +144,7 @@ class User(CanvasObject):
 
 
         :calls: `PUT /api/v1/users/:id
-        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_color>`
+        <https://canvas.instructure.com/doc/api/users.html#method.users.update>`
         :rtype: :class:`User`
         """
         response = self._requester.request(
@@ -152,4 +152,22 @@ class User(CanvasObject):
             'users/%s' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return User(self._requester, response.json())
+        super(User, self).set_attributes(response.json())
+        return self
+
+    def merge_into(self, destination_user):
+        """
+        Merge a user into another user.
+
+        :calls: `PUT /api/v1/users/:id/merge_into/:destination_user_id
+        <https://canvas.instructure.com/doc/api/users.html#method.users.merge_into>`
+        :param destination_user: :class:`User`
+        :rtype: :class:`User`
+        """
+        assert isinstance(destination_user, User)
+        response = self._requester.request(
+            'PUT',
+            'users/%s/merge_into/%s' % (self.id, destination_user.id),
+        )
+        super(User, self).set_attributes(response.json())
+        return self
