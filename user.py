@@ -171,3 +171,19 @@ class User(CanvasObject):
         )
         super(User, self).set_attributes(response.json())
         return self
+
+    def get_avatars(self):
+        """
+        Retrieve the possible user avatar options that can be set with the user update endpoint.
+
+        :calls: `GET /api/v1/users/:user_id/avatars
+        <https://canvas.instructure.com/doc/api/users.html#method.profile.profile_pics>`
+        """
+        from avatar import Avatar
+
+        return PaginatedList(
+            Avatar,
+            self._requester,
+            'GET',
+            '/users/%s/avatars' % (self.id)
+        )
