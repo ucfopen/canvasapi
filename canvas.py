@@ -125,3 +125,116 @@ class Canvas(object):
             'accounts/%s/users' % (account_id),
             **kwargs
         )
+
+    def get_activity_stream_summary(self):
+        """
+        Returns a summary of the current user's global activity stream.
+
+        :calls: `GET /api/v1/users/self/activity_stream/summary
+        <https://canvas.instructure.com/doc/api/users.html#method.users.activity_stream_summary>`
+        :rtype: dict
+        """
+        response = self.__requester.request(
+            'GET',
+            'users/self/activity_stream/summary'
+        )
+        return response.json()
+
+    def get_todo_items(self):
+        """
+        Returns the current user's list of todo items, as seen on the user dashboard.
+
+        :calls: `GET /api/v1/users/self/todo
+        <https://canvas.instructure.com/doc/api/users.html#method.users.todo_items>`
+        :rtype: dict
+        """
+        response = self.__requester.request(
+            'GET',
+            'users/self/todo'
+        )
+        return response.json()
+
+    def get_upcoming_events(self):
+        """
+        Returns the current user's upcoming events, i.e. the same
+        things shown in the dashboard 'Coming Up' sidebar.
+
+        :calls: `GET /api/v1/users/self/upcoming_events
+        <https://canvas.instructure.com/doc/api/users.html#method.users.upcoming_events>`
+        :rtype: dict
+        """
+        response = self.__requester.request(
+            'GET',
+            'users/self/upcoming_events'
+        )
+        return response.json()
+
+    def get_course_nicknames(self):
+        """
+        Returns all course nicknames you have set.
+
+        :calls: `GET /api/v1/users/self/course_nicknames
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`
+        :rtype: :class:`PaginatedList` of :class:`CourseNickname`
+        """
+        from course_nickname import CourseNickname
+
+        return PaginatedList(
+            CourseNickname,
+            self.__requester,
+            'GET',
+            'users/self/course_nicknames'
+        )
+
+    def get_course_nickname(self, course_id):
+        """
+        Returns all course nicknames you have set.
+
+        :calls: `GET /api/v1/users/self/course_nicknames/:course_id
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.show>`
+        :param course_id: int
+        :rtype: :class:`CourseNickname`
+        """
+        from course_nickname import CourseNickname
+
+        response = self.__requester.request(
+            'GET',
+            'users/self/course_nicknames/%s' % (course_id)
+        )
+        return CourseNickname(self.__requester, response.json())
+
+    def set_course_nickname(self, course_id, nickname):
+        """
+        Set a nickname for the given course. This will replace the
+        course's name in output of API calls you make subsequently, as
+        well as in selected places in the Canvas web user interface.
+
+        :calls: `PUT /api/v1/users/self/course_nicknames/:course_id
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.update>`
+        :param course_id: int
+        :param nickname: str
+        :rtype: :class:`CourseNickname`
+        """
+        from course_nickname import CourseNickname
+
+        response = self.__requester.request(
+            'PUT',
+            'users/self/course_nicknames/%s' % (course_id),
+            nickname=nickname
+        )
+        return CourseNickname(self.__requester, response.json())
+
+    def clear_course_nicknames(self):
+        """
+        Remove all stored course nicknames.
+
+        :calls: `DELETE /api/v1/users/self/course_nicknames
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`
+        :rtype: dict
+        """
+
+        response = self.__requester.request(
+            'DELETE',
+            'users/self/course_nicknames'
+        )
+        return response.json()

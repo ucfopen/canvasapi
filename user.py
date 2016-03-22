@@ -178,6 +178,7 @@ class User(CanvasObject):
 
         :calls: `GET /api/v1/users/:user_id/avatars
         <https://canvas.instructure.com/doc/api/users.html#method.profile.profile_pics>`
+        :rtype: :class:`PaginatedList` of :class:`Avatar`
         """
         from avatar import Avatar
 
