@@ -13,7 +13,7 @@ class PaginatedList(object):
         self.__content_class = content_class
         self.__first_url = first_url
         self.__first_params = kwargs or {}
-        self.__first_params['per_page'] = kwargs.get('per_page', 10)
+        self.__first_params['per_page'] = kwargs.get('per_page', 100)
         self.__next_url = first_url
         self.__next_params = kwargs or {}
 
@@ -32,6 +32,9 @@ class PaginatedList(object):
             new_elements = self._grow()
             for element in new_elements:
                 yield element
+
+    def __repr__(self):
+        return "<PaginatedList of type %s>" % (self.__content_class.__name__)
 
     def _is_larger_than(self, index):
         return len(self.__elements) > index or self._has_next()
@@ -62,7 +65,7 @@ class PaginatedList(object):
         response = self.__requester.request(
             'GET',
             self.__next_url,
-            **self.__first_params
+            **self.__next_params
         )
         data = response.json()
         self.__next_url = None
@@ -72,7 +75,7 @@ class PaginatedList(object):
 
         self.__next_url = re.search(regex, next_link['url']).group(1) if next_link else None
 
-        self.__next_params = None
+        self.__next_params = {}
 
         content = [
             self.__content_class(self.__requester, element)

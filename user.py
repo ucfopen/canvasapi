@@ -4,7 +4,10 @@ from paginated_list import PaginatedList
 
 class User(CanvasObject):
 
-    def profile(self, **kwargs):
+    def __str__(self):
+        return "%s" % (self.name)
+
+    def get_profile(self, **kwargs):
         """
         Get a user's profile.
 
@@ -33,5 +36,19 @@ class User(CanvasObject):
             'users/%s/page_views' % (self.id)
         )
 
-    def __str__(self):
-        return "%s" % (self.name)
+    def get_courses(self):
+        """
+        Get a user's courses.
+
+        :calls: `GET /api/v1/users/:user_id/courses`
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.user_index>
+        :rtype: list
+        """
+        from course import Course
+
+        return PaginatedList(
+            Course,
+            self._requester,
+            'GET',
+            'users/%s/courses' % (self.id)
+        )

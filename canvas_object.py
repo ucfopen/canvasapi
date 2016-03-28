@@ -17,6 +17,11 @@ class CanvasObject(object):
         self._requester = requester
         self.set_attributes(attributes)
 
+    def __repr__(self):
+        classname = self.__class__.__name__
+        attrs = ', '.join(['%s=%s' % (attr, val) for attr, val in self.__dict__.iteritems()])
+        return '%s(%s)' % (classname, attrs)
+
     def set_attributes(self, attributes):
         """
         Load this object with attributes.
@@ -30,8 +35,3 @@ class CanvasObject(object):
             if DATE_PATTERN.match(str(value)):
                 date = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
                 self.__setattr__(attribute + '_date', date)
-
-    def __repr__(self):
-        classname = self.__class__.__name__
-        attrs = ', '.join(['%s=%s' % (attr, val) for attr, val in self.__dict__.iteritems()])
-        return '%s(%s)' % (classname, attrs)
