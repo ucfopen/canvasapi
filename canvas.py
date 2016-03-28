@@ -19,6 +19,21 @@ class Canvas(object):
         """
         self.__requester = Requester(base_url, access_token)
 
+    def create_account(self, **kwargs):
+        """
+        Creates a new root account.
+
+        :calls: `POST /api/v1/accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`
+        :rtype: :class:`Account`
+        """
+        response = self.__requester.request(
+            'POST',
+            '/accounts',
+            **combine_kwargs(**kwargs)
+        )
+        return Account(self.__requester, response.json())
+
     def get_account(self, account_id, id_type=None):
         """
         Retrieve information on an individual account, given by id or sis sis_account_id

@@ -12,6 +12,21 @@ class Account(CanvasObject):
             self.name
         )
 
+    def create_account(self, **kwargs):
+        """
+        Creates a new root account.
+
+        :calls: `POST /api/v1/accounts/:account_id/root_accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`
+        :rtype: :class:`Account`
+        """
+        response = self._requester.request(
+            'POST',
+            '/accounts/%s/root_accounts' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Account(self._requester, response.json())
+
     def create_course(self, **kwargs):
         """
         Create a course.
@@ -49,6 +64,38 @@ class Account(CanvasObject):
             'POST',
             'accounts/%s/users' % (self.id),
             **combine_kwargs(**kwargs)
+        )
+        return User(self._requester, response.json())
+
+    def delete_user(self, user):
+        """
+        Delete a user record from a Canvas root account.
+
+        If a user is associated with multiple root accounts (in a
+        multi-tenant instance of Canvas), this action will NOT remove
+        them from the other accounts.
+
+        WARNING: This API will allow a user to remove themselves from
+        the account. If they do this, they won't be able to make API
+        calls or log into Canvas at that account.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/users/:user_id
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.remove_user>`
+        :param user: :class:`User` or int
+        :rtype: :class:`User`
+        """
+        from user import User
+
+        try:
+            if isinstance(user, User):
+                user = user.id
+            user_id = int(user)
+        except TypeError:
+            raise TypeError('parameter user must be of type User or int.')
+
+        response = self._requester.request(
+            'DELETE',
+            'accounts/%s/users/%s' % (self.id, user_id)
         )
         return User(self._requester, response.json())
 
