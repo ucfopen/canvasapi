@@ -69,3 +69,59 @@ class Account(CanvasObject):
             'accounts/%s/users' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def get_subaccounts(self, recursive=False):
+        """
+        List accounts that are sub-accounts of the given account.
+
+        :calls: `GET /api/v1/accounts/:account_id/sub_accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.sub_accounts>`
+        :param recursive: bool
+        :rtype: :class:`PaginatedList` of :class:`Account`
+        """
+        return PaginatedList(
+            Account,
+            self._requester,
+            'GET',
+            'accounts/%s/sub_accounts' % (self.id),
+            recursive=recursive
+        )
+
+    def get_courses(self, **kwargs):
+        """
+        Retrieve the list of courses in this account.
+
+        :calls: `GET /api/v1/accounts/:account_id/courses
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.courses_api>`
+        :rtype: :class:`PaginatedList` of :class:`Course`
+        """
+        from course import Course
+
+        return PaginatedList(
+            Course,
+            self._requester,
+            'GET',
+            'accounts/%s/courses' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def update(self, **kwargs):
+        """
+        Update an existing account.
+
+        :calls: `PUT /api/v1/accounts/:id
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.update>`
+        :rtype: bool: True if the course was updated, False otherwise.
+        """
+
+        response = self._requester(
+            'PUT',
+            'accounts/%s' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        if 'name' in response.json():
+            super(Account, self).set_attributes(response.json())
+            return True
+        else:
+            return False
