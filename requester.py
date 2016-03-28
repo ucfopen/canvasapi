@@ -23,7 +23,7 @@ class Requester(object):
         except ResourceDoesNotExist:
             raise ResourceDoesNotExist('Invalid base_url')
 
-    def request(self, method, endpoint, headers={}, **kwargs):
+    def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
         """
         Makes a request to the Canvas API.
 
@@ -31,10 +31,17 @@ class Requester(object):
         :param endpoint: string
         :param headers: dict
         """
-        full_url = self.base_url + endpoint
+        if not url:
+            full_url = self.base_url + endpoint
+        else:
+            full_url = url
 
-        auth_header = {'Authorization': 'Bearer ' + self.access_token}
-        headers.update(auth_header)
+        if not headers:
+            headers = {}
+
+        if use_auth:
+            auth_header = {'Authorization': 'Bearer ' + self.access_token}
+            headers.update(auth_header)
 
         if method == 'GET':
             req_method = self._get_request
