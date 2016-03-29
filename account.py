@@ -44,6 +44,26 @@ class Account(CanvasObject):
         )
         return Course(self._requester, response.json())
 
+    def create_subaccount(self, account, **kwargs):
+        """
+        Add a new sub-account to a given account.
+
+        :calls: `POST /api/v1/accounts/:account_id/sub_accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`
+        :rtype: :class:`Account`
+        """
+        if isinstance(account, dict) and 'name' in account:
+            kwargs['account'] = account
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'name' is required.")
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/sub_accounts' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Account(self._requester, response.json())
+
     def create_user(self, pseudonym, **kwargs):
         """
         Create and return a new user and pseudonym for an account.
