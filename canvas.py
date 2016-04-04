@@ -257,3 +257,21 @@ class Canvas(object):
             'users/self/course_nicknames'
         )
         return response.json()
+
+    def search_accounts(self, **kwargs):
+        """
+        Returns a list of up to 5 matching account domains.
+
+        Partial match on name / domain are supported.
+
+        :calls: `GET /api/v1/accounts/search
+        <https://canvas.instructure.com/doc/api/account_domain_lookups.html#method.account_domain_lookups.search>`
+        :rtype: dict
+        """
+
+        response = self.__requester.request(
+            'GET',
+            'accounts/search',
+            **combine_kwargs(**kwargs)
+        )
+        return response.json()

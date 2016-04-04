@@ -1,7 +1,7 @@
 from canvas_object import CanvasObject
 from exceptions import RequiredFieldMissing
 from paginated_list import PaginatedList
-from util import combine_kwargs
+from util import combine_kwargs, obj_or_id
 
 
 class Account(CanvasObject):
@@ -11,6 +11,27 @@ class Account(CanvasObject):
             self.id,
             self.name
         )
+
+    def close_notification_for_user(self, user, notif):
+        """
+        If the user no long wants to see this notification it can be
+        excused with this call.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/users/:user_id/account_notifications/:id
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_close_notification>`
+        :param user: :class:`User` or int
+        :rtype: :class:`AccountNotification`
+        """
+        from user import User
+
+        user_id = obj_or_id(user, "user", (User,))
+        notif_id = obj_or_id(notif, "notif", (AccountNotification,))
+
+        response = self._requester.request(
+            'DELETE',
+            'accounts/%s/users/%s/account_notifications/%s' % (self.id, user_id, notif_id)
+        )
+        return AccountNotification(self._requester, response.json())
 
     def create_account(self, **kwargs):
         """
@@ -87,6 +108,30 @@ class Account(CanvasObject):
         )
         return User(self._requester, response.json())
 
+    def create_notification(self, account_notification, **kwargs):
+        """
+        Create and return a new global notification for an account.
+
+        :calls: `POST /api/v1/accounts/:account_id/account_notifications
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.create>`
+        :param account_notification: dict
+        :rtype: :class: `AccountNotification`
+        """
+        required_key_list = ['subject', 'message', 'start_at', 'end_at']
+        required_keys_present = all((x in account_notification for x in required_key_list))
+
+        if isinstance(account_notification, dict) and required_keys_present:
+            kwargs['account_notification'] = account_notification
+        else:
+            raise RequiredFieldMissing("account_notification must be a dictionary with keys 'subject', 'message', 'start_at', and 'end_at'.")
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/account_notifications' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return AccountNotification(self._requester, response.json())
+
     def delete_user(self, user):
         """
         Delete a user record from a Canvas root account.
@@ -106,18 +151,35 @@ class Account(CanvasObject):
         """
         from user import User
 
-        try:
-            if isinstance(user, User):
-                user = user.id
-            user_id = int(user)
-        except TypeError:
-            raise TypeError('parameter user must be of type User or int.')
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'DELETE',
             'accounts/%s/users/%s' % (self.id, user_id)
         )
         return User(self._requester, response.json())
+
+    def get_user_notifications(self, user):
+        """
+        Returns a list of all global notifications in the account for
+        this user. Any notifications that have been closed by the user
+        will not be returned.
+
+        :calls:`GET /api/v1/accounts/:account_id/users/:user_id/account_notifications
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_index>`
+        :param user: :class:`User` or int
+        :rtype: :class:`PaginatedList` of :class:`AccountNotification`
+        """
+        from user import User
+
+        user_id = obj_or_id(user, "user", (User,))
+
+        return PaginatedList(
+            AccountNotification,
+            self._requester,
+            'GET',
+            'accounts/%s/users/%s/account_notifications' % (self.id, user_id)
+        )
 
     def get_users(self, **kwargs):
         """
@@ -192,3 +254,11 @@ class Account(CanvasObject):
             return True
         else:
             return False
+
+
+class AccountNotification(CanvasObject):
+    def __str__(self):
+        return "subject: %s, message: %s" % (
+            self.subject,
+            self.message
+        )
