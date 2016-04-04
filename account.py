@@ -177,6 +177,54 @@ class Account(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def get_index_of_reports(self, report_type):
+        """
+        Shows all reports that have been run for the account of a specific type.
+
+        :calls: `GET /api/v1/accounts/:account_id/reports/:report
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.index>`
+        :param report_type: str
+        :rtype: :class:`PaginatedList` of :class:`AccountReport`
+        """
+        return PaginatedList(
+            AccountReport,
+            self._requester,
+            'GET',
+            'accounts/%s/reports/%s' % (self.id, report_type)
+        )
+
+    def get_reports(self):
+        """
+        Returns the list of reports for the current context.
+
+        :calls: `GET /api/v1/accounts/:account_id/reports
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.available_reports>`
+        :rtpye: :class:`PaginatedList` of :class`AccountReport`
+        """
+        return PaginatedList(
+            AccountReport,
+            self._requester,
+            'GET',
+            'accounts/%s/reports' % (self.id)
+        )
+
+    def get_subaccounts(self, recursive=False):
+        """
+        List accounts that are sub-accounts of the given account.
+
+        :calls: `GET /api/v1/accounts/:account_id/sub_accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.sub_accounts>`
+        :param recursive: bool
+        :rtype: :class:`PaginatedList` of :class:`Account`
+        """
+        return PaginatedList(
+            Account,
+            self._requester,
+            'GET',
+            'accounts/%s/sub_accounts' % (self.id),
+            recursive=recursive
+        )
+
     def get_users(self, **kwargs):
         """
         Retrieve the list of users associated with this account.
@@ -215,23 +263,6 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/%s/users/%s/account_notifications' % (self.id, user_id)
-        )
-
-    def get_subaccounts(self, recursive=False):
-        """
-        List accounts that are sub-accounts of the given account.
-
-        :calls: `GET /api/v1/accounts/:account_id/sub_accounts
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.sub_accounts>`
-        :param recursive: bool
-        :rtype: :class:`PaginatedList` of :class:`Account`
-        """
-        return PaginatedList(
-            Account,
-            self._requester,
-            'GET',
-            'accounts/%s/sub_accounts' % (self.id),
-            recursive=recursive
         )
 
     def update(self, **kwargs):
