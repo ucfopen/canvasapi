@@ -159,6 +159,42 @@ class Account(CanvasObject):
         )
         return User(self._requester, response.json())
 
+    def get_courses(self, **kwargs):
+        """
+        Retrieve the list of courses in this account.
+
+        :calls: `GET /api/v1/accounts/:account_id/courses
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.courses_api>`
+        :rtype: :class:`PaginatedList` of :class:`Course`
+        """
+        from course import Course
+
+        return PaginatedList(
+            Course,
+            self._requester,
+            'GET',
+            'accounts/%s/courses' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_users(self, **kwargs):
+        """
+        Retrieve the list of users associated with this account.
+
+        :calls: `GET /api/v1/accounts/:account_id/users
+        <https://canvas.instructure.com/doc/api/users.html#method.users.index>`
+        :rtype: :class:`PaginatedList` of :class:`User`
+        """
+        from user import User
+
+        return PaginatedList(
+            User,
+            self._requester,
+            'GET',
+            'accounts/%s/users' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
     def get_user_notifications(self, user):
         """
         Returns a list of all global notifications in the account for
@@ -181,24 +217,6 @@ class Account(CanvasObject):
             'accounts/%s/users/%s/account_notifications' % (self.id, user_id)
         )
 
-    def get_users(self, **kwargs):
-        """
-        Retrieve the list of users associated with this account.
-
-        :calls: `GET /api/v1/accounts/:account_id/users
-        <https://canvas.instructure.com/doc/api/users.html#method.users.index>`
-        :rtype: :class:`PaginatedList` of :class:`User`
-        """
-        from user import User
-
-        return PaginatedList(
-            User,
-            self._requester,
-            'GET',
-            'accounts/%s/users' % (self.id),
-            **combine_kwargs(**kwargs)
-        )
-
     def get_subaccounts(self, recursive=False):
         """
         List accounts that are sub-accounts of the given account.
@@ -214,24 +232,6 @@ class Account(CanvasObject):
             'GET',
             'accounts/%s/sub_accounts' % (self.id),
             recursive=recursive
-        )
-
-    def get_courses(self, **kwargs):
-        """
-        Retrieve the list of courses in this account.
-
-        :calls: `GET /api/v1/accounts/:account_id/courses
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.courses_api>`
-        :rtype: :class:`PaginatedList` of :class:`Course`
-        """
-        from course import Course
-
-        return PaginatedList(
-            Course,
-            self._requester,
-            'GET',
-            'accounts/%s/courses' % (self.id),
-            **combine_kwargs(**kwargs)
         )
 
     def update(self, **kwargs):
@@ -261,4 +261,12 @@ class AccountNotification(CanvasObject):
         return "subject: %s, message: %s" % (
             self.subject,
             self.message
+        )
+
+
+class AccountReport(CanvasObject):
+    def __str__(self):
+        return "id: %s, report: %s" % (
+            self.id,
+            self.report
         )
