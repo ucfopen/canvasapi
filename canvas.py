@@ -1,3 +1,4 @@
+from account import Account
 from course import Course
 from exceptions import RequiredFieldMissing
 from paginated_list import PaginatedList
@@ -18,44 +19,79 @@ class Canvas(object):
         """
         self.__requester = Requester(base_url, access_token)
 
-    def create_course(self, account_id, **kwargs):
+    def create_account(self, **kwargs):
         """
-        Create a course.
+        Creates a new root account.
 
-        :calls: `POST /api/v1/accounts/:account_id/courses
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.create>`
-        :param account_id: int
-        :rtype: :class:`pycanvas.course.Course`
+        :calls: `POST /api/v1/accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`
+        :rtype: :class:`Account`
         """
         response = self.__requester.request(
             'POST',
-            'accounts/%s/courses' % (account_id),
-            account_id=account_id,
+            '/accounts',
             **combine_kwargs(**kwargs)
         )
-        return Course(self.__requester, response.json())
+        return Account(self.__requester, response.json())
 
-    def create_user(self, account_id, pseudonym, **kwargs):
+    def get_account(self, account_id, id_type=None):
         """
-        Create and return a new user and pseudonym for an account.
+        Retrieve information on an individual account, given by id or sis sis_account_id
 
-        :calls: `POST /api/v1/accounts/:account_id/users
-        <https://canvas.instructure.com/doc/api/users.html#method.users.create>`
-        :param account_id: int
-        :param pseudonym: dict
-        :rtype: :class: `User`
+        :calls: `GET /api/v1/accounts/:id
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`
+        :rtype: :class:`Account`
         """
-        if isinstance(pseudonym, dict) and pseudonym.get('unique_id'):
-            kwargs['pseudonym'] = pseudonym
+        if id_type:
+            uri = 'accounts/%s:%s' % (id_type, account_id)
         else:
-            raise RequiredFieldMissing("Dictionary with key 'unique_id' is required.")
+            uri = 'accounts/%s' % (account_id)
 
         response = self.__requester.request(
-            'POST',
-            'accounts/%s/users' % (account_id),
+            'GET',
+            uri
+        )
+        return Account(self.__requester, response.json())
+
+    def get_accounts(self, **kwargs):
+        """
+        List accounts that the current user can view or manage.
+
+        Typically, students and even teachers will get an empty list in
+        response, only account admins can view the accounts that they
+        are in.
+
+        :calls: `GET /api/v1/accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.index>`
+        :rtype: :class:`PaginatedList` of :class:`Account`
+        """
+        return PaginatedList(
+            Account,
+            self.__requester,
+            'GET',
+            'accounts',
             **combine_kwargs(**kwargs)
         )
-        return User(self.__requester, response.json())
+
+    def get_course_accounts(self):
+        """
+        List accounts that the current user can view through their
+        admin course enrollments (Teacher, TA or designer enrollments).
+
+        Only returns `id`, `name`, `workflow_state`, `root_account_id`
+        and `parent_account_id`.
+
+        :calls: `GET /api/v1/course_accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.course_accounts>`
+        :rtype: :class:`PaginatedList` of :class:`Account`
+        """
+
+        return PaginatedList(
+            Account,
+            self.__requester,
+            'GET',
+            'course_accounts',
+        )
 
     def get_course(self, course_id):
         """
@@ -107,23 +143,6 @@ class Canvas(object):
             self.__requester,
             'GET',
             'courses'
-        )
-
-    def get_users(self, account_id, **kwargs):
-        """
-        Retrieve the list of users associated with this account.
-
-        :calls: `GET /api/v1/accounts/:account_id/users
-        <https://canvas.instructure.com/doc/api/users.html#method.users.index>`
-        :param account_id: int
-        :rtype: :class:`PaginatedList` of :class:`User`
-        """
-        return PaginatedList(
-            User,
-            self.__requester,
-            'GET',
-            'accounts/%s/users' % (account_id),
-            **kwargs
         )
 
     def get_activity_stream_summary(self):
@@ -236,5 +255,23 @@ class Canvas(object):
         response = self.__requester.request(
             'DELETE',
             'users/self/course_nicknames'
+        )
+        return response.json()
+
+    def search_accounts(self, **kwargs):
+        """
+        Returns a list of up to 5 matching account domains.
+
+        Partial match on name / domain are supported.
+
+        :calls: `GET /api/v1/accounts/search
+        <https://canvas.instructure.com/doc/api/account_domain_lookups.html#method.account_domain_lookups.search>`
+        :rtype: dict
+        """
+
+        response = self.__requester.request(
+            'GET',
+            'accounts/search',
+            **combine_kwargs(**kwargs)
         )
         return response.json()

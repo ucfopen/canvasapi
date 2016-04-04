@@ -15,7 +15,7 @@ class PaginatedList(object):
         self.__first_params = kwargs or {}
         self.__first_params['per_page'] = kwargs.get('per_page', 100)
         self.__next_url = first_url
-        self.__next_params = kwargs or {}
+        self.__next_params = self.__first_params
 
     def __getitem__(self, index):
         assert isinstance(index, (int, slice))
