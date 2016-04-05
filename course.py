@@ -206,3 +206,17 @@ class Course(CanvasObject):
             'courses/%s/reset_content' % (self.id),
         )
         return Course(self._requester, response.json())
+
+    def list_quizzes(self):
+        """
+        Returns the list of Quizzes in this course
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes`
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Quiz`
+        """
+        response = self._requester.request(
+            'GET'
+            'courses/%s/quizzes' % (self.id),
+        )
+        return Course(self._requester, response.json())
