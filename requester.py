@@ -63,7 +63,7 @@ class Requester(object):
 
         return response
 
-    def _get_request(self, url, headers, params={}):
+    def _get_request(self, url, headers, params=None):
         """
         Issue a GET request to the specified endpoint with the data provided.
 
@@ -73,7 +73,7 @@ class Requester(object):
         """
         return requests.get(url, headers=headers, params=params)
 
-    def _post_request(self, url, headers, data={}):
+    def _post_request(self, url, headers, data=None):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
@@ -82,9 +82,14 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
+        if 'file' in data:
+            file = {'file': data['file']}
+            del data['file']
+            return requests.post(url, headers=headers, data=data, files=file)
+
         return requests.post(url, headers=headers, data=data)
 
-    def _delete_request(self, url, headers, data={}):
+    def _delete_request(self, url, headers, data=None):
         """
         Issue a DELETE request to the specified endpoint with the data provided.
 
@@ -95,7 +100,7 @@ class Requester(object):
         """
         return requests.delete(url, headers=headers, data=data)
 
-    def _put_request(self, url, headers, data={}):
+    def _put_request(self, url, headers, data=None):
         """
         Issue a PUT request to the specified endpoint with the data provided.
 
