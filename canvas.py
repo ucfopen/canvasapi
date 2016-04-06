@@ -1,6 +1,5 @@
 from account import Account
 from course import Course
-from exceptions import RequiredFieldMissing
 from paginated_list import PaginatedList
 from requester import Requester
 from user import User

@@ -1,5 +1,3 @@
-import os
-
 from canvas_object import CanvasObject
 from upload import upload
 from util import combine_kwargs
