@@ -215,11 +215,11 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>
         :rtype: :class:`PaginatedList` of :class:`Quiz`
         """
-        from quizzes import Quizzes
-        
-        response = self._requester.request(
-            'GET'
+        from quiz import Quiz
+        return PaginatedList(
+            Quiz,
+            self._requester,
+            'GET',
             'courses/%s/quizzes' % (self.id),
-            **kwargs
+            **combine_kwargs(**kwargs)
         )
-        return PaginatedList(self._requester, response.json())
