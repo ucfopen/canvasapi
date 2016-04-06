@@ -23,7 +23,6 @@ def upload(requester, url, path=None, file=None, **kwargs):
             raise IOError('File ' + path + ' does not exist.')
         file = open(path, 'rb')
 
-    import pdb; pdb.set_trace()
     kwargs['name'] = os.path.basename(file.name)
     kwargs['size'] = os.fstat(file.fileno()).st_size
 
@@ -55,5 +54,4 @@ def upload(requester, url, path=None, file=None, **kwargs):
         url=upload_url,
         **kwargs
     )
-    import pdb; pdb.set_trace()
-    return True
+    return response.json()

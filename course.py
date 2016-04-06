@@ -205,7 +205,7 @@ class Course(CanvasObject):
         :type path: str
         :param file: The file to upload.
         :type file: file
-        :rtype: bool
+        :rtype: dict
         """
         return upload(
             self._requester,
