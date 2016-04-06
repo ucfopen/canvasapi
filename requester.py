@@ -13,15 +13,7 @@ class Requester(object):
         :param access_token: string
         """
         self.base_url = base_url
-        self.access_token = access_token
-
-        # Try to establish an initial connection to Canvas
-        try:
-            self.request('GET', 'accounts')
-        except PermissionError:
-            raise InvalidAccessToken('Invalid access_token')
-        except ResourceDoesNotExist:
-            raise ResourceDoesNotExist('Invalid base_url')
+        self.access_token = access_token     
 
     def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
         """

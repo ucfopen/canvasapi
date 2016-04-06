@@ -8,3 +8,5 @@ class Quiz(CanvasObject):
             self.id,
             self.title
         )
+
+
