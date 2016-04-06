@@ -85,9 +85,10 @@ class Requester(object):
         if 'file' in data:
             file = {'file': data['file']}
             del data['file']
-            return requests.post(url, headers=headers, data=data, files=file)
+        else:
+            file = None
 
-        return requests.post(url, headers=headers, data=data)
+        return requests.post(url, headers=headers, data=data, files=file)
 
     def _delete_request(self, url, headers, data=None):
         """

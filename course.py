@@ -1,6 +1,7 @@
 import os
 
 from canvas_object import CanvasObject
+from upload import upload
 from util import combine_kwargs
 from paginated_list import PaginatedList
 
@@ -206,43 +207,11 @@ class Course(CanvasObject):
         :type file: file
         :rtype: bool
         """
-        if not path and not file:
-            raise ValueError('Must provide a path or a file pointer.')
-
-        if path:
-            if not os.path.exists(path):
-                raise IOError('File ' + path + ' does not exist.')
-            file = open(path, 'rb')
-
-        kwargs['name'] = file.name
-        kwargs['size'] = os.fstat(file.fileno()).st_size
-
-        response = self._requester.request(
-            'POST',
+        return upload(
+            self._requester,
             'courses/%s/files' % (self.id),
-            **kwargs
-        )
-
-        response = response.json()
-
-        upload_url = response.get('upload_url', False)
-
-        if not upload_url:
-            raise Error('Malformed response. Either you or Canvas made a mistake.')
-
-        upload_params = response.get('upload_params', False)
-
-        if not upload_params:
-            raise Error('Failed to collect upload_params?')
-
-        kwargs = upload_params
-        # Add our file to the kwargs
-        kwargs['file'] = file
-
-        response = self._requester.request(
-            'POST',
-            use_auth=False,
-            url=upload_url,
+            path=path,
+            file=file,
             **kwargs
         )
 
