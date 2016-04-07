@@ -206,3 +206,19 @@ class Course(CanvasObject):
             'courses/%s/reset_content' % (self.id),
         )
         return Course(self._requester, response.json())
+
+    def get_assignment(self, assignment_id):
+        """
+        Returns the assignment with the given id.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:id`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.show>
+        :rtype: Assignment
+        """
+        from assignment import Assignment
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/assignments/%s' % (self.id, assignment_id),
+        )
+        return Assignment(self._requester, response.json())
