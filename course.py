@@ -222,3 +222,20 @@ class Course(CanvasObject):
             'courses/%s/assignments/%s' % (self.id, assignment_id),
         )
         return Assignment(self._requester, response.json())
+
+    def list_assignments(self):
+        """
+        Returns the list of assignments for the current context.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            'GET',
+            'courses/%s/assignments' % (self.id)
+        )
