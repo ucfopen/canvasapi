@@ -223,3 +223,17 @@ class Course(CanvasObject):
             'courses/%s/quizzes' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def get_quiz(self, quiz_id):
+        """
+        Returns the quiz with the given id
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:id`
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>
+        :rtype: Quiz
+        """
+        from quiz import Quiz
+        response = self._requester.request(
+            'GET',
+            'courses/%s/quizzes/%s' % (self.id, quiz_id)
+        )
+        return Quiz(self._requester, response.json())
