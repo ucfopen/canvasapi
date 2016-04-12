@@ -213,7 +213,7 @@ class Course(CanvasObject):
 
         :calls: `GET /api/v1/courses/:course_id/quizzes`
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Quiz`
+        :rtype: Quiz :class:`PaginatedList` of :class:`Quiz`
         """
         from quiz import Quiz
         return PaginatedList(
@@ -228,7 +228,7 @@ class Course(CanvasObject):
         """
         Returns the quiz with the given id
         :calls: `GET /api/v1/courses/:course_id/quizzes/:id`
-        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.show>
         :rtype: Quiz
         """
         from quiz import Quiz
@@ -247,9 +247,9 @@ class Course(CanvasObject):
         :rtype: Quiz
         """
         from quiz import Quiz
-        return PaginatedList(
-            Quiz,
-            self._requester,
+        response = self._requester.request(
             'POST',
-            'courses/%s/quizzes' % (self.id)
+            'courses/%s/quizzes' % (self.id),
+            **combine_kwargs(**kwargs)
         )
+        return Quiz(self._requester, response.json())
