@@ -237,3 +237,19 @@ class Course(CanvasObject):
             'courses/%s/quizzes/%s' % (self.id, quiz_id)
         )
         return Quiz(self._requester, response.json())
+
+    def create_quiz(self, title, **kwargs):
+        """
+        Create a new quiz for a course
+        :calls: `POST /api/v1/courses/:course_id/quizzes
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.create>
+        :param title: string
+        :rtype: Quiz
+        """
+        from quiz import Quiz
+        return PaginatedList(
+            Quiz,
+            self._requester,
+            'POST',
+            'courses/%s/quizzes' % (self.id)
+        )
