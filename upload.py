@@ -3,7 +3,7 @@ import os
 from util import combine_kwargs
 
 
-def upload(requester, url, path=None, file=None, **kwargs):
+def uploader(requester, url, path=None, file=None, **kwargs):
     """
     Upload a file to a course.
 

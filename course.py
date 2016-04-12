@@ -1,5 +1,5 @@
 from canvas_object import CanvasObject
-from upload import upload
+from upload import uploader
 from util import combine_kwargs
 from paginated_list import PaginatedList
 
@@ -193,7 +193,7 @@ class Course(CanvasObject):
         )
         return response.json()
 
-    def upload(self, path=None, file=None, **kwargs):
+    def upload_file(self, path=None, file=None, **kwargs):
         """
         Upload a file to a course.
 
@@ -205,7 +205,7 @@ class Course(CanvasObject):
         :type file: file
         :rtype: dict
         """
-        return upload(
+        return uploader(
             self._requester,
             'courses/%s/files' % (self.id),
             path=path,
