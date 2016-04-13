@@ -1,0 +1,7 @@
+{
+    "not_found": {
+        "method": "GET",
+        "endpoint": "ANY",
+        "status": 404
+    }
+}
