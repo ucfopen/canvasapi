@@ -38,4 +38,8 @@ class Assignment(CanvasObject):
             'courses/%s/assignments/%s' % (self.course_id, self.id),
             **combine_kwargs(**kwargs)
         )
+
+        if 'name' in response.json():
+            super(Assignment, self).set_attributes(response.json())
+
         return Assignment(self._requester, response.json())
