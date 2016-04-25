@@ -1,4 +1,4 @@
-from pycanvas.exceptions import BadRequest, InvalidAccessToken, PermissionError, ResourceDoesNotExist
+from pycanvas.exceptions import BadRequest, PermissionError, ResourceDoesNotExist
 import requests
 
 
@@ -13,7 +13,7 @@ class Requester(object):
         :param access_token: string
         """
         self.base_url = base_url
-        self.access_token = access_token     
+        self.access_token = access_token
 
     def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
         """

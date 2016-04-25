@@ -1,8 +1,8 @@
 from canvas_object import CanvasObject
 from util import combine_kwargs
 
-class Quiz(CanvasObject):
 
+class Quiz(CanvasObject):
 
     def __str__(self):
         return "id %s, title: %s" % (
@@ -17,7 +17,6 @@ class Quiz(CanvasObject):
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.update>
         :rtype: Quiz
         """
-        from course import Course
         response = self._requester.request(
             'PUT',
             'courses/%s/quizzes/%s' % (course_id, self.id),
@@ -25,14 +24,14 @@ class Quiz(CanvasObject):
         )
         return Quiz(self._requester, response.json())
 
-    def delete_quiz(self):
+    def delete_quiz(self, course_id, **kwargs):
         """
         Deletes a quiz
         :calls: `DELETE /api/v1/courses/:course_id/quizzes/:id`
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.destroy>
         """
-        from courses import Course
         response = self._requester.request(
             'DELETE',
-            'courses/%s/'
+            'courses/%s/quizzes/%s' % (course_id, self.id),
+            **combine_kwargs(**kwargs)
         )
