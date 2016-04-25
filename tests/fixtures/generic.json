@@ -1,7 +1,12 @@
 {
-    "not_found": {
-        "method": "GET",
-        "endpoint": "ANY",
-        "status": 404
-    }
+	"not_found": {
+		"method": "ANY",
+		"endpoint": "ANY",
+		"status_code": 404
+	},
+	"unauthorized": {
+		"method": "ANY",
+		"endpoint": "ANY",
+		"status_code": 401
+	}
 }

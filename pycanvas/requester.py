@@ -27,10 +27,7 @@ class Requester(object):
         :param endpoint: string
         :param headers: dict
         """
-        if not url:
-            full_url = self.base_url + endpoint
-        else:
-            full_url = url
+        full_url = url if url else self.base_url + endpoint
 
         if not headers:
             headers = {}

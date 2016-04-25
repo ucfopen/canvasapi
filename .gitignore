@@ -3,3 +3,4 @@
 .coverage
 htmlcov/
 env/
+_test.py

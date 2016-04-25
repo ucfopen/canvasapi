@@ -22,14 +22,16 @@ def register_uris(base_url, requirements, adapter):
         for obj in objects:
             obj = data.get(obj)
 
+            method = requests_mock.ANY if obj['method'] == 'ANY' else obj['method']
             url = requests_mock.ANY if obj['endpoint'] == 'ANY' else base_url + obj['endpoint']
 
             try:
                 adapter.register_uri(
-                    obj['method'],
+                    method,
                     url,
                     json=obj.get('data'),
-                    status_code=obj.get('status')
+                    status_code=obj.get('status_code'),
+                    headers=obj.get('headers', {})
                 )
             except Exception as e:
                 print e
