@@ -1,4 +1,4 @@
-from pycanvas.exceptions import BadRequest, InvalidAccessToken, PermissionError, ResourceDoesNotExist
+from pycanvas.exceptions import BadRequest, PermissionError, ResourceDoesNotExist
 import requests
 
 
@@ -7,21 +7,17 @@ class Requester(object):
     Responsible for handling HTTP requests.
     """
 
-    def __init__(self, base_url, access_token):
+    def __init__(self, base_url, access_token, mock_adapter):
         """
         :param base_url: string
         :param access_token: string
         """
         self.base_url = base_url
         self.access_token = access_token
+        self._session = requests.Session()
 
-        # Try to establish an initial connection to Canvas
-        try:
-            self.request('GET', 'accounts')
-        except PermissionError:
-            raise InvalidAccessToken('Invalid access_token')
-        except ResourceDoesNotExist:
-            raise ResourceDoesNotExist('Invalid base_url')
+        if mock_adapter:
+            self._session.mount('mock', mock_adapter)
 
     def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
         """
@@ -31,10 +27,7 @@ class Requester(object):
         :param endpoint: string
         :param headers: dict
         """
-        if not url:
-            full_url = self.base_url + endpoint
-        else:
-            full_url = url
+        full_url = url if url else self.base_url + endpoint
 
         if not headers:
             headers = {}
@@ -71,7 +64,7 @@ class Requester(object):
         :pararm headers: dict
         :param params: dict
         """
-        return requests.get(url, headers=headers, params=params)
+        return self._session.get(url, headers=headers, params=params)
 
     def _post_request(self, url, headers, data={}):
         """
@@ -82,7 +75,7 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        return requests.post(url, headers=headers, data=data)
+        return self._session.post(url, headers=headers, data=data)
 
     def _delete_request(self, url, headers, data={}):
         """
@@ -93,7 +86,7 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        return requests.delete(url, headers=headers, data=data)
+        return self._session.delete(url, headers=headers, data=data)
 
     def _put_request(self, url, headers, data={}):
         """
@@ -104,4 +97,4 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        return requests.put(url, headers=headers, data=data)
+        return self._session.put(url, headers=headers, data=data)

@@ -1,0 +1,139 @@
+{
+	"activity_stream_summary": {
+		"method": "GET",
+		"endpoint": "users/self/activity_stream/summary",
+		"data": [
+			{
+				"type": "DiscussionTopic",
+				"unread_count": 2,
+				"count": 7
+			},
+			{
+				"type": "Conversation",
+				"unread_count": 0,
+				"count": 3
+			}
+		],
+		"status_code": 200
+	},
+	"course_nickname": {
+		"method": "GET",
+		"endpoint": "users/self/course_nicknames/1",
+		"data": {
+			"course_id": 1,
+			"name": "One is the Loneliest Number",
+			"nickname": "ONE"
+		},
+		"status_code": 200
+	},
+	"course_nickname_set": {
+		"method": "PUT",
+		"endpoint": "users/self/course_nicknames/1",
+		"data": {
+			"course_id": 1,
+			"name": "Course Name",
+			"nickname": "New Course Nickname"
+		},
+		"status_code": 200
+	},
+	"course_nicknames": {
+		"method": "GET",
+		"endpoint": "users/self/course_nicknames",
+		"data": [
+			{
+				"course_id": 16,
+				"name": "User-friendly Web-enabled Task-force",
+				"nickname": "UWT"
+			},
+			{
+				"course_id": 17,
+				"name": "Seamless Intangible Framework",
+				"nickname": "SIF"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+            "Link": "<mock://example.com/api/v1/users/self/course_nicknames?page=2&per_page=2>; rel=\"next\""
+        }
+	},
+	"course_nicknames_delete": {
+		"method": "DELETE",
+		"endpoint": "users/self/course_nicknames",
+		"data": {
+			"message": "OK"
+		},
+		"status_code": 200
+	},
+	"course_nicknames_page_2": {
+		"method": "GET",
+		"endpoint": "users/self/course_nicknames?page=2&per_page=2",
+		"data": [
+			{
+				"course_id": 18,
+				"name": "Open-architected Disintermediate Complexity",
+				"nickname": "ODC"
+			},
+			{
+				"course_id": 19,
+				"name": "Persevering Impactful Function",
+				"nickname": "PIF"
+			}
+		],
+		"status_code": 200
+	},
+	"get_by_id": {
+		"method": "GET",
+		"endpoint": "users/1",
+		"data": {
+			"id": 1,
+			"name": "John Doe"
+		}
+	},
+	"get_by_id_type": {
+		"method": "GET",
+		"endpoint": "users/sis_user_id:jdoe",
+		"data": {
+			"id": 1,
+			"name": "John Doe"
+		}
+	},
+	"todo_items": {
+		"method": "GET",
+		"endpoint": "users/self/todo",
+		"data": [
+			{
+				"type": "grading",
+				"assignment": {},
+				"ignore": ".. url ..",
+				"ignore_permanently": ".. url ..",
+				"html_url": ".. url ..",
+				"needs_grading_count": 3,
+				"context_type": "course",
+				"course_id": 1,
+				"group_id": null
+			},
+			{
+				"type": "submitting",
+				"assignment": {},
+				"ignore": ".. url ..",
+				"ignore_permanently": ".. url ..",
+				"html_url": ".. url ..",
+				"context_type": "course",
+				"course_id": 1
+			}
+		]
+	},
+	"upcoming_events": {
+		"method": "GET",
+		"endpoint": "users/self/upcoming_events",
+		"data": [
+			{
+				"id": 42,
+				"title": "Upcoming Course Event",
+				"description": "This is an event!",
+				"start_at": "2015-04-01T13:37:00Z",
+				"end_at": "2017-04-01T13:37:00Z"
+			}
+		]
+	}
+}
