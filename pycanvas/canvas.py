@@ -1,6 +1,5 @@
 from account import Account
 from course import Course
-from exceptions import RequiredFieldMissing
 from paginated_list import PaginatedList
 from requester import Requester
 from user import User
@@ -12,12 +11,13 @@ class Canvas(object):
     The main class to be instantiated to provide access to Canvas's API.
     """
 
-    def __init__(self, base_url, access_token):
+    def __init__(self, base_url, access_token, adapter=None):
         """
         :param base_url: string
         :param access_token: string
+        :param adapter: requests_mock.Adapter
         """
-        self.__requester = Requester(base_url, access_token)
+        self.__requester = Requester(base_url, access_token, adapter)
 
     def create_account(self, **kwargs):
         """
@@ -29,12 +29,12 @@ class Canvas(object):
         """
         response = self.__requester.request(
             'POST',
-            '/accounts',
+            'accounts',
             **combine_kwargs(**kwargs)
         )
         return Account(self.__requester, response.json())
 
-    def get_account(self, account_id, id_type=None):
+    def get_account(self, account_id):
         """
         Retrieve information on an individual account, given by id or sis sis_account_id
 
@@ -42,14 +42,9 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`
         :rtype: :class:`Account`
         """
-        if id_type:
-            uri = 'accounts/%s:%s' % (id_type, account_id)
-        else:
-            uri = 'accounts/%s' % (account_id)
-
         response = self.__requester.request(
             'GET',
-            uri
+            'accounts/%s' % (account_id)
         )
         return Account(self.__requester, response.json())
 
@@ -130,7 +125,7 @@ class Canvas(object):
         )
         return User(self.__requester, response.json())
 
-    def get_courses(self):
+    def get_courses(self, **kwargs):
         """
         Returns the list of active courses for the current user.
 
@@ -142,7 +137,8 @@ class Canvas(object):
             Course,
             self.__requester,
             'GET',
-            'courses'
+            'courses',
+            **combine_kwargs(**kwargs)
         )
 
     def get_activity_stream_summary(self):
@@ -249,14 +245,15 @@ class Canvas(object):
 
         :calls: `DELETE /api/v1/users/self/course_nicknames
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`
-        :rtype: dict
+        :rtype: bool
         """
 
         response = self.__requester.request(
             'DELETE',
             'users/self/course_nicknames'
         )
-        return response.json()
+        response_json = response.json()
+        return 'message' in response_json and response_json['message'] == 'OK'
 
     def search_accounts(self, **kwargs):
         """
