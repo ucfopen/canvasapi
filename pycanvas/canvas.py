@@ -29,12 +29,12 @@ class Canvas(object):
         """
         response = self.__requester.request(
             'POST',
-            '/accounts',
+            'accounts',
             **combine_kwargs(**kwargs)
         )
         return Account(self.__requester, response.json())
 
-    def get_account(self, account_id, id_type=None):
+    def get_account(self, account_id):
         """
         Retrieve information on an individual account, given by id or sis sis_account_id
 
