@@ -1,0 +1,12 @@
+{
+	"not_found": {
+		"method": "ANY",
+		"endpoint": "ANY",
+		"status_code": 404
+	},
+	"unauthorized": {
+		"method": "ANY",
+		"endpoint": "ANY",
+		"status_code": 401
+	}
+}
