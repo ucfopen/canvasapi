@@ -12,8 +12,9 @@ class Course(CanvasObject):
         """
         Marks the course as concluded.
 
-        :calls: `DELETE /api/v1/courses/:id
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
+        :calls: `DELETE /api/v1/courses/:id \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`_
+
         :rtype: bool: True if the course was concluded, False otherwise.
         """
         response = self._requester.request(
@@ -28,8 +29,9 @@ class Course(CanvasObject):
         """
         Permanently deletes the course.
 
-        :calls: `DELETE /api/v1/courses/:id
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`
+        :calls: `DELETE /api/v1/courses/:id \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`_
+
         :rtype: bool: True if the course was deleted, False otherwise.
         """
         response = self._requester.request(
@@ -44,8 +46,9 @@ class Course(CanvasObject):
         """
         Updates the course.
 
-        :calls: `PUT /api/v1/courses/:id
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`
+        :calls: `PUT /api/v1/courses/:id \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`_
+
         :rtype: bool: True if the course was updated, False otherwise.
         """
         response = self._requester.request(
@@ -64,11 +67,12 @@ class Course(CanvasObject):
         Retrieve a user by their ID. id_type denotes which endpoint to try as there are
         several different ids that can pull the same user record from Canvas.
 
-        :calls: `GET /api/v1/courses/:course_id/users/:id`
-        <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>
-        :param: user_id str
-        :param: user_id_type str
-        :rtype: :class:`pycanvas.user.User`
+        :calls: `GET /api/v1/courses/:course_id/users/:id \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
+
+        :param: user_id: str
+        :param: user_id_type: str
+        :rtype: :class:`User`
         """
         from user import User
 
@@ -88,8 +92,9 @@ class Course(CanvasObject):
         Lists all users in a course.
         If a `search_term` is provided, only returns matching users
 
-        :calls: `GET /api/v1/courses/:course_id/search_users
-        https://canvas.instructure.com/doc/api/courses.html#method.courses.users`
+        :calls: `GET /api/v1/courses/:course_id/search_users \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>`_
+
         :rtype: :class:`PaginatedList` of :class:`User`
 
         """
@@ -107,13 +112,14 @@ class Course(CanvasObject):
         """
         Create a new user enrollment for a course or a section.
 
-        :calls: `POST /api/v1/courses/:course_id/enrollments
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`
+        :calls: `POST /api/v1/courses/:course_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`_
+
         :param user: the user to enroll
-        :type user: :class:`pycanvas.user.User`
+        :type user: :class:`User`
         :param enrollment_type: the type of enrollment
         :type enrollment_type: str
-        :rtype: Enrollment: object representing the enrollment
+        :rtype: :class:`Enrollment` object representing the enrollment
         """
         from enrollment import Enrollment
 
@@ -133,8 +139,9 @@ class Course(CanvasObject):
         Returns a list of students in the course ordered by how
         recently they have logged in.
 
-        :calls: `GET /api/v1/courses/:course_id/recent_students`
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.recent_students>
+        :calls: `GET /api/v1/courses/:course_id/recent_students \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.recent_students>`_
+
         :rtype: :class:`PaginatedList` of :class:`User`
         """
         from user import User
@@ -150,8 +157,9 @@ class Course(CanvasObject):
         """
         Preview HTML content processed for this course.
 
-        :calls: `POST /api/v1/courses/:course_id/preview_html`
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.preview_html>
+        :calls: `POST /api/v1/courses/:course_id/preview_html \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.preview_html>`_
+
         :param html: The HTML code to preview.
         :type html: str
         :rtype: str
@@ -167,8 +175,9 @@ class Course(CanvasObject):
         """
         Returns some of a course's settings.
 
-        :calls: `GET /api/v1/courses/:course_id/settings`
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.settings>
+        :calls: `GET /api/v1/courses/:course_id/settings \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.settings>`_
+
         :rtype: dict
         """
         response = self._requester.request(
@@ -181,8 +190,9 @@ class Course(CanvasObject):
         """
         Update a course's settings.
 
-        :calls: `PUT /api/v1/courses/:course_id/settings`
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.update_settings>
+        :calls: `PUT /api/v1/courses/:course_id/settings \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.update_settings>`_
+
         :rtype: dict
         """
         response = self._requester.request(
@@ -197,9 +207,10 @@ class Course(CanvasObject):
         Deletes the current course, and creates a new equivalent course
         with no content, but all sections and users moved over.
 
-        :calls: `POST /api/v1/courses/:course_id/reset_content`
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.reset_content>
-        :rtype: Course
+        :calls: `POST /api/v1/courses/:course_id/reset_content \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.reset_content>`_
+
+        :rtype: :class:`Course`
         """
         response = self._requester.request(
             'POST',

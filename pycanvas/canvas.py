@@ -13,8 +13,8 @@ class Canvas(object):
 
     def __init__(self, base_url, access_token, adapter=None):
         """
-        :param base_url: string
-        :param access_token: string
+        :param base_url: str
+        :param access_token: str
         :param adapter: requests_mock.Adapter
         """
         self.__requester = Requester(base_url, access_token, adapter)
@@ -23,8 +23,9 @@ class Canvas(object):
         """
         Creates a new root account.
 
-        :calls: `POST /api/v1/accounts
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`
+        :calls: `POST /api/v1/accounts \
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
+
         :rtype: :class:`Account`
         """
         response = self.__requester.request(
@@ -36,10 +37,12 @@ class Canvas(object):
 
     def get_account(self, account_id):
         """
-        Retrieve information on an individual account, given by id or sis sis_account_id
+        Retrieve information on an individual account.
 
-        :calls: `GET /api/v1/accounts/:id
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`
+        :calls: `GET /api/v1/accounts/:id \
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`_
+
+        :param account_id: int
         :rtype: :class:`Account`
         """
         response = self.__requester.request(
@@ -56,8 +59,9 @@ class Canvas(object):
         response, only account admins can view the accounts that they
         are in.
 
-        :calls: `GET /api/v1/accounts
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.index>`
+        :calls: `GET /api/v1/accounts \
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.index>`_
+
         :rtype: :class:`PaginatedList` of :class:`Account`
         """
         return PaginatedList(
@@ -76,8 +80,9 @@ class Canvas(object):
         Only returns `id`, `name`, `workflow_state`, `root_account_id`
         and `parent_account_id`.
 
-        :calls: `GET /api/v1/course_accounts
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.course_accounts>`
+        :calls: `GET /api/v1/course_accounts \
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.course_accounts>`_
+
         :rtype: :class:`PaginatedList` of :class:`Account`
         """
 
@@ -92,8 +97,9 @@ class Canvas(object):
         """
         Retrieve a course by its ID.
 
-        :calls: `GET /courses/:id
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`
+        :calls: `GET /courses/:id \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
+
         :param course_id: int
         :rtype: :class:`pycanvas.course.Course`
         """
@@ -108,11 +114,12 @@ class Canvas(object):
         Retrieve a user by their ID. `id_type` denotes which endpoint to try as there are
         several different ids that can pull the same user record from Canvas.
 
-        :calls: `GET /users/:id
-        <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`
-        :param: user_id str
-        :param: id_type str
-        :rtype: :class: `pycanvas.user.User`
+        :calls: `GET /users/:id \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
+
+        :param user_id: str
+        :param id_type: str
+        :rtype: :class:`User`
         """
         if id_type:
             uri = 'users/%s:%s' % (id_type, user_id)
@@ -129,8 +136,9 @@ class Canvas(object):
         """
         Returns the list of active courses for the current user.
 
-        :calls: `GET /api/v1/courses
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.index>`
+        :calls: `GET /api/v1/courses \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.index>`_
+
         :rtype: :class:`PaginatedList` of :class:`Course`
         """
         return PaginatedList(
@@ -145,8 +153,9 @@ class Canvas(object):
         """
         Returns a summary of the current user's global activity stream.
 
-        :calls: `GET /api/v1/users/self/activity_stream/summary
-        <https://canvas.instructure.com/doc/api/users.html#method.users.activity_stream_summary>`
+        :calls: `GET /api/v1/users/self/activity_stream/summary \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.activity_stream_summary>`_
+
         :rtype: dict
         """
         response = self.__requester.request(
@@ -159,8 +168,9 @@ class Canvas(object):
         """
         Returns the current user's list of todo items, as seen on the user dashboard.
 
-        :calls: `GET /api/v1/users/self/todo
-        <https://canvas.instructure.com/doc/api/users.html#method.users.todo_items>`
+        :calls: `GET /api/v1/users/self/todo \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.todo_items>`_
+
         :rtype: dict
         """
         response = self.__requester.request(
@@ -174,8 +184,9 @@ class Canvas(object):
         Returns the current user's upcoming events, i.e. the same
         things shown in the dashboard 'Coming Up' sidebar.
 
-        :calls: `GET /api/v1/users/self/upcoming_events
-        <https://canvas.instructure.com/doc/api/users.html#method.users.upcoming_events>`
+        :calls: `GET /api/v1/users/self/upcoming_events \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.upcoming_events>`_
+
         :rtype: dict
         """
         response = self.__requester.request(
@@ -188,8 +199,9 @@ class Canvas(object):
         """
         Returns all course nicknames you have set.
 
-        :calls: `GET /api/v1/users/self/course_nicknames
-        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`
+        :calls: `GET /api/v1/users/self/course_nicknames \
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`_
+
         :rtype: :class:`PaginatedList` of :class:`CourseNickname`
         """
         from course_nickname import CourseNickname
@@ -205,8 +217,9 @@ class Canvas(object):
         """
         Returns all course nicknames you have set.
 
-        :calls: `GET /api/v1/users/self/course_nicknames/:course_id
-        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.show>`
+        :calls: `GET /api/v1/users/self/course_nicknames/:course_id \
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.show>`_
+
         :param course_id: int
         :rtype: :class:`CourseNickname`
         """
@@ -224,8 +237,9 @@ class Canvas(object):
         course's name in output of API calls you make subsequently, as
         well as in selected places in the Canvas web user interface.
 
-        :calls: `PUT /api/v1/users/self/course_nicknames/:course_id
-        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.update>`
+        :calls: `PUT /api/v1/users/self/course_nicknames/:course_id \
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.update>`_
+
         :param course_id: int
         :param nickname: str
         :rtype: :class:`CourseNickname`
@@ -243,8 +257,9 @@ class Canvas(object):
         """
         Remove all stored course nicknames.
 
-        :calls: `DELETE /api/v1/users/self/course_nicknames
-        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`
+        :calls: `DELETE /api/v1/users/self/course_nicknames \
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
+
         :rtype: bool
         """
 
@@ -261,8 +276,9 @@ class Canvas(object):
 
         Partial match on name / domain are supported.
 
-        :calls: `GET /api/v1/accounts/search
-        <https://canvas.instructure.com/doc/api/account_domain_lookups.html#method.account_domain_lookups.search>`
+        :calls: `GET /api/v1/accounts/search \
+        <https://canvas.instructure.com/doc/api/account_domain_lookups.html#method.account_domain_lookups.search>`_
+
         :rtype: dict
         """
 

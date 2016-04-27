@@ -3,7 +3,8 @@ import re
 
 class PaginatedList(object):
     """
-    Abstracts `pagination of Canvas API <https://canvas.instructure.com/doc/api/file.pagination.html>`.
+    Abstracts `pagination of Canvas API <https://canvas.instructure.com/doc/api/file.pagination.html>`_
+.
     """
 
     def __init__(self, content_class, requester, request_method, first_url, **kwargs):

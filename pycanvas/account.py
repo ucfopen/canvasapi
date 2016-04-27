@@ -17,8 +17,9 @@ class Account(CanvasObject):
         If the user no long wants to see this notification it can be
         excused with this call.
 
-        :calls: `DELETE /api/v1/accounts/:account_id/users/:user_id/account_notifications/:id
-        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_close_notification>`
+        .. :calls: `DELETE /api/v1/accounts/:account_id/users/:user_id/account_notifications/:id
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_close_notification>`_
+
         :param user: :class:`User` or int
         :rtype: :class:`AccountNotification`
         """
@@ -37,8 +38,9 @@ class Account(CanvasObject):
         """
         Creates a new root account.
 
-        :calls: `POST /api/v1/accounts/:account_id/root_accounts
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`
+        .. :calls: `POST /api/v1/accounts/:account_id/root_accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
+
         :rtype: :class:`Account`
         """
         response = self._requester.request(
@@ -52,8 +54,9 @@ class Account(CanvasObject):
         """
         Create a course.
 
-        :calls: `POST /api/v1/accounts/:account_id/courses
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.create>`
+        .. :calls: `POST /api/v1/accounts/:account_id/courses
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.create>`_
+
         :rtype: :class:`pycanvas.course.Course`
         """
         from course import Course
@@ -69,8 +72,9 @@ class Account(CanvasObject):
         """
         Add a new sub-account to a given account.
 
-        :calls: `POST /api/v1/accounts/:account_id/sub_accounts
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`
+        .. :calls: `POST /api/v1/accounts/:account_id/sub_accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
+
         :rtype: :class:`Account`
         """
         if isinstance(account, dict) and 'name' in account:
@@ -89,8 +93,9 @@ class Account(CanvasObject):
         """
         Create and return a new user and pseudonym for an account.
 
-        :calls: `POST /api/v1/accounts/:account_id/users
-        <https://canvas.instructure.com/doc/api/users.html#method.users.create>`
+        .. :calls: `POST /api/v1/accounts/:account_id/users
+        <https://canvas.instructure.com/doc/api/users.html#method.users.create>`_
+
         :param pseudonym: dict
         :rtype: :class: `User`
         """
@@ -112,8 +117,9 @@ class Account(CanvasObject):
         """
         Create and return a new global notification for an account.
 
-        :calls: `POST /api/v1/accounts/:account_id/account_notifications
-        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.create>`
+        .. :calls: `POST /api/v1/accounts/:account_id/account_notifications
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.create>`_
+
         :param account_notification: dict
         :rtype: :class: `AccountNotification`
         """
@@ -144,8 +150,9 @@ class Account(CanvasObject):
         the account. If they do this, they won't be able to make API
         calls or log into Canvas at that account.
 
-        :calls: `DELETE /api/v1/accounts/:account_id/users/:user_id
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.remove_user>`
+        .. :calls: `DELETE /api/v1/accounts/:account_id/users/:user_id
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.remove_user>`_
+
         :param user: :class:`User` or int
         :rtype: :class:`User`
         """
@@ -163,8 +170,9 @@ class Account(CanvasObject):
         """
         Retrieve the list of courses in this account.
 
-        :calls: `GET /api/v1/accounts/:account_id/courses
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.courses_api>`
+        .. :calls: `GET /api/v1/accounts/:account_id/courses
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.courses_api>`_
+
         :rtype: :class:`PaginatedList` of :class:`Course`
         """
         from course import Course
@@ -181,8 +189,9 @@ class Account(CanvasObject):
         """
         Shows all reports that have been run for the account of a specific type.
 
-        :calls: `GET /api/v1/accounts/:account_id/reports/:report
-        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.index>`
+        .. :calls: `GET /api/v1/accounts/:account_id/reports/:report
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.index>`_
+
         :param report_type: str
         :rtype: :class:`PaginatedList` of :class:`AccountReport`
         """
@@ -197,8 +206,9 @@ class Account(CanvasObject):
         """
         Returns the list of reports for the current context.
 
-        :calls: `GET /api/v1/accounts/:account_id/reports
-        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.available_reports>`
+        .. :calls: `GET /api/v1/accounts/:account_id/reports
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.available_reports>`_
+
         :rtpye: :class:`PaginatedList` of :class`AccountReport`
         """
         return PaginatedList(
@@ -212,8 +222,9 @@ class Account(CanvasObject):
         """
         List accounts that are sub-accounts of the given account.
 
-        :calls: `GET /api/v1/accounts/:account_id/sub_accounts
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.sub_accounts>`
+        .. :calls: `GET /api/v1/accounts/:account_id/sub_accounts
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.sub_accounts>`_
+
         :param recursive: bool
         :rtype: :class:`PaginatedList` of :class:`Account`
         """
@@ -229,8 +240,9 @@ class Account(CanvasObject):
         """
         Retrieve the list of users associated with this account.
 
-        :calls: `GET /api/v1/accounts/:account_id/users
-        <https://canvas.instructure.com/doc/api/users.html#method.users.index>`
+        .. :calls: `GET /api/v1/accounts/:account_id/users
+        <https://canvas.instructure.com/doc/api/users.html#method.users.index>`_
+
         :rtype: :class:`PaginatedList` of :class:`User`
         """
         from user import User
@@ -249,8 +261,9 @@ class Account(CanvasObject):
         this user. Any notifications that have been closed by the user
         will not be returned.
 
-        :calls:`GET /api/v1/accounts/:account_id/users/:user_id/account_notifications
-        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_index>`
+        .. :calls:`GET /api/v1/accounts/:account_id/users/:user_id/account_notifications
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_index>`_
+
         :param user: :class:`User` or int
         :rtype: :class:`PaginatedList` of :class:`AccountNotification`
         """
@@ -269,8 +282,9 @@ class Account(CanvasObject):
         """
         Update an existing account.
 
-        :calls: `PUT /api/v1/accounts/:id
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.update>`
+        .. :calls: `PUT /api/v1/accounts/:id
+        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.update>`_
+
         :rtype: bool: True if the course was updated, False otherwise.
         """
 
