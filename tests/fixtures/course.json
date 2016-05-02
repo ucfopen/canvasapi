@@ -95,5 +95,13 @@
             "title": "Newer Title"
         },
         "status_code": 200
+    },
+    "get_quiz": {
+        "method": "GET",
+        "endpoint": "courses/1/quizzes/1",
+        "data": {
+            "id": 1
+        },
+        "status_code": 200
     }
 }

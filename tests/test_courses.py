@@ -15,7 +15,7 @@ class TestCourses(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['create', 'get_by_id'],
+            'course': ['create', 'get_by_id','get_quiz'],
             'generic': ['not_found'],
             'quiz': ['get_by_id']
         }
@@ -36,7 +36,9 @@ class TestCourses(unittest.TestCase):
         assert new_quiz.title == title
 
     def test_get_quiz(self):
-        pass
+        target_quiz = self.course.get_quiz(1)
+
+        assert isinstance(target_quiz, Quiz)
 
     def test_list_quizzes(self):
         pass
