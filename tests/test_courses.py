@@ -3,7 +3,7 @@ import settings
 
 from util import register_uris
 from pycanvas.course import Course
-
+from pycanvas.quiz import Quiz
 
 class TestCourses(unittest.TestCase):
     """
@@ -12,7 +12,7 @@ class TestCourses(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-
+            'course': ['create']
         }
 
         adapter = requests_mock.Adapter()
@@ -20,7 +20,12 @@ class TestCourses(unittest.TestCase):
         register_uris(settings.BASE_URL, requires, adapter)
 
     def test_create_quiz(self):
-        pass
+        title = 'New Title'
+        new_quiz = self.course.create_quiz(self.course.id, quiz={'title': title})
+
+        assert isinstance(new_quiz, Course)
+        assert hasattr(new_quiz, 'title')
+        assert new_quiz.title == title
 
     def test_get_quiz(self):
         pass
