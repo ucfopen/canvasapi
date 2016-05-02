@@ -18,7 +18,7 @@ class TestCourses(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['create', 'get_by_id','get_quiz'],
+            'course': ['create', 'get_by_id', 'get_quiz', 'multiple_quizzes'],
             'generic': ['not_found'],
             'quiz': ['get_by_id']
         }
@@ -51,4 +51,8 @@ class TestCourses(unittest.TestCase):
 
     #list_quizzes()
     def test_list_quizzes(self):
-        pass
+        quizzes = self.course.list_quizzes()
+        quiz_list = [quiz for quiz in quizzes]
+
+        assert len(quiz_list) == 2
+        assert isinstance(quiz_list[0], Quiz)

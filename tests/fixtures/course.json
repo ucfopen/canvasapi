@@ -103,5 +103,20 @@
             "id": 1
         },
         "status_code": 200
+    },
+    "multiple_quizzes": {
+        "method": "GET",
+        "endpoint": "courses/1/quizzes",
+        "data": [
+            {
+                "id": 1,
+                "title": "First Quiz"
+            },
+            {
+                "id": 2,
+                "title": "Second Quiz"
+            }
+        ],
+        "status_code": 200
     }
 }
