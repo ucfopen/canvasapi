@@ -17,7 +17,7 @@ class TestQuizzes(unittest.TestCase):
         requires = {
             'course': ['get_by_id'],
             'generic': ['not_found'],
-            'quiz': ['edit', 'get_by_id'],
+            'quiz': ['delete', 'edit', 'get_by_id'],
         }
 
         adapter = requests_mock.Adapter()
@@ -37,4 +37,9 @@ class TestQuizzes(unittest.TestCase):
 
 
     def test_delete_quiz(self):
-        pass
+        title = "Great Title"
+        deleted_quiz = self.quiz.delete_quiz(self.course.id, quiz={'title': title})
+
+        assert isinstance(deleted_quiz, Quiz)
+        assert hasattr(deleted_quiz, 'title')
+        assert deleted_quiz.title == title
