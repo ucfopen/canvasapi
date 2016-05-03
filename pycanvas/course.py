@@ -5,7 +5,7 @@ from paginated_list import PaginatedList
 
 class Course(CanvasObject):
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "%s %s %s" % (self.id, self.course_code, self.name)
 
     def conclude(self):
