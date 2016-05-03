@@ -35,3 +35,4 @@ class Quiz(CanvasObject):
             'courses/%s/quizzes/%s' % (course_id, self.id),
             **combine_kwargs(**kwargs)
         )
+        return Quiz(self._requester, response.json())
