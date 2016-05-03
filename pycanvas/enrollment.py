@@ -10,5 +10,3 @@ class Enrollment(CanvasObject):
             self.user_id,
             self.name
         )
-
-

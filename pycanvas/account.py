@@ -287,6 +287,7 @@ class Account(CanvasObject):
             return False
 
 
+
 class AccountNotification(CanvasObject):
     def __str__(self):
         return "subject: %s, message: %s" % (
