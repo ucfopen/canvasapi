@@ -27,6 +27,7 @@ class TestQuiz(unittest.TestCase):
         self.course = self.canvas.get_course(1)
         self.quiz = self.course.get_quiz(1)
 
+    # edit()
     def test_edit(self):
         title = 'New Title'
         edited_quiz = self.quiz.edit(self.course.id, quiz={'title': title})
@@ -35,6 +36,7 @@ class TestQuiz(unittest.TestCase):
         assert hasattr(edited_quiz, 'title')
         assert edited_quiz.title == title
 
+    # delete()
     def test_delete(self):
         title = "Great Title"
         deleted_quiz = self.quiz.delete(self.course.id, quiz={'title': title})
