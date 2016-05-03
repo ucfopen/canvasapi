@@ -222,4 +222,3 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/enrollments' % (self.id)
         )
-
