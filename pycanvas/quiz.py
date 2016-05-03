@@ -4,7 +4,7 @@ from util import combine_kwargs
 
 class Quiz(CanvasObject):
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "id %s, title: %s" % (
             self.id,
             self.title
