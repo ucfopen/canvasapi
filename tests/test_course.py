@@ -64,3 +64,15 @@ class TestCourse(unittest.TestCase):
 
         assert len(enrollment_list) == 4
         assert isinstance(enrollment_list[0], enrollment)
+
+    #deactivate_enrollment()
+    def test_deactivate_enrollment(self):
+        target_enrollment = self.course.deactivate_enrollment(1)
+
+        assert isinstance(target_enrollment, Enrollment)
+
+    #reactivate_enrollment()
+    def test_reactivate_enrollment(self):
+        target_enrollment = self.course.reactivate_enrollment(1)
+
+        assert isinstance(target_enrollment, Enrollment)
