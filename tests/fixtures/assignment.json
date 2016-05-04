@@ -1,0 +1,91 @@
+{
+	"create": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Newly Created Assignment",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
+
+	"get_by_id": {
+	    "method": "GET",
+	    "endpoint": "courses/1/assignments/5",
+	    "data": {
+	        "id": 5,
+	        "course_id": 1,
+	        "name": "Assignment 1",
+	        "description": "Do this assignment"
+	    },
+		"status_code": 200
+	},
+
+	"get_all_assignments": {
+	    "method": "GET",
+	    "endpoint": "courses/1/assignments",
+	    "data": [
+		    {
+		        "id": 1,
+		        "course_id": 1,
+		        "name": "Assignment 1",
+		        "description": "Do this assignment"
+		    },
+		    {
+		    	"id": 2,
+		    	"course_id": 1,
+				"name": "Assignment 2",
+		    	"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
+
+	"get_user_assignments": {
+	    "method": "GET",
+	    "endpoint": "users/1/courses/1/assignments",
+	    "data": [
+		    {
+		        "id": 1,
+		        "course_id": 1,
+		        "name": "Assignment 1",
+		        "description": "Do this assignment"
+		    },
+		    {
+		    	"id": 2,
+		    	"course_id": 1,
+		    	"name": "Assignment 2",
+		    	"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
+
+	"edit_assignment": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "New Name",
+			"description": "Delete this assignment"
+		},
+		"status_code": 200
+	},
+
+	"delete_assignment": {
+		"method": "DELETE",
+		"endpoint": "courses/1/assignments/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Delete this assignment"
+		},
+		"status_code": 200
+	}
+
+
+}
