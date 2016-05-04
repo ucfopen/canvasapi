@@ -1,0 +1,35 @@
+{
+	"list_enrollments": {
+		"method": "GET",
+		"endpoint": "sections/1/enrollments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 5
+			},
+			{
+				"id": 2,
+				"course_id": 6
+			}
+		],
+		"status_code": 200,
+		"headers": {
+            "Link": "<mock://example.com/api/v1/sections/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+        }
+	},
+	"list_enrollments_2": {
+		"method": "GET",
+		"endpoint": "sections/1/list_enrollments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 7
+			},
+			{
+				"id": 4,
+				"course_id": 8
+			}
+		],
+		"status_code": 200
+	}
+}
