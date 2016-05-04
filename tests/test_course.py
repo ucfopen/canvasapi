@@ -4,6 +4,7 @@ import requests_mock
 
 from util import register_uris
 from pycanvas.course import Course
+from pycanvas.enrollment import Enrollment
 from pycanvas.quiz import Quiz
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas import Canvas
@@ -18,7 +19,7 @@ class TestCourse(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['create', 'get_by_id', 'get_quiz', 'list_quizzes', 'list_quizzes2'],
+            'course': ['create', 'deactivate_enrollment', 'get_by_id', 'get_quiz', 'list_quizzes', 'list_quizzes2', 'reactivate_enrollment'],
             'generic': ['not_found'],
             'quiz': ['get_by_id']
         }
