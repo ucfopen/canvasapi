@@ -22,3 +22,10 @@ class TestSection(unittest.TestCase):
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
+
+    def test_list_enrollments(self):
+        enrollments = self.section.list_enrollments()
+        enrollment_list = [enrollment for enrollment in enrollments]
+
+        assert len(enrollment_list) == 4
+        assert isinstance(enrollment_list[0], enrollment)
