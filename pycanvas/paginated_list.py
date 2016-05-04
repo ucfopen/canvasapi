@@ -43,16 +43,6 @@ class PaginatedList(object):
         while len(self.__elements) <= index and self._has_next():
             self._grow()
 
-    def _get_last_page_url(self):
-        response = self.__requester.request(
-            'GET',
-            self.__url,
-            **self.__first_params
-        )
-        regex = r'%s(.*)' % (re.escape(self.__requester.base_url))
-        last_link = response.links.get('last')
-        self.__next_url = re.search(regex, last_link['url']).group(1) if last_link else None
-
     def _grow(self):
         new_elements = self._get_next_page()
         self.__elements += new_elements
@@ -83,23 +73,6 @@ class PaginatedList(object):
         ]
 
         return content
-
-    def get_page(self, page):
-        params = dict(self.__first_params)
-        if page != 0:
-            params["page"] = page + 1
-
-        response = self.__requester.request(
-            'GET',
-            self.__first_url,
-            **self.__first_params
-        )
-        data = response.json()
-
-        return [
-            self.__content_class(self.__requester, element)
-            for element in data if element is not None
-        ]
 
     class _Slice:
         def __init__(self, the_list, the_slice):
