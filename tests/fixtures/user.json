@@ -135,5 +135,12 @@
 				"end_at": "2017-04-01T13:37:00Z"
 			}
 		]
+	},
+	"list_enrollments": {
+		"method": "GET",
+		"endpoint": "users/1/enrollments",
+		"data": {
+			"id": 1,
+		}
 	}
 }
