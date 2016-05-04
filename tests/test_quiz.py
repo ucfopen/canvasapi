@@ -4,6 +4,7 @@ import settings
 
 import requests_mock
 from pycanvas import Canvas
+from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.quiz import Quiz
 from util import register_uris
 

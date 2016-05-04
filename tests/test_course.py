@@ -5,6 +5,7 @@ import requests_mock
 from util import register_uris
 from pycanvas.course import Course
 from pycanvas.quiz import Quiz
+from pycanvas.assignment import Assignment
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas import Canvas
 
@@ -18,7 +19,11 @@ class TestCourse(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['create', 'get_by_id', 'get_quiz', 'list_quizzes', 'list_quizzes2'],
+            'course': [
+                'create', 'get_by_id', 'get_quiz', 'list_quizzes', 'list_quizzes2',
+                'create_assignment', 'get_assignment_by_id', 'get_all_assignments',
+                'get_all_assignments2'
+            ],
             'generic': ['not_found'],
             'quiz': ['get_by_id']
         }
@@ -56,3 +61,33 @@ class TestCourse(unittest.TestCase):
 
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
+
+    #create_assignment()
+    def test_create_assignment(self):
+        name = 'Newly Created Assignment'
+
+        assignment_dict = {
+            'name': name
+        }
+
+        assignment = self.course.create_assignment(assignment=assignment_dict)
+
+        assert isinstance(assignment, Assignment)
+        assert hasattr(assignment, 'name')
+        assert assignment.name == name
+        assert assignment.id == 5
+
+    #get_assignment()
+    def test_get_assignment(self):
+        assignment = self.course.get_assignment('5')
+
+        assert isinstance(assignment, Assignment)
+        assert hasattr(assignment, 'name')
+
+    #get_assignments()
+    def test_get_assignments(self):
+        assignments = self.course.get_assignments()
+        assignment_list = [assignment for assignment in assignments]
+
+        assert isinstance(assignments[0], Assignment)
+        assert len(assignment_list) == 4
