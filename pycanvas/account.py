@@ -286,6 +286,20 @@ class Account(CanvasObject):
         else:
             return False
 
+    def enroll_by_id(self, enrollment_id):
+        """
+        Get an enrollment object by id
+        :calls: `GET /api/v1/accounts/:account_id/enrollments/:id
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.show>
+        :rtype: enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester(
+            'GET',
+            'accounts/%s/enrollments/%s' % (self.id, enrollment.id),
+        )
+        return response.json()
 
 
 class AccountNotification(CanvasObject):
