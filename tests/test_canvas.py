@@ -6,8 +6,7 @@ import requests_mock
 import settings
 from pycanvas import Canvas
 from pycanvas.account import Account
-from pycanvas.course import Course
-from pycanvas.course_nickname import CourseNickname
+from pycanvas.course import Course, CourseNickname
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.user import User
 from util import register_uris
