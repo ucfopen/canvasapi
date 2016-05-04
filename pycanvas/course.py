@@ -274,8 +274,6 @@ class CourseNickname(CanvasObject):
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`
         :rtype: :class:`CourseNickname`
         """
-        from course_nickname import CourseNickname
-
         response = self._requester.request(
             'DELETE',
             'users/self/course_nicknames/%s' % (self.course_id)

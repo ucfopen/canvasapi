@@ -97,6 +97,15 @@
 			"name": "John Doe"
 		}
 	},
+	"remove_nickname": {
+		"method": "DELETE",
+		"endpoint": "users/self/course_nicknames/1",
+		"data": {
+			"course_id": 1,
+			"name": "Electrical Zoning Fundamentals",
+			"nickname": "EZ course"
+		}
+	},
 	"todo_items": {
 		"method": "GET",
 		"endpoint": "users/self/todo",

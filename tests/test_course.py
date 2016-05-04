@@ -6,7 +6,7 @@ import requests_mock
 
 from util import register_uris
 from pycanvas import Canvas
-from pycanvas.course import Course
+from pycanvas.course import Course, CourseNickname
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.quiz import Quiz
@@ -175,3 +175,34 @@ class TestCourse(unittest.TestCase):
 
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
+
+
+class TestCourseNickname(unittest.TestCase):
+    """
+    Tests core CourseNickname functionality
+    """
+    @classmethod
+    def setUpClass(self):
+        requires = {
+            'course': [],
+            'generic': ['not_found'],
+            'user': ['course_nickname', 'remove_nickname']
+        }
+
+        adapter = requests_mock.Adapter()
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, requires, adapter)
+
+        self.nickname = self.canvas.get_course_nickname(1)
+
+    # __str__()
+    def test__str__(self):
+        string = str(self.nickname)
+        assert isinstance(string, str)
+
+    # remove()
+    def test_remove(self):
+        deleted_nick = self.nickname.remove()
+
+        assert isinstance(deleted_nick, CourseNickname)
+        assert hasattr(deleted_nick, 'nickname')
