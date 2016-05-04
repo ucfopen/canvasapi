@@ -203,5 +203,5 @@ class User(CanvasObject):
             Assignment,
             self._requester,
             'GET',
-            '/users/%s/courses/%s/assignments' % (self.id, course_id)
+            'users/%s/courses/%s/assignments' % (self.id, course_id)
         )
