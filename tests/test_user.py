@@ -4,9 +4,6 @@ import requests_mock
 
 from util import register_uris
 from pycanvas.assignment import Assignment
-from pycanvas.course import Course
-from pycanvas.quiz import Quiz
-from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas import Canvas
 
 INVALID_ID = 9001
@@ -26,7 +23,7 @@ class TestUser(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
-    #get_assignments()
+    # get_assignments()
     def test_user_assignments(self):
         user = self.canvas.get_user(1)
 

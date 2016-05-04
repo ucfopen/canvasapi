@@ -10,7 +10,6 @@
 		},
 		"status_code": 200
 	},
-
 	"delete_assignment": {
 		"method": "DELETE",
 		"endpoint": "courses/1/assignments/5",
@@ -22,6 +21,4 @@
 		},
 		"status_code": 200
 	}
-
-
 }

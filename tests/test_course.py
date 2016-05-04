@@ -14,7 +14,7 @@ INVALID_ID = 9001
 
 class TestCourse(unittest.TestCase):
     """
-    Tests core Courses functionality
+    Tests Courses functionality
     """
     @classmethod
     def setUpClass(self):
@@ -35,7 +35,7 @@ class TestCourse(unittest.TestCase):
         self.course = self.canvas.get_course(1)
         self.quiz = self.course.get_quiz(1)
 
-    #create_quiz()
+    # create_quiz()
     def test_create_quiz(self):
         title = 'Newer Title'
         new_quiz = self.course.create_quiz(self.course.id, quiz={'title': title})
@@ -44,7 +44,7 @@ class TestCourse(unittest.TestCase):
         assert hasattr(new_quiz, 'title')
         assert new_quiz.title == title
 
-    #get_quiz()
+    # get_quiz()
     def test_get_quiz(self):
         target_quiz = self.course.get_quiz(1)
 
@@ -54,7 +54,7 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(ResourceDoesNotExist):
             self.course.get_quiz(INVALID_ID)
 
-    #list_quizzes()
+    # list_quizzes()
     def test_list_quizzes(self):
         quizzes = self.course.list_quizzes()
         quiz_list = [quiz for quiz in quizzes]
@@ -62,7 +62,7 @@ class TestCourse(unittest.TestCase):
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
 
-    #create_assignment()
+    # create_assignment()
     def test_create_assignment(self):
         name = 'Newly Created Assignment'
 
@@ -77,14 +77,14 @@ class TestCourse(unittest.TestCase):
         assert assignment.name == name
         assert assignment.id == 5
 
-    #get_assignment()
+    # get_assignment()
     def test_get_assignment(self):
         assignment = self.course.get_assignment('5')
 
         assert isinstance(assignment, Assignment)
         assert hasattr(assignment, 'name')
 
-    #get_assignments()
+    # get_assignments()
     def test_get_assignments(self):
         assignments = self.course.get_assignments()
         assignment_list = [assignment for assignment in assignments]
