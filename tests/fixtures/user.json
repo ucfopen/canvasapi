@@ -135,5 +135,25 @@
 				"end_at": "2017-04-01T13:37:00Z"
 			}
 		]
+	},
+
+	"get_user_assignments": {
+	    "method": "GET",
+	    "endpoint": "users/1/courses/1/assignments",
+	    "data": [
+		    {
+		        "id": 1,
+		        "course_id": 1,
+		        "name": "Assignment 1",
+		        "description": "Do this assignment"
+		    },
+		    {
+		    	"id": 2,
+		    	"course_id": 1,
+		    	"name": "Assignment 2",
+		    	"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
 	}
 }
