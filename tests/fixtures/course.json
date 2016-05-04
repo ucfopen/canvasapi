@@ -86,5 +86,55 @@
             "start_at": "2016-01-01T00:00:00Z"
         },
         "status_code": 200
+    },
+    "create": {
+        "method": "POST",
+        "endpoint": "courses/1/quizzes",
+        "data": {
+            "id": 1,
+            "title": "Newer Title"
+        },
+        "status_code": 200
+    },
+    "get_quiz": {
+        "method": "GET",
+        "endpoint": "courses/1/quizzes/1",
+        "data": {
+            "id": 1
+        },
+        "status_code": 200
+    },
+    "list_quizzes": {
+        "method": "GET",
+        "endpoint": "courses/1/quizzes",
+        "data": [
+            {
+                "id": 1,
+                "title": "First Quiz"
+            },
+            {
+                "id": 2,
+                "title": "Second Quiz"
+            }
+        ],
+        "status_code": 200,
+        "headers": {
+            "Link": "<mock://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
+        }
+    },
+    "list_quizzes2": {
+        "method": "GET",
+        "endpoint": "courses/1/list_quizzes?page=2&per_page=2",
+        "data": [
+            {
+                "id": 3,
+                "title": "Third Quiz"
+            },
+            {
+                "id": 4,
+                "title": "Fourth Quiz"
+            }
+        ],
+        "status_code": 200
     }
 }
