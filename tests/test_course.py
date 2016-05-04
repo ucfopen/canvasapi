@@ -1,9 +1,9 @@
 import unittest
-import settings
 import requests
 
 import requests_mock
 
+import settings
 from util import register_uris
 from pycanvas import Canvas
 from pycanvas.course import Course, CourseNickname
