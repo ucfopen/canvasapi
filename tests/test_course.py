@@ -7,6 +7,7 @@ import requests_mock
 from util import register_uris
 from pycanvas import Canvas
 from pycanvas.course import Course
+from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.quiz import Quiz
 from pycanvas.user import User
@@ -20,11 +21,15 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'get_by_id', 'get_quiz', 'get_user', 'get_user_id_type',
-                'get_users', 'get_users_p2', 'list_quizzes', 'list_quizzes2', 'update'
+                'create', 'enroll_user', 'get_by_id', 'get_quiz',
+                'get_recent_students', 'get_recent_students_p2', 'get_user',
+                'get_user_id_type', 'get_users', 'get_users_p2', 'list_quizzes',
+                'list_quizzes2', 'preview_html', 'reset', 'settings', 'update',
+                'update_settings'
             ],
             'generic': ['not_found'],
-            'quiz': ['get_by_id']
+            'quiz': ['get_by_id'],
+            'user': ['get_by_id']
         }
 
         adapter = requests_mock.Adapter()
@@ -96,6 +101,53 @@ class TestCourse(unittest.TestCase):
 
         assert len(user_list) == 4
         assert isinstance(user_list[0], User)
+
+    # enroll_user()
+    def test_enroll_user(self):
+        enrollment_type = 'TeacherEnrollment'
+        user = self.canvas.get_user(1)
+        enrollment = self.course.enroll_user(user, enrollment_type)
+
+        assert isinstance(enrollment, Enrollment)
+        assert hasattr(enrollment, 'type')
+        assert enrollment.type == enrollment_type
+
+    # get_recent_students()
+    def test_get_recent_students(self):
+        students = self.course.get_recent_students()
+        student_list = [student for student in students]
+
+        assert len(student_list) == 4
+        assert isinstance(student_list[0], User)
+        assert hasattr(student_list[0], 'name')
+
+    # preview_html()
+    def test_preview_html(self):
+        html_str = "<script></script><p>hello</p>"
+        prev_html = self.course.preview_html(html_str)
+
+        assert isinstance(prev_html, (str, unicode))
+        assert prev_html == "<p>hello</p>"
+
+    # get_settings()
+    def test_get_settings(self):
+        settings = self.course.get_settings()
+
+        assert isinstance(settings, dict)
+
+    # update_settings()
+    def test_update_settings(self):
+        settings = self.course.update_settings()
+
+        assert isinstance(settings, dict)
+        assert settings['hide_final_grades'] is True
+
+    # reset()
+    def test_reset(self):
+        course = self.course.reset()
+
+        assert isinstance(course, Course)
+        assert hasattr(course, 'name')
 
     # create_quiz()
     def test_create_quiz(self):
