@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from util import combine_kwargs
+from enrollment import Enrollment
 from paginated_list import PaginatedList
 
 
@@ -269,3 +270,21 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
         return Quiz(self._requester, response.json())
+
+    def deactivate_enrollment(self):
+        """
+        Delete, conclude or deactivate an enrollment
+        :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.destroy>
+        :rtype: Enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester(
+            'DELETE',
+            'courses/%s/enrollments/%s' % (self.id, enrollment.id)
+        )
+        return Enrollment(self._requester, response.json())
+
+    def reactivate_enrollment(self):
+        pass
