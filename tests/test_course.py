@@ -56,3 +56,12 @@ class TestCourse(unittest.TestCase):
 
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
+
+    #list_enrollments()
+    def test_list_enrollments(self):
+        enrollments = self.user.list_enrollments()
+        enrollment_list = [enrollment for enrollment in enrollments]
+
+        assert len(enrollment_list) == 4
+        assert isinstance(enrollment_list[0], enrollment)
+
