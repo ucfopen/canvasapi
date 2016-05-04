@@ -169,5 +169,21 @@
             }
         ],
         "status_code": 200
+    },
+    "deactivate_enrollment": {
+        "method": "DELETE",
+        "endpoint": "courses/1/enrollments/1",
+        "data": {
+            "id": 1
+        },
+        "status_code": 200
+    },
+    "reactivate_enrollment": {
+        "method": "PUT",
+        "endpoint": "courses/1/enrollments/1/reactivate",
+        "data":{
+            "id": 1
+        },
+        "status_code": 200
     }
 }
