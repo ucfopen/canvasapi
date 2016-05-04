@@ -4,7 +4,7 @@ import requests_mock
 
 from util import register_uris
 from pycanvas.account import Account
-from pycanvas.exceptions import ResourceDoesNotExist
+from pycanvas.enrollment import Enrollment
 from pycanvas import Canvas
 
 
@@ -15,7 +15,8 @@ class TestAccount(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-
+            'account': ['enroll_by_id'],
+            'generic': ['not_found']
         }
 
         adapter = requests_mock.Adapter()
@@ -23,4 +24,6 @@ class TestAccount(unittest.TestCase):
         register_uris(settings.BASE_URL, requires, adapter)
 
     def test_enroll_by_id(self):
+        target_enrollment = self.account.enroll_by_id(1)
 
+        assert isinstance(target_enrollment, Enrollment)
