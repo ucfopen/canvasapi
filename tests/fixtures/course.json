@@ -8,14 +8,6 @@
 		},
 		"status_code": 200
 	},
-	"get_quiz": {
-		"method": "GET",
-		"endpoint": "courses/1/quizzes/1",
-		"data": {
-			"id": 1
-		},
-		"status_code": 200
-	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "courses/1",
@@ -29,6 +21,66 @@
 			"enrollment_term_id": 1,
 			"grading_standard_id": 1
 		},
+		"status_code": 200
+	},
+	"get_quiz": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1",
+		"data": {
+			"id": 1
+		},
+		"status_code": 200
+	},
+	"get_user": {
+		"method": "GET",
+		"endpoint": "courses/1/users/1",
+		"data": {
+			"id": 1,
+			"name": "John Doe"
+		},
+		"status_code": 200
+	},
+	"get_user_id_type": {
+		"method": "GET",
+		"endpoint": "courses/1/users/sis_login_id:ab123456",
+		"data": {
+			"id": 123456,
+			"name": "Abby Smith",
+			"sis_login_id": "ab123456"
+		},
+		"status_code": 200
+	},
+	"get_users": {
+		"method": "GET",
+		"endpoint": "courses/1/search_users",
+		"data": [
+			{
+				"id": 1,
+				"name": "John Doe"
+			},
+			{
+				"id": 2,
+				"name": "Jane Doe"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_users_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/search_users?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "John Smith"
+			},
+			{
+				"id": 4,
+				"name": "Joe Smith"
+			}
+		],
 		"status_code": 200
 	},
 	"list_quizzes": {
@@ -134,6 +186,21 @@
 			"enrollment_term_id": 1,
 			"grading_standard_id": 1,
 			"start_at": "2016-01-01T00:00:00Z"
+		},
+		"status_code": 200
+	},
+	"update": {
+		"method": "PUT",
+		"endpoint": "courses/1",
+		"data": {
+			"id": 1,
+			"course_code": "TST1234",
+			"name": "New Name",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
 		},
 		"status_code": 200
 	}

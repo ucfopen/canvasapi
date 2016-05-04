@@ -39,6 +39,11 @@ class TestAccount(unittest.TestCase):
         self.account = self.canvas.get_account(1)
         self.user = self.canvas.get_user(1)
 
+    # __str__()
+    def test__str__(self):
+        string = str(self.account)
+        assert isinstance(string, str)
+
     # close_notification_for_user()
     def test_close_notification_for_user_id(self):
         user_id = self.user.id

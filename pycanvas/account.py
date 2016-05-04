@@ -6,7 +6,7 @@ from util import combine_kwargs, obj_or_id
 
 class Account(CanvasObject):
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         return "id: %s, name: %s" % (
             self.id,
             self.name
