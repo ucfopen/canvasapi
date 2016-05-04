@@ -287,4 +287,16 @@ class Course(CanvasObject):
         return Enrollment(self._requester, response.json())
 
     def reactivate_enrollment(self):
-        pass
+        """
+        Activates an inactive role
+        :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reactivate>
+        :rtype: Enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester(
+            'PUT',
+            'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment.id)
+        )
+        return Enrollment(self._requester, response.json())
