@@ -3,7 +3,6 @@ import settings
 import requests_mock
 
 from util import register_uris
-from pycanvas.section import Section
 from pycanvas.enrollment import Enrollment
 from pycanvas import Canvas
 
@@ -16,12 +15,14 @@ class TestSection(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'generic': ['not_found'],
-            'section': ['list_enrollments', 'list_enrollments_2']
+            'section': ['get_by_id', 'list_enrollments', 'list_enrollments_2']
         }
 
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
+
+        self.section = self.canvas.get_section(1)
 
     #list_enrollments()
     def test_list_enrollments(self):
@@ -30,8 +31,3 @@ class TestSection(unittest.TestCase):
 
         assert len(enrollment_list) == 4
         assert isinstance(enrollment_list[0], Enrollment)
-
-    def test_get_info(self):
-        info = self.section.get_info(1)
-
-        assert isinstance(info, Section)
