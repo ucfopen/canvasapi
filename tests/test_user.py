@@ -4,22 +4,17 @@ import requests_mock
 
 from util import register_uris
 from pycanvas.assignment import Assignment
-from pycanvas.course import Course
-from pycanvas.quiz import Quiz
-from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas import Canvas
-
-INVALID_ID = 9001
 
 
 class TestUser(unittest.TestCase):
     """
-    Tests core Canvas functionality.
+    Tests User functionality.
     """
     @classmethod
     def setUpClass(self):
         requires = {
-            'user': ['get_by_id', 'get_user_assignments']
+            'user': ['get_by_id', 'get_user_assignments', 'get_user_assignments2']
         }
 
         adapter = requests_mock.Adapter()
@@ -34,4 +29,4 @@ class TestUser(unittest.TestCase):
         assignment_list = [assignment for assignment in assignments]
 
         assert isinstance(assignments[0], Assignment)
-        assert len(assignment_list) == 2
+        assert len(assignment_list) == 4
