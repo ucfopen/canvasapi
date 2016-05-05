@@ -133,8 +133,8 @@
 				"description": "This is an event!",
 				"start_at": "2015-04-01T13:37:00Z",
 				"end_at": "2017-04-01T13:37:00Z"
-			},
-		],
+			}
+		]
 	},
 	"list_enrollments": {
 		"method": "GET",
