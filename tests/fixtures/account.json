@@ -93,5 +93,13 @@
 			}
 		],
 		"status_code": 200
+	},
+	"enroll_by_id": {
+		"method": "GET",
+		"endpoint": "accounts/1/enrollments/1",
+		"data": {
+			"id": 1
+		},
+		"status_code": 200
 	}
 }
