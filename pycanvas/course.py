@@ -300,3 +300,18 @@ class Course(CanvasObject):
             'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment.id)
         )
         return Enrollment(self._requester, response.json())
+
+    def get_section_info(self):
+        """
+        Gets details about a specific section
+        :calls: `GET /api/v1/courses/:course_id/sections/:id`
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>
+        :rtype: Section
+        """
+        from section import Section
+
+        response = self._requester(
+            'GET',
+            'courses/%s/sections/%s' % (self.id, section.id)
+        )
+        return Section(self._requester, response.json())
