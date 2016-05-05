@@ -1,6 +1,5 @@
 from canvas_object import CanvasObject
 from util import combine_kwargs
-from enrollment import Enrollment
 from paginated_list import PaginatedList
 
 
@@ -271,7 +270,7 @@ class Course(CanvasObject):
         )
         return Quiz(self._requester, response.json())
 
-    def deactivate_enrollment(self):
+    def deactivate_enrollment(self, enrollment_id):
         """
         Delete, conclude or deactivate an enrollment
         :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id`
@@ -280,13 +279,13 @@ class Course(CanvasObject):
         """
         from enrollment import Enrollment
 
-        response = self._requester(
+        response = self._requester.request(
             'DELETE',
-            'courses/%s/enrollments/%s' % (self.id, enrollment.id)
+            'courses/%s/enrollments/%s' % (self.id, enrollment_id)
         )
         return Enrollment(self._requester, response.json())
 
-    def reactivate_enrollment(self):
+    def reactivate_enrollment(self, enrollment_id):
         """
         Activates an inactive role
         :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate`
@@ -295,13 +294,13 @@ class Course(CanvasObject):
         """
         from enrollment import Enrollment
 
-        response = self._requester(
+        response = self._requester.request(
             'PUT',
-            'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment.id)
+            'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment_id)
         )
         return Enrollment(self._requester, response.json())
 
-    def get_section_info(self):
+    def get_section(self, section_id):
         """
         Gets details about a specific section
         :calls: `GET /api/v1/courses/:course_id/sections/:id`
@@ -310,8 +309,8 @@ class Course(CanvasObject):
         """
         from section import Section
 
-        response = self._requester(
+        response = self._requester.request(
             'GET',
-            'courses/%s/sections/%s' % (self.id, section.id)
+            'courses/%s/sections/%s' % (self.id, section_id)
         )
         return Section(self._requester, response.json())
