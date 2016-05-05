@@ -296,7 +296,7 @@ class Account(CanvasObject):
         """
         from enrollment import Enrollment
 
-        response = self._requester(
+        response = self._requester.request(
             'GET',
             'accounts/%s/enrollments/%s' % (self.id, enrollment_id),
             **combine_kwargs(**kwargs)
