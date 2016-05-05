@@ -1,4 +1,12 @@
 {
+	"get_info": {
+		"method": "GET",
+		"endpoint": "sections/1",
+		"data":{
+			"id": 1
+		},
+		"status_code": 200
+	},
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "sections/1/enrollments",
