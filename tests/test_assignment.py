@@ -9,7 +9,7 @@ from util import register_uris
 
 class TestAssignment(unittest.TestCase):
     """
-    Tests core Canvas functionality.
+    Tests Assignment functionality.
     """
     @classmethod
     def setUpClass(self):
@@ -25,7 +25,7 @@ class TestAssignment(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
 
-    #edit()
+    # edit()
     def test_edit_assignment(self):
         name = 'New Name'
         assignment = self.course.get_assignment(5)
@@ -35,7 +35,7 @@ class TestAssignment(unittest.TestCase):
         assert hasattr(edited_assignment, 'name')
         assert edited_assignment.name == name
 
-    #delete()
+    # delete()
     def test_delete_assignments(self):
 
         assignment = self.course.get_assignment('5')

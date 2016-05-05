@@ -53,8 +53,8 @@
 		],
 		"status_code": 200,
 		"headers": {
-            "Link": "<mock://example.com/api/v1/users/self/course_nicknames?page=2&per_page=2>; rel=\"next\""
-        }
+			"Link": "<mock://example.com/api/v1/users/self/course_nicknames?page=2&per_page=2>; rel=\"next\""
+		}
 	},
 	"course_nicknames_delete": {
 		"method": "DELETE",
@@ -136,22 +136,21 @@
 			}
 		]
 	},
-
 	"get_user_assignments": {
-	    "method": "GET",
-	    "endpoint": "users/1/courses/1/assignments",
-	    "data": [
-		    {
-		        "id": 1,
-		        "course_id": 1,
-		        "name": "Assignment 1",
-		        "description": "Do this assignment"
-		    },
-		    {
-		    	"id": 2,
-		    	"course_id": 1,
-		    	"name": "Assignment 2",
-		    	"description": "Do this assignment too"
+		"method": "GET",
+		"endpoint": "users/1/courses/1/assignments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 2,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
 			}
 		],
 		"status_code": 200,
