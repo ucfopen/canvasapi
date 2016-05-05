@@ -16,7 +16,7 @@ class TestUser(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'user': ['list_enrollments', 'list_enrollments_2'],
+            'user': ['get_by_id', 'list_enrollments', 'list_enrollments_2'],
             'generic': ['not_found']
         }
 
@@ -24,10 +24,12 @@ class TestUser(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
+        self.user = self.canvas.get_user(1, None)
+
     #list_enrollments()
     def test_list_enrollments(self):
         enrollments = self.user.list_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
         assert len(enrollment_list) == 4
-        assert isinstance(enrollment_list[0], enrollment)
+        assert isinstance(enrollment_list[0], Enrollment)
