@@ -3,9 +3,9 @@ import settings
 import requests_mock
 
 from util import register_uris
-from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
 from pycanvas.quiz import Quiz
+from pycanvas.section import Section
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas import Canvas
 
@@ -19,9 +19,14 @@ class TestCourse(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['create', 'deactivate_enrollment', 'get_by_id', 'get_quiz', 'list_quizzes', 'list_quizzes2', 'reactivate_enrollment'],
+            'course': [
+                'create', 'deactivate_enrollment', 'get_by_id', 'get_quiz', 'get_section',
+                'list_enrollments', 'list_enrollments_2', 'list_quizzes', 'list_quizzes2',
+                'reactivate_enrollment'
+            ],
             'generic': ['not_found'],
-            'quiz': ['get_by_id']
+            'quiz': ['get_by_id'],
+            'user': ['get_by_id']
         }
 
         adapter = requests_mock.Adapter()
@@ -30,6 +35,7 @@ class TestCourse(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
         self.quiz = self.course.get_quiz(1)
+        self.user = self.canvas.get_user(1, None)
 
     #create_quiz()
     def test_create_quiz(self):
@@ -60,11 +66,11 @@ class TestCourse(unittest.TestCase):
 
     #list_enrollments()
     def test_list_enrollments(self):
-        enrollments = self.user.list_enrollments()
+        enrollments = self.course.list_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
         assert len(enrollment_list) == 4
-        assert isinstance(enrollment_list[0], enrollment)
+        assert isinstance(enrollment_list[0], Enrollment)
 
     #deactivate_enrollment()
     def test_deactivate_enrollment(self):
@@ -77,3 +83,9 @@ class TestCourse(unittest.TestCase):
         target_enrollment = self.course.reactivate_enrollment(1)
 
         assert isinstance(target_enrollment, Enrollment)
+
+    # get_section
+    def test_get_section(self):
+        section = self.course.get_section(1)
+
+        assert isinstance(section, Section)
