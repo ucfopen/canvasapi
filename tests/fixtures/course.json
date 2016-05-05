@@ -185,5 +185,13 @@
             "id": 1
         },
         "status_code": 200
+    },
+    "get_section":{
+        "method": "GET",
+        "endpoint": "courses/1/sections/1",
+        "data": {
+            "id": 1
+        },
+        "status_code": 200
     }
 }

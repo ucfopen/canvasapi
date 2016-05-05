@@ -1,5 +1,5 @@
 {
-	"get_info": {
+	"get_by_id": {
 		"method": "GET",
 		"endpoint": "sections/1",
 		"data":{
