@@ -5,7 +5,6 @@ import requests_mock
 from util import register_uris
 from pycanvas.section import Section
 from pycanvas.enrollment import Enrollment
-from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas import Canvas
 
 
@@ -16,7 +15,8 @@ class TestSection(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'generic': ['not_found']
+            'generic': ['not_found'],
+            'section': ['list_enrollments', 'list_enrollments_2']
         }
 
         adapter = requests_mock.Adapter()
@@ -29,4 +29,9 @@ class TestSection(unittest.TestCase):
         enrollment_list = [enrollment for enrollment in enrollments]
 
         assert len(enrollment_list) == 4
-        assert isinstance(enrollment_list[0], enrollment)
+        assert isinstance(enrollment_list[0], Enrollment)
+
+    def test_get_info(self):
+        info = self.section.get_info(1)
+
+        assert isinstance(info, Section)
