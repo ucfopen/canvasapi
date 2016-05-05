@@ -1,0 +1,97 @@
+{
+	"create": {
+		"method": "POST",
+		"endpoint": "accounts",
+		"data": {
+			"id": 5,
+			"name": "Newly Created Account",
+			"parent_account_id": null,
+			"root_account_id": null,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/Denver"
+		},
+		"status_code": 200
+	},
+	"domains": {
+		"method": "GET",
+		"endpoint": "accounts/search",
+		"data": [
+			{
+				"name": "University of Example",
+				"domain": "example.com",
+				"distance": null
+			}
+		]
+	},
+	"get_by_id": {
+		"method": "GET",
+		"endpoint": "accounts/1",
+		"data": {
+			"id": 1,
+			"name": "Canvas Account",
+			"parent_account_id": null,
+			"root_account_id": null,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/Denver"
+		},
+		"status_code": 200
+	},
+	"multiple": {
+		"method": "GET",
+		"endpoint": "accounts",
+		"data": [
+			{
+				"id": 1,
+				"name": "First Account",
+				"parent_account_id": null,
+				"root_account_id": null,
+				"default_storage_quota_mb": 500,
+				"default_user_storage_quota_mb": 50,
+				"default_group_storage_quota_mb": 50,
+				"default_time_zone": "America/Denver"
+			},
+			{
+				"id": 2,
+				"name": "Second Account",
+				"parent_account_id": null,
+				"root_account_id": null,
+				"default_storage_quota_mb": 500,
+				"default_user_storage_quota_mb": 50,
+				"default_group_storage_quota_mb": 50,
+				"default_time_zone": "America/Denver"
+			}
+		],
+		"status_code": 200
+	},
+	"multiple_course": {
+		"method": "GET",
+		"endpoint": "course_accounts",
+		"data": [
+			{
+				"id": 1,
+				"name": "First Course Account",
+				"parent_account_id": null,
+				"root_account_id": null,
+				"default_storage_quota_mb": 500,
+				"default_user_storage_quota_mb": 50,
+				"default_group_storage_quota_mb": 50,
+				"default_time_zone": "America/Denver"
+			},
+			{
+				"id": 2,
+				"name": "Second Course Account",
+				"parent_account_id": null,
+				"root_account_id": null,
+				"default_storage_quota_mb": 500,
+				"default_user_storage_quota_mb": 50,
+				"default_group_storage_quota_mb": 50,
+				"default_time_zone": "America/Denver"
+			}
+		],
+		"status_code": 200
+	}
+}

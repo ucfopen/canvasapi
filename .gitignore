@@ -1,1 +1,6 @@
 *.pyc
+.DS_Store
+.coverage
+htmlcov/
+env/
+_test.py

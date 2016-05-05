@@ -5,7 +5,7 @@ from paginated_list import PaginatedList
 
 class Course(CanvasObject):
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "%s %s %s" % (self.id, self.course_code, self.name)
 
     def conclude(self):
@@ -207,6 +207,7 @@ class Course(CanvasObject):
         )
         return Course(self._requester, response.json())
 
+<<<<<<< HEAD:course.py
     def list_modules(self):
         """
         List the modules in a course
@@ -240,3 +241,51 @@ class Course(CanvasObject):
             'courses/%s/modules/%s' % (self.id, module_id),
         )
         return Module(self._requester, response.json())
+=======
+    def list_quizzes(self, **kwargs):
+        """
+        Returns the list of Quizzes in this course
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes`
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>
+        :rtype: Quiz :class:`PaginatedList` of :class:`Quiz`
+        """
+        from quiz import Quiz
+        return PaginatedList(
+            Quiz,
+            self._requester,
+            'GET',
+            'courses/%s/quizzes' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_quiz(self, quiz_id):
+        """
+        Returns the quiz with the given id
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:id`
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.show>
+        :rtype: Quiz
+        """
+        from quiz import Quiz
+        response = self._requester.request(
+            'GET',
+            'courses/%s/quizzes/%s' % (self.id, quiz_id)
+        )
+        return Quiz(self._requester, response.json())
+
+    def create_quiz(self, title, **kwargs):
+        """
+        Create a new quiz for a course
+        :calls: `POST /api/v1/courses/:course_id/quizzes
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.create>
+        :param title: string
+        :rtype: Quiz
+        """
+        from quiz import Quiz
+        response = self._requester.request(
+            'POST',
+            'courses/%s/quizzes' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Quiz(self._requester, response.json())
+>>>>>>> 623b3f30a17f6cdd7818af567ac201c09c5999ce:pycanvas/course.py
