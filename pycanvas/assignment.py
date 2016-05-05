@@ -22,7 +22,6 @@ class Assignment(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/%s/assignments/%s' % (self.course_id, self.id),
-            event="delete"
         )
         return Assignment(self._requester, response.json())
 
