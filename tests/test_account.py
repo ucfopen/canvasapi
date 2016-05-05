@@ -3,7 +3,6 @@ import settings
 import requests_mock
 
 from util import register_uris
-from pycanvas.account import Account
 from pycanvas.enrollment import Enrollment
 from pycanvas import Canvas
 
@@ -15,7 +14,7 @@ class TestAccount(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'account': ['enroll_by_id'],
+            'account': ['create', 'enroll_by_id', 'get_by_id'],
             'generic': ['not_found']
         }
 
@@ -23,7 +22,9 @@ class TestAccount(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
+        self.account = self.canvas.get_account(1)
+
     def test_enroll_by_id(self):
-        target_enrollment = self.account.enroll_by_id(1)
+        target_enrollment = self.account.enroll_by_id(1, 1)
 
         assert isinstance(target_enrollment, Enrollment)
