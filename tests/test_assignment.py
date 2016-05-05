@@ -3,7 +3,6 @@ import requests_mock
 import settings
 
 from pycanvas import Canvas
-from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.assignment import Assignment
 from util import register_uris
 
@@ -44,3 +43,8 @@ class TestAssignment(unittest.TestCase):
         deleted_assignment = assignment.delete()
 
         assert isinstance(deleted_assignment, Assignment)
+
+    # __str__()
+    def test__str__(self):
+        string = str(self.course.get_assignment('5'))
+        assert isinstance(string, str)
