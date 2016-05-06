@@ -1,5 +1,5 @@
 from canvas_object import CanvasObject
-from util import combine_kwargs
+
 
 class Role(CanvasObject):
 
