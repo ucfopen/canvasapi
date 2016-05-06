@@ -291,9 +291,8 @@ class Account(CanvasObject):
         List the roles available to an account
         :calls: `GET /api/v1/accounts/:account_id/roles
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>
-        :rtype: Role
+        :rtype: :class: `PaginatedList` of :class: `Role`
         """
-        from role import Role
 
         return PaginatedList(
             Role,
@@ -301,7 +300,21 @@ class Account(CanvasObject):
             'GET',
             'accounts/%s/roles' % (account_id)
         )
-        pass
+
+    def get_role(self, account_id, role_id):
+        """
+        Retrieve information about a single role
+        :calls: `GET /api/v1/accounts/:account_id/roles/:id
+        https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show`
+        :rtype: Role
+        """
+        from role import Role
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/roles/%s' % (account_id, role_id)
+        )
+        return Role(self._requester, response.json())
 
 
 class AccountNotification(CanvasObject):
