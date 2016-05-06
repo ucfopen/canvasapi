@@ -93,5 +93,38 @@
 			}
 		],
 		"status_code": 200
+	},
+	"list_roles": {
+		"method": "GET",
+		"endpoint": "accounts/1/roles",
+		"data": [
+			{
+				"id": 1,
+				"account_id": 2
+			},
+			{
+				"id": 3,
+				"account_id": 4
+			}
+		],
+		"headers": {
+            "Link": "<mock://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
+        },
+        "status_code": 200
+	},
+	"list_roles_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/roles/?page=2&per_page=2",
+		"data": [
+			{
+				"id": 5,
+				"account_id": 6
+			},
+			{
+				"id": 7,
+				"account_id": 8
+			}
+		],
+		"status_code": 200
 	}
 }
