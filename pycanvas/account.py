@@ -286,6 +286,23 @@ class Account(CanvasObject):
         else:
             return False
 
+    def list_roles(self, account_id):
+        """
+        List the roles available to an account
+        :calls: `GET /api/v1/accounts/:account_id/roles
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>
+        :rtype: Role
+        """
+        from role import Role
+
+        return PaginatedList(
+            Role,
+            self._requester,
+            'GET',
+            'accounts/%s/roles' % (account_id)
+        )
+        pass
+
 
 class AccountNotification(CanvasObject):
     def __str__(self):
