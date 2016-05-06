@@ -14,7 +14,7 @@ class TestAccount(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'account': ['get_by_id', 'list_roles', 'list_roles_2'],
+            'account': ['get_by_id', 'get_role', 'list_roles', 'list_roles_2'],
             'generic': ['not_found']
         }
 
@@ -24,9 +24,14 @@ class TestAccount(unittest.TestCase):
 
         self.account = self.canvas.get_account(1)
 
-    def list_roles(self):
+    def test_list_roles(self):
         roles = self.account.list_roles()
         role_list = [role for role in roles]
 
         assert len(role_list) == 4
         assert isinstance(role_list[0], Role)
+
+    def test_get_role(self):
+        target_role = self.account.get_role(1, 2)
+
+        assert isinstance(target_role, Role)
