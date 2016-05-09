@@ -155,27 +155,27 @@
 		],
 		"status_code": 200,
 		"headers": {
-		    "Link": "<mock://example.com/api/v1/users/1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+			"Link": "<mock://example.com/api/v1/users/1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 
 	"get_user_assignments2": {
-	    "method": "GET",
-	    "endpoint": "users/1/courses/1/list_assignments?page=2&per_page=2",
-	    "data": [
-	        {
-	            "id": 3,
-	            "course_id": 1,
-	            "name": "Assignment 3",
-	            "description": "Do this assignment"
-	        },
-	        {
-	            "id": 4,
-	            "course_id": 1,
-	            "name": "Assignment 4",
-	            "description": "Do this assignment too"
-	        }
-	    ],
-	    "status_code": 200
+		"method": "GET",
+		"endpoint": "users/1/courses/1/list_assignments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 3",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 4",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
 	}
 }
