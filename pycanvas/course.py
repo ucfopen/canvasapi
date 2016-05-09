@@ -207,41 +207,6 @@ class Course(CanvasObject):
         )
         return Course(self._requester, response.json())
 
-<<<<<<< HEAD:course.py
-    def list_modules(self):
-        """
-        List the modules in a course
-
-        :calls: `GET /api/v1/courses/:course_id/modules`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Module`
-        """
-        from module import Module
-
-        return PaginatedList(
-            Module,
-            self._requester,
-            'GET',
-            'courses/%s/modules' % (self.id)
-        )
-
-    def get_module(self, module_id):
-        """
-        Get information about a single module
-
-        :calls: `GET /api/v1/courses/:course_id/modules/:id`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.show>
-        :param module_id: str
-        :rtype: :class:`Module`
-        """
-        from module import Module
-
-        response = self._requester.request(
-            'POST',
-            'courses/%s/modules/%s' % (self.id, module_id),
-        )
-        return Module(self._requester, response.json())
-=======
     def list_quizzes(self, **kwargs):
         """
         Returns the list of Quizzes in this course
@@ -288,4 +253,55 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
         return Quiz(self._requester, response.json())
->>>>>>> 623b3f30a17f6cdd7818af567ac201c09c5999ce:pycanvas/course.py
+
+    def list_modules(self):
+        """
+        List the modules in a course
+
+        :calls: `GET /api/v1/courses/:course_id/modules`
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Module`
+        """
+        from module import Module
+
+        return PaginatedList(
+            Module,
+            self._requester,
+            'GET',
+            'courses/%s/modules' % (self.id)
+        )
+
+    def get_module(self, module_id):
+        """
+        Get information about a single module
+
+        :calls: `GET /api/v1/courses/:course_id/modules/:id`
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.show>
+        :param module_id: str
+        :rtype: :class:`Module`
+        """
+        from module import Module
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/modules/%s' % (self.id, module_id),
+        )
+        return Module(self._requester, response.json())
+
+    def create_module(self, name, **kwargs):
+        """
+        Create and return a new module
+
+        :calls: `POST /api/v1/courses/:course_id/modules`
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.create>
+        :param name: str
+        :rtype: :class:`Module`
+        """
+        from module import Module
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/modules' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Module(self._requester, response.json())
