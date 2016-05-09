@@ -1,0 +1,36 @@
+{
+    "delete": {
+        "method":"DELETE",
+        "endpoint": "courses/1/modules/1",
+        "data": {
+            "id": 1,
+            "name": "Name",
+            "workflow_state": "active",
+            "position": 1
+        },
+        "status_code": 200
+    },
+    "edit": {
+        "method": "PUT",
+        "endpoint": "courses/1/modules/1",
+        "data": {
+            "id": 1,
+            "name": "New Name",
+            "workflow_state": "active",
+            "position": 1
+        },
+        "status_code": 200
+    },
+    "relock": {
+        "method": "PUT",
+        "endpoint": "courses/1/modules/1/relock",
+        "data": {
+            "id": 1,
+            "name": "New Name",
+            "workflow_state": "active",
+            "position": 1,
+            "state": "locked"
+        },
+        "status_code": 200
+    }
+}

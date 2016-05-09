@@ -4,6 +4,7 @@ import requests_mock
 
 from util import register_uris
 from pycanvas.course import Course
+from pycanvas.module import Module
 from pycanvas.quiz import Quiz
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas import Canvas
@@ -18,7 +19,10 @@ class TestCourse(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['create', 'get_by_id', 'get_quiz', 'list_quizzes', 'list_quizzes2'],
+            'course': [
+                'create', 'get_by_id', 'get_quiz', 'list_quizzes', 'list_quizzes2',
+                'list_modules', 'list_modules2', 'get_module_by_id', 'create_module'
+            ],
             'generic': ['not_found'],
             'quiz': ['get_by_id']
         }
@@ -56,3 +60,22 @@ class TestCourse(unittest.TestCase):
 
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
+
+    def test_list_modules(self):
+        modules = self.course.list_modules()
+        module_list = [module for module in modules]
+
+        assert len(module_list) == 4
+        assert isinstance(module_list[0], Module)
+
+    def test_get_module(self):
+        target_module = self.course.get_module(1)
+
+        assert isinstance(target_module, Module)
+
+    def test_create_module(self):
+        name = 'Name'
+        new_module = self.course.create_module(self.course.id, module={'name': name})
+
+        assert isinstance(new_module, Module)
+        assert hasattr(new_module, 'name')
