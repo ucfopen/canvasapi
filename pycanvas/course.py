@@ -208,6 +208,56 @@ class Course(CanvasObject):
         )
         return Course(self._requester, response.json())
 
+    def get_assignment(self, assignment_id):
+        """
+        Returns the assignment with the given id.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:id`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.show>
+        :rtype: :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/assignments/%s' % (self.id, assignment_id),
+        )
+        return Assignment(self._requester, response.json())
+
+    def get_assignments(self):
+        """
+        Returns the list of assignments for the current context.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            'GET',
+            'courses/%s/assignments' % (self.id)
+        )
+
+    def create_assignment(self, **kwargs):
+        """
+        Create a new assignment for this course. The assignment is created in the active state.
+        :calls: `POST /api/v1/courses/:course_id/assignments`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.create>
+        :rtype: :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/assignments' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return Assignment(self._requester, response.json())
+
     def list_quizzes(self, **kwargs):
         """
         Returns the list of Quizzes in this course

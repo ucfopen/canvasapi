@@ -8,6 +8,17 @@
 		},
 		"status_code": 200
 	},
+	"create_assignment": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Newly Created Assignment",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
 	"enroll_user": {
 		"method": "POST",
 		"endpoint": "courses/1/enrollments",
@@ -16,6 +27,58 @@
 			"course_id": 1,
 			"user_id": 1,
 			"type": "TeacherEnrollment"
+		},
+		"status_code": 200
+	},
+	"get_all_assignments": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 2,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_all_assignments2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_assignments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
+	"get_assignment_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Do this assignment"
 		},
 		"status_code": 200
 	},

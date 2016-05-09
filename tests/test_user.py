@@ -21,7 +21,8 @@ class TestUser(unittest.TestCase):
         requires = {
             'generic': ['not_found'],
             'user': [
-                'avatars', 'avatars_p2', 'get_by_id', 'get_by_id_2', 'color',
+                'avatars', 'avatars_p2', 'get_by_id', 'get_by_id_2',
+                'get_user_assignments', 'get_user_assignments2', 'color',
                 'color_update', 'colors', 'courses', 'courses_p2', 'edit',
                 'merge', 'missing_sub', 'missing_sub_p2', 'page_views',
                 'page_views_p2', 'profile', 'update_settings'
@@ -152,3 +153,13 @@ class TestUser(unittest.TestCase):
 
         assert len(avatar_list) == 4
         assert isinstance(avatar_list[0], Avatar)
+
+    # get_assignments()
+    def test_user_assignments(self):
+        user = self.canvas.get_user(1)
+
+        assignments = user.get_assignments(1)
+        assignment_list = [assignment for assignment in assignments]
+
+        assert isinstance(assignments[0], Assignment)
+        assert len(assignment_list) == 4
