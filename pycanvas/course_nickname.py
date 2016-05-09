@@ -15,7 +15,7 @@ class CourseNickname(CanvasObject):
         Remove the nickname for the given course. Subsequent course API
         calls will return the actual name for the course.
 
-        .. :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id
+        :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
 
         :rtype: :class:`CourseNickname`

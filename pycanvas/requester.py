@@ -9,8 +9,8 @@ class Requester(object):
 
     def __init__(self, base_url, access_token, mock_adapter):
         """
-        :param base_url: string
-        :param access_token: string
+        :param base_url: str
+        :param access_token: str
         """
         self.base_url = base_url
         self.access_token = access_token
@@ -23,8 +23,8 @@ class Requester(object):
         """
         Makes a request to the Canvas API.
 
-        :param method: string
-        :param endpoint: string
+        :param method: str
+        :param endpoint: str
         :param headers: dict
         """
         full_url = url if url else self.base_url + endpoint
@@ -60,7 +60,7 @@ class Requester(object):
         """
         Issue a GET request to the specified endpoint with the data provided.
 
-        :param url: string
+        :param url: str
         :pararm headers: dict
         :param params: dict
         """
@@ -70,7 +70,7 @@ class Requester(object):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
-        :param url: string
+        :param url: str
         :pararm headers: dict
         :param params: dict
         :param data: dict
@@ -81,7 +81,7 @@ class Requester(object):
         """
         Issue a DELETE request to the specified endpoint with the data provided.
 
-        :param url: string
+        :param url: str
         :pararm headers: dict
         :param params: dict
         :param data: dict
@@ -92,7 +92,7 @@ class Requester(object):
         """
         Issue a PUT request to the specified endpoint with the data provided.
 
-        :param url: string
+        :param url: str
         :pararm headers: dict
         :param params: dict
         :param data: dict
