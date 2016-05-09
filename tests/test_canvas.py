@@ -19,13 +19,18 @@ class TestCanvas(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'account': ['create', 'domains', 'get_by_id', 'multiple', 'multiple_course'],
-            'course': ['get_by_id', 'multiple', 'multiple_page_2', 'start_at_date'],
+            'account': [
+                'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
+            ],
+            'course': [
+                'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date'
+            ],
             'generic': ['not_found'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
-                'course_nicknames', 'course_nicknames_delete', 'course_nicknames_page_2',
-                'get_by_id', 'get_by_id_type', 'todo_items', 'upcoming_events'
+                'course_nicknames', 'course_nicknames_delete',
+                'course_nicknames_page_2', 'courses', 'courses_p2', 'get_by_id',
+                'get_by_id_type', 'todo_items', 'upcoming_events'
             ],
         }
 
