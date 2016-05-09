@@ -188,3 +188,20 @@ class User(CanvasObject):
             'GET',
             '/users/%s/avatars' % (self.id)
         )
+
+    def get_assignments(self, course_id):
+        """
+        Returns the list of assignments for the specified user if the current
+        user has rights to view. See List assignments for valid arguments.
+
+        :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments`
+        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            'GET',
+            'users/%s/courses/%s/assignments' % (self.id, course_id)
+        )

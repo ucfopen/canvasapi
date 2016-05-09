@@ -1,140 +1,207 @@
 {
-    "get_by_id": {
-        "method": "GET",
-        "endpoint": "courses/1",
-        "data": {
-            "id": 1,
-            "course_code": "TST1234",
-            "name": "Test Course 1234",
-            "workflow_state": "available",
-            "account_id": 1,
-            "root_account_id": 1,
-            "enrollment_term_id": 1,
-            "grading_standard_id": 1
-        },
-        "status_code": 200
-    },
-    "multiple": {
-        "method": "GET",
-        "endpoint": "courses",
-        "data": [
-            {
-                "id": 1,
-                "course_code": "TST1234",
-                "name": "Test Course 1234",
-                "workflow_state": "available",
-                "account_id": 1,
-                "root_account_id": 1,
-                "enrollment_term_id": 1,
-                "grading_standard_id": 1
-            },
-            {
-                "id": 2,
-                "course_code": "TST5678",
-                "name": "Test Course 5678",
-                "workflow_state": "available",
-                "account_id": 1,
-                "root_account_id": 1,
-                "enrollment_term_id": 1,
-                "grading_standard_id": 1
-            }
-        ],
-        "headers": {
-            "Link": "<mock://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
-        },
-        "status_code": 200
-    },
-    "multiple_page_2": {
-        "method": "GET",
-        "endpoint": "courses/?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "course_code": "HAI5555",
-                "name": "Hello 5555",
-                "workflow_state": "available",
-                "account_id": 1,
-                "root_account_id": 1,
-                "enrollment_term_id": 1,
-                "grading_standard_id": 1
-            },
-            {
-                "id": 4,
-                "course_code": "UCF1963",
-                "name": "University Birthday",
-                "workflow_state": "available",
-                "account_id": 1,
-                "root_account_id": 1,
-                "enrollment_term_id": 1,
-                "grading_standard_id": 1
-            }
-        ],
-        "status_code": 200
-    },
-    "start_at_date": {
-        "method": "GET",
-        "endpoint": "courses/2",
-        "data": {
-            "id": 2,
-            "course_code": "TEST_DATE",
-            "name": "Testing Start At Date",
-            "workflow_state": "available",
-            "account_id": 1,
-            "root_account_id": 1,
-            "enrollment_term_id": 1,
-            "grading_standard_id": 1,
-            "start_at": "2016-01-01T00:00:00Z"
-        },
-        "status_code": 200
-    },
-    "create": {
-        "method": "POST",
-        "endpoint": "courses/1/quizzes",
-        "data": {
-            "id": 1,
-            "title": "Newer Title"
-        },
-        "status_code": 200
-    },
-    "get_quiz": {
-        "method": "GET",
-        "endpoint": "courses/1/quizzes/1",
-        "data": {
-            "id": 1
-        },
-        "status_code": 200
-    },
-    "list_quizzes": {
-        "method": "GET",
-        "endpoint": "courses/1/quizzes",
-        "data": [
-            {
-                "id": 1,
-                "title": "First Quiz"
-            },
-            {
-                "id": 2,
-                "title": "Second Quiz"
-            }
-        ],
-        "status_code": 200,
-        "headers": {
-            "Link": "<mock://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
-        }
-    },
-    "list_quizzes2": {
-        "method": "GET",
-        "endpoint": "courses/1/list_quizzes?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "title": "Third Quiz"
-            },
-            {
-                "id": 4,
-                "title": "Fourth Quiz"
-            }
-        ],
-        "status_code": 200
-    }
+	"get_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1",
+		"data": {
+			"id": 1,
+			"course_code": "TST1234",
+			"name": "Test Course 1234",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"multiple": {
+		"method": "GET",
+		"endpoint": "courses",
+		"data": [
+			{
+				"id": 1,
+				"course_code": "TST1234",
+				"name": "Test Course 1234",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			},
+			{
+				"id": 2,
+				"course_code": "TST5678",
+				"name": "Test Course 5678",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"multiple_page_2": {
+		"method": "GET",
+		"endpoint": "courses/?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_code": "HAI5555",
+				"name": "Hello 5555",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			},
+			{
+				"id": 4,
+				"course_code": "UCF1963",
+				"name": "University Birthday",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			}
+		],
+		"status_code": 200
+	},
+	"start_at_date": {
+		"method": "GET",
+		"endpoint": "courses/2",
+		"data": {
+			"id": 2,
+			"course_code": "TEST_DATE",
+			"name": "Testing Start At Date",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1,
+			"start_at": "2016-01-01T00:00:00Z"
+		},
+		"status_code": 200
+	},
+	"create": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes",
+		"data": {
+			"id": 1,
+			"title": "Newer Title"
+		},
+		"status_code": 200
+	},
+	"get_quiz": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1",
+		"data": {
+			"id": 1
+		},
+		"status_code": 200
+	},
+	"list_quizzes": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes",
+		"data": [
+			{
+				"id": 1,
+				"title": "First Quiz"
+			},
+			{
+				"id": 2,
+				"title": "Second Quiz"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_quizzes2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_quizzes?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"title": "Third Quiz"
+			},
+			{
+				"id": 4,
+				"title": "Fourth Quiz"
+			}
+		],
+		"status_code": 200
+	},
+
+	"create_assignment": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Newly Created Assignment",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
+
+	"get_assignment_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
+
+	"get_all_assignments": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 2,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+
+	"get_all_assignments2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_assignments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	}
 }

@@ -1,7 +1,6 @@
 import unittest
 import settings
 
-
 import requests_mock
 from pycanvas import Canvas
 from pycanvas.quiz import Quiz
