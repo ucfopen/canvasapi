@@ -2,6 +2,8 @@
 
 
 def combine_kwargs(**kwargs):
+    # TODO: look into implementing and testing multi-level post params
+    # e.g. `account[settings][restrict_student_future_view]`
     """
     Combines a list of keyword arguments into a single dictionary.
 
