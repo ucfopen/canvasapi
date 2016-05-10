@@ -64,7 +64,7 @@ class TestCourse(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
         self.quiz = self.course.get_quiz(1)
-        self.user = self.canvas.get_user(1, None)
+        self.user = self.canvas.get_user(1)
 
     # __str__()
     def test__str__(self):

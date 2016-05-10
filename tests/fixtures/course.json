@@ -23,7 +23,10 @@
 		"method": "DELETE",
 		"endpoint": "courses/1/enrollments/1",
 		"data": {
-			"id": 1
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "StudentEnrollment"
 		},
 		"status_code": 200
 	},
@@ -149,7 +152,9 @@
 		"method": "GET",
 		"endpoint": "courses/1/sections/1",
 		"data": {
-			"id": 1
+			"id": 1,
+			"name": "Section 1",
+			"course_id": 1
 		},
 		"status_code": 200
 	},
@@ -339,8 +344,11 @@
 	"reactivate_enrollment": {
 		"method": "PUT",
 		"endpoint": "courses/1/enrollments/1/reactivate",
-		"data":{
-			"id": 1
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "StudentEnrollment"
 		},
 		"status_code": 200
 	},
