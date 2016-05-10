@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import unittest
-import settings
-import requests_mock
-
-from util import register_uris
-from pycanvas import Canvas
-from pycanvas.role import Role
-=======
 import datetime
 import unittest
 
@@ -15,11 +6,11 @@ import requests_mock
 import settings
 from pycanvas import Canvas
 from pycanvas.account import Account, AccountNotification, AccountReport
+from pycanvas.role import Role
 from pycanvas.course import Course
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.user import User
 from util import register_uris
->>>>>>> 9970db4553397317e3c8a0e372b7280f7325317e
 
 
 class TestAccount(unittest.TestCase):
@@ -50,6 +41,7 @@ class TestAccount(unittest.TestCase):
         register_uris(settings.BASE_URL, requires, adapter)
 
         self.account = self.canvas.get_account(1)
+        self.role = self.account.get_role(1,2)
         self.user = self.canvas.get_user(1)
 
     # __str__()
