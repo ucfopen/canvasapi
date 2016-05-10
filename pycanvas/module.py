@@ -63,3 +63,14 @@ class Module(CanvasObject):
             'courses/%s/modules/%s/relock' % (course_id, self.id),
         )
         return Module(self._requester, response.json())
+
+
+class ModuleItem(CanvasObject):
+
+    def __str__(self):
+        return "id: %s, name: %s, description: %s" % (
+            self.id,
+            self.name,
+            self.description
+        )
+
