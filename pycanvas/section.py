@@ -5,7 +5,11 @@ from paginated_list import PaginatedList
 class Section(CanvasObject):
 
     def __str__(self):
-        return ""
+        return 'Section #%s \"%s\" |course_id: %s' % (
+            self.id,
+            self.name,
+            self.course_id
+        )
 
     def list_enrollments(self):
         """

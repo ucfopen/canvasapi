@@ -241,7 +241,7 @@ class TestCourse(unittest.TestCase):
 
 class TestCourseNickname(unittest.TestCase):
     """
-    Tests core CourseNickname functionality
+    Tests CourseNickname methods
     """
     @classmethod
     def setUpClass(self):

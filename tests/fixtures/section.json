@@ -3,7 +3,9 @@
 		"method": "GET",
 		"endpoint": "sections/1",
 		"data":{
-			"id": 1
+			"id": 1,
+			"course_id": 1,
+			"name": "Section 1"
 		},
 		"status_code": 200
 	},
@@ -13,11 +15,13 @@
 		"data": [
 			{
 				"id": 1,
-				"course_id": 5
+				"course_id": 5,
+				"name": "Section 1"
 			},
 			{
 				"id": 2,
-				"course_id": 6
+				"course_id": 6,
+				"name": "Section 2"
 			}
 		],
 		"status_code": 200,
@@ -31,11 +35,13 @@
 		"data": [
 			{
 				"id": 3,
-				"course_id": 7
+				"course_id": 7,
+				"name": "Section 3"
 			},
 			{
 				"id": 4,
-				"course_id": 8
+				"course_id": 8,
+				"name": "Section 4"
 			}
 		],
 		"status_code": 200

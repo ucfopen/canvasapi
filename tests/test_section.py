@@ -24,7 +24,12 @@ class TestSection(unittest.TestCase):
 
         self.section = self.canvas.get_section(1)
 
-    #list_enrollments()
+    # __str__()
+    def test__str__(self):
+        string = str(self.section)
+        assert isinstance(string, str)
+
+    # list_enrollments()
     def test_list_enrollments(self):
         enrollments = self.section.list_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
