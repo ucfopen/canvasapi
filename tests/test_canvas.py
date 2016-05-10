@@ -3,17 +3,14 @@ from datetime import datetime
 
 import requests_mock
 
+import settings
 from pycanvas import Canvas
 from pycanvas.account import Account
-from pycanvas.course import Course
-from pycanvas.course_nickname import CourseNickname
+from pycanvas.course import Course, CourseNickname
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.section import Section
 from pycanvas.user import User
-import settings
 from util import register_uris
-
-INVALID_ID = 9001
 
 
 class TestCanvas(unittest.TestCase):
@@ -23,14 +20,19 @@ class TestCanvas(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'account': ['create', 'domains', 'get_by_id', 'multiple', 'multiple_course'],
-            'course': ['get_by_id', 'multiple', 'multiple_page_2', 'start_at_date'],
+            'account': [
+                'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
+            ],
+            'course': [
+                'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date'
+            ],
             'generic': ['not_found'],
             'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
-                'course_nicknames', 'course_nicknames_delete', 'course_nicknames_page_2',
-                'get_by_id', 'get_by_id_type', 'todo_items', 'upcoming_events'
+                'course_nicknames', 'course_nicknames_delete',
+                'course_nicknames_page_2', 'courses', 'courses_p2', 'get_by_id',
+                'get_by_id_type', 'todo_items', 'upcoming_events'
             ],
         }
 
@@ -59,7 +61,7 @@ class TestCanvas(unittest.TestCase):
 
     def test_get_account_fail(self):
         with self.assertRaises(ResourceDoesNotExist):
-            self.canvas.get_account(INVALID_ID)
+            self.canvas.get_account(settings.INVALID_ID)
 
     # get_accounts()
     def test_get_accounts(self):
@@ -90,7 +92,7 @@ class TestCanvas(unittest.TestCase):
 
     def test_get_course_fail(self):
         with self.assertRaises(ResourceDoesNotExist):
-            self.canvas.get_course(INVALID_ID)
+            self.canvas.get_course(settings.INVALID_ID)
 
     # get_user()
     def test_get_user(self):
@@ -107,7 +109,7 @@ class TestCanvas(unittest.TestCase):
 
     def test_get_user_fail(self):
         with self.assertRaises(ResourceDoesNotExist):
-            self.canvas.get_user(INVALID_ID)
+            self.canvas.get_user(settings.INVALID_ID)
 
     # get_courses()
     def test_get_courses(self):
@@ -153,7 +155,7 @@ class TestCanvas(unittest.TestCase):
 
     def test_get_course_nickname_fail(self):
         with self.assertRaises(ResourceDoesNotExist):
-            self.canvas.get_course_nickname(INVALID_ID)
+            self.canvas.get_course_nickname(settings.INVALID_ID)
 
     # set_course_nickname()
     def test_set_course_nickname(self):

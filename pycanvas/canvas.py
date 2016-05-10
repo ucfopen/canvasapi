@@ -192,7 +192,7 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`
         :rtype: :class:`PaginatedList` of :class:`CourseNickname`
         """
-        from course_nickname import CourseNickname
+        from course import CourseNickname
 
         return PaginatedList(
             CourseNickname,
@@ -210,7 +210,7 @@ class Canvas(object):
         :param course_id: int
         :rtype: :class:`CourseNickname`
         """
-        from course_nickname import CourseNickname
+        from course import CourseNickname
 
         response = self.__requester.request(
             'GET',
@@ -244,7 +244,7 @@ class Canvas(object):
         :param nickname: str
         :rtype: :class:`CourseNickname`
         """
-        from course_nickname import CourseNickname
+        from course import CourseNickname
 
         response = self.__requester.request(
             'PUT',

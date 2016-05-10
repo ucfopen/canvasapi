@@ -1,0 +1,24 @@
+{
+	"edit_assignment": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "New Name",
+			"description": "Delete this assignment"
+		},
+		"status_code": 200
+	},
+	"delete_assignment": {
+		"method": "DELETE",
+		"endpoint": "courses/1/assignments/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Delete this assignment"
+		},
+		"status_code": 200
+	}
+}

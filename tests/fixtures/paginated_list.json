@@ -1,0 +1,118 @@
+{
+	"empty": {
+		"method": "ANY",
+		"endpoint": "empty_list",
+		"data": [],
+		"status_code": 200
+	},
+	"single": {
+		"method": "ANY",
+		"endpoint": "single_item",
+		"data": [
+			{
+				"id": "1",
+				"name": "object 1"
+			}
+		],
+		"status_code": 200
+	},
+	"2_1_page": {
+		"method": "ANY",
+		"endpoint": "two_objects_one_page",
+		"data": [
+			{
+				"id": "1",
+				"name": "object 1"
+			},
+			{
+				"id": "2",
+				"name": "object 2"
+			}
+		],
+		"status_code": 200
+	},
+	"4_2_pages_p1": {
+		"method": "ANY",
+		"endpoint": "four_objects_two_pages",
+		"data": [
+			{
+				"id": "1",
+				"name": "object 1"
+			},
+			{
+				"id": "2",
+				"name": "object 2"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/four_objects_two_pages?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"4_2_pages_p2": {
+		"method": "ANY",
+		"endpoint": "four_objects_two_pages?page=2&per_page=2",
+		"data": [
+			{
+				"id": "3",
+				"name": "object 3"
+			},
+			{
+				"id": "4",
+				"name": "object 4"
+			}
+		],
+		"status_code": 200
+	},
+	"6_3_pages_p1": {
+		"method": "ANY",
+		"endpoint": "six_objects_three_pages",
+		"data": [
+			{
+				"id": "1",
+				"name": "object 1"
+			},
+			{
+				"id": "2",
+				"name": "object 2"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/six_objects_three_pages?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"6_3_pages_p2": {
+		"method": "ANY",
+		"endpoint": "six_objects_three_pages?page=2&per_page=2",
+		"data": [
+			{
+				"id": "3",
+				"name": "object 3"
+			},
+			{
+				"id": "4",
+				"name": "object 4"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/six_objects_three_pages?page=3&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"6_3_pages_p3": {
+		"method": "ANY",
+		"endpoint": "six_objects_three_pages?page=3&per_page=2",
+		"data": [
+			{
+				"id": "5",
+				"name": "object 5"
+			},
+			{
+				"id": "6",
+				"name": "object 6"
+			}
+		],
+		"status_code": 200
+	}
+}
