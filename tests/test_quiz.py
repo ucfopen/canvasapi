@@ -1,7 +1,6 @@
 import unittest
 import settings
 
-
 import requests_mock
 from pycanvas import Canvas
 from pycanvas.quiz import Quiz
@@ -26,6 +25,11 @@ class TestQuiz(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
         self.quiz = self.course.get_quiz(1)
+
+    # __str__()
+    def test__str__(self):
+        string = str(self.quiz)
+        assert isinstance(string, str)
 
     # edit()
     def test_edit(self):
