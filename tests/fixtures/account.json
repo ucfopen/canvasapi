@@ -264,9 +264,6 @@
 		],
 		"status_code": 200
 	},
-<<<<<<< HEAD
-
-=======
 	"reports": {
 		"method": "GET",
 		"endpoint": "accounts/1/reports",
@@ -458,7 +455,6 @@
 		"endpoint": "accounts/101",
 		"data": {},
 		"status_code": 200
->>>>>>> 9970db4553397317e3c8a0e372b7280f7325317e
 	},
 	"list_roles": {
 		"method": "GET",
@@ -489,7 +485,7 @@
 			{
 				"id": 7,
 				"account_id": 8
-			},
+			}
 		],
         "status_code": 200
     }
