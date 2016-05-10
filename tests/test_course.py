@@ -5,13 +5,13 @@ import requests_mock
 
 import settings
 from util import register_uris
-
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.course import Course, CourseNickname
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.quiz import Quiz
+from pycanvas.section import Section
 from pycanvas.user import User
 
 
@@ -23,12 +23,14 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'enroll_user', 'get_all_assignments',
-                'get_all_assignments2', 'get_assignment_by_id', 'get_by_id', 'get_quiz',
-                'get_recent_students', 'get_recent_students_p2', 'get_user',
-                'get_user_id_type', 'get_users', 'get_users_p2', 'list_quizzes',
-                'list_quizzes2', 'preview_html', 'reset', 'settings', 'update',
-                'update_settings'
+                'create', 'create_assignment', 'deactivate_enrollment',
+                'enroll_user', 'get_all_assignments', 'get_all_assignments2',
+                'get_assignment_by_id', 'get_by_id', 'get_quiz',
+                'get_recent_students', 'get_recent_students_p2', 'get_section',
+                'get_user', 'get_user_id_type', 'get_users', 'get_users_p2',
+                'list_enrollments', 'list_enrollments_2', 'list_quizzes',
+                'list_quizzes2', 'preview_html', 'reactivate_enrollment',
+                'reset', 'settings', 'update', 'update_settings'
             ],
             'generic': ['not_found'],
             'quiz': ['get_by_id'],
@@ -62,6 +64,7 @@ class TestCourse(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
         self.quiz = self.course.get_quiz(1)
+        self.user = self.canvas.get_user(1)
 
     # __str__()
     def test__str__(self):
@@ -179,6 +182,32 @@ class TestCourse(unittest.TestCase):
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
 
+    # list_enrollments()
+    def test_list_enrollments(self):
+        enrollments = self.course.list_enrollments()
+        enrollment_list = [enrollment for enrollment in enrollments]
+
+        assert len(enrollment_list) == 4
+        assert isinstance(enrollment_list[0], Enrollment)
+
+    # deactivate_enrollment()
+    def test_deactivate_enrollment(self):
+        target_enrollment = self.course.deactivate_enrollment(1)
+
+        assert isinstance(target_enrollment, Enrollment)
+
+    # reactivate_enrollment()
+    def test_reactivate_enrollment(self):
+        target_enrollment = self.course.reactivate_enrollment(1)
+
+        assert isinstance(target_enrollment, Enrollment)
+
+    # get_section
+    def test_get_section(self):
+        section = self.course.get_section(1)
+
+        assert isinstance(section, Section)
+
     # create_assignment()
     def test_create_assignment(self):
         name = 'Newly Created Assignment'
@@ -212,7 +241,7 @@ class TestCourse(unittest.TestCase):
 
 class TestCourseNickname(unittest.TestCase):
     """
-    Tests core CourseNickname functionality
+    Tests CourseNickname methods
     """
     @classmethod
     def setUpClass(self):
