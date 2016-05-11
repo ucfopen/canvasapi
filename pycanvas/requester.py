@@ -1,4 +1,4 @@
-from pycanvas.exceptions import BadRequest, PermissionError, ResourceDoesNotExist
+from pycanvas.exceptions import BadRequest, CanvasException, PermissionError, ResourceDoesNotExist
 import requests
 
 
@@ -19,7 +19,7 @@ class Requester(object):
         if mock_adapter:
             self._session.mount('mock', mock_adapter)
 
-    def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
+    def request(self, method, endpoint, headers=None, use_auth=True, url=None, **kwargs):
         """
         Makes a request to the Canvas API.
 
@@ -27,13 +27,13 @@ class Requester(object):
         :param endpoint: string
         :param headers: dict
         """
-        full_url = url if url else self.base_url + endpoint
+        full_url = url if url else "%s%s" % (self.base_url, endpoint)
 
         if not headers:
             headers = {}
 
         if use_auth:
-            auth_header = {'Authorization': 'Bearer ' + self.access_token}
+            auth_header = {'Authorization': 'Bearer %s' % (self.access_token)}
             headers.update(auth_header)
 
         if method == 'GET':
@@ -53,6 +53,8 @@ class Requester(object):
             raise PermissionError(response.json())
         elif response.status_code == 404:
             raise ResourceDoesNotExist('Not Found')
+        elif response.status_code == 500:
+            raise CanvasException("API encountered an error processing your request")
 
         return response
 

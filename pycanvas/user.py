@@ -1,6 +1,6 @@
 from canvas_object import CanvasObject
 from paginated_list import PaginatedList
-from util import combine_kwargs
+from util import combine_kwargs, obj_or_id
 
 
 class User(CanvasObject):
@@ -161,13 +161,14 @@ class User(CanvasObject):
 
         :calls: `PUT /api/v1/users/:id/merge_into/:destination_user_id
         <https://canvas.instructure.com/doc/api/users.html#method.users.merge_into>`
-        :param destination_user: :class:`User`
+        :param destination_user: :class:`User` or int
         :rtype: :class:`User`
         """
-        assert isinstance(destination_user, User)
+        dest_user_id = obj_or_id(destination_user, 'destination_user', (User, ))
+
         response = self._requester.request(
             'PUT',
-            'users/%s/merge_into/%s' % (self.id, destination_user.id),
+            'users/%s/merge_into/%s' % (self.id, dest_user_id),
         )
         super(User, self).set_attributes(response.json())
         return self
@@ -186,5 +187,39 @@ class User(CanvasObject):
             Avatar,
             self._requester,
             'GET',
-            '/users/%s/avatars' % (self.id)
+            'users/%s/avatars' % (self.id)
+        )
+
+    def get_assignments(self, course_id):
+        """
+        Returns the list of assignments for the specified user if the current
+        user has rights to view. See List assignments for valid arguments.
+
+        :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments`
+        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            'GET',
+            'users/%s/courses/%s/assignments' % (self.id, course_id)
+        )
+
+    def list_enrollments(self):
+        """
+        Lists all of the enrollments for a user.
+
+        :calls: `GET /api/v1/users/:user_id/enrollments`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        """
+        from enrollment import Enrollment
+
+        return PaginatedList(
+            Enrollment,
+            self._requester,
+            'GET',
+            'users/%s/enrollments' % (self.id)
         )

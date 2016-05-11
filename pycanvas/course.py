@@ -20,7 +20,8 @@ class Course(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/%s' % (self.id),
-            event="conclude"
+            event="conclude",
+            var="blarg"
         )
         response_json = response.json()
         return response_json.get('conclude', False)
@@ -227,3 +228,186 @@ class Course(CanvasObject):
             'courses/%s/reset_content' % (self.id),
         )
         return Course(self._requester, response.json())
+
+    def list_enrollments(self):
+        """
+        Lists all of the enrollments within a course.
+
+        :calls: `GET /api/v1/courses/:course_id/enrollments`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        """
+        from enrollment import Enrollment
+        return PaginatedList(
+            Enrollment,
+            self._requester,
+            'GET',
+            'courses/%s/enrollments' % (self.id)
+        )
+
+    def get_assignment(self, assignment_id):
+        """
+        Returns the assignment with the given id.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:id`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.show>
+        :rtype: :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/assignments/%s' % (self.id, assignment_id),
+        )
+        return Assignment(self._requester, response.json())
+
+    def get_assignments(self):
+        """
+        Returns the list of assignments for the current context.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            'GET',
+            'courses/%s/assignments' % (self.id)
+        )
+
+    def create_assignment(self, **kwargs):
+        """
+        Create a new assignment for this course. The assignment is created in the active state.
+        :calls: `POST /api/v1/courses/:course_id/assignments`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.create>
+        :rtype: :class:`Assignment`
+        """
+        from assignment import Assignment
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/assignments' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return Assignment(self._requester, response.json())
+
+    def list_quizzes(self, **kwargs):
+        """
+        Returns the list of Quizzes in this course
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes`
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>
+        :rtype: Quiz :class:`PaginatedList` of :class:`Quiz`
+        """
+        from quiz import Quiz
+        return PaginatedList(
+            Quiz,
+            self._requester,
+            'GET',
+            'courses/%s/quizzes' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_quiz(self, quiz_id):
+        """
+        Returns the quiz with the given id
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:id`
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.show>
+        :rtype: Quiz
+        """
+        from quiz import Quiz
+        response = self._requester.request(
+            'GET',
+            'courses/%s/quizzes/%s' % (self.id, quiz_id)
+        )
+        return Quiz(self._requester, response.json())
+
+    def create_quiz(self, title, **kwargs):
+        """
+        Create a new quiz for a course
+        :calls: `POST /api/v1/courses/:course_id/quizzes
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.create>
+        :param title: string
+        :rtype: Quiz
+        """
+        from quiz import Quiz
+        response = self._requester.request(
+            'POST',
+            'courses/%s/quizzes' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Quiz(self._requester, response.json())
+
+    def deactivate_enrollment(self, enrollment_id):
+        """
+        Delete, conclude or deactivate an enrollment
+        :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.destroy>
+        :rtype: Enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/enrollments/%s' % (self.id, enrollment_id)
+        )
+        return Enrollment(self._requester, response.json())
+
+    def reactivate_enrollment(self, enrollment_id):
+        """
+        Activates an inactive role
+        :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reactivate>
+        :rtype: Enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment_id)
+        )
+        return Enrollment(self._requester, response.json())
+
+    def get_section(self, section_id):
+        """
+        Gets details about a specific section
+        :calls: `GET /api/v1/courses/:course_id/sections/:id`
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>
+        :rtype: Section
+        """
+        from section import Section
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/sections/%s' % (self.id, section_id)
+        )
+        return Section(self._requester, response.json())
+
+
+class CourseNickname(CanvasObject):
+
+    def __str__(self):
+        return "course_id: %s, name: %s, nickname: %s, " % (
+            self.course_id,
+            self.name,
+            self.nickname
+        )
+
+    def remove(self):
+        """
+        Remove the nickname for the given course. Subsequent course API
+        calls will return the actual name for the course.
+
+        :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`
+        :rtype: :class:`CourseNickname`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'users/self/course_nicknames/%s' % (self.course_id)
+        )
+        return CourseNickname(self._requester, response.json())

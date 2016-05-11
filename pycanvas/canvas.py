@@ -192,7 +192,7 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`
         :rtype: :class:`PaginatedList` of :class:`CourseNickname`
         """
-        from course_nickname import CourseNickname
+        from course import CourseNickname
 
         return PaginatedList(
             CourseNickname,
@@ -210,13 +210,27 @@ class Canvas(object):
         :param course_id: int
         :rtype: :class:`CourseNickname`
         """
-        from course_nickname import CourseNickname
+        from course import CourseNickname
 
         response = self.__requester.request(
             'GET',
             'users/self/course_nicknames/%s' % (course_id)
         )
         return CourseNickname(self.__requester, response.json())
+
+    def get_section(self, section_id):
+        """
+        Get details about a specific sections
+        :calls: `GET /api/v1/sections/:id`
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>
+        :rtype: Section
+        """
+        from section import Section
+        response = self.__requester.request(
+            'GET',
+            'sections/%s' % (section_id)
+        )
+        return Section(self.__requester, response.json())
 
     def set_course_nickname(self, course_id, nickname):
         """
@@ -230,7 +244,7 @@ class Canvas(object):
         :param nickname: str
         :rtype: :class:`CourseNickname`
         """
-        from course_nickname import CourseNickname
+        from course import CourseNickname
 
         response = self.__requester.request(
             'PUT',

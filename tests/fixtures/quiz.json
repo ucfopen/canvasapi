@@ -1,0 +1,29 @@
+{
+	"delete": {
+		"method":"DELETE",
+		"endpoint": "courses/1/quizzes/1",
+		"data": {
+			"id": 1,
+			"title": "Great Title"
+		},
+		"status_code": 200
+	},
+	"edit":{
+		"method": "PUT",
+		"endpoint": "courses/1/quizzes/1",
+		"data": {
+			"id": 1,
+			"title": "New Title"
+		},
+		"status_code": 200
+	},
+	"get_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1",
+		"data": {
+			"id": 1,
+			"title": "Quizzy McQuizFace"
+		},
+		"status_code": 200
+	}
+}
