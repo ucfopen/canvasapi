@@ -208,6 +208,22 @@ class Course(CanvasObject):
         )
         return Course(self._requester, response.json())
 
+    def list_enrollments(self):
+        """
+        Lists all of the enrollments within a course.
+
+        :calls: `GET /api/v1/courses/:course_id/enrollments`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        """
+        from enrollment import Enrollment
+        return PaginatedList(
+            Enrollment,
+            self._requester,
+            'GET',
+            'courses/%s/enrollments' % (self.id)
+        )
+
     def get_assignment(self, assignment_id):
         """
         Returns the assignment with the given id.
@@ -356,6 +372,51 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
         return Module(self._requester, response.json())
+
+    def deactivate_enrollment(self, enrollment_id):
+        """
+        Delete, conclude or deactivate an enrollment
+        :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.destroy>
+        :rtype: Enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/enrollments/%s' % (self.id, enrollment_id)
+        )
+        return Enrollment(self._requester, response.json())
+
+    def reactivate_enrollment(self, enrollment_id):
+        """
+        Activates an inactive role
+        :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reactivate>
+        :rtype: Enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment_id)
+        )
+        return Enrollment(self._requester, response.json())
+
+    def get_section(self, section_id):
+        """
+        Gets details about a specific section
+        :calls: `GET /api/v1/courses/:course_id/sections/:id`
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>
+        :rtype: Section
+        """
+        from section import Section
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/sections/%s' % (self.id, section_id)
+        )
+        return Section(self._requester, response.json())
 
 
 class CourseNickname(CanvasObject):

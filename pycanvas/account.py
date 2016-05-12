@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from exceptions import RequiredFieldMissing
+from enrollment import Enrollment
 from paginated_list import PaginatedList
 from util import combine_kwargs, obj_or_id
 
@@ -284,6 +285,22 @@ class Account(CanvasObject):
             return True
         else:
             return False
+
+    def enroll_by_id(self, id, enrollment_id, **kwargs):
+        """
+        Get an enrollment object by id
+        :calls: `GET /api/v1/accounts/:account_id/enrollments/:id
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.show>
+        :rtype: enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/enrollments/%s' % (self.id, enrollment_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Enrollment(self._requester, response.json())
 
 
 class AccountNotification(CanvasObject):

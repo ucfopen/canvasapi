@@ -7,6 +7,7 @@ import settings
 from pycanvas import Canvas
 from pycanvas.account import Account, AccountNotification, AccountReport
 from pycanvas.course import Course
+from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.user import User
 from util import register_uris
@@ -20,12 +21,12 @@ class TestAccount(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'account': [
-                'close_notification', 'create_course', 'create_2',
+                'close_notification', 'create', 'create_2', 'create_course',
                 'create_notification', 'create_subaccount', 'create_user',
-                'delete_user', 'get_by_id', 'get_by_id_2', 'get_by_id_3',
-                'get_courses', 'get_courses_page_2', 'reports', 'reports_page_2',
-                'report_index', 'report_index_page_2', 'subaccounts',
-                'subaccounts_page_2', 'users', 'users_page_2',
+                'delete_user', 'enroll_by_id', 'get_by_id', 'get_by_id_2',
+                'get_by_id_3', 'get_courses', 'get_courses_page_2', 'reports',
+                'reports_page_2', 'report_index', 'report_index_page_2',
+                'subaccounts', 'subaccounts_page_2', 'users', 'users_page_2',
                 'user_notifs', 'user_notifs_page_2', 'update', 'update_fail'
             ],
             'generic': ['not_found'],
@@ -217,3 +218,9 @@ class TestAccount(unittest.TestCase):
 
         success = account.update(account=update_account_dict)
         assert not success
+
+    # enroll_by_id()
+    def test_enroll_by_id(self):
+        target_enrollment = self.account.enroll_by_id(1, 1)
+
+        assert isinstance(target_enrollment, Enrollment)

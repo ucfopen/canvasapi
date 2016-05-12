@@ -1,363 +1,428 @@
 {
-    "create": {
-        "method": "POST",
-        "endpoint": "courses/1/quizzes",
-        "data": {
-            "id": 1,
-            "title": "Newer Title"
-        },
-        "status_code": 200
-    },
-    "create_assignment": {
-        "method": "POST",
-        "endpoint": "courses/1/assignments",
-        "data": {
-            "id": 5,
-            "course_id": 1,
-            "name": "Newly Created Assignment",
-            "description": "Do this assignment"
-        },
-        "status_code": 200
-    },
-    "enroll_user": {
-        "method": "POST",
-        "endpoint": "courses/1/enrollments",
-        "data": {
-            "id": 1,
-            "course_id": 1,
-            "user_id": 1,
-            "type": "TeacherEnrollment"
-        },
-        "status_code": 200
-    },
-    "get_all_assignments": {
-        "method": "GET",
-        "endpoint": "courses/1/assignments",
-        "data": [
-            {
-                "id": 1,
-                "course_id": 1,
-                "name": "Assignment 1",
-                "description": "Do this assignment"
-            },
-            {
-                "id": 2,
-                "course_id": 1,
-                "name": "Assignment 2",
-                "description": "Do this assignment too"
-            }
-        ],
-        "status_code": 200,
-        "headers": {
-            "Link": "<mock://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
-        }
-    },
-    "get_all_assignments2": {
-        "method": "GET",
-        "endpoint": "courses/1/list_assignments?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "course_id": 1,
-                "name": "Assignment 1",
-                "description": "Do this assignment"
-            },
-            {
-                "id": 4,
-                "course_id": 1,
-                "name": "Assignment 2",
-                "description": "Do this assignment too"
-            }
-        ],
-        "status_code": 200
-    },
-    "get_assignment_by_id": {
-        "method": "GET",
-        "endpoint": "courses/1/assignments/5",
-        "data": {
-            "id": 5,
-            "course_id": 1,
-            "name": "Assignment 1",
-            "description": "Do this assignment"
-        },
-        "status_code": 200
-    },
-    "get_by_id": {
-        "method": "GET",
-        "endpoint": "courses/1",
-        "data": {
-            "id": 1,
-            "course_code": "TST1234",
-            "name": "Test Course 1234",
-            "workflow_state": "available",
-            "account_id": 1,
-            "root_account_id": 1,
-            "enrollment_term_id": 1,
-            "grading_standard_id": 1
-        },
-        "status_code": 200
-    },
-    "get_quiz": {
-        "method": "GET",
-        "endpoint": "courses/1/quizzes/1",
-        "data": {
-            "id": 1
-        },
-        "status_code": 200
-    },
-    "get_recent_students": {
-        "method": "GET",
-        "endpoint": "courses/1/recent_students",
-        "data": [
-            {
-                "id": 1,
-                "name": "John Doe"
-            },
-            {
-                "id": 2,
-                "name": "John Smith"
-            }
-        ],
-        "headers": {
-            "Link": "<mock://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
-        },
-        "status_code": 200
-    },
-    "get_recent_students_p2": {
-        "method": "GET",
-        "endpoint": "courses/1/recent_students?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "name": "Joe Smith"
-            },
-            {
-                "id": 4,
-                "name": "James Smith"
-            }
-        ]
-    },
-    "get_user": {
-        "method": "GET",
-        "endpoint": "courses/1/users/1",
-        "data": {
-            "id": 1,
-            "name": "John Doe"
-        },
-        "status_code": 200
-    },
-    "get_user_id_type": {
-        "method": "GET",
-        "endpoint": "courses/1/users/sis_login_id:ab123456",
-        "data": {
-            "id": 123456,
-            "name": "Abby Smith",
-            "sis_login_id": "ab123456"
-        },
-        "status_code": 200
-    },
-    "get_users": {
-        "method": "GET",
-        "endpoint": "courses/1/search_users",
-        "data": [
-            {
-                "id": 1,
-                "name": "John Doe"
-            },
-            {
-                "id": 2,
-                "name": "Jane Doe"
-            }
-        ],
-        "headers": {
-            "Link": "<mock://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
-        },
-        "status_code": 200
-    },
-    "get_users_p2": {
-        "method": "GET",
-        "endpoint": "courses/1/search_users?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "name": "John Smith"
-            },
-            {
-                "id": 4,
-                "name": "Joe Smith"
-            }
-        ],
-        "status_code": 200
-    },
-    "list_quizzes": {
-        "method": "GET",
-        "endpoint": "courses/1/quizzes",
-        "data": [
-            {
-                "id": 1,
-                "title": "First Quiz"
-            },
-            {
-                "id": 2,
-                "title": "Second Quiz"
-            }
-        ],
-        "status_code": 200,
-        "headers": {
-            "Link": "<mock://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
-        }
-    },
-    "list_quizzes2": {
-        "method": "GET",
-        "endpoint": "courses/1/list_quizzes?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "title": "Third Quiz"
-            },
-            {
-                "id": 4,
-                "title": "Fourth Quiz"
-            }
-        ],
-        "status_code": 200
-    },
-    "multiple": {
-        "method": "GET",
-        "endpoint": "courses",
-        "data": [
-            {
-                "id": 1,
-                "course_code": "TST1234",
-                "name": "Test Course 1234",
-                "workflow_state": "available",
-                "account_id": 1,
-                "root_account_id": 1,
-                "enrollment_term_id": 1,
-                "grading_standard_id": 1
-            },
-            {
-                "id": 2,
-                "course_code": "TST5678",
-                "name": "Test Course 5678",
-                "workflow_state": "available",
-                "account_id": 1,
-                "root_account_id": 1,
-                "enrollment_term_id": 1,
-                "grading_standard_id": 1
-            }
-        ],
-        "headers": {
-            "Link": "<mock://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
-        },
-        "status_code": 200
-    },
-    "multiple_page_2": {
-        "method": "GET",
-        "endpoint": "courses/?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "course_code": "HAI5555",
-                "name": "Hello 5555",
-                "workflow_state": "available",
-                "account_id": 1,
-                "root_account_id": 1,
-                "enrollment_term_id": 1,
-                "grading_standard_id": 1
-            },
-            {
-                "id": 4,
-                "course_code": "UCF1963",
-                "name": "University Birthday",
-                "workflow_state": "available",
-                "account_id": 1,
-                "root_account_id": 1,
-                "enrollment_term_id": 1,
-                "grading_standard_id": 1
-            }
-        ],
-        "status_code": 200
-    },
-    "preview_html": {
-        "method": "POST",
-        "endpoint": "courses/1/preview_html",
-        "data": {
-            "html": "<p>hello</p>"
-        },
-        "status_code": 200
-    },
-    "reset": {
-        "method": "POST",
-        "endpoint": "courses/1/reset_content",
-        "data": {
-            "id": 1,
-            "course_code": "RESET",
-            "name": "Reset Course"
-        },
-        "status_code": 200
-    },
-    "start_at_date": {
-        "method": "GET",
-        "endpoint": "courses/2",
-        "data": {
-            "id": 2,
-            "course_code": "TEST_DATE",
-            "name": "Testing Start At Date",
-            "workflow_state": "available",
-            "account_id": 1,
-            "root_account_id": 1,
-            "enrollment_term_id": 1,
-            "grading_standard_id": 1,
-            "start_at": "2016-01-01T00:00:00Z"
-        },
-        "status_code": 200
-    },
-    "settings": {
-        "method": "GET",
-        "endpoint": "courses/1/settings",
-        "data": {
-            "allow_student_discussion_topics": true,
-            "allow_student_forum_attachments": false,
-            "allow_student_discussion_editing": true,
-            "grading_standard_enabled": true,
-            "grading_standard_id": 1,
-            "allow_student_organized_groups": true,
-            "hide_final_grades": false,
-            "hide_distribution_graphs": false,
-            "lock_all_announcements": true
-        }
-    },
-    "update": {
-        "method": "PUT",
-        "endpoint": "courses/1",
-        "data": {
-            "id": 1,
-            "course_code": "TST1234",
-            "name": "New Name",
-            "workflow_state": "available",
-            "account_id": 1,
-            "root_account_id": 1,
-            "enrollment_term_id": 1,
-            "grading_standard_id": 1
-        },
-        "status_code": 200
-    },
-    "update_settings": {
-        "method": "PUT",
-        "endpoint": "courses/1/settings",
-        "data": {
-            "allow_student_discussion_topics": true,
-            "allow_student_forum_attachments": false,
-            "allow_student_discussion_editing": true,
-            "grading_standard_enabled": true,
-            "grading_standard_id": 1,
-            "allow_student_organized_groups": true,
-            "hide_final_grades": true,
-            "hide_distribution_graphs": false,
-            "lock_all_announcements": true
-        }
-    },
+	"create": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes",
+		"data": {
+			"id": 1,
+			"title": "Newer Title"
+		},
+		"status_code": 200
+	},
+	"create_assignment": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Newly Created Assignment",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
+	"deactivate_enrollment": {
+		"method": "DELETE",
+		"endpoint": "courses/1/enrollments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "StudentEnrollment"
+		},
+		"status_code": 200
+	},
+	"enroll_user": {
+		"method": "POST",
+		"endpoint": "courses/1/enrollments",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "TeacherEnrollment"
+		},
+		"status_code": 200
+	},
+	"get_all_assignments": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 2,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_all_assignments2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_assignments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
+	"get_assignment_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
+	"get_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1",
+		"data": {
+			"id": 1,
+			"course_code": "TST1234",
+			"name": "Test Course 1234",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"get_quiz": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1",
+		"data": {
+			"id": 1
+		},
+		"status_code": 200
+	},
+	"get_recent_students": {
+		"method": "GET",
+		"endpoint": "courses/1/recent_students",
+		"data": [
+			{
+				"id": 1,
+				"name": "John Doe"
+			},
+			{
+				"id": 2,
+				"name": "John Smith"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_recent_students_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/recent_students?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Joe Smith"
+			},
+			{
+				"id": 4,
+				"name": "James Smith"
+			}
+		]
+	},
+	"get_section":{
+		"method": "GET",
+		"endpoint": "courses/1/sections/1",
+		"data": {
+			"id": 1,
+			"name": "Section 1",
+			"course_id": 1
+		},
+		"status_code": 200
+	},
+	"get_user": {
+		"method": "GET",
+		"endpoint": "courses/1/users/1",
+		"data": {
+			"id": 1,
+			"name": "John Doe"
+		},
+		"status_code": 200
+	},
+	"get_user_id_type": {
+		"method": "GET",
+		"endpoint": "courses/1/users/sis_login_id:ab123456",
+		"data": {
+			"id": 123456,
+			"name": "Abby Smith",
+			"sis_login_id": "ab123456"
+		},
+		"status_code": 200
+	},
+	"get_users": {
+		"method": "GET",
+		"endpoint": "courses/1/search_users",
+		"data": [
+			{
+				"id": 1,
+				"name": "John Doe"
+			},
+			{
+				"id": 2,
+				"name": "Jane Doe"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_users_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/search_users?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "John Smith"
+			},
+			{
+				"id": 4,
+				"name": "Joe Smith"
+			}
+		],
+		"status_code": 200
+	},
+	"list_enrollments": {
+		"method": "GET",
+		"endpoint": "courses/1/enrollments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 5
+			},
+			{
+				"id": 2,
+				"course_id": 6
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_enrollments_2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_enrollments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 7
+			},
+			{
+				"id": 4,
+				"course_id": 8
+			}
+		],
+		"status_code": 200
+	},
+	"list_quizzes": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes",
+		"data": [
+			{
+				"id": 1,
+				"title": "First Quiz"
+			},
+			{
+				"id": 2,
+				"title": "Second Quiz"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_quizzes2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_quizzes?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"title": "Third Quiz"
+			},
+			{
+				"id": 4,
+				"title": "Fourth Quiz"
+			}
+		],
+		"status_code": 200
+	},
+	"multiple": {
+		"method": "GET",
+		"endpoint": "courses",
+		"data": [
+			{
+				"id": 1,
+				"course_code": "TST1234",
+				"name": "Test Course 1234",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			},
+			{
+				"id": 2,
+				"course_code": "TST5678",
+				"name": "Test Course 5678",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"multiple_page_2": {
+		"method": "GET",
+		"endpoint": "courses/?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_code": "HAI5555",
+				"name": "Hello 5555",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			},
+			{
+				"id": 4,
+				"course_code": "UCF1963",
+				"name": "University Birthday",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			}
+		],
+		"status_code": 200
+	},
+	"preview_html": {
+		"method": "POST",
+		"endpoint": "courses/1/preview_html",
+		"data": {
+			"html": "<p>hello</p>"
+		},
+		"status_code": 200
+	},
+	"reactivate_enrollment": {
+		"method": "PUT",
+		"endpoint": "courses/1/enrollments/1/reactivate",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "StudentEnrollment"
+		},
+		"status_code": 200
+	},
+	"reset": {
+		"method": "POST",
+		"endpoint": "courses/1/reset_content",
+		"data": {
+			"id": 1,
+			"course_code": "RESET",
+			"name": "Reset Course"
+		},
+		"status_code": 200
+	},
+	"start_at_date": {
+		"method": "GET",
+		"endpoint": "courses/2",
+		"data": {
+			"id": 2,
+			"course_code": "TEST_DATE",
+			"name": "Testing Start At Date",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1,
+			"start_at": "2016-01-01T00:00:00Z"
+		},
+		"status_code": 200
+	},
+	"settings": {
+		"method": "GET",
+		"endpoint": "courses/1/settings",
+		"data": {
+			"allow_student_discussion_topics": true,
+			"allow_student_forum_attachments": false,
+			"allow_student_discussion_editing": true,
+			"grading_standard_enabled": true,
+			"grading_standard_id": 1,
+			"allow_student_organized_groups": true,
+			"hide_final_grades": false,
+			"hide_distribution_graphs": false,
+			"lock_all_announcements": true
+		}
+	},
+	"update": {
+		"method": "PUT",
+		"endpoint": "courses/1",
+		"data": {
+			"id": 1,
+			"course_code": "TST1234",
+			"name": "New Name",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"update_settings": {
+		"method": "PUT",
+		"endpoint": "courses/1/settings",
+		"data": {
+			"allow_student_discussion_topics": true,
+			"allow_student_forum_attachments": false,
+			"allow_student_discussion_editing": true,
+			"grading_standard_enabled": true,
+			"grading_standard_id": 1,
+			"allow_student_organized_groups": true,
+			"hide_final_grades": true,
+			"hide_distribution_graphs": false,
+			"lock_all_announcements": true
+		},
+
     "list_modules": {
         "method": "GET",
         "endpoint": "courses/1/modules",
@@ -416,5 +481,5 @@
             "position": 1
         },
         "status_code": 200
-    }
+	}
 }

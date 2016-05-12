@@ -8,6 +8,7 @@ from pycanvas import Canvas
 from pycanvas.account import Account
 from pycanvas.course import Course, CourseNickname
 from pycanvas.exceptions import ResourceDoesNotExist
+from pycanvas.section import Section
 from pycanvas.user import User
 from util import register_uris
 
@@ -26,6 +27,7 @@ class TestCanvas(unittest.TestCase):
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date'
             ],
             'generic': ['not_found'],
+            'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
                 'course_nicknames', 'course_nicknames_delete',
@@ -177,3 +179,9 @@ class TestCanvas(unittest.TestCase):
         assert isinstance(domains, list)
         assert len(domains) == 1
         assert 'name' in domains[0]
+
+    # get_section()
+    def test_section(self):
+        info = self.canvas.get_section(1)
+
+        assert isinstance(info, Section)
