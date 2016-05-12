@@ -423,63 +423,63 @@
 			"lock_all_announcements": true
 		},
 
-    "list_modules": {
-        "method": "GET",
-        "endpoint": "courses/1/modules",
-        "data": [
-            {
-                "id": 1,
-                "name": "First Module",
-                "position": 1
-            },
-            {
-                "id": 2,
-                "name": "Second Module",
-                "position": 2
-            }
-        ],
-        "status_code": 200,
-        "headers": {
-            "Link": "<mock://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
-        }
-    },
-    "list_modules2": {
-        "method": "GET",
-        "endpoint": "courses/1/list_modules?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "name": "Third Module",
-                "position": 3
-            },
-            {
-                "id": 4,
-                "name": "Fourth Module",
-                "position": 4
-            }
-        ],
-        "status_code": 200
-    },
-    "get_module_by_id": {
-        "method": "GET",
-        "endpoint": "courses/1/modules/1",
-        "data": {
-            "id": 1,
-            "name": "Test Module 1234",
-            "workflow_state": "active",
-            "position": 1
-        },
-        "status_code": 200
-    },
-    "create_module": {
-        "method": "POST",
-        "endpoint": "courses/1/modules",
-        "data": {
-            "id": 1,
-            "name": "Name",
-            "workflow_state": "active",
-            "position": 1
-        },
-        "status_code": 200
+	"list_modules": {
+		"method": "GET",
+		"endpoint": "courses/1/modules",
+		"data": [
+			{
+				"id": 1,
+				"name": "First Module",
+				"position": 1
+			},
+			{
+				"id": 2,
+				"name": "Second Module",
+				"position": 2
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_modules2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_modules?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Third Module",
+				"position": 3
+			},
+			{
+				"id": 4,
+				"name": "Fourth Module",
+				"position": 4
+			}
+		],
+		"status_code": 200
+	},
+	"get_module_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1/modules/1",
+		"data": {
+			"id": 1,
+			"name": "Test Module 1234",
+			"workflow_state": "active",
+			"position": 1
+		},
+		"status_code": 200
+	},
+	"create_module": {
+		"method": "POST",
+		"endpoint": "courses/1/modules",
+		"data": {
+			"id": 1,
+			"name": "Name",
+			"workflow_state": "active",
+			"position": 1
+		},
+		"status_code": 200
 	}
 }
