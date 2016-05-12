@@ -321,7 +321,7 @@ class Course(CanvasObject):
         )
         return Quiz(self._requester, response.json())
 
-    def list_modules(self):
+    def list_modules(self, **kwargs):
         """
         List the modules in a course
 
@@ -335,7 +335,8 @@ class Course(CanvasObject):
             Module,
             self._requester,
             'GET',
-            'courses/%s/modules' % (self.id)
+            'courses/%s/modules' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def get_module(self, module_id):

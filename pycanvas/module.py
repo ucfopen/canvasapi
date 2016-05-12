@@ -142,19 +142,28 @@ class ModuleItem(CanvasObject):
         )
         return ModuleItem(self._requester, response.json())
 
-    def completed(self, course_id, completed):
+    def complete(self, course_id):
         """
-        Mark a module item as done/not done. Use HTTP method PUT to mark as
-        done, and DELETE to mark as not done.
-
+        Mark a module item as done
         :calls: `PUT /api/v1/courses/:course_id/modules/:module_id/items/:id/done`,
-                `DELETE /api/v1/courses/:course_id/modules/:module_id/items/:id/done`
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.mark_as_done>
-        :rtype:
+        :rtype: :class:`ModuleItem`
         """
-        httpresponse = 'PUT' if completed else 'DELETE'
         response = self._requester.request(
-            httpresponse,
+            'PUT',
+            'courses/%s/modules/%s/items/%s/done' % (course_id, self.module_id, self.id),
+        )
+        return ModuleItem(self._requester, response.json())
+
+    def uncomplete(self, course_id):
+        """
+        Mark a module item as not done
+        :calls: `DELETE /api/v1/courses/:course_id/modules/:module_id/items/:id/done`,
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.mark_as_done>
+        :rtype: :class:`ModuleItem`
+        """
+        response = self._requester.request(
+            'DELETE',
             'courses/%s/modules/%s/items/%s/done' % (course_id, self.module_id, self.id),
         )
         return ModuleItem(self._requester, response.json())

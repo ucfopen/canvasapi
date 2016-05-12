@@ -116,14 +116,14 @@ class TestModuleItem(unittest.TestCase):
 
     #complete(course_id, True)
     def test_complete(self):
-        completed_module_item = self.module_item.completed(self.course.id, True)
+        completed_module_item = self.module_item.complete(self.course.id)
 
         assert isinstance(completed_module_item, ModuleItem)
         assert hasattr(completed_module_item, 'completion_requirement')
 
     #complete(course_id, False)
     def test_uncomplete(self):
-        completed_module_item = self.module_item.completed(self.course.id, False)
+        completed_module_item = self.module_item.uncomplete(self.course.id)
 
         assert isinstance(completed_module_item, ModuleItem)
         assert hasattr(completed_module_item, 'completion_requirement')
