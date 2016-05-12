@@ -94,6 +94,8 @@ class Module(CanvasObject):
 
         :calls: `POST /api/v1/courses/:course_id/modules/:module_id/items`
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.create>
+        :param type: str
+        :param content_id: str
         :rtype: :class:`ModuleItem`
         """
         if isinstance(module_item, dict) and 'type' in module_item:
