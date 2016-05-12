@@ -6,7 +6,7 @@ from util import combine_kwargs
 class Module(CanvasObject):
 
     def __str__(self):
-        return "id: %s, name: %s, description: %s" % (
+        return "id: %s, name: %s" % (
             self.id,
             self.name,
         )
@@ -107,9 +107,9 @@ class Module(CanvasObject):
 class ModuleItem(CanvasObject):
 
     def __str__(self):
-        return "id: %s, name: %s, description: %s" % (
+        return "id: %s, title: %s, description: %s" % (
             self.id,
-            self.name,
+            self.title,
             self.module_id
         )
 

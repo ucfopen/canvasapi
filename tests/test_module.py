@@ -70,6 +70,11 @@ class TestModule(unittest.TestCase):
 
         assert isinstance(module_item, ModuleItem)
 
+    #__str__
+    def test__str__(self):
+        string = str(self.module)
+        assert isinstance(string, str)
+
 
 class TestModuleItem(unittest.TestCase):
     """
@@ -122,3 +127,7 @@ class TestModuleItem(unittest.TestCase):
 
         assert isinstance(completed_module_item, ModuleItem)
         assert hasattr(completed_module_item, 'completion_requirement')
+
+    def test__str__(self):
+        string = str(self.module_item)
+        assert isinstance(string, str)
