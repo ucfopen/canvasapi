@@ -340,7 +340,7 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-    def get_module(self, module_id):
+    def get_module(self, module_id, **kwargs):
         """
         Get information about a single module
 
