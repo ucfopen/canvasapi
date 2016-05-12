@@ -65,8 +65,8 @@ class TestModule(unittest.TestCase):
 
     #create_module_item()
     def test_create_module_item(self):
-        title = 'Module Item Name'
-        module_item = self.module.create_module_item(self.course.id, module_item={'title': title})
+        module_item = self.module.create_module_item(self.course.id, module_item={'type': 'Page',
+                                                                                  'content_id': 1})
 
         assert isinstance(module_item, ModuleItem)
 

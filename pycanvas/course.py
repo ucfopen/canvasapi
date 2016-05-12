@@ -1,6 +1,7 @@
 from canvas_object import CanvasObject
 from util import combine_kwargs
 from paginated_list import PaginatedList
+from exceptions import RequiredFieldMissing
 
 
 class Course(CanvasObject):
@@ -356,7 +357,7 @@ class Course(CanvasObject):
         )
         return Module(self._requester, response.json())
 
-    def create_module(self, name, **kwargs):
+    def create_module(self, module, **kwargs):
         """
         Create and return a new module
 
@@ -366,6 +367,11 @@ class Course(CanvasObject):
         :rtype: :class:`Module`
         """
         from module import Module
+
+        if isinstance(module, dict) and 'name' in module:
+            kwargs['module'] = module
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'name' is required.")
 
         response = self._requester.request(
             'POST',

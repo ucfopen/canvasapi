@@ -201,7 +201,7 @@ class TestCourse(unittest.TestCase):
     # create_module()
     def test_create_module(self):
         name = 'Name'
-        new_module = self.course.create_module(self.course.id, module={'name': name})
+        new_module = self.course.create_module(module={'name': name})
 
         assert isinstance(new_module, Module)
         assert hasattr(new_module, 'name')

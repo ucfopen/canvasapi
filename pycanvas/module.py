@@ -1,4 +1,5 @@
 from canvas_object import CanvasObject
+from exceptions import RequiredFieldMissing
 from paginated_list import PaginatedList
 from util import combine_kwargs
 
@@ -87,7 +88,7 @@ class Module(CanvasObject):
         )
         return ModuleItem(self._requester, response.json())
 
-    def create_module_item(self, course_id, **kwargs):
+    def create_module_item(self, course_id, module_item, **kwargs):
         """
         Create and return a new module item
 
@@ -95,6 +96,14 @@ class Module(CanvasObject):
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.create>
         :rtype: :class:`ModuleItem`
         """
+        if isinstance(module_item, dict) and 'type' in module_item:
+            if 'content_id' in module_item:
+                kwargs['module_item'] = module_item
+            else:
+                raise RequiredFieldMissing("Dictionary with key 'content_id' is required.")
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'type' is required.")
+
         response = self._requester.request(
             'POST',
             'courses/%s/modules/%s/items' % (course_id, self.id),
