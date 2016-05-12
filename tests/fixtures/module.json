@@ -32,5 +32,126 @@
             "state": "locked"
         },
         "status_code": 200
+    },
+    "list_module_items": {
+        "method": "GET",
+        "endpoint": "courses/1/modules/1/items",
+        "data": [
+            {
+                "id": 1,
+                "title": "First Module Item",
+                "position": 1,
+                "type": "Assignment"
+            },
+            {
+                "id": 2,
+                "title": "Second Module Item",
+                "position": 2,
+                "type": "Assignment"
+            }
+        ],
+        "status_code": 200,
+        "headers": {
+            "Link": "<mock://example.com/api/v1/courses/1/modules/1/items/list_module_items?page=2&per_page=2>; rel=\"next\""
+        }
+    },
+    "list_module_items2": {
+        "method": "GET",
+        "endpoint": "courses/1/modules/1/items/list_module_items?page=2&per_page=2",
+        "data": [
+            {
+                "id": 3,
+                "title": "Third Module Item",
+                "position": 3,
+                "type": "Assignment",
+                "module_id": 1
+
+            },
+            {
+                "id": 4,
+                "title": "Fourth Module Item",
+                "position": 4,
+                "type": "Assignment",
+                "module_id": 1
+            }
+        ],
+        "status_code": 200
+    },
+    "get_module_item_by_id": {
+        "method": "GET",
+        "endpoint": "courses/1/modules/1/items/1",
+        "data": {
+            "id": 1,
+            "title": "Test Module Item 1234",
+            "type": "Assignment",
+            "position": 1,
+            "module_id": 1
+        },
+        "status_code": 200
+    },
+    "create_module_item": {
+        "method": "POST",
+        "endpoint": "courses/1/modules/1/items",
+        "data": {
+            "id": 1,
+            "title": "Module Item Name",
+            "type": "Assignment",
+            "position": 1,
+            "module_id": 1
+        },
+        "status_code": 200
+    },
+    "edit_module_item": {
+        "method": "PUT",
+        "endpoint": "courses/1/modules/1/items/1",
+        "data": {
+            "id": 1,
+            "title": "New Title",
+            "type": "Assignment",
+            "position": 1,
+            "module_id": 1
+        },
+        "status_code": 200
+    },
+    "delete_module_item": {
+        "method": "DELETE",
+        "endpoint": "courses/1/modules/1/items/1",
+        "data": {
+            "id": 1,
+            "title": "New Title",
+            "type": "Assignment",
+            "position": 1,
+            "module_id": 1
+        },
+        "status_code": 200
+    },
+    "complete_module_item": {
+        "method": "PUT",
+        "endpoint": "courses/1/modules/1/items/1/done",
+        "data": {
+            "id": 1,
+            "title": "New Title",
+            "type": "Assignment",
+            "position": 1,
+            "module_id": 1,
+            "completion_requirement": {"type":"min_score","min_score":10,"completed":true}
+
+        },
+        "status_code": 200
+    },
+    "uncomplete_module_item": {
+        "method": "DELETE",
+        "endpoint": "courses/1/modules/1/items/1/done",
+        "data": {
+            "id": 1,
+            "title": "New Title",
+            "type": "Assignment",
+            "position": 1,
+            "module_id": 1,
+            "completion_requirement": {"type":"min_score","min_score":10,"completed":false}
+
+        },
+        "status_code": 200
     }
 }
+
