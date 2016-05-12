@@ -1,3 +1,4 @@
+import datetime
 import unittest
 import requests
 
@@ -147,6 +148,19 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(settings, dict)
         assert settings['hide_final_grades'] is True
+
+    # upload_file()
+    def test_upload_file_file(self):
+        # TODO
+        # filename = 'testfile_%s' % datetime.datetime.now().strftime('%m%d%H%M%S%f')
+        # new_file = open(filename, 'w+')
+        # self.course.upload_file(file=new_file)
+        pass
+
+    def test_upload_file_path(self):
+        # TODO
+        # self.course.upload_file()
+        pass
 
     # reset()
     def test_reset(self):

@@ -13,7 +13,7 @@ def uploader(requester, url, path=None, file=None, **kwargs):
     :type path: str
     :param file: The file to upload.
     :type file: file
-    :rtype: bool
+    :rtype: dict
     """
     if not path and not file:
         raise ValueError('Must provide a path or a file pointer.')
