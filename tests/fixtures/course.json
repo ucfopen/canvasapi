@@ -422,7 +422,8 @@
 			"hide_distribution_graphs": false,
 			"lock_all_announcements": true
 		},
-
+		"status_code": 200
+	},
 	"list_modules": {
 		"method": "GET",
 		"endpoint": "courses/1/modules",

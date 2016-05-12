@@ -184,7 +184,6 @@ class TestCourse(unittest.TestCase):
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
 
-<<<<<<< HEAD
     # list_modules()
     def test_list_modules(self):
         modules = self.course.list_modules()
@@ -206,7 +205,7 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(new_module, Module)
         assert hasattr(new_module, 'name')
-=======
+
     # list_enrollments()
     def test_list_enrollments(self):
         enrollments = self.course.list_enrollments()
@@ -232,7 +231,6 @@ class TestCourse(unittest.TestCase):
         section = self.course.get_section(1)
 
         assert isinstance(section, Section)
->>>>>>> 9afa9d650147c6774b24b53559d0326c44c70f47
 
     # create_assignment()
     def test_create_assignment(self):
