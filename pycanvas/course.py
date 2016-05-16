@@ -74,8 +74,8 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
 
         :param user_id: The ID of the user to retrieve.
-        :type user: int
-        :param: user_id_type: The type of the ID to search for.
+        :type user_id: int
+        :param user_id_type: The type of the ID to search for.
         :type user_id_type: str
         :rtype: :class:`pycanvas.user.User`
         """
@@ -226,11 +226,12 @@ class Course(CanvasObject):
 
     def list_enrollments(self):
         """
-        Lists all of the enrollments within a course.
+        List all of the enrollments in this course.
 
-        :calls: `GET /api/v1/courses/:course_id/enrollments`
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        :calls: `GET /api/v1/courses/:course_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
         return PaginatedList(
@@ -242,11 +243,14 @@ class Course(CanvasObject):
 
     def get_assignment(self, assignment_id):
         """
-        Returns the assignment with the given id.
+        Return the assignment with the given ID.
 
-        :calls: `GET /api/v1/courses/:course_id/assignments/:id`
-        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.show>
-        :rtype: :class:`Assignment`
+        :calls: `GET /api/v1/courses/:course_id/assignments/:id \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.show>`_
+
+        :param assignment_id: The ID of the assignment to retrieve.
+        :type assignment_id: int
+        :rtype: :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 
@@ -258,11 +262,12 @@ class Course(CanvasObject):
 
     def get_assignments(self):
         """
-        Returns the list of assignments for the current context.
+        List all of the assignments in this course.
 
-        :calls: `GET /api/v1/courses/:course_id/assignments`
-        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        :calls: `GET /api/v1/courses/:course_id/assignments \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 
@@ -275,10 +280,14 @@ class Course(CanvasObject):
 
     def create_assignment(self, **kwargs):
         """
-        Create a new assignment for this course. The assignment is created in the active state.
-        :calls: `POST /api/v1/courses/:course_id/assignments`
-        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.create>
-        :rtype: :class:`Assignment`
+        Create a new assignment for this course.
+
+        Note: The assignment is created in the active state.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.create>`_
+
+        :rtype: :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 
@@ -296,6 +305,7 @@ class Course(CanvasObject):
 
         :calls: `GET /api/v1/courses/:course_id/quizzes \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>`_
+
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.quiz.Quiz`
         """
         from quiz import Quiz
@@ -346,11 +356,12 @@ class Course(CanvasObject):
 
     def list_modules(self, **kwargs):
         """
-        List the modules in a course
+        Return a list of modules in this course.
 
-        :calls: `GET /api/v1/courses/:course_id/modules`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Module`
+        :calls: `GET /api/v1/courses/:course_id/modules \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.module.Module`
         """
         from module import Module
 
@@ -364,12 +375,14 @@ class Course(CanvasObject):
 
     def get_module(self, module_id, **kwargs):
         """
-        Get information about a single module
+        Retrieve a single module by ID.
 
-        :calls: `GET /api/v1/courses/:course_id/modules/:id`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.show>
-        :param module_id: str
-        :rtype: :class:`Module`
+        :calls: `GET /api/v1/courses/:course_id/modules/:id \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.show>`_
+
+        :param module_id: The ID of the module to retrieve.
+        :type module_id: int
+        :rtype: :class:`pycanvas.module.Module`
         """
         from module import Module
 
@@ -381,12 +394,15 @@ class Course(CanvasObject):
 
     def create_module(self, module, **kwargs):
         """
-        Create and return a new module
+        Create a new module.
 
-        :calls: `POST /api/v1/courses/:course_id/modules`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.create>
-        :param module: dict
-        :rtype: :class:`Module`
+        :calls: `POST /api/v1/courses/:course_id/modules \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.create>`_
+
+        :param module: The attributes for the module.
+        :type module: dict
+        :returns: The created module.
+        :rtype: :class:`pycanvas.module.Module`
         """
         from module import Module
 
@@ -402,23 +418,30 @@ class Course(CanvasObject):
         )
         return Module(self._requester, response.json())
 
-    def deactivate_enrollment(self, enrollment_id, task):
+    def deactivate_enrollment(self, enrollment_id, action):
         """
-        Delete, conclude or deactivate an enrollment
-        :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id`
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.destroy>
-        :param enrollment_id: int
-        :param task: str
-        :rtype: Enrollment
+        Delete, conclude, or deactivate an enrollment.
+
+        The following actions can be performed on an enrollment: conclude, delete, \
+        inactivate, deactivate.
+
+        :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.destroy>`_
+
+        :param enrollment_id: The ID of the enrollment to modify.
+        :type enrollment_id: int
+        :param action: The action to perform on the enrollment.
+        :type action: str
+        :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
-        ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
+        ALLOWED_ACTIONS = ['conclude', 'delete', 'inactivate', 'deactivate']
 
-        if not task in ALLOWED_TASKS:
-            raise ValueError('%s is not a valid task. Please use one of the following: %s' % (
-                task,
-                ','.join(ALLOWED_TASKS)
+        if not action in ALLOWED_ACTIONS:
+            raise ValueError('%s is not a valid action. Please use one of the following: %s' % (
+                action,
+                ','.join(ALLOWED_ACTIONS)
             ))
 
         response = self._requester.request(
@@ -429,10 +452,14 @@ class Course(CanvasObject):
 
     def reactivate_enrollment(self, enrollment_id):
         """
-        Activates an inactive role
-        :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate`
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reactivate>
-        :rtype: Enrollment
+        Activate an inactive enrollment.
+
+        :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reactivate>`_
+
+        :param enrollment_id: The ID of the enrollment to reactivate.
+        :type enrollment_id: int
+        :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
@@ -444,10 +471,14 @@ class Course(CanvasObject):
 
     def get_section(self, section_id):
         """
-        Gets details about a specific section
-        :calls: `GET /api/v1/courses/:course_id/sections/:id`
-        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>
-        :rtype: Section
+        Retrieve a section.
+
+        :calls: `GET /api/v1/courses/:course_id/sections/:id \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+
+        :param section_id: The ID of the section to retrieve.
+        :type section_id: int
+        :rtype: :class:`pycanvas.section.Section`
         """
         from section import Section
 

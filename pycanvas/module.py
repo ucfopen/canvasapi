@@ -14,11 +14,12 @@ class Module(CanvasObject):
 
     def edit(self, course_id, **kwargs):
         """
-        Update and return an existing module
+        Update this module.
 
-        :calls: `PUT /api/v1/courses/:course_id/modules/:id`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.update>
-        :rtype: :class:`Module`
+        :calls: `PUT /api/v1/courses/:course_id/modules/:id \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.update>`_
+
+        :rtype: :class:`pycanvas.module.Module`
         """
         response = self._requester.request(
             'PUT',
@@ -29,11 +30,12 @@ class Module(CanvasObject):
 
     def delete(self, course_id):
         """
-        Delete a module
+        Delete this module.
 
-        :calls: `DELETE /api/v1/courses/:course_id/modules/:id`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.destroy>
-        :rtype: :class:`Module`
+        :calls: `DELETE /api/v1/courses/:course_id/modules/:id \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.destroy>`_
+
+        :rtype: :class:`pycanvas.module.Module`
         """
         response = self._requester.request(
             'DELETE',
@@ -43,15 +45,16 @@ class Module(CanvasObject):
 
     def relock(self, course_id):
         """
-        Resets module progressions to their default locked state and recalculates
+        Reset module progressions to their default locked state and recalculates
         them based on the current requirements.
 
-        Adding progression requirements to an active course will notlock students
+        Adding progression requirements to an active course will not lock students
         out of modules they have already unlocked unless this action is called.
 
-        :calls: `PUT /api/v1/courses/:course_id/modules/:id/relock`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.relock>
-        :rtype: :class:`Module`
+        :calls: `PUT /api/v1/courses/:course_id/modules/:id/relock \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.relock>`_
+
+        :rtype: :class:`pycanvas.module.Module`
         """
         response = self._requester.request(
             'PUT',
@@ -61,11 +64,12 @@ class Module(CanvasObject):
 
     def list_module_items(self, course_id):
         """
-        List the items in a module
+        List all of the items in this module.
 
-        :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.index>
-        :rtype: :class:`PaginatedList` of :class:`ModuleItem`
+        :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.module.ModuleItem`
         """
         return PaginatedList(
             ModuleItem,
@@ -76,11 +80,12 @@ class Module(CanvasObject):
 
     def get_module_item(self, course_id, module_item_id):
         """
-        Get information about a single module item
+        Retrieve a module item by ID.
 
-        :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items/:id`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.show>
-        :rtype: :class:`ModuleItem`
+        :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items/:id \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.show>`_
+
+        :rtype: :class:`pycanvas.module.ModuleItem`
         """
         response = self._requester.request(
             'GET',
@@ -90,13 +95,15 @@ class Module(CanvasObject):
 
     def create_module_item(self, course_id, module_item, **kwargs):
         """
-        Create and return a new module item
+        Create a module item.
 
-        :calls: `POST /api/v1/courses/:course_id/modules/:module_id/items`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.create>
-        :param type: str
-        :param content_id: str
-        :rtype: :class:`ModuleItem`
+        :calls: `POST /api/v1/courses/:course_id/modules/:module_id/items \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.create>`_
+
+        :param module_item: The attributes to create the module item with.
+        :type module_item: dict
+        :returns: The created module item.
+        :rtype: :class:`pycanvas.module.ModuleItem`
         """
         if isinstance(module_item, dict) and 'type' in module_item:
             if 'content_id' in module_item:
@@ -126,11 +133,13 @@ class ModuleItem(CanvasObject):
 
     def edit(self, course_id, **kwargs):
         """
-        Update and return an existing module
+        Update this module item.
 
-        :calls: `PUT /api/v1/courses/:course_id/modules/:id`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.update>
-        :rtype: :class:`Module`
+        :calls: `PUT /api/v1/courses/:course_id/modules/:id \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.update>`_
+
+        :returns: The updated module item.
+        :rtype: :class:`pycanvas.module.ModuleItem`
         """
         response = self._requester.request(
             'PUT',
@@ -141,11 +150,12 @@ class ModuleItem(CanvasObject):
 
     def delete(self, course_id):
         """
-        Delete a module item
+        Delete this module item.
 
-        :calls: `DELETE /api/v1/courses/:course_id/modules/:module_id/items/:id`
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.destroy>
-        :rtype: :class:`ModuleItem`
+        :calls: `DELETE /api/v1/courses/:course_id/modules/:module_id/items/:id \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.destroy>`_
+
+        :rtype: :class:`pycanvas.module.ModuleItem`
         """
         response = self._requester.request(
             'DELETE',
@@ -155,10 +165,12 @@ class ModuleItem(CanvasObject):
 
     def complete(self, course_id):
         """
-        Mark a module item as done
-        :calls: `PUT /api/v1/courses/:course_id/modules/:module_id/items/:id/done`,
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.mark_as_done>
-        :rtype: :class:`ModuleItem`
+        Mark this module item as done.
+
+        :calls: `PUT /api/v1/courses/:course_id/modules/:module_id/items/:id/done \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.mark_as_done>`_
+
+        :rtype: :class:`pycanvas.module.ModuleItem`
         """
         response = self._requester.request(
             'PUT',
@@ -168,10 +180,12 @@ class ModuleItem(CanvasObject):
 
     def uncomplete(self, course_id):
         """
-        Mark a module item as not done
-        :calls: `DELETE /api/v1/courses/:course_id/modules/:module_id/items/:id/done`,
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.mark_as_done>
-        :rtype: :class:`ModuleItem`
+        Mark this module item as not done.
+
+        :calls: `DELETE /api/v1/courses/:course_id/modules/:module_id/items/:id/done \
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.mark_as_done>`_
+
+        :rtype: :class:`pycanvas.module.ModuleItem`
         """
         response = self._requester.request(
             'DELETE',

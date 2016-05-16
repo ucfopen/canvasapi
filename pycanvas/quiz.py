@@ -12,10 +12,13 @@ class Quiz(CanvasObject):
 
     def edit(self, course_id, **kwargs):
         """
-        Modifies an existing quiz
-        :calls: `PUT /api/v1/courses/:course_id/quizzes/:id`
-        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.update>
-        :rtype: Quiz
+        Modify this quiz.
+
+        :calls: `PUT /api/v1/courses/:course_id/quizzes/:id \
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.update>`_
+
+        :returns: The updated quiz.
+        :rtype: :class:`pycanvas.quiz.Quiz`
         """
         response = self._requester.request(
             'PUT',
@@ -26,10 +29,12 @@ class Quiz(CanvasObject):
 
     def delete(self, course_id, **kwargs):
         """
-        Deletes a quiz
-        :calls: `DELETE /api/v1/courses/:course_id/quizzes/:id`
-        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.destroy>
-        :rtype: Quiz
+        Delete this quiz.
+
+        :calls: `DELETE /api/v1/courses/:course_id/quizzes/:id \
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.destroy>`_
+
+        :rtype: :class:`pycanvas.quiz.Quiz`
         """
         response = self._requester.request(
             'DELETE',

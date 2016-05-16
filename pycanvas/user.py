@@ -30,7 +30,7 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/page_views \
         <https://canvas.instructure.com/doc/api/users.html#method.page_views.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.PageView` objects
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.PageView`
         """
         from page_view import PageView
 
@@ -210,11 +210,13 @@ class User(CanvasObject):
 
     def get_assignments(self, course_id):
         """
-        Returns the list of assignments for the specified user if the current
-        user has rights to view. See List assignments for valid arguments.
+        Return the list of assignments for this user if the current
+        user (the API key owner) has rights to view. See List assignments for valid arguments.
 
-        :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments`
-        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.user_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 
@@ -227,11 +229,12 @@ class User(CanvasObject):
 
     def list_enrollments(self):
         """
-        Lists all of the enrollments for a user.
+        List all of the enrollments for this user.
 
-        :calls: `GET /api/v1/users/:user_id/enrollments`
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        :calls: `GET /api/v1/users/:user_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
