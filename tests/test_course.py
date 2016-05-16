@@ -9,7 +9,8 @@ from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.course import Course, CourseNickname
 from pycanvas.enrollment import Enrollment
-from pycanvas.exceptions import ResourceDoesNotExist
+from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
+from pycanvas.module import Module
 from pycanvas.quiz import Quiz
 from pycanvas.section import Section
 from pycanvas.user import User
@@ -30,7 +31,8 @@ class TestCourse(unittest.TestCase):
                 'get_user', 'get_user_id_type', 'get_users', 'get_users_p2',
                 'list_enrollments', 'list_enrollments_2', 'list_quizzes',
                 'list_quizzes2', 'preview_html', 'reactivate_enrollment',
-                'reset', 'settings', 'update', 'update_settings'
+                'reset', 'settings', 'update', 'update_settings', 'list_modules',
+                'list_modules2', 'get_module_by_id', 'create_module'
             ],
             'generic': ['not_found'],
             'quiz': ['get_by_id'],
@@ -182,6 +184,32 @@ class TestCourse(unittest.TestCase):
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
 
+    # list_modules()
+    def test_list_modules(self):
+        modules = self.course.list_modules()
+        module_list = [module for module in modules]
+
+        assert len(module_list) == 4
+        assert isinstance(module_list[0], Module)
+
+    # get_module()
+    def test_get_module(self):
+        target_module = self.course.get_module(1)
+
+        assert isinstance(target_module, Module)
+
+    # create_module()
+    def test_create_module(self):
+        name = 'Name'
+        new_module = self.course.create_module(module={'name': name})
+
+        assert isinstance(new_module, Module)
+        assert hasattr(new_module, 'name')
+
+    def test_create_module_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_module(module={'not_required': 'not_required'})
+
     # list_enrollments()
     def test_list_enrollments(self):
         enrollments = self.course.list_enrollments()
@@ -192,9 +220,13 @@ class TestCourse(unittest.TestCase):
 
     # deactivate_enrollment()
     def test_deactivate_enrollment(self):
-        target_enrollment = self.course.deactivate_enrollment(1)
+        target_enrollment = self.course.deactivate_enrollment(1, 'conclude')
 
         assert isinstance(target_enrollment, Enrollment)
+
+    def test_deactivate_enrollment_invalid_task(self):
+        with self.assertRaises(ValueError):
+            self.course.deactivate_enrollment(1, 'finish')
 
     # reactivate_enrollment()
     def test_reactivate_enrollment(self):
