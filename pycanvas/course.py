@@ -10,46 +10,47 @@ class Course(CanvasObject):
 
     def conclude(self):
         """
-        Marks the course as concluded.
+        Mark this course as concluded.
 
         :calls: `DELETE /api/v1/courses/:id \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`_
 
-        :rtype: bool: True if the course was concluded, False otherwise.
+        :returns: True if the course was concluded, False otherwise.
+        :rtype: bool
         """
         response = self._requester.request(
             'DELETE',
             'courses/%s' % (self.id),
             event="conclude"
         )
-        response_json = response.json()
-        return response_json.get('conclude', False)
+        return response.json().get('conclude')
 
     def delete(self):
         """
-        Permanently deletes the course.
+        Permanently delete this course.
 
         :calls: `DELETE /api/v1/courses/:id \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.destroy>`_
 
-        :rtype: bool: True if the course was deleted, False otherwise.
+        :returns: True if the course was deleted, False otherwise.
+        :rtype: bool
         """
         response = self._requester.request(
             'DELETE',
             'courses/%s' % (self.id),
             event="delete"
         )
-        response_json = response.json()
-        return response_json.get('delete', False)
+        return response.json().get('delete')
 
     def update(self, **kwargs):
         """
-        Updates the course.
+        Update this course.
 
         :calls: `PUT /api/v1/courses/:id \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`_
 
-        :rtype: bool: True if the course was updated, False otherwise.
+        :returns: True if the course was updated, False otherwise.
+        :rtype: bool
         """
         response = self._requester.request(
             'PUT',
@@ -57,22 +58,24 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-        if 'name' in response.json():
+        if response.json().get('name'):
             super(Course, self).set_attributes(response.json())
 
-        return 'name' in response.json()
+        return response.json().get('name')
 
     def get_user(self, user_id, user_id_type=None):
         """
-        Retrieve a user by their ID. id_type denotes which endpoint to try as there are
+        Retrieve a user by their ID. `user_id_type` denotes which endpoint to try as there are
         several different ids that can pull the same user record from Canvas.
 
         :calls: `GET /api/v1/courses/:course_id/users/:id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
 
-        :param: user_id: str
-        :param: user_id_type: str
-        :rtype: :class:`User`
+        :param user_id: The ID of the user to retrieve.
+        :type user: int
+        :param: user_id_type: The type of the ID to search for.
+        :type user_id_type: str
+        :rtype: :class:`pycanvas.user.User`
         """
         from user import User
 
@@ -89,14 +92,15 @@ class Course(CanvasObject):
 
     def get_users(self, search_term=None, **kwargs):
         """
-        Lists all users in a course.
-        If a `search_term` is provided, only returns matching users
+        List all users in a course.
+
+        If a `search_term` is provided, only matching users will be included
+        in the returned list.
 
         :calls: `GET /api/v1/courses/:course_id/search_users \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>`_
 
-        :rtype: :class:`PaginatedList` of :class:`User`
-
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
         from user import User
 
@@ -115,11 +119,11 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`_
 
-        :param user: the user to enroll
-        :type user: :class:`User`
-        :param enrollment_type: the type of enrollment
+        :param user: The user to enroll in this course.
+        :type user: :class:`pycanvas.user.User`
+        :param enrollment_type: The type of enrollment.
         :type enrollment_type: str
-        :rtype: :class:`Enrollment` object representing the enrollment
+        :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
@@ -136,13 +140,13 @@ class Course(CanvasObject):
 
     def get_recent_students(self):
         """
-        Returns a list of students in the course ordered by how
-        recently they have logged in.
+        Return a list of students in the course ordered by how recently they
+        have logged in.
 
         :calls: `GET /api/v1/courses/:course_id/recent_students \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.recent_students>`_
 
-        :rtype: :class:`PaginatedList` of :class:`User`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
         from user import User
 
@@ -173,7 +177,7 @@ class Course(CanvasObject):
 
     def get_settings(self):
         """
-        Returns some of a course's settings.
+        Returns this course's settings.
 
         :calls: `GET /api/v1/courses/:course_id/settings \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.settings>`_
@@ -204,13 +208,13 @@ class Course(CanvasObject):
 
     def reset(self):
         """
-        Deletes the current course, and creates a new equivalent course
+        Delete the current course and create a new equivalent course
         with no content, but all sections and users moved over.
 
         :calls: `POST /api/v1/courses/:course_id/reset_content \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.reset_content>`_
 
-        :rtype: :class:`Course`
+        :rtype: :class:`pycanvas.course.Course`
         """
         response = self._requester.request(
             'POST',
@@ -220,11 +224,11 @@ class Course(CanvasObject):
 
     def list_quizzes(self, **kwargs):
         """
-        Returns the list of Quizzes in this course
+        Return a list of quizzes belonging to this course.
 
-        :calls: `GET /api/v1/courses/:course_id/quizzes`
-        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>
-        :rtype: Quiz :class:`PaginatedList` of :class:`Quiz`
+        :calls: `GET /api/v1/courses/:course_id/quizzes \
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>`_
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.quiz.Quiz`
         """
         from quiz import Quiz
         return PaginatedList(
@@ -237,10 +241,14 @@ class Course(CanvasObject):
 
     def get_quiz(self, quiz_id):
         """
-        Returns the quiz with the given id
-        :calls: `GET /api/v1/courses/:course_id/quizzes/:id`
-        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.show>
-        :rtype: Quiz
+        Return the quiz with the given id.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:id \
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.show>`_
+
+        :param quiz_id: The ID of the quiz to retrieve.
+        :type quiz_id: int
+        :rtype: :class:`pycanvas.quiz.Quiz`
         """
         from quiz import Quiz
         response = self._requester.request(
@@ -251,11 +259,14 @@ class Course(CanvasObject):
 
     def create_quiz(self, title, **kwargs):
         """
-        Create a new quiz for a course
-        :calls: `POST /api/v1/courses/:course_id/quizzes
-        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.create>
-        :param title: string
-        :rtype: Quiz
+        Create a new quiz in this course.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes \
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.create>`_
+
+        :param title: The title of the quiz.
+        :type title: str
+        :rtype: :class:`pycanvas.quiz.Quiz`
         """
         from quiz import Quiz
         response = self._requester.request(

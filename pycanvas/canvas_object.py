@@ -8,14 +8,16 @@ class CanvasObject(object):
     """
     Base class for all classes representing objects returned by the API.
 
-    Using the :func:`set_attributes` method, the
-    object's attributes are dynamically constructed using the data from a JSON object.
+    This makes a call to :func:`pycanvas.canvas_object.CanvasObject.set_attributes`
+    to dynamically construct this object's attributes with a JSON object.
     """
 
     def __init__(self, requester, attributes):
         """
-        :param requester: Requester
-        :param attributes: dict
+        :param requester: The requester to pass HTTP requests through.
+        :type requester: :class:`pycanvas.requester.Requester`
+        :param attributes: The JSON object to build this object with.
+        :type attributes: dict
         """
         self._requester = requester
         self.set_attributes(attributes)
@@ -27,7 +29,7 @@ class CanvasObject(object):
 
     def set_attributes(self, attributes):
         """
-        Load this CanvasObject with attributes.
+        Load this object with attributes.
 
         This method attempts to detect special types based on the field's content
         and will create an additional attribute of that type.
@@ -46,7 +48,8 @@ class CanvasObject(object):
         so two additional datetime attributes are created, `start_at_date`
         and `end_at_date`.
 
-        :param attributes: dict
+        :param attributes: The JSON object to build this object with.
+        :type attributes: dict
         """
         for attribute, value in attributes.iteritems():
             self.__setattr__(attribute, value)
