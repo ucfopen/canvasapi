@@ -1,7 +1,10 @@
 from datetime import datetime
+
+import string
 import re
 
 DATE_PATTERN = re.compile('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')
+COURSE_PATTERN = re.compile('\/courses\/[0-9]+\/')
 
 
 class CanvasObject(object):
@@ -31,7 +34,19 @@ class CanvasObject(object):
         for attribute, value in attributes.iteritems():
             self.__setattr__(attribute, value)
 
-            # Generate extra attributes (i.e. datetime attributes for dates)
-            if DATE_PATTERN.match(str(value)):
-                date = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
-                self.__setattr__(attribute + '_date', date)
+            try:
+                # datetime field
+                if DATE_PATTERN.match(str(value)):
+                    date = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
+                    self.__setattr__(attribute + '_date', date)
+
+                # course_id field
+                result = COURSE_PATTERN.search(str(value))
+
+                if result:
+                    course_id = result.group(0).translate(None, string.letters).replace('/', '')
+                    self.__setattr__('course_id', course_id)
+
+            # Non-unicode character. We can skip over this attribute.
+            except UnicodeEncodeError:
+                continue
