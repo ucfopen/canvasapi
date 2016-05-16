@@ -71,14 +71,12 @@ class TestModule(unittest.TestCase):
         assert isinstance(module_item, ModuleItem)
 
     def test_create_module_item_fail1(self):
-        def test_get_quiz_fail(self):
-            with self.assertRaises(RequiredFieldMissing):
-                self.course.create_module_item(self.course.id, module_item={'content_id': 1})
+        with self.assertRaises(RequiredFieldMissing):
+            self.module.create_module_item(self.course.id, module_item={'content_id': 1})
 
     def test_create_module_item_fail2(self):
-        def test_get_quiz_fail(self):
-            with self.assertRaises(RequiredFieldMissing):
-                self.course.create_module_item(self.course.id, module_item={'type': 'Page'})
+        with self.assertRaises(RequiredFieldMissing):
+            self.module.create_module_item(self.course.id, module_item={'type': 'Page'})
 
     #__str__
     def test__str__(self):
