@@ -1,4 +1,15 @@
 {
+	"close_notification": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/users/1/account_notifications/1",
+		"data": {
+			"subject": "Subject",
+			"message": "Message",
+			"start_at": "2015-04-01T00:00:00Z",
+			"end_at": "2018-04-01T00:00:00Z"
+		},
+		"status_code":  200
+	},
 	"create": {
 		"method": "POST",
 		"endpoint": "accounts",
@@ -10,9 +21,81 @@
 			"default_storage_quota_mb": 500,
 			"default_user_storage_quota_mb": 50,
 			"default_group_storage_quota_mb": 50,
-			"default_time_zone": "America/Denver"
+			"default_time_zone": "America/New_York"
 		},
 		"status_code": 200
+	},
+	"create_2": {
+		"method": "POST",
+		"endpoint": "accounts/1/root_accounts",
+		"data": {
+			"id": 2,
+			"name": "New Account From Account",
+			"parent_account_id": null,
+			"root_account_id": null,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/New_York"
+		}
+	},
+	"create_course": {
+		"method": "POST",
+		"endpoint": "accounts/1/courses",
+		"data": {
+			"id": 1,
+			"course_code": "TST1234",
+			"name": "Test Course 1234",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"create_notification": {
+		"method": "POST",
+		"endpoint": "accounts/1/account_notifications",
+		"data": {
+			"subject": "Subject",
+			"message": "Message",
+			"start_at": "2015-04-01T00:00:00Z",
+			"end_at": "2018-04-01T00:00:00Z"
+		}
+	},
+	"create_subaccount": {
+		"method": "POST",
+		"endpoint": "accounts/1/sub_accounts",
+		"data": {
+			"id": 101,
+			"name": "New Subaccount",
+			"parent_account_id": 1,
+			"root_account_id": 1,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/New_York"
+		},
+		"status_code": 200
+	},
+	"create_user": {
+		"method": "POST",
+		"endpoint": "accounts/1/users",
+		"data": {
+			"id": 50,
+			"unique_id": 123456,
+			"name": "New User"
+		},
+		"status_code": 200
+	},
+	"delete_user": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/users/1",
+		"data": {
+			"id": 1,
+			"name": "Deleted User"
+		}
 	},
 	"domains": {
 		"method": "GET",
@@ -25,6 +108,17 @@
 			}
 		]
 	},
+	"enroll_by_id": {
+		"method": "GET",
+		"endpoint": "accounts/1/enrollments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "StudentEnrollment"
+		},
+		"status_code": 200
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "accounts/1",
@@ -36,8 +130,95 @@
 			"default_storage_quota_mb": 500,
 			"default_user_storage_quota_mb": 50,
 			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/New_York"
+		},
+		"status_code": 200
+	},
+	"get_by_id_2": {
+		"method": "GET",
+		"endpoint": "accounts/100",
+		"data": {
+			"id": 100,
+			"name": "Old Name",
+			"parent_account_id": null,
+			"root_account_id": null,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
 			"default_time_zone": "America/Denver"
 		},
+		"status_code": 200
+	},
+	"get_by_id_3": {
+		"method": "GET",
+		"endpoint": "accounts/101",
+		"data": {
+			"id": 101,
+			"name": "Old Name",
+			"parent_account_id": null,
+			"root_account_id": null,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/Denver"
+		},
+		"status_code": 200
+	},
+	"get_courses": {
+		"method": "GET",
+		"endpoint": "accounts/1/courses",
+		"data": [
+			{
+				"id": 1,
+				"course_code": "TEST 1",
+				"name": "Test Course 1",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			},
+			{
+				"id": 2,
+				"course_code": "TEST 2",
+				"name": "Test Course 2",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_courses_page_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/courses?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_code": "TEST 2",
+				"name": "Test Course 2",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			},
+			{
+				"id": 4,
+				"course_code": "TEST 4",
+				"name": "Test Course 4",
+				"workflow_state": "available",
+				"account_id": 1,
+				"root_account_id": 1,
+				"enrollment_term_id": 1,
+				"grading_standard_id": 1
+			}
+		],
 		"status_code": 200
 	},
 	"multiple": {
@@ -92,6 +273,188 @@
 				"default_time_zone": "America/Denver"
 			}
 		],
+		"status_code": 200
+	},
+	"reports": {
+		"method": "GET",
+		"endpoint": "accounts/1/reports",
+		"data": [
+			{
+				"id": 1
+			},
+			{
+				"id": 2
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"reports_page_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/reports?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3
+			},
+			{
+				"id": 4
+			}
+		],
+		"status_code": 200
+	},
+	"report_index": {
+		"method": "GET",
+		"endpoint": "accounts/1/reports/sis_export_csv",
+		"data": [
+			{
+				"id": 1,
+				"report": "sis_export_csv"
+			},
+			{
+				"id": 2,
+				"report": "sis_export_csv"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"report_index_page_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/reports/sis_export_csv?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"report": "sis_export_csv"
+			},
+			{
+				"id": 4,
+				"report": "sis_export_csv"
+			}
+		],
+		"status_code": 200
+	},
+	"subaccounts": {
+		"method": "GET",
+		"endpoint": "accounts/1/sub_accounts",
+		"data": [
+			{
+				"id": 101,
+				"name": "Subaccount 1"
+			},
+			{
+				"id": 102,
+				"name": "Subaccount 2"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"subaccounts_page_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/sub_accounts?page=2&per_page=2",
+		"data": [
+			{
+				"id": 103,
+				"name": "Subaccount 3"
+			},
+			{
+				"id": 104,
+				"name": "Subaccount 4"
+			}
+		],
+		"status_code": 200
+	},
+	"users": {
+		"method": "GET",
+		"endpoint": "accounts/1/users",
+		"data": [
+			{
+				"id": 1,
+				"name": "User 1"
+			},
+			{
+				"id": 2,
+				"name": "User 2"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"users_page_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/users?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "User 3"
+			},
+			{
+				"id": 4,
+				"name": "User 4"
+			}
+		],
+		"status_code": 200
+	},
+	"user_notifs": {
+		"method": "GET",
+		"endpoint": "accounts/1/users/1/account_notifications",
+		"data": [
+			{
+				"subject": "Subject 1",
+				"message": "Message 1"
+			},
+			{
+				"subject": "Subject 2",
+				"message": "Message 2"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"user_notifs_page_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/users/1/account_notifications?page=2&per_page=2",
+		"data": [
+			{
+				"subject": "Subject 3",
+				"message": "Message 3"
+			},
+			{
+				"subject": "Subject 4",
+				"message": "Message 4"
+			}
+		],
+		"status_code": 200
+	},
+	"update": {
+		"method": "PUT",
+		"endpoint": "accounts/100",
+		"data": {
+			"id": 100,
+			"name": "Updated Name",
+			"parent_account_id": null,
+			"root_account_id": null,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/Denver"
+		},
+		"status_code": 200
+	},
+	"update_fail": {
+		"method": "PUT",
+		"endpoint": "accounts/101",
+		"data": {},
 		"status_code": 200
 	}
 }

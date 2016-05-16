@@ -16,6 +16,70 @@
 		],
 		"status_code": 200
 	},
+	"avatars": {
+		"method": "GET",
+		"endpoint": "users/1/avatars",
+		"data": [
+			{
+				"type": "gravatar",
+				"url": "https://secure.gravatar.com/avatar/1",
+				"display_name": "avatar"
+			},
+			{
+				"type": "gravatar",
+				"url": "https://secure.gravatar.com/avatar/2",
+				"display_name": "avatar"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/users/1/avatars?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"avatars_p2": {
+		"method": "GET",
+		"endpoint": "users/1/avatars?page=2&per_page=2",
+		"data": [
+			{
+				"type": "gravatar",
+				"url": "https://secure.gravatar.com/avatar/3",
+				"display_name": "avatar"
+			},
+			{
+				"type": "gravatar",
+				"url": "https://secure.gravatar.com/avatar/4",
+				"display_name": "avatar"
+			}
+		],
+		"status_code": 200
+	},
+	"color": {
+		"method": "GET",
+		"endpoint": "users/1/colors/course_1",
+		"data": {
+			"hexcode": "#abc123"
+		},
+		"status_code": 200
+	},
+	"color_update": {
+		"method": "PUT",
+		"endpoint": "users/1/colors/course_1",
+		"data": {
+			"hexcode": "#f00f00"
+		},
+		"status_code": 200
+	},
+	"colors": {
+		"method": "GET",
+		"endpoint": "users/1/colors",
+		"data": {
+			"custom_colors": {
+				"course_42": "#abc123",
+				"course_88": "#123abc"
+			}
+		},
+		"status_code": 200
+	},
 	"course_nickname": {
 		"method": "GET",
 		"endpoint": "users/self/course_nicknames/1",
@@ -53,8 +117,8 @@
 		],
 		"status_code": 200,
 		"headers": {
-            "Link": "<mock://example.com/api/v1/users/self/course_nicknames?page=2&per_page=2>; rel=\"next\""
-        }
+			"Link": "<mock://example.com/api/v1/users/self/course_nicknames?page=2&per_page=2>; rel=\"next\""
+		}
 	},
 	"course_nicknames_delete": {
 		"method": "DELETE",
@@ -81,6 +145,51 @@
 		],
 		"status_code": 200
 	},
+	"courses": {
+		"method": "GET",
+		"endpoint": "users/1/courses",
+		"data": [
+			{
+				"id": 101,
+				"course_code": "TST101",
+				"name": "Test Course 101"
+			},
+			{
+				"id": 102,
+				"course_code": "TST102",
+				"name": "Test Course 102"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/users/1/courses?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"courses_p2": {
+		"method": "GET",
+		"endpoint": "users/1/courses?page=2&per_page=2",
+		"data": [
+			{
+				"id": 103,
+				"course_code": "TST103",
+				"name": "Test Course 103"
+			},
+			{
+				"id": 104,
+				"course_code": "TST104",
+				"name": "Test Course 104"
+			}
+		],
+		"status_code": 200
+	},
+	"edit": {
+		"method": "PUT",
+		"endpoint": "users/1",
+		"data": {
+			"id": 1,
+			"name": "New User Name"
+		}
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "users/1",
@@ -89,12 +198,194 @@
 			"name": "John Doe"
 		}
 	},
+	"get_by_id_2": {
+		"method": "GET",
+		"endpoint": "users/2",
+		"data": {
+			"id": 2,
+			"name": "John Smith"
+		}
+	},
 	"get_by_id_type": {
 		"method": "GET",
 		"endpoint": "users/sis_user_id:jdoe",
 		"data": {
 			"id": 1,
 			"name": "John Doe"
+		}
+	},
+	"get_user_assignments": {
+		"method": "GET",
+		"endpoint": "users/1/courses/1/assignments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 2,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/users/1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_user_assignments2": {
+		"method": "GET",
+		"endpoint": "users/1/courses/1/list_assignments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 3",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 4",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
+	"list_enrollments": {
+		"method": "GET",
+		"endpoint": "users/1/enrollments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 5
+			},
+			{
+				"id": 2,
+				"course_id": 6
+			}
+		],
+		"status_code": 200,
+		"headers": {
+            "Link": "<mock://example.com/api/v1/users/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+        }
+	},
+	"list_enrollments_2": {
+		"method": "GET",
+		"endpoint": "users/1/list_enrollments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 7
+			},
+			{
+				"id": 4,
+				"course_id": 8
+			}
+		],
+		"status_code": 200
+	},
+	"merge": {
+		"method": "PUT",
+		"endpoint": "users/1/merge_into/2",
+		"data": {
+			"id": 1,
+			"name": "John Smith"
+		}
+	},
+	"missing_sub": {
+		"method": "GET",
+		"endpoint": "users/1/missing_submissions",
+		"data": [
+			{
+				"id": 1,
+				"name": "Assignment 1",
+				"description": "This is the first assignment"
+			},
+			{
+				"id": 2,
+				"name": "Assignment 2",
+				"description": "This is the second assignment"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/users/1/missing_submissions?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"missing_sub_p2": {
+		"method": "GET",
+		"endpoint": "users/1/missing_submissions?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Assignment 3",
+				"description": "This is the third assignment"
+			},
+			{
+				"id": 4,
+				"name": "Assignment 4",
+				"description": "This is the fourth assignment"
+			}
+		],
+		"status_code": 200
+	},
+	"page_views": {
+		"method": "GET",
+		"endpoint": "users/1/page_views",
+		"data": [
+			{
+				"id": "123fb561-c9ce-7ed9-8e42-31e0aab47e18",
+				"url": "mock://example.com/test",
+				"created_at": "2013-01-01T12:00:00Z"
+			},
+			{
+				"id": "4c7f44f9-41b9-ff59-03ad-3215cb246966",
+				"url": "mock://example.com/hello",
+				"created_at": "2014-01-01T12:00:00Z"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/users/1/page_views?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"page_views_p2": {
+		"method": "GET",
+		"endpoint": "users/1/page_views?page=2&per_page=2",
+		"data": [
+			{
+				"id": "77f111c9-5b0b-46cb-92a2-34108ebe7b5b",
+				"url": "mock://example.com/login",
+				"created_at": "2015-01-01T12:00:00Z"
+			},
+			{
+				"id": "69ec8b6f-e123-2af8-dafb-561fdc711f6b",
+				"url": "mock://example.com/logout",
+				"created_at": "2016-01-01T12:00:00Z"
+			}
+		],
+		"status_code": 200
+	},
+	"profile": {
+		"method": "GET",
+		"endpoint": "users/1/profile",
+		"data": {
+			"id": 1,
+			"name": "Sample User"
+		},
+		"status_code": 200
+	},
+	"remove_nickname": {
+		"method": "DELETE",
+		"endpoint": "users/self/course_nicknames/1",
+		"data": {
+			"course_id": 1,
+			"name": "Electrical Zoning Fundamentals",
+			"nickname": "EZ course"
 		}
 	},
 	"todo_items": {
@@ -135,5 +426,12 @@
 				"end_at": "2017-04-01T13:37:00Z"
 			}
 		]
+	},
+	"update_settings": {
+		"method": "PUT",
+		"endpoint": "users/1/settings",
+		"data": {
+			"manual_mark_as_read": true
+		}
 	}
 }

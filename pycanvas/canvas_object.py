@@ -22,7 +22,7 @@ class CanvasObject(object):
         self._requester = requester
         self.set_attributes(attributes)
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         classname = self.__class__.__name__
         attrs = ', '.join(['%s=%s' % (attr, val) for attr, val in self.__dict__.iteritems()])
         return '%s(%s)' % (classname, attrs)

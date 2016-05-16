@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from exceptions import RequiredFieldMissing
+from enrollment import Enrollment
 from paginated_list import PaginatedList
 from util import combine_kwargs, obj_or_id
 
@@ -48,7 +49,7 @@ class Account(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            '/accounts/%s/root_accounts' % (self.id),
+            'accounts/%s/root_accounts' % (self.id),
             **combine_kwargs(**kwargs)
         )
         return Account(self._requester, response.json())
@@ -298,8 +299,7 @@ class Account(CanvasObject):
         :returns: True if the account was updated, False otherwise.
         :rtype: bool
         """
-
-        response = self._requester(
+        response = self._requester.request(
             'PUT',
             'accounts/%s' % (self.id),
             **combine_kwargs(**kwargs)
@@ -311,9 +311,27 @@ class Account(CanvasObject):
         else:
             return False
 
+    def enroll_by_id(self, enrollment_id, **kwargs):
+        """
+        Get an enrollment object by ID.
+
+        :calls: `GET /api/v1/accounts/:account_id/enrollments/:id \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.show>`_
+
+        :param enrollment_id: The ID of the enrollment to retrieve.
+        :type enrollment_id: int
+        :rtype: :class:`pycanvas.enrollment.Enrollment`
+        """
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/enrollments/%s' % (self.id, enrollment_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Enrollment(self._requester, response.json())
+
 
 class AccountNotification(CanvasObject):
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "subject: %s, message: %s" % (
             self.subject,
             self.message
@@ -321,7 +339,7 @@ class AccountNotification(CanvasObject):
 
 
 class AccountReport(CanvasObject):
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "id: %s, report: %s" % (
             self.id,
             self.report
