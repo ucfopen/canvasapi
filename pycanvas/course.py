@@ -380,14 +380,24 @@ class Course(CanvasObject):
         )
         return Module(self._requester, response.json())
 
-    def deactivate_enrollment(self, enrollment_id):
+    def deactivate_enrollment(self, enrollment_id, task):
         """
         Delete, conclude or deactivate an enrollment
         :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id`
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.destroy>
+        :param enrollment_id: int
+        :param task: str
         :rtype: Enrollment
         """
         from enrollment import Enrollment
+
+        ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
+
+        if not task in ALLOWED_TASKS:
+            raise ValueError('%s is not a valid task. Please use one of the following: %s' % (
+                task,
+                ','.join(ALLOWED_TASKS)
+            ))
 
         response = self._requester.request(
             'DELETE',

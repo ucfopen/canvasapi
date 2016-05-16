@@ -220,9 +220,13 @@ class TestCourse(unittest.TestCase):
 
     # deactivate_enrollment()
     def test_deactivate_enrollment(self):
-        target_enrollment = self.course.deactivate_enrollment(1)
+        target_enrollment = self.course.deactivate_enrollment(1, 'conclude')
 
         assert isinstance(target_enrollment, Enrollment)
+
+    def test_deactivate_enrollment_invalid_task(self):
+        with self.assertRaises(ValueError):
+            self.course.deactivate_enrollment(1, 'finish')
 
     # reactivate_enrollment()
     def test_reactivate_enrollment(self):
