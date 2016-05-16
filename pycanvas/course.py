@@ -363,7 +363,7 @@ class Course(CanvasObject):
 
         :calls: `POST /api/v1/courses/:course_id/modules`
         <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.create>
-        :param name: str
+        :param module: dict
         :rtype: :class:`Module`
         """
         from module import Module
