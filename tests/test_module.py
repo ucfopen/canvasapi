@@ -3,6 +3,7 @@ import settings
 
 import requests_mock
 from pycanvas import Canvas
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.module import Module, ModuleItem
 from util import register_uris
 
@@ -67,8 +68,17 @@ class TestModule(unittest.TestCase):
     def test_create_module_item(self):
         module_item = self.module.create_module_item(self.course.id, module_item={'type': 'Page',
                                                                                   'content_id': 1})
-
         assert isinstance(module_item, ModuleItem)
+
+    def test_create_module_item_fail1(self):
+        def test_get_quiz_fail(self):
+            with self.assertRaises(RequiredFieldMissing):
+                self.course.create_module_item(self.course.id, module_item={'content_id': 1})
+
+    def test_create_module_item_fail2(self):
+        def test_get_quiz_fail(self):
+            with self.assertRaises(RequiredFieldMissing):
+                self.course.create_module_item(self.course.id, module_item={'type': 'Page'})
 
     #__str__
     def test__str__(self):

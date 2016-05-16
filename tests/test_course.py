@@ -9,7 +9,7 @@ from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.course import Course, CourseNickname
 from pycanvas.enrollment import Enrollment
-from pycanvas.exceptions import ResourceDoesNotExist
+from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from pycanvas.module import Module
 from pycanvas.quiz import Quiz
 from pycanvas.section import Section
@@ -205,6 +205,10 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(new_module, Module)
         assert hasattr(new_module, 'name')
+
+    def test_create_module_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_module(module={'not_required': 'not_required'})
 
     # list_enrollments()
     def test_list_enrollments(self):
