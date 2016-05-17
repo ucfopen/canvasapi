@@ -41,7 +41,7 @@ class TestAccount(unittest.TestCase):
         register_uris(settings.BASE_URL, requires, adapter)
 
         self.account = self.canvas.get_account(1)
-        self.role = self.account.get_role(1,2)
+        self.role = self.account.get_role(2, 1)
         self.user = self.canvas.get_user(1)
 
     # __str__()
@@ -224,13 +224,13 @@ class TestAccount(unittest.TestCase):
         assert not success
 
     def test_list_roles(self):
-        roles = self.account.list_roles()
+        roles = self.account.list_roles(1)
         role_list = [role for role in roles]
 
         assert len(role_list) == 4
         assert isinstance(role_list[0], Role)
 
     def test_get_role(self):
-        target_role = self.account.get_role(1, 2)
+        target_role = self.account.get_role(2, 1)
 
         assert isinstance(target_role, Role)

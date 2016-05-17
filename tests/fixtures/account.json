@@ -361,7 +361,7 @@
 	},
 	"get_role": {
 		"method": "GET",
-		"endpoint": "accounts/1/roles/3",
+		"endpoint": "accounts/2/roles/1",
 		"data": {
 			"id": 1,
 			"account_id": 2,

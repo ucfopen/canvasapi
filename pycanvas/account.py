@@ -292,7 +292,8 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>
         :rtype: :class: `PaginatedList` of :class: `Role`
         """
-
+        from role import Role
+        
         return PaginatedList(
             Role,
             self._requester,
