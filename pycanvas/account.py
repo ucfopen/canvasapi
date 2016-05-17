@@ -312,7 +312,7 @@ class Account(CanvasObject):
         :type account_id: string
         :param role_id: The unique identifier for the role
         :type role_id: int
-        :rtype: Role
+        :rtype: :class: `pycanvas.role.Role`
         """
         from role import Role
 
@@ -327,7 +327,9 @@ class Account(CanvasObject):
         Create a new course-level or account-level role
         :calls: `POST /api/v1/accounts/:account_id/roles \
         https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.add_role`
-        :rtype: Role
+        :param label: The label for the role
+        :type label: string
+        :rtype: :class: `pycanvas.role.Role`
         """
         from role import Role
 
@@ -342,14 +344,17 @@ class Account(CanvasObject):
         Deactivates a custom role
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
         https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role`
-        :rtype: Role
+        :param role_id: The unique id for the role
+        :type role_id:
+        :rtype: :class: `pycanvas.role.Role`
         """
         from role import Role
 
         response = self._requester.request(
             'DELETE',
-            'accounts/%s/roles/%s' 
+            'accounts/%s/roles/%s' % (account_id, role_id)
         )
+        return Role(self._requester, response.json())
 
 
 class AccountNotification(CanvasObject):
