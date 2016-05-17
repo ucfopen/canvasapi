@@ -235,3 +235,9 @@ class TestAccount(unittest.TestCase):
         target_role = self.account.get_role(2, 1)
 
         assert isinstance(target_role, Role)
+
+    def test_create_role(self):
+        new_role = self.account.create_role(2)
+
+        assert isinstance(role, Role)
+
