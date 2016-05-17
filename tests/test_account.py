@@ -22,8 +22,9 @@ class TestAccount(unittest.TestCase):
         requires = {
             'account': [
                 'close_notification', 'create_course', 'create_2',
-                'create_notification', 'create_subaccount',
-                'create_user', 'delete_user', 'get_by_id',
+                'create_notification', 'create_role',
+                'create_subaccount', 'create_user',
+                'deactivate_role', 'delete_user', 'get_by_id',
                 'get_by_id_2', 'get_by_id_3', 'get_courses',
                 'get_courses_page_2', 'get_role', 'list_roles',
                 'list_roles_2', 'reports', 'reports_page_2',
