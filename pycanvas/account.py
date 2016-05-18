@@ -322,7 +322,7 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def create_role(self, label):
+    def create_role(self, account_id, label):
         """
         Create a new course-level or account-level role
         :calls: `POST /api/v1/accounts/:account_id/roles \
@@ -339,7 +339,7 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def deactivate_role(self, role_id):
+    def deactivate_role(self, account_id, role_id):
         """
         Deactivates a custom role
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \

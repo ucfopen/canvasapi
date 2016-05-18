@@ -491,19 +491,21 @@
     },
     "create_role":{
     	"method": "POST",
-    	"endpoint": "accounts/1/roles",
+    	"endpoint": "accounts/3/roles",
     	"data":{
     		"id": 1,
-    		"label": 2
+    		"label": 2,
+    		"account_id": 3
     	},
     	"status_code": 200
     },
     "deactivate_role":{
     	"method": "DELETE",
-    	"endpoint": "accounts/1/roles/2",
+    	"endpoint": "accounts/3/roles/1",
     	"data": {
     		"id": 1,
-    		"role_id": 2
+    		"role_id": 2,
+    		"account_id": 3
     	},
     	"status_code": 200
     }
