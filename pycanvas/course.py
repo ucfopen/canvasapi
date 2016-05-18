@@ -275,7 +275,7 @@ class Course(CanvasObject):
 
         return Assignment(self._requester, response.json())
 
-    def list_quizzes(self, **kwargs):
+    def get_quizzes(self, **kwargs):
         """
         Returns the list of Quizzes in this course
 
@@ -289,6 +289,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/quizzes' % (self.id),
+            {'course_id': self.id},
             **combine_kwargs(**kwargs)
         )
 

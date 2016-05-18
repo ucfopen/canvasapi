@@ -180,13 +180,15 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(ResourceDoesNotExist):
             self.course.get_quiz(settings.INVALID_ID)
 
-    # list_quizzes()
-    def test_list_quizzes(self):
-        quizzes = self.course.list_quizzes()
+    # get_quizzes()
+    def test_get_quizzes(self):
+        quizzes = self.course.get_quizzes()
         quiz_list = [quiz for quiz in quizzes]
 
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
+        assert hasattr(quiz_list[0], 'course_id')
+        assert quiz_list[0].course_id == self.course.id
 
     # get_modules()
     def test_get_modules(self):
