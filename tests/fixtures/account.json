@@ -361,11 +361,10 @@
 	},
 	"get_role": {
 		"method": "GET",
-		"endpoint": "accounts/2/roles/1",
+		"endpoint": "accounts/1/roles/2",
 		"data": {
 			"id": 1,
-			"account_id": 2,
-			"role_id": 3
+			"role_id": 2
 		},
 		"status_code": 200
 	},
@@ -461,12 +460,10 @@
 		"endpoint": "accounts/1/roles",
 		"data": [
 			{
-				"id": 1,
-				"account_id": 2
+				"id": 1
 			},
 			{
-				"id": 3,
-				"account_id": 4
+				"id": 3
 			}
 		],
 		"headers": {
@@ -479,33 +476,29 @@
 		"endpoint": "accounts/1/roles/?page=2&per_page=2",
 		"data": [
 			{
-				"id": 5,
-				"account_id": 6
+				"id": 5
 			},
 			{
-				"id": 7,
-				"account_id": 8
+				"id": 7
 			}
 		],
         "status_code": 200
     },
     "create_role":{
     	"method": "POST",
-    	"endpoint": "accounts/3/roles",
+    	"endpoint": "accounts/1/roles",
     	"data":{
     		"id": 1,
-    		"label": 2,
-    		"account_id": 3
+    		"label": 2
     	},
     	"status_code": 200
     },
     "deactivate_role":{
     	"method": "DELETE",
-    	"endpoint": "accounts/3/roles/1",
+    	"endpoint": "accounts/1/roles/2",
     	"data": {
     		"id": 1,
-    		"role_id": 2,
-    		"account_id": 3
+    		"role_id": 2
     	},
     	"status_code": 200
     }
