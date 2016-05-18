@@ -495,7 +495,7 @@
     },
     "deactivate_role": {
     	"method": "DELETE",
-    	"endpoint": "accounts/1/roles/2/activate",
+    	"endpoint": "accounts/1/roles/2",
     	"data": {
     		"id": 1,
     		"role_id": 2
@@ -504,7 +504,7 @@
     },
     "activate_role": {
     	"method": "POST",
-    	"endpoint": "accounts/1/roles/2",
+    	"endpoint": "accounts/1/roles/2/activate",
     	"data": {
     		"id": 1,
     		"role_id": 2
