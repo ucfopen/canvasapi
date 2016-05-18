@@ -313,7 +313,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
 
-        :param account_id: The id of the account containing the role
+        :param account_id: The id of the account containing the Role
         :type account_id: str
         :param role_id: The unique identifier for the role
         :type role_id: int
