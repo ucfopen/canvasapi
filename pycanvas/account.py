@@ -385,8 +385,10 @@ class Account(CanvasObject):
         Update permissions for an existing role.
 
         :calls: `PUT /api/v1/accounts/:account_id/roles/:id \
-
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`
+
+        :param role_id: ID for the role.
+        :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
         from role import Role
