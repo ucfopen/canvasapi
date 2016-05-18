@@ -287,13 +287,14 @@ class Account(CanvasObject):
 
     def list_roles(self):
         """
-        List the roles available to an account
+        List the roles available to an account.
         :calls: `GET /api/v1/accounts/:account_id/roles \
+
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>
-        :param account_id: The id of the account to retrieve roles
+        :param account_id: The ID of the account to retrieve roles
         for
-        :type account_id: string
-        :rtype: :class: `pycanvas.paginated_list.PaginatedList` of :class: `pycanvas.role.Role`
+        :type account_id: str
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.role.Role`
         """
         from role import Role
 
@@ -306,14 +307,16 @@ class Account(CanvasObject):
 
     def get_role(self, role_id):
         """
-        Retrieve information about a single role
+        Retrieve information about a single role.
+
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
-        https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show`
+
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`
         :param account_id: The id of the account containing the role
-        :type account_id: string
+        :type account_id: str
         :param role_id: The unique identifier for the role
         :type role_id: int
-        :rtype: :class: `pycanvas.role.Role`
+        :rtype: :class:`pycanvas.role.Role`
         """
         from role import Role
 
@@ -325,12 +328,14 @@ class Account(CanvasObject):
 
     def create_role(self, label):
         """
-        Create a new course-level or account-level role
+        Create a new course-level or account-level role.
+
         :calls: `POST /api/v1/accounts/:account_id/roles \
-        https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.add_role`
+
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.add_role>`
         :param label: The label for the role
-        :type label: string
-        :rtype: :class: `pycanvas.role.Role`
+        :type label: str
+        :rtype: :class:`pycanvas.role.Role`
         """
         from role import Role
 
@@ -342,12 +347,14 @@ class Account(CanvasObject):
 
     def deactivate_role(self, role_id):
         """
-        Deactivates a custom role
+        Deactivates a custom role.
+
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
-        https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role`
-        :param role_id: The unique id for the role
+
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`
+        :param role_id: The unique ID for the role
         :type role_id: int
-        :rtype: :class: `pycanvas.role.Role`
+        :rtype: :class:`pycanvas.role.Role`
         """
         from role import Role
 
@@ -359,12 +366,15 @@ class Account(CanvasObject):
 
     def activate_role(self, role_id):
         """
-        Reactivates an inactive role
-        :calls: `POST /api/v1/accounts/:account_id/roles/:id/activate \
-        https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role`
-        :param role_id: Id for the role
+        Reactivates an inactive role.
+
+        :calls: `POST 
+        /api/v1/accounts/:account_id/roles/:id/activate \
+
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`
+        :param role_id: ID for the role
         :type role_id: int
-        :rtype: :class: `pycanvas.role.Role`
+        :rtype: :class:`pycanvas.role.Role`
         """
         from role import Role
 
@@ -376,10 +386,12 @@ class Account(CanvasObject):
 
     def update_role(self, role_id):
         """
-        Updates permissions for an existing role
+        Updates permissions for an existing role.
+
         :calls: `PUT /api/v1/accounts/:account_id/roles/:id \
-        https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update`
-        :rtype: :class: `pycanvas.role.Role`
+
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`
+        :rtype: :class:`pycanvas.role.Role`
         """
         from role import Role
 
