@@ -398,7 +398,7 @@
 		"endpoint": "courses/3",
 		"data": {
 			"id": 3,
-			"course_code": "TEST_DATE",
+			"course_code": "TEST_UNICODE",
 			"name": "¢"
 		},
 		"status_code": 200

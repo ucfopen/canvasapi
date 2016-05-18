@@ -1,10 +1,8 @@
 from datetime import datetime
-
-import string
 import re
 
+
 DATE_PATTERN = re.compile('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')
-COURSE_PATTERN = re.compile('\/courses\/[0-9]+\/')
 
 
 class CanvasObject(object):
