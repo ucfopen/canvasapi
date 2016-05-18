@@ -44,7 +44,6 @@ class TestAccount(unittest.TestCase):
         register_uris(settings.BASE_URL, requires, adapter)
 
         self.account = self.canvas.get_account(1)
-        self.role = self.account.get_role(2)
         self.user = self.canvas.get_user(1)
 
     # __str__()
