@@ -1,6 +1,5 @@
 from canvas_object import CanvasObject
 from exceptions import RequiredFieldMissing
-from enrollment import Enrollment
 from paginated_list import PaginatedList
 from util import combine_kwargs, obj_or_id
 
@@ -286,7 +285,7 @@ class Account(CanvasObject):
         else:
             return False
 
-    def enroll_by_id(self, id, enrollment_id, **kwargs):
+    def enroll_by_id(self, enrollment_id, **kwargs):
         """
         Get an enrollment object by id
         :calls: `GET /api/v1/accounts/:account_id/enrollments/:id
