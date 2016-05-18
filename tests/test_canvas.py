@@ -24,7 +24,8 @@ class TestCanvas(unittest.TestCase):
                 'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
             ],
             'course': [
-                'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date'
+                'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
+                'unicode_encode_error'
             ],
             'generic': ['not_found'],
             'section': ['get_by_id'],
@@ -89,6 +90,11 @@ class TestCanvas(unittest.TestCase):
         assert isinstance(course.start_at, (str, unicode))
         assert hasattr(course, 'start_at_date')
         assert isinstance(course.start_at_date, datetime)
+
+    def test_get_course_non_unicode_char(self):
+        course = self.canvas.get_course(3)
+
+        assert hasattr(course, 'name')
 
     def test_get_course_fail(self):
         with self.assertRaises(ResourceDoesNotExist):

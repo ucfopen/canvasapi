@@ -221,6 +221,6 @@ class TestAccount(unittest.TestCase):
 
     # enroll_by_id()
     def test_enroll_by_id(self):
-        target_enrollment = self.account.enroll_by_id(1, 1)
+        target_enrollment = self.account.enroll_by_id(1)
 
         assert isinstance(target_enrollment, Enrollment)

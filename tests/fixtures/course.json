@@ -393,6 +393,16 @@
 			"lock_all_announcements": true
 		}
 	},
+	"unicode_encode_error": {
+		"method": "GET",
+		"endpoint": "courses/3",
+		"data": {
+			"id": 3,
+			"course_code": "TEST_DATE",
+			"name": "¢"
+		},
+		"status_code": 200
+	},
 	"update": {
 		"method": "PUT",
 		"endpoint": "courses/1",

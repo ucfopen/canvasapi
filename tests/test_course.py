@@ -165,12 +165,16 @@ class TestCourse(unittest.TestCase):
         assert isinstance(new_quiz, Quiz)
         assert hasattr(new_quiz, 'title')
         assert new_quiz.title == title
+        assert hasattr(new_quiz, 'course_id')
+        assert new_quiz.course_id == self.course.id
 
     # get_quiz()
     def test_get_quiz(self):
         target_quiz = self.course.get_quiz(1)
 
         assert isinstance(target_quiz, Quiz)
+        assert hasattr(target_quiz, 'course_id')
+        assert target_quiz.course_id == self.course.id
 
     def test_get_quiz_fail(self):
         with self.assertRaises(ResourceDoesNotExist):
@@ -184,19 +188,23 @@ class TestCourse(unittest.TestCase):
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
 
-    # list_modules()
-    def test_list_modules(self):
-        modules = self.course.list_modules()
+    # get_modules()
+    def test_get_modules(self):
+        modules = self.course.get_modules()
         module_list = [module for module in modules]
 
         assert len(module_list) == 4
         assert isinstance(module_list[0], Module)
+        assert hasattr(module_list[0], 'course_id')
+        assert module_list[0].course_id == self.course.id
 
     # get_module()
     def test_get_module(self):
         target_module = self.course.get_module(1)
 
         assert isinstance(target_module, Module)
+        assert hasattr(target_module, 'course_id')
+        assert target_module.course_id == self.course.id
 
     # create_module()
     def test_create_module(self):
@@ -205,6 +213,8 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(new_module, Module)
         assert hasattr(new_module, 'name')
+        assert hasattr(new_module, 'course_id')
+        assert new_module.course_id == self.course.id
 
     def test_create_module_fail(self):
         with self.assertRaises(RequiredFieldMissing):

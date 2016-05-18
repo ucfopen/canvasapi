@@ -10,7 +10,7 @@ class Quiz(CanvasObject):
             self.title
         )
 
-    def edit(self, course_id, **kwargs):
+    def edit(self, **kwargs):
         """
         Modifies an existing quiz
         :calls: `PUT /api/v1/courses/:course_id/quizzes/:id`
@@ -19,12 +19,15 @@ class Quiz(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/quizzes/%s' % (course_id, self.id),
+            'courses/%s/quizzes/%s' % (self.course_id, self.id),
             **combine_kwargs(**kwargs)
         )
-        return Quiz(self._requester, response.json())
+        quiz_json = response.json()
+        quiz_json.update({'course_id': self.course_id})
 
-    def delete(self, course_id, **kwargs):
+        return Quiz(self._requester, quiz_json)
+
+    def delete(self, **kwargs):
         """
         Deletes a quiz
         :calls: `DELETE /api/v1/courses/:course_id/quizzes/:id`
@@ -33,7 +36,10 @@ class Quiz(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/quizzes/%s' % (course_id, self.id),
+            'courses/%s/quizzes/%s' % (self.course_id, self.id),
             **combine_kwargs(**kwargs)
         )
-        return Quiz(self._requester, response.json())
+        quiz_json = response.json()
+        quiz_json.update({'course_id': self.course_id})
+
+        return Quiz(self._requester, quiz_json)

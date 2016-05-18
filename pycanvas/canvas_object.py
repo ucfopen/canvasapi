@@ -40,13 +40,6 @@ class CanvasObject(object):
                     date = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
                     self.__setattr__(attribute + '_date', date)
 
-                # course_id field
-                result = COURSE_PATTERN.search(str(value))
-
-                if result:
-                    course_id = result.group(0).translate(None, string.letters).replace('/', '')
-                    self.__setattr__('course_id', course_id)
-
             # Non-unicode character. We can skip over this attribute.
             except UnicodeEncodeError:
                 continue
