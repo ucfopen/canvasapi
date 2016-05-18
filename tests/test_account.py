@@ -21,9 +21,9 @@ class TestAccount(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'account': [
-                'close_notification', 'create_course', 'create_2',
-                'create_notification', 'create_role',
-                'create_subaccount', 'create_user',
+                'activate_role', 'close_notification',
+                'create_course', 'create_2', 'create_notification',
+                'create_role', 'create_subaccount', 'create_user',
                 'deactivate_role', 'delete_user', 'get_by_id',
                 'get_by_id_2', 'get_by_id_3', 'get_courses',
                 'get_courses_page_2', 'get_role', 'list_roles',
@@ -31,7 +31,7 @@ class TestAccount(unittest.TestCase):
                 'report_index', 'report_index_page_2', 'subaccounts',
                 'subaccounts_page_2', 'users', 'users_page_2',
                 'user_notifs', 'user_notifs_page_2', 'update',
-                'update_fail'
+                'update_fail', 'update_role'
             ],
             'generic': ['not_found'],
             'user': ['get_by_id']
@@ -42,7 +42,7 @@ class TestAccount(unittest.TestCase):
         register_uris(settings.BASE_URL, requires, adapter)
 
         self.account = self.canvas.get_account(1)
-        self.role = self.account.get_role(2, 1)
+        self.role = self.account.get_role(2)
         self.user = self.canvas.get_user(1)
 
     # __str__()
@@ -225,24 +225,33 @@ class TestAccount(unittest.TestCase):
         assert not success
 
     def test_list_roles(self):
-        roles = self.account.list_roles(1)
+        roles = self.account.list_roles()
         role_list = [role for role in roles]
 
         assert len(role_list) == 4
         assert isinstance(role_list[0], Role)
 
     def test_get_role(self):
-        target_role = self.account.get_role(2, 1)
+        target_role = self.account.get_role(2)
 
         assert isinstance(target_role, Role)
 
     def test_create_role(self):
-        new_role = self.account.create_role(3, 2)
+        new_role = self.account.create_role(1)
 
         assert isinstance(new_role, Role)
 
     def test_deactivate_role(self):
-        old_role = self.account.deactivate_role(3, 1)
+        old_role = self.account.deactivate_role(2)
 
         assert isinstance(old_role, Role)
 
+    def test_activate_role(self):
+        activated_role = self.account.activate_role(2)
+
+        assert isinstance(activated_role, Role)
+
+    def test_update_role(self):
+        updated_role = self.account.update_role(2)
+
+        assert isinstance(updated_role, Role)
