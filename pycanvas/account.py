@@ -305,7 +305,7 @@ class Account(CanvasObject):
 
     def get_role(self, role_id):
         """
-        Retrieve a Role by ID
+        Retrieve a role by ID.
 
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
