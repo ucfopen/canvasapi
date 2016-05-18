@@ -285,12 +285,13 @@ class Account(CanvasObject):
         else:
             return False
 
-    def list_roles(self, account_id):
+    def list_roles(self):
         """
         List the roles available to an account
         :calls: `GET /api/v1/accounts/:account_id/roles \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>
-        :param account_id: The id of the account to retrieve roles for 
+        :param account_id: The id of the account to retrieve roles
+        for
         :type account_id: string
         :rtype: :class: `pycanvas.paginated_list.PaginatedList` of :class: `pycanvas.role.Role`
         """
@@ -300,10 +301,10 @@ class Account(CanvasObject):
             Role,
             self._requester,
             'GET',
-            'accounts/%s/roles' % (account_id)
+            'accounts/%s/roles' % (self.id)
         )
 
-    def get_role(self, account_id, role_id):
+    def get_role(self, role_id):
         """
         Retrieve information about a single role
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
@@ -318,11 +319,11 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/roles/%s' % (account_id, role_id)
+            'accounts/%s/roles/%s' % (self.id, role_id)
         )
         return Role(self._requester, response.json())
 
-    def create_role(self, account_id, label):
+    def create_role(self, label):
         """
         Create a new course-level or account-level role
         :calls: `POST /api/v1/accounts/:account_id/roles \
@@ -335,11 +336,11 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/roles' % (account_id)
+            'accounts/%s/roles' % (self.id)
         )
         return Role(self._requester, response.json())
 
-    def deactivate_role(self, account_id, role_id):
+    def deactivate_role(self, role_id):
         """
         Deactivates a custom role
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
@@ -352,7 +353,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'DELETE',
-            'accounts/%s/roles/%s' % (account_id, role_id)
+            'accounts/%s/roles/%s' % (self.id, role_id)
         )
         return Role(self._requester, response.json())
 
