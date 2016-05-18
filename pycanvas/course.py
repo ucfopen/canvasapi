@@ -1,6 +1,7 @@
 from canvas_object import CanvasObject
 from util import combine_kwargs
 from paginated_list import PaginatedList
+from exceptions import RequiredFieldMissing
 
 
 class Course(CanvasObject):
@@ -208,6 +209,22 @@ class Course(CanvasObject):
         )
         return Course(self._requester, response.json())
 
+    def list_enrollments(self):
+        """
+        Lists all of the enrollments within a course.
+
+        :calls: `GET /api/v1/courses/:course_id/enrollments`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        """
+        from enrollment import Enrollment
+        return PaginatedList(
+            Enrollment,
+            self._requester,
+            'GET',
+            'courses/%s/enrollments' % (self.id)
+        )
+
     def get_assignment(self, assignment_id):
         """
         Returns the assignment with the given id.
@@ -258,7 +275,7 @@ class Course(CanvasObject):
 
         return Assignment(self._requester, response.json())
 
-    def list_quizzes(self, **kwargs):
+    def get_quizzes(self, **kwargs):
         """
         Returns the list of Quizzes in this course
 
@@ -272,6 +289,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/quizzes' % (self.id),
+            {'course_id': self.id},
             **combine_kwargs(**kwargs)
         )
 
@@ -287,7 +305,10 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/quizzes/%s' % (self.id, quiz_id)
         )
-        return Quiz(self._requester, response.json())
+        quiz_json = response.json()
+        quiz_json.update({'course_id': self.id})
+
+        return Quiz(self._requester, quiz_json)
 
     def create_quiz(self, title, **kwargs):
         """
@@ -303,7 +324,130 @@ class Course(CanvasObject):
             'courses/%s/quizzes' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return Quiz(self._requester, response.json())
+        quiz_json = response.json()
+        quiz_json.update({'course_id': self.id})
+
+        return Quiz(self._requester, quiz_json)
+
+    def get_modules(self, **kwargs):
+        """
+        List the modules in a course
+
+        :calls: `GET /api/v1/courses/:course_id/modules`
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>
+        :rtype: :class:`PaginatedList` of :class:`Module`
+        """
+        from module import Module
+
+        return PaginatedList(
+            Module,
+            self._requester,
+            'GET',
+            'courses/%s/modules' % (self.id),
+            {'course_id': self.id},
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_module(self, module_id, **kwargs):
+        """
+        Get information about a single module
+
+        :calls: `GET /api/v1/courses/:course_id/modules/:id`
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.show>
+        :param module_id: str
+        :rtype: :class:`Module`
+        """
+        from module import Module
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/modules/%s' % (self.id, module_id),
+        )
+        module_json = response.json()
+        module_json.update({'course_id': self.id})
+
+        return Module(self._requester, module_json)
+
+    def create_module(self, module, **kwargs):
+        """
+        Create and return a new module
+
+        :calls: `POST /api/v1/courses/:course_id/modules`
+        <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.create>
+        :param module: dict
+        :rtype: :class:`Module`
+        """
+        from module import Module
+
+        if isinstance(module, dict) and 'name' in module:
+            kwargs['module'] = module
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'name' is required.")
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/modules' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        module_json = response.json()
+        module_json.update({'course_id': self.id})
+
+        return Module(self._requester, module_json)
+
+    def deactivate_enrollment(self, enrollment_id, task):
+        """
+        Delete, conclude or deactivate an enrollment
+        :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.destroy>
+        :param enrollment_id: int
+        :param task: str
+        :rtype: Enrollment
+        """
+        from enrollment import Enrollment
+
+        ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
+
+        if not task in ALLOWED_TASKS:
+            raise ValueError('%s is not a valid task. Please use one of the following: %s' % (
+                task,
+                ','.join(ALLOWED_TASKS)
+            ))
+
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/enrollments/%s' % (self.id, enrollment_id)
+        )
+        return Enrollment(self._requester, response.json())
+
+    def reactivate_enrollment(self, enrollment_id):
+        """
+        Activates an inactive role
+        :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate`
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reactivate>
+        :rtype: Enrollment
+        """
+        from enrollment import Enrollment
+
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment_id)
+        )
+        return Enrollment(self._requester, response.json())
+
+    def get_section(self, section_id):
+        """
+        Gets details about a specific section
+        :calls: `GET /api/v1/courses/:course_id/sections/:id`
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>
+        :rtype: Section
+        """
+        from section import Section
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/sections/%s' % (self.id, section_id)
+        )
+        return Section(self._requester, response.json())
 
 
 class CourseNickname(CanvasObject):

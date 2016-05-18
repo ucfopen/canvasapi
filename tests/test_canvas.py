@@ -8,6 +8,7 @@ from pycanvas import Canvas
 from pycanvas.account import Account
 from pycanvas.course import Course, CourseNickname
 from pycanvas.exceptions import ResourceDoesNotExist
+from pycanvas.section import Section
 from pycanvas.user import User
 from util import register_uris
 
@@ -23,9 +24,11 @@ class TestCanvas(unittest.TestCase):
                 'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
             ],
             'course': [
-                'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date'
+                'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
+                'unicode_encode_error'
             ],
             'generic': ['not_found'],
+            'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
                 'course_nicknames', 'course_nicknames_delete',
@@ -87,6 +90,11 @@ class TestCanvas(unittest.TestCase):
         assert isinstance(course.start_at, (str, unicode))
         assert hasattr(course, 'start_at_date')
         assert isinstance(course.start_at_date, datetime)
+
+    def test_get_course_non_unicode_char(self):
+        course = self.canvas.get_course(3)
+
+        assert hasattr(course, 'name')
 
     def test_get_course_fail(self):
         with self.assertRaises(ResourceDoesNotExist):
@@ -177,3 +185,9 @@ class TestCanvas(unittest.TestCase):
         assert isinstance(domains, list)
         assert len(domains) == 1
         assert 'name' in domains[0]
+
+    # get_section()
+    def test_section(self):
+        info = self.canvas.get_section(1)
+
+        assert isinstance(info, Section)

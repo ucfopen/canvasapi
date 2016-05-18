@@ -6,7 +6,7 @@ class PaginatedList(object):
     Abstracts `pagination of Canvas API <https://canvas.instructure.com/doc/api/file.pagination.html>`.
     """
 
-    def __init__(self, content_class, requester, request_method, first_url, **kwargs):
+    def __init__(self, content_class, requester, request_method, first_url, extra_attribs=None, **kwargs):
         self.__elements = list()
 
         self.__requester = requester
@@ -16,6 +16,7 @@ class PaginatedList(object):
         self.__first_params['per_page'] = kwargs.get('per_page', 100)
         self.__next_url = first_url
         self.__next_params = self.__first_params
+        self.__extra_attribs = extra_attribs or {}
 
     def __getitem__(self, index):
         assert isinstance(index, (int, slice))
@@ -67,10 +68,11 @@ class PaginatedList(object):
 
         self.__next_params = {}
 
-        content = [
-            self.__content_class(self.__requester, element)
-            for element in data if element is not None
-        ]
+        content = []
+        for element in data:
+            if element is not None:
+                element.update(self.__extra_attribs)
+                content.append(self.__content_class(self.__requester, element))
 
         return content
 

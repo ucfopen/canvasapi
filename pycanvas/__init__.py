@@ -6,6 +6,7 @@ import assignment
 import course
 import enrollment
 import requester
+import section
 import user
 import util
 import page_view

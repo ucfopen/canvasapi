@@ -8,6 +8,7 @@ from pycanvas import Canvas
 from pycanvas.account import Account, AccountNotification, AccountReport
 from pycanvas.role import Role
 from pycanvas.course import Course
+from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.user import User
 from util import register_uris
@@ -21,14 +22,15 @@ class TestAccount(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'account': [
-                'activate_role', 'close_notification',
+                'activate_role', 'close_notification', 'create'
                 'create_course', 'create_2', 'create_notification',
                 'create_role', 'create_subaccount', 'create_user',
-                'deactivate_role', 'delete_user', 'get_by_id',
-                'get_by_id_2', 'get_by_id_3', 'get_courses',
-                'get_courses_page_2', 'get_role', 'list_roles',
-                'list_roles_2', 'reports', 'reports_page_2',
-                'report_index', 'report_index_page_2', 'subaccounts',
+                'deactivate_role', 'delete_user', 'enroll_by_id',
+                'get_by_id', 'get_by_id_2', 'get_by_id_3',
+                'get_courses', 'get_courses_page_2', 'get_role',
+                'list_roles', 'list_roles_2', 'reports',
+                'reports_page_2', 'report_index',
+                'report_index_page_2', 'subaccounts',
                 'subaccounts_page_2', 'users', 'users_page_2',
                 'user_notifs', 'user_notifs_page_2', 'update',
                 'update_fail', 'update_role'
@@ -255,3 +257,10 @@ class TestAccount(unittest.TestCase):
         updated_role = self.account.update_role(2)
 
         assert isinstance(updated_role, Role)
+
+    # enroll_by_id()
+    def test_enroll_by_id(self):
+        target_enrollment = self.account.enroll_by_id(1)
+
+        assert isinstance(target_enrollment, Enrollment)
+

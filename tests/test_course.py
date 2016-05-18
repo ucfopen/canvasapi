@@ -5,13 +5,14 @@ import requests_mock
 
 import settings
 from util import register_uris
-
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.course import Course, CourseNickname
 from pycanvas.enrollment import Enrollment
-from pycanvas.exceptions import ResourceDoesNotExist
+from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
+from pycanvas.module import Module
 from pycanvas.quiz import Quiz
+from pycanvas.section import Section
 from pycanvas.user import User
 
 
@@ -23,12 +24,15 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'enroll_user', 'get_all_assignments',
-                'get_all_assignments2', 'get_assignment_by_id', 'get_by_id', 'get_quiz',
-                'get_recent_students', 'get_recent_students_p2', 'get_user',
-                'get_user_id_type', 'get_users', 'get_users_p2', 'list_quizzes',
-                'list_quizzes2', 'preview_html', 'reset', 'settings', 'update',
-                'update_settings'
+                'create', 'create_assignment', 'deactivate_enrollment',
+                'enroll_user', 'get_all_assignments', 'get_all_assignments2',
+                'get_assignment_by_id', 'get_by_id', 'get_quiz',
+                'get_recent_students', 'get_recent_students_p2', 'get_section',
+                'get_user', 'get_user_id_type', 'get_users', 'get_users_p2',
+                'list_enrollments', 'list_enrollments_2', 'list_quizzes',
+                'list_quizzes2', 'preview_html', 'reactivate_enrollment',
+                'reset', 'settings', 'update', 'update_settings', 'list_modules',
+                'list_modules2', 'get_module_by_id', 'create_module'
             ],
             'generic': ['not_found'],
             'quiz': ['get_by_id'],
@@ -62,6 +66,7 @@ class TestCourse(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
         self.quiz = self.course.get_quiz(1)
+        self.user = self.canvas.get_user(1)
 
     # __str__()
     def test__str__(self):
@@ -160,24 +165,92 @@ class TestCourse(unittest.TestCase):
         assert isinstance(new_quiz, Quiz)
         assert hasattr(new_quiz, 'title')
         assert new_quiz.title == title
+        assert hasattr(new_quiz, 'course_id')
+        assert new_quiz.course_id == self.course.id
 
     # get_quiz()
     def test_get_quiz(self):
         target_quiz = self.course.get_quiz(1)
 
         assert isinstance(target_quiz, Quiz)
+        assert hasattr(target_quiz, 'course_id')
+        assert target_quiz.course_id == self.course.id
 
     def test_get_quiz_fail(self):
         with self.assertRaises(ResourceDoesNotExist):
             self.course.get_quiz(settings.INVALID_ID)
 
-    # list_quizzes()
-    def test_list_quizzes(self):
-        quizzes = self.course.list_quizzes()
+    # get_quizzes()
+    def test_get_quizzes(self):
+        quizzes = self.course.get_quizzes()
         quiz_list = [quiz for quiz in quizzes]
 
         assert len(quiz_list) == 4
         assert isinstance(quiz_list[0], Quiz)
+        assert hasattr(quiz_list[0], 'course_id')
+        assert quiz_list[0].course_id == self.course.id
+
+    # get_modules()
+    def test_get_modules(self):
+        modules = self.course.get_modules()
+        module_list = [module for module in modules]
+
+        assert len(module_list) == 4
+        assert isinstance(module_list[0], Module)
+        assert hasattr(module_list[0], 'course_id')
+        assert module_list[0].course_id == self.course.id
+
+    # get_module()
+    def test_get_module(self):
+        target_module = self.course.get_module(1)
+
+        assert isinstance(target_module, Module)
+        assert hasattr(target_module, 'course_id')
+        assert target_module.course_id == self.course.id
+
+    # create_module()
+    def test_create_module(self):
+        name = 'Name'
+        new_module = self.course.create_module(module={'name': name})
+
+        assert isinstance(new_module, Module)
+        assert hasattr(new_module, 'name')
+        assert hasattr(new_module, 'course_id')
+        assert new_module.course_id == self.course.id
+
+    def test_create_module_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_module(module={'not_required': 'not_required'})
+
+    # list_enrollments()
+    def test_list_enrollments(self):
+        enrollments = self.course.list_enrollments()
+        enrollment_list = [enrollment for enrollment in enrollments]
+
+        assert len(enrollment_list) == 4
+        assert isinstance(enrollment_list[0], Enrollment)
+
+    # deactivate_enrollment()
+    def test_deactivate_enrollment(self):
+        target_enrollment = self.course.deactivate_enrollment(1, 'conclude')
+
+        assert isinstance(target_enrollment, Enrollment)
+
+    def test_deactivate_enrollment_invalid_task(self):
+        with self.assertRaises(ValueError):
+            self.course.deactivate_enrollment(1, 'finish')
+
+    # reactivate_enrollment()
+    def test_reactivate_enrollment(self):
+        target_enrollment = self.course.reactivate_enrollment(1)
+
+        assert isinstance(target_enrollment, Enrollment)
+
+    # get_section
+    def test_get_section(self):
+        section = self.course.get_section(1)
+
+        assert isinstance(section, Section)
 
     # create_assignment()
     def test_create_assignment(self):
@@ -212,7 +285,7 @@ class TestCourse(unittest.TestCase):
 
 class TestCourseNickname(unittest.TestCase):
     """
-    Tests core CourseNickname functionality
+    Tests CourseNickname methods
     """
     @classmethod
     def setUpClass(self):

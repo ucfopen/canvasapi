@@ -1,15 +1,15 @@
 import unittest
-
 import requests_mock
 
 import settings
+from util import register_uris
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.avatar import Avatar
 from pycanvas.course import Course
+from pycanvas.enrollment import Enrollment
 from pycanvas.page_view import PageView
 from pycanvas.user import User
-from util import register_uris
 
 
 class TestUser(unittest.TestCase):
@@ -21,11 +21,12 @@ class TestUser(unittest.TestCase):
         requires = {
             'generic': ['not_found'],
             'user': [
-                'avatars', 'avatars_p2', 'get_by_id', 'get_by_id_2',
-                'get_user_assignments', 'get_user_assignments2', 'color',
-                'color_update', 'colors', 'courses', 'courses_p2', 'edit',
-                'merge', 'missing_sub', 'missing_sub_p2', 'page_views',
-                'page_views_p2', 'profile', 'update_settings'
+                'avatars', 'avatars_p2', 'color', 'color_update', 'colors',
+                'courses', 'courses_p2', 'edit', 'get_by_id', 'get_by_id_2',
+                'get_user_assignments', 'get_user_assignments2',
+                'list_enrollments', 'list_enrollments_2', 'merge',
+                'missing_sub', 'missing_sub_p2', 'page_views', 'page_views_p2',
+                'profile', 'update_settings'
             ]
         }
 
@@ -163,3 +164,11 @@ class TestUser(unittest.TestCase):
 
         assert isinstance(assignments[0], Assignment)
         assert len(assignment_list) == 4
+
+    #list_enrollments()
+    def test_list_enrollments(self):
+        enrollments = self.user.list_enrollments()
+        enrollment_list = [enrollment for enrollment in enrollments]
+
+        assert len(enrollment_list) == 4
+        assert isinstance(enrollment_list[0], Enrollment)

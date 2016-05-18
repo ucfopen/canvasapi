@@ -218,6 +218,20 @@ class Canvas(object):
         )
         return CourseNickname(self.__requester, response.json())
 
+    def get_section(self, section_id):
+        """
+        Get details about a specific sections
+        :calls: `GET /api/v1/sections/:id`
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>
+        :rtype: Section
+        """
+        from section import Section
+        response = self.__requester.request(
+            'GET',
+            'sections/%s' % (section_id)
+        )
+        return Section(self.__requester, response.json())
+
     def set_course_nickname(self, course_id, nickname):
         """
         Set a nickname for the given course. This will replace the
