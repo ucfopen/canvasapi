@@ -484,7 +484,7 @@
 		],
         "status_code": 200
     },
-    "create_role":{
+    "create_role": {
     	"method": "POST",
     	"endpoint": "accounts/1/roles",
     	"data":{
@@ -493,8 +493,26 @@
     	},
     	"status_code": 200
     },
-    "deactivate_role":{
+    "deactivate_role": {
     	"method": "DELETE",
+    	"endpoint": "accounts/1/roles/2/activate",
+    	"data": {
+    		"id": 1,
+    		"role_id": 2
+    	},
+    	"status_code": 200
+    },
+    "activate_role": {
+    	"method": "POST",
+    	"endpoint": "accounts/1/roles/2",
+    	"data": {
+    		"id": 1,
+    		"role_id": 2
+    	},
+    	"status_code": 200
+    },
+    "update_role": {
+    	"method": "PUT",
     	"endpoint": "accounts/1/roles/2",
     	"data": {
     		"id": 1,
