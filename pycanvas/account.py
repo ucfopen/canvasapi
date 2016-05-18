@@ -288,9 +288,10 @@ class Account(CanvasObject):
     def list_roles(self):
         """
         List the roles available to an account.
-        :calls: `GET /api/v1/accounts/:account_id/roles \
 
-        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>
+        :calls: `GET /api/v1/accounts/:account_id/roles \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
+
         :param account_id: The ID of the account to retrieve roles
         for
         :type account_id: str
@@ -310,8 +311,8 @@ class Account(CanvasObject):
         Retrieve information about a single role.
 
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
 
-        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`
         :param account_id: The id of the account containing the role
         :type account_id: str
         :param role_id: The unique identifier for the role
@@ -331,8 +332,8 @@ class Account(CanvasObject):
         Create a new course-level or account-level role.
 
         :calls: `POST /api/v1/accounts/:account_id/roles \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.add_role>`_
 
-        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.add_role>`
         :param label: The label for the role
         :type label: str
         :rtype: :class:`pycanvas.role.Role`
@@ -350,8 +351,8 @@ class Account(CanvasObject):
         Deactivates a custom role.
 
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`_
 
-        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`
         :param role_id: The unique ID for the role
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
@@ -368,10 +369,10 @@ class Account(CanvasObject):
         """
         Reactivates an inactive role.
 
-        :calls: `POST 
+        :calls: `POST
         /api/v1/accounts/:account_id/roles/:id/activate \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`_
 
-        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`
         :param role_id: ID for the role
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`

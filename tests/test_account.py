@@ -22,7 +22,7 @@ class TestAccount(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'account': [
-                'activate_role', 'close_notification', 'create'
+                'activate_role', 'close_notification', 'create',
                 'create_course', 'create_2', 'create_notification',
                 'create_role', 'create_subaccount', 'create_user',
                 'deactivate_role', 'delete_user', 'enroll_by_id',
@@ -263,4 +263,3 @@ class TestAccount(unittest.TestCase):
         target_enrollment = self.account.enroll_by_id(1)
 
         assert isinstance(target_enrollment, Enrollment)
-
