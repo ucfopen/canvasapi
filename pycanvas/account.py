@@ -345,7 +345,7 @@ class Account(CanvasObject):
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
         https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role`
         :param role_id: The unique id for the role
-        :type role_id:
+        :type role_id: int
         :rtype: :class: `pycanvas.role.Role`
         """
         from role import Role
@@ -355,6 +355,39 @@ class Account(CanvasObject):
             'accounts/%s/roles/%s' % (account_id, role_id)
         )
         return Role(self._requester, response.json())
+
+    def activate_role(self, role_id):
+        """
+        Reactivates an inactive role
+        :calls: `POST /api/v1/accounts/:account_id/roles/:id/activate \
+        https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role`
+        :param role_id: Id for the role
+        :type role_id: int
+        :rtype: :class: `pycanvas.role.Role`
+        """
+        from role import Role
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/roles/%s/activate' % (self.id, role_id)
+        )
+        return Role(self._requester, response.json())
+
+    def update_role(self, role_id):
+        """
+        Updates permissions for an existing role
+        :calls: `PUT /api/v1/accounts/:account_id/roles/:id
+        https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update`
+        :rtype: :class: `pycanvas.role.Role`
+        """
+        from role import Role
+
+        response = self._requester.request(
+            'PUT',
+            'accounts/%s/roles/%s' % (self.id, role_id)
+        )
+        return Role(self._requester, response.json())
+
 
 
 class AccountNotification(CanvasObject):
