@@ -502,6 +502,21 @@ class Course(CanvasObject):
         )
         return Section(self._requester, response.json())
 
+    def show_front_page(self):
+        """
+        Retrieve the content of the front page.
+
+        :calls: `GET /api/v1/courses/:course_id/front_page \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_front_page>`_
+
+        :rtype: :class:`pycanvas.course.Course`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/front_page' % (self.id)
+        )
+        return Page(self._requester, response.json())
+
 
 class CourseNickname(CanvasObject):
 
@@ -527,3 +542,12 @@ class CourseNickname(CanvasObject):
             'users/self/course_nicknames/%s' % (self.course_id)
         )
         return CourseNickname(self._requester, response.json())
+
+
+class Page(CanvasObject):
+
+    def __str__(self):
+        return "url: %s, title: %s" % (
+            self.url,
+            self.title
+        )
