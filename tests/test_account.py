@@ -231,31 +231,43 @@ class TestAccount(unittest.TestCase):
 
         assert len(role_list) == 4
         assert isinstance(role_list[0], Role)
+        assert hasattr(role_list[0], 'role')
+        assert hasattr(role_list[0], 'label')
 
     def test_get_role(self):
         target_role = self.account.get_role(2)
 
         assert isinstance(target_role, Role)
+        assert hasattr(target_role, 'role')
+        assert hasattr(target_role, 'label')
 
     def test_create_role(self):
         new_role = self.account.create_role(1)
 
         assert isinstance(new_role, Role)
+        assert hasattr(new_role, 'role')
+        assert hasattr(new_role, 'label')
 
     def test_deactivate_role(self):
         old_role = self.account.deactivate_role(2)
 
         assert isinstance(old_role, Role)
+        assert hasattr(old_role, 'role')
+        assert hasattr(old_role, 'label')
 
     def test_activate_role(self):
         activated_role = self.account.activate_role(2)
 
         assert isinstance(activated_role, Role)
+        assert hasattr(activated_role, 'role')
+        assert hasattr(activated_role, 'label')
 
     def test_update_role(self):
         updated_role = self.account.update_role(2)
 
         assert isinstance(updated_role, Role)
+        assert hasattr(updated_role, 'role')
+        assert hasattr(updated_role, 'label')
 
     # enroll_by_id()
     def test_enroll_by_id(self):

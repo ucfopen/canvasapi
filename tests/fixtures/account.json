@@ -375,7 +375,8 @@
 		"endpoint": "accounts/1/roles/2",
 		"data": {
 			"id": 1,
-			"role_id": 2
+   			"role": "StudentEnrollment",
+   			"label": "Student"
 		},
 		"status_code": 200
 	},
@@ -471,10 +472,14 @@
 		"endpoint": "accounts/1/roles",
 		"data": [
 			{
-				"id": 1
+				"id": 1,
+				"role": "StudentEnrollment",
+   				"label": "Student"
 			},
 			{
-				"id": 3
+				"id": 3,
+				"role": "StudentEnrollment",
+   				"label": "Student"
 			}
 		],
 		"headers": {
@@ -487,10 +492,14 @@
 		"endpoint": "accounts/1/roles/?page=2&per_page=2",
 		"data": [
 			{
-				"id": 5
+				"id": 5,
+				"role": "StudentEnrollment",
+   				"label": "Student"
 			},
 			{
-				"id": 7
+				"id": 7,
+				"role": "StudentEnrollment",
+   				"label": "Student"
 			}
 		],
         "status_code": 200
@@ -500,7 +509,8 @@
     	"endpoint": "accounts/1/roles",
     	"data":{
     		"id": 1,
-    		"label": 2
+    		"role": "StudentEnrollment",
+   			"label": "Student"
     	},
     	"status_code": 200
     },
@@ -509,7 +519,8 @@
     	"endpoint": "accounts/1/roles/2",
     	"data": {
     		"id": 1,
-    		"role_id": 2
+    		"role": "StudentEnrollment",
+   			"label": "Student"
     	},
     	"status_code": 200
     },
@@ -518,7 +529,8 @@
     	"endpoint": "accounts/1/roles/2/activate",
     	"data": {
     		"id": 1,
-    		"role_id": 2
+    		"role": "StudentEnrollment",
+   			"label": "Student"
     	},
     	"status_code": 200
     },
@@ -527,7 +539,8 @@
     	"endpoint": "accounts/1/roles/2",
     	"data": {
     		"id": 1,
-    		"role_id": 2
+    		"role": "StudentEnrollment",
+   			"label": "Student"
     	},
     	"status_code": 200
     }
