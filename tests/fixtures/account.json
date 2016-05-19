@@ -478,8 +478,8 @@
 			},
 			{
 				"id": 3,
-				"role": "StudentEnrollment",
-   				"label": "Student"
+				"role": "StudentEnrollment1",
+   				"label": "Student1"
 			}
 		],
 		"headers": {
@@ -493,13 +493,13 @@
 		"data": [
 			{
 				"id": 5,
-				"role": "StudentEnrollment",
-   				"label": "Student"
+				"role": "StudentEnrollment2",
+   				"label": "Student2"
 			},
 			{
 				"id": 7,
-				"role": "StudentEnrollment",
-   				"label": "Student"
+				"role": "StudentEnrollment3",
+   				"label": "Student3"
 			}
 		],
         "status_code": 200
