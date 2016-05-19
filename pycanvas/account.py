@@ -1,6 +1,5 @@
 from canvas_object import CanvasObject
 from exceptions import RequiredFieldMissing
-from enrollment import Enrollment
 from paginated_list import PaginatedList
 from util import combine_kwargs, obj_or_id
 
@@ -322,6 +321,8 @@ class Account(CanvasObject):
         :type enrollment_id: int
         :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
+        from enrollment import Enrollment
+
         response = self._requester.request(
             'GET',
             'accounts/%s/enrollments/%s' % (self.id, enrollment_id),

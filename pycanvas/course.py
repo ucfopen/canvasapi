@@ -299,7 +299,7 @@ class Course(CanvasObject):
 
         return Assignment(self._requester, response.json())
 
-    def list_quizzes(self, **kwargs):
+    def get_quizzes(self, **kwargs):
         """
         Return a list of quizzes belonging to this course.
 
@@ -314,6 +314,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/quizzes' % (self.id),
+            {'course_id': self.id},
             **combine_kwargs(**kwargs)
         )
 
@@ -333,7 +334,10 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/quizzes/%s' % (self.id, quiz_id)
         )
-        return Quiz(self._requester, response.json())
+        quiz_json = response.json()
+        quiz_json.update({'course_id': self.id})
+
+        return Quiz(self._requester, quiz_json)
 
     def create_quiz(self, title, **kwargs):
         """
@@ -352,9 +356,12 @@ class Course(CanvasObject):
             'courses/%s/quizzes' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return Quiz(self._requester, response.json())
+        quiz_json = response.json()
+        quiz_json.update({'course_id': self.id})
 
-    def list_modules(self, **kwargs):
+        return Quiz(self._requester, quiz_json)
+
+    def get_modules(self, **kwargs):
         """
         Return a list of modules in this course.
 
@@ -370,6 +377,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/modules' % (self.id),
+            {'course_id': self.id},
             **combine_kwargs(**kwargs)
         )
 
@@ -390,7 +398,10 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/modules/%s' % (self.id, module_id),
         )
-        return Module(self._requester, response.json())
+        module_json = response.json()
+        module_json.update({'course_id': self.id})
+
+        return Module(self._requester, module_json)
 
     def create_module(self, module, **kwargs):
         """
@@ -416,7 +427,10 @@ class Course(CanvasObject):
             'courses/%s/modules' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return Module(self._requester, response.json())
+        module_json = response.json()
+        module_json.update({'course_id': self.id})
+
+        return Module(self._requester, module_json)
 
     def deactivate_enrollment(self, enrollment_id, action):
         """

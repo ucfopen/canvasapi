@@ -34,17 +34,21 @@ class TestQuiz(unittest.TestCase):
     # edit()
     def test_edit(self):
         title = 'New Title'
-        edited_quiz = self.quiz.edit(self.course.id, quiz={'title': title})
+        edited_quiz = self.quiz.edit(quiz={'title': title})
 
         assert isinstance(edited_quiz, Quiz)
         assert hasattr(edited_quiz, 'title')
         assert edited_quiz.title == title
+        assert hasattr(edited_quiz, 'course_id')
+        assert edited_quiz.course_id == self.course.id
 
     # delete()
     def test_delete(self):
         title = "Great Title"
-        deleted_quiz = self.quiz.delete(self.course.id, quiz={'title': title})
+        deleted_quiz = self.quiz.delete(quiz={'title': title})
 
         assert isinstance(deleted_quiz, Quiz)
         assert hasattr(deleted_quiz, 'title')
         assert deleted_quiz.title == title
+        assert hasattr(deleted_quiz, 'course_id')
+        assert deleted_quiz.course_id == self.course.id
