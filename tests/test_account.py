@@ -225,8 +225,8 @@ class TestAccount(unittest.TestCase):
         success = account.update(account=update_account_dict)
         assert not success
 
-    def test_list_roles(self):
-        roles = self.account.list_roles()
+    def test_get_roles(self):
+        roles = self.account.get_roles()
         role_list = [role for role in roles]
 
         assert len(role_list) == 4
