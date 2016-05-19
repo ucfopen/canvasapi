@@ -13,11 +13,12 @@ class Section(CanvasObject):
 
     def list_enrollments(self):
         """
-        Lists all of the enrollments for a user.
+        List all of the enrollments for the current user.
 
-        :calls: `GET /api/v1/sections/:section_id/enrollments`
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        :calls: `GET /api/v1/sections/:section_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
