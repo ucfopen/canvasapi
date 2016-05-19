@@ -430,3 +430,11 @@ class AccountReport(CanvasObject):
             self.id,
             self.report
         )
+
+class Role(CanvasObject):
+
+    def __str__(self):
+        return "id: %s" % (
+            self.id
+        )
+
