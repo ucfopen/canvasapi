@@ -285,7 +285,7 @@ class Account(CanvasObject):
         else:
             return False
 
-    def list_roles(self):
+    def get_roles(self):
         """
         List the roles available to an account.
 
