@@ -7,7 +7,7 @@ import settings
 from util import register_uris
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
-from pycanvas.course import Course, CourseNickname
+from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from pycanvas.module import Module
@@ -32,7 +32,8 @@ class TestCourse(unittest.TestCase):
                 'list_enrollments', 'list_enrollments_2', 'list_quizzes',
                 'list_quizzes2', 'preview_html', 'reactivate_enrollment',
                 'reset', 'settings', 'update', 'update_settings', 'list_modules',
-                'list_modules2', 'get_module_by_id', 'create_module'
+                'list_modules2', 'get_module_by_id', 'create_module',
+                'show_front_page'
             ],
             'generic': ['not_found'],
             'quiz': ['get_by_id'],
@@ -281,6 +282,13 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(assignments[0], Assignment)
         assert len(assignment_list) == 4
+
+    def test_show_front_page(self):
+        front_page = self.course.show_front_page()
+
+        assert isinstance(front_page, Page)
+        assert hasattr(front_page, 'url')
+        assert hasattr(front_page, 'title')
 
 
 class TestCourseNickname(unittest.TestCase):
