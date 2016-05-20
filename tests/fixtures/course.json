@@ -492,5 +492,15 @@
 			"position": 1
 		},
 		"status_code": 200
+	},
+	"show_front_page": {
+		"method": "GET",
+		"endpoint": "courses/1/front_page",
+		"data":{
+			"id": 1,
+			"url": "front-page",
+			"title": "Front Page"
+		},
+		"status_code": 200
 	}
 }
