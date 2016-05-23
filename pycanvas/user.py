@@ -10,9 +10,11 @@ class User(CanvasObject):
 
     def get_profile(self, **kwargs):
         """
-        Get a user's profile.
+        Retrieve this user's profile.
 
-        :calls: `GET /api/v1/user/:id <https://canvas.instructure.com/doc/api/users.html#method.profile.settings>`
+        :calls: `GET /api/v1/user/:id \
+        <https://canvas.instructure.com/doc/api/users.html#method.profile.settings>`_
+
         :rtype: dict
         """
         response = self._requester.request(
@@ -23,10 +25,12 @@ class User(CanvasObject):
 
     def get_page_views(self):
         """
-        Get a user's pageviews.
+        Retrieve this user's page views.
 
-        :calls: `GET /api/v1/users/:user_id/page_views <https://canvas.instructure.com/doc/api/users.html#method.page_views.index>`
-        :rtype :class:`pycanvas.user.User`
+        :calls: `GET /api/v1/users/:user_id/page_views \
+        <https://canvas.instructure.com/doc/api/users.html#method.page_views.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.PageView`
         """
         from page_view import PageView
 
@@ -39,11 +43,12 @@ class User(CanvasObject):
 
     def get_courses(self):
         """
-        Get a user's courses.
+        Retrieve all courses this user is enrolled in.
 
-        :calls: `GET /api/v1/users/:user_id/courses
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.user_index>`
-        :rtype: list
+        :calls: `GET /api/v1/users/:user_id/courses \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.user_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
         """
         from course import Course
 
@@ -56,12 +61,13 @@ class User(CanvasObject):
 
     def get_missing_submissions(self):
         """
-        Returns past-due assignments for which the student does not
+        Retrieve all past-due assignments for which the student does not
         have a submission.
 
-        :calls: `GET /api/v1/users/:user_id/missing_submissions
-        <https://canvas.instructure.com/doc/api/users.html#method.users.missing_submissions>`
-        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        :calls: `GET /api/v1/users/:user_id/missing_submissions \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.missing_submissions>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 
@@ -74,10 +80,11 @@ class User(CanvasObject):
 
     def update_settings(self, **kwargs):
         """
-        Update an existing user's settings.
+        Update this user's settings.
 
-        :calls: `PUT /api/v1/users/:id/settings
-        <https://canvas.instructure.com/doc/api/users.html#method.users.settings>`
+        :calls: `PUT /api/v1/users/:id/settings \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.settings>`_
+
         :rtype: dict
         """
         response = self._requester.request(
@@ -89,13 +96,15 @@ class User(CanvasObject):
 
     def get_color(self, asset_string):
         """
-        Returns the custom colors that have been saved for a user for a given context.
+        Return the custom colors that have been saved by this user for a given context.
 
         The `asset_string` parameter should be in the format 'context_id', for example 'course_42'.
 
-        :calls: `GET /api/v1/users/:id/colors/:asset_string
-        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_color>`
-        :param asset_string: string
+        :calls: `GET /api/v1/users/:id/colors/:asset_string \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_color>`_
+
+        :param asset_string: The asset to retrieve the color from.
+        :type asset_string: str
         :rtype: dict
         """
         response = self._requester.request(
@@ -106,10 +115,11 @@ class User(CanvasObject):
 
     def get_colors(self):
         """
-        Returns all custom colors that have been saved for a user.
+        Return all custom colors that have been saved by this user.
 
-        :calls: `GET /api/v1/users/:id/colors
-        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_colors>`
+        :calls: `GET /api/v1/users/:id/colors \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.get_custom_colors>`_
+
         :rtype: dict
         """
         response = self._requester.request(
@@ -120,15 +130,20 @@ class User(CanvasObject):
 
     def update_color(self, asset_string, hexcode):
         """
-        Updates a custom color for a user for a given context. This allows colors for the calendar and elsewhere to be customized on a user basis.
+        Update a custom color for this user for a given context.
+
+        This allows colors for the calendar and elsewhere to be customized on a user basis.
 
         The `asset_string` parameter should be in the format 'context_id', for example 'course_42'.
         The `hexcode` parameter need not include the '#'.
 
-        :calls: `PUT /api/v1/users/:id/colors/:asset_string
-        <https://canvas.instructure.com/doc/api/users.html#method.users.set_custom_color>`
-        :param asset_string: string
-        :param hexcode: string
+        :calls: `PUT /api/v1/users/:id/colors/:asset_string \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.set_custom_color>`_
+
+        :param asset_string: The asset to modify the color for.
+        :type asset_string: str
+        :param hexcode: The hexcode of the color to use.
+        :type hexcode: str
         :rtype: dict
         """
         response = self._requester.request(
@@ -140,12 +155,12 @@ class User(CanvasObject):
 
     def edit(self, **kwargs):
         """
-        Modify an existing user.
+        Modify this user's information.
 
+        :calls: `PUT /api/v1/users/:id \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.update>`_
 
-        :calls: `PUT /api/v1/users/:id
-        <https://canvas.instructure.com/doc/api/users.html#method.users.update>`
-        :rtype: :class:`User`
+        :rtype: :class:`pycanvas.user.User`
         """
         response = self._requester.request(
             'PUT',
@@ -157,12 +172,14 @@ class User(CanvasObject):
 
     def merge_into(self, destination_user):
         """
-        Merge a user into another user.
+        Merge this user into another user.
 
-        :calls: `PUT /api/v1/users/:id/merge_into/:destination_user_id
-        <https://canvas.instructure.com/doc/api/users.html#method.users.merge_into>`
-        :param destination_user: :class:`User` or int
-        :rtype: :class:`User`
+        :calls: `PUT /api/v1/users/:id/merge_into/:destination_user_id \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.merge_into>`_
+
+        :param destination_user: The user to merge into.
+        :type destination_user: :class:`pycanvas.user.User`
+        :rtype: :class:`pycanvas.user.User`
         """
         dest_user_id = obj_or_id(destination_user, 'destination_user', (User, ))
 
@@ -177,9 +194,10 @@ class User(CanvasObject):
         """
         Retrieve the possible user avatar options that can be set with the user update endpoint.
 
-        :calls: `GET /api/v1/users/:user_id/avatars
-        <https://canvas.instructure.com/doc/api/users.html#method.profile.profile_pics>`
-        :rtype: :class:`PaginatedList` of :class:`Avatar`
+        :calls: `GET /api/v1/users/:user_id/avatars \
+        <https://canvas.instructure.com/doc/api/users.html#method.profile.profile_pics>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.avatar.Avatar`
         """
         from avatar import Avatar
 
@@ -192,11 +210,13 @@ class User(CanvasObject):
 
     def get_assignments(self, course_id):
         """
-        Returns the list of assignments for the specified user if the current
-        user has rights to view. See List assignments for valid arguments.
+        Return the list of assignments for this user if the current
+        user (the API key owner) has rights to view. See List assignments for valid arguments.
 
-        :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments`
-        :rtype: :class:`PaginatedList` of :class:`Assignment`
+        :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.user_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 
@@ -209,11 +229,12 @@ class User(CanvasObject):
 
     def list_enrollments(self):
         """
-        Lists all of the enrollments for a user.
+        List all of the enrollments for this user.
 
-        :calls: `GET /api/v1/users/:user_id/enrollments`
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        :calls: `GET /api/v1/users/:user_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
