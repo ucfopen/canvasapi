@@ -310,7 +310,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
 
-        :param role_id: The unique identifier for the role.
+        :param role_id: The ID of the role.
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
@@ -348,7 +348,7 @@ class Account(CanvasObject):
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`_
 
-        :param role_id: The unique ID for the role.
+        :param role_id: The ID of the role.
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
@@ -364,11 +364,10 @@ class Account(CanvasObject):
         """
         Reactivate an inactive role.
 
-        :calls: `POST
-        /api/v1/accounts/:account_id/roles/:id/activate \
+        :calls: `POST /api/v1/accounts/:account_id/roles/:id/activate \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`_
 
-        :param role_id: ID for the role.
+        :param role_id: The ID of the role.
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
@@ -385,9 +384,9 @@ class Account(CanvasObject):
         Update permissions for an existing role.
 
         :calls: `PUT /api/v1/accounts/:account_id/roles/:id \
-        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`_
 
-        :param role_id: ID for the role.
+        :param role_id: The ID of the role.
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
@@ -431,10 +430,8 @@ class AccountReport(CanvasObject):
             self.report
         )
 
+
 class Role(CanvasObject):
 
     def __str__(self):
-        return "id: %s" % (
-            self.id
-        )
-
+        return "id: %s" % (self.id)
