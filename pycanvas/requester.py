@@ -19,7 +19,7 @@ class Requester(object):
         if mock_adapter:
             self._session.mount('mock', mock_adapter)
 
-    def request(self, method, endpoint, headers=None, use_auth=True, url=None, **kwargs):
+    def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
         """
         Makes a request to the Canvas API.
 

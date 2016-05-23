@@ -1,4 +1,7 @@
 import unittest
+import uuid
+import os
+
 import requests_mock
 
 import settings
@@ -26,7 +29,7 @@ class TestUser(unittest.TestCase):
                 'get_user_assignments', 'get_user_assignments2',
                 'list_enrollments', 'list_enrollments_2', 'merge',
                 'missing_sub', 'missing_sub_p2', 'page_views', 'page_views_p2',
-                'profile', 'update_settings'
+                'profile', 'update_settings', 'upload', 'upload_final'
             ]
         }
 
@@ -172,3 +175,21 @@ class TestUser(unittest.TestCase):
 
         assert len(enrollment_list) == 4
         assert isinstance(enrollment_list[0], Enrollment)
+
+    # upload()
+    def test_upload(self):
+        filename = 'testfile_%s' % uuid.uuid4().hex
+        file = open(filename, 'w+')
+
+        response = self.user.upload(file)
+
+        assert response[0] is True
+        assert isinstance(response[1], dict)
+        assert 'url' in response[1]
+
+        # http://stackoverflow.com/a/10840586
+        # Not as stupid as it looks.
+        try:
+            os.remove(filename)
+        except OSError:
+            pass

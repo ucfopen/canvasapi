@@ -3,55 +3,73 @@ import os
 from util import combine_kwargs
 
 
-def uploader(requester, url, path=None, file=None, **kwargs):
+class Uploader(object):
     """
-    Upload a file to a course.
-
-    :param url: The url of the endpoint to upload to.
-    :type url: str
-    :param path: The path of the file to upload.
-    :type path: str
-    :param file: The file to upload.
-    :type file: file
-    :rtype: dict
+    Upload a file to Canvas.
     """
-    if not path and not file:
-        raise ValueError('Must provide a path or a file pointer.')
 
-    if path:
-        if not os.path.exists(path):
-            raise IOError('File ' + path + ' does not exist.')
-        file = open(path, 'rb')
+    def __init__(self, requester, url, file, **kwargs):
+        """
+        :param requester: The :class:`pycanvas.requester.Requester` to pass requests through.
+        :type requester: :class:`pycanvas.requester.Requester`
+        :param url: The URL to upload the file to.
+        :type url: str
+        :param file: The file or path of the file to upload.
+        :type file: file or str
+        """
+        if isinstance(file, str):
+            if not os.path.exists(file):
+                raise IOError('File ' + file + ' does not exist.')
 
-    kwargs['name'] = os.path.basename(file.name)
-    kwargs['size'] = os.fstat(file.fileno()).st_size
+            file = open(file, 'rb')
 
-    response = requester.request(
-        'POST',
-        url,
-        **combine_kwargs(**kwargs)
-    )
+        self._requester = requester
+        self.url = url
+        self.file = file
+        self.kwargs = kwargs
 
-    response = response.json()
+    def start(self):
+        """
+        Request an upload token.
+        """
+        self.kwargs['name'] = os.path.basename(self.file.name)
+        self.kwargs['size'] = os.fstat(self.file.fileno()).st_size
 
-    upload_url = response.get('upload_url')
+        response = self._requester.request(
+            'POST',
+            self.url,
+            **combine_kwargs(**self.kwargs)
+        )
+        return self.upload(response)
 
-    if not upload_url:
-        raise Exception('Malformed response. Either you or Canvas made a mistake.')
+    def upload(self, response):
+        """
+        Upload the file.
 
-    upload_params = response.get('upload_params')
+        :param response: The response from the upload request.
+        :type response: dict
+        :returns: True if the file uploaded successfully, False otherwise, \
+                    and the JSON response from the API.
+        :rtype: tuple
+        """
+        response = response.json()
+        if not response.get('upload_url'):
+            raise Exception('Bad API response. No upload_url.')
 
-    if not upload_params:
-        raise Exception('Failed to collect upload_params?')
+        if not response.get('upload_params'):
+            raise Exception('Bad API response. No upload_params.')
 
-    kwargs = upload_params
-    # Add our file to the kwargs
-    kwargs['file'] = file
+        kwargs = response.get('upload_params')
+        kwargs['file'] = self.file
 
-    response = requester.request(
-        'POST',
-        use_auth=False,
-        url=upload_url,
-        **kwargs
-    )
-    return response.json()
+        response_json = self._requester.request(
+            'POST',
+            use_auth=False,
+            url=response.get('upload_url'),
+            **kwargs
+        ).json()
+
+        if 'url' in response_json:
+            return (True, response_json)
+
+        return (False, response_json)

@@ -1,6 +1,7 @@
-import datetime
 import unittest
+import uuid
 import requests
+import os
 
 import requests_mock
 
@@ -17,9 +18,7 @@ from pycanvas.user import User
 
 
 class TestCourse(unittest.TestCase):
-    """
-    Tests Courses functionality
-    """
+
     @classmethod
     def setUpClass(self):
         requires = {
@@ -31,11 +30,12 @@ class TestCourse(unittest.TestCase):
                 'get_user', 'get_user_id_type', 'get_users', 'get_users_p2',
                 'list_enrollments', 'list_enrollments_2', 'list_quizzes',
                 'list_quizzes2', 'preview_html', 'reactivate_enrollment',
-                'reset', 'settings', 'update', 'update_settings'
+                'reset', 'settings', 'update', 'update_settings', 'upload',
+                'upload_final'
             ],
             'generic': ['not_found'],
             'quiz': ['get_by_id'],
-            'user': ['get_by_id']
+            'user': ['get_by_id'],
         }
 
         adapter = requests_mock.Adapter()
@@ -149,18 +149,23 @@ class TestCourse(unittest.TestCase):
         assert isinstance(settings, dict)
         assert settings['hide_final_grades'] is True
 
-    # upload_file()
-    def test_upload_file_file(self):
-        # TODO
-        # filename = 'testfile_%s' % datetime.datetime.now().strftime('%m%d%H%M%S%f')
-        # new_file = open(filename, 'w+')
-        # self.course.upload_file(file=new_file)
-        pass
+    # upload()
+    def test_upload(self):
+        filename = 'testfile_%s' % uuid.uuid4().hex
+        file = open(filename, 'w+')
 
-    def test_upload_file_path(self):
-        # TODO
-        # self.course.upload_file()
-        pass
+        response = self.course.upload(file)
+
+        assert response[0] is True
+        assert isinstance(response[1], dict)
+        assert 'url' in response[1]
+
+        # http://stackoverflow.com/a/10840586
+        # Not as stupid as it looks.
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
 
     # reset()
     def test_reset(self):

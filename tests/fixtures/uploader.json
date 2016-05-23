@@ -1,0 +1,52 @@
+{
+    "upload_response": {
+        "method": "POST",
+        "endpoint": "upload_response",
+        "data": {
+            "upload_url": "mock://example.com/api/v1/upload_response_upload_url",
+            "upload_params": {
+                "some_param": "param123",
+                "a_different_param": "param456"
+            }
+        }
+    },
+    "upload_response_upload_url": {
+        "method": "POST",
+        "endpoint": "upload_response_upload_url",
+        "data": {
+            "url": "great_url_success"
+        }
+    },
+    "upload_response_no_upload_url": {
+        "method": "POST",
+        "endpoint": "upload_response_no_upload_url",
+        "data": {
+            "some_param": "not_upload"
+        }
+    },
+    "upload_response_no_upload_params": {
+        "method": "POST",
+        "endpoint": "upload_response_no_upload_params",
+        "data": {
+            "upload_url": "mock://example.com/api/v1/upload_response_upload_url"
+        }
+    },
+    "upload_response_fail": {
+        "method": "POST",
+        "endpoint": "upload_response_fail",
+        "data": {
+            "upload_url": "mock://example.com/api/v1/upload_fail",
+            "upload_params": {
+                "some_param": "param123",
+                "a_different_param": "param456"
+            }
+        }
+    },
+    "upload_fail": {
+        "method": "POST",
+        "endpoint": "upload_fail",
+        "data": {
+            "no_url": "bad_url_failure"
+        }
+    }
+}

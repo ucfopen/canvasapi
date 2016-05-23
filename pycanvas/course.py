@@ -1,5 +1,5 @@
 from canvas_object import CanvasObject
-from upload import uploader
+from upload import Uploader
 from util import combine_kwargs
 from paginated_list import PaginatedList
 
@@ -194,25 +194,27 @@ class Course(CanvasObject):
         )
         return response.json()
 
-    def upload_file(self, path=None, file=None, **kwargs):
+    def upload(self, file, **kwargs):
         """
-        Upload a file to a course.
+        Upload a file to this course.
 
-        :calls: `POST /api/v1/courses/:course_id/files`
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.create_file>
+        :calls: `POST /api/v1/courses/:course_id/files \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.create_file>`_
+
         :param path: The path of the file to upload.
         :type path: str
-        :param file: The file to upload.
-        :type file: file
-        :rtype: dict
+        :param file: The file or path of the file to upload.
+        :type file: file or str
+        :returns: True if the file uploaded successfully, False otherwise, \
+                    and the JSON response from the API.
+        :rtype: tuple
         """
-        return uploader(
+        return Uploader(
             self._requester,
             'courses/%s/files' % (self.id),
-            path=path,
-            file=file,
+            file,
             **kwargs
-        )
+        ).start()
 
     def reset(self):
         """

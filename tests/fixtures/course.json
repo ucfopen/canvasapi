@@ -422,5 +422,23 @@
 			"hide_distribution_graphs": false,
 			"lock_all_announcements": true
 		}
+	},
+	"upload": {
+		"method": "POST",
+		"endpoint": "courses/1/files",
+		"data": {
+			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
+			"upload_params": {
+			    "some_param": "param123",
+			    "a_different_param": "param456"
+			}
+		}
+	},
+	"upload_final": {
+		"method": "POST",
+        "endpoint": "files/upload_response_upload_url",
+        "data": {
+            "url": "great_url_success"
+        }
 	}
 }
