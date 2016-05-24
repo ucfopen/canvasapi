@@ -283,6 +283,7 @@ class TestCourse(unittest.TestCase):
         assert isinstance(assignments[0], Assignment)
         assert len(assignment_list) == 4
 
+    # show_front_page()
     def test_show_front_page(self):
         front_page = self.course.show_front_page()
 
