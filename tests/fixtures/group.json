@@ -8,5 +8,15 @@
 			"title": "Front Page"
 		},
 		"status_code": 200
+	},
+	"get_single_group": {
+		"method": "GET",
+		"endpoint": "groups/1",
+		"data": {
+			"id": 1,
+			"name": "group1",
+			"description": "best group ever"
+		},
+		"status_code": 200
 	}
 }
