@@ -310,7 +310,7 @@ class Account(CanvasObject):
         else:
             return False
 
-    def get_roles(self):
+    def get_roles(self, **kwargs):
         """
         List the roles available to an account.
 
@@ -325,7 +325,8 @@ class Account(CanvasObject):
             Role,
             self._requester,
             'GET',
-            'accounts/%s/roles' % (self.id)
+            'accounts/%s/roles' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def get_role(self, role_id):
@@ -347,7 +348,7 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def create_role(self, label):
+    def create_role(self, label, **kwargs):
         """
         Create a new course-level or account-level role.
 
@@ -362,7 +363,8 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/roles' % (self.id)
+            'accounts/%s/roles' % (self.id),
+            **combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
@@ -381,7 +383,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'DELETE',
-            'accounts/%s/roles/%s' % (self.id, role_id)
+            'accounts/%s/roles/%s' % (self.id, role_id),
         )
         return Role(self._requester, response.json())
 
@@ -404,7 +406,7 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def update_role(self, role_id):
+    def update_role(self, role_id, **kwargs):
         """
         Update permissions for an existing role.
 
@@ -419,7 +421,8 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'accounts/%s/roles/%s' % (self.id, role_id)
+            'accounts/%s/roles/%s' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
