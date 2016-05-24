@@ -9,7 +9,7 @@ class Group(CanvasObject):
     def __str__(self):
         return "%s %s %s" % (self.id, self.name, self.description)
 
-    def get_single_group(self):
+    def get_single_group(self, **kwargs):
         """
         Return the data for a single group. If the caller does not
         have permission to view the group a 401 will be returned.
@@ -22,7 +22,8 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'groups/%s' % (self.id)
+            'groups/%s' % (self.id),
+            **combine_kwargs(**kwargs)
         )
         return Group(self._requester, response.json())
 
