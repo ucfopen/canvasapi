@@ -7,6 +7,7 @@ import settings
 from pycanvas import Canvas
 from pycanvas.account import Account
 from pycanvas.course import Course, CourseNickname
+from pycanvas.group import Group
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.section import Section
 from pycanvas.user import User
@@ -28,6 +29,7 @@ class TestCanvas(unittest.TestCase):
                 'unicode_encode_error'
             ],
             'generic': ['not_found'],
+            'group': ['get_single_group'],
             'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
@@ -191,3 +193,11 @@ class TestCanvas(unittest.TestCase):
         info = self.canvas.get_section(1)
 
         assert isinstance(info, Section)
+
+    # get_single_group()
+    def test_get_single_group(self):
+        group = self.canvas.get_single_group(1)
+
+        assert isinstance(group, Group)
+        assert hasattr(group, 'name')
+        assert hasattr(group, 'description')

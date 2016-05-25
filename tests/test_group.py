@@ -17,7 +17,8 @@ class TestGroup(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': ['get_by_id', 'show_front_page'],
-            'generic': ['not_found']
+            'generic': ['not_found'],
+            'group': ['show_front_page']
         }
 
         adapter = requests_mock.Adapter()
@@ -26,3 +27,11 @@ class TestGroup(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
         self.group = self.group.get_single_group(1)
+
+    #show_front_page()
+    def test_show_front_page(self):
+        front_page = self.group.show_front_page()
+
+        assert isinstance(front_page, Page)
+        assert hasattr(front_page, 'url')
+        assert hasattr(front_page, 'title')

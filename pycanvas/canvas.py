@@ -3,6 +3,7 @@ from course import Course
 from paginated_list import PaginatedList
 from requester import Requester
 from user import User
+from group import Group
 from util import combine_kwargs
 
 
@@ -311,3 +312,20 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
         return response.json()
+
+    def get_single_group(self, group_id, **kwargs):
+        """
+        Return the data for a single group. If the caller does not
+        have permission to view the group a 401 will be returned.
+
+        :calls: `GET /api/v1/groups/:group_id \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
+
+        :rtype: :class:`pycanvas.group.Group`
+        """
+        response = self.__requester.request(
+            'GET',
+            'groups/%s' % (group_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Group(self.__requester, response.json())
