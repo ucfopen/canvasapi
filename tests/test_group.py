@@ -26,7 +26,7 @@ class TestGroup(unittest.TestCase):
         register_uris(settings.BASE_URL, requires, adapter)
 
         self.course = self.canvas.get_course(1)
-        self.group = self.group.get_single_group(1)
+        self.group = self.canvas.get_single_group(1)
 
     #show_front_page()
     def test_show_front_page(self):

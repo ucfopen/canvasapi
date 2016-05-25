@@ -1,5 +1,4 @@
 from canvas_object import CanvasObject
-from util import combine_kwargs
 from paginated_list import PaginatedList
 from exceptions import RequiredFieldMissing
 
