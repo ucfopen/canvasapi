@@ -517,6 +517,22 @@ class Course(CanvasObject):
         )
         return Page(self._requester, response.json())
 
+    def create_front_page(self, **kwargs):
+        """
+        Update the title or contents of the front page.
+
+        :calls: `PUT /api/v1/courses/:course_id/front_page \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update_front_page>`_
+
+        :rtype: :class:`pycanvas.course.Course`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/front_page' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Page(self._requester, response.json())
+
 
 class CourseNickname(CanvasObject):
 
