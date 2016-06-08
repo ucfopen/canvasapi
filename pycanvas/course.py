@@ -528,7 +528,7 @@ class Course(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/front_page' % (self.id),
+            'courses/%s/pages/' % (self.id),
             **combine_kwargs(**kwargs)
         )
         return Page(self._requester, response.json())
