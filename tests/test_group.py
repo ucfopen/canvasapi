@@ -18,7 +18,7 @@ class TestGroup(unittest.TestCase):
         requires = {
             'course': ['get_by_id', 'show_front_page'],
             'generic': ['not_found'],
-            'group': ['show_front_page']
+            'group': ['show_front_page', 'get_single_group']
         }
 
         adapter = requests_mock.Adapter()

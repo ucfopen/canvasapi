@@ -29,7 +29,7 @@ class TestCanvas(unittest.TestCase):
                 'unicode_encode_error'
             ],
             'generic': ['not_found'],
-            'group': ['get_single_group'],
+            #'group': ['get_single_group'],
             'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
