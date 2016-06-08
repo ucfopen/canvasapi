@@ -12,7 +12,7 @@ class Section(CanvasObject):
             self.course_id
         )
 
-    def list_enrollments(self, **kwargs):
+    def get_enrollments(self, **kwargs):
         """
         List all of the enrollments for the current user.
 
