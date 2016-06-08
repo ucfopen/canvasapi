@@ -28,8 +28,7 @@ class TestCanvas(unittest.TestCase):
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
                 'unicode_encode_error'
             ],
-            'generic': ['not_found'],
-            #'group': ['get_single_group'],
+            'group': ['get_single_group'],
             'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
@@ -39,8 +38,13 @@ class TestCanvas(unittest.TestCase):
             ],
         }
 
+        require_generic = {
+            'generic': ['not_found']
+        }
+
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, require_generic, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
     # create_account()
