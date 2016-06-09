@@ -24,24 +24,32 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'deactivate_enrollment',
-                'enroll_user', 'get_all_assignments', 'get_all_assignments2',
+                'create', 'create_assignment',
+                'deactivate_enrollment', 'enroll_user',
+                'get_all_assignments', 'get_all_assignments2',
                 'get_assignment_by_id', 'get_by_id', 'get_quiz',
-                'get_recent_students', 'get_recent_students_p2', 'get_section',
-                'get_user', 'get_user_id_type', 'get_users', 'get_users_p2',
-                'list_enrollments', 'list_enrollments_2', 'list_quizzes',
-                'list_quizzes2', 'preview_html', 'reactivate_enrollment',
-                'reset', 'settings', 'update', 'update_settings', 'list_modules',
-                'list_modules2', 'get_module_by_id', 'create_module',
-                'show_front_page'
+                'get_recent_students', 'get_recent_students_p2',
+                'get_section', 'get_user', 'get_user_id_type',
+                'get_users', 'get_users_p2', 'list_enrollments',
+                'list_enrollments_2', 'list_quizzes',
+                'list_quizzes2', 'preview_html',
+                'reactivate_enrollment', 'reset', 'settings',
+                'update', 'update_settings', 'list_modules',
+                'list_modules2', 'get_module_by_id',
+                'create_module', 'show_front_page',
+                'create_front_page'
             ],
-            'generic': ['not_found'],
             'quiz': ['get_by_id'],
             'user': ['get_by_id']
         }
 
+        require_generic = {
+            'generic': ['not_found']
+        }
+
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, require_generic, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
         # define custom matchers
@@ -290,6 +298,14 @@ class TestCourse(unittest.TestCase):
         assert isinstance(front_page, Page)
         assert hasattr(front_page, 'url')
         assert hasattr(front_page, 'title')
+
+    #create_front_page()
+    def test_create_front_page(self):
+        new_front_page = self.course.create_front_page()
+
+        assert isinstance(new_front_page, Page)
+        assert hasattr(new_front_page, 'url')
+        assert hasattr(new_front_page, 'title')
 
 
 class TestCourseNickname(unittest.TestCase):

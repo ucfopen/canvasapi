@@ -17,12 +17,19 @@ class TestGroup(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': ['get_by_id', 'show_front_page'],
-            'generic': ['not_found'],
-            'group': ['show_front_page', 'get_single_group']
+            'group': [
+                'show_front_page', 'get_single_group',
+                'create_front_page'
+            ]
+        }
+
+        require_generic = {
+            'generic': ['not_found']
         }
 
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, require_generic, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
         self.course = self.canvas.get_course(1)
@@ -35,3 +42,11 @@ class TestGroup(unittest.TestCase):
         assert isinstance(front_page, Page)
         assert hasattr(front_page, 'url')
         assert hasattr(front_page, 'title')
+
+    #create_front_page()
+    def test_create_front_page(self):
+        new_front_page = self.group.create_front_page()
+
+        assert isinstance(new_front_page, Page)
+        assert hasattr(new_front_page, 'url')
+        assert hasattr(new_front_page, 'title')

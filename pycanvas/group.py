@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from paginated_list import PaginatedList
+from util import combine_kwargs
 from exceptions import RequiredFieldMissing
 
 
@@ -21,7 +22,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/%s/front_page' % (self.id)
+            'groups/%s/front_page' % (self.id)
         )
         return Page(self._requester, response.json())
 
@@ -38,7 +39,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'courses/%s/front_page' % (self.id),
+            'groups/%s/front_page' % (self.id),
             **combine_kwargs(**kwargs)
         )
         return Page(self._requester, response.json())
