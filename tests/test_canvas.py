@@ -5,6 +5,7 @@ import requests_mock
 
 import settings
 from pycanvas import Canvas
+from pycanvas.canvas_object import CanvasObject
 from pycanvas.account import Account
 from pycanvas.course import Course, CourseNickname
 from pycanvas.exceptions import ResourceDoesNotExist
@@ -15,7 +16,7 @@ from util import register_uris
 
 class TestCanvas(unittest.TestCase):
     """
-    Tests core Canvas functionality.
+    Test core Canvas functionality.
     """
     @classmethod
     def setUpClass(self):
@@ -191,3 +192,15 @@ class TestCanvas(unittest.TestCase):
         info = self.canvas.get_section(1)
 
         assert isinstance(info, Section)
+
+    def test_canvas_object_to_json(self):
+        attributes = {'name': 'Test Object', 'id': 1}
+        canvas_obj = CanvasObject(None, attributes)
+
+        prev_json = canvas_obj.to_json()
+        assert isinstance(prev_json, str)
+
+        attributes.update({'name': 'Test Object 2'})
+        canvas_obj.set_attributes(attributes)
+
+        assert canvas_obj.to_json() != prev_json
