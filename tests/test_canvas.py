@@ -5,6 +5,7 @@ import requests_mock
 
 import settings
 from pycanvas import Canvas
+from pycanvas.canvas_object import CanvasObject
 from pycanvas.account import Account
 from pycanvas.course import Course, CourseNickname
 from pycanvas.exceptions import ResourceDoesNotExist
@@ -15,7 +16,7 @@ from util import register_uris
 
 class TestCanvas(unittest.TestCase):
     """
-    Tests core Canvas functionality.
+    Test core Canvas functionality.
     """
     @classmethod
     def setUpClass(self):
