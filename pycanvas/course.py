@@ -483,6 +483,38 @@ class Course(CanvasObject):
         )
         return Enrollment(self._requester, response.json())
 
+    def get_external_tool(self, tool_id):
+        """
+        :calls: `GET /api/v1/courses/:course_id/external_tools \
+        <https://canvas.instructure.com/doc/api/external_tools.html>`_
+
+        :rtype: :class:`pycanvas.external_tool.ExternalTool`
+        """
+        from external_tool import ExternalTool
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/external_tools/%s' % (self.id, tool_id),
+        )
+        return ExternalTool(self._requester, response.json())
+
+    def get_external_tools(self, **kwargs):
+        """
+        :calls: `GET /api/v1/courses/:course_id/external_tools \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.external_tool.ExternalTool`
+        """
+        from external_tool import ExternalTool
+
+        return PaginatedList(
+            ExternalTool,
+            self._requester,
+            'GET',
+            'courses/%s/external_tools' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
     def get_section(self, section_id):
         """
         Retrieve a section.
