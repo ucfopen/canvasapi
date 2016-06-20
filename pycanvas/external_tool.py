@@ -1,7 +1,5 @@
 from canvas_object import CanvasObject
 from util import combine_kwargs
-from paginated_list import PaginatedList
-# from exceptions import RequiredFieldMissing
 
 
 class ExternalTool(CanvasObject):
@@ -55,3 +53,22 @@ class ExternalTool(CanvasObject):
             return Account(self._requester, response.json())
         elif self.parent_type == 'course':
             return Course(self._requester, response.json())
+
+    def get_sessionless_launch_url(self, **kwargs):
+        """
+        Return a sessionless launch url for an external tool.
+
+        :calls: `GET /api/v1/courses/:course_id/external_tools/sessionless_launch \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.generate_sessionless_launch>`_
+            or `GET /api/v1/accounts/:account_id/external_tools/sessionless_launch \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.generate_sessionless_launch>`_
+
+        :rtype: str
+        """
+        kwargs['id'] = self.id
+        response = self._requester.request(
+            'GET',
+            '%ss/%s/external_tools/sessionless_launch' % (self.parent_type, self.parent_id),
+            **combine_kwargs(**kwargs)
+        )
+        return response.json()['url']

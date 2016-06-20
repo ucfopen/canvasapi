@@ -19,7 +19,10 @@ class TestExternalTool(unittest.TestCase):
         requires = {
             'account': ['get_by_id'],
             'course': ['get_by_id'],
-            'external_tool': ['get_by_id_account', 'get_by_id_course'],
+            'external_tool': [
+                'get_by_id_account', 'get_by_id_course',
+                'get_sessionless_launch_url_course'
+            ],
         }
 
         adapter = requests_mock.Adapter()
@@ -66,3 +69,7 @@ class TestExternalTool(unittest.TestCase):
 
     def test_get_parent_course(self):
         assert isinstance(self.ext_tool_course.get_parent(), Course)
+
+    # get_sessionless_launch_url()
+    def test_get_sessionless_launch_url(self):
+        assert isinstance(self.ext_tool_course.get_sessionless_launch_url(), (str, unicode))
