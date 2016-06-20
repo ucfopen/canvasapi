@@ -8,3 +8,4 @@ _test.py
 _templates/
 _build/
 _static/
+build/

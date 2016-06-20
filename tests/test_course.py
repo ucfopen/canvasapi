@@ -9,6 +9,7 @@ from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.course import Course, CourseNickname
 from pycanvas.enrollment import Enrollment
+from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from pycanvas.module import Module
 from pycanvas.quiz import Quiz
@@ -26,21 +27,24 @@ class TestCourse(unittest.TestCase):
             'course': [
                 'create', 'create_assignment', 'deactivate_enrollment',
                 'enroll_user', 'get_all_assignments', 'get_all_assignments2',
-                'get_assignment_by_id', 'get_by_id', 'get_quiz',
-                'get_recent_students', 'get_recent_students_p2', 'get_section',
-                'get_user', 'get_user_id_type', 'get_users', 'get_users_p2',
+                'get_assignment_by_id', 'get_by_id', 'get_external_tools',
+                'get_external_tools_p2', 'get_quiz', 'get_recent_students',
+                'get_recent_students_p2', 'get_section', 'get_user',
+                'get_user_id_type', 'get_users', 'get_users_p2',
                 'list_enrollments', 'list_enrollments_2', 'list_quizzes',
                 'list_quizzes2', 'preview_html', 'reactivate_enrollment',
-                'reset', 'settings', 'update', 'update_settings', 'list_modules',
-                'list_modules2', 'get_module_by_id', 'create_module'
+                'reset', 'settings', 'update', 'update_settings',
+                'list_modules', 'list_modules2', 'get_module_by_id',
+                'create_module'
             ],
-            'generic': ['not_found'],
+            'external_tool': ['get_by_id_course'],
             'quiz': ['get_by_id'],
             'user': ['get_by_id']
         }
 
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, {'generic': ['not_found']}, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
         # define custom matchers
@@ -281,6 +285,21 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(assignments[0], Assignment)
         assert len(assignment_list) == 4
+
+    # get_external_tool()
+    def test_get_external_tool(self):
+        tool = self.course.get_external_tool(1)
+
+        assert isinstance(tool, ExternalTool)
+        assert hasattr(tool, 'name')
+
+    # get_external_tools()
+    def test_get_external_tools(self):
+        tools = self.course.get_external_tools()
+        tool_list = [tool for tool in tools]
+
+        assert isinstance(tool_list[0], ExternalTool)
+        assert len(tool_list) == 4
 
 
 class TestCourseNickname(unittest.TestCase):
