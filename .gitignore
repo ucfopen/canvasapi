@@ -3,6 +3,7 @@
 .coverage
 htmlcov/
 env/
+build/
 _test.py
 _templates/
 _build/
