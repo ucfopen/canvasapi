@@ -243,9 +243,11 @@ class Canvas(object):
 
     def get_section(self, section_id):
         """
-        Get details about a specific sections
-        :calls: `GET /api/v1/sections/:id`
-        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>
+        Get details about a specific section.
+
+        :calls: `GET /api/v1/sections/:id \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+
         :rtype: Section
         """
         from section import Section
