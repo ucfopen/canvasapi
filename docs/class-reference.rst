@@ -7,6 +7,7 @@ Class Reference
     account-ref
     assignment-ref
     course-ref
+    external-tool-ref
     module-ref
     quiz-ref
     section-ref
