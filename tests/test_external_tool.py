@@ -7,6 +7,7 @@ from util import register_uris
 from pycanvas import Canvas
 from pycanvas.account import Account
 from pycanvas.course import Course
+from pycanvas.exceptions import CanvasException
 from pycanvas.external_tool import ExternalTool
 
 
@@ -18,10 +19,10 @@ class TestExternalTool(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'account': ['get_by_id'],
-            'course': ['get_by_id'],
+            'course': ['get_by_id', 'get_by_id_2'],
             'external_tool': [
-                'get_by_id_account', 'get_by_id_course',
-                'get_sessionless_launch_url_course'
+                'get_by_id_account', 'get_by_id_course', 'get_by_id_course_2',
+                'get_sessionless_launch_url_course', 'sessionless_launch_no_url'
             ],
         }
 
@@ -73,3 +74,9 @@ class TestExternalTool(unittest.TestCase):
     # get_sessionless_launch_url()
     def test_get_sessionless_launch_url(self):
         assert isinstance(self.ext_tool_course.get_sessionless_launch_url(), (str, unicode))
+
+    def test_get_sessionless_launch_url_no_url(self):
+        course = self.canvas.get_course(2)
+        ext_tool = course.get_external_tool(2)
+        with self.assertRaises(CanvasException):
+            ext_tool.get_sessionless_launch_url()

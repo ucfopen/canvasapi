@@ -1,4 +1,5 @@
 from canvas_object import CanvasObject
+from exceptions import CanvasException
 from util import combine_kwargs
 
 
@@ -71,4 +72,7 @@ class ExternalTool(CanvasObject):
             '%ss/%s/external_tools/sessionless_launch' % (self.parent_type, self.parent_id),
             **combine_kwargs(**kwargs)
         )
-        return response.json()['url']
+        try:
+            return response.json()['url']
+        except:
+            raise CanvasException('Canvas did not respond with a valid URL')

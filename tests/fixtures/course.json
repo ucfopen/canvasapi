@@ -108,6 +108,21 @@
 		},
 		"status_code": 200
 	},
+	"get_by_id_2": {
+		"method": "GET",
+		"endpoint": "courses/2",
+		"data": {
+			"id": 2,
+			"course_code": "TST5678",
+			"name": "Test Course 5678",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
 	"get_external_tools": {
 		"method": "GET",
 		"endpoint": "courses/1/external_tools",
