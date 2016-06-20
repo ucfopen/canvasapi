@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pycanvas',
-    version='0.1',
+    version='0.1.1',
     description='API wrapper for the Canvas LMS',
     url='https://***REMOVED***/pycanvas/',
     author='Techrangers (University of Central Florida)',
