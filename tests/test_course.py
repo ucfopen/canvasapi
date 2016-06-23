@@ -226,9 +226,9 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.course.create_module(module={'not_required': 'not_required'})
 
-    # list_enrollments()
-    def test_list_enrollments(self):
-        enrollments = self.course.list_enrollments()
+    # get_enrollments()
+    def test_get_enrollments(self):
+        enrollments = self.course.get_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
         assert len(enrollment_list) == 4

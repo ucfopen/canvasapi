@@ -224,7 +224,7 @@ class Course(CanvasObject):
         )
         return Course(self._requester, response.json())
 
-    def list_enrollments(self):
+    def get_enrollments(self, **kwargs):
         """
         List all of the enrollments in this course.
 
@@ -238,7 +238,8 @@ class Course(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'courses/%s/enrollments' % (self.id)
+            'courses/%s/enrollments' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def get_assignment(self, assignment_id):
