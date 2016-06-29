@@ -1,6 +1,7 @@
 *.pyc
 .DS_Store
 .coverage
+coverage.xml
 htmlcov/
 env/
 build/
