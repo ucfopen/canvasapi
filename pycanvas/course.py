@@ -224,7 +224,7 @@ class Course(CanvasObject):
         )
         return Course(self._requester, response.json())
 
-    def list_enrollments(self):
+    def get_enrollments(self, **kwargs):
         """
         List all of the enrollments in this course.
 
@@ -238,7 +238,8 @@ class Course(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'courses/%s/enrollments' % (self.id)
+            'courses/%s/enrollments' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def get_assignment(self, assignment_id):
@@ -482,6 +483,42 @@ class Course(CanvasObject):
             'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment_id)
         )
         return Enrollment(self._requester, response.json())
+
+    def get_external_tool(self, tool_id):
+        """
+        :calls: `GET /api/v1/courses/:course_id/external_tools/:external_tool_id \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
+
+        :rtype: :class:`pycanvas.external_tool.ExternalTool`
+        """
+        from external_tool import ExternalTool
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/external_tools/%s' % (self.id, tool_id),
+        )
+        tool_json = response.json()
+        tool_json.update({'course_id': self.id})
+
+        return ExternalTool(self._requester, tool_json)
+
+    def get_external_tools(self, **kwargs):
+        """
+        :calls: `GET /api/v1/courses/:course_id/external_tools \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.external_tool.ExternalTool`
+        """
+        from external_tool import ExternalTool
+
+        return PaginatedList(
+            ExternalTool,
+            self._requester,
+            'GET',
+            'courses/%s/external_tools' % (self.id),
+            {'course_id': self.id},
+            **combine_kwargs(**kwargs)
+        )
 
     def get_section(self, section_id):
         """

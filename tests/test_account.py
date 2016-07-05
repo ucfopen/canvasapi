@@ -8,6 +8,7 @@ from pycanvas import Canvas
 from pycanvas.account import Account, AccountNotification, AccountReport
 from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
+from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.user import User
 from util import register_uris
@@ -24,17 +25,19 @@ class TestAccount(unittest.TestCase):
                 'close_notification', 'create', 'create_2', 'create_course',
                 'create_notification', 'create_subaccount', 'create_user',
                 'delete_user', 'enroll_by_id', 'get_by_id', 'get_by_id_2',
-                'get_by_id_3', 'get_courses', 'get_courses_page_2', 'reports',
+                'get_by_id_3', 'get_courses', 'get_courses_page_2',
+                'get_external_tools', 'get_external_tools_p2', 'reports',
                 'reports_page_2', 'report_index', 'report_index_page_2',
                 'subaccounts', 'subaccounts_page_2', 'users', 'users_page_2',
                 'user_notifs', 'user_notifs_page_2', 'update', 'update_fail'
             ],
-            'generic': ['not_found'],
+            'external_tool': ['get_by_id_account'],
             'user': ['get_by_id'],
         }
 
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, {'generic': ['not_found']}, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
         self.account = self.canvas.get_account(1)
@@ -142,6 +145,21 @@ class TestAccount(unittest.TestCase):
         assert len(course_list) == 4
         assert isinstance(course_list[0], Course)
         assert hasattr(course_list[0], 'name')
+
+    # get_external_tool()
+    def test_get_external_tool(self):
+        tool = self.account.get_external_tool(1)
+
+        assert isinstance(tool, ExternalTool)
+        assert hasattr(tool, 'name')
+
+    # get_external_tools()
+    def test_get_external_tools(self):
+        tools = self.account.get_external_tools()
+        tool_list = [tool for tool in tools]
+
+        assert isinstance(tool_list[0], ExternalTool)
+        assert len(tool_list) == 4
 
     # get_index_of_reports()
     def test_get_index_of_reports(self):

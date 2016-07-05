@@ -9,6 +9,7 @@ from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
+from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from pycanvas.module import Module
 from pycanvas.quiz import Quiz
@@ -24,21 +25,19 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'create_page',
-                'deactivate_enrollment', 'enroll_user',
-                'get_all_assignments', 'get_all_assignments2',
-                'get_assignment_by_id', 'get_by_id', 'get_quiz',
-                'get_recent_students', 'get_recent_students_p2',
-                'get_section', 'get_user', 'get_user_id_type',
-                'get_users', 'get_users_p2', 'list_enrollments',
-                'list_enrollments_2', 'list_quizzes',
-                'list_quizzes2', 'list_pages', 'list_pages2', 'preview_html',
-                'reactivate_enrollment', 'reset', 'settings',
-                'update', 'update_settings', 'list_modules',
-                'list_modules2', 'get_module_by_id',
-                'create_module', 'show_front_page',
-                'create_front_page'
+                'create', 'create_assignment', 'create_page', 'create_front_page',
+                'deactivate_enrollment', 'enroll_user', 'get_all_assignments',
+                'get_all_assignments2', 'get_assignment_by_id', 'get_by_id',
+                'get_external_tools', 'get_external_tools_p2', 'get_quiz',
+                'get_recent_students', 'get_recent_students_p2', 'get_section',
+                'get_user', 'get_user_id_type', 'get_users', 'get_users_p2',
+                'list_enrollments', 'list_enrollments_2', 'list_pages',
+                'list_pages2', 'list_quizzes', 'list_quizzes2', 'preview_html',
+                'reactivate_enrollment', 'reset', 'settings', 'show_front_page',
+                'update', 'update_settings', 'list_modules', 'list_modules2',
+                'get_module_by_id', 'create_module'
             ],
+            'external_tool': ['get_by_id_course'],
             'quiz': ['get_by_id'],
             'user': ['get_by_id']
         }
@@ -231,9 +230,9 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.course.create_module(module={'not_required': 'not_required'})
 
-    # list_enrollments()
-    def test_list_enrollments(self):
-        enrollments = self.course.list_enrollments()
+    # get_enrollments()
+    def test_get_enrollments(self):
+        enrollments = self.course.get_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
         assert len(enrollment_list) == 4
@@ -325,6 +324,21 @@ class TestCourse(unittest.TestCase):
         assert new_page.title == title
         assert hasattr(new_page, 'course_id')
         assert new_page.course_id == self.course.id
+
+    # get_external_tool()
+    def test_get_external_tool(self):
+        tool = self.course.get_external_tool(1)
+
+        assert isinstance(tool, ExternalTool)
+        assert hasattr(tool, 'name')
+
+    # get_external_tools()
+    def test_get_external_tools(self):
+        tools = self.course.get_external_tools()
+        tool_list = [tool for tool in tools]
+
+        assert isinstance(tool_list[0], ExternalTool)
+        assert len(tool_list) == 4
 
 
 class TestCourseNickname(unittest.TestCase):
