@@ -533,6 +533,35 @@ class Course(CanvasObject):
         )
         return Page(self._requester, response.json())
 
+    def list_pages(self, **kwargs):
+        """
+        List the wiki pages associated with a course.
+        :calls: `GET /api/v1/courses/:course_id/pages \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
+        :rtype: :class:`pycanvas.courses.Course`
+        """
+        return PaginatedList(
+            Page,
+            self._requester,
+            'GET',
+            'courses/%s/pages' % (self.id)
+        )
+
+    def create_page(self, title, **kwargs):
+        """
+        Create a new wiki page.
+        :calls: `POST /api/v1/courses/:course_id/pages \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.create>`_
+        :rtype: :class: `pycanvas.courses.Course`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/%s/pages' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Page(self._requester, response.json())
+
+
 
 class CourseNickname(CanvasObject):
 

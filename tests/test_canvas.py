@@ -199,8 +199,8 @@ class TestCanvas(unittest.TestCase):
         assert isinstance(info, Section)
 
     # get_single_group()
-    def test_get_single_group(self):
-        group = self.canvas.get_single_group(1)
+    def test_get_group(self):
+        group = self.canvas.get_group(1)
 
         assert isinstance(group, Group)
         assert hasattr(group, 'name')

@@ -313,7 +313,7 @@ class Canvas(object):
         )
         return response.json()
 
-    def get_single_group(self, group_id, **kwargs):
+    def get_group(self, group_id, **kwargs):
         """
         Return the data for a single group. If the caller does not
         have permission to view the group a 401 will be returned.

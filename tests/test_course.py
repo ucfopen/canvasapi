@@ -32,7 +32,7 @@ class TestCourse(unittest.TestCase):
                 'get_section', 'get_user', 'get_user_id_type',
                 'get_users', 'get_users_p2', 'list_enrollments',
                 'list_enrollments_2', 'list_quizzes',
-                'list_quizzes2', 'preview_html',
+                'list_quizzes2', 'list_pages', 'list_pages2', 'preview_html',
                 'reactivate_enrollment', 'reset', 'settings',
                 'update', 'update_settings', 'list_modules',
                 'list_modules2', 'get_module_by_id',
@@ -306,6 +306,14 @@ class TestCourse(unittest.TestCase):
         assert isinstance(new_front_page, Page)
         assert hasattr(new_front_page, 'url')
         assert hasattr(new_front_page, 'title')
+
+    #list_pages()
+    def test_list_pages(self):
+        pages = self.course.list_pages()
+        page_list = [page for page in pages]
+
+        assert len(page_list) == 4
+        assert isinstance(page_list[0], Page)
 
 
 class TestCourseNickname(unittest.TestCase):
