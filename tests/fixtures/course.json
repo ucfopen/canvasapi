@@ -549,5 +549,15 @@
 			}
 		],
 		"status_code": 200
+	},
+	"create_page": {
+		"method": "POST",
+		"endpoint": "courses/1/pages",
+		"data": {
+			"id": 2,
+			"url": "new-page",
+			"title": "Newest Page"
+		},
+		"status_code": 200
 	}
 }

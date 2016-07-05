@@ -18,7 +18,7 @@ class TestGroup(unittest.TestCase):
         requires = {
             'course': ['get_by_id', 'show_front_page'],
             'group': [
-                'show_front_page', 'get_single_group',
+                'create_page', 'show_front_page', 'get_single_group',
                 'create_front_page', 'list_pages', 'list_pages2'
             ]
         }
@@ -60,12 +60,12 @@ class TestGroup(unittest.TestCase):
         assert isinstance(page_list[0], Page)
 
     #create_page()
-    def create_page(self):
+    def test_create_page(self):
         title = 'New Page'
-        new_page = self.group.create_page(quiz={'title': title})
+        new_page = self.group.create_page(wiki_page={'title': title})
 
         assert isinstance(new_page, Page)
         assert hasattr(new_page, 'title')
         assert new_page.title == title
         assert hasattr(new_page, 'group_id')
-        assert new_quiz.group_id == self.group.id
+        assert new_page.group_id == self.group.id

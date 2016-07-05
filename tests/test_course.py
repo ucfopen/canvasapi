@@ -24,7 +24,7 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment',
+                'create', 'create_assignment', 'create_page',
                 'deactivate_enrollment', 'enroll_user',
                 'get_all_assignments', 'get_all_assignments2',
                 'get_assignment_by_id', 'get_by_id', 'get_quiz',
@@ -314,6 +314,15 @@ class TestCourse(unittest.TestCase):
 
         assert len(page_list) == 4
         assert isinstance(page_list[0], Page)
+
+    #create_page()
+    def test_create_page(self):
+        title = "Newest Page"
+        new_page = self.course.create_page(wiki_page={'title': title})
+
+        assert isinstance(new_page, Page)
+        assert hasattr(new_page, 'title')
+        assert new_page.title == title
 
 
 class TestCourseNickname(unittest.TestCase):
