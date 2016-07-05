@@ -323,6 +323,8 @@ class TestCourse(unittest.TestCase):
         assert isinstance(new_page, Page)
         assert hasattr(new_page, 'title')
         assert new_page.title == title
+        assert hasattr(new_page, 'course_id')
+        assert new_page.course_id == self.course.id
 
 
 class TestCourseNickname(unittest.TestCase):

@@ -574,7 +574,7 @@ class Course(CanvasObject):
         page_json = response.json()
         page_json.update({'course_id': self.id})
 
-        return Page(self._requester, response.json())
+        return Page(self._requester, page_json)
 
 
 
