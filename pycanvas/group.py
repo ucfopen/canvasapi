@@ -98,6 +98,9 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/pages/:url \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
 
+        :param url: The url for the page.
+        :type url: string
+        :returns: The specified page.
         :rtype: :class: `pycanvas.groups.Group`
         """
         from course import Page
