@@ -29,7 +29,7 @@
 		},
 		"status_code": 200
 	},
-	"list_pages": {
+	"get_pages": {
 		"method": "GET",
 		"endpoint": "groups/1/pages",
 		"data": [
@@ -46,12 +46,12 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/groups/1/list_pages?page=2&per_page=2>; rel=\"next\""
+			"Link": "<mock://example.com/api/v1/groups/1/get_pages?page=2&per_page=2>; rel=\"next\""
 		}
 	},
-	"list_pages2": {
+	"get_pages2": {
 		"method": "GET",
-		"endpoint": "groups/1/list_pages?page=2&per_page=2",
+		"endpoint": "groups/1/get_pages?page=2&per_page=2",
 		"data": [
 			{
 				"id": 3,
@@ -73,6 +73,16 @@
 			"id": 2,
 			"url": "new-page",
 			"title": "New Page"
+		},
+		"status_code": 200
+	},
+	"get_page": {
+		"method": "GET",
+		"endpoint": "groups/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"url": "my-url",
+			"title": "Awesome Page"
 		},
 		"status_code": 200
 	}

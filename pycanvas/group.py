@@ -44,7 +44,7 @@ class Group(CanvasObject):
         )
         return Page(self._requester, response.json())
 
-    def list_pages(self, **kwargs):
+    def get_pages(self, **kwargs):
         """
         List the wiki pages associated with a group.
 
@@ -91,3 +91,19 @@ class Group(CanvasObject):
         page_json.update({'group_id': self.id})
 
         return Page(self._requester, page_json)
+
+    def get_page(self, url):
+        """
+        Retrieve the contents of a wiki page.
+        :calls: `GET /api/v1/groups/:group_id/pages/:url \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
+
+        :rtype: :class: `pycanvas.groups.Group`
+        """
+        from course import Page
+
+        response = self._requester.request(
+            'GET',
+            'groups/%s/pages/%s' % (self.id, url)
+        )
+        return Page(self._requester, response.json())

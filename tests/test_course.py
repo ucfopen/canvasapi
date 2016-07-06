@@ -28,14 +28,14 @@ class TestCourse(unittest.TestCase):
                 'create', 'create_assignment', 'create_page', 'create_front_page',
                 'deactivate_enrollment', 'enroll_user', 'get_all_assignments',
                 'get_all_assignments2', 'get_assignment_by_id', 'get_by_id',
-                'get_external_tools', 'get_external_tools_p2', 'get_quiz',
-                'get_recent_students', 'get_recent_students_p2', 'get_section',
-                'get_user', 'get_user_id_type', 'get_users', 'get_users_p2',
-                'list_enrollments', 'list_enrollments_2', 'list_pages',
-                'list_pages2', 'list_quizzes', 'list_quizzes2', 'preview_html',
-                'reactivate_enrollment', 'reset', 'settings', 'show_front_page',
-                'update', 'update_settings', 'list_modules', 'list_modules2',
-                'get_module_by_id', 'create_module'
+                'get_external_tools', 'get_external_tools_p2', 'get_page',
+                'get_quiz', 'get_recent_students', 'get_recent_students_p2',
+                'get_section', 'get_user', 'get_user_id_type', 'get_users',
+                'get_users_p2', 'list_enrollments', 'list_enrollments_2',
+                'get_pages', 'get_pages2', 'list_quizzes', 'list_quizzes2',
+                'preview_html', 'reactivate_enrollment', 'reset', 'settings',
+                'show_front_page', 'update', 'update_settings', 'list_modules',
+                'list_modules2', 'get_module_by_id', 'create_module'
             ],
             'external_tool': ['get_by_id_course'],
             'quiz': ['get_by_id'],
@@ -306,9 +306,9 @@ class TestCourse(unittest.TestCase):
         assert hasattr(new_front_page, 'url')
         assert hasattr(new_front_page, 'title')
 
-    #list_pages()
-    def test_list_pages(self):
-        pages = self.course.list_pages()
+    #get_pages()
+    def test_get_pages(self):
+        pages = self.course.get_pages()
         page_list = [page for page in pages]
 
         assert len(page_list) == 4
@@ -340,6 +340,16 @@ class TestCourse(unittest.TestCase):
         assert isinstance(tool_list[0], ExternalTool)
         assert len(tool_list) == 4
 
+    def test_create_page_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_page(settings.INVALID_ID)
+
+    def test_get_page(self):
+        url = 'my-url'
+        page = self.course.get_page(url)
+
+        assert isinstance(page, Page)
+
 
 class TestCourseNickname(unittest.TestCase):
     """
@@ -370,3 +380,26 @@ class TestCourseNickname(unittest.TestCase):
 
         assert isinstance(deleted_nick, CourseNickname)
         assert hasattr(deleted_nick, 'nickname')
+
+
+class TestPage(unittest.TestCase):
+    """
+    Test Page methods
+    """
+    @classmethod
+    def setUpClass(self):
+        requires = {
+            'course': ['get_by_id', 'get_page'],
+            'generic': ['not_found']
+        }
+        adapter = requests_mock.Adapter()
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, requires, adapter)
+
+        self.course = self.canvas.get_course(1)
+        self.page = self.course.get_page('my-url')
+
+    #__str__()
+    def test__str__(self):
+        string = str(self.page)
+        assert isinstance(string, str)
