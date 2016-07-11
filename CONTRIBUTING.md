@@ -66,7 +66,7 @@ You'll notice our tests live in the creatively named `tests` directory. Within t
 
 We use the [requests-mock](https://pypi.python.org/pypi/requests-mock) library to simulate API responses, and those mock responses live inside the `fixtures` directory in JSON files. Each file's name describes the endpoints that are contained within (course endpoints live in `course.json`, for example). Those fixtures are loaded by name within a test Python file. Let's look at `test_course.py`:
 
-```
+```python
   @classmethod
    def setUpClass(self):
        requires = {
@@ -104,7 +104,7 @@ Let's look at the first required fixture, `course create_quiz`:
 
 While we're at it, let's pull out the code in the library for creating a quiz:
 
-```
+```python
 def create_quiz(self, title, **kwargs):
 	from quiz import Quiz
 	response = self._requester.request(
@@ -116,7 +116,7 @@ def create_quiz(self, title, **kwargs):
 
 This code sends a POST request to the URL `courses/:course_id/quizzes`. With that information, we know that our fixture needs to contain `"method": "POST"` and `"endpoint": "courses/1/quizzes"`. You may be wondering where the ID (`courses/1`) came from. In our setUpClass method in `test_course.py`, we define a few starting objects to work with:
 
-```
+```python
 self.course = self.canvas.get_course(1)
 self.quiz = self.course.get_quiz(1)
 self.user = self.canvas.get_user(1)
@@ -126,7 +126,7 @@ For consistency, it's easiest to call give your fixture objects an ID of 1 unles
 
 In the actual test, we use the `create_quiz()` method of `Course` to create a quiz with some data:
 
-```
+```python
 # create_quiz()
 def test_create_quiz(self):
 	title = 'Newer Title'
@@ -234,7 +234,7 @@ Parameters should be listed in the order that they appear in the method prototyp
 #### Returns
 **Return description** should be listed first, if available. This should be included to clarify a returned value, for example:
 
-```
+```python
 def uncheck_box(box_id):
 	"""
 	Uncheck the box with the given ID.
