@@ -1,4 +1,4 @@
--r test_requirements.txt
+-r tests_requirements.txt
 
 alabaster==0.7.8
 Babel==2.3.4
