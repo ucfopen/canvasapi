@@ -313,3 +313,21 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
         return response.json()
+
+    def get_conversation(self, conversation_id, **kwargs):
+        """
+        Return single Conversation
+
+        :calls: `GET /api/v1/conversations/:id \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.show>`
+
+        :param conversation_id: The ID of the conversation.
+        :type conversation_id: int
+        :rtype: :class:`pycanvas.conversation.Conversation`
+        """
+        from conversation import Conversation
+        response = self.__requester.request(
+            'GET',
+            'conversations/%s' % (conversation_id)
+        )
+        return Conversation(self.__requester, response.json())

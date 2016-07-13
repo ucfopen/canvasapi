@@ -6,6 +6,7 @@ import requests_mock
 import settings
 from pycanvas import Canvas
 from pycanvas.account import Account
+from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.section import Section
@@ -23,22 +24,23 @@ class TestCanvas(unittest.TestCase):
             'account': [
                 'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
             ],
+            'conversation': ['get_by_id'],
             'course': [
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
                 'unicode_encode_error'
             ],
-            'generic': ['not_found'],
             'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
                 'course_nicknames', 'course_nicknames_delete',
                 'course_nicknames_page_2', 'courses', 'courses_p2', 'get_by_id',
                 'get_by_id_type', 'todo_items', 'upcoming_events'
-            ],
+            ]
         }
 
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, {'generic': ['not_found']}, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
     # create_account()
@@ -191,3 +193,10 @@ class TestCanvas(unittest.TestCase):
         info = self.canvas.get_section(1)
 
         assert isinstance(info, Section)
+
+    # get_conversation()
+    def test_get_conversation(self):
+        convo = self.canvas.get_conversation(1)
+
+        assert isinstance(convo, Conversation)
+        assert hasattr(convo, 'subject')

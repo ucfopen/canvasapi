@@ -1,0 +1,11 @@
+{
+	"get_by_id": {
+		"method": "GET",
+		"endpoint": "conversations/1",
+		"data": {
+			"id": 1,
+			"subject": "Pokemon Go"
+		},
+		"status_code": 200
+	}
+}
