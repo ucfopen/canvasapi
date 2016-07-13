@@ -25,7 +25,7 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'create_page', 'create_front_page',
+                'create', 'create_assignment', 'create_page', 'edit_front_page',
                 'deactivate_enrollment', 'enroll_user', 'get_all_assignments',
                 'get_all_assignments2', 'get_assignment_by_id', 'get_by_id',
                 'get_external_tools', 'get_external_tools_p2', 'get_page',
@@ -299,8 +299,8 @@ class TestCourse(unittest.TestCase):
         assert hasattr(front_page, 'title')
 
     #create_front_page()
-    def test_create_front_page(self):
-        new_front_page = self.course.create_front_page()
+    def test_edit_front_page(self):
+        new_front_page = self.course.edit_front_page()
 
         assert isinstance(new_front_page, Page)
         assert hasattr(new_front_page, 'url')

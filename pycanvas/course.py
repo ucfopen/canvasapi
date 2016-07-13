@@ -554,7 +554,7 @@ class Course(CanvasObject):
         )
         return Page(self._requester, response.json())
 
-    def create_front_page(self, **kwargs):
+    def edit_front_page(self, **kwargs):
         """
         Update the title or contents of the front page.
 
@@ -577,7 +577,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
-        :rtype: :class:`pycanvas.courses.Course`
+        :rtype: :class:`pycanvas.course.Course`
         """
         return PaginatedList(
             Page,
@@ -596,7 +596,7 @@ class Course(CanvasObject):
         :param title: The title for the page.
         :type title: dict
         :returns: The created page.
-        :rtype: :class: `pycanvas.courses.Course`
+        :rtype: :class: `pycanvas.course.Course`
         """
 
         if isinstance(wiki_page, dict) and 'title' in wiki_page:
@@ -618,10 +618,14 @@ class Course(CanvasObject):
     def get_page(self, url):
         """
         Retrieve the contents of a wiki page.
+
         :calls: `GET /api/v1/courses/:course_id/pages/:url \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
 
-        :rtype: :class: `pycanvas.courses.Course`
+        :param url: The url for the page.
+        :type url: string
+        :returns: The specified page.
+        :rtype: :class: `pycanvas.course.Course`
         """
 
         response = self._requester.request(
@@ -629,6 +633,24 @@ class Course(CanvasObject):
             'courses/%s/pages/%s' % (self.id, url)
         )
         return Page(self._requester, response.json())
+
+    def edit(self, **kwargs):
+        """
+        Update the title or the contents of a specified wiki
+        page.
+
+        :calls: `PUT /api/v1/courses/:course_id/pages/:url \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update>`_
+
+        :rtype: :class: `pycanvas.course.Course`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/pages/%s' % (self.id, url),
+            **combine_kwargs(**kwargs)
+        )
+        super(Page, self).set_attributes(response.json())
+        return self
 
 
 class CourseNickname(CanvasObject):
