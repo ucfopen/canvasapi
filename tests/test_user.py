@@ -170,7 +170,7 @@ class TestUser(unittest.TestCase):
 
     #list_enrollments()
     def test_list_enrollments(self):
-        enrollments = self.user.list_enrollments()
+        enrollments = self.user.get_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
         assert len(enrollment_list) == 4

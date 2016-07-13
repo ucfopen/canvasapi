@@ -1,6 +1,6 @@
 from datetime import datetime
+import json
 import re
-
 
 DATE_PATTERN = re.compile('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')
 
@@ -25,8 +25,15 @@ class CanvasObject(object):
 
     def __repr__(self):  # pragma: no cover
         classname = self.__class__.__name__
-        attrs = ', '.join(['%s=%s' % (attr, val) for attr, val in self.__dict__.iteritems()])
+        attrs = ', '.join(['%s=%s' % (attr, val) for attr, val in self.__dict__.iteritems() if attr != 'attributes'])
         return '%s(%s)' % (classname, attrs)
+
+    def to_json(self):
+        """
+        Return the original JSON response from the API that was used to
+        construct the object.
+        """
+        return json.dumps(self.attributes)
 
     def set_attributes(self, attributes):
         """
@@ -52,6 +59,8 @@ class CanvasObject(object):
         :param attributes: The JSON object to build this object with.
         :type attributes: dict
         """
+        self.attributes = attributes
+
         for attribute, value in attributes.iteritems():
             self.__setattr__(attribute, value)
 

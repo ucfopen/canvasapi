@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from paginated_list import PaginatedList
+from util import combine_kwargs
 
 
 class Section(CanvasObject):
@@ -11,7 +12,7 @@ class Section(CanvasObject):
             self.course_id
         )
 
-    def list_enrollments(self):
+    def get_enrollments(self, **kwargs):
         """
         List all of the enrollments for the current user.
 
@@ -26,5 +27,6 @@ class Section(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'sections/%s/enrollments' % (self.id)
+            'sections/%s/enrollments' % (self.id),
+            **combine_kwargs(**kwargs)
         )

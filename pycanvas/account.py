@@ -191,6 +191,42 @@ class Account(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def get_external_tool(self, tool_id):
+        """
+        :calls: `GET /api/v1/accounts/:account_id/external_tools/:external_tool_id \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
+
+        :rtype: :class:`pycanvas.external_tool.ExternalTool`
+        """
+        from external_tool import ExternalTool
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/external_tools/%s' % (self.id, tool_id),
+        )
+        tool_json = response.json()
+        tool_json.update({'account_id': self.id})
+
+        return ExternalTool(self._requester, tool_json)
+
+    def get_external_tools(self, **kwargs):
+        """
+        :calls: `GET /api/v1/accounts/:account_id/external_tools \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.external_tool.ExternalTool`
+        """
+        from external_tool import ExternalTool
+
+        return PaginatedList(
+            ExternalTool,
+            self._requester,
+            'GET',
+            'accounts/%s/external_tools' % (self.id),
+            {'account_id': self.id},
+            **combine_kwargs(**kwargs)
+        )
+
     def get_index_of_reports(self, report_type):
         """
         Retrieve all reports that have been run for the account of a specific type.

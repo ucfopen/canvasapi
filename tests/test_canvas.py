@@ -15,7 +15,7 @@ from util import register_uris
 
 class TestCanvas(unittest.TestCase):
     """
-    Tests core Canvas functionality.
+    Test core Canvas functionality.
     """
     @classmethod
     def setUpClass(self):

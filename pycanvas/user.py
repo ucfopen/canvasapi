@@ -228,7 +228,7 @@ class User(CanvasObject):
             'users/%s/courses/%s/assignments' % (self.id, course_id)
         )
 
-    def list_enrollments(self):
+    def get_enrollments(self, **kwargs):
         """
         List all of the enrollments for this user.
 
@@ -243,7 +243,8 @@ class User(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'users/%s/enrollments' % (self.id)
+            'users/%s/enrollments' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def upload(self, file, **kwargs):
