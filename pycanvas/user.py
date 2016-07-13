@@ -23,7 +23,7 @@ class User(CanvasObject):
         )
         return response.json()
 
-    def get_page_views(self):
+    def get_page_views(self, **kwargs):
         """
         Retrieve this user's page views.
 
@@ -38,7 +38,8 @@ class User(CanvasObject):
             PageView,
             self._requester,
             'GET',
-            'users/%s/page_views' % (self.id)
+            'users/%s/page_views' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def get_courses(self):
