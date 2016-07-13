@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from paginated_list import PaginatedList
+from upload import Uploader
 from util import combine_kwargs, obj_or_id
 
 
@@ -245,3 +246,29 @@ class User(CanvasObject):
             'users/%s/enrollments' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def upload(self, file, **kwargs):
+        """
+        Upload a file for a user.
+
+        NOTE: You *must* have authenticated with this user's API key to
+        upload on their behalf no matter what permissions the issuer of the
+        request has.
+
+        :calls: `POST /api/v1/users/:user_id/files \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.create_file>`_
+
+        :param path: The path of the file to upload.
+        :type path: str
+        :param file: The file or path of the file to upload.
+        :type file: file or str
+        :returns: True if the file uploaded successfully, False otherwise, \
+                    and the JSON response from the API.
+        :rtype: tuple
+        """
+        return Uploader(
+            self._requester,
+            'users/%s/files' % (self.id),
+            file,
+            **kwargs
+        ).start()

@@ -1,5 +1,7 @@
 import unittest
+import uuid
 import requests
+import os
 
 import requests_mock
 
@@ -18,9 +20,7 @@ from pycanvas.user import User
 
 
 class TestCourse(unittest.TestCase):
-    """
-    Tests Courses functionality
-    """
+
     @classmethod
     def setUpClass(self):
         requires = {
@@ -33,13 +33,13 @@ class TestCourse(unittest.TestCase):
                 'get_user_id_type', 'get_users', 'get_users_p2',
                 'list_enrollments', 'list_enrollments_2', 'list_quizzes',
                 'list_quizzes2', 'preview_html', 'reactivate_enrollment',
-                'reset', 'settings', 'update', 'update_settings',
-                'list_modules', 'list_modules2', 'get_module_by_id',
-                'create_module'
+                'reset', 'settings', 'update', 'update_settings', 'list_modules',
+                'list_modules2', 'get_module_by_id', 'create_module', 'upload',
+                'upload_final'
             ],
             'external_tool': ['get_by_id_course'],
             'quiz': ['get_by_id'],
-            'user': ['get_by_id']
+            'user': ['get_by_id'],
         }
 
         adapter = requests_mock.Adapter()
@@ -153,6 +153,24 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(settings, dict)
         assert settings['hide_final_grades'] is True
+
+    # upload()
+    def test_upload(self):
+        filename = 'testfile_%s' % uuid.uuid4().hex
+        file = open(filename, 'w+')
+
+        response = self.course.upload(file)
+
+        assert response[0] is True
+        assert isinstance(response[1], dict)
+        assert 'url' in response[1]
+
+        # http://stackoverflow.com/a/10840586
+        # Not as stupid as it looks.
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
 
     # reset()
     def test_reset(self):
