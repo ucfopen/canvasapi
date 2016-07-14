@@ -634,7 +634,7 @@ class Course(CanvasObject):
         )
         return Page(self._requester, response.json())
 
-    def edit(self, **kwargs):
+    def edit(self, url, **kwargs):
         """
         Update the title or the contents of a specified wiki
         page.
