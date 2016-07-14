@@ -26,7 +26,7 @@ class Group(CanvasObject):
         )
         return Page(self._requester, response.json())
 
-    def create_front_page(self, **kwargs):
+    def edit_front_page(self, **kwargs):
         """
         Update the title or contents of the front page.
 

@@ -20,7 +20,7 @@ class TestGroup(unittest.TestCase):
             'course': ['get_by_id', 'show_front_page'],
             'group': [
                 'create_page', 'show_front_page',
-                'get_single_group', 'create_front_page',
+                'get_single_group', 'edit_front_page',
                 'get_page', 'get_pages', 'get_pages2'
             ]
         }
@@ -51,8 +51,8 @@ class TestGroup(unittest.TestCase):
         assert hasattr(front_page, 'title')
 
     #create_front_page()
-    def test_create_front_page(self):
-        new_front_page = self.group.create_front_page()
+    def test_edit_front_page(self):
+        new_front_page = self.group.edit_front_page()
 
         assert isinstance(new_front_page, Page)
         assert hasattr(new_front_page, 'url')
