@@ -350,6 +350,17 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(page, Page)
 
+    def test_edit(self):
+        new_title = "New Page"
+        self.course.edit(page={'title': new_title})
+
+        assert isinstance(self.course, Page)
+        assert hasattr(self.course, 'title')
+        assert self.course.title == new_title
+
+        #reset for future tests
+        self.course = self.canvas.get_course(1)
+
 
 class TestCourseNickname(unittest.TestCase):
     """
