@@ -85,5 +85,15 @@
 			"title": "Awesome Page"
 		},
 		"status_code": 200
+	},
+	"edit_page": {
+		"method": "PUT",
+		"endpoint": "groups/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"title": "New Page",
+			"url": "my-url"
+		},
+		"status_code": 200
 	}
 }

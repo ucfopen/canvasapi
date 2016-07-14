@@ -19,7 +19,7 @@ class TestGroup(unittest.TestCase):
         requires = {
             'course': ['get_by_id', 'show_front_page'],
             'group': [
-                'create_page', 'show_front_page',
+                'create_page', 'edit_page', 'show_front_page',
                 'get_single_group', 'edit_front_page',
                 'get_page', 'get_pages', 'get_pages2'
             ]
@@ -36,6 +36,7 @@ class TestGroup(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
         self.group = self.canvas.get_group(1)
+        self.page = self.group.get_page('my-url')
 
     #__str__()
     def test__str__(self):
@@ -87,3 +88,15 @@ class TestGroup(unittest.TestCase):
         page = self.group.get_page(url)
 
         assert isinstance(page, Page)
+
+    #edit()
+    def test_edit(self):
+        new_title = "New Page"
+        self.page.edit(page={'title': new_title})
+
+        assert isinstance(self.page, Page)
+        assert hasattr(self.page, 'title')
+        assert self.page.title == new_title
+
+        #reset for future tests
+        self.page = self.group.get_page('my-url')

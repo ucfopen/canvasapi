@@ -73,6 +73,7 @@ class TestCourse(unittest.TestCase):
         adapter.add_matcher(delete_matcher)
 
         self.course = self.canvas.get_course(1)
+        self.page = self.course.get_page('my-url')
         self.quiz = self.course.get_quiz(1)
         self.user = self.canvas.get_user(1)
 
@@ -350,16 +351,7 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(page, Page)
 
-    def test_edit(self):
-        new_title = "New Page"
-        self.course.edit(page={'title': new_title})
 
-        assert isinstance(self.course, Page)
-        assert hasattr(self.course, 'title')
-        assert self.course.title == new_title
-
-        #reset for future tests
-        self.course = self.canvas.get_course(1)
 
 
 class TestCourseNickname(unittest.TestCase):
@@ -400,8 +392,8 @@ class TestPage(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['get_by_id', 'get_page'],
-            'generic': ['not_found']
+            'course': ['get_by_id', 'get_page', 'edit'],
+            'generic': ['not_found'],
         }
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
@@ -414,3 +406,14 @@ class TestPage(unittest.TestCase):
     def test__str__(self):
         string = str(self.page)
         assert isinstance(string, str)
+
+    def test_edit(self):
+        new_title = "New Page"
+        self.page.edit(page={'title': new_title})
+
+        assert isinstance(self.page, Page)
+        assert hasattr(self.page, 'title')
+        assert self.page.title == new_title
+
+        #reset for future tests
+        self.page = self.course.get_page('my-url')

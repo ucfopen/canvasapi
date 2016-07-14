@@ -643,7 +643,7 @@
 		"endpoint": "courses/1/pages/my-url",
 		"data": {
 			"id": 1,
-			"name": "New Page",
+			"title": "New Page",
 			"url": "my-url"
 		},
 		"status_code": 200

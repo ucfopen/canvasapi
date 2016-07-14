@@ -24,7 +24,10 @@ class Group(CanvasObject):
             'GET',
             'groups/%s/front_page' % (self.id)
         )
-        return Page(self._requester, response.json())
+        page_json = response.json()
+        page_json.update({'group_id': self.id})
+
+        return Page(self._requester, page_json)
 
     def edit_front_page(self, **kwargs):
         """
@@ -42,7 +45,10 @@ class Group(CanvasObject):
             'groups/%s/front_page' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return Page(self._requester, response.json())
+        page_json = response.json()
+        page_json.update({'group_id': self.id})
+
+        return Page(self._requester, page_json)
 
     def get_pages(self, **kwargs):
         """
@@ -109,4 +115,7 @@ class Group(CanvasObject):
             'GET',
             'groups/%s/pages/%s' % (self.id, url)
         )
-        return Page(self._requester, response.json())
+        page_json = response.json()
+        page_json.update({'group_id': self.id})
+
+        return Page(self._requester, page_json)
