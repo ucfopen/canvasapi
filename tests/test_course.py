@@ -330,6 +330,8 @@ class TestCourse(unittest.TestCase):
 
         assert len(page_list) == 4
         assert isinstance(page_list[0], Page)
+        assert hasattr(page_list[0], 'course_id')
+        assert page_list[0].course_id == self.course.id
 
     #create_page()
     def test_create_page(self):

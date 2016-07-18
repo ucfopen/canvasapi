@@ -66,6 +66,8 @@ class TestGroup(unittest.TestCase):
 
         assert len(page_list) == 4
         assert isinstance(page_list[0], Page)
+        assert hasattr(page_list[0], 'group_id')
+        assert page_list[0].group_id == self.group.id
 
     #create_page()
     def test_create_page(self):

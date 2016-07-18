@@ -65,6 +65,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/%s/pages' % (self.id),
+            {'group_id': self.id},
             **combine_kwargs(**kwargs)
         )
 
