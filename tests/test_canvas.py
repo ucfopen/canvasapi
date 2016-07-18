@@ -24,7 +24,7 @@ class TestCanvas(unittest.TestCase):
             'account': [
                 'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
             ],
-            'conversation': ['get_by_id'],
+            'conversation': ['get_by_id', 'get_conversations', 'get_conversations_2'],
             'course': [
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
                 'unicode_encode_error'
@@ -200,3 +200,12 @@ class TestCanvas(unittest.TestCase):
 
         assert isinstance(convo, Conversation)
         assert hasattr(convo, 'subject')
+
+    # get_conversations()
+    def test_get_conversations(self):
+        convos = self.canvas.get_conversations()
+        conversation_list = [conversation for conversation in convos]
+
+        assert len(conversation_list) == 4
+        assert isinstance(conversation_list[0], Conversation)
+

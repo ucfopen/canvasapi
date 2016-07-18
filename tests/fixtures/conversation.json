@@ -7,5 +7,38 @@
 			"subject": "Pokemon Go"
 		},
 		"status_code": 200
+	}, 
+	"get_conversations": {
+		"method": "GET:",
+		"endpoint": "conversations",
+		"data": [
+			{
+				"id": 1,
+				"subject": "Pokemon Go"
+			},
+			{
+				"id": 2,
+				"subject": "Agar.io"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/conversations?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_conversations_2": {
+		"method": "GET",
+		"endpoint": "conversations?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"subject": "Minecraft"
+			},
+			{
+				"id": 4,
+				"subject": "Smash Bros"
+			}
+		],
+		"status_code": 200
 	}
 }

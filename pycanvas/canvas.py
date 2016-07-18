@@ -328,6 +328,27 @@ class Canvas(object):
         from conversation import Conversation
         response = self.__requester.request(
             'GET',
-            'conversations/%s' % (conversation_id)
+            'conversations/%s' % (conversation_id),
+            **combine_kwargs(**kwargs)
         )
         return Conversation(self.__requester, response.json())
+
+    def get_conversations(self, **kwargs):
+        """
+        Return list of conversations for the current user, most resent ones first.
+
+        :calls: `GET /api/v1/conversations \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.conversation.Conversation`
+        """
+        from conversation import Conversation
+
+        return PaginatedList(
+            Conversation,
+            self.__requester,
+            'GET',
+            'conversations',
+            **combine_kwargs(**kwargs)
+        )
+
