@@ -9,7 +9,7 @@
 		"status_code": 200
 	}, 
 	"get_conversations": {
-		"method": "GET:",
+		"method": "GET",
 		"endpoint": "conversations",
 		"data": [
 			{
