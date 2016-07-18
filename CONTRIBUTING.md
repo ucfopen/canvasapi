@@ -38,6 +38,7 @@ We welcome pull requests for bug fixes and new features! Feel free to browse our
 * [api coverage](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=api+coverage) -- covering new endpoints or updating existing ones.
 * [internal](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=internal) -- updates to the engine to improve performance.
 * [major](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=major) -- difficult or major changes or additions that require familiarity with the library.
+* [bug](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=bug) -- happy little code accidents.
 
 
 Once you've found an issue you're interested in tackling, take a look at our [first contribution tutorial](#making-your-first-contribution) for information on our pull request policy.
