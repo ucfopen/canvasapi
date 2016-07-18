@@ -323,7 +323,14 @@ class TestCourse(unittest.TestCase):
         assert hasattr(new_front_page, 'url')
         assert hasattr(new_front_page, 'title')
 
-    #get_pages()
+    # get_page()
+    def test_get_page(self):
+        url = 'my-url'
+        page = self.course.get_page(url)
+
+        assert isinstance(page, Page)
+
+    # get_pages()
     def test_get_pages(self):
         pages = self.course.get_pages()
         page_list = [page for page in pages]
@@ -333,7 +340,7 @@ class TestCourse(unittest.TestCase):
         assert hasattr(page_list[0], 'course_id')
         assert page_list[0].course_id == self.course.id
 
-    #create_page()
+    # create_page()
     def test_create_page(self):
         title = "Newest Page"
         new_page = self.course.create_page(wiki_page={'title': title})
@@ -343,6 +350,10 @@ class TestCourse(unittest.TestCase):
         assert new_page.title == title
         assert hasattr(new_page, 'course_id')
         assert new_page.course_id == self.course.id
+
+    def test_create_page_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_page(settings.INVALID_ID)
 
     # get_external_tool()
     def test_get_external_tool(self):
@@ -358,16 +369,6 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(tool_list[0], ExternalTool)
         assert len(tool_list) == 4
-
-    def test_create_page_fail(self):
-        with self.assertRaises(RequiredFieldMissing):
-            self.course.create_page(settings.INVALID_ID)
-
-    def test_get_page(self):
-        url = 'my-url'
-        page = self.course.get_page(url)
-
-        assert isinstance(page, Page)
 
 
 class TestCourseNickname(unittest.TestCase):
