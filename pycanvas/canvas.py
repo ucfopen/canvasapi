@@ -340,7 +340,8 @@ class Canvas(object):
         :calls: `GET /api/v1/conversations \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.conversation.Conversation`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.conversation.Conversation`
         """
         from conversation import Conversation
 
@@ -352,3 +353,31 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
 
+    def create_conversation(self, recipients, body, **kwargs):
+        """
+        Create a new Conversation.
+
+        :calls: `POST /api/v1/conversations \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.create>`_
+
+        :param recipients[]: An array of recipient ids.
+            These may be user ids or course/group ids prefixed
+            with 'course_' or 'group_' respectively,
+            e.g. recipients[]=1&recipients=2&recipients[]=course_3
+        :type recipients[]: string array
+        :param body: The body of the conversation.
+        :type body: string
+        :rtype: :class:`pycanvas.account.Conversation`
+        """
+        from conversation import Conversation
+
+
+        return PaginatedList(
+            Conversation,
+            self.__requester,
+            'POST',
+            'conversations',
+            recipients=recipients,
+            body=body,
+            **combine_kwargs(**kwargs)
+        )

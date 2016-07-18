@@ -24,7 +24,7 @@ class TestCanvas(unittest.TestCase):
             'account': [
                 'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
             ],
-            'conversation': ['get_by_id', 'get_conversations', 'get_conversations_2'],
+            'conversation': ['get_by_id', 'get_conversations', 'get_conversations_2', 'create_conversation'],
             'course': [
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
                 'unicode_encode_error'
@@ -209,3 +209,16 @@ class TestCanvas(unittest.TestCase):
         assert len(conversation_list) == 4
         assert isinstance(conversation_list[0], Conversation)
 
+    # create_conversation()
+    def test_create_conversation(self):
+        recipients = ['1', '2']
+        body = 'Test Conversation Body'
+
+        conversations = self.canvas.create_conversation(recipients=recipients, body=body)
+
+        conversation_list = [conversation for conversation in conversations]
+
+        print conversation_list
+        print len(conversation_list)
+        assert isinstance(conversation_list[0], Conversation)
+        assert len(conversation_list) == 2

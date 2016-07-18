@@ -17,6 +17,7 @@ class PaginatedList(object):
         self.__next_url = first_url
         self.__next_params = self.__first_params
         self.__extra_attribs = extra_attribs or {}
+        self.__request_method = request_method
 
     def __getitem__(self, index):
         assert isinstance(index, (int, slice))
@@ -54,7 +55,7 @@ class PaginatedList(object):
 
     def _get_next_page(self):
         response = self.__requester.request(
-            'GET',
+            self.__request_method,
             self.__next_url,
             **self.__next_params
         )

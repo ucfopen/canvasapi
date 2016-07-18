@@ -40,5 +40,20 @@
 			}
 		],
 		"status_code": 200
+	},
+	"create_conversation": {
+		"method": "POST",
+		"endpoint": "conversations",
+		"data": [
+			{
+				"recipients": ["1", "2"],
+				"body": "Test Conversation Body"
+			},
+			{
+				"recipients": ["3", "4"],
+				"body": "Test Conversation Body 2"
+			}
+		],
+		"status_code": 200
 	}
 }
