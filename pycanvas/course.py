@@ -700,6 +700,21 @@ class Page(CanvasObject):
 
         return self
 
+    def delete(self):
+        """
+        Delete this page.
+
+        :calls: `DELETE /api/v1/courses/:course_id/pages/:url \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.destroy>`_
+
+        :rtype: :class: `pycanvas.course.Course`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/pages/%s' % (self.course_id, self.url)
+        )
+        return Page(self._requester, response.json())
+
     @property
     def parent_id(self):
         """

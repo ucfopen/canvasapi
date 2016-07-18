@@ -647,5 +647,15 @@
 			"url": "my-url"
 		},
 		"status_code": 200
+	},
+	"delete_page": {
+		"method": "DELETE",
+		"endpoint": "courses/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"title": "Page To Be Deleted",
+			"url": "my-url"
+		},
+		"status_code": 200
 	}
 }

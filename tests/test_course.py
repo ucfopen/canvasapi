@@ -392,7 +392,7 @@ class TestPage(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['get_by_id', 'get_page', 'edit'],
+            'course': ['get_by_id', 'get_page', 'edit', 'delete_page'],
             'generic': ['not_found'],
         }
         adapter = requests_mock.Adapter()
@@ -417,3 +417,13 @@ class TestPage(unittest.TestCase):
 
         #reset for future tests
         self.page = self.course.get_page('my-url')
+
+    def test_delete(self):
+        page = self.course.get_page('my-url')
+        deleted_page = page.delete()
+
+        assert isinstance(deleted_page, Page)
+
+    # parent_id
+    def test_parent_id_course(self):
+        assert self.page.parent_id == 1
