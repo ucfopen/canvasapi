@@ -1,5 +1,7 @@
 import unittest
+import uuid
 import requests
+import os
 
 import requests_mock
 
@@ -18,37 +20,33 @@ from pycanvas.user import User
 
 
 class TestCourse(unittest.TestCase):
-    """
-    Tests Courses functionality
-    """
+
     @classmethod
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'create_page', 'edit_front_page',
-                'deactivate_enrollment', 'enroll_user', 'get_all_assignments',
-                'get_all_assignments2', 'get_assignment_by_id', 'get_by_id',
-                'get_external_tools', 'get_external_tools_p2', 'get_page',
-                'get_quiz', 'get_recent_students', 'get_recent_students_p2',
-                'get_section', 'get_user', 'get_user_id_type', 'get_users',
-                'get_users_p2', 'list_enrollments', 'list_enrollments_2',
-                'get_pages', 'get_pages2', 'list_quizzes', 'list_quizzes2',
+                'create', 'create_assignment', 'create_module', 'create_page',
+                'deactivate_enrollment', 'edit_front_page', 'enroll_user',
+                'get_all_assignments', 'get_all_assignments2',
+                'get_assignment_by_id', 'get_by_id', 'get_external_tools',
+                'get_external_tools_p2', 'get_module_by_id', 'get_page',
+                'get_pages', 'get_pages2', 'get_quiz', 'get_recent_students',
+                'get_recent_students_p2', 'get_section', 'get_user',
+                'get_user_id_type', 'get_users', 'get_users_p2',
+                'list_enrollments', 'list_enrollments_2', 'list_modules',
+                'list_modules2', 'list_quizzes', 'list_quizzes2',
                 'preview_html', 'reactivate_enrollment', 'reset', 'settings',
-                'show_front_page', 'update', 'update_settings', 'list_modules',
-                'list_modules2', 'get_module_by_id', 'create_module'
+                'show_front_page', 'update', 'update_settings', 'upload',
+                'upload_final'
             ],
             'external_tool': ['get_by_id_course'],
             'quiz': ['get_by_id'],
-            'user': ['get_by_id']
-        }
-
-        require_generic = {
-            'generic': ['not_found']
+            'user': ['get_by_id'],
         }
 
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
-        register_uris(settings.BASE_URL, require_generic, adapter)
+        register_uris(settings.BASE_URL, {'generic': ['not_found']}, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
         # define custom matchers
@@ -158,6 +156,24 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(settings, dict)
         assert settings['hide_final_grades'] is True
+
+    # upload()
+    def test_upload(self):
+        filename = 'testfile_%s' % uuid.uuid4().hex
+        file = open(filename, 'w+')
+
+        response = self.course.upload(file)
+
+        assert response[0] is True
+        assert isinstance(response[1], dict)
+        assert 'url' in response[1]
+
+        # http://stackoverflow.com/a/10840586
+        # Not as stupid as it looks.
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
 
     # reset()
     def test_reset(self):
