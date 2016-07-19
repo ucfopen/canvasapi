@@ -9,6 +9,7 @@ Class Reference
     course-ref
     external-tool-ref
     module-ref
+    page-ref
     quiz-ref
     section-ref
     user-ref

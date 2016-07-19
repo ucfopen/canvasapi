@@ -433,5 +433,23 @@
 		"data": {
 			"manual_mark_as_read": true
 		}
+	},
+	"upload": {
+		"method": "POST",
+		"endpoint": "users/1/files",
+		"data": {
+			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
+			"upload_params": {
+			    "some_param": "param123",
+			    "a_different_param": "param456"
+			}
+		}
+	},
+	"upload_final": {
+		"method": "POST",
+        "endpoint": "files/upload_response_upload_url",
+        "data": {
+            "url": "great_url_success"
+        }
 	}
 }
