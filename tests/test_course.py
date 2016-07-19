@@ -315,7 +315,7 @@ class TestCourse(unittest.TestCase):
         assert hasattr(front_page, 'url')
         assert hasattr(front_page, 'title')
 
-    #create_front_page()
+    # create_front_page()
     def test_edit_front_page(self):
         new_front_page = self.course.edit_front_page()
 

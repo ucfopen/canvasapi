@@ -1,12 +1,11 @@
 import unittest
-import requests
 
 import requests_mock
 
 import settings
 from util import register_uris
 from pycanvas import Canvas
-from pycanvas.course import Course, CourseNickname, Page
+from pycanvas.course import Page
 from pycanvas.exceptions import RequiredFieldMissing
 
 
@@ -38,12 +37,12 @@ class TestGroup(unittest.TestCase):
         self.group = self.canvas.get_group(1)
         self.page = self.group.get_page('my-url')
 
-    #__str__()
+    # __str__()
     def test__str__(self):
         string = str(self.group)
         assert isinstance(string, str)
 
-    #show_front_page()
+    # show_front_page()
     def test_show_front_page(self):
         front_page = self.group.show_front_page()
 
@@ -51,7 +50,7 @@ class TestGroup(unittest.TestCase):
         assert hasattr(front_page, 'url')
         assert hasattr(front_page, 'title')
 
-    #create_front_page()
+    # create_front_page()
     def test_edit_front_page(self):
         new_front_page = self.group.edit_front_page()
 
@@ -59,7 +58,7 @@ class TestGroup(unittest.TestCase):
         assert hasattr(new_front_page, 'url')
         assert hasattr(new_front_page, 'title')
 
-    #list_pages()
+    # list_pages()
     def test_get_pages(self):
         pages = self.group.get_pages()
         page_list = [page for page in pages]
@@ -69,7 +68,7 @@ class TestGroup(unittest.TestCase):
         assert hasattr(page_list[0], 'group_id')
         assert page_list[0].group_id == self.group.id
 
-    #create_page()
+    # create_page()
     def test_create_page(self):
         title = 'New Page'
         new_page = self.group.create_page(wiki_page={'title': title})
@@ -84,14 +83,14 @@ class TestGroup(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.group.create_page(settings.INVALID_ID)
 
-    #get_page()
+    # get_page()
     def test_get_page(self):
         url = 'my-url'
         page = self.group.get_page(url)
 
         assert isinstance(page, Page)
 
-    #edit()
+    # edit()
     def test_edit(self):
         new_title = "New Page"
         self.page.edit(page={'title': new_title})
@@ -100,5 +99,5 @@ class TestGroup(unittest.TestCase):
         assert hasattr(self.page, 'title')
         assert self.page.title == new_title
 
-        #reset for future tests
+        # reset for future tests
         self.page = self.group.get_page('my-url')
