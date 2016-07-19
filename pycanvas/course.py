@@ -1,8 +1,9 @@
 from canvas_object import CanvasObject
+from exceptions import RequiredFieldMissing
 from upload import Uploader
 from util import combine_kwargs
+from page import Page
 from paginated_list import PaginatedList
-from exceptions import RequiredFieldMissing
 
 
 class Course(CanvasObject):
@@ -561,6 +562,111 @@ class Course(CanvasObject):
             'courses/%s/sections/%s' % (self.id, section_id)
         )
         return Section(self._requester, response.json())
+
+    def show_front_page(self):
+        """
+        Retrieve the content of the front page.
+
+        :calls: `GET /api/v1/courses/:course_id/front_page \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_front_page>`_
+
+        :rtype: :class:`pycanvas.course.Course`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/front_page' % (self.id)
+        )
+        page_json = response.json()
+        page_json.update({'course_id': self.id})
+
+        return Page(self._requester, page_json)
+
+    def edit_front_page(self, **kwargs):
+        """
+        Update the title or contents of the front page.
+
+        :calls: `PUT /api/v1/courses/:course_id/front_page \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update_front_page>`_
+
+        :rtype: :class:`pycanvas.course.Course`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/front_page' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        page_json = response.json()
+        page_json.update({'course_id': self.id})
+
+        return Page(self._requester, page_json)
+
+    def get_pages(self, **kwargs):
+        """
+        List the wiki pages associated with a course.
+
+        :calls: `GET /api/v1/courses/:course_id/pages \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
+
+        :rtype: :class:`pycanvas.course.Course`
+        """
+        return PaginatedList(
+            Page,
+            self._requester,
+            'GET',
+            'courses/%s/pages' % (self.id),
+            {'course_id': self.id}
+        )
+
+    def create_page(self, wiki_page, **kwargs):
+        """
+        Create a new wiki page.
+
+        :calls: `POST /api/v1/courses/:course_id/pages \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.create>`_
+
+        :param title: The title for the page.
+        :type title: dict
+        :returns: The created page.
+        :rtype: :class: `pycanvas.course.Course`
+        """
+
+        if isinstance(wiki_page, dict) and 'title' in wiki_page:
+            kwargs['wiki_page'] = wiki_page
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'title' is required.")
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/pages' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        page_json = response.json()
+        page_json.update({'course_id': self.id})
+
+        return Page(self._requester, page_json)
+
+    def get_page(self, url):
+        """
+        Retrieve the contents of a wiki page.
+
+        :calls: `GET /api/v1/courses/:course_id/pages/:url \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
+
+        :param url: The url for the page.
+        :type url: string
+        :returns: The specified page.
+        :rtype: :class: `pycanvas.course.Course`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/pages/%s' % (self.id, url)
+        )
+        page_json = response.json()
+        page_json.update({'course_id': self.id})
+
+        return Page(self._requester, page_json)
 
 
 class CourseNickname(CanvasObject):

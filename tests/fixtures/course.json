@@ -578,5 +578,102 @@
 			"position": 1
 		},
 		"status_code": 200
+	},
+	"show_front_page": {
+		"method": "GET",
+		"endpoint": "courses/1/front_page",
+		"data":{
+			"id": 1,
+			"url": "front-page",
+			"title": "Front Page"
+		},
+		"status_code": 200
+	},
+	"edit_front_page": {
+		"method": "PUT",
+		"endpoint": "courses/1/front_page",
+		"data": {
+			"id": 1,
+			"url": "front-page-1",
+			"title": "Front Pagest"
+		},
+		"status_code": 200
+	},
+	"get_pages": {
+		"method": "GET",
+		"endpoint": "courses/1/pages",
+		"data": [
+			{
+				"id": 1,
+				"name": "Page 1",
+				"position": 1
+			},
+			{
+				"id": 2,
+				"name": "Page 2",
+				"position": 2
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/get_pages?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_pages2": {
+		"method": "GET",
+		"endpoint": "courses/1/get_pages?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Page 3",
+				"position": 3
+			},
+			{
+				"id": 4,
+				"name": "Page 4",
+				"position": 4
+			}
+		],
+		"status_code": 200
+	},
+	"create_page": {
+		"method": "POST",
+		"endpoint": "courses/1/pages",
+		"data": {
+			"id": 2,
+			"url": "new-page",
+			"title": "Newest Page"
+		},
+		"status_code": 200
+	},
+	"get_page": {
+		"method": "GET",
+		"endpoint": "courses/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"url": "my-url",
+			"title": "Awesome Page"
+		},
+		"status_code": 200
+	},
+	"edit": {
+		"method": "PUT",
+		"endpoint": "courses/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"title": "New Page",
+			"url": "my-url"
+		},
+		"status_code": 200
+	},
+	"delete_page": {
+		"method": "DELETE",
+		"endpoint": "courses/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"title": "Page To Be Deleted",
+			"url": "my-url"
+		},
+		"status_code": 200
 	}
 }
