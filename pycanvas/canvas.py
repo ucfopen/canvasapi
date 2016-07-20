@@ -381,3 +381,22 @@ class Canvas(object):
             body=body,
             **combine_kwargs(**kwargs)
         )
+
+    def edit_conversation(self, conversation_id, **kwargs):
+        """
+        Update a conversation.
+
+        :calls: `PUT /api/v1/conversations/:id \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.update>`_
+
+        :param conversation_id: The ID of the conversation.
+        :type conversation_id: int
+        :rtype: :class:`pycanvas.conversation.Conversation`
+        """
+        from conversation import Conversation
+        response = self.__requester.request(
+            'PUT',
+            'conversations/%s' % (conversation_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Conversation(self.__requester, response.json())
