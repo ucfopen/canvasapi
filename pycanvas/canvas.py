@@ -97,7 +97,7 @@ class Canvas(object):
             'course_accounts',
         )
 
-    def get_course(self, course_id):
+    def get_course(self, course_id, **kwargs):
         """
         Retrieve a course by its ID.
 
@@ -110,7 +110,8 @@ class Canvas(object):
         """
         response = self.__requester.request(
             'GET',
-            'courses/%s' % (course_id)
+            'courses/%s' % (course_id),
+            **combine_kwargs(**kwargs)
         )
         return Course(self.__requester, response.json())
 
@@ -247,7 +248,7 @@ class Canvas(object):
         Get details about a specific section.
 
         :calls: `GET /api/v1/sections/:id \
-        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.show>`_
 
         :rtype: Section
         """
