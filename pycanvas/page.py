@@ -1,6 +1,7 @@
 from canvas_object import CanvasObject
 
 from util import combine_kwargs
+from paginated_list import PaginatedList
 
 
 class Page(CanvasObject):
@@ -103,3 +104,14 @@ class PageRevision(CanvasObject):
             self.id,
             self.update
         )
+
+    def list_revisions(self):
+        """
+        List the revisions of a page.
+
+        :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
+
+        :rtype: :class:`pycanvas.page.Page`
+        """
+        return Paginated
