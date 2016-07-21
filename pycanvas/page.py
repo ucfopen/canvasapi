@@ -94,3 +94,12 @@ class Page(CanvasObject):
             return Group(self._requester, response.json())
         elif self.parent_type == 'course':
             return Course(self._requester, response.json())
+
+
+class PageRevision(CanvasObject):
+
+    def __str__(self):
+        return "revision_id: %s, updated_at: %s" % (
+            self.id,
+            self.update
+        )
