@@ -7,6 +7,15 @@
             "subject": "Pokemon Go"
         },
         "status_code": 200
+    },
+    "get_by_id_2": {
+        "method": "GET",
+        "endpoint": "conversations/2",
+        "data": {
+            "id": 2,
+            "subject": "Pokemon Go2"
+        },
+        "status_code": 200
     }, 
     "get_conversations": {
         "method": "GET",
@@ -58,11 +67,33 @@
     },
     "edit_conversation": {
         "method": "PUT",
+        "endpoint": "conversations/1",
+        "data": {
+            "id": 1,
+            "subject": "conversations api example"
+        },
+        "status_code": 200
+    },
+    "edit_conversation_fail": {
+        "method": "PUT",
         "endpoint": "conversations/2",
         "data": {
-            "id": 2,
-            "subject": "conversations api example",
-            "private": true
+            "subject": "this should fail"
+        }
+    },
+    "delete_conversation": {
+        "method": "DELETE",
+        "endpoint": "conversations/1",
+        "data": {
+            "id": 1,
+            "subject": "conversations api example"
+        }
+    },
+    "delete_conversation_fail": {
+        "method": "DELETE",
+        "endpoint": "conversations/2",
+        "data": {
+            "subject": "this should fail"
         }
     }
 }

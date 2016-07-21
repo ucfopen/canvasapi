@@ -1,9 +1,9 @@
-from account import Account
-from course import Course
-from paginated_list import PaginatedList
-from requester import Requester
-from user import User
-from util import combine_kwargs
+from pycanvas.account import Account
+from pycanvas.course import Course
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.requester import Requester
+from pycanvas.user import User
+from pycanvas.util import combine_kwargs
 
 
 class Canvas(object):
@@ -118,7 +118,8 @@ class Canvas(object):
         Retrieve a user by their ID. `id_type` denotes which endpoint to try as there are
         several different IDs that can pull the same user record from Canvas.
 
-        Refer to API documentation's `User <https://canvas.instructure.com/doc/api/users.html#User>`_
+        Refer to API documentation's
+        `User <https://canvas.instructure.com/doc/api/users.html#User>`_
         example to see the ID types a user can be retrieved with.
 
         :calls: `GET /users/:id \
@@ -211,9 +212,10 @@ class Canvas(object):
         :calls: `GET /api/v1/users/self/course_nicknames \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course_nickname.CourseNickname`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of \
+        :class:`pycanvas.course_nickname.CourseNickname`
         """
-        from course import CourseNickname
+        from pycanvas.course import CourseNickname
 
         return PaginatedList(
             CourseNickname,
@@ -233,7 +235,7 @@ class Canvas(object):
         :type course_id: int
         :rtype: :class:`pycanvas.course_nickname.CourseNickname`
         """
-        from course import CourseNickname
+        from pycanvas.course import CourseNickname
 
         response = self.__requester.request(
             'GET',
@@ -250,7 +252,7 @@ class Canvas(object):
 
         :rtype: Section
         """
-        from section import Section
+        from pycanvas.section import Section
         response = self.__requester.request(
             'GET',
             'sections/%s' % (section_id)
@@ -272,7 +274,7 @@ class Canvas(object):
         :type nickname: str
         :rtype: :class:`pycanvas.course_nickname.CourseNickname`
         """
-        from course import CourseNickname
+        from pycanvas.course import CourseNickname
 
         response = self.__requester.request(
             'PUT',
@@ -325,7 +327,7 @@ class Canvas(object):
         :type conversation_id: int
         :rtype: :class:`pycanvas.conversation.Conversation`
         """
-        from conversation import Conversation
+        from pycanvas.conversation import Conversation
         response = self.__requester.request(
             'GET',
             'conversations/%s' % (conversation_id),
@@ -343,7 +345,7 @@ class Canvas(object):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.conversation.Conversation`
         """
-        from conversation import Conversation
+        from pycanvas.conversation import Conversation
 
         return PaginatedList(
             Conversation,
@@ -369,8 +371,7 @@ class Canvas(object):
         :type body: string
         :rtype: :class:`pycanvas.account.Conversation`
         """
-        from conversation import Conversation
-
+        from pycanvas.conversation import Conversation
 
         return PaginatedList(
             Conversation,
@@ -381,22 +382,3 @@ class Canvas(object):
             body=body,
             **combine_kwargs(**kwargs)
         )
-
-    def edit_conversation(self, conversation_id, **kwargs):
-        """
-        Update a conversation.
-
-        :calls: `PUT /api/v1/conversations/:id \
-        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.update>`_
-
-        :param conversation_id: The ID of the conversation.
-        :type conversation_id: int
-        :rtype: :class:`pycanvas.conversation.Conversation`
-        """
-        from conversation import Conversation
-        response = self.__requester.request(
-            'PUT',
-            'conversations/%s' % (conversation_id),
-            **combine_kwargs(**kwargs)
-        )
-        return Conversation(self.__requester, response.json())

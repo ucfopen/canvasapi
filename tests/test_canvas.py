@@ -3,7 +3,6 @@ from datetime import datetime
 
 import requests_mock
 
-import settings
 from pycanvas import Canvas
 from pycanvas.account import Account
 from pycanvas.conversation import Conversation
@@ -11,7 +10,8 @@ from pycanvas.course import Course, CourseNickname
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.section import Section
 from pycanvas.user import User
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 class TestCanvas(unittest.TestCase):
@@ -25,8 +25,7 @@ class TestCanvas(unittest.TestCase):
                 'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
             ],
             'conversation': [
-                'get_by_id', 'get_conversations', 'get_conversations_2', 'create_conversation',
-                'edit_conversation'
+                'get_by_id', 'get_conversations', 'get_conversations_2', 'create_conversation'
             ],
             'course': [
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
@@ -223,14 +222,3 @@ class TestCanvas(unittest.TestCase):
 
         assert isinstance(conversation_list[0], Conversation)
         assert len(conversation_list) == 2
-
-    def test_edit_conversation(self):
-        subject_string = "conversations api example"
-        this_id = 2
-
-        conversation = self.canvas.edit_conversation(conversation_id=this_id, subject=subject_string)
-
-        assert isinstance(conversation, Conversation)
-        assert hasattr(conversation, 'subject')
-        assert conversation.subject == subject_string
-        assert conversation.id == this_id
