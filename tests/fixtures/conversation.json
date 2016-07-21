@@ -87,7 +87,8 @@
         "data": {
             "id": 1,
             "subject": "conversations api example"
-        }
+        },
+        "status_code": 200
     },
     "delete_conversation_fail": {
         "method": "DELETE",
@@ -95,5 +96,24 @@
         "data": {
             "subject": "this should fail"
         }
+    },
+    "add_recipients": {
+        "method": "POST",
+        "endpoint": "conversations/1/add_recipients",
+        "data": {
+            "id": 1,
+            "subject": "add_recipients test",
+            "messages": [
+                {
+                    "id": 1,
+                    "body": "Bob was added to the conversation by Hank TA"
+                },
+                {
+                    "id": 2,
+                    "body": "Joe was added to the conversation by Hank TA"
+                }
+            ]
+        },
+        "status_code": 200
     }
 }

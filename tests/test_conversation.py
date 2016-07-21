@@ -20,7 +20,8 @@ class TestConversation(unittest.TestCase):
                 'edit_conversation',
                 'edit_conversation_fail',
                 'delete_conversation',
-                'delete_conversation_fail'
+                'delete_conversation_fail',
+                'add_recipients'
             ]
         }
 
@@ -54,3 +55,16 @@ class TestConversation(unittest.TestCase):
     def test_delete_fail(self):
         temp_convo = self.canvas.get_conversation(2)
         assert temp_convo.delete() is False
+
+    # add-recipients()
+    def test_add_recipients(self):
+        recipients = {'bob': 1, 'joe': 2}
+        string_bob = "Bob was added to the conversation by Hank TA"
+        string_joe = "Joe was added to the conversation by Hank TA"
+
+        result = self.conversation.add_recipients([recipients['bob'],recipients['joe']])
+
+        assert hasattr(result, 'messages')
+        assert len(result.messages) == 2
+        assert result.messages[0]["body"] == string_bob
+        assert result.messages[1]["body"] == string_joe
