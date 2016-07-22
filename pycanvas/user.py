@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from paginated_list import PaginatedList
+from upload import Uploader
 from util import combine_kwargs, obj_or_id
 
 
@@ -23,7 +24,7 @@ class User(CanvasObject):
         )
         return response.json()
 
-    def get_page_views(self):
+    def get_page_views(self, **kwargs):
         """
         Retrieve this user's page views.
 
@@ -38,10 +39,11 @@ class User(CanvasObject):
             PageView,
             self._requester,
             'GET',
-            'users/%s/page_views' % (self.id)
+            'users/%s/page_views' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
-    def get_courses(self):
+    def get_courses(self, **kwargs):
         """
         Retrieve all courses this user is enrolled in.
 
@@ -56,7 +58,8 @@ class User(CanvasObject):
             Course,
             self._requester,
             'GET',
-            'users/%s/courses' % (self.id)
+            'users/%s/courses' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def get_missing_submissions(self):
@@ -208,7 +211,7 @@ class User(CanvasObject):
             'users/%s/avatars' % (self.id)
         )
 
-    def get_assignments(self, course_id):
+    def get_assignments(self, course_id, **kwargs):
         """
         Return the list of assignments for this user if the current
         user (the API key owner) has rights to view. See List assignments for valid arguments.
@@ -224,10 +227,11 @@ class User(CanvasObject):
             Assignment,
             self._requester,
             'GET',
-            'users/%s/courses/%s/assignments' % (self.id, course_id)
+            'users/%s/courses/%s/assignments' % (self.id, course_id),
+            **combine_kwargs(**kwargs)
         )
 
-    def list_enrollments(self):
+    def get_enrollments(self, **kwargs):
         """
         List all of the enrollments for this user.
 
@@ -242,5 +246,32 @@ class User(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'users/%s/enrollments' % (self.id)
+            'users/%s/enrollments' % (self.id),
+            **combine_kwargs(**kwargs)
         )
+
+    def upload(self, file, **kwargs):
+        """
+        Upload a file for a user.
+
+        NOTE: You *must* have authenticated with this user's API key to
+        upload on their behalf no matter what permissions the issuer of the
+        request has.
+
+        :calls: `POST /api/v1/users/:user_id/files \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.create_file>`_
+
+        :param path: The path of the file to upload.
+        :type path: str
+        :param file: The file or path of the file to upload.
+        :type file: file or str
+        :returns: True if the file uploaded successfully, False otherwise, \
+                    and the JSON response from the API.
+        :rtype: tuple
+        """
+        return Uploader(
+            self._requester,
+            'users/%s/files' % (self.id),
+            file,
+            **kwargs
+        ).start()
