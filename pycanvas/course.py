@@ -499,7 +499,8 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'DELETE',
-            'courses/%s/enrollments/%s' % (self.id, enrollment_id)
+            'courses/%s/enrollments/%s' % (self.id, enrollment_id),
+            task=task
         )
         return Enrollment(self._requester, response.json())
 
