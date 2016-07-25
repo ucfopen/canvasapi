@@ -17,9 +17,10 @@ class TestPage(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         requires = {
-            'course': ['get_by_id', 'get_page', 'edit', 'delete_page'],
+            'course': ['get_by_id'],
             'group': ['get_single_group', 'get_page'],
             'generic': ['not_found'],
+            'page': ['get_page', 'edit', 'delete_page']
         }
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)

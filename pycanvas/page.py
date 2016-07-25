@@ -105,7 +105,7 @@ class PageRevision(CanvasObject):
             self.update
         )
 
-    def list_revisions(self):
+    def list_revisions(self, url, **kwargs):
         """
         List the revisions of a page.
 
@@ -114,4 +114,10 @@ class PageRevision(CanvasObject):
 
         :rtype: :class:`pycanvas.page.Page`
         """
-        return Paginated
+        return PaginatedList(
+            PageRevision,
+            self._requester,
+            'courses/%s/pages/%s/revisions' % (self.id, url),
+            'GET',
+            **combine_kwargs(**kwargs)
+        )
