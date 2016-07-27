@@ -708,3 +708,12 @@ class CourseNickname(CanvasObject):
             'users/self/course_nicknames/%s' % (self.course_id)
         )
         return CourseNickname(self._requester, response.json())
+
+
+class CourseSection(CanvasObject):
+
+    def __str__(self):
+        return "id: %s, name: %s: " % (
+            self.id,
+            self.name
+        )
