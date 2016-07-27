@@ -7,7 +7,7 @@ from util import register_uris
 from pycanvas.canvas import Canvas
 from pycanvas.course import Course
 from pycanvas.group import Group
-from pycanvas.page import Page
+from pycanvas.page import Page, PageRevision
 
 
 class TestPage(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestPage(unittest.TestCase):
             'course': ['get_by_id'],
             'group': ['get_single_group', 'get_page'],
             'generic': ['not_found'],
-            'page': ['get_page', 'edit', 'delete_page']
+            'page': ['get_page', 'edit', 'delete_page', 'list_revisions', 'list_revisions2']
         }
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
@@ -52,6 +52,13 @@ class TestPage(unittest.TestCase):
         deleted_page = page.delete()
 
         assert isinstance(deleted_page, Page)
+
+    def test_list_revisions(self):
+        revisions = self.page_course.list_revisions()
+        rev_list = [rev for rev in revisions]
+
+        assert len(rev_list) == 4
+        assert isinstance(rev_list[0], PageRevision)
 
     # parent_id
     def test_parent_id_course(self):

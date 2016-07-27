@@ -105,19 +105,35 @@ class PageRevision(CanvasObject):
             self.update
         )
 
-    def list_revisions(self, url, **kwargs):
+    def list_revisions(self, url, course_id, **kwargs):
         """
         List the revisions of a page.
 
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
 
-        :rtype: :class:`pycanvas.page.Page`
+        :rtype: :class:`pycanvas.pagerevision.PageRevision`
         """
+        from course import Course
+
         return PaginatedList(
             PageRevision,
             self._requester,
-            'courses/%s/pages/%s/revisions' % (self.id, url),
+            'courses/%s/pages/%s/revisions' % (course_id, url),
             'GET',
             **combine_kwargs(**kwargs)
+        )
+
+    def show_latest_revision(self):
+        """
+        Retrieve the contents of the latest revision.
+
+        :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions/latest \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_revision>`_
+
+        :rtype: :class:`pycanvas.pagerevision.PageRevision`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/'
         )
