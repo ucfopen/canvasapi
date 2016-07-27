@@ -1,6 +1,12 @@
+*.egg-info
 *.pyc
-.DS_Store
 .coverage
+.DS_Store
+build/
+coverage.xml
 htmlcov/
 env/
+_build/
+_static/
+_templates/
 _test.py

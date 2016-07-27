@@ -9,8 +9,12 @@ class Requester(object):
 
     def __init__(self, base_url, access_token, mock_adapter):
         """
-        :param base_url: string
-        :param access_token: string
+        :param base_url: The base URL of the Canvas instance's API.
+        :type base_url: str
+        :param access_token: The API key to authenticate requests with.
+        :type access_token: str
+        :param mock_adapter: The requests_mock adapter (for testing).
+        :type mock_adapter: :class:`requests_mock.Adapter`
         """
         self.base_url = base_url
         self.access_token = access_token
@@ -19,13 +23,23 @@ class Requester(object):
         if mock_adapter:
             self._session.mount('mock', mock_adapter)
 
-    def request(self, method, endpoint, headers=None, use_auth=True, url=None, **kwargs):
+    def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
         """
-        Makes a request to the Canvas API.
+        Make a request to the Canvas API and return the response.
 
-        :param method: string
-        :param endpoint: string
-        :param headers: dict
+        :param method: The HTTP method for the request.
+        :type method: str
+        :param endpoint: The endpoint to call.
+        :type endpoint: str
+        :param headers: Optional HTTP headers to be sent with the request.
+        :type headers: dict
+        :param use_auth: Optional flag to remove the authentication header from the request.
+        :type use_auth: bool
+        :param url: Optional argument to send a request to a URL outside of the Canvas API. \
+                    If this is selected and an endpoint is provided, the endpoint will be \
+                    ignored and only the url argument will be used.
+        :type url: str
+        :rtype: str
         """
         full_url = url if url else "%s%s" % (self.base_url, endpoint)
 
@@ -58,43 +72,49 @@ class Requester(object):
 
         return response
 
-    def _get_request(self, url, headers, params={}):
+    def _get_request(self, url, headers, params=None):
         """
         Issue a GET request to the specified endpoint with the data provided.
 
-        :param url: string
+        :param url: str
         :pararm headers: dict
         :param params: dict
         """
         return self._session.get(url, headers=headers, params=params)
 
-    def _post_request(self, url, headers, data={}):
+    def _post_request(self, url, headers, data=None):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
-        :param url: string
+        :param url: str
         :pararm headers: dict
         :param params: dict
         :param data: dict
         """
-        return self._session.post(url, headers=headers, data=data)
+        if 'file' in data:
+            file = {'file': data['file']}
+            del data['file']
+        else:
+            file = None
 
-    def _delete_request(self, url, headers, data={}):
+        return self._session.post(url, headers=headers, data=data, files=file)
+
+    def _delete_request(self, url, headers, data=None):
         """
         Issue a DELETE request to the specified endpoint with the data provided.
 
-        :param url: string
+        :param url: str
         :pararm headers: dict
         :param params: dict
         :param data: dict
         """
         return self._session.delete(url, headers=headers, data=data)
 
-    def _put_request(self, url, headers, data={}):
+    def _put_request(self, url, headers, data=None):
         """
         Issue a PUT request to the specified endpoint with the data provided.
 
-        :param url: string
+        :param url: str
         :pararm headers: dict
         :param params: dict
         :param data: dict

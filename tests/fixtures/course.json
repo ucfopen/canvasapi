@@ -108,6 +108,74 @@
 		},
 		"status_code": 200
 	},
+	"get_by_id_2": {
+		"method": "GET",
+		"endpoint": "courses/2",
+		"data": {
+			"id": 2,
+			"course_code": "TST5678",
+			"name": "Test Course 5678",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"get_external_tools": {
+		"method": "GET",
+		"endpoint": "courses/1/external_tools",
+		"data": [
+			{
+				"id": 1,
+				"name": "External Tool #1",
+				"description": "This is an external tool.",
+				"url": "http://www.example.com/ims/lti",
+				"privacy_level": "anonymous",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			},
+			{
+				"id": 2,
+				"name": "External Tool #2",
+				"description": "This is an external tool.",
+				"url": "http://www.example.com/ims/lti",
+				"privacy_level": "public",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/external_tools?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_external_tools_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/external_tools?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "External Tool #3",
+				"description": "This is an external tool.",
+				"domain": "example.com",
+				"privacy_level": "name_only",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			},
+			{
+				"id": 4,
+				"name": "External Tool #4",
+				"description": "This is an external tool.",
+				"domain": "example.com",
+				"privacy_level": "anonymous",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			}
+		],
+		"status_code": 200
+	},
 	"get_quiz": {
 		"method": "GET",
 		"endpoint": "courses/1/quizzes/1",
@@ -454,6 +522,24 @@
 			"Link": "<mock://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
 		}
 	},
+	"upload": {
+		"method": "POST",
+		"endpoint": "courses/1/files",
+		"data": {
+			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
+			"upload_params": {
+			    "some_param": "param123",
+			    "a_different_param": "param456"
+			}
+		}
+	},
+	"upload_final": {
+		"method": "POST",
+        "endpoint": "files/upload_response_upload_url",
+        "data": {
+            "url": "great_url_success"
+        }
+    },
 	"list_modules2": {
 		"method": "GET",
 		"endpoint": "courses/1/list_modules?page=2&per_page=2",
@@ -490,6 +576,103 @@
 			"name": "Name",
 			"workflow_state": "active",
 			"position": 1
+		},
+		"status_code": 200
+	},
+	"show_front_page": {
+		"method": "GET",
+		"endpoint": "courses/1/front_page",
+		"data":{
+			"id": 1,
+			"url": "front-page",
+			"title": "Front Page"
+		},
+		"status_code": 200
+	},
+	"edit_front_page": {
+		"method": "PUT",
+		"endpoint": "courses/1/front_page",
+		"data": {
+			"id": 1,
+			"url": "front-page-1",
+			"title": "Front Pagest"
+		},
+		"status_code": 200
+	},
+	"get_pages": {
+		"method": "GET",
+		"endpoint": "courses/1/pages",
+		"data": [
+			{
+				"id": 1,
+				"name": "Page 1",
+				"position": 1
+			},
+			{
+				"id": 2,
+				"name": "Page 2",
+				"position": 2
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/get_pages?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_pages2": {
+		"method": "GET",
+		"endpoint": "courses/1/get_pages?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Page 3",
+				"position": 3
+			},
+			{
+				"id": 4,
+				"name": "Page 4",
+				"position": 4
+			}
+		],
+		"status_code": 200
+	},
+	"create_page": {
+		"method": "POST",
+		"endpoint": "courses/1/pages",
+		"data": {
+			"id": 2,
+			"url": "new-page",
+			"title": "Newest Page"
+		},
+		"status_code": 200
+	},
+	"get_page": {
+		"method": "GET",
+		"endpoint": "courses/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"url": "my-url",
+			"title": "Awesome Page"
+		},
+		"status_code": 200
+	},
+	"edit": {
+		"method": "PUT",
+		"endpoint": "courses/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"title": "New Page",
+			"url": "my-url"
+		},
+		"status_code": 200
+	},
+	"delete_page": {
+		"method": "DELETE",
+		"endpoint": "courses/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"title": "Page To Be Deleted",
+			"url": "my-url"
 		},
 		"status_code": 200
 	}

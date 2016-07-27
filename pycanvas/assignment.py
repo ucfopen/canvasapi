@@ -13,11 +13,12 @@ class Assignment(CanvasObject):
 
     def delete(self):
         """
-        Delete the given assignment.
+        Delete this assignment.
 
-        :calls: `DELETE /api/v1/courses/:course_id/assignments/:id`
-        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments.destroy>
-        :rtype: Assignment
+        :calls: `DELETE /api/v1/courses/:course_id/assignments/:id \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments.destroy>`_
+
+        :rtype: :class:`pycanvas.assignment.Assignment`
         """
         response = self._requester.request(
             'DELETE',
@@ -27,10 +28,12 @@ class Assignment(CanvasObject):
 
     def edit(self, **kwargs):
         """
-        Modify an existing assignment.
-        :calls: `PUT /api/v1/courses/:course_id/assignments/:id`
-        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.update>
-        :rtype: :class:`Assignment`
+        Modify this assignment.
+
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:id \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.update>`_
+
+        :rtype: :class:`pycanvas.assignment.Assignment`
         """
         response = self._requester.request(
             'PUT',

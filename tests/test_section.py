@@ -30,8 +30,8 @@ class TestSection(unittest.TestCase):
         assert isinstance(string, str)
 
     # list_enrollments()
-    def test_list_enrollments(self):
-        enrollments = self.section.list_enrollments()
+    def test_get_enrollments(self):
+        enrollments = self.section.get_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
         assert len(enrollment_list) == 4

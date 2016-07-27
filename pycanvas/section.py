@@ -1,5 +1,6 @@
 from canvas_object import CanvasObject
 from paginated_list import PaginatedList
+from util import combine_kwargs
 
 
 class Section(CanvasObject):
@@ -11,13 +12,14 @@ class Section(CanvasObject):
             self.course_id
         )
 
-    def list_enrollments(self):
+    def get_enrollments(self, **kwargs):
         """
-        Lists all of the enrollments for a user.
+        List all of the enrollments for the current user.
 
-        :calls: `GET /api/v1/sections/:section_id/enrollments`
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>
-        :rtype: :class:`PaginatedList` of :class:`Enrollment`
+        :calls: `GET /api/v1/sections/:section_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
@@ -25,5 +27,6 @@ class Section(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'sections/%s/enrollments' % (self.id)
+            'sections/%s/enrollments' % (self.id),
+            **combine_kwargs(**kwargs)
         )

@@ -1,0 +1,63 @@
+{
+	"get_by_id_account": {
+		"method": "GET",
+		"endpoint": "accounts/1/external_tools/1",
+		"data": {
+			"id": 1,
+			"name": "External Tool #1 (Account)",
+			"description": "This is an external tool for an account.",
+			"url": "mock://www.example.com/ims/lti",
+			"privacy_level": "anonymous",
+			"created_at": "2015-01-01T01:01:01Z",
+			"updated_at": "2016-06-17T14:20:00Z"
+		},
+		"status_code": 200
+	},
+	"get_by_id_course": {
+		"method": "GET",
+		"endpoint": "courses/1/external_tools/1",
+		"data": {
+			"id": 1,
+			"name": "External Tool #1 (Course)",
+			"description": "This is an external tool in a course.",
+			"url": "mock://www.example.com/ims/lti",
+			"privacy_level": "anonymous",
+			"created_at": "2015-01-01T01:01:01Z",
+			"updated_at": "2016-06-17T14:20:00Z"
+		},
+		"status_code": 200
+	},
+	"get_by_id_course_2": {
+		"method": "GET",
+		"endpoint": "courses/2/external_tools/2",
+		"data": {
+			"id": 2,
+			"name": "External Tool #2 (Course)",
+			"description": "This is an external tool in a course.",
+			"url": "mock://www.example.com/ims/lti",
+			"privacy_level": "anonymous",
+			"created_at": "2015-01-01T01:01:01Z",
+			"updated_at": "2016-06-17T14:20:00Z"
+		},
+		"status_code": 200
+	},
+	"get_sessionless_launch_url_course": {
+		"method": "GET",
+		"endpoint": "courses/1/external_tools/sessionless_launch",
+		"data": {
+			"id": "1",
+			"name": "External Tool #1 (Course)",
+			"url": "mock://example.com/courses/1/external_tools/sessionless_launch/?verifier=1337"
+		},
+		"status_code": 200
+	},
+	"sessionless_launch_no_url": {
+		"method": "GET",
+		"endpoint": "courses/2/external_tools/sessionless_launch",
+		"data": {
+			"id": "2",
+			"name": "External Tool #2 (Course)"
+		},
+		"status_code": 200
+	}
+}

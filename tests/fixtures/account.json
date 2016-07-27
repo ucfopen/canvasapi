@@ -221,6 +221,59 @@
 		],
 		"status_code": 200
 	},
+	"get_external_tools": {
+		"method": "GET",
+		"endpoint": "accounts/1/external_tools",
+		"data": [
+			{
+				"id": 1,
+				"name": "External Tool #1",
+				"description": "This is an external tool.",
+				"url": "http://www.example.com/ims/lti",
+				"privacy_level": "anonymous",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			},
+			{
+				"id": 2,
+				"name": "External Tool #2",
+				"description": "This is an external tool.",
+				"url": "http://www.example.com/ims/lti",
+				"privacy_level": "public",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_external_tools_p2": {
+		"method": "GET",
+		"endpoint": "accounts/1/external_tools?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "External Tool #3",
+				"description": "This is an external tool.",
+				"domain": "example.com",
+				"privacy_level": "name_only",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			},
+			{
+				"id": 4,
+				"name": "External Tool #4",
+				"description": "This is an external tool.",
+				"domain": "example.com",
+				"privacy_level": "anonymous",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			}
+		],
+		"status_code": 200
+	},
 	"multiple": {
 		"method": "GET",
 		"endpoint": "accounts",
