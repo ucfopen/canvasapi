@@ -109,7 +109,7 @@ class Page(CanvasObject):
             'GET',
             '%ss/%s/pages/%s/revisions/latest' % (self.parent_type, self.parent_id, self.url),
         )
-        return PageRevision(self._requester, page_json)
+        return PageRevision(self._requester, response.json())
 
     def get_revision_by_id(self, revision_id):
         """
@@ -127,7 +127,7 @@ class Page(CanvasObject):
             'GET',
             '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
         )
-        return PageRevision(self._requester, page_json)
+        return PageRevision(self._requester, response.json())
 
     def list_revisions(self, **kwargs):
         """
@@ -138,7 +138,6 @@ class Page(CanvasObject):
 
         :rtype: :class:`pycanvas.pagerevision.PageRevision`
         """
-
         return PaginatedList(
             PageRevision,
             self._requester,
@@ -146,6 +145,25 @@ class Page(CanvasObject):
             '%ss/%s/pages/%s/revisions' % (self.parent_type, self.parent_id, self.url),
             **combine_kwargs(**kwargs)
         )
+
+    def revert_to_revision(self, revision_id):
+        """
+        Revert the page back to a specified revision.
+
+        :calls: `POST /api/v1/courses/:course_id/pages/:url/revisions/:revision_id \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revert?>`_
+
+        :param revision_id: The id of a specified revision.
+        :type revision_id: int
+        :returns: Contents of the page revision.
+        :rtype: :class: `pycanvas.pagerevision.PageRevision`
+        """
+        response = self._requester.request(
+            'POST',
+            '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
+        )
+        return PageRevision(self._requester, response.json())
+
 
 
 class PageRevision(CanvasObject):

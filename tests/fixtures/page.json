@@ -81,5 +81,15 @@
 			"url": "my-url"
 		},
 		"status_code": 200
+	},
+	"revert_to_revision": {
+		"method": "POST",
+		"endpoint": "courses/1/pages/my-url/revisions/3",
+		"data": {
+			"id": 1,
+			"revision_id": 3,
+			"url": "my-url"
+		},
+		"status_code": 200
 	}
 }
