@@ -20,7 +20,7 @@ class TestPage(unittest.TestCase):
             'course': ['get_by_id'],
             'group': ['get_single_group', 'get_page'],
             'generic': ['not_found'],
-            'page': ['get_page', 'edit', 'delete_page', 'list_revisions', 'list_revisions2']
+            'page': ['get_page', 'edit', 'delete_page', 'list_revisions', 'list_revisions2', 'latest_revision', 'get_latest_rev_by_id']
         }
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
@@ -61,7 +61,12 @@ class TestPage(unittest.TestCase):
         assert isinstance(rev_list[0], PageRevision)
 
     def test_show_latest_revision(self):
-        revision = self.page_course.show_latest_revision(1)
+        revision = self.page_course.show_latest_revision()
+
+        assert isinstance(revision, PageRevision)
+
+    def test_get_revision_by_id(self):
+        revision = self.page_course.get_revision_by_id(1)
 
         assert isinstance(revision, PageRevision)
 
