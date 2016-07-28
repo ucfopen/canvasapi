@@ -31,7 +31,7 @@
 	},
 	"list_revisions": {
 		"method": "GET",
-		"endpoint": "courses/1/pages/1/revisions",
+		"endpoint": "courses/1/pages/my-url/revisions",
 		"data": [
 			{
 				"id": 1,
@@ -44,12 +44,12 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/pages/1/revisions?page=2&per_page=2>; rel=\"next\""
+			"Link": "<mock://example.com/api/v1/courses/1/pages/my-url/revisions?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_revisions2": {
 		"method": "GET",
-		"endpoint": "courses/1/pages/1/revisions?page=2&per_page=2",
+		"endpoint": "courses/1/pages/my-url/revisions?page=2&per_page=2",
 		"data": [
 			{
 				"id": 3,
@@ -60,6 +60,16 @@
 				"title": "Revision 4"
 			}
 		],
+		"status_code": 200
+	},
+	"latest_revision": {
+		"method": "GET",
+		"endpoint": "courses/1/pages/my-url/revisions/latest",
+		"data": {
+			"id": 1,
+			"title": "Latest Revision",
+			"url": "my-url"
+		},
 		"status_code": 200
 	}
 }
