@@ -185,13 +185,17 @@ class TestCourse(unittest.TestCase):
     # create_quiz()
     def test_create_quiz(self):
         title = 'Newer Title'
-        new_quiz = self.course.create_quiz(self.course.id, quiz={'title': title})
+        new_quiz = self.course.create_quiz({'title': title})
 
         assert isinstance(new_quiz, Quiz)
         assert hasattr(new_quiz, 'title')
         assert new_quiz.title == title
         assert hasattr(new_quiz, 'course_id')
         assert new_quiz.course_id == self.course.id
+
+    def test_create_quiz_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_quiz({})
 
     # get_quiz()
     def test_get_quiz(self):
@@ -245,7 +249,7 @@ class TestCourse(unittest.TestCase):
 
     def test_create_module_fail(self):
         with self.assertRaises(RequiredFieldMissing):
-            self.course.create_module(module={'not_required': 'not_required'})
+            self.course.create_module(module={})
 
     # get_enrollments()
     def test_get_enrollments(self):
@@ -281,16 +285,16 @@ class TestCourse(unittest.TestCase):
     def test_create_assignment(self):
         name = 'Newly Created Assignment'
 
-        assignment_dict = {
-            'name': name
-        }
-
-        assignment = self.course.create_assignment(assignment=assignment_dict)
+        assignment = self.course.create_assignment(assignment={'name': name})
 
         assert isinstance(assignment, Assignment)
         assert hasattr(assignment, 'name')
         assert assignment.name == name
         assert assignment.id == 5
+
+    def test_create_assignment_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_assignment(assignment={})
 
     # get_assignment()
     def test_get_assignment(self):

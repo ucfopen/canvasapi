@@ -24,7 +24,7 @@ class User(CanvasObject):
         )
         return response.json()
 
-    def get_page_views(self):
+    def get_page_views(self, **kwargs):
         """
         Retrieve this user's page views.
 
@@ -39,10 +39,11 @@ class User(CanvasObject):
             PageView,
             self._requester,
             'GET',
-            'users/%s/page_views' % (self.id)
+            'users/%s/page_views' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
-    def get_courses(self):
+    def get_courses(self, **kwargs):
         """
         Retrieve all courses this user is enrolled in.
 
@@ -57,7 +58,8 @@ class User(CanvasObject):
             Course,
             self._requester,
             'GET',
-            'users/%s/courses' % (self.id)
+            'users/%s/courses' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def get_missing_submissions(self):
@@ -209,7 +211,7 @@ class User(CanvasObject):
             'users/%s/avatars' % (self.id)
         )
 
-    def get_assignments(self, course_id):
+    def get_assignments(self, course_id, **kwargs):
         """
         Return the list of assignments for this user if the current
         user (the API key owner) has rights to view. See List assignments for valid arguments.
@@ -225,7 +227,8 @@ class User(CanvasObject):
             Assignment,
             self._requester,
             'GET',
-            'users/%s/courses/%s/assignments' % (self.id, course_id)
+            'users/%s/courses/%s/assignments' % (self.id, course_id),
+            **combine_kwargs(**kwargs)
         )
 
     def get_enrollments(self, **kwargs):

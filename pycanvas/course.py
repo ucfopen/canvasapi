@@ -27,6 +27,7 @@ class Course(CanvasObject):
             event="conclude",
             var="blarg"
         )
+
         return response.json().get('conclude')
 
     def delete(self):
@@ -303,7 +304,7 @@ class Course(CanvasObject):
             'courses/%s/assignments' % (self.id)
         )
 
-    def create_assignment(self, **kwargs):
+    def create_assignment(self, assignment, **kwargs):
         """
         Create a new assignment for this course.
 
@@ -312,9 +313,16 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.create>`_
 
+        :param assignment: The attributes of the assignment
+        :type assignment: dict
         :rtype: :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
+
+        if isinstance(assignment, dict) and 'name' in assignment:
+            kwargs['assignment'] = assignment
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'name' is required.")
 
         response = self._requester.request(
             'POST',
@@ -364,18 +372,24 @@ class Course(CanvasObject):
 
         return Quiz(self._requester, quiz_json)
 
-    def create_quiz(self, title, **kwargs):
+    def create_quiz(self, quiz, **kwargs):
         """
         Create a new quiz in this course.
 
         :calls: `POST /api/v1/courses/:course_id/quizzes \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.create>`_
 
-        :param title: The title of the quiz.
-        :type title: str
+        :param quiz: The attributes for the quiz.
+        :type quiz: dict
         :rtype: :class:`pycanvas.quiz.Quiz`
         """
         from quiz import Quiz
+
+        if isinstance(quiz, dict) and 'title' in quiz:
+            kwargs['quiz'] = quiz
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'title' is required.")
+
         response = self._requester.request(
             'POST',
             'courses/%s/quizzes' % (self.id),
@@ -457,11 +471,11 @@ class Course(CanvasObject):
 
         return Module(self._requester, module_json)
 
-    def deactivate_enrollment(self, enrollment_id, action):
+    def deactivate_enrollment(self, enrollment_id, task):
         """
         Delete, conclude, or deactivate an enrollment.
 
-        The following actions can be performed on an enrollment: conclude, delete, \
+        The following tasks can be performed on an enrollment: conclude, delete, \
         inactivate, deactivate.
 
         :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id \
@@ -469,23 +483,24 @@ class Course(CanvasObject):
 
         :param enrollment_id: The ID of the enrollment to modify.
         :type enrollment_id: int
-        :param action: The action to perform on the enrollment.
-        :type action: str
+        :param task: The task to perform on the enrollment.
+        :type task: str
         :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
-        ALLOWED_ACTIONS = ['conclude', 'delete', 'inactivate', 'deactivate']
+        ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
 
-        if not action in ALLOWED_ACTIONS:
-            raise ValueError('%s is not a valid action. Please use one of the following: %s' % (
-                action,
-                ','.join(ALLOWED_ACTIONS)
+        if not task in ALLOWED_TASKS:
+            raise ValueError('%s is not a valid task. Please use one of the following: %s' % (
+                task,
+                ','.join(ALLOWED_TASKS)
             ))
 
         response = self._requester.request(
             'DELETE',
-            'courses/%s/enrollments/%s' % (self.id, enrollment_id)
+            'courses/%s/enrollments/%s' % (self.id, enrollment_id),
+            task=task
         )
         return Enrollment(self._requester, response.json())
 
