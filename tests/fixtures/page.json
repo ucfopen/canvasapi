@@ -71,5 +71,15 @@
 			"url": "my-url"
 		},
 		"status_code": 200
+	},
+	"get_latest_rev_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1/pages/my-url/revisions/2",
+		"data": {
+			"id": 1,
+			"revision_id": 2,
+			"url": "my-url"
+		},
+		"status_code": 200
 	}
 }
