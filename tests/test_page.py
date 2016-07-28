@@ -66,7 +66,7 @@ class TestPage(unittest.TestCase):
         assert isinstance(revision, PageRevision)
 
     def test_get_revision_by_id(self):
-        revision = self.page_course.get_revision_by_id(1)
+        revision = self.page_course.get_revision_by_id(2)
 
         assert isinstance(revision, PageRevision)
 
