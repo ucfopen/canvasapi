@@ -316,6 +316,34 @@ class Canvas(object):
         )
         return response.json()
 
+    def create_conversation(self, recipients, body, **kwargs):
+        """
+        Create a new Conversation.
+
+        :calls: `POST /api/v1/conversations \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.create>`_
+
+        :param recipients[]: An array of recipient ids.
+            These may be user ids or course/group ids prefixed
+            with 'course_' or 'group_' respectively,
+            e.g. recipients[]=1&recipients=2&recipients[]=course_3
+        :type recipients[]: string array
+        :param body: The body of the message being added.
+        :type body: string
+        :rtype: :class:`pycanvas.account.Conversation`
+        """
+        from pycanvas.conversation import Conversation
+
+        return PaginatedList(
+            Conversation,
+            self.__requester,
+            'POST',
+            'conversations',
+            recipients=recipients,
+            body=body,
+            **combine_kwargs(**kwargs)
+        )
+
     def get_conversation(self, conversation_id, **kwargs):
         """
         Return single Conversation
@@ -355,30 +383,99 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
 
-    def create_conversation(self, recipients, body, **kwargs):
+    def mark_all_as_read(self):
         """
-        Create a new Conversation.
-
-        :calls: `POST /api/v1/conversations \
-        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.create>`_
-
-        :param recipients[]: An array of recipient ids.
-            These may be user ids or course/group ids prefixed
-            with 'course_' or 'group_' respectively,
-            e.g. recipients[]=1&recipients=2&recipients[]=course_3
-        :type recipients[]: string array
-        :param body: The body of the conversation.
-        :type body: string
-        :rtype: :class:`pycanvas.account.Conversation`
+        Mark all conversations as read.
+        :calls: `POST /api/v1/conversations/mark_all_as_read \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.mark_all_as_read>`_
+        
+        :rtype: bool
         """
-        from pycanvas.conversation import Conversation
-
-        return PaginatedList(
-            Conversation,
-            self.__requester,
+        response = self.__requester.request(
             'POST',
-            'conversations',
-            recipients=recipients,
-            body=body,
-            **combine_kwargs(**kwargs)
+            'conversations/mark_all_as_read'
         )
+        return response.json() == {}
+
+    def unread_count(self):
+        """
+        Get the number of unread conversations for the current user
+
+        :calls: `GET /api/v1/conversations/unread_count \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.unread_count>`_
+        
+        :rtype: simple object with unread_count, example: {'unread_count': '7'}
+        """
+        response = self.__requester.request(
+            'GET',
+            'conversations/unread_count'
+        )
+
+        return response.json()
+        
+    def get_running_batches(self):
+        """
+        Returns any currently running conversation batches for the current user.
+        Conversation batches are created when a bulk private message is sent 
+        asynchronously.
+
+        :calls: `GET /api/v1/conversations/batches \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batches>`_
+        
+        :rtype: dict with list of batch objects - not currently a Class
+        """
+
+        response = self.__requester.request(
+            'GET',
+            'conversations/batches'
+        )
+
+        return response.json()
+
+    def batch_update(self, conversation_ids, event): # IN PROGRESS
+        """
+        
+        :calls: `PUT /api/v1/conversations \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batch_update>`_
+        
+        :param conversation_ids[]: List of conversations to update. Limited to 500 conversations.
+        :type conversation_ids: list of strings
+        :param event: The action to take on each conversation.
+        :type event: string
+        :rtype: json object for a Progress - currently undefined class
+        """
+
+        from pycanvas.process import Process
+
+        ALLOWED_EVENTS = [
+            'mark_as_read',
+            'mark_as_unread',
+            'star',
+            'unstar',
+            'archive',
+            'destroy'
+        ]
+
+        try:
+            if not event in ALLOWED_EVENTS:
+                raise ValueError('%s is not a valid action. Please use one of the following: %s' % (
+                    event,
+                    ','.join(ALLOWED_EVENTS)
+                ))
+
+            if len(conversation_ids) > 500:
+                raise ValueError('You have requested %s updates, which exceeds the limit of 500' % (
+                    len(conversation_ids)
+                ))
+
+            response = self.__requester.request(
+                'PUT',
+                'conversations',
+                conversation_ids=conversation_ids,
+                event=event
+            )
+            return_process = Process(self.__requester, response.json())
+            return return_process
+
+        except ValueError as e:
+            return e

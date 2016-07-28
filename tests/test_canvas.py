@@ -25,7 +25,9 @@ class TestCanvas(unittest.TestCase):
                 'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
             ],
             'conversation': [
-                'get_by_id', 'get_conversations', 'get_conversations_2', 'create_conversation'
+                'get_by_id', 'get_conversations', 'get_conversations_2',
+                'create_conversation', 'mark_all_as_read', 'unread_count',
+                'get_running_batches', 'batch_update'
             ],
             'course': [
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
@@ -196,6 +198,17 @@ class TestCanvas(unittest.TestCase):
 
         assert isinstance(info, Section)
 
+    # create_conversation()
+    def test_create_conversation(self):
+        recipients = ['1', '2']
+        body = 'Test Conversation Body'
+
+        conversations = self.canvas.create_conversation(recipients=recipients, body=body)
+        conversation_list = [conversation for conversation in conversations]
+
+        assert isinstance(conversation_list[0], Conversation)
+        assert len(conversation_list) == 2
+
     # get_conversation()
     def test_get_conversation(self):
         convo = self.canvas.get_conversation(1)
@@ -211,14 +224,39 @@ class TestCanvas(unittest.TestCase):
         assert len(conversation_list) == 4
         assert isinstance(conversation_list[0], Conversation)
 
-    # create_conversation()
-    def test_create_conversation(self):
-        recipients = ['1', '2']
-        body = 'Test Conversation Body'
+    # mark_all_as_read()
+    def test_mark_all_as_read(self):
+        result = self.canvas.mark_all_as_read()
+        assert result is True
 
-        conversations = self.canvas.create_conversation(recipients=recipients, body=body)
+    # unread_count()
+    def test_unread_count(self):
+        result = self.canvas.unread_count()
+        assert result['unread_count'] == "7"
 
-        conversation_list = [conversation for conversation in conversations]
+    # get_running_batches()
+    def test_get_running_batches(self):
+        result = self.canvas.get_running_batches()
+        assert len(result) == 2
+        assert 'body' in result[0]['message']
+        assert result[1]['message']['author_id'] == 1
 
-        assert isinstance(conversation_list[0], Conversation)
-        assert len(conversation_list) == 2
+    # batch_update()
+    def test_batch_update(self):
+        from pycanvas.process import Process
+        conversation_ids= [1, 2]
+        this_event = "mark_as_read"
+        result = self.canvas.batch_update(event=this_event, conversation_ids=conversation_ids)
+        assert isinstance(result, Process)
+
+    def test_batch_updated_fail_on_event(self):
+        conversation_ids= [1, 2]
+        this_event = "this doesn't work"
+        result = self.canvas.batch_update(event=this_event, conversation_ids=conversation_ids)
+        assert isinstance(result, ValueError)
+
+    def test_batch_updated_fail_on_ids(self):
+        conversation_ids = [None] * 501
+        this_event = "mark_as_read"
+        result = self.canvas.batch_update(event=this_event, conversation_ids=conversation_ids)
+        assert isinstance(result, ValueError)

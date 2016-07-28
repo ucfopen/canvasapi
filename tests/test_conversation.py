@@ -24,11 +24,7 @@ class TestConversation(unittest.TestCase):
                 'delete_conversation_fail',
                 'add_recipients',
                 'add_message',
-                'delete_message',
-                'mark_all_as_read',
-                'unread_count',
-                'get_running_batches',
-                'batch_update'
+                'delete_message'
             ]
         }
 
@@ -88,40 +84,3 @@ class TestConversation(unittest.TestCase):
         result = self.conversation.delete_message(id_list)
         assert 'subject' in result
         assert result['id'] == 1
-
-    # mark_all_as_read()
-    def test_mark_all_as_read(self):
-        result = self.conversation.mark_all_as_read()
-        assert result is True
-
-    # unread_count()
-    def test_unread_count(self):
-        result = self.conversation.unread_count()
-        assert result['unread_count'] == "7"
-
-    # get_running_batches()
-    def test_get_running_batches(self):
-        result = self.conversation.get_running_batches()
-        assert len(result) == 2
-        assert 'body' in result[0]['message']
-        assert result[1]['message']['author_id'] == 1
-
-    # batch_update()
-    def test_batch_update(self):
-        from pycanvas.process import Process
-        conversation_ids= [1, 2]
-        this_event = "mark_as_read"
-        result = self.conversation.batch_update(event=this_event, conversation_ids=conversation_ids)
-        assert isinstance(result, Process)
-
-    def test_batch_updated_fail_on_event(self):
-        conversation_ids= [1, 2]
-        this_event = "this doesn't work"
-        result = self.conversation.batch_update(event=this_event, conversation_ids=conversation_ids)
-        assert isinstance(result, ValueError)
-
-    def test_batch_updated_fail_on_ids(self):
-        conversation_ids = [None] * 501
-        this_event = "mark_as_read"
-        result = self.conversation.batch_update(event=this_event, conversation_ids=conversation_ids)
-        assert isinstance(result, ValueError)
