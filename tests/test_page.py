@@ -60,6 +60,11 @@ class TestPage(unittest.TestCase):
         assert len(rev_list) == 4
         assert isinstance(rev_list[0], PageRevision)
 
+    def test_show_latest_revision(self):
+        revision = self.page_course.show_latest_revision(1)
+
+        assert isinstance(revision, PageRevision)
+
     # parent_id
     def test_parent_id_course(self):
         assert self.page_course.parent_id == 1
