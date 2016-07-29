@@ -7,6 +7,7 @@ from pycanvas import Canvas
 from pycanvas.account import Account
 from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
+from pycanvas.group import Group
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.section import Section
 from pycanvas.user import User
@@ -33,6 +34,7 @@ class TestCanvas(unittest.TestCase):
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
                 'unicode_encode_error'
             ],
+            'group': ['get_single_group'],
             'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
@@ -198,6 +200,14 @@ class TestCanvas(unittest.TestCase):
 
         assert isinstance(info, Section)
 
+    # get_group()
+    def test_get_group(self):
+        group = self.canvas.get_group(1)
+
+        assert isinstance(group, Group)
+        assert hasattr(group, 'name')
+        assert hasattr(group, 'description')
+        
     # create_conversation()
     def test_create_conversation(self):
         recipients = ['1', '2']

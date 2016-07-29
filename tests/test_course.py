@@ -1,5 +1,7 @@
 import unittest
+import uuid
 import requests
+import os
 
 import requests_mock
 
@@ -7,7 +9,7 @@ import settings
 from util import register_uris
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
-from pycanvas.course import Course, CourseNickname
+from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
@@ -18,28 +20,28 @@ from pycanvas.user import User
 
 
 class TestCourse(unittest.TestCase):
-    """
-    Tests Courses functionality
-    """
+
     @classmethod
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'deactivate_enrollment',
-                'enroll_user', 'get_all_assignments', 'get_all_assignments2',
+                'create', 'create_assignment', 'create_module', 'create_page',
+                'deactivate_enrollment', 'edit_front_page', 'enroll_user',
+                'get_all_assignments', 'get_all_assignments2',
                 'get_assignment_by_id', 'get_by_id', 'get_external_tools',
-                'get_external_tools_p2', 'get_quiz', 'get_recent_students',
+                'get_external_tools_p2', 'get_module_by_id', 'get_page',
+                'get_pages', 'get_pages2', 'get_quiz', 'get_recent_students',
                 'get_recent_students_p2', 'get_section', 'get_user',
                 'get_user_id_type', 'get_users', 'get_users_p2',
-                'list_enrollments', 'list_enrollments_2', 'list_quizzes',
-                'list_quizzes2', 'preview_html', 'reactivate_enrollment',
-                'reset', 'settings', 'update', 'update_settings',
-                'list_modules', 'list_modules2', 'get_module_by_id',
-                'create_module'
+                'list_enrollments', 'list_enrollments_2', 'list_modules',
+                'list_modules2', 'list_quizzes', 'list_quizzes2',
+                'preview_html', 'reactivate_enrollment', 'reset', 'settings',
+                'show_front_page', 'update', 'update_settings', 'upload',
+                'upload_final'
             ],
             'external_tool': ['get_by_id_course'],
             'quiz': ['get_by_id'],
-            'user': ['get_by_id']
+            'user': ['get_by_id'],
         }
 
         adapter = requests_mock.Adapter()
@@ -69,6 +71,7 @@ class TestCourse(unittest.TestCase):
         adapter.add_matcher(delete_matcher)
 
         self.course = self.canvas.get_course(1)
+        self.page = self.course.get_page('my-url')
         self.quiz = self.course.get_quiz(1)
         self.user = self.canvas.get_user(1)
 
@@ -154,6 +157,24 @@ class TestCourse(unittest.TestCase):
         assert isinstance(settings, dict)
         assert settings['hide_final_grades'] is True
 
+    # upload()
+    def test_upload(self):
+        filename = 'testfile_%s' % uuid.uuid4().hex
+        file = open(filename, 'w+')
+
+        response = self.course.upload(file)
+
+        assert response[0] is True
+        assert isinstance(response[1], dict)
+        assert 'url' in response[1]
+
+        # http://stackoverflow.com/a/10840586
+        # Not as stupid as it looks.
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
+
     # reset()
     def test_reset(self):
         course = self.course.reset()
@@ -164,13 +185,17 @@ class TestCourse(unittest.TestCase):
     # create_quiz()
     def test_create_quiz(self):
         title = 'Newer Title'
-        new_quiz = self.course.create_quiz(self.course.id, quiz={'title': title})
+        new_quiz = self.course.create_quiz({'title': title})
 
         assert isinstance(new_quiz, Quiz)
         assert hasattr(new_quiz, 'title')
         assert new_quiz.title == title
         assert hasattr(new_quiz, 'course_id')
         assert new_quiz.course_id == self.course.id
+
+    def test_create_quiz_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_quiz({})
 
     # get_quiz()
     def test_get_quiz(self):
@@ -224,7 +249,7 @@ class TestCourse(unittest.TestCase):
 
     def test_create_module_fail(self):
         with self.assertRaises(RequiredFieldMissing):
-            self.course.create_module(module={'not_required': 'not_required'})
+            self.course.create_module(module={})
 
     # get_enrollments()
     def test_get_enrollments(self):
@@ -260,16 +285,16 @@ class TestCourse(unittest.TestCase):
     def test_create_assignment(self):
         name = 'Newly Created Assignment'
 
-        assignment_dict = {
-            'name': name
-        }
-
-        assignment = self.course.create_assignment(assignment=assignment_dict)
+        assignment = self.course.create_assignment(assignment={'name': name})
 
         assert isinstance(assignment, Assignment)
         assert hasattr(assignment, 'name')
         assert assignment.name == name
         assert assignment.id == 5
+
+    def test_create_assignment_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_assignment(assignment={})
 
     # get_assignment()
     def test_get_assignment(self):
@@ -285,6 +310,54 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(assignments[0], Assignment)
         assert len(assignment_list) == 4
+
+    # show_front_page()
+    def test_show_front_page(self):
+        front_page = self.course.show_front_page()
+
+        assert isinstance(front_page, Page)
+        assert hasattr(front_page, 'url')
+        assert hasattr(front_page, 'title')
+
+    # create_front_page()
+    def test_edit_front_page(self):
+        new_front_page = self.course.edit_front_page()
+
+        assert isinstance(new_front_page, Page)
+        assert hasattr(new_front_page, 'url')
+        assert hasattr(new_front_page, 'title')
+
+    # get_page()
+    def test_get_page(self):
+        url = 'my-url'
+        page = self.course.get_page(url)
+
+        assert isinstance(page, Page)
+
+    # get_pages()
+    def test_get_pages(self):
+        pages = self.course.get_pages()
+        page_list = [page for page in pages]
+
+        assert len(page_list) == 4
+        assert isinstance(page_list[0], Page)
+        assert hasattr(page_list[0], 'course_id')
+        assert page_list[0].course_id == self.course.id
+
+    # create_page()
+    def test_create_page(self):
+        title = "Newest Page"
+        new_page = self.course.create_page(wiki_page={'title': title})
+
+        assert isinstance(new_page, Page)
+        assert hasattr(new_page, 'title')
+        assert new_page.title == title
+        assert hasattr(new_page, 'course_id')
+        assert new_page.course_id == self.course.id
+
+    def test_create_page_fail(self):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_page(settings.INVALID_ID)
 
     # get_external_tool()
     def test_get_external_tool(self):

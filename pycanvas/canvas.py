@@ -3,8 +3,8 @@ from pycanvas.course import Course
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.requester import Requester
 from pycanvas.user import User
+from pycanvas.group import Group
 from pycanvas.util import combine_kwargs
-
 
 class Canvas(object):
     """
@@ -96,7 +96,7 @@ class Canvas(object):
             'course_accounts',
         )
 
-    def get_course(self, course_id):
+    def get_course(self, course_id, **kwargs):
         """
         Retrieve a course by its ID.
 
@@ -109,7 +109,8 @@ class Canvas(object):
         """
         response = self.__requester.request(
             'GET',
-            'courses/%s' % (course_id)
+            'courses/%s' % (course_id),
+            **combine_kwargs(**kwargs)
         )
         return Course(self.__requester, response.json())
 
@@ -248,7 +249,7 @@ class Canvas(object):
         Get details about a specific section.
 
         :calls: `GET /api/v1/sections/:id \
-        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.show>`_
 
         :rtype: Section
         """
@@ -315,6 +316,23 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
         return response.json()
+
+    def get_group(self, group_id, **kwargs):
+        """
+        Return the data for a single group. If the caller does not
+        have permission to view the group a 401 will be returned.
+
+        :calls: `GET /api/v1/groups/:group_id \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
+
+        :rtype: :class:`pycanvas.group.Group`
+        """
+        response = self.__requester.request(
+            'GET',
+            'groups/%s' % (group_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Group(self.__requester, response.json())
 
     def create_conversation(self, recipients, body, **kwargs):
         """

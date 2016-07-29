@@ -1,7 +1,9 @@
 from canvas_object import CanvasObject
-from util import combine_kwargs
-from paginated_list import PaginatedList
 from exceptions import RequiredFieldMissing
+from upload import Uploader
+from util import combine_kwargs
+from page import Page
+from paginated_list import PaginatedList
 
 
 class Course(CanvasObject):
@@ -25,6 +27,7 @@ class Course(CanvasObject):
             event="conclude",
             var="blarg"
         )
+
         return response.json().get('conclude')
 
     def delete(self):
@@ -208,6 +211,28 @@ class Course(CanvasObject):
         )
         return response.json()
 
+    def upload(self, file, **kwargs):
+        """
+        Upload a file to this course.
+
+        :calls: `POST /api/v1/courses/:course_id/files \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.create_file>`_
+
+        :param path: The path of the file to upload.
+        :type path: str
+        :param file: The file or path of the file to upload.
+        :type file: file or str
+        :returns: True if the file uploaded successfully, False otherwise, \
+                    and the JSON response from the API.
+        :rtype: tuple
+        """
+        return Uploader(
+            self._requester,
+            'courses/%s/files' % (self.id),
+            file,
+            **kwargs
+        ).start()
+
     def reset(self):
         """
         Delete the current course and create a new equivalent course
@@ -279,7 +304,7 @@ class Course(CanvasObject):
             'courses/%s/assignments' % (self.id)
         )
 
-    def create_assignment(self, **kwargs):
+    def create_assignment(self, assignment, **kwargs):
         """
         Create a new assignment for this course.
 
@@ -288,9 +313,16 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.create>`_
 
+        :param assignment: The attributes of the assignment
+        :type assignment: dict
         :rtype: :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
+
+        if isinstance(assignment, dict) and 'name' in assignment:
+            kwargs['assignment'] = assignment
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'name' is required.")
 
         response = self._requester.request(
             'POST',
@@ -340,18 +372,24 @@ class Course(CanvasObject):
 
         return Quiz(self._requester, quiz_json)
 
-    def create_quiz(self, title, **kwargs):
+    def create_quiz(self, quiz, **kwargs):
         """
         Create a new quiz in this course.
 
         :calls: `POST /api/v1/courses/:course_id/quizzes \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.create>`_
 
-        :param title: The title of the quiz.
-        :type title: str
+        :param quiz: The attributes for the quiz.
+        :type quiz: dict
         :rtype: :class:`pycanvas.quiz.Quiz`
         """
         from quiz import Quiz
+
+        if isinstance(quiz, dict) and 'title' in quiz:
+            kwargs['quiz'] = quiz
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'title' is required.")
+
         response = self._requester.request(
             'POST',
             'courses/%s/quizzes' % (self.id),
@@ -433,11 +471,11 @@ class Course(CanvasObject):
 
         return Module(self._requester, module_json)
 
-    def deactivate_enrollment(self, enrollment_id, action):
+    def deactivate_enrollment(self, enrollment_id, task):
         """
         Delete, conclude, or deactivate an enrollment.
 
-        The following actions can be performed on an enrollment: conclude, delete, \
+        The following tasks can be performed on an enrollment: conclude, delete, \
         inactivate, deactivate.
 
         :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id \
@@ -445,23 +483,24 @@ class Course(CanvasObject):
 
         :param enrollment_id: The ID of the enrollment to modify.
         :type enrollment_id: int
-        :param action: The action to perform on the enrollment.
-        :type action: str
+        :param task: The task to perform on the enrollment.
+        :type task: str
         :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 
-        ALLOWED_ACTIONS = ['conclude', 'delete', 'inactivate', 'deactivate']
+        ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
 
-        if not action in ALLOWED_ACTIONS:
-            raise ValueError('%s is not a valid action. Please use one of the following: %s' % (
-                action,
-                ','.join(ALLOWED_ACTIONS)
+        if not task in ALLOWED_TASKS:
+            raise ValueError('%s is not a valid task. Please use one of the following: %s' % (
+                task,
+                ','.join(ALLOWED_TASKS)
             ))
 
         response = self._requester.request(
             'DELETE',
-            'courses/%s/enrollments/%s' % (self.id, enrollment_id)
+            'courses/%s/enrollments/%s' % (self.id, enrollment_id),
+            task=task
         )
         return Enrollment(self._requester, response.json())
 
@@ -538,6 +577,111 @@ class Course(CanvasObject):
             'courses/%s/sections/%s' % (self.id, section_id)
         )
         return Section(self._requester, response.json())
+
+    def show_front_page(self):
+        """
+        Retrieve the content of the front page.
+
+        :calls: `GET /api/v1/courses/:course_id/front_page \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_front_page>`_
+
+        :rtype: :class:`pycanvas.course.Course`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/front_page' % (self.id)
+        )
+        page_json = response.json()
+        page_json.update({'course_id': self.id})
+
+        return Page(self._requester, page_json)
+
+    def edit_front_page(self, **kwargs):
+        """
+        Update the title or contents of the front page.
+
+        :calls: `PUT /api/v1/courses/:course_id/front_page \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update_front_page>`_
+
+        :rtype: :class:`pycanvas.course.Course`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/front_page' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        page_json = response.json()
+        page_json.update({'course_id': self.id})
+
+        return Page(self._requester, page_json)
+
+    def get_pages(self, **kwargs):
+        """
+        List the wiki pages associated with a course.
+
+        :calls: `GET /api/v1/courses/:course_id/pages \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
+
+        :rtype: :class:`pycanvas.course.Course`
+        """
+        return PaginatedList(
+            Page,
+            self._requester,
+            'GET',
+            'courses/%s/pages' % (self.id),
+            {'course_id': self.id}
+        )
+
+    def create_page(self, wiki_page, **kwargs):
+        """
+        Create a new wiki page.
+
+        :calls: `POST /api/v1/courses/:course_id/pages \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.create>`_
+
+        :param title: The title for the page.
+        :type title: dict
+        :returns: The created page.
+        :rtype: :class: `pycanvas.course.Course`
+        """
+
+        if isinstance(wiki_page, dict) and 'title' in wiki_page:
+            kwargs['wiki_page'] = wiki_page
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'title' is required.")
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/pages' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        page_json = response.json()
+        page_json.update({'course_id': self.id})
+
+        return Page(self._requester, page_json)
+
+    def get_page(self, url):
+        """
+        Retrieve the contents of a wiki page.
+
+        :calls: `GET /api/v1/courses/:course_id/pages/:url \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
+
+        :param url: The url for the page.
+        :type url: string
+        :returns: The specified page.
+        :rtype: :class: `pycanvas.course.Course`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/pages/%s' % (self.id, url)
+        )
+        page_json = response.json()
+        page_json.update({'course_id': self.id})
+
+        return Page(self._requester, page_json)
 
 
 class CourseNickname(CanvasObject):

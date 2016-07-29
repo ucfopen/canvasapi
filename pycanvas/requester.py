@@ -23,7 +23,7 @@ class Requester(object):
         if mock_adapter:
             self._session.mount('mock', mock_adapter)
 
-    def request(self, method, endpoint, headers=None, use_auth=True, url=None, **kwargs):
+    def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
         """
         Make a request to the Canvas API and return the response.
 
@@ -72,7 +72,7 @@ class Requester(object):
 
         return response
 
-    def _get_request(self, url, headers, params={}):
+    def _get_request(self, url, headers, params=None):
         """
         Issue a GET request to the specified endpoint with the data provided.
 
@@ -82,7 +82,7 @@ class Requester(object):
         """
         return self._session.get(url, headers=headers, params=params)
 
-    def _post_request(self, url, headers, data={}):
+    def _post_request(self, url, headers, data=None):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
@@ -91,9 +91,15 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        return self._session.post(url, headers=headers, data=data)
+        if 'file' in data:
+            file = {'file': data['file']}
+            del data['file']
+        else:
+            file = None
 
-    def _delete_request(self, url, headers, data={}):
+        return self._session.post(url, headers=headers, data=data, files=file)
+
+    def _delete_request(self, url, headers, data=None):
         """
         Issue a DELETE request to the specified endpoint with the data provided.
 
@@ -104,7 +110,7 @@ class Requester(object):
         """
         return self._session.delete(url, headers=headers, data=data)
 
-    def _put_request(self, url, headers, data={}):
+    def _put_request(self, url, headers, data=None):
         """
         Issue a PUT request to the specified endpoint with the data provided.
 
