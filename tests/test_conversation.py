@@ -64,7 +64,7 @@ class TestConversation(unittest.TestCase):
         recipients = {'bob': 1, 'joe': 2}
         string_bob = "Bob was added to the conversation by Hank TA"
         string_joe = "Joe was added to the conversation by Hank TA"
-        result = self.conversation.add_recipients([recipients['bob'],recipients['joe']])
+        result = self.conversation.add_recipients([recipients['bob'], recipients['joe']])
         assert hasattr(result, 'messages')
         assert len(result.messages) == 2
         assert result.messages[0]["body"] == string_bob

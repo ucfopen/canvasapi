@@ -48,7 +48,7 @@ class Conversation(CanvasObject):
         else:
             return False
 
-    def add_recipients(self, recipients): # NEEDS TESTING ON PRODUCTION
+    def add_recipients(self, recipients):
         """
         Add a recipient to a conversation.
 
@@ -69,13 +69,13 @@ class Conversation(CanvasObject):
         )
         return Conversation(self._requester, response.json())
 
-    def add_message(self, body, **kwargs): # NEEDS TESTING
+    def add_message(self, body, **kwargs):
         """
         Add a message to a conversation.
 
         :calls: `POST /api/v1/conversations/:id/add_message \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.add_message>`_
-        
+
         :param body: The body of the conversation.
         :type body: string
         :rtype: :class:`pycanvas.account.Conversation` but with only one message, the most recent one.
@@ -88,7 +88,7 @@ class Conversation(CanvasObject):
         )
         return Conversation(self._requester, response.json())
 
-    def delete_message(self, remove): # NEEDS TESTING
+    def delete_message(self, remove):
         """
         Delete messages from this conversation.
         Note that this only affects this user's view of the conversation.
@@ -96,7 +96,7 @@ class Conversation(CanvasObject):
 
         :calls: `POST /api/v1/conversations/:id/remove_messages \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.remove_messages>`_
-        
+
         :param remove[]: Array of message ids to be removed.
         :type remove: list of strings
         :rtype: dict

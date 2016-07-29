@@ -1,5 +1,6 @@
 from pycanvas.canvas_object import CanvasObject
 
+
 class Process(CanvasObject):
 
     def __str__(self):  # pragma: no cover

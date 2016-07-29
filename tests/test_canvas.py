@@ -207,7 +207,7 @@ class TestCanvas(unittest.TestCase):
         assert isinstance(group, Group)
         assert hasattr(group, 'name')
         assert hasattr(group, 'description')
-        
+
     # create_conversation()
     def test_create_conversation(self):
         recipients = ['1', '2']
@@ -254,13 +254,13 @@ class TestCanvas(unittest.TestCase):
     # batch_update()
     def test_conversations_batch_update(self):
         from pycanvas.process import Process
-        conversation_ids= [1, 2]
+        conversation_ids = [1, 2]
         this_event = "mark_as_read"
         result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
         assert isinstance(result, Process)
 
     def test_conversations_batch_updated_fail_on_event(self):
-        conversation_ids= [1, 2]
+        conversation_ids = [1, 2]
         this_event = "this doesn't work"
         result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
         assert isinstance(result, ValueError)

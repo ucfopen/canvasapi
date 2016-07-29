@@ -6,6 +6,7 @@ from pycanvas.user import User
 from pycanvas.group import Group
 from pycanvas.util import combine_kwargs
 
+
 class Canvas(object):
     """
     The main class to be instantiated to provide access to Canvas's API.
@@ -406,7 +407,7 @@ class Canvas(object):
         Mark all conversations as read.
         :calls: `POST /api/v1/conversations/mark_all_as_read \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.mark_all_as_read>`_
-        
+
         :rtype: bool
         """
         response = self.__requester.request(
@@ -421,7 +422,7 @@ class Canvas(object):
 
         :calls: `GET /api/v1/conversations/unread_count \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.unread_count>`_
-        
+
         :rtype: simple object with unread_count, example: {'unread_count': '7'}
         """
         response = self.__requester.request(
@@ -430,16 +431,16 @@ class Canvas(object):
         )
 
         return response.json()
-        
+
     def conversations_get_running_batches(self):
         """
         Returns any currently running conversation batches for the current user.
-        Conversation batches are created when a bulk private message is sent 
+        Conversation batches are created when a bulk private message is sent
         asynchronously.
 
         :calls: `GET /api/v1/conversations/batches \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batches>`_
-        
+
         :rtype: dict with list of batch objects - not currently a Class
         """
 
@@ -450,12 +451,12 @@ class Canvas(object):
 
         return response.json()
 
-    def conversations_batch_update(self, conversation_ids, event): # IN PROGRESS
+    def conversations_batch_update(self, conversation_ids, event):
         """
-        
+
         :calls: `PUT /api/v1/conversations \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batch_update>`_
-        
+
         :param conversation_ids[]: List of conversations to update. Limited to 500 conversations.
         :type conversation_ids: list of strings
         :param event: The action to take on each conversation.
@@ -475,7 +476,7 @@ class Canvas(object):
         ]
 
         try:
-            if not event in ALLOWED_EVENTS:
+            if event not in ALLOWED_EVENTS:
                 raise ValueError('%s is not a valid action. Please use one of the following: %s' % (
                     event,
                     ','.join(ALLOWED_EVENTS)
@@ -490,7 +491,7 @@ class Canvas(object):
                 'PUT',
                 'conversations',
                 event=event,
-                **{"conversation_ids[]":conversation_ids}
+                **{"conversation_ids[]": conversation_ids}
             )
             return_process = Process(self.__requester, response.json())
             return return_process
