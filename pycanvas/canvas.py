@@ -471,8 +471,8 @@ class Canvas(object):
             response = self.__requester.request(
                 'PUT',
                 'conversations',
-                conversation_ids=conversation_ids,
-                event=event
+                event=event,
+                **{"conversation_ids[]":conversation_ids}
             )
             return_process = Process(self.__requester, response.json())
             return return_process
