@@ -383,7 +383,7 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
 
-    def mark_all_as_read(self):
+    def conversations_mark_all_as_read(self):
         """
         Mark all conversations as read.
         :calls: `POST /api/v1/conversations/mark_all_as_read \
@@ -397,7 +397,7 @@ class Canvas(object):
         )
         return response.json() == {}
 
-    def unread_count(self):
+    def conversations_unread_count(self):
         """
         Get the number of unread conversations for the current user
 
@@ -413,7 +413,7 @@ class Canvas(object):
 
         return response.json()
         
-    def get_running_batches(self):
+    def conversations_get_running_batches(self):
         """
         Returns any currently running conversation batches for the current user.
         Conversation batches are created when a bulk private message is sent 
@@ -432,7 +432,7 @@ class Canvas(object):
 
         return response.json()
 
-    def batch_update(self, conversation_ids, event): # IN PROGRESS
+    def conversations_batch_update(self, conversation_ids, event): # IN PROGRESS
         """
         
         :calls: `PUT /api/v1/conversations \

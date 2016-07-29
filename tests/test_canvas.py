@@ -225,38 +225,38 @@ class TestCanvas(unittest.TestCase):
         assert isinstance(conversation_list[0], Conversation)
 
     # mark_all_as_read()
-    def test_mark_all_as_read(self):
-        result = self.canvas.mark_all_as_read()
+    def test_conversations_mark_all_as_read(self):
+        result = self.canvas.conversations_mark_all_as_read()
         assert result is True
 
     # unread_count()
-    def test_unread_count(self):
-        result = self.canvas.unread_count()
+    def test_conversations_unread_count(self):
+        result = self.canvas.conversations_unread_count()
         assert result['unread_count'] == "7"
 
     # get_running_batches()
-    def test_get_running_batches(self):
-        result = self.canvas.get_running_batches()
+    def test_conversations_get_running_batches(self):
+        result = self.canvas.conversations_get_running_batches()
         assert len(result) == 2
         assert 'body' in result[0]['message']
         assert result[1]['message']['author_id'] == 1
 
     # batch_update()
-    def test_batch_update(self):
+    def test_conversations_batch_update(self):
         from pycanvas.process import Process
         conversation_ids= [1, 2]
         this_event = "mark_as_read"
-        result = self.canvas.batch_update(event=this_event, conversation_ids=conversation_ids)
+        result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
         assert isinstance(result, Process)
 
-    def test_batch_updated_fail_on_event(self):
+    def test_conversations_batch_updated_fail_on_event(self):
         conversation_ids= [1, 2]
         this_event = "this doesn't work"
-        result = self.canvas.batch_update(event=this_event, conversation_ids=conversation_ids)
+        result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
         assert isinstance(result, ValueError)
 
-    def test_batch_updated_fail_on_ids(self):
+    def test_conversations_batch_updated_fail_on_ids(self):
         conversation_ids = [None] * 501
         this_event = "mark_as_read"
-        result = self.canvas.batch_update(event=this_event, conversation_ids=conversation_ids)
+        result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
         assert isinstance(result, ValueError)
