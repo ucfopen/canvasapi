@@ -342,14 +342,15 @@ class Canvas(object):
         :calls: `POST /api/v1/conversations \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.create>`_
 
-        :param recipients[]: An array of recipient ids.
+        :param recipients: An array of recipient ids.
             These may be user ids or course/group ids prefixed
             with 'course_' or 'group_' respectively,
-            e.g. recipients[]=1&recipients=2&recipients[]=course_3
-        :type recipients[]: string array
+            e.g. recipients=['1', '2', 'course_3']
+        :type recipients: `list` of `str`
         :param body: The body of the message being added.
-        :type body: string
-        :rtype: :class:`pycanvas.account.Conversation`
+        :type body: `str`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of \
+        :class: `pycanvas.conversation.Conversation`
         """
         from pycanvas.conversation import Conversation
 
@@ -368,10 +369,10 @@ class Canvas(object):
         Return single Conversation
 
         :calls: `GET /api/v1/conversations/:id \
-        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.show>`
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.show>`_
 
         :param conversation_id: The ID of the conversation.
-        :type conversation_id: int
+        :type conversation_id: `int`
         :rtype: :class:`pycanvas.conversation.Conversation`
         """
         from pycanvas.conversation import Conversation
@@ -389,8 +390,8 @@ class Canvas(object):
         :calls: `GET /api/v1/conversations \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.conversation.Conversation`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of \
+        :class:`pycanvas.conversation.Conversation`
         """
         from pycanvas.conversation import Conversation
 
@@ -408,7 +409,7 @@ class Canvas(object):
         :calls: `POST /api/v1/conversations/mark_all_as_read \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.mark_all_as_read>`_
 
-        :rtype: bool
+        :rtype: `bool`
         """
         response = self.__requester.request(
             'POST',
@@ -457,11 +458,11 @@ class Canvas(object):
         :calls: `PUT /api/v1/conversations \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batch_update>`_
 
-        :param conversation_ids[]: List of conversations to update. Limited to 500 conversations.
-        :type conversation_ids: list of strings
+        :param conversation_ids: List of conversations to update. Limited to 500 conversations.
+        :type conversation_ids: `list` of `str`
         :param event: The action to take on each conversation.
-        :type event: string
-        :rtype: json object for a Progress - currently undefined class
+        :type event: `str`
+        :rtype: :class:`pycanvas.process.Process`
         """
 
         from pycanvas.process import Process

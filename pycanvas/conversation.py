@@ -14,7 +14,7 @@ class Conversation(CanvasObject):
         :calls: `PUT /api/v1/conversations/:id \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.update>`_
 
-        :rtype: bool
+        :rtype: `bool`
         """
         response = self._requester.request(
             'PUT',
@@ -35,7 +35,7 @@ class Conversation(CanvasObject):
         :calls: `DELETE /api/v1/conversations/:id \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.destroy>`_
 
-        :rtype: bool
+        :rtype: `bool`
         """
         response = self._requester.request(
             'DELETE',
@@ -55,11 +55,11 @@ class Conversation(CanvasObject):
         :calls: `POST /api/v1/conversations/:id/add_recipients \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.add_recipients>`_
 
-        :param recipients[]: A list of recipient ids.
+        :param recipients: A list of string format recipient ids.
             These may be user ids or course/group ids prefixed
             with 'course_' or 'group_' respectively,
-            e.g. recipients[]=1&recipients=2&recipients[]=course_3
-        :type recipients[]: string list
+            e.g. recipients['1', '2', 'course_3']
+        :type recipients:  `list` of `str`
         :rtype: :class:`pycanvas.account.Conversation`
         """
         response = self._requester.request(
@@ -77,8 +77,8 @@ class Conversation(CanvasObject):
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.add_message>`_
 
         :param body: The body of the conversation.
-        :type body: string
-        :rtype: :class:`pycanvas.account.Conversation` but with only one message, the most recent one.
+        :type body: str
+        :rtype: :class:`pycanvas.account.Conversation` with only the most recent message.
         """
         response = self._requester.request(
             'POST',
@@ -97,9 +97,9 @@ class Conversation(CanvasObject):
         :calls: `POST /api/v1/conversations/:id/remove_messages \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.remove_messages>`_
 
-        :param remove[]: Array of message ids to be removed.
-        :type remove: list of strings
-        :rtype: dict
+        :param remove: List of message ids to be removed.
+        :type remove: `list` of `str`
+        :rtype: `dict`
         """
         response = self._requester.request(
             'POST',
