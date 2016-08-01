@@ -131,7 +131,7 @@ class Page(CanvasObject):
         if self.parent_type == "group":
             pagerev_json.update({'group_id': self.id})
         elif self.parent_type == "course":
-            pagerev_json.update({'group_id': self.id})
+            pagerev_json.update({'course_id': self.id})
 
         return PageRevision(self._requester, pagerev_json)
 
@@ -182,7 +182,7 @@ class PageRevision(CanvasObject):
     def __str__(self):
         return "revision_id: %s, updated_at: %s" % (
             self.id,
-            self.update
+            self.updated_at
         )
 
     @property

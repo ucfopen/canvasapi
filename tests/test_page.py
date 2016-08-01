@@ -24,7 +24,8 @@ class TestPage(unittest.TestCase):
                 'get_page', 'edit', 'delete_page',
                 'list_revisions', 'list_revisions2',
                 'latest_revision', 'get_latest_rev_by_id',
-                'revert_to_revision'
+                'get_latest_rev_by_id_group', 'revert_to_revision',
+                'revert_to_revision_group'
             ]
         }
         adapter = requests_mock.Adapter()
@@ -70,13 +71,23 @@ class TestPage(unittest.TestCase):
 
         assert isinstance(revision, PageRevision)
 
-    def test_get_revision_by_id(self):
+    def test_get_revision_by_id_course(self):
         revision = self.page_course.get_revision_by_id(2)
 
         assert isinstance(revision, PageRevision)
 
-    def test_revert_to_revision(self):
+    def test_get_revision_by_id_group(self):
+        revision = self.page_group.get_revision_by_id(2)
+
+        assert isinstance(revision, PageRevision)
+
+    def test_revert_to_revision_course(self):
         revision = self.page_course.revert_to_revision(3)
+
+        assert isinstance(revision, PageRevision)
+
+    def test_revert_to_revision_group(self):
+        revision = self.page_group.revert_to_revision(3)
 
         assert isinstance(revision, PageRevision)
 
@@ -122,7 +133,7 @@ class TestPageRevision(unittest.TestCase):
             'course': ['get_by_id', 'get_page'],
             'group': ['get_single_group', 'get_page'],
             'generic': ['not_found'],
-            'page': ['get_latest_rev_by_id']
+            'page': ['get_latest_rev_by_id', 'get_latest_rev_by_id_group']
         }
 
         adapter = requests_mock.Adapter()
@@ -134,10 +145,11 @@ class TestPageRevision(unittest.TestCase):
         self.page_course = self.course.get_page('my-url')
         self.page_group = self.group.get_page('my-url')
         self.revision = self.page_course.get_revision_by_id(2)
+        self.group_revision = self.page_group.get_revision_by_id(2)
 
     # __str__()
     def test__str__(self):
-        string = str(self.page_course)
+        string = str(self.revision)
         assert isinstance(string, str)
 
     # parent_id
@@ -163,4 +175,7 @@ class TestPageRevision(unittest.TestCase):
 
     # get_parent()
     def test_get_parent_course(self):
-        assert isinstance(self.page_course.get_parent(), Course)
+        assert isinstance(self.revision.get_parent(), Course)
+
+    def test_get_parent_group(self):
+        assert isinstance(self.group_revision.get_parent(), Group)
