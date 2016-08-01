@@ -127,7 +127,13 @@ class Page(CanvasObject):
             'GET',
             '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
         )
-        return PageRevision(self._requester, response.json())
+        pagerev_json = response.json()
+        if self.parent_type == "group":
+            pagerev_json.update({'group_id': self.id})
+        elif self.parent_type == "course":
+            pagerev_json.update({'group_id': self.id})
+
+        return PageRevision(self._requester, pagerev_json)
 
     def list_revisions(self, **kwargs):
         """
@@ -162,8 +168,13 @@ class Page(CanvasObject):
             'POST',
             '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
         )
-        return PageRevision(self._requester, response.json())
+        pagerev_json = response.json()
+        if self.parent_type == "group":
+            pagerev_json.update({'group_id': self.id})
+        elif self.parent_type == "course":
+            pagerev_json.update({'group_id': self.id})
 
+        return PageRevision(self._requester, pagerev_json)
 
 
 class PageRevision(CanvasObject):

@@ -110,3 +110,57 @@ class TestPage(unittest.TestCase):
 
     def test_get_parent_group(self):
         assert isinstance(self.page_group.get_parent(), Group)
+
+
+class TestPageRevision(unittest.TestCase):
+    """
+    Tests PageRevision methods
+    """
+    @classmethod
+    def setUpClass(self):
+        requires = {
+            'course': ['get_by_id', 'get_page'],
+            'group': ['get_single_group', 'get_page'],
+            'generic': ['not_found'],
+            'page': ['get_latest_rev_by_id']
+        }
+
+        adapter = requests_mock.Adapter()
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, requires, adapter)
+
+        self.course = self.canvas.get_course(1)
+        self.group = self.canvas.get_group(1)
+        self.page_course = self.course.get_page('my-url')
+        self.page_group = self.group.get_page('my-url')
+        self.revision = self.page_course.get_revision_by_id(2)
+
+    # __str__()
+    def test__str__(self):
+        string = str(self.page_course)
+        assert isinstance(string, str)
+
+    # parent_id
+    def test_parent_id_course(self):
+        assert self.revision.parent_id == 1
+
+    def test_parent_id_no_id(self):
+        page = PageRevision(self.canvas._Canvas__requester, {'url': 'my-url'})
+        with self.assertRaises(ValueError):
+            page.parent_id
+
+    # parent_type
+    def test_parent_type_course(self):
+        assert self.page_course.parent_type == 'course'
+
+    def test_parent_type_group(self):
+        assert self.page_group.parent_type == 'group'
+
+    def test_parent_type_no_id(self):
+        page = PageRevision(self.canvas._Canvas__requester, {'url': 'my-url'})
+        with self.assertRaises(ValueError):
+            page.parent_type
+
+    # get_parent()
+    def test_get_parent_course(self):
+        assert isinstance(self.page_course.get_parent(), Course)
