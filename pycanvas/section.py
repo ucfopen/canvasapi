@@ -32,7 +32,7 @@ class Section(CanvasObject):
         )
 
     #Need help
-    def cross_list_section(self):
+    def cross_list_section(self, new_course_id):
         """
         Move the Section to another course.
 
@@ -42,12 +42,12 @@ class Section(CanvasObject):
 
         :rtype: :class:`pycanvas.section.Section`
         """
-        from course import Course
         response = self._requester.request(
             'POST',
-            'sections/%s/crosslist/%s'
+            'sections/%s/crosslist/%s' % (self.id, new_course_id)
         )
-    #Need help
+        return Section(self._requester, response.json())
+
     def decross_list_section(self):
         """
         Undo cross-listing of a section.
