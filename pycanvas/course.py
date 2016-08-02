@@ -734,11 +734,12 @@ class Course(CanvasObject):
 
         :rtype: :class: `pycanvas.course.Sections`
         """
+        from section import Section
         return PaginatedList(
             Section,
             self._requester,
             'GET',
-            'courses/%s/sections' % (self.parent_id, {'course_id': self.id}),
+            'courses/%s/sections' % (self.parent_id),
             **combine_kwargs(**kwargs)
         )
 
@@ -751,11 +752,15 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.course.Section`
         """
+        from section import Section
         response = self._requester.request(
             'POST',
             'courses/%s/sections' % (self.parent_id)
         )
-        return Section(self._requester, response.json())
+        section_json = response.json()
+        section_json.update({'course_id': self.id})
+
+        return Section(self._requester, section_json)
 
 
 class CourseNickname(CanvasObject):
