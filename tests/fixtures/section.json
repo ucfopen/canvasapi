@@ -46,6 +46,16 @@
 		],
 		"status_code": 200
 	},
+	"crosslist_section":{
+		"method": "POST",
+		"endpoint": "sections/1/crosslist/2",
+		"data": {
+			"id": 1,
+			"new_course_id": 2,
+			"name": "Cross Section"
+		},
+		"status_code": 200
+	},
 	"decross_section": {
 		"method": "DELETE",
 		"endpoint": "sections/1/crosslist",
