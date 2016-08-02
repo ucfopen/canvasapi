@@ -9,7 +9,7 @@ import settings
 from util import register_uris
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
-from pycanvas.course import Course, CourseNickname, Page, Section
+from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
@@ -379,7 +379,7 @@ class TestCourse(unittest.TestCase):
         section_list = [sect for sect in sections]
 
         assert isinstance(section_list[0], Section)
-        assert len(section_list, Section)
+        assert len(section_list) == 4
 
     def test_create_course_section(self):
         section = self.course.create_course_section()

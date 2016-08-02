@@ -683,48 +683,6 @@ class Course(CanvasObject):
 
         return Page(self._requester, page_json)
 
-    @property
-    def parent_id(self):
-        """
-        Return the id of the course or group that spawned this page.
-
-        :rtype: int
-        """
-        if hasattr(self, 'course_id'):
-            return self.course_id
-        else:
-            raise ValueError("Section does not have a course_id or group_id")
-
-    @property
-    def parent_type(self):
-        """
-        Return whether the page was spawned from a course or group.
-
-        :rtype: str
-        """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        else:
-            raise ValueError("ExternalTool does not have a course_id or group_id")
-
-    def get_parent(self):
-        """
-        Return the object that spawned this page.
-
-        :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
-        """
-        from course import Course
-
-        response = self._requester.request(
-            'GET',
-            '%ss/%s' % (self.parent_type, self.parent_id)
-        )
-
-        if self.parent_type == 'group':
-            return Group(self._requester, response.json())
-        elif self.parent_type == 'course':
-            return Course(self._requester, response.json())
-
     def list_sections(self, **kwargs):
         """
         Returns the list of sections for this course.
@@ -739,11 +697,11 @@ class Course(CanvasObject):
             Section,
             self._requester,
             'GET',
-            'courses/%s/sections' % (self.parent_id),
+            'courses/%s/sections' % (self.id),
             **combine_kwargs(**kwargs)
         )
 
-    def create_course_section(self):
+    def create_course_section(self, **kwargs):
         """
         Create a new section for this course.
 
@@ -752,15 +710,15 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.course.Section`
         """
+
         from section import Section
         response = self._requester.request(
             'POST',
-            'courses/%s/sections' % (self.parent_id)
+            'courses/%s/sections' % (self.id),
+            **combine_kwargs(**kwargs)
         )
-        section_json = response.json()
-        section_json.update({'course_id': self.id})
 
-        return Section(self._requester, section_json)
+        return Section(self._requester, response.json())
 
 
 class CourseNickname(CanvasObject):
@@ -787,12 +745,3 @@ class CourseNickname(CanvasObject):
             'users/self/course_nicknames/%s' % (self.course_id)
         )
         return CourseNickname(self._requester, response.json())
-
-
-class Section(CanvasObject):
-
-    def __str__(self):
-        return "id: %s, name: %s: " % (
-            self.id,
-            self.name
-        )
