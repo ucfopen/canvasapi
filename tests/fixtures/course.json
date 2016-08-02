@@ -708,5 +708,14 @@
 			}
 		],
 		"status_code": 200
+	},
+	"create_section": {
+		"method": "POST",
+		"endpoint": "courses/1/sections",
+		"data": {
+			"id": 1,
+			"name": "New Section"
+		},
+		"status_code": 200
 	}
 }
