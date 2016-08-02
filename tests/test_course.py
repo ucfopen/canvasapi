@@ -25,7 +25,7 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'create_module', 'create_page',
+                'create', 'create_assignment', 'create_section', 'create_module', 'create_page',
                 'deactivate_enrollment', 'edit_front_page', 'enroll_user',
                 'get_all_assignments', 'get_all_assignments2',
                 'get_assignment_by_id', 'get_by_id', 'get_external_tools',
