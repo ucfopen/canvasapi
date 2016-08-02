@@ -54,5 +54,23 @@
 			"name": "Target Section"
 		},
 		"status_code": 200
+	},
+	"edit": {
+		"method": "PUT",
+		"endpoint": "sections/1",
+		"data": {
+			"id": 1,
+			"name": "Target Edit"
+		},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "sections/1",
+		"data": {
+			"id": 1,
+			"name": "Deleted Section"
+		},
+		"status_code": 200
 	}
 }
