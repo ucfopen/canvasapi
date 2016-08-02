@@ -683,6 +683,80 @@ class Course(CanvasObject):
 
         return Page(self._requester, page_json)
 
+    @property
+    def parent_id(self):
+        """
+        Return the id of the course or group that spawned this page.
+
+        :rtype: int
+        """
+        if hasattr(self, 'course_id'):
+            return self.course_id
+        else:
+            raise ValueError("Section does not have a course_id or group_id")
+
+    @property
+    def parent_type(self):
+        """
+        Return whether the page was spawned from a course or group.
+
+        :rtype: str
+        """
+        if hasattr(self, 'course_id'):
+            return 'course'
+        else:
+            raise ValueError("ExternalTool does not have a course_id or group_id")
+
+    def get_parent(self):
+        """
+        Return the object that spawned this page.
+
+        :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
+        """
+        from course import Course
+
+        response = self._requester.request(
+            'GET',
+            '%ss/%s' % (self.parent_type, self.parent_id)
+        )
+
+        if self.parent_type == 'group':
+            return Group(self._requester, response.json())
+        elif self.parent_type == 'course':
+            return Course(self._requester, response.json())
+
+    def list_sections(self, **kwargs):
+        """
+        Returns the list of sections for this course.
+
+        :calls: `GET /api/v1/courses/:course_id/sections \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+
+        :rtype: :class: `pycanvas.course.Sections`
+        """
+        return PaginatedList(
+            Section,
+            self._requester,
+            'GET',
+            'courses/%s/sections' % (self.parent_id, {'course_id': self.id}),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_course_section(self):
+        """
+        Create a new section for this course.
+
+        :calls: `POST /api/v1/courses/:course_id/sections \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.create>`_
+
+        :rtype: :class:`pycanvas.course.Section`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/%s/sections' % (self.parent_id)
+        )
+        return Section(self._requester, response.json())
+
 
 class CourseNickname(CanvasObject):
 
@@ -710,7 +784,7 @@ class CourseNickname(CanvasObject):
         return CourseNickname(self._requester, response.json())
 
 
-class CourseSection(CanvasObject):
+class Section(CanvasObject):
 
     def __str__(self):
         return "id: %s, name: %s: " % (
