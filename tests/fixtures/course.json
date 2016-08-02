@@ -675,5 +675,38 @@
 			"url": "my-url"
 		},
 		"status_code": 200
+	},
+	"list_sections": {
+		"method": "GET",
+		"endpoint": "courses/1/sections",
+		"data": [
+			{
+				"id": 1,
+				"name": "Section 1"
+			},
+			{
+				"id": 2,
+				"name": "Section 2"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/list_sections?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_sections2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_sections?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Section 3"
+			},
+			{
+				"id": 4,
+				"name": "Section 4"
+			}
+		],
+		"status_code": 200
 	}
 }
