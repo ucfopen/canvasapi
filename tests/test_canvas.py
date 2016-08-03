@@ -3,15 +3,16 @@ from datetime import datetime
 
 import requests_mock
 
-import settings
 from pycanvas import Canvas
 from pycanvas.account import Account
+from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
 from pycanvas.group import Group
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.section import Section
 from pycanvas.user import User
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 class TestCanvas(unittest.TestCase):
@@ -24,6 +25,11 @@ class TestCanvas(unittest.TestCase):
             'account': [
                 'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
             ],
+            'conversation': [
+                'get_by_id', 'get_conversations', 'get_conversations_2',
+                'create_conversation', 'mark_all_as_read', 'unread_count',
+                'get_running_batches', 'batch_update'
+            ],
             'course': [
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
                 'unicode_encode_error'
@@ -35,16 +41,12 @@ class TestCanvas(unittest.TestCase):
                 'course_nicknames', 'course_nicknames_delete',
                 'course_nicknames_page_2', 'courses', 'courses_p2', 'get_by_id',
                 'get_by_id_type', 'todo_items', 'upcoming_events'
-            ],
-        }
-
-        require_generic = {
-            'generic': ['not_found']
+            ]
         }
 
         adapter = requests_mock.Adapter()
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
-        register_uris(settings.BASE_URL, require_generic, adapter)
+        register_uris(settings.BASE_URL, {'generic': ['not_found']}, adapter)
         register_uris(settings.BASE_URL, requires, adapter)
 
     # create_account()
@@ -205,3 +207,66 @@ class TestCanvas(unittest.TestCase):
         assert isinstance(group, Group)
         assert hasattr(group, 'name')
         assert hasattr(group, 'description')
+
+    # create_conversation()
+    def test_create_conversation(self):
+        recipients = ['1', '2']
+        body = 'Test Conversation Body'
+
+        conversations = self.canvas.create_conversation(recipients=recipients, body=body)
+        conversation_list = [conversation for conversation in conversations]
+
+        assert isinstance(conversation_list[0], Conversation)
+        assert len(conversation_list) == 2
+
+    # get_conversation()
+    def test_get_conversation(self):
+        convo = self.canvas.get_conversation(1)
+
+        assert isinstance(convo, Conversation)
+        assert hasattr(convo, 'subject')
+
+    # get_conversations()
+    def test_get_conversations(self):
+        convos = self.canvas.get_conversations()
+        conversation_list = [conversation for conversation in convos]
+
+        assert len(conversation_list) == 4
+        assert isinstance(conversation_list[0], Conversation)
+
+    # mark_all_as_read()
+    def test_conversations_mark_all_as_read(self):
+        result = self.canvas.conversations_mark_all_as_read()
+        assert result is True
+
+    # unread_count()
+    def test_conversations_unread_count(self):
+        result = self.canvas.conversations_unread_count()
+        assert result['unread_count'] == "7"
+
+    # get_running_batches()
+    def test_conversations_get_running_batches(self):
+        result = self.canvas.conversations_get_running_batches()
+        assert len(result) == 2
+        assert 'body' in result[0]['message']
+        assert result[1]['message']['author_id'] == 1
+
+    # batch_update()
+    def test_conversations_batch_update(self):
+        from pycanvas.process import Process
+        conversation_ids = [1, 2]
+        this_event = "mark_as_read"
+        result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
+        assert isinstance(result, Process)
+
+    def test_conversations_batch_updated_fail_on_event(self):
+        conversation_ids = [1, 2]
+        this_event = "this doesn't work"
+        result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
+        assert isinstance(result, ValueError)
+
+    def test_conversations_batch_updated_fail_on_ids(self):
+        conversation_ids = [None] * 501
+        this_event = "mark_as_read"
+        result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
+        assert isinstance(result, ValueError)
