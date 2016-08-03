@@ -8,6 +8,7 @@ Class Reference
     assignment-ref
     course-ref
     external-tool-ref
+    group-ref
     module-ref
     page-ref
     quiz-ref
