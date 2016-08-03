@@ -122,7 +122,7 @@ class Page(CanvasObject):
         :param revision_id: The id of a specified revision.
         :type revision_id: int
         :returns: Contents of the page revision.
-        :rtype: :class: `pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`pycanvas.pagerevision.PageRevision`
         """
         response = self._requester.request(
             'GET',
@@ -164,7 +164,7 @@ class Page(CanvasObject):
         :param revision_id: The id of a specified revision.
         :type revision_id: int
         :returns: Contents of the page revision.
-        :rtype: :class: `pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`pycanvas.pagerevision.PageRevision`
         """
         response = self._requester.request(
             'POST',
