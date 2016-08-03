@@ -96,7 +96,7 @@ class Page(CanvasObject):
         elif self.parent_type == 'course':
             return Course(self._requester, response.json())
 
-    def show_latest_revision(self):
+    def show_latest_revision(self, **kwargs):
         """
         Retrieve the contents of the latest revision.
 
@@ -108,15 +108,16 @@ class Page(CanvasObject):
         response = self._requester.request(
             'GET',
             '%ss/%s/pages/%s/revisions/latest' % (self.parent_type, self.parent_id, self.url),
+            **combine_kwargs(**kwargs)
         )
         return PageRevision(self._requester, response.json())
 
-    def get_revision_by_id(self, revision_id):
+    def get_revision_by_id(self, revision_id, **kwargs):
         """
         Retrieve the contents of the revision by the id.
 
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions/:revision_id \
-        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_revision>
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_revision>`_
 
         :param revision_id: The id of a specified revision.
         :type revision_id: int
@@ -126,6 +127,7 @@ class Page(CanvasObject):
         response = self._requester.request(
             'GET',
             '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
+            **combine_kwargs(**kwargs)
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
@@ -142,7 +144,7 @@ class Page(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
 
-        :rtype: :class:`pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of `pycanvas.pagerevision.PageRevision`
         """
         return PaginatedList(
             PageRevision,
@@ -157,7 +159,7 @@ class Page(CanvasObject):
         Revert the page back to a specified revision.
 
         :calls: `POST /api/v1/courses/:course_id/pages/:url/revisions/:revision_id \
-        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revert?>`_
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revert>`_
 
         :param revision_id: The id of a specified revision.
         :type revision_id: int
