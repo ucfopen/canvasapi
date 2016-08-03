@@ -144,7 +144,7 @@ class Page(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of `pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.pagerevision.PageRevision`
         """
         return PaginatedList(
             PageRevision,
