@@ -10,21 +10,15 @@ from tests.util import register_uris
 
 class TestConversation(unittest.TestCase):
     """
-    Tests PageView functionality.
+    Tests Conversation functionality.
     """
     @classmethod
     def setUpClass(self):
         requires = {
             'conversation': [
-                'get_by_id',
-                "get_by_id_2",
-                'edit_conversation',
-                'edit_conversation_fail',
-                'delete_conversation',
-                'delete_conversation_fail',
-                'add_recipients',
-                'add_message',
-                'delete_message'
+                'add_message', 'add_recipients', 'delete_conversation',
+                'delete_conversation_fail', 'delete_message', 'edit_conversation',
+                'edit_conversation_fail', 'get_by_id', 'get_by_id_2'
             ]
         }
 
@@ -81,6 +75,6 @@ class TestConversation(unittest.TestCase):
     # delete_message()
     def test_delete_message(self):
         id_list = [1]
-        result = self.conversation.delete_message(id_list)
+        result = self.conversation.delete_messages(id_list)
         assert 'subject' in result
         assert result['id'] == 1

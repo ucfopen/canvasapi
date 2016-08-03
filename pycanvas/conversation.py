@@ -88,7 +88,7 @@ class Conversation(CanvasObject):
         )
         return Conversation(self._requester, response.json())
 
-    def delete_message(self, remove):
+    def delete_messages(self, remove):
         """
         Delete messages from this conversation.
         Note that this only affects this user's view of the conversation.

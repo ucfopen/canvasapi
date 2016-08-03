@@ -424,7 +424,8 @@ class Canvas(object):
         :calls: `GET /api/v1/conversations/unread_count \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.unread_count>`_
 
-        :rtype: simple object with unread_count, example: {'unread_count': '7'}
+        :returns: simple object with unread_count, example: {'unread_count': '7'}
+        :rtype: `dict`
         """
         response = self.__requester.request(
             'GET',
@@ -442,7 +443,8 @@ class Canvas(object):
         :calls: `GET /api/v1/conversations/batches \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batches>`_
 
-        :rtype: dict with list of batch objects - not currently a Class
+        :returns: dict with list of batch objects - not currently a Class
+        :rtype: `dict`
         """
 
         response = self.__requester.request(
