@@ -214,8 +214,8 @@ class Canvas(object):
         :calls: `GET /api/v1/users/self/course_nicknames \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of \
-        :class:`pycanvas.course_nickname.CourseNickname`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.course_nickname.CourseNickname`
         """
         from pycanvas.course import CourseNickname
 
@@ -349,8 +349,8 @@ class Canvas(object):
         :type recipients: `list` of `str`
         :param body: The body of the message being added.
         :type body: `str`
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of \
-        :class: `pycanvas.conversation.Conversation`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.conversation.Conversation`
         """
         from pycanvas.conversation import Conversation
 
@@ -480,15 +480,19 @@ class Canvas(object):
 
         try:
             if event not in ALLOWED_EVENTS:
-                raise ValueError('%s is not a valid action. Please use one of the following: %s' % (
-                    event,
-                    ','.join(ALLOWED_EVENTS)
-                ))
+                raise ValueError(
+                    '%s is not a valid action. Please use one of the following: %s' % (
+                        event,
+                        ','.join(ALLOWED_EVENTS)
+                    )
+                )
 
             if len(conversation_ids) > 500:
-                raise ValueError('You have requested %s updates, which exceeds the limit of 500' % (
-                    len(conversation_ids)
-                ))
+                raise ValueError(
+                    'You have requested %s updates, which exceeds the limit of 500' % (
+                        len(conversation_ids)
+                    )
+                )
 
             response = self.__requester.request(
                 'PUT',
