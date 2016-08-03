@@ -690,7 +690,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/sections \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
 
-        :rtype: :class: `pycanvas.course.Sections`
+        :rtype: :class: `pycanvas.section.Section`
         """
         from section import Section
         return PaginatedList(

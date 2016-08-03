@@ -31,7 +31,6 @@ class Section(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-    #Need help
     def cross_list_section(self, new_course_id):
         """
         Move the Section to another course.
