@@ -30,3 +30,64 @@ class Section(CanvasObject):
             'sections/%s/enrollments' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def cross_list_section(self, new_course_id):
+        """
+        Move the Section to another course.
+
+        :calls: `POST /api/v1/sections/:id/crosslist/:new_course_id
+        \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.crosslist>`_
+
+        :rtype: :class:`pycanvas.section.Section`
+        """
+        response = self._requester.request(
+            'POST',
+            'sections/%s/crosslist/%s' % (self.id, new_course_id)
+        )
+        return Section(self._requester, response.json())
+
+    def decross_list_section(self):
+        """
+        Undo cross-listing of a section.
+
+        :calls: `DELETE /api/v1/sections/:id/crosslist \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.uncrosslist>`_
+
+        :rtype: :class:`pycanvas.section.Section`
+        """
+        response = self._requester.request(
+            "DELETE",
+            "sections/%s/crosslist" % (self.id)
+        )
+        return Section(self._requester, response.json())
+
+    def edit(self):
+        """
+        Edit contents of a target section.
+
+        :calls: `PUT /api/v1/sections/:id \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.update>`_
+
+        :rtype: :class:`pycanvas.section.Section`
+        """
+        response = self._requester.request(
+            "PUT",
+            "sections/%s" % (self.id)
+        )
+        return Section(self._requester, response.json())
+
+    def delete(self):
+        """
+        Delete a target section.
+
+        :calls: `DELETE /api/v1/sections/:id \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.destroy>`_
+
+        :rtype: :class:`pycanvas.section.Section`
+        """
+        response = self._requester.request(
+            "DELETE",
+            "sections/%s" % (self.id)
+        )
+        return Section(self._requester, response.json())

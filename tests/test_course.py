@@ -25,7 +25,7 @@ class TestCourse(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': [
-                'create', 'create_assignment', 'create_module', 'create_page',
+                'create', 'create_assignment', 'create_section', 'create_module', 'create_page',
                 'deactivate_enrollment', 'edit_front_page', 'enroll_user',
                 'get_all_assignments', 'get_all_assignments2',
                 'get_assignment_by_id', 'get_by_id', 'get_external_tools',
@@ -34,7 +34,7 @@ class TestCourse(unittest.TestCase):
                 'get_recent_students_p2', 'get_section', 'get_user',
                 'get_user_id_type', 'get_users', 'get_users_p2',
                 'list_enrollments', 'list_enrollments_2', 'list_modules',
-                'list_modules2', 'list_quizzes', 'list_quizzes2',
+                'list_modules2', 'list_sections', 'list_sections2', 'list_quizzes', 'list_quizzes2',
                 'preview_html', 'reactivate_enrollment', 'reset', 'settings',
                 'show_front_page', 'update', 'update_settings', 'upload',
                 'upload_final'
@@ -373,6 +373,18 @@ class TestCourse(unittest.TestCase):
 
         assert isinstance(tool_list[0], ExternalTool)
         assert len(tool_list) == 4
+
+    def test_list_sections(self):
+        sections = self.course.list_sections()
+        section_list = [sect for sect in sections]
+
+        assert isinstance(section_list[0], Section)
+        assert len(section_list) == 4
+
+    def test_create_course_section(self):
+        section = self.course.create_course_section()
+
+        assert isinstance(section, Section)
 
 
 class TestCourseNickname(unittest.TestCase):

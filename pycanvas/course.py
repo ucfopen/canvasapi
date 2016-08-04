@@ -683,6 +683,43 @@ class Course(CanvasObject):
 
         return Page(self._requester, page_json)
 
+    def list_sections(self, **kwargs):
+        """
+        Returns the list of sections for this course.
+
+        :calls: `GET /api/v1/courses/:course_id/sections \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+
+        :rtype: :class: `pycanvas.section.Section`
+        """
+        from section import Section
+        return PaginatedList(
+            Section,
+            self._requester,
+            'GET',
+            'courses/%s/sections' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_course_section(self, **kwargs):
+        """
+        Create a new section for this course.
+
+        :calls: `POST /api/v1/courses/:course_id/sections \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.create>`_
+
+        :rtype: :class:`pycanvas.course.Section`
+        """
+
+        from section import Section
+        response = self._requester.request(
+            'POST',
+            'courses/%s/sections' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return Section(self._requester, response.json())
+
 
 class CourseNickname(CanvasObject):
 

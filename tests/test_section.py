@@ -5,6 +5,7 @@ import requests_mock
 from util import register_uris
 from pycanvas.enrollment import Enrollment
 from pycanvas import Canvas
+from pycanvas.section import Section
 
 
 class TestSection(unittest.TestCase):
@@ -15,7 +16,11 @@ class TestSection(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'generic': ['not_found'],
-            'section': ['get_by_id', 'list_enrollments', 'list_enrollments_2']
+            'section': [
+                'crosslist_section', 'decross_section', 'delete',
+                'edit', 'get_by_id', 'list_enrollments',
+                'list_enrollments_2'
+            ]
         }
 
         adapter = requests_mock.Adapter()
@@ -36,3 +41,23 @@ class TestSection(unittest.TestCase):
 
         assert len(enrollment_list) == 4
         assert isinstance(enrollment_list[0], Enrollment)
+
+    def test_cross_list_section(self):
+        section = self.section.cross_list_section(2)
+
+        assert isinstance(section, Section)
+
+    def test_decross_list_section(self):
+        section = self.section.decross_list_section()
+
+        assert isinstance(section, Section)
+
+    def test_edit(self):
+        edit = self.section.edit()
+
+        assert isinstance(edit, Section)
+
+    def test_delete(self):
+        deleted_section = self.section.delete()
+
+        assert isinstance(deleted_section, Section)
