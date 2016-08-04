@@ -1,0 +1,210 @@
+{
+    "get_by_id": {
+        "method": "GET",
+        "endpoint": "conversations/1",
+        "data": {
+            "id": 1,
+            "subject": "Pokemon Go"
+        },
+        "status_code": 200
+    },
+    "get_by_id_2": {
+        "method": "GET",
+        "endpoint": "conversations/2",
+        "data": {
+            "id": 2,
+            "subject": "Pokemon Go2"
+        },
+        "status_code": 200
+    }, 
+    "get_conversations": {
+        "method": "GET",
+        "endpoint": "conversations",
+        "data": [
+            {
+                "id": 1,
+                "subject": "Pokemon Go"
+            },
+            {
+                "id": 2,
+                "subject": "Agar.io"
+            }
+        ],
+        "status_code": 200,
+        "headers": {
+            "Link": "<mock://example.com/api/v1/conversations?page=2&per_page=2>; rel=\"next\""
+        }
+    },
+    "get_conversations_2": {
+        "method": "GET",
+        "endpoint": "conversations?page=2&per_page=2",
+        "data": [
+            {
+                "id": 3,
+                "subject": "Minecraft"
+            },
+            {
+                "id": 4,
+                "subject": "Smash Bros"
+            }
+        ],
+        "status_code": 200
+    },
+    "create_conversation": {
+        "method": "POST",
+        "endpoint": "conversations",
+        "data": [
+            {
+                "recipients": ["1", "2"],
+                "body": "Test Conversation Body"
+            },
+            {
+                "recipients": ["3", "4"],
+                "body": "Test Conversation Body 2"
+            }
+        ],
+        "status_code": 200
+    },
+    "edit_conversation": {
+        "method": "PUT",
+        "endpoint": "conversations/1",
+        "data": {
+            "id": 1,
+            "subject": "conversations api example"
+        },
+        "status_code": 200
+    },
+    "edit_conversation_fail": {
+        "method": "PUT",
+        "endpoint": "conversations/2",
+        "data": {
+            "subject": "this should fail"
+        }
+    },
+    "delete_conversation": {
+        "method": "DELETE",
+        "endpoint": "conversations/1",
+        "data": {
+            "id": 1,
+            "subject": "conversations api example"
+        },
+        "status_code": 200
+    },
+    "delete_conversation_fail": {
+        "method": "DELETE",
+        "endpoint": "conversations/2",
+        "data": {
+            "subject": "this should fail"
+        }
+    },
+    "add_recipients": {
+        "method": "POST",
+        "endpoint": "conversations/1/add_recipients",
+        "data": {
+            "id": 1,
+            "subject": "add_recipients test",
+            "messages": [
+                {
+                    "id": 1,
+                    "body": "Bob was added to the conversation by Hank TA"
+                },
+                {
+                    "id": 2,
+                    "body": "Joe was added to the conversation by Hank TA"
+                }
+            ]
+        },
+        "status_code": 200
+    },
+    "add_message": {
+        "method": "POST",
+        "endpoint": "conversations/1/add_message",
+        "data": {
+            "id": 1,
+            "subject": "add_message test subject",
+            "workflow_state": "unread",
+            "messages":
+            [
+                {
+                    "id": 3,
+                    "body": "add_message test body",
+                    "author_id": 2,
+                    "generated": false
+                }
+            ]
+        },
+        "status_code": 200
+    },
+    "delete_message": {
+        "method": "POST",
+        "endpoint": "conversations/1/remove_messages",
+        "data": {
+            "id": 1,
+            "subject": "delete_message example",
+            "workflow_state": "read",
+            "last_message": "delete_message message",
+            "message_count": 1,
+            "properties": ["attachments"]
+        },
+        "status_code": 200
+    },
+    "mark_all_as_read": {
+        "method": "POST",
+        "endpoint": "conversations/mark_all_as_read",
+        "data": {},
+        "status_code": 200
+    },
+    "unread_count": {
+        "method": "GET",
+        "endpoint": "conversations/unread_count",
+        "data": {
+            "unread_count": "7"
+        },
+        "status_code": 200
+    },
+    "get_running_batches": {
+        "method": "GET",
+        "endpoint": "conversations/batches",
+        "data":[
+            {
+                "id": 1,
+                "subject": "conversations api example",
+                "message":
+                {
+                    "id": 1,
+                    "body": "quick reminder, no class tomorrow",
+                    "author_id": 1
+                }
+            },
+            {
+                "id": 2,
+                "subject": "conversations api example",
+                "message":
+                {
+                    "id": 2,
+                    "body": "quick reminder, no class tomorrow",
+                    "author_id": 1
+                }
+            }
+        ],
+        "status_code": 200
+    },
+    "batch_update": {
+        "method": "PUT",
+        "endpoint": "conversations",
+        "data": {
+            "id": 1,
+            "context_id": 1,
+            "context_type": "Account",
+            "user_id": 123,
+            "tag": "course_batch_update",
+            "completion": 100,
+            "workflow_state": "completed",
+            "created_at": "2013-01-15T15:00:00Z",
+            "updated_at": "2013-01-15T15:04:00Z",
+            "message": "17 courses processed",
+            "url": "https://canvas.example.edu/api/v1/progress/1"
+        },
+        "status_code": 200
+    }
+}
