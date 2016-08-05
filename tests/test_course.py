@@ -13,6 +13,7 @@ from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
+from pycanvas.group import Group
 from pycanvas.module import Module
 from pycanvas.quiz import Quiz
 from pycanvas.section import Section
@@ -33,9 +34,9 @@ class TestCourse(unittest.TestCase):
                 'get_pages', 'get_pages2', 'get_quiz', 'get_recent_students',
                 'get_recent_students_p2', 'get_section', 'get_user',
                 'get_user_id_type', 'get_users', 'get_users_p2',
-                'list_enrollments', 'list_enrollments_2', 'list_modules',
+                'list_enrollments', 'list_enrollments_2', 'list_modules', 'list_groups_context',
                 'list_modules2', 'list_sections', 'list_sections2', 'list_quizzes', 'list_quizzes2',
-                'preview_html', 'reactivate_enrollment', 'reset', 'settings',
+                'list_groups_context2', 'preview_html', 'reactivate_enrollment', 'reset', 'settings',
                 'show_front_page', 'update', 'update_settings', 'upload',
                 'upload_final'
             ],
@@ -385,6 +386,14 @@ class TestCourse(unittest.TestCase):
         section = self.course.create_course_section()
 
         assert isinstance(section, Section)
+
+    def test_list_groups_in_context(self):
+        groups = self.course.list_groups_in_context()
+        group_list = [group for group in groups]
+
+        assert isinstance(group_list[0], Group)
+        assert len(group_list) == 4
+
 
 
 class TestCourseNickname(unittest.TestCase):

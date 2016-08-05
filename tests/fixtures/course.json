@@ -717,5 +717,38 @@
 			"name": "New Section"
 		},
 		"status_code": 200
+	},
+	"list_groups_context": {
+		"method": "GET",
+		"endpoint": "courses/1/groups",
+		"data": [
+			{
+				"id": 1,
+				"name": "Group 1"
+			},
+			{
+				"id": 2,
+				"name": "Group 2"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/courses/1/groups?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_groups_context2": {
+		"method": "GET",
+		"endpoint": "courses/1/groups?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Group 3"
+			},
+			{
+				"id": 4,
+				"name": "Group 4"
+			}
+		],
+		"status_code": 200
 	}
 }

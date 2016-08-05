@@ -10,6 +10,7 @@ from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.group import Group
 from pycanvas.user import User
 from util import register_uris
 
@@ -26,10 +27,10 @@ class TestAccount(unittest.TestCase):
                 'create_notification', 'create_subaccount', 'create_user',
                 'delete_user', 'enroll_by_id', 'get_by_id', 'get_by_id_2',
                 'get_by_id_3', 'get_courses', 'get_courses_page_2',
-                'get_external_tools', 'get_external_tools_p2', 'reports',
-                'reports_page_2', 'report_index', 'report_index_page_2',
-                'subaccounts', 'subaccounts_page_2', 'users', 'users_page_2',
-                'user_notifs', 'user_notifs_page_2', 'update', 'update_fail'
+                'get_external_tools', 'get_external_tools_p2', 'list_groups_context',
+                'list_groups_context2', 'reports', 'reports_page_2', 'report_index',
+                'report_index_page_2', 'subaccounts', 'subaccounts_page_2', 'users',
+                'users_page_2', 'user_notifs', 'user_notifs_page_2', 'update', 'update_fail'
             ],
             'external_tool': ['get_by_id_account'],
             'user': ['get_by_id'],
@@ -242,3 +243,10 @@ class TestAccount(unittest.TestCase):
         target_enrollment = self.account.enroll_by_id(1)
 
         assert isinstance(target_enrollment, Enrollment)
+
+    def test_list_groups_in_context(self):
+        groups = self.account.list_groups_in_context()
+        group_list = [group for group in groups]
+
+        assert isinstance(group_list[0], Group)
+        assert len(group_list) == 4

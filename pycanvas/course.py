@@ -720,6 +720,25 @@ class Course(CanvasObject):
 
         return Section(self._requester, response.json())
 
+    def list_groups_in_context(self, **kwargs):
+        """
+        Return list of active groups for the specified course.
+
+        :calls:`GET /api/v1/courses/:course_id/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
+        """
+        from group import Group
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'courses/%s/groups' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+
 
 class CourseNickname(CanvasObject):
 

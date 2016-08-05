@@ -275,3 +275,22 @@ class User(CanvasObject):
             file,
             **kwargs
         ).start()
+
+    def list_groups(self, **kwargs):
+        """
+        Return the list of active groups for the user.
+
+        :calls:`GET /api/v1/users/self/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        """
+        from group import Group
+
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'users/self/groups',
+            **combine_kwargs(**kwargs)
+        )
