@@ -5,8 +5,7 @@ import requests_mock
 
 import settings
 from pycanvas import Canvas
-from pycanvas.account import Account, AccountNotification, AccountReport
-from pycanvas.role import Role
+from pycanvas.account import Account, AccountNotification, AccountReport, Role
 from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
@@ -23,13 +22,13 @@ class TestAccount(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'account': [
-<<<<<<< HEAD
                 'activate_role', 'close_notification', 'create',
                 'create_course', 'create_2', 'create_notification',
                 'create_role', 'create_subaccount', 'create_user',
                 'deactivate_role', 'delete_user', 'enroll_by_id',
                 'get_by_id', 'get_by_id_2', 'get_by_id_3',
-                'get_courses', 'get_courses_page_2', 'get_role',
+                'get_courses', 'get_courses_page_2',
+                'get_external_tools', 'get_external_tools_p2', 'get_role',
                 'list_roles', 'list_roles_2', 'reports',
                 'reports_page_2', 'report_index',
                 'report_index_page_2', 'subaccounts',
@@ -38,20 +37,8 @@ class TestAccount(unittest.TestCase):
                 'update_fail', 'update_role'
             ],
             'generic': ['not_found'],
-            'user': ['get_by_id']
-=======
-                'close_notification', 'create', 'create_2', 'create_course',
-                'create_notification', 'create_subaccount', 'create_user',
-                'delete_user', 'enroll_by_id', 'get_by_id', 'get_by_id_2',
-                'get_by_id_3', 'get_courses', 'get_courses_page_2',
-                'get_external_tools', 'get_external_tools_p2', 'reports',
-                'reports_page_2', 'report_index', 'report_index_page_2',
-                'subaccounts', 'subaccounts_page_2', 'users', 'users_page_2',
-                'user_notifs', 'user_notifs_page_2', 'update', 'update_fail'
-            ],
-            'external_tool': ['get_by_id_account'],
             'user': ['get_by_id'],
->>>>>>> 62265f63cc518271723f8192c295e3f6d7b9a1a7
+            'external_tool': ['get_by_id_account']
         }
 
         adapter = requests_mock.Adapter()
@@ -256,8 +243,8 @@ class TestAccount(unittest.TestCase):
         success = account.update(account=update_account_dict)
         assert not success
 
-    def test_get_roles(self):
-        roles = self.account.get_roles()
+    def test_list_roles(self):
+        roles = self.account.list_roles()
         role_list = [role for role in roles]
 
         assert len(role_list) == 4

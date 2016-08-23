@@ -10,3 +10,4 @@ _build/
 _static/
 _templates/
 _test.py
+_setup.py

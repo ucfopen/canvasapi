@@ -346,7 +346,7 @@ class Account(CanvasObject):
         else:
             return False
 
-    def get_roles(self, **kwargs):
+    def list_roles(self, **kwargs):
         """
         List the roles available to an account.
 
@@ -355,7 +355,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.role.Role`
         """
-        from role import Role
 
         return PaginatedList(
             Role,
@@ -376,7 +375,6 @@ class Account(CanvasObject):
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
-        from role import Role
 
         response = self._requester.request(
             'GET',
@@ -395,16 +393,16 @@ class Account(CanvasObject):
         :type label: str
         :rtype: :class:`pycanvas.role.Role`
         """
-        from role import Role
 
         response = self._requester.request(
             'POST',
             'accounts/%s/roles' % (self.id),
+            label=label,
             **combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
-    def deactivate_role(self, role_id):
+    def deactivate_role(self, role_id, **kwargs):
         """
         Deactivate a custom role.
 
@@ -415,15 +413,15 @@ class Account(CanvasObject):
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
-        from role import Role
 
         response = self._requester.request(
             'DELETE',
             'accounts/%s/roles/%s' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
-    def activate_role(self, role_id):
+    def activate_role(self, role_id, **kwargs):
         """
         Reactivate an inactive role.
 
@@ -434,11 +432,11 @@ class Account(CanvasObject):
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
-        from role import Role
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/roles/%s/activate' % (self.id, role_id)
+            'accounts/%s/roles/%s/activate' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
@@ -453,7 +451,6 @@ class Account(CanvasObject):
         :type role_id: int
         :rtype: :class:`pycanvas.role.Role`
         """
-        from role import Role
 
         response = self._requester.request(
             'PUT',
@@ -501,5 +498,5 @@ class AccountReport(CanvasObject):
 
 class Role(CanvasObject):
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "id: %s" % (self.id)
