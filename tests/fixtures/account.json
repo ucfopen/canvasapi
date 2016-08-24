@@ -423,6 +423,16 @@
 		],
 		"status_code": 200
 	},
+	"get_role": {
+		"method": "GET",
+		"endpoint": "accounts/1/roles/2",
+		"data": {
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
+		"status_code": 200
+	},
 	"users": {
 		"method": "GET",
 		"endpoint": "accounts/1/users",
@@ -508,6 +518,83 @@
 		"method": "PUT",
 		"endpoint": "accounts/101",
 		"data": {},
+		"status_code": 200
+	},
+	"list_roles": {
+		"method": "GET",
+		"endpoint": "accounts/1/roles",
+		"data": [
+			{
+				"id": 1,
+				"role": "StudentEnrollment",
+				"label": "Student"
+			},
+			{
+				"id": 3,
+				"role": "StudentEnrollment1",
+				"label": "Student1"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_roles_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/roles/?page=2&per_page=2",
+		"data": [
+			{
+				"id": 5,
+				"role": "StudentEnrollment2",
+				"label": "Student2"
+			},
+			{
+				"id": 7,
+				"role": "StudentEnrollment3",
+				"label": "Student3"
+			}
+		],
+		"status_code": 200
+	},
+	"create_role": {
+		"method": "POST",
+		"endpoint": "accounts/1/roles",
+		"data":{
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
+		"status_code": 200
+	},
+	"deactivate_role": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/roles/2",
+		"data": {
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
+		"status_code": 200
+	},
+	"activate_role": {
+		"method": "POST",
+		"endpoint": "accounts/1/roles/2/activate",
+		"data": {
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
+		"status_code": 200
+	},
+	"update_role": {
+		"method": "PUT",
+		"endpoint": "accounts/1/roles/2",
+		"data": {
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
 		"status_code": 200
 	}
 }

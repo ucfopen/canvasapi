@@ -346,6 +346,119 @@ class Account(CanvasObject):
         else:
             return False
 
+    def list_roles(self, **kwargs):
+        """
+        List the roles available to an account.
+
+        :calls: `GET /api/v1/accounts/:account_id/roles \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.Role`
+        """
+
+        return PaginatedList(
+            Role,
+            self._requester,
+            'GET',
+            'accounts/%s/roles' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_role(self, role_id):
+        """
+        Retrieve a role by ID.
+
+        :calls: `GET /api/v1/accounts/:account_id/roles/:id \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
+
+        :param role_id: The ID of the role.
+        :type role_id: int
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/roles/%s' % (self.id, role_id)
+        )
+        return Role(self._requester, response.json())
+
+    def create_role(self, label, **kwargs):
+        """
+        Create a new course-level or account-level role.
+
+        :calls: `POST /api/v1/accounts/:account_id/roles \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.add_role>`_
+
+        :param label: The label for the role.
+        :type label: str
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/roles' % (self.id),
+            label=label,
+            **combine_kwargs(**kwargs)
+        )
+        return Role(self._requester, response.json())
+
+    def deactivate_role(self, role_id, **kwargs):
+        """
+        Deactivate a custom role.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`_
+
+        :param role_id: The ID of the role.
+        :type role_id: int
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'DELETE',
+            'accounts/%s/roles/%s' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Role(self._requester, response.json())
+
+    def activate_role(self, role_id, **kwargs):
+        """
+        Reactivate an inactive role.
+
+        :calls: `POST /api/v1/accounts/:account_id/roles/:id/activate \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`_
+
+        :param role_id: The ID of the role.
+        :type role_id: int
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/roles/%s/activate' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Role(self._requester, response.json())
+
+    def update_role(self, role_id, **kwargs):
+        """
+        Update permissions for an existing role.
+
+        :calls: `PUT /api/v1/accounts/:account_id/roles/:id \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`_
+
+        :param role_id: The ID of the role.
+        :type role_id: int
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'PUT',
+            'accounts/%s/roles/%s' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Role(self._requester, response.json())
+
     def enroll_by_id(self, enrollment_id, **kwargs):
         """
         Get an enrollment object by ID.
@@ -381,3 +494,9 @@ class AccountReport(CanvasObject):
             self.id,
             self.report
         )
+
+
+class Role(CanvasObject):
+
+    def __str__(self):  # pragma: no cover
+        return "id: %s" % (self.id)
