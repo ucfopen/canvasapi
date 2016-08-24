@@ -15,7 +15,7 @@ class CanvasException(Exception):  # pragma: no cover
             if errors:
                 self.message = str(errors)
             else:
-                self.message = ('Something went wrong.', message)
+                self.message = ('Something went wrong. ', message)
         else:
             self.message = message
 

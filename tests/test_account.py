@@ -36,9 +36,8 @@ class TestAccount(unittest.TestCase):
                 'user_notifs', 'user_notifs_page_2', 'update',
                 'update_fail', 'update_role'
             ],
-            'generic': ['not_found'],
-            'user': ['get_by_id'],
-            'external_tool': ['get_by_id_account']
+            'external_tool': ['get_by_id_account'],
+            'user': ['get_by_id']
         }
 
         adapter = requests_mock.Adapter()

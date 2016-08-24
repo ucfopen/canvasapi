@@ -353,7 +353,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/roles \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.role.Role`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.Role`
         """
 
         return PaginatedList(
@@ -373,7 +373,7 @@ class Account(CanvasObject):
 
         :param role_id: The ID of the role.
         :type role_id: int
-        :rtype: :class:`pycanvas.role.Role`
+        :rtype: :class:`pycanvas.account.Role`
         """
 
         response = self._requester.request(
@@ -391,7 +391,7 @@ class Account(CanvasObject):
 
         :param label: The label for the role.
         :type label: str
-        :rtype: :class:`pycanvas.role.Role`
+        :rtype: :class:`pycanvas.account.Role`
         """
 
         response = self._requester.request(
@@ -411,7 +411,7 @@ class Account(CanvasObject):
 
         :param role_id: The ID of the role.
         :type role_id: int
-        :rtype: :class:`pycanvas.role.Role`
+        :rtype: :class:`pycanvas.account.Role`
         """
 
         response = self._requester.request(
@@ -430,7 +430,7 @@ class Account(CanvasObject):
 
         :param role_id: The ID of the role.
         :type role_id: int
-        :rtype: :class:`pycanvas.role.Role`
+        :rtype: :class:`pycanvas.account.Role`
         """
 
         response = self._requester.request(
@@ -449,7 +449,7 @@ class Account(CanvasObject):
 
         :param role_id: The ID of the role.
         :type role_id: int
-        :rtype: :class:`pycanvas.role.Role`
+        :rtype: :class:`pycanvas.account.Role`
         """
 
         response = self._requester.request(
