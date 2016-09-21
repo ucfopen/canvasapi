@@ -318,6 +318,22 @@ class Canvas(object):
         )
         return response.json()
 
+    def create_group(self, **kwargs):
+        """
+        Create a group
+
+        :calls: `POST /api/v1/groups/ \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.create>`_
+
+        :rtype: :class:`pycanvas.group.Group`
+        """
+        response = self.__requester.request(
+            'POST',
+            'groups',
+            **combine_kwargs(**kwargs)
+        )
+        return Group(self.__requester, response.json())
+
     def get_group(self, group_id, **kwargs):
         """
         Return the data for a single group. If the caller does not
