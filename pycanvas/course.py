@@ -738,6 +738,42 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def create_group_category(self, name, **kwargs):
+        """
+        Create a Group Category
+
+        :calls: `POST /api/v1/courses/:course_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create>`_
+
+        :rtype: :class:`pycanvas.group.GroupCategories`
+        """
+        from pycanvas.group import Group, GroupCategories
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/group_categories' % (self.id),
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return GroupCategories(self._requester, response.json())
+
+    def list_group_categories(self):
+        """
+        List group categories for a context
+
+        :calls: `GET /api/v1/courses/:course_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.GroupCategories`
+        """
+        from pycanvas.group import Group, GroupCategories
+
+        return PaginatedList(
+            GroupCategories,
+            self._requester,
+            'GET',
+            'courses/%s/group_categories' % (self.id)
+        )
 
 
 class CourseNickname(CanvasObject):

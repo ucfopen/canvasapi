@@ -13,7 +13,7 @@ from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
-from pycanvas.group import Group
+from pycanvas.group import Group, GroupCategories
 from pycanvas.module import Module
 from pycanvas.quiz import Quiz
 from pycanvas.section import Section
@@ -38,7 +38,7 @@ class TestCourse(unittest.TestCase):
                 'list_modules2', 'list_sections', 'list_sections2', 'list_quizzes', 'list_quizzes2',
                 'list_groups_context2', 'preview_html', 'reactivate_enrollment', 'reset', 'settings',
                 'show_front_page', 'update', 'update_settings', 'upload',
-                'upload_final'
+                'upload_final', 'create_group_category', 'list_group_categories'
             ],
             'external_tool': ['get_by_id_course'],
             'quiz': ['get_by_id'],
@@ -394,6 +394,17 @@ class TestCourse(unittest.TestCase):
         assert isinstance(group_list[0], Group)
         assert len(group_list) == 4
 
+    # create_group_category()
+    def test_create_group_category(self):
+        name_str = "Shia Laboef"
+        response = self.course.create_group_category(name=name_str)
+        assert isinstance(response, GroupCategories)
+
+    # list_group_categories()
+    def test_list_group_categories(self):
+        response = self.course.list_group_categories()
+        category_list = [category for category in response]
+        assert isinstance(category_list[0], GroupCategories)
 
 
 class TestCourseNickname(unittest.TestCase):

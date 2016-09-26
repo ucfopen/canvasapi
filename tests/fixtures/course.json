@@ -750,5 +750,50 @@
 			}
 		],
 		"status_code": 200
+	},
+	"create_group_category": {
+		"method": "POST",
+		"endpoint": "courses/1/group_categories",
+		"data": {
+			"id": 1,
+			"name": "Shia Laboef",
+			"role": "communities",
+			"self_signup": null,
+			"auto_leader": null,
+			"context_type": "Account",
+			"account_id": 1,
+			"group_limit": null,
+			"progress": null
+		},
+		"status_code": 200
+	},
+	"list_group_categories": {
+		"method": "GET",
+		"endpoint": "courses/1/group_categories",
+		"data": [
+			{
+				"id": 2,
+				"name": "Math Groups",
+				"role": "communities",
+				"self_signup": null,
+				"auto_leader": null,
+				"context_type": "Course",
+				"account_id": 2,
+				"group_limit": null,
+				"progress": null
+			},
+			{
+				"id": 3,
+				"name": "Film Groups",
+				"role": "communities",
+				"self_signup": null,
+				"auto_leader": null,
+				"context_type": "Course",
+				"account_id": 3,
+				"group_limit": null,
+				"progress": null
+			}
+		],
+		"status_code": 200
 	}
 }

@@ -370,7 +370,7 @@ class Account(CanvasObject):
         """
         Return list of active groups for the specified account.
 
-        :calls:`GET /api/v1/accounts/:account_id/groups \
+        :calls: `GET /api/v1/accounts/:account_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
@@ -382,6 +382,42 @@ class Account(CanvasObject):
             'GET',
             'accounts/%s/groups' % (self.id),
             **combine_kwargs(**kwargs)
+        )
+
+    def create_group_category(self, name, **kwargs):
+        """
+        Create a Group Category
+
+        :calls: `POST /api/v1/accounts/:account_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create>`_
+
+        :rtype: :class:`pycanvas.group.GroupCategories`
+        """
+        from group import GroupCategories
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/group_categories' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return GroupCategories(self._requester, response.json())
+
+    def list_group_categories(self):
+        """
+        List group categories for a context
+
+        :calls: `GET /api/v1/accounts/:account_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.GroupCategories`
+        """
+        from group import GroupCategories
+
+        return PaginatedList(
+            GroupCategories,
+            self._requester,
+            'GET',
+            'accounts/%s/group_categories' % (self.id)
         )
 
 

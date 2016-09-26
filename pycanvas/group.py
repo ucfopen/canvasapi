@@ -270,7 +270,7 @@ class Group(CanvasObject):
 
     #     :rtype: list of various objects.
     #     """
-    #     response = self.__requester.request(
+    #     response = self._requester.request(
     #         'GET',
     #         'groups/self/activity_stream/'
     #     )
@@ -397,7 +397,7 @@ class GroupMembership(CanvasObject):
         :param user: The user object or ID to remove from the group.
         :type user: :class:`pycanvas.user.User` or int
 
-        :rtype: unknown
+        :rtype: empty dict
         """
         from user import User
         from util import obj_or_id
@@ -417,7 +417,7 @@ class GroupMembership(CanvasObject):
         :calls: `DELETE /api/v1/groups/:group_id/:type/:id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.destroy>`_
 
-        :rtype: unknown
+        :rtype: empty dict
         """
         response = self._requester.request(
             'DELETE',
@@ -427,18 +427,9 @@ class GroupMembership(CanvasObject):
 
 
 class GroupCategories(CanvasObject):
-    # List group categories for a context
-    # GET /api/v1/accounts/:account_id/group_categories
-    # GET /api/v1/courses/:course_id/group_categories
-    # https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index
-
-    # Create a Group Category
-    # POST /api/v1/accounts/:account_id/group_categories
-    # POST /api/v1/courses/:course_id/group_categories
-    # https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create
 
     def __str__(self):
-        return "id: %s, group_id: %s" % (self.id, self.group_id)
+        return "id: %s, name: %s" % (self.id, self.name)
 
     def create_group(self, **kwargs):
         """
@@ -449,67 +440,115 @@ class GroupCategories(CanvasObject):
 
         :rtype: :class:`pycanvas.group.Group`
         """
-        response = self.__requester.request(
+        response = self._requester.request(
             'POST',
             'group_categories/%s/groups' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return Group(self.__requester, response.json())
+        return Group(self._requester, response.json())
 
-    def get_category():
+    def get_category(self, cat_id):
         """
         Get a single group category
 
         :calls: `GET /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
+
+        :rtype: :class:`pycanvas.group.GroupCategories`
         """
+        response = self._requester.request(
+            'GET',
+            'group_categories/%s' % (cat_id)
+        )
+        return GroupCategories(self._requester, response.json())
 
-        return None
-
-    def update():
+    def update(self, **kwargs):
         """
         Update a Group Category
+
         :calls: `PUT /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.update>`_
+
+        :rtype: :class:`pycanvas.group.GroupCategories`
         """
+        response = self._requester.request(
+            'PUT',
+            'group_categories/%s' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return GroupCategories(self._requester, response.json())
 
-        return None
-
-    def delete_category():
+    def delete(self):
         """
         Delete a Group Category
+
         :calls: `DELETE /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.destroy>`_
+
+        :rtype: empty dict
         """
+        response = self._requester.request(
+            'DELETE',
+            'group_categories/%s' % (self.id)
+        )
+        return response.json()
 
-        return None
-
-# List groups in group category
-# GET /api/v1/group_categories/:group_category_id/groups
-# https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.groups
-    def list_groups():
+    def list_groups(self):
         """
+        List groups in group category
 
+        :calls: `GET /api/v1/group_categories/:group_category_id/groups \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.groups>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
         """
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'group_categories/%s/groups' % (self.id)
+        )
 
-        return None
-
-# List users in group category
-# GET /api/v1/group_categories/:group_category_id/users
-# https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.users
-    def list_users():
+    def list_users(self, **kwargs):
         """
+        List users in group category
 
+        :calls: `GET /api/v1/group_categories/:group_category_id/users \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.users>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
+        from pycanvas.user import User
+        return PaginatedList(
+            User,
+            self._requester,
+            'GET',
+            'group_categories/%s/users' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
 
-        return None
-
-# Assign unassigned members
-# POST /api/v1/group_categories/:group_category_id/assign_unassigned_members
-# https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.assign_unassigned_members
-    def assign_members():
+    def assign_members(self, sync=False):
         """
+        Assign unassigned members
 
+        :calls: `POST /api/v1/group_categories/:group_category_id/assign_unassigned_members \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.assign_unassigned_members>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+            or :class:`pycanvas.progress.Progress`
         """
-
-        return None
+        from pycanvas.user import User
+        from pycanvas.progress import Progress
+        if sync:
+            return PaginatedList(
+                User,
+                self._requester,
+                'POST',
+                'group_categories/%s/assign_unassigned_members' % (self.id)
+            )
+        else:
+            response = self._requester.request(
+                'POST',
+                'group_categories/%s/assign_unassigned_members' % (self.id)
+            )
+            return Progress(self._requester, response.json())

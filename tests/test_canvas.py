@@ -261,11 +261,11 @@ class TestCanvas(unittest.TestCase):
 
     # batch_update()
     def test_conversations_batch_update(self):
-        from pycanvas.process import Process
+        from pycanvas.progress import Progress
         conversation_ids = [1, 2]
         this_event = "mark_as_read"
         result = self.canvas.conversations_batch_update(event=this_event, conversation_ids=conversation_ids)
-        assert isinstance(result, Process)
+        assert isinstance(result, Progress)
 
     def test_conversations_batch_updated_fail_on_event(self):
         conversation_ids = [1, 2]

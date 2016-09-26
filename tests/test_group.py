@@ -5,9 +5,7 @@ import requests_mock
 import settings
 from util import register_uris
 from pycanvas import Canvas
-from pycanvas.group import Group
-from pycanvas.group import GroupMembership
-from pycanvas.group import GroupCategories
+from pycanvas.group import Group, GroupMembership, GroupCategories
 from pycanvas.course import Page
 from pycanvas.exceptions import RequiredFieldMissing
 
@@ -32,8 +30,7 @@ class TestGroup(unittest.TestCase):
                 'group_preview_processed_html', 'group_get_activity_stream_summary',
                 'group_list_memberships', 'group_list_memberships_p2',
                 'group_get_membership', 'group_create_membership',
-                'group_update_membership',
-                'membership_update', 'membership_remove_user', 'membership_remove_self'
+                'group_update_membership'
             ]
         }
 
@@ -48,8 +45,6 @@ class TestGroup(unittest.TestCase):
 
         self.course = self.canvas.get_course(1)
         self.group = self.canvas.get_group(1)
-        self.membership = self.group.get_membership(1, "users")
-        self.page = self.group.get_page('my-url')
 
     # __str__()
     def test__str__(self):
@@ -195,20 +190,146 @@ class TestGroup(unittest.TestCase):
         response = self.group.update_membership(1)
         assert isinstance(response, GroupMembership)
 
-################################################
-    # membership.update()
-    def test_membership_update(self):
+
+class TestGroupMembership(unittest.TestCase):
+    """
+    Tests GroupMembership functionality
+    """
+    @classmethod
+    def setUpClass(self):
+        requires = {
+            'group': [
+                'canvas_get_group',
+                'group_get_membership',
+                'membership_update',
+                'membership_remove_user',
+                'membership_remove_self'
+            ]
+        }
+
+        require_generic = {
+            'generic': ['not_found']
+        }
+
+        adapter = requests_mock.Adapter()
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, require_generic, adapter)
+        register_uris(settings.BASE_URL, requires, adapter)
+
+        self.group = self.canvas.get_group(1)
+        self.membership = self.group.get_membership(1, "users")
+
+    # __str__()
+    def test__str__(self):
+        string = str(self.membership)
+        assert isinstance(string, str)
+
+    # update()
+    def test_update(self):
         response = self.membership.update(mem_id=1, moderator=False)
         assert isinstance(response, GroupMembership)
 
-    # membership.remove_user()
-    def test_membership_remove_user(self):
+    # remove_user()
+    def test_remove_user(self):
         response = self.membership.remove_user(1)
         assert not response
 
-    # membership.remove_self()
-    def test_membership_remove_self(self):
+    # remove_self()
+    def test_remove_self(self):
         response = self.membership.remove_self()
         assert not response
 
-################################################
+
+class TestGroupCategories(unittest.TestCase):
+    """
+    Tests GroupCategories Item functionality
+    """
+    @classmethod
+    def setUpClass(self):
+        requires = {
+            'course': [
+                'get_by_id', 'create_group_category', 'list_group_categories'
+            ],
+            'account': [
+                'get_by_id', 'create_group_category', 'list_group_categories'
+            ],
+            'group': [
+                'categories_create_group',
+                'categories_get_category',
+                'categories_update',
+                'categories_delete_category',
+                'categories_list_groups',
+                'categories_list_users',
+                'categories_assign_members_true',
+                'categories_assign_members_false'
+            ]
+        }
+
+        require_generic = {
+            'generic': ['not_found']
+        }
+
+        adapter = requests_mock.Adapter()
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+        register_uris(settings.BASE_URL, require_generic, adapter)
+        register_uris(settings.BASE_URL, requires, adapter)
+
+        self.course = self.canvas.get_course(1)
+        self.group_category = self.course.create_group_category("Shia Laboef")
+
+    # __str__()
+    def test__str__(self):
+        string = str(self.group_category)
+        assert isinstance(string, str)
+
+    # create_group()
+    def test_create_group(self):
+        test_str = "Test Create Group"
+        response = self.group_category.create_group(name=test_str)
+        assert isinstance(response, Group)
+        assert hasattr(response, 'name')
+        assert response.name == test_str
+
+    # get_category()
+    def test_get_category(self):
+        response = self.group_category.get_category(1)
+        assert isinstance(response, GroupCategories)
+
+    # update()
+    def test_update(self):
+        new_name = "Test Update Category"
+        response = self.group_category.update(name=new_name)
+        assert isinstance(response, GroupCategories)
+
+    # delete_category()
+    def test_delete_category(self):
+        response = self.group_category.delete()
+        return None
+
+    # list_groups()
+    def test_list_groups(self):
+        response = self.group_category.list_groups()
+        group_list = [group for group in response]
+        assert len(group_list) == 2
+        assert isinstance(group_list[0], Group)
+        assert hasattr(group_list[0], 'id')
+
+    # list_users()
+    def test_list_users(self):
+        from pycanvas.user import User
+        response = self.group_category.list_users()
+        user_list = [user for user in response]
+        assert len(user_list) == 4
+        assert isinstance(user_list[0], User)
+        assert hasattr(user_list[0], 'user_id')
+
+    # assign_members()
+    def test_assign_members(self):
+        from pycanvas.progress import Progress
+        from pycanvas.paginated_list import PaginatedList
+
+        result_true = self.group_category.assign_members(sync=True)
+        return_false = self.group_category.assign_members()
+
+        assert isinstance(result_true, PaginatedList)
+        assert isinstance(return_false, Progress)

@@ -10,7 +10,7 @@ from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.group import Group
+from pycanvas.group import Group, GroupCategories
 from pycanvas.user import User
 from util import register_uris
 
@@ -30,7 +30,8 @@ class TestAccount(unittest.TestCase):
                 'get_external_tools', 'get_external_tools_p2', 'list_groups_context',
                 'list_groups_context2', 'reports', 'reports_page_2', 'report_index',
                 'report_index_page_2', 'subaccounts', 'subaccounts_page_2', 'users',
-                'users_page_2', 'user_notifs', 'user_notifs_page_2', 'update', 'update_fail'
+                'users_page_2', 'user_notifs', 'user_notifs_page_2', 'update', 'update_fail',
+                'create_group_category', 'list_group_categories'
             ],
             'external_tool': ['get_by_id_account'],
             'user': ['get_by_id'],
@@ -250,3 +251,15 @@ class TestAccount(unittest.TestCase):
 
         assert isinstance(group_list[0], Group)
         assert len(group_list) == 4
+
+    # create_group_category()
+    def test_create_group_category(self):
+        name_str = "Shia Laboef"
+        response = self.account.create_group_category(name=name_str)
+        assert isinstance(response, GroupCategories)
+
+    # list_group_categories()
+    def test_list_group_categories(self):
+        response = self.account.list_group_categories()
+        category_list = [category for category in response]
+        assert isinstance(category_list[0], GroupCategories)

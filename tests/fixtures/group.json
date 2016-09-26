@@ -376,5 +376,249 @@
 
 		},
 		"status_code": 200
+	},
+
+
+	"categories_create_group": {
+		"method": "POST",
+		"endpoint": "group_categories/1/groups",
+		"data": {
+			"id": 1,
+			"name": "Test Create Group",
+			"description": null,
+			"is_public": false,
+			"followed_by_user": false,
+			"join_level": "invitation_only",
+			"members_count": 0,
+			"avatar_url": "https://<canvas>/files/avatar_image.png",
+			"context_type": "Course",
+			"course_id": 3,
+			"role": null,
+			"group_category_id": 4,
+			"sis_group_id": "group4a",
+			"sis_import_id": 14,
+			"storage_quota_mb": 50,
+			"permissions": {"create_discussion_topic":true,"create_announcement":true}
+		},
+		"status_code": 200
+	},
+	"categories_get_category": {
+		"method": "GET",
+		"endpoint": "group_categories/1",
+		"data": {
+			"id": 1,
+			"name": "Test Get Category",
+			"role": "communities",
+			"self_signup": null,
+			"auto_leader": null,
+			"context_type": "Account",
+			"account_id": 3,
+			"group_limit": null,
+			"progress": null
+		},
+		"status_code": 200
+	},
+	"categories_update": {
+		"method": "PUT",
+		"endpoint": "group_categories/1",
+		"data": {
+			"id": 1,
+			"name": "Test Update Category",
+			"role": "communities",
+			"self_signup": null,
+			"auto_leader": null,
+			"context_type": "Account",
+			"account_id": 3,
+			"group_limit": null,
+			"progress": null
+		},
+		"status_code": 200
+	},
+	"categories_delete_category": {
+		"method": "DELETE",
+		"endpoint": "group_categories/1",
+		"data": {
+
+		},
+		"status_code": 200
+	},
+	"categories_list_groups": {
+		"method": "GET",
+		"endpoint": "group_categories/1/groups",
+		"data": [
+			{
+				"id": 1,
+				"name": "Math Group 1",
+				"description": null,
+				"is_public": false,
+				"followed_by_user": false,
+				"join_level": "invitation_only",
+				"members_count": 0,
+				"avatar_url": "https://<canvas>/files/avatar_image.png",
+				"context_type": "Course",
+				"course_id": 3,
+				"role": null,
+				"group_category_id": 4,
+				"sis_group_id": "group4a",
+				"sis_import_id": 14,
+				"storage_quota_mb": 50,
+				"permissions": {
+					"create_discussion_topic":true,
+					"create_announcement":true
+				}
+			},
+			{
+				"id": 2,
+				"name": "Math Group 1",
+				"description": null,
+				"is_public": false,
+				"followed_by_user": false,
+				"join_level": "invitation_only",
+				"members_count": 0,
+				"avatar_url": "https://<canvas>/files/avatar_image.png",
+				"context_type": "Course",
+				"course_id": 3,
+				"role": null,
+				"group_category_id": 4,
+				"sis_group_id": "group4a",
+				"sis_import_id": 14,
+				"storage_quota_mb": 50,
+				"permissions": {
+					"create_discussion_topic":true,
+					"create_announcement":true
+				}
+			}
+		],
+		"status_code": 200
+	},
+	"categories_list_users": {
+		"method": "GET",
+		"endpoint": "group_categories/1/users",
+		"data": [
+			{
+				"user_id": 1,
+				"name": "Sam",
+				"display_name": "Sam",
+				"sections": [
+					{
+						"section_id": 1,
+						"section_code": "Section 1"
+					}
+				]
+			},
+			{
+				"user_id": 2,
+				"name": "Sue",
+				"display_name": "Sue",
+				"sections": [
+					{
+						"section_id": 2,
+						"section_code": "Section 2"
+					}
+				]
+			},
+			{
+				"user_id": 3,
+				"name": "Joe",
+				"display_name": "Joe",
+				"sections": [
+					{
+						"section_id": 2,
+						"section_code": "Section 2"
+					}
+				]
+			},
+			{
+				"user_id": 4,
+				"name": "Cecil",
+				"display_name": "Cecil",
+				"sections": [
+					{
+						"section_id": 3,
+						"section_code": "Section 3"
+					}
+				]
+			}
+		],
+		"status_code": 200
+	},
+	"categories_assign_members_true": {
+		"method": "POST",
+		"endpoint": "group_categories/1/assign_unassigned_members",
+		"data": [
+			{
+				"id": 1,
+				"new_members": [
+					{
+						"user_id": 1,
+						"name": "Sam",
+						"display_name": "Sam",
+						"sections": [
+							{
+								"section_id": 1,
+								"section_code": "Section 1"
+							}
+						]
+					},
+					{
+						"user_id": 2,
+						"name": "Sue",
+						"display_name": "Sue",
+						"sections": [
+							{
+								"section_id": 2,
+								"section_code": "Section 2"
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": 2,
+				"new_members": [
+					{
+						"user_id": 3,
+						"name": "Joe",
+						"display_name": "Joe",
+						"sections": [
+							{
+								"section_id": 2,
+								"section_code": "Section 2"
+							}
+						]
+					},
+					{
+						"user_id": 4,
+						"name": "Cecil",
+						"display_name": "Cecil",
+						"sections": [
+							{
+								"section_id": 3,
+								"section_code": "Section 3"
+							}
+						]
+					}
+				]
+			}
+		],
+		"status_code": 200
+	},
+	"categories_assign_members_false": {
+		"method": "POST",
+		"endpoint": "group_categories/1/assign_unassigned_members",
+		"data": {
+		    "completion": 0,
+		    "context_id": 20,
+		    "context_type": "GroupCategory",
+		    "created_at": "2013-07-05T10:57:48-06:00",
+		    "id": 2,
+		    "message": null,
+		    "tag": "assign_unassigned_members",
+		    "updated_at": "2013-07-05T10:57:48-06:00",
+		    "user_id": null,
+		    "workflow_state": "running",
+		    "url": "http://localhost:3000/api/v1/progress/2"
+		},
+		"status_code": 200
 	}
 }
