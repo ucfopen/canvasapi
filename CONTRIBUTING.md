@@ -23,7 +23,7 @@ Below you'll find guidelines for contributing that will keep our codebase clean 
 ### Bug Reports
 
 #### Reporting bugs
-Bug reports are awesome. Writing quality bug reports helps us identify issues and solve them even faster. You can submit bug reports directly to our [issue tracker](https://***REMOVED***/pycanvas/issues).
+Bug reports are awesome. Writing quality bug reports helps us identify issues and solve them even faster. You can submit bug reports directly to our [issue tracker](https://example.com/changeme/pycanvas/issues).
 
 Here are a few things worth mentioning when making a report:
 
@@ -34,11 +34,11 @@ Here are a few things worth mentioning when making a report:
 ### Resolving issues
 We welcome pull requests for bug fixes and new features! Feel free to browse our open, unassigned issues and assign yourself to them. You can also filter by labels:
 
-* [simple](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=simple) -- easier issues to start working on; great for getting familiar with the codebase.
-* [api coverage](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=api+coverage) -- covering new endpoints or updating existing ones.
-* [internal](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=internal) -- updates to the engine to improve performance.
-* [major](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=major) -- difficult or major changes or additions that require familiarity with the library.
-* [bug](https://***REMOVED***/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=bug) -- happy little code accidents.
+* [simple](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=simple) -- easier issues to start working on; great for getting familiar with the codebase.
+* [api coverage](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=api+coverage) -- covering new endpoints or updating existing ones.
+* [internal](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=internal) -- updates to the engine to improve performance.
+* [major](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=major) -- difficult or major changes or additions that require familiarity with the library.
+* [bug](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=bug) -- happy little code accidents.
 
 
 Once you've found an issue you're interested in tackling, take a look at our [first contribution tutorial](#making-your-first-contribution) for information on our pull request policy.
@@ -49,7 +49,7 @@ Once you've found an issue you're interested in tackling, take a look at our [fi
 
 Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have pip, virtualenv, and git installed and are using a terminal. If not, please set those up before continuing.
 
-1. Clone our repository by executing `git clone git@***REMOVED***/pycanvas.git`
+1. Clone our repository by executing `git clone git@example.com:changeme/pycanvas.git`
 2. Pull the latest commit from the **master** branch: `git pull origin master` 
 3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git branch -b issue/1-test-issue-for-documentation`
 4. Set up a new virtual environment ( `virtualenv env` ) and activate it (`source env/bin/activate`)
@@ -179,7 +179,7 @@ pycanvas/util.py                22      0   100%
 TOTAL                          629      0   100%
 ```
 
-Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://***REMOVED***/pycanvas/merge_requests)! 
+Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://example.com/changeme/pycanvas/merge_requests)!
 
 Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at master and then submit it for review.
 
