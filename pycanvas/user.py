@@ -219,7 +219,8 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.user_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 
@@ -238,7 +239,8 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 

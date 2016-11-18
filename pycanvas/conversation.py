@@ -93,7 +93,8 @@ class Conversation(CanvasObject):
         """
         Delete messages from this conversation.
         Note that this only affects this user's view of the conversation.
-        If all messages are deleted, the conversation will be as well (equivalent to DELETE) by canvas
+        If all messages are deleted, the conversation will be as well
+        (equivalent to DELETE) by canvas
 
         :calls: `POST /api/v1/conversations/:id/remove_messages \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.remove_messages>`_

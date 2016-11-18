@@ -134,7 +134,10 @@ class Account(CanvasObject):
         if isinstance(account_notification, dict) and required_keys_present:
             kwargs['account_notification'] = account_notification
         else:
-            raise RequiredFieldMissing("account_notification must be a dictionary with keys 'subject', 'message', 'start_at', and 'end_at'.")
+            raise RequiredFieldMissing((
+                "account_notification must be a dictionary with keys "
+                "'subject', 'message', 'start_at', and 'end_at'."
+            ))
 
         response = self._requester.request(
             'POST',
@@ -214,7 +217,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/external_tools \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.external_tool.ExternalTool`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.external_tool.ExternalTool`
         """
         from external_tool import ExternalTool
 
@@ -236,7 +240,8 @@ class Account(CanvasObject):
 
         :param report_type: The type of report.
         :type report_type: str
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.AccountReport`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.account.AccountReport`
         """
         return PaginatedList(
             AccountReport,
@@ -252,7 +257,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/reports \
         <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.available_reports>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.AccountReport`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.account.AccountReport`
         """
         return PaginatedList(
             AccountReport,
@@ -311,7 +317,8 @@ class Account(CanvasObject):
 
         :param user: The user object or ID to retrieve notifications for.
         :type user: :class:`pycanvas.user.User` or int
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.AccountNotification`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.account.AccountNotification`
         """
         from user import User
 

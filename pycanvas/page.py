@@ -126,7 +126,12 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
+            '%ss/%s/pages/%s/revisions/%s' % (
+                self.parent_type,
+                self.parent_id,
+                self.url,
+                revision_id
+            ),
             **combine_kwargs(**kwargs)
         )
         pagerev_json = response.json()
@@ -144,7 +149,8 @@ class Page(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.pagerevision.PageRevision`
         """
         return PaginatedList(
             PageRevision,
@@ -168,7 +174,12 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
+            '%ss/%s/pages/%s/revisions/%s' % (
+                self.parent_type,
+                self.parent_id,
+                self.url,
+                revision_id
+            ),
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
