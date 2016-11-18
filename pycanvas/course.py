@@ -256,7 +256,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
         return PaginatedList(
@@ -267,7 +268,7 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-    def get_assignment(self, assignment_id):
+    def get_assignment(self, assignment_id, **kwargs):
         """
         Return the assignment with the given ID.
 
@@ -283,17 +284,19 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/assignments/%s' % (self.id, assignment_id),
+            **combine_kwargs(**kwargs)
         )
         return Assignment(self._requester, response.json())
 
-    def get_assignments(self):
+    def get_assignments(self, **kwargs):
         """
         List all of the assignments in this course.
 
         :calls: `GET /api/v1/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 
@@ -301,7 +304,8 @@ class Course(CanvasObject):
             Assignment,
             self._requester,
             'GET',
-            'courses/%s/assignments' % (self.id)
+            'courses/%s/assignments' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def create_assignment(self, assignment, **kwargs):
@@ -546,7 +550,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/external_tools \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.external_tool.ExternalTool`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.external_tool.ExternalTool`
         """
         from external_tool import ExternalTool
 
