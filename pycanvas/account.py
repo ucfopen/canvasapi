@@ -459,7 +459,7 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def enroll_by_id(self, enrollment_id, **kwargs):
+    def get_enrollment(self, enrollment_id, **kwargs):
         """
         Get an enrollment object by ID.
 
