@@ -2,23 +2,32 @@
 
 
 def combine_kwargs(**kwargs):
-    # TODO: look into implementing and testing multi-level post params
-    # e.g. `account[settings][restrict_student_future_view]`
     """
     Combines a list of keyword arguments into a single dictionary.
 
     :rtype: dict
     """
-    data = {}
-    for key, value in kwargs.iteritems():
+
+    def flatten_dict(prefix, key, value):
+        new_prefix = prefix + '[' + str(key) + ']'
         if isinstance(value, dict):
-            for subkey, subvalue in value.iteritems():
-                data[key + '[' + subkey + ']'] = subvalue
-            continue
+            d = {}
+            for k, v in value.iteritems():
+                d.update(flatten_dict(new_prefix, k, v))
+            return d
+        else:
+            return {new_prefix: value}
 
-        data[key] = value
-
-    return data
+    combined_kwargs = {}
+    # Loop through all kwargs
+    for kw, arg in kwargs.iteritems():
+        if isinstance(arg, dict):
+            # If the argument is a dictionary, flatten it.
+            for key, value in arg.iteritems():
+                combined_kwargs.update(flatten_dict(str(kw), key, value))
+        else:
+            combined_kwargs.update({str(kw): arg})
+    return combined_kwargs
 
 
 def obj_or_id(parameter, param_name, object_types):
