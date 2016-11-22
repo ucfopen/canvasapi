@@ -5,9 +5,18 @@
 		"data": {},
 		"status_code": 400
 	},
-	"401": {
+	"401_invalid_access_token": {
 		"method": "ANY",
-		"endpoint": "401",
+		"endpoint": "401_invalid_access_token",
+		"data": {},
+		"headers": {
+			"WWW-Authenticate": "Bearer realm=\"canvas-lms\""
+		},
+		"status_code": 401
+	},
+	"401_unauthorized": {
+		"method": "ANY",
+		"endpoint": "401_unauthorized",
 		"data": {},
 		"status_code": 401
 	},

@@ -1,4 +1,7 @@
-from pycanvas.exceptions import BadRequest, CanvasException, PermissionError, ResourceDoesNotExist
+from pycanvas.exceptions import (
+    BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
+    Unauthorized
+)
 import requests
 
 
@@ -64,7 +67,10 @@ class Requester(object):
         if response.status_code == 400:
             raise BadRequest(response.json())
         elif response.status_code == 401:
-            raise PermissionError(response.json())
+            if 'WWW-Authenticate' in response.headers:
+                raise InvalidAccessToken(response.json())
+            else:
+                raise Unauthorized(response.json())
         elif response.status_code == 404:
             raise ResourceDoesNotExist('Not Found')
         elif response.status_code == 500:
