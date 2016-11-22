@@ -1,0 +1,37 @@
+{
+	"deactivate": {
+		"method": "DELETE",
+		"endpoint": "courses/1/enrollments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "StudentEnrollment",
+			"state": "inactive"
+		},
+		"status_code": 200
+	},
+	"get_by_id": {
+		"method": "GET",
+		"endpoint": "accounts/1/enrollments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "StudentEnrollment"
+		},
+		"status_code": 200
+	},
+	"reactivate": {
+		"method": "PUT",
+		"endpoint": "courses/1/enrollments/1/reactivate",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "StudentEnrollment",
+			"state": "active"
+		},
+		"status_code": 200
+	}
+}

@@ -78,7 +78,8 @@ class Module(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.module.ModuleItem`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.module.ModuleItem`
         """
         return PaginatedList(
             ModuleItem,

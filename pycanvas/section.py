@@ -19,7 +19,8 @@ class Section(CanvasObject):
         :calls: `GET /api/v1/sections/:section_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.enrollment.Enrollment`
         """
         from enrollment import Enrollment
 

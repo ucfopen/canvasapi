@@ -25,7 +25,7 @@ class TestAccount(unittest.TestCase):
                 'activate_role', 'close_notification', 'create',
                 'create_course', 'create_2', 'create_notification',
                 'create_role', 'create_subaccount', 'create_user',
-                'deactivate_role', 'delete_user', 'enroll_by_id',
+                'deactivate_role', 'delete_user',
                 'get_by_id', 'get_by_id_2', 'get_by_id_3',
                 'get_courses', 'get_courses_page_2',
                 'get_external_tools', 'get_external_tools_p2', 'get_role',
@@ -36,6 +36,7 @@ class TestAccount(unittest.TestCase):
                 'user_notifs', 'user_notifs_page_2', 'update',
                 'update_fail', 'update_role'
             ],
+            'enrollment': ['get_by_id'],
             'external_tool': ['get_by_id_account'],
             'user': ['get_by_id']
         }
@@ -286,8 +287,8 @@ class TestAccount(unittest.TestCase):
         assert hasattr(updated_role, 'role')
         assert hasattr(updated_role, 'label')
 
-    # enroll_by_id()
-    def test_enroll_by_id(self):
-        target_enrollment = self.account.enroll_by_id(1)
+    # get_enrollment()
+    def test_get_enrollment(self):
+        target_enrollment = self.account.get_enrollment(1)
 
         assert isinstance(target_enrollment, Enrollment)
