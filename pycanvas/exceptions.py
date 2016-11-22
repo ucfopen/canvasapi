@@ -33,7 +33,7 @@ class InvalidAccessToken(CanvasException):
     pass
 
 
-class PermissionError(CanvasException):
+class Unauthorized(CanvasException):
     """PyCanvas's key is valid, but is unauthorized to access the requested resource."""
     pass
 
