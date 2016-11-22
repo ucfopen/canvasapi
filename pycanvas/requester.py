@@ -1,8 +1,9 @@
+import requests
+
 from pycanvas.exceptions import (
     BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
     Unauthorized
 )
-import requests
 
 
 class Requester(object):
