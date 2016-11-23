@@ -9,7 +9,7 @@ from paginated_list import PaginatedList
 class Course(CanvasObject):
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.course_code, self.name)
+        return "{} {} ({})".format(self.course_code, self.name, self.id)
 
     def conclude(self):
         """
@@ -677,11 +677,7 @@ class Course(CanvasObject):
 class CourseNickname(CanvasObject):
 
     def __str__(self):
-        return "course_id: %s, name: %s, nickname: %s, " % (
-            self.course_id,
-            self.name,
-            self.nickname
-        )
+        return "{} ({})".format(self.nickname, self.course_id)
 
     def remove(self):
         """

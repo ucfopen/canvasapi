@@ -7,7 +7,7 @@ from util import combine_kwargs, obj_or_id
 class User(CanvasObject):
 
     def __str__(self):
-        return "%s" % (self.name)
+        return "{} ({})".format(self.name, self.id)
 
     def get_profile(self, **kwargs):
         """
@@ -70,7 +70,8 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/missing_submissions \
         <https://canvas.instructure.com/doc/api/users.html#method.users.missing_submissions>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.assignment.Assignment`
         """
         from assignment import Assignment
 

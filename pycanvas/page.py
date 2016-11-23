@@ -7,10 +7,7 @@ from paginated_list import PaginatedList
 class Page(CanvasObject):
 
     def __str__(self):
-        return "url: %s, title: %s" % (
-            self.url,
-            self.title
-        )
+        return "{} ({})".format(self.title, self.url)
 
     def edit(self, **kwargs):
         """
@@ -193,10 +190,7 @@ class Page(CanvasObject):
 class PageRevision(CanvasObject):
 
     def __str__(self):
-        return "revision_id: %s, updated_at: %s" % (
-            self.id,
-            self.updated_at
-        )
+        return "{} ({})".format(self.updated_at, self.revision_id)
 
     @property
     def parent_id(self):

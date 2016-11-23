@@ -7,10 +7,7 @@ from util import combine_kwargs, obj_or_id
 class Account(CanvasObject):
 
     def __str__(self):
-        return "id: %s, name: %s" % (
-            self.id,
-            self.name
-        )
+        return "{} ({})".format(self.name, self.id)
 
     def close_notification_for_user(self, user, notification):
         """
@@ -489,21 +486,15 @@ class Account(CanvasObject):
 
 class AccountNotification(CanvasObject):
     def __str__(self):  # pragma: no cover
-        return "subject: %s, message: %s" % (
-            self.subject,
-            self.message
-        )
+        return str(self.subject)
 
 
 class AccountReport(CanvasObject):
     def __str__(self):  # pragma: no cover
-        return "id: %s, report: %s" % (
-            self.id,
-            self.report
-        )
+        return "{} ({})".format(self.report, self.id)
 
 
 class Role(CanvasObject):
 
     def __str__(self):  # pragma: no cover
-        return "id: %s" % (self.id)
+        return "{} ({})".format(self.label, self.base_role_type)

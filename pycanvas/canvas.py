@@ -464,10 +464,10 @@ class Canvas(object):
         :type conversation_ids: `list` of `str`
         :param event: The action to take on each conversation.
         :type event: `str`
-        :rtype: :class:`pycanvas.process.Process`
+        :rtype: :class:`pycanvas.progress.Progress`
         """
 
-        from pycanvas.process import Process
+        from pycanvas.progress import Progress
 
         ALLOWED_EVENTS = [
             'mark_as_read',
@@ -500,8 +500,8 @@ class Canvas(object):
                 event=event,
                 **{"conversation_ids[]": conversation_ids}
             )
-            return_process = Process(self.__requester, response.json())
-            return return_process
+            return_progress = Progress(self.__requester, response.json())
+            return return_progress
 
         except ValueError as e:
             return e
