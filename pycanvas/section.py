@@ -1,6 +1,6 @@
-from canvas_object import CanvasObject
-from paginated_list import PaginatedList
-from util import combine_kwargs
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.util import combine_kwargs
 
 
 class Section(CanvasObject):
@@ -22,7 +22,7 @@ class Section(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
 
         return PaginatedList(
             Enrollment,

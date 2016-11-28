@@ -3,7 +3,6 @@ import unittest
 
 import requests_mock
 
-import settings
 from pycanvas import Canvas
 from pycanvas.account import Account, AccountNotification, AccountReport, Role
 from pycanvas.course import Course
@@ -11,7 +10,8 @@ from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.user import User
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 class TestAccount(unittest.TestCase):

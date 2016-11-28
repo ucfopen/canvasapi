@@ -2,12 +2,12 @@ import unittest
 
 import requests_mock
 
-import settings
-from util import register_uris
 from pycanvas.canvas import Canvas
 from pycanvas.course import Course
 from pycanvas.group import Group
 from pycanvas.page import Page, PageRevision
+from tests import settings
+from tests.util import register_uris
 
 
 class TestPage(unittest.TestCase):
@@ -37,7 +37,7 @@ class TestPage(unittest.TestCase):
         self.page_course = self.course.get_page('my-url')
         self.page_group = self.group.get_page('my-url')
 
-    #__str__()
+    # __str__()
     def test__str__(self):
         string = str(self.page_course)
         assert isinstance(string, str)
@@ -50,7 +50,7 @@ class TestPage(unittest.TestCase):
         assert hasattr(self.page_course, 'title')
         assert self.page_course.title == new_title
 
-        #reset for future tests
+        # reset for future tests
         self.page_course = self.course.get_page('my-url')
 
     def test_delete(self):

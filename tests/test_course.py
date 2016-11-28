@@ -5,18 +5,18 @@ import os
 
 import requests_mock
 
-import settings
-from util import register_uris
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
-from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
+from pycanvas.external_tool import ExternalTool
 from pycanvas.module import Module
 from pycanvas.quiz import Quiz
 from pycanvas.section import Section
 from pycanvas.user import User
+from tests import settings
+from tests.util import register_uris
 
 
 class TestCourse(unittest.TestCase):

@@ -1,7 +1,7 @@
-from canvas_object import CanvasObject
-from exceptions import RequiredFieldMissing
-from paginated_list import PaginatedList
-from util import combine_kwargs
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.util import combine_kwargs
 
 
 class Module(CanvasObject):
