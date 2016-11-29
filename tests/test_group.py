@@ -2,11 +2,11 @@ import unittest
 
 import requests_mock
 
-import settings
-from util import register_uris
 from pycanvas import Canvas
 from pycanvas.course import Page
 from pycanvas.exceptions import RequiredFieldMissing
+from tests import settings
+from tests.util import register_uris
 
 
 class TestGroup(unittest.TestCase):

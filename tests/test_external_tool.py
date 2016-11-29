@@ -2,13 +2,13 @@ import unittest
 
 import requests_mock
 
-import settings
-from util import register_uris
 from pycanvas import Canvas
 from pycanvas.account import Account
 from pycanvas.course import Course
 from pycanvas.exceptions import CanvasException
 from pycanvas.external_tool import ExternalTool
+from tests import settings
+from tests.util import register_uris
 
 
 class TestExternalTool(unittest.TestCase):

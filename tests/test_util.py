@@ -2,12 +2,12 @@ import unittest
 
 import requests_mock
 
-import settings
-from util import register_uris
 from pycanvas import Canvas
 from pycanvas.course import CourseNickname
 from pycanvas.user import User
 from pycanvas.util import combine_kwargs, obj_or_id
+from tests import settings
+from tests.util import register_uris
 
 
 class TestCourse(unittest.TestCase):

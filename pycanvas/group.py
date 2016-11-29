@@ -1,7 +1,7 @@
-from canvas_object import CanvasObject
-from paginated_list import PaginatedList
-from util import combine_kwargs
-from exceptions import RequiredFieldMissing
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.util import combine_kwargs
 
 
 class Group(CanvasObject):
@@ -18,7 +18,7 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.group.Group`
         """
-        from course import Page
+        from pycanvas.course import Page
 
         response = self._requester.request(
             'GET',
@@ -38,7 +38,7 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.group.Group`
         """
-        from course import Page
+        from pycanvas.course import Page
 
         response = self._requester.request(
             'PUT',
@@ -59,7 +59,7 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.groups.Group`
         """
-        from course import Page
+        from pycanvas.course import Page
         return PaginatedList(
             Page,
             self._requester,
@@ -81,7 +81,7 @@ class Group(CanvasObject):
         :returns: The created page.
         :rtype: :class: `pycanvas.groups.Group`
         """
-        from course import Page
+        from pycanvas.course import Page
 
         if isinstance(wiki_page, dict) and 'title' in wiki_page:
             kwargs['wiki_page'] = wiki_page
@@ -110,7 +110,7 @@ class Group(CanvasObject):
         :returns: The specified page.
         :rtype: :class: `pycanvas.groups.Group`
         """
-        from course import Page
+        from pycanvas.course import Page
 
         response = self._requester.request(
             'GET',

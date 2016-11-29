@@ -1,7 +1,7 @@
-from canvas_object import CanvasObject
-from exceptions import RequiredFieldMissing
-from paginated_list import PaginatedList
-from util import combine_kwargs, obj_or_id
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.util import combine_kwargs, obj_or_id
 
 
 class Account(CanvasObject):
@@ -23,7 +23,7 @@ class Account(CanvasObject):
         :type notification: :class:`pycanvas.account.AccountNotification` or int
         :rtype: :class:`pycanvas.account.AccountNotification`
         """
-        from user import User
+        from pycanvas.user import User
 
         user_id = obj_or_id(user, "user", (User,))
         notif_id = obj_or_id(notification, "notif", (AccountNotification,))
@@ -59,7 +59,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.course.Course`
         """
-        from course import Course
+        from pycanvas.course import Course
         response = self._requester.request(
             'POST',
             'accounts/%s/courses' % (self.id),
@@ -100,7 +100,7 @@ class Account(CanvasObject):
         :type pseudonym: dict
         :rtype: :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         if isinstance(pseudonym, dict) and 'unique_id' in pseudonym:
             kwargs['pseudonym'] = pseudonym
@@ -162,7 +162,7 @@ class Account(CanvasObject):
         :type user: :class:`pycanvas.user.User` or int
         :rtype: :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -181,7 +181,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
         """
-        from course import Course
+        from pycanvas.course import Course
 
         return PaginatedList(
             Course,
@@ -198,7 +198,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.external_tool.ExternalTool`
         """
-        from external_tool import ExternalTool
+        from pycanvas.external_tool import ExternalTool
 
         response = self._requester.request(
             'GET',
@@ -217,7 +217,7 @@ class Account(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.external_tool.ExternalTool`
         """
-        from external_tool import ExternalTool
+        from pycanvas.external_tool import ExternalTool
 
         return PaginatedList(
             ExternalTool,
@@ -293,7 +293,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         return PaginatedList(
             User,
@@ -317,7 +317,7 @@ class Account(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.account.AccountNotification`
         """
-        from user import User
+        from pycanvas.user import User
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -474,7 +474,7 @@ class Account(CanvasObject):
         :type enrollment_id: int
         :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
 
         response = self._requester.request(
             'GET',
@@ -485,11 +485,13 @@ class Account(CanvasObject):
 
 
 class AccountNotification(CanvasObject):
+
     def __str__(self):  # pragma: no cover
         return str(self.subject)
 
 
 class AccountReport(CanvasObject):
+
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.report, self.id)
 

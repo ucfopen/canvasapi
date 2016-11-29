@@ -1,4 +1,4 @@
-from canvas_object import CanvasObject
+from pycanvas.canvas_object import CanvasObject
 
 
 class Avatar(CanvasObject):

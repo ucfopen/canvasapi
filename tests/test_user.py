@@ -4,8 +4,6 @@ import os
 
 import requests_mock
 
-import settings
-from util import register_uris
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.avatar import Avatar
@@ -13,6 +11,8 @@ from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
 from pycanvas.page_view import PageView
 from pycanvas.user import User
+from tests import settings
+from tests.util import register_uris
 
 
 class TestUser(unittest.TestCase):

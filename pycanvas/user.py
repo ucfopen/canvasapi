@@ -1,7 +1,7 @@
-from canvas_object import CanvasObject
-from paginated_list import PaginatedList
-from upload import Uploader
-from util import combine_kwargs, obj_or_id
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.upload import Uploader
+from pycanvas.util import combine_kwargs, obj_or_id
 
 
 class User(CanvasObject):
@@ -33,7 +33,7 @@ class User(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.PageView`
         """
-        from page_view import PageView
+        from pycanvas.page_view import PageView
 
         return PaginatedList(
             PageView,
@@ -52,7 +52,7 @@ class User(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
         """
-        from course import Course
+        from pycanvas.course import Course
 
         return PaginatedList(
             Course,
@@ -73,7 +73,7 @@ class User(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         return PaginatedList(
             Assignment,
@@ -203,7 +203,7 @@ class User(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.avatar.Avatar`
         """
-        from avatar import Avatar
+        from pycanvas.avatar import Avatar
 
         return PaginatedList(
             Avatar,
@@ -223,7 +223,7 @@ class User(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         return PaginatedList(
             Assignment,
@@ -243,7 +243,7 @@ class User(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
 
         return PaginatedList(
             Enrollment,

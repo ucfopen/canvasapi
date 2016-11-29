@@ -1,5 +1,5 @@
-from canvas_object import CanvasObject
-from util import combine_kwargs
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.util import combine_kwargs
 
 
 class Assignment(CanvasObject):

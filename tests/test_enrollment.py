@@ -2,10 +2,10 @@ import unittest
 
 import requests_mock
 
-import settings
-from util import register_uris
 from pycanvas.canvas import Canvas
 from pycanvas.enrollment import Enrollment
+from tests import settings
+from tests.util import register_uris
 
 
 class TestEnrollment(unittest.TestCase):

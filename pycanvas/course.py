@@ -1,9 +1,9 @@
-from canvas_object import CanvasObject
-from exceptions import RequiredFieldMissing
-from upload import Uploader
-from util import combine_kwargs
-from page import Page
-from paginated_list import PaginatedList
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.page import Page
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.upload import Uploader
+from pycanvas.util import combine_kwargs
 
 
 class Course(CanvasObject):
@@ -82,7 +82,7 @@ class Course(CanvasObject):
         :type user_id_type: str
         :rtype: :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         if user_id_type:
             uri = 'courses/%s/users/%s:%s' % (self.id, user_id_type, user_id)
@@ -107,7 +107,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         return PaginatedList(
             User,
@@ -130,7 +130,7 @@ class Course(CanvasObject):
         :type enrollment_type: str
         :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
 
         kwargs['enrollment[user_id]'] = user.id
         kwargs['enrollment[type]'] = enrollment_type
@@ -153,7 +153,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         return PaginatedList(
             User,
@@ -259,7 +259,7 @@ class Course(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
         return PaginatedList(
             Enrollment,
             self._requester,
@@ -279,7 +279,7 @@ class Course(CanvasObject):
         :type assignment_id: int
         :rtype: :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         response = self._requester.request(
             'GET',
@@ -298,7 +298,7 @@ class Course(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         return PaginatedList(
             Assignment,
@@ -321,7 +321,7 @@ class Course(CanvasObject):
         :type assignment: dict
         :rtype: :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         if isinstance(assignment, dict) and 'name' in assignment:
             kwargs['assignment'] = assignment
@@ -345,7 +345,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.quiz.Quiz`
         """
-        from quiz import Quiz
+        from pycanvas.quiz import Quiz
         return PaginatedList(
             Quiz,
             self._requester,
@@ -366,7 +366,7 @@ class Course(CanvasObject):
         :type quiz_id: int
         :rtype: :class:`pycanvas.quiz.Quiz`
         """
-        from quiz import Quiz
+        from pycanvas.quiz import Quiz
         response = self._requester.request(
             'GET',
             'courses/%s/quizzes/%s' % (self.id, quiz_id)
@@ -387,7 +387,7 @@ class Course(CanvasObject):
         :type quiz: dict
         :rtype: :class:`pycanvas.quiz.Quiz`
         """
-        from quiz import Quiz
+        from pycanvas.quiz import Quiz
 
         if isinstance(quiz, dict) and 'title' in quiz:
             kwargs['quiz'] = quiz
@@ -413,7 +413,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.module.Module`
         """
-        from module import Module
+        from pycanvas.module import Module
 
         return PaginatedList(
             Module,
@@ -435,7 +435,7 @@ class Course(CanvasObject):
         :type module_id: int
         :rtype: :class:`pycanvas.module.Module`
         """
-        from module import Module
+        from pycanvas.module import Module
 
         response = self._requester.request(
             'GET',
@@ -458,7 +458,7 @@ class Course(CanvasObject):
         :returns: The created module.
         :rtype: :class:`pycanvas.module.Module`
         """
-        from module import Module
+        from pycanvas.module import Module
 
         if isinstance(module, dict) and 'name' in module:
             kwargs['module'] = module
@@ -482,7 +482,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.external_tool.ExternalTool`
         """
-        from external_tool import ExternalTool
+        from pycanvas.external_tool import ExternalTool
 
         response = self._requester.request(
             'GET',
@@ -501,7 +501,7 @@ class Course(CanvasObject):
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.external_tool.ExternalTool`
         """
-        from external_tool import ExternalTool
+        from pycanvas.external_tool import ExternalTool
 
         return PaginatedList(
             ExternalTool,
@@ -523,7 +523,7 @@ class Course(CanvasObject):
         :type section_id: int
         :rtype: :class:`pycanvas.section.Section`
         """
-        from section import Section
+        from pycanvas.section import Section
 
         response = self._requester.request(
             'GET',
@@ -645,7 +645,7 @@ class Course(CanvasObject):
 
         :rtype: :class: `pycanvas.section.Section`
         """
-        from section import Section
+        from pycanvas.section import Section
         return PaginatedList(
             Section,
             self._requester,
@@ -664,7 +664,7 @@ class Course(CanvasObject):
         :rtype: :class:`pycanvas.course.Section`
         """
 
-        from section import Section
+        from pycanvas.section import Section
         response = self._requester.request(
             'POST',
             'courses/%s/sections' % (self.id),

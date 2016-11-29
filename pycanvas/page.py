@@ -1,7 +1,6 @@
-from canvas_object import CanvasObject
-
-from util import combine_kwargs
-from paginated_list import PaginatedList
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.util import combine_kwargs
+from pycanvas.paginated_list import PaginatedList
 
 
 class Page(CanvasObject):
@@ -80,8 +79,8 @@ class Page(CanvasObject):
 
         :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
         """
-        from group import Group
-        from course import Course
+        from pycanvas.group import Group
+        from pycanvas.course import Course
 
         response = self._requester.request(
             'GET',
@@ -226,8 +225,8 @@ class PageRevision(CanvasObject):
 
         :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
         """
-        from group import Group
-        from course import Course
+        from pycanvas.group import Group
+        from pycanvas.course import Course
 
         response = self._requester.request(
             'GET',

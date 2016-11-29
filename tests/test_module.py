@@ -2,10 +2,11 @@ import unittest
 import settings
 
 import requests_mock
+
 from pycanvas import Canvas
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.module import Module, ModuleItem
-from util import register_uris
+from tests.util import register_uris
 
 
 class TestModule(unittest.TestCase):
@@ -48,7 +49,7 @@ class TestModule(unittest.TestCase):
         assert hasattr(deleted_module, 'course_id')
         assert deleted_module.course_id == self.course.id
 
-    #relock()
+    # relock()
     def test_relock(self):
         relocked_module = self.module.relock()
 
@@ -56,7 +57,7 @@ class TestModule(unittest.TestCase):
         assert hasattr(relocked_module, 'course_id')
         assert relocked_module.course_id == self.course.id
 
-    #list_module_items()
+    # list_module_items()
     def test_list_module_items(self):
         module_items = self.module.list_module_items()
         module_item_list = [module_item for module_item in module_items]
@@ -66,7 +67,7 @@ class TestModule(unittest.TestCase):
         assert hasattr(module_item_list[0], 'course_id')
         assert module_item_list[0].course_id == self.course.id
 
-    #get_module_item()
+    # get_module_item()
     def test_get_module_item(self):
         module_item = self.module.get_module_item(1)
 
@@ -74,7 +75,7 @@ class TestModule(unittest.TestCase):
         assert hasattr(module_item, 'course_id')
         assert module_item.course_id == self.course.id
 
-    #create_module_item()
+    # create_module_item()
     def test_create_module_item(self):
         module_item = self.module.create_module_item(
             module_item={
@@ -98,7 +99,7 @@ class TestModule(unittest.TestCase):
                 module_item={'type': 'Page'}
             )
 
-    #__str__
+    # __str__
     def test__str__(self):
         string = str(self.module)
         assert isinstance(string, str)
@@ -127,7 +128,7 @@ class TestModuleItem(unittest.TestCase):
         self.module = self.course.get_module(1)
         self.module_item = self.module.get_module_item(1)
 
-    #edit()
+    # edit()
     def test_edit_module_item(self):
         title = 'New Title'
         edited_module_item = self.module_item.edit(
@@ -140,7 +141,7 @@ class TestModuleItem(unittest.TestCase):
         assert hasattr(edited_module_item, 'course_id')
         assert edited_module_item.course_id == self.course.id
 
-    #delete()
+    # delete()
     def test_delete(self):
         deleted_module_item = self.module_item.delete()
 
@@ -148,7 +149,7 @@ class TestModuleItem(unittest.TestCase):
         assert hasattr(deleted_module_item, 'course_id')
         assert deleted_module_item.course_id == self.course.id
 
-    #complete(course_id, True)
+    # complete(course_id, True)
     def test_complete(self):
         completed_module_item = self.module_item.complete()
 
@@ -157,7 +158,7 @@ class TestModuleItem(unittest.TestCase):
         assert hasattr(completed_module_item, 'course_id')
         assert completed_module_item.course_id == self.course.id
 
-    #complete(course_id, False)
+    # complete(course_id, False)
     def test_uncomplete(self):
         completed_module_item = self.module_item.uncomplete()
 

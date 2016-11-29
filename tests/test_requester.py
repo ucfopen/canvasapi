@@ -2,13 +2,13 @@ import unittest
 
 import requests_mock
 
-import settings
 from pycanvas import Canvas
 from pycanvas.exceptions import (
     BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
     Unauthorized
 )
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 class TestRequester(unittest.TestCase):

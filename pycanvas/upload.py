@@ -1,6 +1,6 @@
 import os
 
-from util import combine_kwargs
+from pycanvas.util import combine_kwargs
 
 
 class Uploader(object):

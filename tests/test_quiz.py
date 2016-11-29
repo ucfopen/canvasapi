@@ -2,9 +2,10 @@ import unittest
 import settings
 
 import requests_mock
+
 from pycanvas import Canvas
 from pycanvas.quiz import Quiz
-from util import register_uris
+from tests.util import register_uris
 
 
 class TestQuiz(unittest.TestCase):

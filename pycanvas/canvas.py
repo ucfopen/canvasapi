@@ -1,9 +1,9 @@
 from pycanvas.account import Account
 from pycanvas.course import Course
+from pycanvas.group import Group
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.requester import Requester
 from pycanvas.user import User
-from pycanvas.group import Group
 from pycanvas.util import combine_kwargs
 
 
