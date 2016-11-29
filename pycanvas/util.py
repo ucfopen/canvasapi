@@ -1,13 +1,9 @@
-"""A collection of useful methods."""
-
-
 def combine_kwargs(**kwargs):
     """
     Combines a list of keyword arguments into a single dictionary.
 
     :rtype: dict
     """
-
     def flatten_dict(prefix, key, value):
         new_prefix = prefix + '[' + str(key) + ']'
         if isinstance(value, dict):
@@ -19,10 +15,11 @@ def combine_kwargs(**kwargs):
             return {new_prefix: value}
 
     combined_kwargs = {}
+
     # Loop through all kwargs
     for kw, arg in kwargs.iteritems():
         if isinstance(arg, dict):
-            # If the argument is a dictionary, flatten it.
+            # If the argument is a dictionary, flatten it
             for key, value in arg.iteritems():
                 combined_kwargs.update(flatten_dict(str(kw), key, value))
         else:
@@ -42,7 +39,6 @@ def obj_or_id(parameter, param_name, object_types):
     :param object_types: tuple
     :rtype: int
     """
-
     try:
         return int(parameter)
     except:

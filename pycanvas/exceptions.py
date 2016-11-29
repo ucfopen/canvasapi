@@ -1,8 +1,3 @@
-"""
-A collection of PyCanvas exception classes.
-"""
-
-
 class CanvasException(Exception):  # pragma: no cover
     """
     Base class for all errors returned by the Canvas API.

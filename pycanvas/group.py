@@ -1,7 +1,7 @@
 from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.util import combine_kwargs
-from pycanvas.exceptions import RequiredFieldMissing
 
 
 class Group(CanvasObject):

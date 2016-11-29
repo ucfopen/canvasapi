@@ -1,9 +1,9 @@
 from pycanvas.canvas_object import CanvasObject
 from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.upload import Uploader
-from pycanvas.util import combine_kwargs
 from pycanvas.page import Page
 from pycanvas.paginated_list import PaginatedList
+from pycanvas.upload import Uploader
+from pycanvas.util import combine_kwargs
 
 
 class Course(CanvasObject):
