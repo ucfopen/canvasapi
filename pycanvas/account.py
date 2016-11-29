@@ -488,6 +488,7 @@ class Account(CanvasObject):
 
 
 class AccountNotification(CanvasObject):
+
     def __str__(self):  # pragma: no cover
         return "subject: %s, message: %s" % (
             self.subject,
@@ -496,6 +497,7 @@ class AccountNotification(CanvasObject):
 
 
 class AccountReport(CanvasObject):
+
     def __str__(self):  # pragma: no cover
         return "id: %s, report: %s" % (
             self.id,

@@ -16,10 +16,10 @@ def combine_kwargs(**kwargs):
 
     combined_kwargs = {}
 
-    # Loop through all kwargs
+    # Loop through all kwargs.
     for kw, arg in kwargs.iteritems():
         if isinstance(arg, dict):
-            # If the argument is a dictionary, flatten it
+            # If the argument is a dictionary, flatten it.
             for key, value in arg.iteritems():
                 combined_kwargs.update(flatten_dict(str(kw), key, value))
         else:
