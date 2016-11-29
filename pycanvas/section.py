@@ -6,10 +6,10 @@ from util import combine_kwargs
 class Section(CanvasObject):
 
     def __str__(self):
-        return 'Section #%s \"%s\" |course_id: %s' % (
-            self.id,
+        return '{} - {} ({})'.format(
             self.name,
-            self.course_id
+            self.course_id,
+            self.id,
         )
 
     def get_enrollments(self, **kwargs):

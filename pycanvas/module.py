@@ -7,10 +7,7 @@ from util import combine_kwargs
 class Module(CanvasObject):
 
     def __str__(self):
-        return "id: %s, name: %s" % (
-            self.id,
-            self.name,
-        )
+        return "{} ({})".format(self.name, self.id)
 
     def edit(self, **kwargs):
         """
@@ -143,11 +140,7 @@ class Module(CanvasObject):
 class ModuleItem(CanvasObject):
 
     def __str__(self):
-        return "id: %s, title: %s, description: %s" % (
-            self.id,
-            self.title,
-            self.module_id
-        )
+        return "{} ({})".format(self.title, self.id)
 
     def edit(self, **kwargs):
         """

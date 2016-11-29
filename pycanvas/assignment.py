@@ -4,12 +4,8 @@ from util import combine_kwargs
 
 class Assignment(CanvasObject):
 
-    def __str__(self):  # pragma: no cover
-        return "id: %s, name: %s, description: %s" % (
-            self.id,
-            self.name,
-            self.description
-        )
+    def __str__(self):
+        return "{} ({})".format(self.name, self.id)
 
     def delete(self):
         """

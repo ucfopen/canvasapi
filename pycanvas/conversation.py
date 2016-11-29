@@ -5,7 +5,7 @@ from pycanvas.util import combine_kwargs
 class Conversation(CanvasObject):
 
     def __str__(self):
-        return "%s %s" % (self.id, self.subject)
+        return "{} ({})".format(self.subject, self.id)
 
     def edit(self, **kwargs):
         """

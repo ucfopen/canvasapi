@@ -7,7 +7,7 @@ from exceptions import RequiredFieldMissing
 class Group(CanvasObject):
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.name, self.description)
+        return "{} ({})".format(self.name, self.id)
 
     def show_front_page(self):
         """

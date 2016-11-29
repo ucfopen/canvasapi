@@ -340,12 +340,14 @@
 			{
 				"id": "123fb561-c9ce-7ed9-8e42-31e0aab47e18",
 				"url": "mock://example.com/test",
-				"created_at": "2013-01-01T12:00:00Z"
+				"created_at": "2013-01-01T12:00:00Z",
+				"context_type": "Course"
 			},
 			{
 				"id": "4c7f44f9-41b9-ff59-03ad-3215cb246966",
 				"url": "mock://example.com/hello",
-				"created_at": "2014-01-01T12:00:00Z"
+				"created_at": "2014-01-01T12:00:00Z",
+				"context_type": "User"
 			}
 		],
 		"headers": {
@@ -360,12 +362,14 @@
 			{
 				"id": "77f111c9-5b0b-46cb-92a2-34108ebe7b5b",
 				"url": "mock://example.com/login",
-				"created_at": "2015-01-01T12:00:00Z"
+				"created_at": "2015-01-01T12:00:00Z",
+				"context_type": null
 			},
 			{
 				"id": "69ec8b6f-e123-2af8-dafb-561fdc711f6b",
 				"url": "mock://example.com/logout",
-				"created_at": "2016-01-01T12:00:00Z"
+				"created_at": "2016-01-01T12:00:00Z",
+				"context_type": "UserProfile"
 			}
 		],
 		"status_code": 200

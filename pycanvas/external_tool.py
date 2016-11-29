@@ -6,7 +6,7 @@ from util import combine_kwargs
 class ExternalTool(CanvasObject):
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.name, self.description)
+        return "{} ({})".format(self.name, self.id)
 
     @property
     def parent_id(self):
