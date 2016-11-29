@@ -232,11 +232,13 @@ class TestGroupMembership(unittest.TestCase):
     # remove_user()
     def test_remove_user(self):
         response = self.membership.remove_user(1)
+        # the response should be an empty dict that evaluates to false
         assert not response
 
     # remove_self()
     def test_remove_self(self):
         response = self.membership.remove_self()
+        # the response should be an empty dict that evaluates to false
         assert not response
 
 
@@ -304,7 +306,8 @@ class TestGroupCategories(unittest.TestCase):
     # delete_category()
     def test_delete_category(self):
         response = self.group_category.delete()
-        return None
+        # the response should be an empty dict that evaluates to false
+        assert not response
 
     # list_groups()
     def test_list_groups(self):

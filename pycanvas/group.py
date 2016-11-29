@@ -491,7 +491,6 @@ class GroupCategories(CanvasObject):
             'DELETE',
             'group_categories/%s' % (self.id)
         )
-        print response
         return response.json()
 
     def list_groups(self):
