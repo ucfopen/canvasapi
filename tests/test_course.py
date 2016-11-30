@@ -104,7 +104,7 @@ class TestCourse(unittest.TestCase):
         assert hasattr(user, 'name')
 
     def test_get_user_id_type(self):
-        user = self.course.get_user("ab123456", "sis_login_id")
+        user = self.course.get_user("SISLOGIN", "sis_login_id")
 
         assert isinstance(user, User)
         assert hasattr(user, 'name')
