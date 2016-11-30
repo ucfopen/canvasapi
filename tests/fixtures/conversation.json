@@ -4,7 +4,7 @@
         "endpoint": "conversations/1",
         "data": {
             "id": 1,
-            "subject": "Pokemon Go"
+            "subject": "Amazing Conversation"
         },
         "status_code": 200
     },
@@ -13,7 +13,7 @@
         "endpoint": "conversations/2",
         "data": {
             "id": 2,
-            "subject": "Pokemon Go2"
+            "subject": "Slightly Entertaining Conversation"
         },
         "status_code": 200
     }, 
@@ -23,11 +23,11 @@
         "data": [
             {
                 "id": 1,
-                "subject": "Pokemon Go"
+                "subject": "Amazing Conversation"
             },
             {
                 "id": 2,
-                "subject": "Agar.io"
+                "subject": "Slightly Entertaining Conversation"
             }
         ],
         "status_code": 200,
@@ -41,11 +41,11 @@
         "data": [
             {
                 "id": 3,
-                "subject": "Minecraft"
+                "subject": "Boring Conversation"
             },
             {
                 "id": 4,
-                "subject": "Smash Bros"
+                "subject": "Average Conversation"
             }
         ],
         "status_code": 200
