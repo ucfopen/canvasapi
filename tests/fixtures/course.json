@@ -226,11 +226,11 @@
 	},
 	"get_user_id_type": {
 		"method": "GET",
-		"endpoint": "courses/1/users/sis_login_id:ab123456",
+		"endpoint": "courses/1/users/sis_login_id:SISLOGIN",
 		"data": {
 			"id": 123456,
 			"name": "Abby Smith",
-			"sis_login_id": "ab123456"
+			"sis_login_id": "SISLOGIN"
 		},
 		"status_code": 200
 	},
