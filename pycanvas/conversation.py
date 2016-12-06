@@ -5,7 +5,7 @@ from pycanvas.util import combine_kwargs
 class Conversation(CanvasObject):
 
     def __str__(self):
-        return "%s %s" % (self.id, self.subject)
+        return "{} ({})".format(self.subject, self.id)
 
     def edit(self, **kwargs):
         """
@@ -92,8 +92,9 @@ class Conversation(CanvasObject):
     def delete_messages(self, remove):
         """
         Delete messages from this conversation.
+
         Note that this only affects this user's view of the conversation.
-        If all messages are deleted, the conversation will be as well (equivalent to DELETE) by canvas
+        If all messages are deleted, the conversation will be as well.
 
         :calls: `POST /api/v1/conversations/:id/remove_messages \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.remove_messages>`_

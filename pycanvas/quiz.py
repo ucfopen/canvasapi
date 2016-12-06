@@ -1,14 +1,11 @@
-from canvas_object import CanvasObject
-from util import combine_kwargs
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.util import combine_kwargs
 
 
 class Quiz(CanvasObject):
 
     def __str__(self):
-        return "id %s, title: %s" % (
-            self.id,
-            self.title
-        )
+        return "{} ({})".format(self.title, self.id)
 
     def edit(self, **kwargs):
         """

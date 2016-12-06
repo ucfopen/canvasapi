@@ -1,6 +1,6 @@
 ============
-Process
+Progress
 ============
 
-.. autoclass:: pycanvas.process.Process
+.. autoclass:: pycanvas.progress.Progress
     :members:

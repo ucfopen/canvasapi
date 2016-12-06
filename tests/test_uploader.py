@@ -6,8 +6,8 @@ import requests_mock
 
 from pycanvas.canvas import Canvas
 from pycanvas.upload import Uploader
-import settings
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 class TestUploader(unittest.TestCase):

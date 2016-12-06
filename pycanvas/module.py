@@ -1,16 +1,13 @@
-from canvas_object import CanvasObject
-from exceptions import RequiredFieldMissing
-from paginated_list import PaginatedList
-from util import combine_kwargs
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.util import combine_kwargs
 
 
 class Module(CanvasObject):
 
     def __str__(self):
-        return "id: %s, name: %s" % (
-            self.id,
-            self.name,
-        )
+        return "{} ({})".format(self.name, self.id)
 
     def edit(self, **kwargs):
         """
@@ -78,7 +75,8 @@ class Module(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.module.ModuleItem`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.module.ModuleItem`
         """
         return PaginatedList(
             ModuleItem,
@@ -142,11 +140,7 @@ class Module(CanvasObject):
 class ModuleItem(CanvasObject):
 
     def __str__(self):
-        return "id: %s, title: %s, description: %s" % (
-            self.id,
-            self.title,
-            self.module_id
-        )
+        return "{} ({})".format(self.title, self.id)
 
     def edit(self, **kwargs):
         """

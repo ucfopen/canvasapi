@@ -2,8 +2,8 @@ import unittest
 
 import requests_mock
 
-import settings
 from pycanvas import Canvas
+from tests import settings
 from util import register_uris
 
 

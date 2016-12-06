@@ -3,8 +3,8 @@ from pycanvas.canvas_object import CanvasObject
 
 class Progress(CanvasObject):
 
-    def __str__(self):  # pragma: no cover
-        return "%s: %s, %s" % (self.id, self.tag, self.workflow_state)
+    def __str__(self):
+        return "{} - {} ({})".format(self.tag, self.workflow_state, self.id)
 
     def query(self):
         """

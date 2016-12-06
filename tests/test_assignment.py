@@ -4,7 +4,7 @@ import settings
 
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
-from util import register_uris
+from tests.util import register_uris
 
 
 class TestAssignment(unittest.TestCase):

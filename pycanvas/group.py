@@ -1,13 +1,13 @@
-from canvas_object import CanvasObject
-from paginated_list import PaginatedList
-from util import combine_kwargs
-from exceptions import RequiredFieldMissing
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.util import combine_kwargs
 
 
 class Group(CanvasObject):
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.name, self.description)
+        return "{} ({})".format(self.name, self.id)
 
     def create_page(self, wiki_page, **kwargs):
         """
@@ -21,7 +21,7 @@ class Group(CanvasObject):
         :returns: The created page.
         :rtype: :class: `pycanvas.page.Page`
         """
-        from course import Page
+        from pycanvas.course import Page
 
         if isinstance(wiki_page, dict) and 'title' in wiki_page:
             kwargs['wiki_page'] = wiki_page
@@ -48,7 +48,7 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.page.Page`
         """
-        from course import Page
+        from pycanvas.course import Page
 
         response = self._requester.request(
             'PUT',
@@ -69,7 +69,7 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.group.Group`
         """
-        from course import Page
+        from pycanvas.course import Page
 
         response = self._requester.request(
             'GET',
@@ -91,7 +91,7 @@ class Group(CanvasObject):
         :returns: The specified page.
         :rtype: :class: `pycanvas.groups.Group`
         """
-        from course import Page
+        from pycanvas.course import Page
 
         response = self._requester.request(
             'GET',
@@ -111,7 +111,7 @@ class Group(CanvasObject):
 
         :rtype: :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.page.Page`
         """
-        from course import Page
+        from pycanvas.course import Page
         return PaginatedList(
             Page,
             self._requester,
@@ -184,7 +184,7 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
         return PaginatedList(
             User,
             self._requester,
@@ -205,8 +205,8 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.user.User`
         """
-        from user import User
-        from util import obj_or_id
+        from pycanvas.user import User
+        from pycanvas.util import obj_or_id
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -233,8 +233,7 @@ class Group(CanvasObject):
                     and the JSON response from the API.
         :rtype: tuple
         """
-
-        from upload import Uploader
+        from pycanvas.upload import Uploader
 
         return Uploader(
             self._requester,
@@ -399,8 +398,8 @@ class GroupMembership(CanvasObject):
 
         :rtype: empty dict
         """
-        from user import User
-        from util import obj_or_id
+        from pycanvas.user import User
+        from pycanvas.util import obj_or_id
 
         user_id = obj_or_id(user, "user", (User,))
 

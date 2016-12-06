@@ -2,10 +2,13 @@ import unittest
 
 import requests_mock
 
-import settings
 from pycanvas import Canvas
-from pycanvas.exceptions import BadRequest, CanvasException, PermissionError, ResourceDoesNotExist
-from util import register_uris
+from pycanvas.exceptions import (
+    BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
+    Unauthorized
+)
+from tests import settings
+from tests.util import register_uris
 
 
 class TestRequester(unittest.TestCase):
@@ -16,8 +19,8 @@ class TestRequester(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'requests': [
-                '400', '401', '404', '500',
-                'delete', 'get', 'post', 'put'
+                '400', '401_invalid_access_token', '401_unauthorized', '404',
+                '500', 'delete', 'get', 'post', 'put'
             ]
         }
 
@@ -47,9 +50,13 @@ class TestRequester(unittest.TestCase):
         with self.assertRaises(BadRequest):
             self.requester.request('GET', '400')
 
-    def test_request_401(self):
-        with self.assertRaises(PermissionError):
-            self.requester.request('GET', '401')
+    def test_request_401_InvalidAccessToken(self):
+        with self.assertRaises(InvalidAccessToken):
+            self.requester.request('GET', '401_invalid_access_token')
+
+    def test_request_401_Unauthorized(self):
+        with self.assertRaises(Unauthorized):
+            self.requester.request('GET', '401_unauthorized')
 
     def test_request_404(self):
         with self.assertRaises(ResourceDoesNotExist):

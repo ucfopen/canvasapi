@@ -12,7 +12,7 @@ Class Reference
     group-ref
     module-ref
     page-ref
-    process-ref
+    progress-ref
     quiz-ref
     section-ref
     user-ref

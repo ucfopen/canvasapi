@@ -1,8 +1,3 @@
-"""
-A collection of PyCanvas exception classes.
-"""
-
-
 class CanvasException(Exception):  # pragma: no cover
     """
     Base class for all errors returned by the Canvas API.
@@ -15,7 +10,7 @@ class CanvasException(Exception):  # pragma: no cover
             if errors:
                 self.message = str(errors)
             else:
-                self.message = 'Something went wrong.'
+                self.message = ('Something went wrong. ', message)
         else:
             self.message = message
 
@@ -33,7 +28,7 @@ class InvalidAccessToken(CanvasException):
     pass
 
 
-class PermissionError(CanvasException):
+class Unauthorized(CanvasException):
     """PyCanvas's key is valid, but is unauthorized to access the requested resource."""
     pass
 

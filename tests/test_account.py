@@ -3,16 +3,16 @@ import unittest
 
 import requests_mock
 
-import settings
 from pycanvas import Canvas
-from pycanvas.account import Account, AccountNotification, AccountReport
+from pycanvas.account import Account, AccountNotification, AccountReport, Role
 from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.group import Group, GroupCategories
 from pycanvas.user import User
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 class TestAccount(unittest.TestCase):
@@ -23,18 +23,22 @@ class TestAccount(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'account': [
-                'close_notification', 'create', 'create_2', 'create_course',
-                'create_notification', 'create_subaccount', 'create_user',
+                'activate_role', 'close_notification', 'create', 'create_2',
+                'create_course', 'create_notification', 'create_role',
+                'create_subaccount', 'create_user', 'deactivate_role',
                 'delete_user', 'enroll_by_id', 'get_by_id', 'get_by_id_2',
                 'get_by_id_3', 'get_courses', 'get_courses_page_2',
-                'get_external_tools', 'get_external_tools_p2', 'list_groups_context',
-                'list_groups_context2', 'reports', 'reports_page_2', 'report_index',
-                'report_index_page_2', 'subaccounts', 'subaccounts_page_2', 'users',
-                'users_page_2', 'user_notifs', 'user_notifs_page_2', 'update', 'update_fail',
-                'create_group_category', 'list_group_categories'
+                'get_external_tools', 'get_external_tools_p2', 'get_role',
+                'list_groups_context', 'list_groups_context2', 'list_roles',
+                'list_roles_2', 'reports', 'reports_page_2', 'report_index',
+                'report_index_page_2', 'subaccounts', 'subaccounts_page_2',
+                'users', 'users_page_2', 'user_notifs', 'user_notifs_page_2',
+                'update', 'update_fail', 'update_role', 'create_group_category',
+                'list_group_categories'
             ],
+            'enrollment': ['get_by_id'],
             'external_tool': ['get_by_id_account'],
-            'user': ['get_by_id'],
+            'user': ['get_by_id']
         }
 
         adapter = requests_mock.Adapter()
@@ -239,9 +243,53 @@ class TestAccount(unittest.TestCase):
         success = account.update(account=update_account_dict)
         assert not success
 
-    # enroll_by_id()
-    def test_enroll_by_id(self):
-        target_enrollment = self.account.enroll_by_id(1)
+    def test_list_roles(self):
+        roles = self.account.list_roles()
+        role_list = [role for role in roles]
+
+        assert len(role_list) == 4
+        assert isinstance(role_list[0], Role)
+        assert hasattr(role_list[0], 'role')
+        assert hasattr(role_list[0], 'label')
+
+    def test_get_role(self):
+        target_role = self.account.get_role(2)
+
+        assert isinstance(target_role, Role)
+        assert hasattr(target_role, 'role')
+        assert hasattr(target_role, 'label')
+
+    def test_create_role(self):
+        new_role = self.account.create_role(1)
+
+        assert isinstance(new_role, Role)
+        assert hasattr(new_role, 'role')
+        assert hasattr(new_role, 'label')
+
+    def test_deactivate_role(self):
+        old_role = self.account.deactivate_role(2)
+
+        assert isinstance(old_role, Role)
+        assert hasattr(old_role, 'role')
+        assert hasattr(old_role, 'label')
+
+    def test_activate_role(self):
+        activated_role = self.account.activate_role(2)
+
+        assert isinstance(activated_role, Role)
+        assert hasattr(activated_role, 'role')
+        assert hasattr(activated_role, 'label')
+
+    def test_update_role(self):
+        updated_role = self.account.update_role(2)
+
+        assert isinstance(updated_role, Role)
+        assert hasattr(updated_role, 'role')
+        assert hasattr(updated_role, 'label')
+
+    # get_enrollment()
+    def test_get_enrollment(self):
+        target_enrollment = self.account.get_enrollment(1)
 
         assert isinstance(target_enrollment, Enrollment)
 

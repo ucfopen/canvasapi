@@ -6,7 +6,7 @@ Installing PyCanvas
 
 [SoonTM] You will eventually be able to install with pip::
 
-    pip install git+ssh://git@***REMOVED***/pycanvas.git
+    pip install git+ssh://git@example.com:changeme/pycanvas.git
 
 Usage
 -----

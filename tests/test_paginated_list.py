@@ -2,11 +2,11 @@ import unittest
 
 import requests_mock
 
-import settings
 from pycanvas import Canvas
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.user import User
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 class TestPaginatedList(unittest.TestCase):

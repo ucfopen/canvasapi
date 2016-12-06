@@ -19,17 +19,6 @@
 		},
 		"status_code": 200
 	},
-	"deactivate_enrollment": {
-		"method": "DELETE",
-		"endpoint": "courses/1/enrollments/1",
-		"data": {
-			"id": 1,
-			"course_id": 1,
-			"user_id": 1,
-			"type": "StudentEnrollment"
-		},
-		"status_code": 200
-	},
 	"enroll_user": {
 		"method": "POST",
 		"endpoint": "courses/1/enrollments",
@@ -284,11 +273,15 @@
 		"data": [
 			{
 				"id": 1,
-				"course_id": 5
+				"course_id": 1,
+				"user_id": 1,
+				"type": "StudentEnrollment"
 			},
 			{
 				"id": 2,
-				"course_id": 6
+				"course_id": 1,
+				"user_id": 2,
+				"type": "TeacherEnrollment"
 			}
 		],
 		"status_code": 200,
@@ -302,11 +295,15 @@
 		"data": [
 			{
 				"id": 3,
-				"course_id": 7
+				"course_id": 1,
+				"user_id": 10,
+				"type": "StudentEnrollment"
 			},
 			{
 				"id": 4,
-				"course_id": 8
+				"course_id": 1,
+				"user_id": 8,
+				"type": "StudentEnrollment"
 			}
 		],
 		"status_code": 200
@@ -406,17 +403,6 @@
 		"endpoint": "courses/1/preview_html",
 		"data": {
 			"html": "<p>hello</p>"
-		},
-		"status_code": 200
-	},
-	"reactivate_enrollment": {
-		"method": "PUT",
-		"endpoint": "courses/1/enrollments/1/reactivate",
-		"data": {
-			"id": 1,
-			"course_id": 1,
-			"user_id": 1,
-			"type": "StudentEnrollment"
 		},
 		"status_code": 200
 	},

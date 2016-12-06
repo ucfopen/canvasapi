@@ -1,16 +1,12 @@
-from canvas_object import CanvasObject
-
-from util import combine_kwargs
-from paginated_list import PaginatedList
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.util import combine_kwargs
+from pycanvas.paginated_list import PaginatedList
 
 
 class Page(CanvasObject):
 
     def __str__(self):
-        return "url: %s, title: %s" % (
-            self.url,
-            self.title
-        )
+        return "{} ({})".format(self.title, self.url)
 
     def edit(self, **kwargs):
         """
@@ -83,8 +79,8 @@ class Page(CanvasObject):
 
         :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
         """
-        from group import Group
-        from course import Course
+        from pycanvas.group import Group
+        from pycanvas.course import Course
 
         response = self._requester.request(
             'GET',
@@ -126,7 +122,12 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
+            '%ss/%s/pages/%s/revisions/%s' % (
+                self.parent_type,
+                self.parent_id,
+                self.url,
+                revision_id
+            ),
             **combine_kwargs(**kwargs)
         )
         pagerev_json = response.json()
@@ -144,7 +145,8 @@ class Page(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.pagerevision.PageRevision`
         """
         return PaginatedList(
             PageRevision,
@@ -168,7 +170,12 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            '%ss/%s/pages/%s/revisions/%s' % (self.parent_type, self.parent_id, self.url, revision_id),
+            '%ss/%s/pages/%s/revisions/%s' % (
+                self.parent_type,
+                self.parent_id,
+                self.url,
+                revision_id
+            ),
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
@@ -182,10 +189,7 @@ class Page(CanvasObject):
 class PageRevision(CanvasObject):
 
     def __str__(self):
-        return "revision_id: %s, updated_at: %s" % (
-            self.id,
-            self.updated_at
-        )
+        return "{} ({})".format(self.updated_at, self.revision_id)
 
     @property
     def parent_id(self):
@@ -221,8 +225,8 @@ class PageRevision(CanvasObject):
 
         :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
         """
-        from group import Group
-        from course import Course
+        from pycanvas.group import Group
+        from pycanvas.course import Course
 
         response = self._requester.request(
             'GET',
