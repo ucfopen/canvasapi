@@ -36,7 +36,7 @@ class TestCourse(unittest.TestCase):
                 'get_user_id_type', 'get_users', 'get_users_p2',
                 'list_enrollments', 'list_enrollments_2', 'list_modules', 'list_groups_context',
                 'list_modules2', 'list_sections', 'list_sections2', 'list_quizzes', 'list_quizzes2',
-                'list_groups_context2', 'preview_html', 'reactivate_enrollment', 'reset', 'settings',
+                'list_groups_context2', 'preview_html', 'reset', 'settings',
                 'show_front_page', 'update', 'update_settings', 'upload',
                 'upload_final', 'create_group_category', 'list_group_categories'
             ],

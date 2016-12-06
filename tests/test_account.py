@@ -26,7 +26,7 @@ class TestAccount(unittest.TestCase):
                 'activate_role', 'close_notification', 'create', 'create_2',
                 'create_course', 'create_notification', 'create_role',
                 'create_subaccount', 'create_user', 'deactivate_role',
-                'delete_user', 'enroll_by_id', 'get_by_id', 'get_by_id_2',
+                'delete_user', 'get_by_id', 'get_by_id_2',
                 'get_by_id_3', 'get_courses', 'get_courses_page_2',
                 'get_external_tools', 'get_external_tools_p2', 'get_role',
                 'list_groups_context', 'list_groups_context2', 'list_roles',
