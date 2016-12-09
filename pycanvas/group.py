@@ -312,12 +312,8 @@ class Group(CanvasObject):
         """
         List users in a group.
 
-        if membership_type = 'users'
-        :calls: `GET /api/v1/groups/:group_id/users/:user_id \
-        <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
-
-        if membership_type = 'memberships'
-        :calls: `GET /api/v1/groups/:group_id/memberships/:membership_id \
+        :calls: `GET /api/v1/groups/:group_id/users/:user_id or \
+        /api/v1/groups/:group_id/memberships/:membership_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
 
         :param invitees: list of user ids
