@@ -368,7 +368,7 @@ class Group(CanvasObject):
 class GroupMembership(CanvasObject):
 
     def __str__(self):
-        return "User: %s, Group: %s" % (self.user_id, self.group_id)
+        return "{} ({})".format(self.user_id, self.group_id)
 
     def update(self, mem_id, **kwargs):
         """
@@ -428,7 +428,7 @@ class GroupMembership(CanvasObject):
 class GroupCategory(CanvasObject):
 
     def __str__(self):
-        return "id: %s, name: %s" % (self.id, self.name)
+        return "{} ({})".format(self.name, self.id)
 
     def create_group(self, **kwargs):
         """
