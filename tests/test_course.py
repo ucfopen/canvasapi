@@ -11,7 +11,7 @@ from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from pycanvas.external_tool import ExternalTool
-from pycanvas.group import Group, GroupCategories
+from pycanvas.group import Group, GroupCategory
 from pycanvas.module import Module
 from pycanvas.quiz import Quiz
 from pycanvas.section import Section
@@ -382,13 +382,13 @@ class TestCourse(unittest.TestCase):
     def test_create_group_category(self):
         name_str = "Shia Laboef"
         response = self.course.create_group_category(name=name_str)
-        assert isinstance(response, GroupCategories)
+        assert isinstance(response, GroupCategory)
 
     # list_group_categories()
     def test_list_group_categories(self):
         response = self.course.list_group_categories()
         category_list = [category for category in response]
-        assert isinstance(category_list[0], GroupCategories)
+        assert isinstance(category_list[0], GroupCategory)
 
 
 class TestCourseNickname(unittest.TestCase):

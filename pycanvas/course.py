@@ -698,9 +698,9 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create>`_
 
-        :rtype: :class:`pycanvas.group.GroupCategories`
+        :rtype: :class:`pycanvas.group.GroupCategory`
         """
-        from pycanvas.group import Group, GroupCategories
+        from pycanvas.group import Group, GroupCategory
 
         response = self._requester.request(
             'POST',
@@ -708,7 +708,7 @@ class Course(CanvasObject):
             name=name,
             **combine_kwargs(**kwargs)
         )
-        return GroupCategories(self._requester, response.json())
+        return GroupCategory(self._requester, response.json())
 
     def list_group_categories(self):
         """
@@ -717,12 +717,12 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.GroupCategories`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.GroupCategory`
         """
-        from pycanvas.group import Group, GroupCategories
+        from pycanvas.group import Group, GroupCategory
 
         return PaginatedList(
-            GroupCategories,
+            GroupCategory,
             self._requester,
             'GET',
             'courses/%s/group_categories' % (self.id)

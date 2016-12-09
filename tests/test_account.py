@@ -9,7 +9,7 @@ from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.group import Group, GroupCategories
+from pycanvas.group import Group, GroupCategory
 from pycanvas.user import User
 from tests import settings
 from tests.util import register_uris
@@ -304,10 +304,10 @@ class TestAccount(unittest.TestCase):
     def test_create_group_category(self):
         name_str = "Shia Laboef"
         response = self.account.create_group_category(name=name_str)
-        assert isinstance(response, GroupCategories)
+        assert isinstance(response, GroupCategory)
 
     # list_group_categories()
     def test_list_group_categories(self):
         response = self.account.list_group_categories()
         category_list = [category for category in response]
-        assert isinstance(category_list[0], GroupCategories)
+        assert isinstance(category_list[0], GroupCategory)

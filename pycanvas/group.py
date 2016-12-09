@@ -425,7 +425,7 @@ class GroupMembership(CanvasObject):
         return response.json()
 
 
-class GroupCategories(CanvasObject):
+class GroupCategory(CanvasObject):
 
     def __str__(self):
         return "id: %s, name: %s" % (self.id, self.name)
@@ -453,13 +453,13 @@ class GroupCategories(CanvasObject):
         :calls: `GET /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
 
-        :rtype: :class:`pycanvas.group.GroupCategories`
+        :rtype: :class:`pycanvas.group.GroupCategory`
         """
         response = self._requester.request(
             'GET',
             'group_categories/%s' % (cat_id)
         )
-        return GroupCategories(self._requester, response.json())
+        return GroupCategory(self._requester, response.json())
 
     def update(self, **kwargs):
         """
@@ -468,14 +468,14 @@ class GroupCategories(CanvasObject):
         :calls: `PUT /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.update>`_
 
-        :rtype: :class:`pycanvas.group.GroupCategories`
+        :rtype: :class:`pycanvas.group.GroupCategory`
         """
         response = self._requester.request(
             'PUT',
             'group_categories/%s' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return GroupCategories(self._requester, response.json())
+        return GroupCategory(self._requester, response.json())
 
     def delete(self):
         """

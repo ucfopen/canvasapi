@@ -5,7 +5,7 @@ import requests_mock
 import settings
 from pycanvas.canvas import Canvas
 from pycanvas.course import Course
-from pycanvas.group import Group, GroupCategories
+from pycanvas.group import Group, GroupCategory
 from pycanvas.progress import Progress
 from util import register_uris
 
@@ -19,7 +19,7 @@ class TestProgress(unittest.TestCase):
         requires = {
             'generic': ['not_found'],
             'course': ['get_by_id', 'create_group_category'],
-            'group': ['categories_create_group', 'categories_assign_members_false'],
+            'group': ['category_create_group', 'category_assign_members_false'],
             'progress': ['progress_query']
         }
 

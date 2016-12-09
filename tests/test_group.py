@@ -3,7 +3,7 @@ import unittest
 import requests_mock
 
 from pycanvas import Canvas
-from pycanvas.group import Group, GroupMembership, GroupCategories
+from pycanvas.group import Group, GroupMembership, GroupCategory
 from pycanvas.course import Page
 from pycanvas.exceptions import RequiredFieldMissing
 from tests import settings
@@ -242,9 +242,9 @@ class TestGroupMembership(unittest.TestCase):
         assert not response
 
 
-class TestGroupCategories(unittest.TestCase):
+class TestGroupCategory(unittest.TestCase):
     """
-    Tests GroupCategories Item functionality
+    Tests GroupCategory Item functionality
     """
     @classmethod
     def setUpClass(self):
@@ -256,14 +256,14 @@ class TestGroupCategories(unittest.TestCase):
                 'get_by_id', 'create_group_category', 'list_group_categories'
             ],
             'group': [
-                'categories_create_group',
-                'categories_get_category',
-                'categories_update',
-                'categories_delete_category',
-                'categories_list_groups',
-                'categories_list_users',
-                'categories_assign_members_true',
-                'categories_assign_members_false'
+                'category_create_group',
+                'category_get_category',
+                'category_update',
+                'category_delete_category',
+                'category_list_groups',
+                'category_list_users',
+                'category_assign_members_true',
+                'category_assign_members_false'
             ]
         }
 
@@ -295,13 +295,13 @@ class TestGroupCategories(unittest.TestCase):
     # get_category()
     def test_get_category(self):
         response = self.group_category.get_category(1)
-        assert isinstance(response, GroupCategories)
+        assert isinstance(response, GroupCategory)
 
     # update()
     def test_update(self):
         new_name = "Test Update Category"
         response = self.group_category.update(name=new_name)
-        assert isinstance(response, GroupCategories)
+        assert isinstance(response, GroupCategory)
 
     # delete_category()
     def test_delete_category(self):

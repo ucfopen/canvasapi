@@ -379,7 +379,7 @@
 	},
 
 
-	"categories_create_group": {
+	"category_create_group": {
 		"method": "POST",
 		"endpoint": "group_categories/1/groups",
 		"data": {
@@ -402,7 +402,7 @@
 		},
 		"status_code": 200
 	},
-	"categories_get_category": {
+	"category_get_category": {
 		"method": "GET",
 		"endpoint": "group_categories/1",
 		"data": {
@@ -418,7 +418,7 @@
 		},
 		"status_code": 200
 	},
-	"categories_update": {
+	"category_update": {
 		"method": "PUT",
 		"endpoint": "group_categories/1",
 		"data": {
@@ -434,7 +434,7 @@
 		},
 		"status_code": 200
 	},
-	"categories_delete_category": {
+	"category_delete_category": {
 		"method": "DELETE",
 		"endpoint": "group_categories/1",
 		"data": {
@@ -442,7 +442,7 @@
 		},
 		"status_code": 200
 	},
-	"categories_list_groups": {
+	"category_list_groups": {
 		"method": "GET",
 		"endpoint": "group_categories/1/groups",
 		"data": [
@@ -491,7 +491,7 @@
 		],
 		"status_code": 200
 	},
-	"categories_list_users": {
+	"category_list_users": {
 		"method": "GET",
 		"endpoint": "group_categories/1/users",
 		"data": [
@@ -542,7 +542,7 @@
 		],
 		"status_code": 200
 	},
-	"categories_assign_members_true": {
+	"category_assign_members_true": {
 		"method": "POST",
 		"endpoint": "group_categories/1/assign_unassigned_members",
 		"data": [
@@ -603,7 +603,7 @@
 		],
 		"status_code": 200
 	},
-	"categories_assign_members_false": {
+	"category_assign_members_false": {
 		"method": "POST",
 		"endpoint": "group_categories/1/assign_unassigned_members",
 		"data": {
