@@ -485,7 +485,7 @@ class Account(CanvasObject):
 
     def list_groups_in_context(self, **kwargs):
         """
-        Return list of active groups for the specified account.
+        Return a list of active groups for the specified account.
 
         :calls: `GET /api/v1/accounts/:account_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
