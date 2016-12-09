@@ -693,7 +693,7 @@ class Course(CanvasObject):
 
     def create_group_category(self, name, **kwargs):
         """
-        Create a Group Category
+        Create a group category.
 
         :calls: `POST /api/v1/courses/:course_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create>`_
@@ -712,7 +712,7 @@ class Course(CanvasObject):
 
     def list_group_categories(self):
         """
-        List group categories for a context
+        List group categories for a context.
 
         :calls: `GET /api/v1/courses/:course_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_

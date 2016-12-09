@@ -83,6 +83,7 @@ class Group(CanvasObject):
     def get_page(self, url):
         """
         Retrieve the contents of a wiki page.
+
         :calls: `GET /api/v1/groups/:group_id/pages/:url \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
 
@@ -260,7 +261,7 @@ class Group(CanvasObject):
         )
         return response.json().get('html', '')
 
-    # def get_activity_stream(self):
+    # def get_activity_stream(self): # Not in use
     #     """
     #     Returns the current user's group-specific activity stream, paginated.
 
@@ -333,7 +334,7 @@ class Group(CanvasObject):
     def create_membership(self, user_id, **kwargs):
         """
         Join, or request to join, a group, depending on the join_level of the group.
-        If the membership or join request already exists, then it is simply returned
+        If the membership or join request already exists, then it is simply returned.
 
         :calls: `POST /api/v1/groups/:group_id/memberships \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.create>`_
@@ -368,7 +369,7 @@ class Group(CanvasObject):
 class GroupMembership(CanvasObject):
 
     def __str__(self):
-        return "{} ({})".format(self.user_id, self.group_id)
+        return "{} - {} ({}))".format(self.user_id, self.group_id, self.id)
 
     def update(self, mem_id, **kwargs):
         """
@@ -432,7 +433,7 @@ class GroupCategory(CanvasObject):
 
     def create_group(self, **kwargs):
         """
-        Create a group
+        Create a group.
 
         :calls: `POST /api/v1/group_categories/:group_category_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.create>`_
@@ -448,7 +449,7 @@ class GroupCategory(CanvasObject):
 
     def get_category(self, cat_id):
         """
-        Get a single group category
+        Get a single group category.
 
         :calls: `GET /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
@@ -463,7 +464,7 @@ class GroupCategory(CanvasObject):
 
     def update(self, **kwargs):
         """
-        Update a Group Category
+        Update a group category.
 
         :calls: `PUT /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.update>`_
@@ -479,7 +480,7 @@ class GroupCategory(CanvasObject):
 
     def delete(self):
         """
-        Delete a Group Category
+        Delete a group category.
 
         :calls: `DELETE /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.destroy>`_
@@ -494,7 +495,7 @@ class GroupCategory(CanvasObject):
 
     def list_groups(self):
         """
-        List groups in group category
+        List groups in group category.
 
         :calls: `GET /api/v1/group_categories/:group_category_id/groups \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.groups>`_
@@ -510,7 +511,7 @@ class GroupCategory(CanvasObject):
 
     def list_users(self, **kwargs):
         """
-        List users in group category
+        List users in group category.
 
         :calls: `GET /api/v1/group_categories/:group_category_id/users \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.users>`_
@@ -528,7 +529,7 @@ class GroupCategory(CanvasObject):
 
     def assign_members(self, sync=False):
         """
-        Assign unassigned members
+        Assign unassigned members.
 
         :calls: `POST /api/v1/group_categories/:group_category_id/assign_unassigned_members \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.assign_unassigned_members>`_
