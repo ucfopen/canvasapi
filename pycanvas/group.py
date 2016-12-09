@@ -162,7 +162,7 @@ class Group(CanvasObject):
         :param invitees: list of user ids
         :type invitees: integer list
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.groupGroupMembership`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.GroupMembership`
         """
         return PaginatedList(
             GroupMembership,
