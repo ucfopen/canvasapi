@@ -1,15 +1,15 @@
 {
-	"show_front_page": {
-		"method": "GET",
-		"endpoint": "groups/1/front_page",
-		"data":{
+	"canvas_create_group": {
+		"method": "POST",
+		"endpoint": "groups",
+		"data": {
 			"id": 1,
-			"url": "front-page",
-			"title": "Front Page"
+			"name": "group0",
+			"description": "first group ever"
 		},
 		"status_code": 200
 	},
-	"get_single_group": {
+	"canvas_get_group": {
 		"method": "GET",
 		"endpoint": "groups/1",
 		"data": {
@@ -19,7 +19,37 @@
 		},
 		"status_code": 200
 	},
-	"edit_front_page": {
+	"pages_get_group": {
+		"method": "GET",
+		"endpoint": "groups/1",
+		"data": {
+			"id": 1,
+			"name": "group1",
+			"description": "best group ever"
+		},
+		"status_code": 200
+	},
+	"pages_get_page": {
+		"method": "GET",
+		"endpoint": "groups/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"url": "my-url",
+			"title": "Awesome Page"
+		},
+		"status_code": 200
+	},
+	"group_create_page": {
+		"method": "POST",
+		"endpoint": "groups/1/pages",
+		"data": {
+			"id": 2,
+			"url": "new-page",
+			"title": "New Page"
+		},
+		"status_code": 200
+	},
+	"group_edit_front_page": {
 		"method": "PUT",
 		"endpoint": "groups/1/front_page",
 		"data": {
@@ -29,7 +59,27 @@
 		},
 		"status_code": 200
 	},
-	"get_pages": {
+	"group_show_front_page": {
+		"method": "GET",
+		"endpoint": "groups/1/front_page",
+		"data":{
+			"id": 1,
+			"url": "front-page",
+			"title": "Front Page"
+		},
+		"status_code": 200
+	},
+	"group_get_page": {
+		"method": "GET",
+		"endpoint": "groups/1/pages/my-url",
+		"data": {
+			"id": 1,
+			"url": "my-url",
+			"title": "Awesome Page"
+		},
+		"status_code": 200
+	},
+	"group_get_pages": {
 		"method": "GET",
 		"endpoint": "groups/1/pages",
 		"data": [
@@ -49,7 +99,7 @@
 			"Link": "<mock://example.com/api/v1/groups/1/get_pages?page=2&per_page=2>; rel=\"next\""
 		}
 	},
-	"get_pages2": {
+	"group_get_pages2": {
 		"method": "GET",
 		"endpoint": "groups/1/get_pages?page=2&per_page=2",
 		"data": [
@@ -66,33 +116,508 @@
 		],
 		"status_code": 200
 	},
-	"create_page": {
-		"method": "POST",
-		"endpoint": "groups/1/pages",
-		"data": {
-			"id": 2,
-			"url": "new-page",
-			"title": "New Page"
-		},
-		"status_code": 200
-	},
-	"get_page": {
-		"method": "GET",
-		"endpoint": "groups/1/pages/my-url",
-		"data": {
-			"id": 1,
-			"url": "my-url",
-			"title": "Awesome Page"
-		},
-		"status_code": 200
-	},
-	"edit_page": {
+	"group_edit": {
 		"method": "PUT",
-		"endpoint": "groups/1/pages/my-url",
+		"endpoint": "groups/1",
 		"data": {
 			"id": 1,
-			"title": "New Page",
-			"url": "my-url"
+			"name": "group-none",
+			"description": "New Group"
+		},
+		"status_code": 200
+	},
+	"group_delete": {
+		"method": "DELETE",
+		"endpoint": "groups/1",
+		"data": {
+			"id": 1,
+			"name": "group-none",
+			"description": "most deleted group ever"
+		},
+		"status_code": 200
+	},
+	"group_invite": {
+		"method": "POST",
+		"endpoint": "groups/1/invite",
+		"data": [
+			{
+				"id": 4,
+				"group_id": 1,
+				"workflow_state": "invited",
+				"user_id": 1,
+				"moderator": false,
+				"sis_import_id": null
+			},
+			{
+				"id": 5,
+				"group_id": 1,
+				"workflow_state": "invited",
+				"user_id": 2,
+				"moderator": false,
+				"sis_import_id": null
+			}
+		],
+		"status_code": 200
+	},
+	"group_list_users": {
+		"method": "GET",
+		"endpoint": "groups/1/users",
+		"data": [
+			{
+				"id": 1,
+				"name": "Jack Doe"
+			},
+			{
+				"id": 2,
+				"name": "Jim Doe"
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/groups/1/users?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"group_list_users_p2": {
+		"method": "GET",
+		"endpoint": "groups/1/users?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "John Smith"
+			},
+			{
+				"id": 4,
+				"name": "Joe Smith"
+			}
+		],
+		"status_code": 200
+	},
+	"group_remove_user": {
+		"method": "DELETE",
+		"endpoint": "groups/1/users/1",
+		"data": {
+			"id": 1,
+			"name": "Benjamin Test"
+		},
+		"status_code": 200
+	},
+	"group_upload": {
+		"method": "POST",
+		"endpoint": "groups/1/files",
+		"data": {
+			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
+			"upload_params": {
+			    "some_param": "param123",
+			    "a_different_param": "param456"
+			}
+		}
+	},
+	"group_upload_final": {
+		"method": "POST",
+        "endpoint": "files/upload_response_upload_url",
+        "data": {
+            "url": "great_url_success"
+        }
+    },
+	"group_preview_processed_html": {
+		"method": "POST",
+		"endpoint": "groups/1/preview_html",
+		"data": {
+			"html": "<p>processed html</p>"
+		},
+		"status_code": 200
+	},
+	"group_activity_stream": {
+		"method": "",
+		"endpoint": "",
+		"data": {
+			"info": "not yet implemented"
+		},
+		"status_code": 404
+	},
+	"group_get_activity_stream_summary": {
+		"method": "GET",
+		"endpoint": "groups/1/activity_stream/summary",
+		"data": [
+			{
+				"type": "DiscussionTopic",
+				"unread_count": 2,
+				"count": 7
+			},
+			{
+				"type": "Conversation",
+				"unread_count": 0,
+				"count": 3
+			}
+		],
+		"status_code": 200
+	},
+	"group_list_memberships": {
+		"method": "GET",
+		"endpoint": "groups/1/memberships",
+		"data": [
+			{
+				"id": 1,
+				"group_id": 1,
+				"user_id": 1,
+				"workflow_state": "accepted",
+				"moderator": true,
+				"just_created": true,
+				"sis_import_id": 1
+			},
+			{
+				"id": 2,
+				"group_id": 2,
+				"user_id": 2,
+				"workflow_state": "accepted",
+				"moderator": true,
+				"just_created": true,
+				"sis_import_id": 2
+			}
+		],
+		"headers": {
+			"Link": "<mock://example.com/api/v1/groups/1/memberships?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"group_list_memberships_p2": {
+		"method": "GET",
+		"endpoint": "groups/1/memberships?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"group_id": 3,
+				"user_id": 3,
+				"workflow_state": "accepted",
+				"moderator": true,
+				"just_created": true,
+				"sis_import_id": 3
+			},
+			{
+				"id": 4,
+				"group_id": 4,
+				"user_id": 4,
+				"workflow_state": "accepted",
+				"moderator": true,
+				"just_created": true,
+				"sis_import_id": 4
+			}
+		],
+		"status_code": 200
+	},
+	"group_get_membership": {
+		"method": "GET",
+		"endpoint": "groups/1/users/1",
+		"data": {
+			"id": 1,
+			"group_id": 1,
+			"user_id": 1,
+			"workflow_state": "accepted",
+			"moderator": true,
+			"just_created": true,
+			"sis_import_id": 1
+		},
+		"status_code": 200
+	},
+	"group_create_membership": {
+		"method": "POST",
+		"endpoint": "groups/1/memberships",
+		"data": {
+			"id": 1,
+			"group_id": 1,
+			"user_id": 1,
+			"workflow_state": "accepted",
+			"moderator": true,
+			"just_created": true,
+			"sis_import_id": 1
+		},
+		"status_code": 200
+	},
+	"group_update_membership": {
+		"method": "PUT",
+		"endpoint": "groups/1/users/1",
+		"data": {
+			"id": 1,
+			"group_id": 1,
+			"user_id": 1,
+			"workflow_state": "accepted",
+			"moderator": true,
+			"just_created": true,
+			"sis_import_id": 1
+		},
+		"status_code": 200
+	},
+	"membership_update": {
+		"method": "PUT",
+		"endpoint": "groups/1/memberships/1",
+		"data": {
+			"id": 1,
+			"group_id": 1,
+			"user_id": 1,
+			"workflow_state": "accepted",
+			"moderator": true,
+			"just_created": true,
+			"sis_import_id": 1
+		},
+		"status_code": 200
+	},
+	"membership_remove_user": {
+		"method": "DELETE",
+		"endpoint": "groups/1/users/1",
+		"data": {
+
+		},
+		"status_code": 200
+	},
+	"membership_remove_self": {
+		"method": "DELETE",
+		"endpoint": "groups/1/memberships/self",
+		"data": {
+
+		},
+		"status_code": 200
+	},
+
+
+	"category_create_group": {
+		"method": "POST",
+		"endpoint": "group_categories/1/groups",
+		"data": {
+			"id": 1,
+			"name": "Test Create Group",
+			"description": null,
+			"is_public": false,
+			"followed_by_user": false,
+			"join_level": "invitation_only",
+			"members_count": 0,
+			"avatar_url": "https://<canvas>/files/avatar_image.png",
+			"context_type": "Course",
+			"course_id": 3,
+			"role": null,
+			"group_category_id": 4,
+			"sis_group_id": "group4a",
+			"sis_import_id": 14,
+			"storage_quota_mb": 50,
+			"permissions": {"create_discussion_topic":true,"create_announcement":true}
+		},
+		"status_code": 200
+	},
+	"category_get_category": {
+		"method": "GET",
+		"endpoint": "group_categories/1",
+		"data": {
+			"id": 1,
+			"name": "Test Get Category",
+			"role": "communities",
+			"self_signup": null,
+			"auto_leader": null,
+			"context_type": "Account",
+			"account_id": 3,
+			"group_limit": null,
+			"progress": null
+		},
+		"status_code": 200
+	},
+	"category_update": {
+		"method": "PUT",
+		"endpoint": "group_categories/1",
+		"data": {
+			"id": 1,
+			"name": "Test Update Category",
+			"role": "communities",
+			"self_signup": null,
+			"auto_leader": null,
+			"context_type": "Account",
+			"account_id": 3,
+			"group_limit": null,
+			"progress": null
+		},
+		"status_code": 200
+	},
+	"category_delete_category": {
+		"method": "DELETE",
+		"endpoint": "group_categories/1",
+		"data": {
+
+		},
+		"status_code": 200
+	},
+	"category_list_groups": {
+		"method": "GET",
+		"endpoint": "group_categories/1/groups",
+		"data": [
+			{
+				"id": 1,
+				"name": "Math Group 1",
+				"description": null,
+				"is_public": false,
+				"followed_by_user": false,
+				"join_level": "invitation_only",
+				"members_count": 0,
+				"avatar_url": "https://<canvas>/files/avatar_image.png",
+				"context_type": "Course",
+				"course_id": 3,
+				"role": null,
+				"group_category_id": 4,
+				"sis_group_id": "group4a",
+				"sis_import_id": 14,
+				"storage_quota_mb": 50,
+				"permissions": {
+					"create_discussion_topic":true,
+					"create_announcement":true
+				}
+			},
+			{
+				"id": 2,
+				"name": "Math Group 1",
+				"description": null,
+				"is_public": false,
+				"followed_by_user": false,
+				"join_level": "invitation_only",
+				"members_count": 0,
+				"avatar_url": "https://<canvas>/files/avatar_image.png",
+				"context_type": "Course",
+				"course_id": 3,
+				"role": null,
+				"group_category_id": 4,
+				"sis_group_id": "group4a",
+				"sis_import_id": 14,
+				"storage_quota_mb": 50,
+				"permissions": {
+					"create_discussion_topic":true,
+					"create_announcement":true
+				}
+			}
+		],
+		"status_code": 200
+	},
+	"category_list_users": {
+		"method": "GET",
+		"endpoint": "group_categories/1/users",
+		"data": [
+			{
+				"user_id": 1,
+				"name": "Sam",
+				"display_name": "Sam",
+				"sections": [
+					{
+						"section_id": 1,
+						"section_code": "Section 1"
+					}
+				]
+			},
+			{
+				"user_id": 2,
+				"name": "Sue",
+				"display_name": "Sue",
+				"sections": [
+					{
+						"section_id": 2,
+						"section_code": "Section 2"
+					}
+				]
+			},
+			{
+				"user_id": 3,
+				"name": "Joe",
+				"display_name": "Joe",
+				"sections": [
+					{
+						"section_id": 2,
+						"section_code": "Section 2"
+					}
+				]
+			},
+			{
+				"user_id": 4,
+				"name": "Cecil",
+				"display_name": "Cecil",
+				"sections": [
+					{
+						"section_id": 3,
+						"section_code": "Section 3"
+					}
+				]
+			}
+		],
+		"status_code": 200
+	},
+	"category_assign_members_true": {
+		"method": "POST",
+		"endpoint": "group_categories/1/assign_unassigned_members",
+		"data": [
+			{
+				"id": 1,
+				"new_members": [
+					{
+						"user_id": 1,
+						"name": "Sam",
+						"display_name": "Sam",
+						"sections": [
+							{
+								"section_id": 1,
+								"section_code": "Section 1"
+							}
+						]
+					},
+					{
+						"user_id": 2,
+						"name": "Sue",
+						"display_name": "Sue",
+						"sections": [
+							{
+								"section_id": 2,
+								"section_code": "Section 2"
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": 2,
+				"new_members": [
+					{
+						"user_id": 3,
+						"name": "Joe",
+						"display_name": "Joe",
+						"sections": [
+							{
+								"section_id": 2,
+								"section_code": "Section 2"
+							}
+						]
+					},
+					{
+						"user_id": 4,
+						"name": "Cecil",
+						"display_name": "Cecil",
+						"sections": [
+							{
+								"section_id": 3,
+								"section_code": "Section 3"
+							}
+						]
+					}
+				]
+			}
+		],
+		"status_code": 200
+	},
+	"category_assign_members_false": {
+		"method": "POST",
+		"endpoint": "group_categories/1/assign_unassigned_members",
+		"data": {
+		    "completion": 0,
+		    "context_id": 20,
+		    "context_type": "GroupCategory",
+		    "created_at": "2013-07-05T10:57:48-06:00",
+		    "id": 2,
+		    "message": null,
+		    "tag": "assign_unassigned_members",
+		    "updated_at": "2013-07-05T10:57:48-06:00",
+		    "user_id": null,
+		    "workflow_state": "running",
+		    "url": "http://localhost:3000/api/v1/progress/2"
 		},
 		"status_code": 200
 	}

@@ -411,7 +411,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/modules \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.module.Module`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.module.Module`
         """
         from pycanvas.module import Module
 
@@ -622,7 +623,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
 
         :param url: The url for the page.
-        :type url: string
+        :type url: str
         :returns: The specified page.
         :rtype: :class: `pycanvas.course.Course`
         """
@@ -672,6 +673,64 @@ class Course(CanvasObject):
         )
 
         return Section(self._requester, response.json())
+
+    def list_groups(self, **kwargs):
+        """
+        Return list of active groups for the specified course.
+
+        :calls:`GET /api/v1/courses/:course_id/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
+        """
+        from group import Group
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'courses/%s/groups' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_group_category(self, name, **kwargs):
+        """
+        Create a group category.
+
+        :calls: `POST /api/v1/courses/:course_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create>`_
+
+        :param name: Name of the category.
+        :type name: str
+        :rtype: :class:`pycanvas.group.GroupCategory`
+        """
+        from pycanvas.group import GroupCategory
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/group_categories' % (self.id),
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return GroupCategory(self._requester, response.json())
+
+    def list_group_categories(self):
+        """
+        List group categories for a context.
+
+        :calls: `GET /api/v1/courses/:course_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.group.GroupCategory`
+        """
+        from pycanvas.group import GroupCategory
+
+        return PaginatedList(
+            GroupCategory,
+            self._requester,
+            'GET',
+            'courses/%s/group_categories' % (self.id)
+        )
 
 
 class CourseNickname(CanvasObject):

@@ -483,6 +483,64 @@ class Account(CanvasObject):
         )
         return Enrollment(self._requester, response.json())
 
+    def list_groups(self, **kwargs):
+        """
+        Return a list of active groups for the specified account.
+
+        :calls: `GET /api/v1/accounts/:account_id/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        """
+        from group import Group
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'accounts/%s/groups' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_group_category(self, name, **kwargs):
+        """
+        Create a Group Category
+
+        :calls: `POST /api/v1/accounts/:account_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create>`_
+
+        :param name: Name of group category.
+        :type name: str
+        :rtype: :class:`pycanvas.group.GroupCategory`
+        """
+        from group import GroupCategory
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/group_categories' % (self.id),
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return GroupCategory(self._requester, response.json())
+
+    def list_group_categories(self):
+        """
+        List group categories for a context
+
+        :calls: `GET /api/v1/accounts/:account_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.group.GroupCategory`
+        """
+        from group import GroupCategory
+
+        return PaginatedList(
+            GroupCategory,
+            self._requester,
+            'GET',
+            'accounts/%s/group_categories' % (self.id)
+        )
+
 
 class AccountNotification(CanvasObject):
 

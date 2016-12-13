@@ -11,6 +11,7 @@ from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from pycanvas.external_tool import ExternalTool
+from pycanvas.group import Group, GroupCategory
 from pycanvas.module import Module
 from pycanvas.quiz import Quiz
 from pycanvas.section import Section
@@ -33,11 +34,11 @@ class TestCourse(unittest.TestCase):
                 'get_pages', 'get_pages2', 'get_quiz', 'get_recent_students',
                 'get_recent_students_p2', 'get_section', 'get_user',
                 'get_user_id_type', 'get_users', 'get_users_p2',
-                'list_enrollments', 'list_enrollments_2', 'list_modules',
-                'list_modules2', 'list_sections', 'list_sections2',
-                'list_quizzes', 'list_quizzes2', 'preview_html', 'reset',
-                'settings', 'show_front_page', 'update', 'update_settings',
-                'upload', 'upload_final'
+                'list_enrollments', 'list_enrollments_2', 'list_modules', 'list_groups_context',
+                'list_modules2', 'list_sections', 'list_sections2', 'list_quizzes', 'list_quizzes2',
+                'list_groups_context2', 'preview_html', 'reset', 'settings',
+                'show_front_page', 'update', 'update_settings', 'upload',
+                'upload_final', 'create_group_category', 'list_group_categories'
             ],
             'external_tool': ['get_by_id_course'],
             'quiz': ['get_by_id'],
@@ -369,6 +370,25 @@ class TestCourse(unittest.TestCase):
         section = self.course.create_course_section()
 
         assert isinstance(section, Section)
+
+    def test_list_groups(self):
+        groups = self.course.list_groups()
+        group_list = [group for group in groups]
+
+        assert isinstance(group_list[0], Group)
+        assert len(group_list) == 4
+
+    # create_group_category()
+    def test_create_group_category(self):
+        name_str = "Shia Laboef"
+        response = self.course.create_group_category(name=name_str)
+        assert isinstance(response, GroupCategory)
+
+    # list_group_categories()
+    def test_list_group_categories(self):
+        response = self.course.list_group_categories()
+        category_list = [category for category in response]
+        assert isinstance(category_list[0], GroupCategory)
 
 
 class TestCourseNickname(unittest.TestCase):

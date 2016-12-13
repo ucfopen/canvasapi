@@ -8,6 +8,7 @@ from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.avatar import Avatar
 from pycanvas.course import Course
+from pycanvas.group import Group
 from pycanvas.enrollment import Enrollment
 from pycanvas.page_view import PageView
 from pycanvas.user import User
@@ -27,7 +28,7 @@ class TestUser(unittest.TestCase):
                 'avatars', 'avatars_p2', 'color', 'color_update', 'colors',
                 'courses', 'courses_p2', 'edit', 'get_by_id', 'get_by_id_2',
                 'get_user_assignments', 'get_user_assignments2',
-                'list_enrollments', 'list_enrollments_2', 'merge',
+                'list_enrollments', 'list_enrollments_2', 'list_groups', 'list_groups2', 'merge',
                 'missing_sub', 'missing_sub_p2', 'page_views', 'page_views_p2',
                 'profile', 'update_settings', 'upload', 'upload_final'
             ]
@@ -193,3 +194,10 @@ class TestUser(unittest.TestCase):
             os.remove(filename)
         except OSError:
             pass
+
+    def test_list_groups(self):
+        groups = self.user.list_groups()
+        group_list = [group for group in groups]
+
+        assert len(group_list) == 4
+        assert isinstance(group_list[0], Group)

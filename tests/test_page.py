@@ -18,7 +18,7 @@ class TestPage(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': ['get_by_id'],
-            'group': ['get_single_group', 'get_page'],
+            'group': ['pages_get_group', 'pages_get_page'],
             'generic': ['not_found'],
             'page': [
                 'get_page', 'edit', 'delete_page',
@@ -131,7 +131,7 @@ class TestPageRevision(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'course': ['get_by_id', 'get_page'],
-            'group': ['get_single_group', 'get_page'],
+            'group': ['pages_get_group', 'pages_get_page'],
             'generic': ['not_found'],
             'page': ['get_latest_rev_by_id', 'get_latest_rev_by_id_group']
         }

@@ -9,6 +9,7 @@ from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.group import Group, GroupCategory
 from pycanvas.user import User
 from tests import settings
 from tests.util import register_uris
@@ -22,19 +23,18 @@ class TestAccount(unittest.TestCase):
     def setUpClass(self):
         requires = {
             'account': [
-                'activate_role', 'close_notification', 'create',
-                'create_course', 'create_2', 'create_notification',
-                'create_role', 'create_subaccount', 'create_user',
-                'deactivate_role', 'delete_user',
-                'get_by_id', 'get_by_id_2', 'get_by_id_3',
-                'get_courses', 'get_courses_page_2',
+                'activate_role', 'close_notification', 'create', 'create_2',
+                'create_course', 'create_notification', 'create_role',
+                'create_subaccount', 'create_user', 'deactivate_role',
+                'delete_user', 'get_by_id', 'get_by_id_2',
+                'get_by_id_3', 'get_courses', 'get_courses_page_2',
                 'get_external_tools', 'get_external_tools_p2', 'get_role',
-                'list_roles', 'list_roles_2', 'reports',
-                'reports_page_2', 'report_index',
-                'report_index_page_2', 'subaccounts',
-                'subaccounts_page_2', 'users', 'users_page_2',
-                'user_notifs', 'user_notifs_page_2', 'update',
-                'update_fail', 'update_role'
+                'list_groups_context', 'list_groups_context2', 'list_roles',
+                'list_roles_2', 'reports', 'reports_page_2', 'report_index',
+                'report_index_page_2', 'subaccounts', 'subaccounts_page_2',
+                'users', 'users_page_2', 'user_notifs', 'user_notifs_page_2',
+                'update', 'update_fail', 'update_role', 'create_group_category',
+                'list_group_categories'
             ],
             'enrollment': ['get_by_id'],
             'external_tool': ['get_by_id_account'],
@@ -292,3 +292,22 @@ class TestAccount(unittest.TestCase):
         target_enrollment = self.account.get_enrollment(1)
 
         assert isinstance(target_enrollment, Enrollment)
+
+    def test_list_groups(self):
+        groups = self.account.list_groups()
+        group_list = [group for group in groups]
+
+        assert isinstance(group_list[0], Group)
+        assert len(group_list) == 4
+
+    # create_group_category()
+    def test_create_group_category(self):
+        name_str = "Shia Laboef"
+        response = self.account.create_group_category(name=name_str)
+        assert isinstance(response, GroupCategory)
+
+    # list_group_categories()
+    def test_list_group_categories(self):
+        response = self.account.list_group_categories()
+        category_list = [category for category in response]
+        assert isinstance(category_list[0], GroupCategory)

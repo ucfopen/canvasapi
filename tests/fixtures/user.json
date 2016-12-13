@@ -270,8 +270,8 @@
 		],
 		"status_code": 200,
 		"headers": {
-            "Link": "<mock://example.com/api/v1/users/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
-        }
+			"Link": "<mock://example.com/api/v1/users/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+		}
 	},
 	"list_enrollments_2": {
 		"method": "GET",
@@ -284,6 +284,39 @@
 			{
 				"id": 4,
 				"course_id": 8
+			}
+		],
+		"status_code": 200
+	},
+	"list_groups": {
+		"method": "GET",
+		"endpoint": "users/self/groups",
+		"data": [
+			{
+				"id": 1,
+				"name": "Group 1"
+			},
+			{
+				"id": 2,
+				"name": "Group 2"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<mock://example.com/api/v1/users/self/groups?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_groups2": {
+		"method": "GET",
+		"endpoint": "users/self/groups?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Group 3"
+			},
+			{
+				"id": 4,
+				"name": "Group 4"
 			}
 		],
 		"status_code": 200
@@ -444,16 +477,16 @@
 		"data": {
 			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
-			    "some_param": "param123",
-			    "a_different_param": "param456"
+				"some_param": "param123",
+				"a_different_param": "param456"
 			}
 		}
 	},
 	"upload_final": {
 		"method": "POST",
-        "endpoint": "files/upload_response_upload_url",
-        "data": {
-            "url": "great_url_success"
-        }
+		"endpoint": "files/upload_response_upload_url",
+		"data": {
+			"url": "great_url_success"
+		}
 	}
 }

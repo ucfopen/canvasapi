@@ -34,7 +34,7 @@ class TestCanvas(unittest.TestCase):
                 'get_by_id', 'multiple', 'multiple_page_2', 'start_at_date',
                 'unicode_encode_error'
             ],
-            'group': ['get_single_group'],
+            'group': ['canvas_create_group', 'canvas_get_group'],
             'section': ['get_by_id'],
             'user': [
                 'activity_stream_summary', 'course_nickname', 'course_nickname_set',
@@ -199,6 +199,14 @@ class TestCanvas(unittest.TestCase):
         info = self.canvas.get_section(1)
 
         assert isinstance(info, Section)
+
+    # create_group()
+    def test_create_group(self):
+        group = self.canvas.create_group()
+
+        assert isinstance(group, Group)
+        assert hasattr(group, 'name')
+        assert hasattr(group, 'description')
 
     # get_group()
     def test_get_group(self):
