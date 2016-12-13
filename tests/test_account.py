@@ -293,8 +293,8 @@ class TestAccount(unittest.TestCase):
 
         assert isinstance(target_enrollment, Enrollment)
 
-    def test_list_groups_in_context(self):
-        groups = self.account.list_groups_in_context()
+    def test_list_groups(self):
+        groups = self.account.list_groups()
         group_list = [group for group in groups]
 
         assert isinstance(group_list[0], Group)

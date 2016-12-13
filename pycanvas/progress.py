@@ -8,7 +8,7 @@ class Progress(CanvasObject):
 
     def query(self):
         """
-        Return completion and status information about an asynchronous job
+        Return completion and status information about an asynchronous job.
 
         :calls: `GET /api/v1/progress/:id \
         <https://canvas.instructure.com/doc/api/progress.html#method.progress.show>`_
@@ -19,4 +19,5 @@ class Progress(CanvasObject):
             'GET',
             'progress/%s' % (self.id)
         )
+        super(Progress, self).set_attributes(response.json())
         return Progress(self._requester, response.json())
