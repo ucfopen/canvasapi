@@ -16,8 +16,8 @@ class Group(CanvasObject):
         :calls: `POST /api/v1/groups/:group_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.create>`_
 
-        :param title: The title for the page.
-        :type title: dict
+        :param wiki_page: Details about the page to create.
+        :type wiki_page: dict
         :returns: The created page.
         :rtype: :class: `pycanvas.page.Page`
         """
@@ -88,7 +88,7 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
 
         :param url: The url for the page.
-        :type url: string
+        :type url: str
         :returns: The specified page.
         :rtype: :class: `pycanvas.groups.Group`
         """
@@ -110,7 +110,8 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
-        :rtype: :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.page.Page`
+        :rtype: :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.page.Page`
         """
         from pycanvas.course import Page
         return PaginatedList(
@@ -163,7 +164,8 @@ class Group(CanvasObject):
         :param invitees: list of user ids
         :type invitees: integer list
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.GroupMembership`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.group.GroupMembership`
         """
         return PaginatedList(
             GroupMembership,
@@ -183,7 +185,8 @@ class Group(CanvasObject):
         :param invitees: list of user ids
         :type invitees: integer list
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.user.User`
         """
         from pycanvas.user import User
         return PaginatedList(
@@ -261,21 +264,6 @@ class Group(CanvasObject):
         )
         return response.json().get('html', '')
 
-    # def get_activity_stream(self): # Not in use
-    #     """
-    #     Returns the current user's group-specific activity stream, paginated.
-
-    #     :calls: `GET /api/v1/groups/:group_id/activity_stream \
-    #     <https://canvas.instructure.com/doc/api/groups.html#method.groups.activity_stream>`_
-
-    #     :rtype: list of various objects.
-    #     """
-    #     response = self._requester.request(
-    #         'GET',
-    #         'groups/self/activity_stream/'
-    #     )
-    #     return response.json()
-
     def get_activity_stream_summary(self):
         """
         Return a summary of the current user's global activity stream.
@@ -298,7 +286,8 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/memberships \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.GroupMembership`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.group.GroupMembership`
         """
         return PaginatedList(
             GroupMembership,
@@ -365,7 +354,7 @@ class Group(CanvasObject):
 class GroupMembership(CanvasObject):
 
     def __str__(self):
-        return "{} - {} ({}))".format(self.user_id, self.group_id, self.id)
+        return "{} - {} ({})".format(self.user_id, self.group_id, self.id)
 
     def update(self, mem_id, **kwargs):
         """
@@ -496,7 +485,8 @@ class GroupCategory(CanvasObject):
         :calls: `GET /api/v1/group_categories/:group_category_id/groups \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.groups>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.group.Group`
         """
         return PaginatedList(
             Group,
@@ -512,7 +502,8 @@ class GroupCategory(CanvasObject):
         :calls: `GET /api/v1/group_categories/:group_category_id/users \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.users>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.user.User`
         """
         from pycanvas.user import User
         return PaginatedList(

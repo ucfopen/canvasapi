@@ -19,5 +19,8 @@ class Progress(CanvasObject):
             'GET',
             'progress/%s' % (self.id)
         )
-        super(Progress, self).set_attributes(response.json())
-        return Progress(self._requester, response.json())
+        response_json = response.json()
+
+        super(Progress, self).set_attributes(response_json)
+
+        return Progress(self._requester, response_json)

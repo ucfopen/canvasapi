@@ -529,7 +529,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.GroupCategory`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.group.GroupCategory`
         """
         from group import GroupCategory
 
