@@ -125,24 +125,9 @@
 	},
 	"get_by_id_2": {
 		"method": "GET",
-		"endpoint": "accounts/100",
+		"endpoint": "accounts/1",
 		"data": {
-			"id": 100,
-			"name": "Old Name",
-			"parent_account_id": null,
-			"root_account_id": null,
-			"default_storage_quota_mb": 500,
-			"default_user_storage_quota_mb": 50,
-			"default_group_storage_quota_mb": 50,
-			"default_time_zone": "America/Denver"
-		},
-		"status_code": 200
-	},
-	"get_by_id_3": {
-		"method": "GET",
-		"endpoint": "accounts/101",
-		"data": {
-			"id": 101,
+			"id": 1,
 			"name": "Old Name",
 			"parent_account_id": null,
 			"root_account_id": null,
@@ -523,9 +508,9 @@
 	},
 	"update": {
 		"method": "PUT",
-		"endpoint": "accounts/100",
+		"endpoint": "accounts/1",
 		"data": {
-			"id": 100,
+			"id": 1,
 			"name": "Updated Name",
 			"parent_account_id": null,
 			"root_account_id": null,
@@ -538,7 +523,7 @@
 	},
 	"update_fail": {
 		"method": "PUT",
-		"endpoint": "accounts/101",
+		"endpoint": "accounts/1",
 		"data": {},
 		"status_code": 200
 	},
@@ -547,7 +532,7 @@
 		"endpoint": "accounts/1/group_categories",
 		"data": {
 			"id": 1,
-			"name": "Shia Laboef",
+			"name": "Test String",
 			"role": "communities",
 			"self_signup": null,
 			"auto_leader": null,

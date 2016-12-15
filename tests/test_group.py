@@ -277,7 +277,7 @@ class TestGroupCategory(unittest.TestCase):
         register_uris(settings.BASE_URL, requires, adapter)
 
         self.course = self.canvas.get_course(1)
-        self.group_category = self.course.create_group_category("Shia Laboef")
+        self.group_category = self.course.create_group_category("Test String")
 
     # __str__()
     def test__str__(self):

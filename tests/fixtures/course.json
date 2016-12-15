@@ -742,7 +742,7 @@
 		"endpoint": "courses/1/group_categories",
 		"data": {
 			"id": 1,
-			"name": "Shia Laboef",
+			"name": "Test String",
 			"role": "communities",
 			"self_signup": null,
 			"auto_leader": null,

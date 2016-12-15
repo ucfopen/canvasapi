@@ -380,7 +380,7 @@ class TestCourse(unittest.TestCase):
 
     # create_group_category()
     def test_create_group_category(self):
-        name_str = "Shia Laboef"
+        name_str = "Test String"
         response = self.course.create_group_category(name=name_str)
         assert isinstance(response, GroupCategory)
 

@@ -196,7 +196,8 @@
 		"data": {
 			"id": 1,
 			"name": "John Doe"
-		}
+		},
+		"status_code": 200
 	},
 	"get_by_id_2": {
 		"method": "GET",
