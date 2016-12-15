@@ -20,8 +20,9 @@ class TestAccount(unittest.TestCase):
 
     @classmethod
     def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
         with requests_mock.Mocker() as m:
-            self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
             requires = {'account': ['get_by_id'], 'user': ['get_by_id']}
             register_uris(requires, m)
 
