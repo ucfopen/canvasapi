@@ -49,7 +49,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_all_assignments2": {
@@ -136,7 +136,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/external_tools?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/external_tools?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -187,7 +187,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -248,7 +248,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -286,7 +286,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_enrollments_2": {
@@ -323,7 +323,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_quizzes2": {
@@ -367,7 +367,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -505,14 +505,14 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"upload": {
 		"method": "POST",
 		"endpoint": "courses/1/files",
 		"data": {
-			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
+			"upload_url": "http://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
 			    "some_param": "param123",
 			    "a_different_param": "param456"
@@ -602,7 +602,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/get_pages?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/get_pages?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_pages2": {
@@ -677,7 +677,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_sections?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_sections?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_sections2": {
@@ -719,7 +719,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/groups?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/groups?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_groups_context2": {

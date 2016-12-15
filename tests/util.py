@@ -3,14 +3,14 @@ import json
 import requests_mock
 
 
-def register_uris(base_url, requirements, adapter):
+def register_uris(base_url, requirements, requests_mocker):
     """
-    Given a list of required fixtures and an adapter object, register each fixture
-    as a uri with the adapter.
+    Given a list of required fixtures and an requests_mocker object,
+    register each fixture as a uri with the mocker.
 
     :param base_url: str
     :param requirements: dict
-    :param adapter: requests_mock.Adapter
+    :param requests_mocker: requests_mock.mocker.Mocker
     """
     for fixture, objects in requirements.iteritems():
 
@@ -26,11 +26,11 @@ def register_uris(base_url, requirements, adapter):
             url = requests_mock.ANY if obj['endpoint'] == 'ANY' else base_url + obj['endpoint']
 
             try:
-                adapter.register_uri(
+                requests_mocker.register_uri(
                     method,
                     url,
                     json=obj.get('data'),
-                    status_code=obj.get('status_code'),
+                    status_code=obj.get('status_code', 200),
                     headers=obj.get('headers', {})
                 )
             except Exception as e:

@@ -26,7 +26,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-            "Link": "<mock://example.com/api/v1/sections/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+            "Link": "<http://example.com/api/v1/sections/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
         }
 	},
 	"list_enrollments_2": {

@@ -179,7 +179,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -234,7 +234,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -278,7 +278,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/groups?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/groups?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_groups_context2": {
@@ -362,7 +362,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -393,7 +393,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -426,7 +426,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -469,7 +469,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -502,7 +502,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -603,7 +603,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
