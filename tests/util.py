@@ -2,8 +2,10 @@ import json
 
 import requests_mock
 
+from tests import settings
 
-def register_uris(base_url, requirements, requests_mocker):
+
+def register_uris(requirements, requests_mocker):
     """
     Given a list of required fixtures and an requests_mocker object,
     register each fixture as a uri with the mocker.
@@ -23,7 +25,7 @@ def register_uris(base_url, requirements, requests_mocker):
             obj = data.get(obj)
 
             method = requests_mock.ANY if obj['method'] == 'ANY' else obj['method']
-            url = requests_mock.ANY if obj['endpoint'] == 'ANY' else base_url + obj['endpoint']
+            url = requests_mock.ANY if obj['endpoint'] == 'ANY' else settings.BASE_URL + obj['endpoint']
 
             try:
                 requests_mocker.register_uri(
