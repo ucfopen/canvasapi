@@ -21,29 +21,6 @@ class TestCanvas(unittest.TestCase):
 
     @classmethod
     def setUp(self):
-        # requires = {
-        #     'account': [
-        #         'create', 'domains', 'get_by_id', 'multiple', 'multiple_course'
-        #     ],
-        #     'conversation': [
-        #         'get_by_id', 'get_conversations', 'get_conversations_2',
-        #         'create_conversation', 'mark_all_as_read', 'unread_count',
-        #         'get_running_batches', 'batch_update'
-        #     ],
-        #     'course': [
-        #         'get_by_id', 'multiple', 'multiple_page_2', '2',
-        #         'unicode_encode_error'
-        #     ],
-        #     'group': ['canvas_create_group', 'canvas_get_group'],
-        #     'section': ['get_by_id'],
-        #     'user': [
-        #         'activity_stream_summary', 'course_nickname', 'course_nickname_set',
-        #         'course_nicknames', 'course_nicknames_delete',
-        #         'course_nicknames_page_2', 'courses', 'courses_p2', 'get_by_id',
-        #         'get_by_id_type', 'todo_items', 'upcoming_events'
-        #     ]
-        # }
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
     # create_account()

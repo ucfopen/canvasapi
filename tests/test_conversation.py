@@ -8,53 +8,56 @@ from tests import settings
 from tests.util import register_uris
 
 
+@requests_mock.Mocker()
 class TestConversation(unittest.TestCase):
-    """
-    Tests Conversation functionality.
-    """
+
     @classmethod
-    def setUpClass(self):
-        requires = {
-            'conversation': [
-                'add_message', 'add_recipients', 'delete_conversation',
-                'delete_conversation_fail', 'delete_message', 'edit_conversation',
-                'edit_conversation_fail', 'get_by_id', 'get_by_id_2'
-            ]
-        }
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
-        adapter = requests_mock.Adapter()
-        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
-        register_uris(settings.BASE_URL, {'generic': ['not_found']}, adapter)
-        register_uris(settings.BASE_URL, requires, adapter)
+        with requests_mock.Mocker() as m:
+            register_uris({'conversation': ['get_by_id']}, m)
 
-        self.conversation = self.canvas.get_conversation(1)
+            self.conversation = self.canvas.get_conversation(1)
 
     # __str__()
-    def test__str__(self):
+    def test__str__(self, m):
         string = str(self.conversation)
         assert isinstance(string, str)
 
     # edit()
-    def test_edit(self):
+    def test_edit(self, m):
+        register_uris({'conversation': ['edit_conversation']}, m)
+
         new_subject = "conversations api example"
         success = self.conversation.edit(subject=new_subject)
         assert success
 
-    def test_edit_fail(self):
+    def test_edit_fail(self, m):
+        requires = {'conversation': ['get_by_id_2', 'edit_conversation_fail']}
+        register_uris(requires, m)
+
         temp_convo = self.canvas.get_conversation(2)
         assert temp_convo.edit() is False
 
     # delete()
-    def test_delete(self):
+    def test_delete(self, m):
+        register_uris({'conversation': ['delete_conversation']}, m)
+
         success = self.conversation.delete()
         assert success
 
-    def test_delete_fail(self):
+    def test_delete_fail(self, m):
+        requires = {'conversation': ['get_by_id_2', 'delete_conversation_fail']}
+        register_uris(requires, m)
+
         temp_convo = self.canvas.get_conversation(2)
         assert temp_convo.delete() is False
 
     # add_recipients()
-    def test_add_recipients(self):
+    def test_add_recipients(self, m):
+        register_uris({'conversation': ['add_recipients']}, m)
+
         recipients = {'bob': 1, 'joe': 2}
         string_bob = "Bob was added to the conversation by Hank TA"
         string_joe = "Joe was added to the conversation by Hank TA"
@@ -65,7 +68,9 @@ class TestConversation(unittest.TestCase):
         assert result.messages[1]["body"] == string_joe
 
     # add_message()
-    def test_add_message(self):
+    def test_add_message(self, m):
+        register_uris({'conversation': ['add_message']}, m)
+
         test_string = "add_message test body"
         result = self.conversation.add_message(test_string)
         assert isinstance(result, Conversation)
@@ -73,7 +78,9 @@ class TestConversation(unittest.TestCase):
         assert result.messages[0]['id'] == 3
 
     # delete_message()
-    def test_delete_message(self):
+    def test_delete_message(self, m):
+        register_uris({'conversation': ['delete_message']}, m)
+
         id_list = [1]
         result = self.conversation.delete_messages(id_list)
         assert 'subject' in result
