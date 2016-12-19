@@ -1,5 +1,13 @@
 {
-	"create": {
+	"conclude": {
+		"method": "DELETE",
+		"endpoint": "courses/1",
+		"data": {
+			"conclude": true
+		},
+		"status_code": 200
+	},
+	"create_quiz": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes",
 		"data": {
@@ -16,6 +24,14 @@
 			"course_id": 1,
 			"name": "Newly Created Assignment",
 			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "courses/1",
+		"data": {
+			"delete": true
 		},
 		"status_code": 200
 	},
