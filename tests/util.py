@@ -28,7 +28,10 @@ def register_uris(requirements, requests_mocker):
             obj = data.get(obj_name)
 
             if obj is None:
-                raise ValueError('{} does not exist in {}.json'.format(obj_name, fixture))
+                raise ValueError('{} does not exist in {}.json'.format(
+                    obj_name.__repr__(),
+                    fixture
+                ))
 
             method = requests_mock.ANY if obj['method'] == 'ANY' else obj['method']
             url = requests_mock.ANY if obj['endpoint'] == 'ANY' else settings.BASE_URL + obj['endpoint']
