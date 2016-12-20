@@ -9,29 +9,23 @@ from pycanvas.module import Module, ModuleItem
 from tests.util import register_uris
 
 
+@requests_mock.Mocker()
 class TestModule(unittest.TestCase):
-    """
-    Tests Module functionality
-    """
+
     @classmethod
-    def setUpClass(self):
-        requires = {
-            'course': ['get_by_id', 'get_module_by_id'],
-            'module': [
-                'edit', 'delete', 'relock', 'list_module_items',
-                'list_module_items2', 'get_module_item_by_id', 'create_module_item',
-            ]
-        }
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
-        adapter = requests_mock.Adapter()
-        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
-        register_uris(settings.BASE_URL, requires, adapter)
+        with requests_mock.Mocker() as m:
+            register_uris({'course': ['get_by_id', 'get_module_by_id']}, m)
 
-        self.course = self.canvas.get_course(1)
-        self.module = self.course.get_module(1)
+            self.course = self.canvas.get_course(1)
+            self.module = self.course.get_module(1)
 
     # edit()
-    def test_edit_module(self):
+    def test_edit_module(self, m):
+        register_uris({'module': ['edit']}, m)
+
         name = 'New Name'
         edited_module = self.module.edit(module={'name': name})
 
@@ -42,7 +36,9 @@ class TestModule(unittest.TestCase):
         assert edited_module.course_id == self.course.id
 
     # delete()
-    def test_delete_module(self):
+    def test_delete_module(self, m):
+        register_uris({'module': ['delete']}, m)
+
         deleted_module = self.module.delete()
 
         assert isinstance(deleted_module, Module)
@@ -50,7 +46,9 @@ class TestModule(unittest.TestCase):
         assert deleted_module.course_id == self.course.id
 
     # relock()
-    def test_relock(self):
+    def test_relock(self, m):
+        register_uris({'module': ['relock']}, m)
+
         relocked_module = self.module.relock()
 
         assert isinstance(relocked_module, Module)
@@ -58,7 +56,9 @@ class TestModule(unittest.TestCase):
         assert relocked_module.course_id == self.course.id
 
     # list_module_items()
-    def test_list_module_items(self):
+    def test_list_module_items(self, m):
+        register_uris({'module': ['list_module_items', 'list_module_items2']}, m)
+
         module_items = self.module.list_module_items()
         module_item_list = [module_item for module_item in module_items]
 
@@ -68,7 +68,9 @@ class TestModule(unittest.TestCase):
         assert module_item_list[0].course_id == self.course.id
 
     # get_module_item()
-    def test_get_module_item(self):
+    def test_get_module_item(self, m):
+        register_uris({'module': ['get_module_item_by_id']}, m)
+
         module_item = self.module.get_module_item(1)
 
         assert isinstance(module_item, ModuleItem)
@@ -76,7 +78,9 @@ class TestModule(unittest.TestCase):
         assert module_item.course_id == self.course.id
 
     # create_module_item()
-    def test_create_module_item(self):
+    def test_create_module_item(self, m):
+        register_uris({'module': ['create_module_item']}, m)
+
         module_item = self.module.create_module_item(
             module_item={
                 'type': 'Page',
@@ -87,49 +91,46 @@ class TestModule(unittest.TestCase):
         assert hasattr(module_item, 'course_id')
         assert module_item.course_id == self.course.id
 
-    def test_create_module_item_fail1(self):
+    def test_create_module_item_fail1(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.module.create_module_item(
                 module_item={'content_id': 1}
             )
 
-    def test_create_module_item_fail2(self):
+    def test_create_module_item_fail2(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.module.create_module_item(
                 module_item={'type': 'Page'}
             )
 
     # __str__
-    def test__str__(self):
+    def test__str__(self, m):
         string = str(self.module)
         assert isinstance(string, str)
 
 
+@requests_mock.Mocker()
 class TestModuleItem(unittest.TestCase):
-    """
-    Tests Module Item functionality
-    """
+
     @classmethod
-    def setUpClass(self):
-        requires = {
-            'course': ['get_by_id', 'get_module_by_id'],
-            'module': [
-                'get_module_item_by_id', 'edit_module_item',
-                'delete_module_item', 'complete_module_item',
-                'uncomplete_module_item'
-            ]
-        }
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
-        adapter = requests_mock.Adapter()
-        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
-        register_uris(settings.BASE_URL, requires, adapter)
+        with requests_mock.Mocker() as m:
+            requires = {
+                'course': ['get_by_id', 'get_module_by_id'],
+                'module': ['get_module_item_by_id']
+            }
+            register_uris(requires, m)
 
-        self.course = self.canvas.get_course(1)
-        self.module = self.course.get_module(1)
-        self.module_item = self.module.get_module_item(1)
+            self.course = self.canvas.get_course(1)
+            self.module = self.course.get_module(1)
+            self.module_item = self.module.get_module_item(1)
 
     # edit()
-    def test_edit_module_item(self):
+    def test_edit_module_item(self, m):
+        register_uris({'module': ['edit_module_item']}, m)
+
         title = 'New Title'
         edited_module_item = self.module_item.edit(
             module_item={'title': title}
@@ -142,7 +143,9 @@ class TestModuleItem(unittest.TestCase):
         assert edited_module_item.course_id == self.course.id
 
     # delete()
-    def test_delete(self):
+    def test_delete(self, m):
+        register_uris({'module': ['delete_module_item']}, m)
+
         deleted_module_item = self.module_item.delete()
 
         assert isinstance(deleted_module_item, ModuleItem)
@@ -150,7 +153,9 @@ class TestModuleItem(unittest.TestCase):
         assert deleted_module_item.course_id == self.course.id
 
     # complete(course_id, True)
-    def test_complete(self):
+    def test_complete(self, m):
+        register_uris({'module': ['complete_module_item']}, m)
+
         completed_module_item = self.module_item.complete()
 
         assert isinstance(completed_module_item, ModuleItem)
@@ -159,7 +164,9 @@ class TestModuleItem(unittest.TestCase):
         assert completed_module_item.course_id == self.course.id
 
     # complete(course_id, False)
-    def test_uncomplete(self):
+    def test_uncomplete(self, m):
+        register_uris({'module': ['uncomplete_module_item']}, m)
+
         completed_module_item = self.module_item.uncomplete()
 
         assert isinstance(completed_module_item, ModuleItem)
@@ -167,6 +174,6 @@ class TestModuleItem(unittest.TestCase):
         assert hasattr(completed_module_item, 'course_id')
         assert completed_module_item.course_id == self.course.id
 
-    def test__str__(self):
+    def test__str__(self, m):
         string = str(self.module_item)
         assert isinstance(string, str)
