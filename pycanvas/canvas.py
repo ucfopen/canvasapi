@@ -1,6 +1,6 @@
 from pycanvas.account import Account
 from pycanvas.course import Course
-from pycanvas.group import Group
+from pycanvas.group import Group, GroupCategory
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.requester import Requester
 from pycanvas.user import User
@@ -348,6 +348,21 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
+
+    def get_group_category(self, cat_id):
+        """
+        Get a single group category.
+
+        :calls: `GET /api/v1/group_categories/:group_category_id \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
+
+        :rtype: :class:`pycanvas.group.GroupCategory`
+        """
+        response = self.__requester.request(
+            'GET',
+            'group_categories/%s' % (cat_id)
+        )
+        return GroupCategory(self.__requester, response.json())
 
     def create_conversation(self, recipients, body, **kwargs):
         """

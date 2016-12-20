@@ -432,21 +432,6 @@ class GroupCategory(CanvasObject):
         )
         return Group(self._requester, response.json())
 
-    def get_category(self, cat_id):
-        """
-        Get a single group category.
-
-        :calls: `GET /api/v1/group_categories/:group_category_id \
-        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
-
-        :rtype: :class:`pycanvas.group.GroupCategory`
-        """
-        response = self._requester.request(
-            'GET',
-            'group_categories/%s' % (cat_id)
-        )
-        return GroupCategory(self._requester, response.json())
-
     def update(self, **kwargs):
         """
         Update a group category.

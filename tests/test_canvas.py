@@ -7,7 +7,7 @@ from pycanvas import Canvas
 from pycanvas.account import Account
 from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
-from pycanvas.group import Group
+from pycanvas.group import Group, GroupCategory
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.progress import Progress
 from pycanvas.section import Section
@@ -222,7 +222,7 @@ class TestCanvas(unittest.TestCase):
 
     # create_group()
     def test_create_group(self, m):
-        register_uris({'group': ['canvas_create_group']}, m)
+        register_uris({'group': ['create']}, m)
 
         group = self.canvas.create_group()
 
@@ -232,13 +232,20 @@ class TestCanvas(unittest.TestCase):
 
     # get_group()
     def test_get_group(self, m):
-        register_uris({'group': ['canvas_get_group']}, m)
+        register_uris({'group': ['get_by_id']}, m)
 
         group = self.canvas.get_group(1)
 
         assert isinstance(group, Group)
         assert hasattr(group, 'name')
         assert hasattr(group, 'description')
+
+    # get_group_category()
+    def test_get_group_category(self, m):
+        register_uris({'group': ['get_category_by_id']}, m)
+
+        response = self.canvas.get_group_category(1)
+        assert isinstance(response, GroupCategory)
 
     # create_conversation()
     def test_create_conversation(self, m):
