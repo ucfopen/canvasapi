@@ -17,12 +17,18 @@ def register_uris(requirements, requests_mocker):
     for fixture, objects in requirements.iteritems():
 
         try:
-            data = json.loads(open('tests/fixtures/%s.json' % (fixture)).read())
+            data = json.loads(open('tests/fixtures/{}.json'.format(fixture)).read())
         except:
-            raise ValueError('Fixture %s.json contains invalid JSON.' % (fixture))
+            raise ValueError('Fixture {}.json contains invalid JSON.'.format(fixture))
 
-        for obj in objects:
-            obj = data.get(obj)
+        if not isinstance(objects, list):
+            raise TypeError('{} is not a list.'.format(objects))
+
+        for obj_name in objects:
+            obj = data.get(obj_name)
+
+            if obj is None:
+                raise ValueError('{} does not exist in {}.json'.format(obj_name, fixture))
 
             method = requests_mock.ANY if obj['method'] == 'ANY' else obj['method']
             url = requests_mock.ANY if obj['endpoint'] == 'ANY' else settings.BASE_URL + obj['endpoint']
