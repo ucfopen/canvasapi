@@ -62,11 +62,15 @@ class TestUploader(unittest.TestCase):
 
     # upload()
     def test_upload_no_upload_url(self, m):
-        with self.assertRaises(Exception):
+        register_uris({'uploader': ['upload_response_no_upload_url']}, m)
+
+        with self.assertRaises(ValueError):
             Uploader(self.requester, 'upload_response_no_upload_url', self.filename).start()
 
     def test_upload_no_upload_params(self, m):
-        with self.assertRaises(Exception):
+        register_uris({'uploader': ['upload_response_no_upload_params']}, m)
+
+        with self.assertRaises(ValueError):
             Uploader(self.requester, 'upload_response_no_upload_params', self.filename).start()
 
     def test_upload_fail(self, m):
