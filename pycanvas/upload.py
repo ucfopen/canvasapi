@@ -54,10 +54,10 @@ class Uploader(object):
         """
         response = response.json()
         if not response.get('upload_url'):
-            raise Exception('Bad API response. No upload_url.')
+            raise ValueError('Bad API response. No upload_url.')
 
         if not response.get('upload_params'):
-            raise Exception('Bad API response. No upload_params.')
+            raise ValueError('Bad API response. No upload_params.')
 
         kwargs = response.get('upload_params')
         kwargs['file'] = self.file

@@ -10,40 +10,33 @@ from tests import settings
 from tests.util import register_uris
 
 
-class TestCourse(unittest.TestCase):
-    """
-    Tests utility methods
-    """
-    @classmethod
-    def setUpClass(self):
-        requires = {
-            'generic': ['not_found'],
-            'user': ['get_by_id', 'course_nickname']
-        }
+@requests_mock.Mocker()
+class TestUtil(unittest.TestCase):
 
-        adapter = requests_mock.Adapter()
-        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
-        register_uris(settings.BASE_URL, requires, adapter)
+    @classmethod
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
     # combine_kwargs()
-    def test_combine_kwargs_empty(self):
+    def test_combine_kwargs_empty(self, m):
+
         result = combine_kwargs()
         self.assertIsInstance(result, dict)
         self.assertEqual(result, {})
 
-    def test_combine_kwargs_single(self):
+    def test_combine_kwargs_single(self, m):
         result = combine_kwargs(var='test')
         self.assertIsInstance(result, dict)
         self.assertTrue('var' in result)
         self.assertEqual(result['var'], 'test')
 
-    def test_combine_kwargs_single_dict(self):
+    def test_combine_kwargs_single_dict(self, m):
         result = combine_kwargs(var={'foo': 'bar'})
         self.assertIsInstance(result, dict)
         self.assertTrue('var[foo]' in result)
         self.assertEqual(result['var[foo]'], 'bar')
 
-    def test_combine_kwargs_multiple_dicts(self):
+    def test_combine_kwargs_multiple_dicts(self, m):
         result = combine_kwargs(
             var1={'foo': 'bar'},
             var2={'fizz': 'buzz'}
@@ -57,7 +50,7 @@ class TestCourse(unittest.TestCase):
         self.assertIn('var2[fizz]', result)
         self.assertEqual(result['var2[fizz]'], 'buzz')
 
-    def test_combine_kwargs_multiple_mixed(self):
+    def test_combine_kwargs_multiple_mixed(self, m):
         result = combine_kwargs(
             var1=True,
             var2={'fizz': 'buzz'},
@@ -75,7 +68,7 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(result['var3'], 'foo')
         self.assertEqual(result['var4'], 42)
 
-    def test_combine_kwargs_nested_dict(self):
+    def test_combine_kwargs_nested_dict(self, m):
         result = combine_kwargs(dict={
             'key': {'subkey': 'value'}
         })
@@ -85,7 +78,7 @@ class TestCourse(unittest.TestCase):
         self.assertIn('dict[key][subkey]', result)
         self.assertEqual(result['dict[key][subkey]'], 'value')
 
-    def test_combine_kwargs_multiple_nested_dicts(self):
+    def test_combine_kwargs_multiple_nested_dicts(self, m):
         result = combine_kwargs(
             dict1={
                 'key1': {
@@ -132,7 +125,7 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(result['dict2[key2][subkey2-1]'], 'value2-1')
         self.assertEqual(result['dict2[key2][subkey2-2]'], 'value2-2')
 
-    def test_combine_kwargs_super_nested_dict(self):
+    def test_combine_kwargs_super_nested_dict(self, m):
         result = combine_kwargs(
             big_dict={'a': {'b': {'c': {'d': {'e': 'We need to go deeper'}}}}}
         )
@@ -141,7 +134,7 @@ class TestCourse(unittest.TestCase):
         self.assertIn('big_dict[a][b][c][d][e]', result)
         self.assertEqual(result['big_dict[a][b][c][d][e]'], 'We need to go deeper')
 
-    def test_combine_kwargs_the_gauntlet(self):
+    def test_combine_kwargs_the_gauntlet(self, m):
         result = combine_kwargs(
             foo='bar',
             fb={
@@ -211,23 +204,25 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(all(key in result for key in expected_keys))
 
     # obj_or_id()
-    def test_obj_or_id_int(self):
+    def test_obj_or_id_int(self, m):
         user_id = obj_or_id(1, 'user_id', (User,))
 
         assert isinstance(user_id, int)
         assert user_id == 1
 
-    def test_obj_or_id_str_valid(self):
+    def test_obj_or_id_str_valid(self, m):
         user_id = obj_or_id("1", 'user_id', (User,))
 
         assert isinstance(user_id, int)
         assert user_id == 1
 
-    def test_obj_or_id_str_invalid(self):
+    def test_obj_or_id_str_invalid(self, m):
         with self.assertRaises(TypeError):
             obj_or_id("1a", 'user_id', (User,))
 
-    def test_obj_or_id_obj(self):
+    def test_obj_or_id_obj(self, m):
+        register_uris({'user': ['get_by_id']}, m)
+
         user = self.canvas.get_user(1)
 
         user_id = obj_or_id(user, 'user_id', (User,))
@@ -235,7 +230,9 @@ class TestCourse(unittest.TestCase):
         assert isinstance(user_id, int)
         assert user_id == 1
 
-    def test_obj_or_id_obj_no_id(self):
+    def test_obj_or_id_obj_no_id(self, m):
+        register_uris({'user': ['course_nickname']}, m)
+
         nick = self.canvas.get_course_nickname(1)
 
         with self.assertRaises(TypeError):

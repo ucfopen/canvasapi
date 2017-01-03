@@ -1,5 +1,5 @@
 {
-	"canvas_create_group": {
+	"create": {
 		"method": "POST",
 		"endpoint": "groups",
 		"data": {
@@ -9,17 +9,7 @@
 		},
 		"status_code": 200
 	},
-	"canvas_get_group": {
-		"method": "GET",
-		"endpoint": "groups/1",
-		"data": {
-			"id": 1,
-			"name": "group1",
-			"description": "best group ever"
-		},
-		"status_code": 200
-	},
-	"pages_get_group": {
+	"get_by_id": {
 		"method": "GET",
 		"endpoint": "groups/1",
 		"data": {
@@ -39,7 +29,7 @@
 		},
 		"status_code": 200
 	},
-	"group_create_page": {
+	"create_page": {
 		"method": "POST",
 		"endpoint": "groups/1/pages",
 		"data": {
@@ -49,7 +39,7 @@
 		},
 		"status_code": 200
 	},
-	"group_edit_front_page": {
+	"edit_front_page": {
 		"method": "PUT",
 		"endpoint": "groups/1/front_page",
 		"data": {
@@ -59,7 +49,7 @@
 		},
 		"status_code": 200
 	},
-	"group_show_front_page": {
+	"show_front_page": {
 		"method": "GET",
 		"endpoint": "groups/1/front_page",
 		"data":{
@@ -69,7 +59,7 @@
 		},
 		"status_code": 200
 	},
-	"group_get_page": {
+	"get_page": {
 		"method": "GET",
 		"endpoint": "groups/1/pages/my-url",
 		"data": {
@@ -79,7 +69,7 @@
 		},
 		"status_code": 200
 	},
-	"group_get_pages": {
+	"get_pages": {
 		"method": "GET",
 		"endpoint": "groups/1/pages",
 		"data": [
@@ -96,10 +86,10 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/groups/1/get_pages?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/groups/1/get_pages?page=2&per_page=2>; rel=\"next\""
 		}
 	},
-	"group_get_pages2": {
+	"get_pages2": {
 		"method": "GET",
 		"endpoint": "groups/1/get_pages?page=2&per_page=2",
 		"data": [
@@ -116,7 +106,7 @@
 		],
 		"status_code": 200
 	},
-	"group_edit": {
+	"edit": {
 		"method": "PUT",
 		"endpoint": "groups/1",
 		"data": {
@@ -126,7 +116,7 @@
 		},
 		"status_code": 200
 	},
-	"group_delete": {
+	"delete": {
 		"method": "DELETE",
 		"endpoint": "groups/1",
 		"data": {
@@ -136,7 +126,7 @@
 		},
 		"status_code": 200
 	},
-	"group_invite": {
+	"invite": {
 		"method": "POST",
 		"endpoint": "groups/1/invite",
 		"data": [
@@ -159,7 +149,7 @@
 		],
 		"status_code": 200
 	},
-	"group_list_users": {
+	"list_users": {
 		"method": "GET",
 		"endpoint": "groups/1/users",
 		"data": [
@@ -173,11 +163,11 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/groups/1/users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/groups/1/users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
-	"group_list_users_p2": {
+	"list_users_p2": {
 		"method": "GET",
 		"endpoint": "groups/1/users?page=2&per_page=2",
 		"data": [
@@ -192,34 +182,25 @@
 		],
 		"status_code": 200
 	},
-	"group_remove_user": {
-		"method": "DELETE",
-		"endpoint": "groups/1/users/1",
-		"data": {
-			"id": 1,
-			"name": "Benjamin Test"
-		},
-		"status_code": 200
-	},
-	"group_upload": {
+	"upload": {
 		"method": "POST",
 		"endpoint": "groups/1/files",
 		"data": {
-			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
+			"upload_url": "http://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
 			    "some_param": "param123",
 			    "a_different_param": "param456"
 			}
 		}
 	},
-	"group_upload_final": {
+	"upload_final": {
 		"method": "POST",
         "endpoint": "files/upload_response_upload_url",
         "data": {
             "url": "great_url_success"
         }
     },
-	"group_preview_processed_html": {
+	"preview_processed_html": {
 		"method": "POST",
 		"endpoint": "groups/1/preview_html",
 		"data": {
@@ -227,15 +208,7 @@
 		},
 		"status_code": 200
 	},
-	"group_activity_stream": {
-		"method": "",
-		"endpoint": "",
-		"data": {
-			"info": "not yet implemented"
-		},
-		"status_code": 404
-	},
-	"group_get_activity_stream_summary": {
+	"activity_stream_summary": {
 		"method": "GET",
 		"endpoint": "groups/1/activity_stream/summary",
 		"data": [
@@ -252,7 +225,7 @@
 		],
 		"status_code": 200
 	},
-	"group_list_memberships": {
+	"list_memberships": {
 		"method": "GET",
 		"endpoint": "groups/1/memberships",
 		"data": [
@@ -276,11 +249,11 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/groups/1/memberships?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/groups/1/memberships?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
-	"group_list_memberships_p2": {
+	"list_memberships_p2": {
 		"method": "GET",
 		"endpoint": "groups/1/memberships?page=2&per_page=2",
 		"data": [
@@ -305,7 +278,7 @@
 		],
 		"status_code": 200
 	},
-	"group_get_membership": {
+	"get_membership": {
 		"method": "GET",
 		"endpoint": "groups/1/users/1",
 		"data": {
@@ -319,7 +292,7 @@
 		},
 		"status_code": 200
 	},
-	"group_create_membership": {
+	"create_membership": {
 		"method": "POST",
 		"endpoint": "groups/1/memberships",
 		"data": {
@@ -333,7 +306,7 @@
 		},
 		"status_code": 200
 	},
-	"group_update_membership": {
+	"update_membership_user": {
 		"method": "PUT",
 		"endpoint": "groups/1/users/1",
 		"data": {
@@ -347,7 +320,7 @@
 		},
 		"status_code": 200
 	},
-	"membership_update": {
+	"update_membership_membership": {
 		"method": "PUT",
 		"endpoint": "groups/1/memberships/1",
 		"data": {
@@ -361,24 +334,18 @@
 		},
 		"status_code": 200
 	},
-	"membership_remove_user": {
+	"remove_user": {
 		"method": "DELETE",
 		"endpoint": "groups/1/users/1",
-		"data": {
-
-		},
+		"data": {},
 		"status_code": 200
 	},
-	"membership_remove_self": {
+	"remove_self": {
 		"method": "DELETE",
 		"endpoint": "groups/1/memberships/self",
-		"data": {
-
-		},
+		"data": {},
 		"status_code": 200
 	},
-
-
 	"category_create_group": {
 		"method": "POST",
 		"endpoint": "group_categories/1/groups",
@@ -402,7 +369,7 @@
 		},
 		"status_code": 200
 	},
-	"category_get_category": {
+	"get_category_by_id": {
 		"method": "GET",
 		"endpoint": "group_categories/1",
 		"data": {

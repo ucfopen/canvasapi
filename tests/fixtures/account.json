@@ -125,24 +125,9 @@
 	},
 	"get_by_id_2": {
 		"method": "GET",
-		"endpoint": "accounts/100",
+		"endpoint": "accounts/1",
 		"data": {
-			"id": 100,
-			"name": "Old Name",
-			"parent_account_id": null,
-			"root_account_id": null,
-			"default_storage_quota_mb": 500,
-			"default_user_storage_quota_mb": 50,
-			"default_group_storage_quota_mb": 50,
-			"default_time_zone": "America/Denver"
-		},
-		"status_code": 200
-	},
-	"get_by_id_3": {
-		"method": "GET",
-		"endpoint": "accounts/101",
-		"data": {
-			"id": 101,
+			"id": 1,
 			"name": "Old Name",
 			"parent_account_id": null,
 			"root_account_id": null,
@@ -179,7 +164,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -234,7 +219,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -278,7 +263,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/groups?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/groups?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_groups_context2": {
@@ -362,7 +347,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -393,7 +378,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -426,7 +411,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -469,7 +454,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -502,7 +487,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -523,9 +508,9 @@
 	},
 	"update": {
 		"method": "PUT",
-		"endpoint": "accounts/100",
+		"endpoint": "accounts/1",
 		"data": {
-			"id": 100,
+			"id": 1,
 			"name": "Updated Name",
 			"parent_account_id": null,
 			"root_account_id": null,
@@ -538,7 +523,7 @@
 	},
 	"update_fail": {
 		"method": "PUT",
-		"endpoint": "accounts/101",
+		"endpoint": "accounts/1",
 		"data": {},
 		"status_code": 200
 	},
@@ -547,7 +532,7 @@
 		"endpoint": "accounts/1/group_categories",
 		"data": {
 			"id": 1,
-			"name": "Shia Laboef",
+			"name": "Test String",
 			"role": "communities",
 			"self_signup": null,
 			"auto_leader": null,
@@ -603,7 +588,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},

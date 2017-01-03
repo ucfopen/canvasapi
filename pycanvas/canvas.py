@@ -1,6 +1,6 @@
 from pycanvas.account import Account
 from pycanvas.course import Course
-from pycanvas.group import Group
+from pycanvas.group import Group, GroupCategory
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.requester import Requester
 from pycanvas.user import User
@@ -12,16 +12,14 @@ class Canvas(object):
     The main class to be instantiated to provide access to Canvas's API.
     """
 
-    def __init__(self, base_url, access_token, adapter=None):
+    def __init__(self, base_url, access_token):
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
-        :param adapter: The requests_mock adapter (for testing).
-        :type adapter: :class:`requests_mock.Adapter`
         """
-        self.__requester = Requester(base_url, access_token, adapter)
+        self.__requester = Requester(base_url, access_token)
 
     def create_account(self, **kwargs):
         """
@@ -350,6 +348,21 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
+
+    def get_group_category(self, cat_id):
+        """
+        Get a single group category.
+
+        :calls: `GET /api/v1/group_categories/:group_category_id \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
+
+        :rtype: :class:`pycanvas.group.GroupCategory`
+        """
+        response = self.__requester.request(
+            'GET',
+            'group_categories/%s' % (cat_id)
+        )
+        return GroupCategory(self.__requester, response.json())
 
     def create_conversation(self, recipients, body, **kwargs):
         """
