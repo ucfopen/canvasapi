@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+__version__ = '0.2'
+
 import exceptions
 import canvas
 import canvas_object
