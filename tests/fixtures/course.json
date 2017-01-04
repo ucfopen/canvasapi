@@ -1,5 +1,13 @@
 {
-	"create": {
+	"conclude": {
+		"method": "DELETE",
+		"endpoint": "courses/1",
+		"data": {
+			"conclude": true
+		},
+		"status_code": 200
+	},
+	"create_quiz": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes",
 		"data": {
@@ -19,14 +27,11 @@
 		},
 		"status_code": 200
 	},
-	"deactivate_enrollment": {
+	"delete": {
 		"method": "DELETE",
-		"endpoint": "courses/1/enrollments/1",
+		"endpoint": "courses/1",
 		"data": {
-			"id": 1,
-			"course_id": 1,
-			"user_id": 1,
-			"type": "StudentEnrollment"
+			"delete": true
 		},
 		"status_code": 200
 	},
@@ -60,7 +65,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_all_assignments2": {
@@ -147,7 +152,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/external_tools?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/external_tools?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -198,7 +203,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -237,11 +242,11 @@
 	},
 	"get_user_id_type": {
 		"method": "GET",
-		"endpoint": "courses/1/users/sis_login_id:ab123456",
+		"endpoint": "courses/1/users/sis_login_id:SISLOGIN",
 		"data": {
 			"id": 123456,
 			"name": "Abby Smith",
-			"sis_login_id": "ab123456"
+			"sis_login_id": "SISLOGIN"
 		},
 		"status_code": 200
 	},
@@ -259,7 +264,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -284,16 +289,20 @@
 		"data": [
 			{
 				"id": 1,
-				"course_id": 5
+				"course_id": 1,
+				"user_id": 1,
+				"type": "StudentEnrollment"
 			},
 			{
 				"id": 2,
-				"course_id": 6
+				"course_id": 1,
+				"user_id": 2,
+				"type": "TeacherEnrollment"
 			}
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_enrollments_2": {
@@ -302,11 +311,15 @@
 		"data": [
 			{
 				"id": 3,
-				"course_id": 7
+				"course_id": 1,
+				"user_id": 10,
+				"type": "StudentEnrollment"
 			},
 			{
 				"id": 4,
-				"course_id": 8
+				"course_id": 1,
+				"user_id": 8,
+				"type": "StudentEnrollment"
 			}
 		],
 		"status_code": 200
@@ -326,7 +339,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_quizzes2": {
@@ -370,7 +383,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -406,17 +419,6 @@
 		"endpoint": "courses/1/preview_html",
 		"data": {
 			"html": "<p>hello</p>"
-		},
-		"status_code": 200
-	},
-	"reactivate_enrollment": {
-		"method": "PUT",
-		"endpoint": "courses/1/enrollments/1/reactivate",
-		"data": {
-			"id": 1,
-			"course_id": 1,
-			"user_id": 1,
-			"type": "StudentEnrollment"
 		},
 		"status_code": 200
 	},
@@ -519,14 +521,14 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"upload": {
 		"method": "POST",
 		"endpoint": "courses/1/files",
 		"data": {
-			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
+			"upload_url": "http://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
 			    "some_param": "param123",
 			    "a_different_param": "param456"
@@ -616,7 +618,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/courses/1/get_pages?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/courses/1/get_pages?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_pages2": {
@@ -674,6 +676,126 @@
 			"title": "Page To Be Deleted",
 			"url": "my-url"
 		},
+		"status_code": 200
+	},
+	"list_sections": {
+		"method": "GET",
+		"endpoint": "courses/1/sections",
+		"data": [
+			{
+				"id": 1,
+				"name": "Section 1"
+			},
+			{
+				"id": 2,
+				"name": "Section 2"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/courses/1/list_sections?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_sections2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_sections?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Section 3"
+			},
+			{
+				"id": 4,
+				"name": "Section 4"
+			}
+		],
+		"status_code": 200
+	},
+	"create_section": {
+		"method": "POST",
+		"endpoint": "courses/1/sections",
+		"data": {
+			"id": 1,
+			"name": "New Section"
+		},
+		"status_code": 200
+	},
+	"list_groups_context": {
+		"method": "GET",
+		"endpoint": "courses/1/groups",
+		"data": [
+			{
+				"id": 1,
+				"name": "Group 1"
+			},
+			{
+				"id": 2,
+				"name": "Group 2"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/courses/1/groups?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_groups_context2": {
+		"method": "GET",
+		"endpoint": "courses/1/groups?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Group 3"
+			},
+			{
+				"id": 4,
+				"name": "Group 4"
+			}
+		],
+		"status_code": 200
+	},
+	"create_group_category": {
+		"method": "POST",
+		"endpoint": "courses/1/group_categories",
+		"data": {
+			"id": 1,
+			"name": "Test String",
+			"role": "communities",
+			"self_signup": null,
+			"auto_leader": null,
+			"context_type": "Account",
+			"account_id": 1,
+			"group_limit": null,
+			"progress": null
+		},
+		"status_code": 200
+	},
+	"list_group_categories": {
+		"method": "GET",
+		"endpoint": "courses/1/group_categories",
+		"data": [
+			{
+				"id": 2,
+				"name": "Math Groups",
+				"role": "communities",
+				"self_signup": null,
+				"auto_leader": null,
+				"context_type": "Course",
+				"account_id": 2,
+				"group_limit": null,
+				"progress": null
+			},
+			{
+				"id": 3,
+				"name": "Film Groups",
+				"role": "communities",
+				"self_signup": null,
+				"auto_leader": null,
+				"context_type": "Course",
+				"account_id": 3,
+				"group_limit": null,
+				"progress": null
+			}
+		],
 		"status_code": 200
 	}
 }

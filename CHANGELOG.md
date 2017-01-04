@@ -1,6 +1,31 @@
 PyCanvas Changelog
 ==================
 
+Version 0.2
+-----------
+
+**New Endpoint Coverage**
+
+- Groups
+- Roles
+- Page Revisions
+- Sections
+- Conversations
+
+**General**
+
+- Standardized `__str__` methods. They now (generally) follow the convention of the value of the single most relevant field followed by an ID in parentheses.
+- Reworked how `requests_mock` is used in test suite.
+- Nested dictionaries are now allowed as kwargs
+- Split 401 into two exceptions: `InvalidAccessToken` if `'WWW-Authenticate'` header is present. Otherwise, `Unauthorized`.
+
+
+**Bugfixes**
+
+- Moved some incorrectly placed enrollment methods to the Enrollment class.
+- Corrected `Process` class to `Progress`
+- Minor text fixes.
+
 Version 0.1.2
 -------------
 

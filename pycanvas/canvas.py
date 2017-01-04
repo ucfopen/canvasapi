@@ -1,10 +1,10 @@
-from account import Account
-from course import Course
-from paginated_list import PaginatedList
-from requester import Requester
-from user import User
-from group import Group
-from util import combine_kwargs
+from pycanvas.account import Account
+from pycanvas.course import Course
+from pycanvas.group import Group, GroupCategory
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.requester import Requester
+from pycanvas.user import User
+from pycanvas.util import combine_kwargs
 
 
 class Canvas(object):
@@ -12,16 +12,14 @@ class Canvas(object):
     The main class to be instantiated to provide access to Canvas's API.
     """
 
-    def __init__(self, base_url, access_token, adapter=None):
+    def __init__(self, base_url, access_token):
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
-        :param adapter: The requests_mock adapter (for testing).
-        :type adapter: :class:`requests_mock.Adapter`
         """
-        self.__requester = Requester(base_url, access_token, adapter)
+        self.__requester = Requester(base_url, access_token)
 
     def create_account(self, **kwargs):
         """
@@ -120,7 +118,8 @@ class Canvas(object):
         Retrieve a user by their ID. `id_type` denotes which endpoint to try as there are
         several different IDs that can pull the same user record from Canvas.
 
-        Refer to API documentation's `User <https://canvas.instructure.com/doc/api/users.html#User>`_
+        Refer to API documentation's
+        `User <https://canvas.instructure.com/doc/api/users.html#User>`_
         example to see the ID types a user can be retrieved with.
 
         :calls: `GET /users/:id \
@@ -213,9 +212,10 @@ class Canvas(object):
         :calls: `GET /api/v1/users/self/course_nicknames \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course_nickname.CourseNickname`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.course_nickname.CourseNickname`
         """
-        from course import CourseNickname
+        from pycanvas.course import CourseNickname
 
         return PaginatedList(
             CourseNickname,
@@ -235,7 +235,7 @@ class Canvas(object):
         :type course_id: int
         :rtype: :class:`pycanvas.course_nickname.CourseNickname`
         """
-        from course import CourseNickname
+        from pycanvas.course import CourseNickname
 
         response = self.__requester.request(
             'GET',
@@ -252,7 +252,7 @@ class Canvas(object):
 
         :rtype: Section
         """
-        from section import Section
+        from pycanvas.section import Section
         response = self.__requester.request(
             'GET',
             'sections/%s' % (section_id)
@@ -274,7 +274,7 @@ class Canvas(object):
         :type nickname: str
         :rtype: :class:`pycanvas.course_nickname.CourseNickname`
         """
-        from course import CourseNickname
+        from pycanvas.course import CourseNickname
 
         response = self.__requester.request(
             'PUT',
@@ -316,6 +316,22 @@ class Canvas(object):
         )
         return response.json()
 
+    def create_group(self, **kwargs):
+        """
+        Create a group
+
+        :calls: `POST /api/v1/groups/ \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.create>`_
+
+        :rtype: :class:`pycanvas.group.Group`
+        """
+        response = self.__requester.request(
+            'POST',
+            'groups',
+            **combine_kwargs(**kwargs)
+        )
+        return Group(self.__requester, response.json())
+
     def get_group(self, group_id, **kwargs):
         """
         Return the data for a single group. If the caller does not
@@ -332,3 +348,189 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
+
+    def get_group_category(self, cat_id):
+        """
+        Get a single group category.
+
+        :calls: `GET /api/v1/group_categories/:group_category_id \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
+
+        :rtype: :class:`pycanvas.group.GroupCategory`
+        """
+        response = self.__requester.request(
+            'GET',
+            'group_categories/%s' % (cat_id)
+        )
+        return GroupCategory(self.__requester, response.json())
+
+    def create_conversation(self, recipients, body, **kwargs):
+        """
+        Create a new Conversation.
+
+        :calls: `POST /api/v1/conversations \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.create>`_
+
+        :param recipients: An array of recipient ids.
+            These may be user ids or course/group ids prefixed
+            with 'course_' or 'group_' respectively,
+            e.g. recipients=['1', '2', 'course_3']
+        :type recipients: `list` of `str`
+        :param body: The body of the message being added.
+        :type body: `str`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.conversation.Conversation`
+        """
+        from pycanvas.conversation import Conversation
+
+        return PaginatedList(
+            Conversation,
+            self.__requester,
+            'POST',
+            'conversations',
+            recipients=recipients,
+            body=body,
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_conversation(self, conversation_id, **kwargs):
+        """
+        Return single Conversation
+
+        :calls: `GET /api/v1/conversations/:id \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.show>`_
+
+        :param conversation_id: The ID of the conversation.
+        :type conversation_id: `int`
+        :rtype: :class:`pycanvas.conversation.Conversation`
+        """
+        from pycanvas.conversation import Conversation
+        response = self.__requester.request(
+            'GET',
+            'conversations/%s' % (conversation_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Conversation(self.__requester, response.json())
+
+    def get_conversations(self, **kwargs):
+        """
+        Return list of conversations for the current user, most resent ones first.
+
+        :calls: `GET /api/v1/conversations \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of \
+        :class:`pycanvas.conversation.Conversation`
+        """
+        from pycanvas.conversation import Conversation
+
+        return PaginatedList(
+            Conversation,
+            self.__requester,
+            'GET',
+            'conversations',
+            **combine_kwargs(**kwargs)
+        )
+
+    def conversations_mark_all_as_read(self):
+        """
+        Mark all conversations as read.
+        :calls: `POST /api/v1/conversations/mark_all_as_read \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.mark_all_as_read>`_
+
+        :rtype: `bool`
+        """
+        response = self.__requester.request(
+            'POST',
+            'conversations/mark_all_as_read'
+        )
+        return response.json() == {}
+
+    def conversations_unread_count(self):
+        """
+        Get the number of unread conversations for the current user
+
+        :calls: `GET /api/v1/conversations/unread_count \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.unread_count>`_
+
+        :returns: simple object with unread_count, example: {'unread_count': '7'}
+        :rtype: `dict`
+        """
+        response = self.__requester.request(
+            'GET',
+            'conversations/unread_count'
+        )
+
+        return response.json()
+
+    def conversations_get_running_batches(self):
+        """
+        Returns any currently running conversation batches for the current user.
+        Conversation batches are created when a bulk private message is sent
+        asynchronously.
+
+        :calls: `GET /api/v1/conversations/batches \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batches>`_
+
+        :returns: dict with list of batch objects - not currently a Class
+        :rtype: `dict`
+        """
+
+        response = self.__requester.request(
+            'GET',
+            'conversations/batches'
+        )
+
+        return response.json()
+
+    def conversations_batch_update(self, conversation_ids, event):
+        """
+
+        :calls: `PUT /api/v1/conversations \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batch_update>`_
+
+        :param conversation_ids: List of conversations to update. Limited to 500 conversations.
+        :type conversation_ids: `list` of `str`
+        :param event: The action to take on each conversation.
+        :type event: `str`
+        :rtype: :class:`pycanvas.progress.Progress`
+        """
+
+        from pycanvas.progress import Progress
+
+        ALLOWED_EVENTS = [
+            'mark_as_read',
+            'mark_as_unread',
+            'star',
+            'unstar',
+            'archive',
+            'destroy'
+        ]
+
+        try:
+            if event not in ALLOWED_EVENTS:
+                raise ValueError(
+                    '%s is not a valid action. Please use one of the following: %s' % (
+                        event,
+                        ','.join(ALLOWED_EVENTS)
+                    )
+                )
+
+            if len(conversation_ids) > 500:
+                raise ValueError(
+                    'You have requested %s updates, which exceeds the limit of 500' % (
+                        len(conversation_ids)
+                    )
+                )
+
+            response = self.__requester.request(
+                'PUT',
+                'conversations',
+                event=event,
+                **{"conversation_ids[]": conversation_ids}
+            )
+            return_progress = Progress(self.__requester, response.json())
+            return return_progress
+
+        except ValueError as e:
+            return e

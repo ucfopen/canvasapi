@@ -1,12 +1,12 @@
-from canvas_object import CanvasObject
-from exceptions import CanvasException
-from util import combine_kwargs
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import CanvasException
+from pycanvas.util import combine_kwargs
 
 
 class ExternalTool(CanvasObject):
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.name, self.description)
+        return "{} ({})".format(self.name, self.id)
 
     @property
     def parent_id(self):
@@ -42,8 +42,8 @@ class ExternalTool(CanvasObject):
 
         :rtype: :class:`pycanvas.account.Account` or :class:`pycanvas.account.Course`
         """
-        from account import Account
-        from course import Course
+        from pycanvas.account import Account
+        from pycanvas.course import Course
 
         response = self._requester.request(
             'GET',

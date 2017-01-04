@@ -1,5 +1,9 @@
-from pycanvas.exceptions import BadRequest, CanvasException, PermissionError, ResourceDoesNotExist
 import requests
+
+from pycanvas.exceptions import (
+    BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
+    Unauthorized
+)
 
 
 class Requester(object):
@@ -7,21 +11,16 @@ class Requester(object):
     Responsible for handling HTTP requests.
     """
 
-    def __init__(self, base_url, access_token, mock_adapter):
+    def __init__(self, base_url, access_token):
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
-        :param mock_adapter: The requests_mock adapter (for testing).
-        :type mock_adapter: :class:`requests_mock.Adapter`
         """
         self.base_url = base_url
         self.access_token = access_token
         self._session = requests.Session()
-
-        if mock_adapter:
-            self._session.mount('mock', mock_adapter)
 
     def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
         """
@@ -64,7 +63,10 @@ class Requester(object):
         if response.status_code == 400:
             raise BadRequest(response.json())
         elif response.status_code == 401:
-            raise PermissionError(response.json())
+            if 'WWW-Authenticate' in response.headers:
+                raise InvalidAccessToken(response.json())
+            else:
+                raise Unauthorized(response.json())
         elif response.status_code == 404:
             raise ResourceDoesNotExist('Not Found')
         elif response.status_code == 500:

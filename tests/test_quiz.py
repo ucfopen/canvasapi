@@ -2,37 +2,34 @@ import unittest
 import settings
 
 import requests_mock
+
 from pycanvas import Canvas
 from pycanvas.quiz import Quiz
-from util import register_uris
+from tests.util import register_uris
 
 
+@requests_mock.Mocker()
 class TestQuiz(unittest.TestCase):
-    """
-    Tests Quiz functionality
-    """
+
     @classmethod
-    def setUpClass(self):
-        requires = {
-            'course': ['get_by_id'],
-            'generic': ['not_found'],
-            'quiz': ['delete', 'edit', 'get_by_id'],
-        }
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
-        adapter = requests_mock.Adapter()
-        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
-        register_uris(settings.BASE_URL, requires, adapter)
+        with requests_mock.Mocker() as m:
+            register_uris({'course': ['get_by_id'], 'quiz': ['get_by_id']}, m)
 
-        self.course = self.canvas.get_course(1)
-        self.quiz = self.course.get_quiz(1)
+            self.course = self.canvas.get_course(1)
+            self.quiz = self.course.get_quiz(1)
 
     # __str__()
-    def test__str__(self):
+    def test__str__(self, m):
         string = str(self.quiz)
         assert isinstance(string, str)
 
     # edit()
-    def test_edit(self):
+    def test_edit(self, m):
+        register_uris({'quiz': ['edit']}, m)
+
         title = 'New Title'
         edited_quiz = self.quiz.edit(quiz={'title': title})
 
@@ -43,7 +40,9 @@ class TestQuiz(unittest.TestCase):
         assert edited_quiz.course_id == self.course.id
 
     # delete()
-    def test_delete(self):
+    def test_delete(self, m):
+        register_uris({'quiz': ['delete']}, m)
+
         title = "Great Title"
         deleted_quiz = self.quiz.delete(quiz={'title': title})
 

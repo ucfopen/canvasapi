@@ -108,17 +108,6 @@
 			}
 		]
 	},
-	"enroll_by_id": {
-		"method": "GET",
-		"endpoint": "accounts/1/enrollments/1",
-		"data": {
-			"id": 1,
-			"course_id": 1,
-			"user_id": 1,
-			"type": "StudentEnrollment"
-		},
-		"status_code": 200
-	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "accounts/1",
@@ -136,24 +125,9 @@
 	},
 	"get_by_id_2": {
 		"method": "GET",
-		"endpoint": "accounts/100",
+		"endpoint": "accounts/1",
 		"data": {
-			"id": 100,
-			"name": "Old Name",
-			"parent_account_id": null,
-			"root_account_id": null,
-			"default_storage_quota_mb": 500,
-			"default_user_storage_quota_mb": 50,
-			"default_group_storage_quota_mb": 50,
-			"default_time_zone": "America/Denver"
-		},
-		"status_code": 200
-	},
-	"get_by_id_3": {
-		"method": "GET",
-		"endpoint": "accounts/101",
-		"data": {
-			"id": 101,
+			"id": 1,
 			"name": "Old Name",
 			"parent_account_id": null,
 			"root_account_id": null,
@@ -190,7 +164,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -245,7 +219,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -270,6 +244,39 @@
 				"privacy_level": "anonymous",
 				"created_at": "2015-01-01T01:01:01Z",
 				"updated_at": "2016-06-17T14:20:00Z"
+			}
+		],
+		"status_code": 200
+	},
+	"list_groups_context": {
+		"method": "GET",
+		"endpoint": "accounts/1/groups",
+		"data": [
+			{
+				"id": 1,
+				"name": "Group 1"
+			},
+			{
+				"id": 2,
+				"name": "Group 2"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/accounts/1/groups?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_groups_context2": {
+		"method": "GET",
+		"endpoint": "accounts/1/groups?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Group 3"
+			},
+			{
+				"id": 4,
+				"name": "Group 4"
 			}
 		],
 		"status_code": 200
@@ -340,7 +347,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -371,7 +378,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -404,7 +411,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -423,6 +430,16 @@
 		],
 		"status_code": 200
 	},
+	"get_role": {
+		"method": "GET",
+		"endpoint": "accounts/1/roles/2",
+		"data": {
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
+		"status_code": 200
+	},
 	"users": {
 		"method": "GET",
 		"endpoint": "accounts/1/users",
@@ -437,7 +454,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -470,7 +487,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -491,9 +508,9 @@
 	},
 	"update": {
 		"method": "PUT",
-		"endpoint": "accounts/100",
+		"endpoint": "accounts/1",
 		"data": {
-			"id": 100,
+			"id": 1,
 			"name": "Updated Name",
 			"parent_account_id": null,
 			"root_account_id": null,
@@ -506,8 +523,130 @@
 	},
 	"update_fail": {
 		"method": "PUT",
-		"endpoint": "accounts/101",
+		"endpoint": "accounts/1",
 		"data": {},
+		"status_code": 200
+	},
+	"create_group_category": {
+		"method": "POST",
+		"endpoint": "accounts/1/group_categories",
+		"data": {
+			"id": 1,
+			"name": "Test String",
+			"role": "communities",
+			"self_signup": null,
+			"auto_leader": null,
+			"context_type": "Account",
+			"account_id": 1,
+			"group_limit": null,
+			"progress": null
+		},
+		"status_code": 200
+	},
+	"list_group_categories": {
+		"method": "GET",
+		"endpoint": "accounts/1/group_categories",
+		"data": [
+			{
+				"id": 2,
+				"name": "Math Groups",
+				"role": "communities",
+				"self_signup": null,
+				"auto_leader": null,
+				"context_type": "Account",
+				"account_id": 2,
+				"group_limit": null,
+				"progress": null
+			},
+			{
+				"id": 3,
+				"name": "Film Groups",
+				"role": "communities",
+				"self_signup": null,
+				"auto_leader": null,
+				"context_type": "Account",
+				"account_id": 3,
+				"group_limit": null,
+				"progress": null
+			}
+		],
+		"status_code": 200
+	},
+	"list_roles": {
+		"method": "GET",
+		"endpoint": "accounts/1/roles",
+		"data": [
+			{
+				"id": 1,
+				"role": "StudentEnrollment",
+				"label": "Student"
+			},
+			{
+				"id": 3,
+				"role": "StudentEnrollment1",
+				"label": "Student1"
+			}
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_roles_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/roles/?page=2&per_page=2",
+		"data": [
+			{
+				"id": 5,
+				"role": "StudentEnrollment2",
+				"label": "Student2"
+			},
+			{
+				"id": 7,
+				"role": "StudentEnrollment3",
+				"label": "Student3"
+			}
+		],
+		"status_code": 200
+	},
+	"create_role": {
+		"method": "POST",
+		"endpoint": "accounts/1/roles",
+		"data":{
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
+		"status_code": 200
+	},
+	"deactivate_role": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/roles/2",
+		"data": {
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
+		"status_code": 200
+	},
+	"activate_role": {
+		"method": "POST",
+		"endpoint": "accounts/1/roles/2/activate",
+		"data": {
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
+		"status_code": 200
+	},
+	"update_role": {
+		"method": "PUT",
+		"endpoint": "accounts/1/roles/2",
+		"data": {
+			"id": 1,
+			"role": "StudentEnrollment",
+			"label": "Student"
+		},
 		"status_code": 200
 	}
 }

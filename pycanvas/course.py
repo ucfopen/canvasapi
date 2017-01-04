@@ -1,15 +1,15 @@
-from canvas_object import CanvasObject
-from exceptions import RequiredFieldMissing
-from upload import Uploader
-from util import combine_kwargs
-from page import Page
-from paginated_list import PaginatedList
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.page import Page
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.upload import Uploader
+from pycanvas.util import combine_kwargs
 
 
 class Course(CanvasObject):
 
     def __str__(self):
-        return "%s %s %s" % (self.id, self.course_code, self.name)
+        return "{} {} ({})".format(self.course_code, self.name, self.id)
 
     def conclude(self):
         """
@@ -82,7 +82,7 @@ class Course(CanvasObject):
         :type user_id_type: str
         :rtype: :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         if user_id_type:
             uri = 'courses/%s/users/%s:%s' % (self.id, user_id_type, user_id)
@@ -107,7 +107,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         return PaginatedList(
             User,
@@ -130,7 +130,7 @@ class Course(CanvasObject):
         :type enrollment_type: str
         :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
 
         kwargs['enrollment[user_id]'] = user.id
         kwargs['enrollment[type]'] = enrollment_type
@@ -153,7 +153,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         return PaginatedList(
             User,
@@ -256,9 +256,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
         return PaginatedList(
             Enrollment,
             self._requester,
@@ -267,7 +268,7 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-    def get_assignment(self, assignment_id):
+    def get_assignment(self, assignment_id, **kwargs):
         """
         Return the assignment with the given ID.
 
@@ -278,30 +279,33 @@ class Course(CanvasObject):
         :type assignment_id: int
         :rtype: :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         response = self._requester.request(
             'GET',
             'courses/%s/assignments/%s' % (self.id, assignment_id),
+            **combine_kwargs(**kwargs)
         )
         return Assignment(self._requester, response.json())
 
-    def get_assignments(self):
+    def get_assignments(self, **kwargs):
         """
         List all of the assignments in this course.
 
         :calls: `GET /api/v1/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         return PaginatedList(
             Assignment,
             self._requester,
             'GET',
-            'courses/%s/assignments' % (self.id)
+            'courses/%s/assignments' % (self.id),
+            **combine_kwargs(**kwargs)
         )
 
     def create_assignment(self, assignment, **kwargs):
@@ -317,7 +321,7 @@ class Course(CanvasObject):
         :type assignment: dict
         :rtype: :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         if isinstance(assignment, dict) and 'name' in assignment:
             kwargs['assignment'] = assignment
@@ -341,7 +345,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.quiz.Quiz`
         """
-        from quiz import Quiz
+        from pycanvas.quiz import Quiz
         return PaginatedList(
             Quiz,
             self._requester,
@@ -362,7 +366,7 @@ class Course(CanvasObject):
         :type quiz_id: int
         :rtype: :class:`pycanvas.quiz.Quiz`
         """
-        from quiz import Quiz
+        from pycanvas.quiz import Quiz
         response = self._requester.request(
             'GET',
             'courses/%s/quizzes/%s' % (self.id, quiz_id)
@@ -383,7 +387,7 @@ class Course(CanvasObject):
         :type quiz: dict
         :rtype: :class:`pycanvas.quiz.Quiz`
         """
-        from quiz import Quiz
+        from pycanvas.quiz import Quiz
 
         if isinstance(quiz, dict) and 'title' in quiz:
             kwargs['quiz'] = quiz
@@ -407,9 +411,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/modules \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.module.Module`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.module.Module`
         """
-        from module import Module
+        from pycanvas.module import Module
 
         return PaginatedList(
             Module,
@@ -431,7 +436,7 @@ class Course(CanvasObject):
         :type module_id: int
         :rtype: :class:`pycanvas.module.Module`
         """
-        from module import Module
+        from pycanvas.module import Module
 
         response = self._requester.request(
             'GET',
@@ -454,7 +459,7 @@ class Course(CanvasObject):
         :returns: The created module.
         :rtype: :class:`pycanvas.module.Module`
         """
-        from module import Module
+        from pycanvas.module import Module
 
         if isinstance(module, dict) and 'name' in module:
             kwargs['module'] = module
@@ -471,58 +476,6 @@ class Course(CanvasObject):
 
         return Module(self._requester, module_json)
 
-    def deactivate_enrollment(self, enrollment_id, task):
-        """
-        Delete, conclude, or deactivate an enrollment.
-
-        The following tasks can be performed on an enrollment: conclude, delete, \
-        inactivate, deactivate.
-
-        :calls: `DELETE /api/v1/courses/:course_id/enrollments/:id \
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.destroy>`_
-
-        :param enrollment_id: The ID of the enrollment to modify.
-        :type enrollment_id: int
-        :param task: The task to perform on the enrollment.
-        :type task: str
-        :rtype: :class:`pycanvas.enrollment.Enrollment`
-        """
-        from enrollment import Enrollment
-
-        ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
-
-        if not task in ALLOWED_TASKS:
-            raise ValueError('%s is not a valid task. Please use one of the following: %s' % (
-                task,
-                ','.join(ALLOWED_TASKS)
-            ))
-
-        response = self._requester.request(
-            'DELETE',
-            'courses/%s/enrollments/%s' % (self.id, enrollment_id),
-            task=task
-        )
-        return Enrollment(self._requester, response.json())
-
-    def reactivate_enrollment(self, enrollment_id):
-        """
-        Activate an inactive enrollment.
-
-        :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate \
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reactivate>`_
-
-        :param enrollment_id: The ID of the enrollment to reactivate.
-        :type enrollment_id: int
-        :rtype: :class:`pycanvas.enrollment.Enrollment`
-        """
-        from enrollment import Enrollment
-
-        response = self._requester.request(
-            'PUT',
-            'courses/%s/enrollments/%s/reactivate' % (self.id, enrollment_id)
-        )
-        return Enrollment(self._requester, response.json())
-
     def get_external_tool(self, tool_id):
         """
         :calls: `GET /api/v1/courses/:course_id/external_tools/:external_tool_id \
@@ -530,7 +483,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.external_tool.ExternalTool`
         """
-        from external_tool import ExternalTool
+        from pycanvas.external_tool import ExternalTool
 
         response = self._requester.request(
             'GET',
@@ -546,9 +499,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/external_tools \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.external_tool.ExternalTool`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.external_tool.ExternalTool`
         """
-        from external_tool import ExternalTool
+        from pycanvas.external_tool import ExternalTool
 
         return PaginatedList(
             ExternalTool,
@@ -570,7 +524,7 @@ class Course(CanvasObject):
         :type section_id: int
         :rtype: :class:`pycanvas.section.Section`
         """
-        from section import Section
+        from pycanvas.section import Section
 
         response = self._requester.request(
             'GET',
@@ -669,7 +623,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show>`_
 
         :param url: The url for the page.
-        :type url: string
+        :type url: str
         :returns: The specified page.
         :rtype: :class: `pycanvas.course.Course`
         """
@@ -683,15 +637,106 @@ class Course(CanvasObject):
 
         return Page(self._requester, page_json)
 
+    def list_sections(self, **kwargs):
+        """
+        Returns the list of sections for this course.
+
+        :calls: `GET /api/v1/courses/:course_id/sections \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+
+        :rtype: :class: `pycanvas.section.Section`
+        """
+        from pycanvas.section import Section
+        return PaginatedList(
+            Section,
+            self._requester,
+            'GET',
+            'courses/%s/sections' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_course_section(self, **kwargs):
+        """
+        Create a new section for this course.
+
+        :calls: `POST /api/v1/courses/:course_id/sections \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.create>`_
+
+        :rtype: :class:`pycanvas.course.Section`
+        """
+
+        from pycanvas.section import Section
+        response = self._requester.request(
+            'POST',
+            'courses/%s/sections' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return Section(self._requester, response.json())
+
+    def list_groups(self, **kwargs):
+        """
+        Return list of active groups for the specified course.
+
+        :calls:`GET /api/v1/courses/:course_id/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
+        """
+        from group import Group
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'courses/%s/groups' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_group_category(self, name, **kwargs):
+        """
+        Create a group category.
+
+        :calls: `POST /api/v1/courses/:course_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create>`_
+
+        :param name: Name of the category.
+        :type name: str
+        :rtype: :class:`pycanvas.group.GroupCategory`
+        """
+        from pycanvas.group import GroupCategory
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/group_categories' % (self.id),
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return GroupCategory(self._requester, response.json())
+
+    def list_group_categories(self):
+        """
+        List group categories for a context.
+
+        :calls: `GET /api/v1/courses/:course_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.group.GroupCategory`
+        """
+        from pycanvas.group import GroupCategory
+
+        return PaginatedList(
+            GroupCategory,
+            self._requester,
+            'GET',
+            'courses/%s/group_categories' % (self.id)
+        )
+
 
 class CourseNickname(CanvasObject):
 
     def __str__(self):
-        return "course_id: %s, name: %s, nickname: %s, " % (
-            self.course_id,
-            self.name,
-            self.nickname
-        )
+        return "{} ({})".format(self.nickname, self.course_id)
 
     def remove(self):
         """

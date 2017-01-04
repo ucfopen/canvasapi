@@ -26,7 +26,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-            "Link": "<mock://example.com/api/v1/sections/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+            "Link": "<http://example.com/api/v1/sections/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
         }
 	},
 	"list_enrollments_2": {
@@ -44,6 +44,43 @@
 				"name": "Section 4"
 			}
 		],
+		"status_code": 200
+	},
+	"crosslist_section":{
+		"method": "POST",
+		"endpoint": "sections/1/crosslist/2",
+		"data": {
+			"id": 1,
+			"new_course_id": 2,
+			"name": "Cross Section"
+		},
+		"status_code": 200
+	},
+	"decross_section": {
+		"method": "DELETE",
+		"endpoint": "sections/1/crosslist",
+		"data": {
+			"id": 1,
+			"name": "Target Section"
+		},
+		"status_code": 200
+	},
+	"edit": {
+		"method": "PUT",
+		"endpoint": "sections/1",
+		"data": {
+			"id": 1,
+			"name": "Target Edit"
+		},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "sections/1",
+		"data": {
+			"id": 1,
+			"name": "Deleted Section"
+		},
 		"status_code": 200
 	}
 }

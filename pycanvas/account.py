@@ -1,16 +1,13 @@
-from canvas_object import CanvasObject
-from exceptions import RequiredFieldMissing
-from paginated_list import PaginatedList
-from util import combine_kwargs, obj_or_id
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.util import combine_kwargs, obj_or_id
 
 
 class Account(CanvasObject):
 
     def __str__(self):
-        return "id: %s, name: %s" % (
-            self.id,
-            self.name
-        )
+        return "{} ({})".format(self.name, self.id)
 
     def close_notification_for_user(self, user, notification):
         """
@@ -26,7 +23,7 @@ class Account(CanvasObject):
         :type notification: :class:`pycanvas.account.AccountNotification` or int
         :rtype: :class:`pycanvas.account.AccountNotification`
         """
-        from user import User
+        from pycanvas.user import User
 
         user_id = obj_or_id(user, "user", (User,))
         notif_id = obj_or_id(notification, "notif", (AccountNotification,))
@@ -62,7 +59,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.course.Course`
         """
-        from course import Course
+        from pycanvas.course import Course
         response = self._requester.request(
             'POST',
             'accounts/%s/courses' % (self.id),
@@ -103,7 +100,7 @@ class Account(CanvasObject):
         :type pseudonym: dict
         :rtype: :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         if isinstance(pseudonym, dict) and 'unique_id' in pseudonym:
             kwargs['pseudonym'] = pseudonym
@@ -134,7 +131,10 @@ class Account(CanvasObject):
         if isinstance(account_notification, dict) and required_keys_present:
             kwargs['account_notification'] = account_notification
         else:
-            raise RequiredFieldMissing("account_notification must be a dictionary with keys 'subject', 'message', 'start_at', and 'end_at'.")
+            raise RequiredFieldMissing((
+                "account_notification must be a dictionary with keys "
+                "'subject', 'message', 'start_at', and 'end_at'."
+            ))
 
         response = self._requester.request(
             'POST',
@@ -162,7 +162,7 @@ class Account(CanvasObject):
         :type user: :class:`pycanvas.user.User` or int
         :rtype: :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -181,7 +181,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
         """
-        from course import Course
+        from pycanvas.course import Course
 
         return PaginatedList(
             Course,
@@ -198,7 +198,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.external_tool.ExternalTool`
         """
-        from external_tool import ExternalTool
+        from pycanvas.external_tool import ExternalTool
 
         response = self._requester.request(
             'GET',
@@ -214,9 +214,10 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/external_tools \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.external_tool.ExternalTool`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.external_tool.ExternalTool`
         """
-        from external_tool import ExternalTool
+        from pycanvas.external_tool import ExternalTool
 
         return PaginatedList(
             ExternalTool,
@@ -236,7 +237,8 @@ class Account(CanvasObject):
 
         :param report_type: The type of report.
         :type report_type: str
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.AccountReport`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.account.AccountReport`
         """
         return PaginatedList(
             AccountReport,
@@ -252,7 +254,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/reports \
         <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.available_reports>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.AccountReport`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.account.AccountReport`
         """
         return PaginatedList(
             AccountReport,
@@ -290,7 +293,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
         """
-        from user import User
+        from pycanvas.user import User
 
         return PaginatedList(
             User,
@@ -311,9 +314,10 @@ class Account(CanvasObject):
 
         :param user: The user object or ID to retrieve notifications for.
         :type user: :class:`pycanvas.user.User` or int
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.AccountNotification`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.account.AccountNotification`
         """
-        from user import User
+        from pycanvas.user import User
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -346,7 +350,120 @@ class Account(CanvasObject):
         else:
             return False
 
-    def enroll_by_id(self, enrollment_id, **kwargs):
+    def list_roles(self, **kwargs):
+        """
+        List the roles available to an account.
+
+        :calls: `GET /api/v1/accounts/:account_id/roles \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.Role`
+        """
+
+        return PaginatedList(
+            Role,
+            self._requester,
+            'GET',
+            'accounts/%s/roles' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_role(self, role_id):
+        """
+        Retrieve a role by ID.
+
+        :calls: `GET /api/v1/accounts/:account_id/roles/:id \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
+
+        :param role_id: The ID of the role.
+        :type role_id: int
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/roles/%s' % (self.id, role_id)
+        )
+        return Role(self._requester, response.json())
+
+    def create_role(self, label, **kwargs):
+        """
+        Create a new course-level or account-level role.
+
+        :calls: `POST /api/v1/accounts/:account_id/roles \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.add_role>`_
+
+        :param label: The label for the role.
+        :type label: str
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/roles' % (self.id),
+            label=label,
+            **combine_kwargs(**kwargs)
+        )
+        return Role(self._requester, response.json())
+
+    def deactivate_role(self, role_id, **kwargs):
+        """
+        Deactivate a custom role.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`_
+
+        :param role_id: The ID of the role.
+        :type role_id: int
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'DELETE',
+            'accounts/%s/roles/%s' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Role(self._requester, response.json())
+
+    def activate_role(self, role_id, **kwargs):
+        """
+        Reactivate an inactive role.
+
+        :calls: `POST /api/v1/accounts/:account_id/roles/:id/activate \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`_
+
+        :param role_id: The ID of the role.
+        :type role_id: int
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/roles/%s/activate' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Role(self._requester, response.json())
+
+    def update_role(self, role_id, **kwargs):
+        """
+        Update permissions for an existing role.
+
+        :calls: `PUT /api/v1/accounts/:account_id/roles/:id \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`_
+
+        :param role_id: The ID of the role.
+        :type role_id: int
+        :rtype: :class:`pycanvas.account.Role`
+        """
+
+        response = self._requester.request(
+            'PUT',
+            'accounts/%s/roles/%s' % (self.id, role_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Role(self._requester, response.json())
+
+    def get_enrollment(self, enrollment_id, **kwargs):
         """
         Get an enrollment object by ID.
 
@@ -357,7 +474,7 @@ class Account(CanvasObject):
         :type enrollment_id: int
         :rtype: :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
 
         response = self._requester.request(
             'GET',
@@ -366,18 +483,78 @@ class Account(CanvasObject):
         )
         return Enrollment(self._requester, response.json())
 
+    def list_groups(self, **kwargs):
+        """
+        Return a list of active groups for the specified account.
+
+        :calls: `GET /api/v1/accounts/:account_id/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        """
+        from group import Group
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'accounts/%s/groups' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_group_category(self, name, **kwargs):
+        """
+        Create a Group Category
+
+        :calls: `POST /api/v1/accounts/:account_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.create>`_
+
+        :param name: Name of group category.
+        :type name: str
+        :rtype: :class:`pycanvas.group.GroupCategory`
+        """
+        from group import GroupCategory
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/group_categories' % (self.id),
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return GroupCategory(self._requester, response.json())
+
+    def list_group_categories(self):
+        """
+        List group categories for a context
+
+        :calls: `GET /api/v1/accounts/:account_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.group.GroupCategory`
+        """
+        from group import GroupCategory
+
+        return PaginatedList(
+            GroupCategory,
+            self._requester,
+            'GET',
+            'accounts/%s/group_categories' % (self.id)
+        )
+
 
 class AccountNotification(CanvasObject):
+
     def __str__(self):  # pragma: no cover
-        return "subject: %s, message: %s" % (
-            self.subject,
-            self.message
-        )
+        return str(self.subject)
 
 
 class AccountReport(CanvasObject):
+
     def __str__(self):  # pragma: no cover
-        return "id: %s, report: %s" % (
-            self.id,
-            self.report
-        )
+        return "{} ({})".format(self.report, self.id)
+
+
+class Role(CanvasObject):
+
+    def __str__(self):  # pragma: no cover
+        return "{} ({})".format(self.label, self.base_role_type)

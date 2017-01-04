@@ -1,13 +1,13 @@
-from canvas_object import CanvasObject
-from paginated_list import PaginatedList
-from upload import Uploader
-from util import combine_kwargs, obj_or_id
+from pycanvas.canvas_object import CanvasObject
+from pycanvas.paginated_list import PaginatedList
+from pycanvas.upload import Uploader
+from pycanvas.util import combine_kwargs, obj_or_id
 
 
 class User(CanvasObject):
 
     def __str__(self):
-        return "%s" % (self.name)
+        return "{} ({})".format(self.name, self.id)
 
     def get_profile(self, **kwargs):
         """
@@ -33,7 +33,7 @@ class User(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.PageView`
         """
-        from page_view import PageView
+        from pycanvas.page_view import PageView
 
         return PaginatedList(
             PageView,
@@ -52,7 +52,7 @@ class User(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
         """
-        from course import Course
+        from pycanvas.course import Course
 
         return PaginatedList(
             Course,
@@ -70,9 +70,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/missing_submissions \
         <https://canvas.instructure.com/doc/api/users.html#method.users.missing_submissions>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         return PaginatedList(
             Assignment,
@@ -202,7 +203,7 @@ class User(CanvasObject):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.avatar.Avatar`
         """
-        from avatar import Avatar
+        from pycanvas.avatar import Avatar
 
         return PaginatedList(
             Avatar,
@@ -219,9 +220,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.user_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.assignment.Assignment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.assignment.Assignment`
         """
-        from assignment import Assignment
+        from pycanvas.assignment import Assignment
 
         return PaginatedList(
             Assignment,
@@ -238,9 +240,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.enrollment.Enrollment`
         """
-        from enrollment import Enrollment
+        from pycanvas.enrollment import Enrollment
 
         return PaginatedList(
             Enrollment,
@@ -275,3 +278,22 @@ class User(CanvasObject):
             file,
             **kwargs
         ).start()
+
+    def list_groups(self, **kwargs):
+        """
+        Return the list of active groups for the user.
+
+        :calls:`GET /api/v1/users/self/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        """
+        from group import Group
+
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'users/self/groups',
+            **combine_kwargs(**kwargs)
+        )

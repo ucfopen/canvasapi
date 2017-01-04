@@ -32,7 +32,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/users/1/avatars?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/users/1/avatars?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -117,7 +117,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/users/self/course_nicknames?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/users/self/course_nicknames?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"course_nicknames_delete": {
@@ -161,7 +161,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/users/1/courses?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/users/1/courses?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -196,7 +196,8 @@
 		"data": {
 			"id": 1,
 			"name": "John Doe"
-		}
+		},
+		"status_code": 200
 	},
 	"get_by_id_2": {
 		"method": "GET",
@@ -233,7 +234,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<mock://example.com/api/v1/users/1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/users/1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_user_assignments2": {
@@ -270,8 +271,8 @@
 		],
 		"status_code": 200,
 		"headers": {
-            "Link": "<mock://example.com/api/v1/users/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
-        }
+			"Link": "<http://example.com/api/v1/users/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+		}
 	},
 	"list_enrollments_2": {
 		"method": "GET",
@@ -284,6 +285,39 @@
 			{
 				"id": 4,
 				"course_id": 8
+			}
+		],
+		"status_code": 200
+	},
+	"list_groups": {
+		"method": "GET",
+		"endpoint": "users/self/groups",
+		"data": [
+			{
+				"id": 1,
+				"name": "Group 1"
+			},
+			{
+				"id": 2,
+				"name": "Group 2"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/users/self/groups?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_groups2": {
+		"method": "GET",
+		"endpoint": "users/self/groups?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Group 3"
+			},
+			{
+				"id": 4,
+				"name": "Group 4"
 			}
 		],
 		"status_code": 200
@@ -312,7 +346,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/users/1/missing_submissions?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/users/1/missing_submissions?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -339,17 +373,19 @@
 		"data": [
 			{
 				"id": "123fb561-c9ce-7ed9-8e42-31e0aab47e18",
-				"url": "mock://example.com/test",
-				"created_at": "2013-01-01T12:00:00Z"
+				"url": "http://example.com/test",
+				"created_at": "2013-01-01T12:00:00Z",
+				"context_type": "Course"
 			},
 			{
 				"id": "4c7f44f9-41b9-ff59-03ad-3215cb246966",
-				"url": "mock://example.com/hello",
-				"created_at": "2014-01-01T12:00:00Z"
+				"url": "http://example.com/hello",
+				"created_at": "2014-01-01T12:00:00Z",
+				"context_type": "User"
 			}
 		],
 		"headers": {
-			"Link": "<mock://example.com/api/v1/users/1/page_views?page=2&per_page=2>; rel=\"next\""
+			"Link": "<http://example.com/api/v1/users/1/page_views?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -359,13 +395,15 @@
 		"data": [
 			{
 				"id": "77f111c9-5b0b-46cb-92a2-34108ebe7b5b",
-				"url": "mock://example.com/login",
-				"created_at": "2015-01-01T12:00:00Z"
+				"url": "http://example.com/login",
+				"created_at": "2015-01-01T12:00:00Z",
+				"context_type": null
 			},
 			{
 				"id": "69ec8b6f-e123-2af8-dafb-561fdc711f6b",
-				"url": "mock://example.com/logout",
-				"created_at": "2016-01-01T12:00:00Z"
+				"url": "http://example.com/logout",
+				"created_at": "2016-01-01T12:00:00Z",
+				"context_type": "UserProfile"
 			}
 		],
 		"status_code": 200
@@ -438,18 +476,18 @@
 		"method": "POST",
 		"endpoint": "users/1/files",
 		"data": {
-			"upload_url": "mock://example.com/api/v1/files/upload_response_upload_url",
+			"upload_url": "http://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
-			    "some_param": "param123",
-			    "a_different_param": "param456"
+				"some_param": "param123",
+				"a_different_param": "param456"
 			}
 		}
 	},
 	"upload_final": {
 		"method": "POST",
-        "endpoint": "files/upload_response_upload_url",
-        "data": {
-            "url": "great_url_success"
-        }
+		"endpoint": "files/upload_response_upload_url",
+		"data": {
+			"url": "great_url_success"
+		}
 	}
 }

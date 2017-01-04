@@ -6,29 +6,18 @@ import requests_mock
 
 from pycanvas.canvas import Canvas
 from pycanvas.upload import Uploader
-import settings
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
+@requests_mock.Mocker()
 class TestUploader(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        requires = {
-            'uploader': [
-                'upload_response', 'upload_response_upload_url',
-                'upload_response_no_upload_url', 'upload_response_no_upload_params',
-                'upload_response_fail', 'upload_fail'
-            ]
-        }
-
-        adapter = requests_mock.Adapter()
-        register_uris(settings.BASE_URL, requires, adapter)
-
-        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         self.requester = self.canvas._Canvas__requester
 
-    def setUp(self):
         self.filename = 'testfile_%s' % uuid.uuid4().hex
         self.file = open(self.filename, 'w+')
 
@@ -41,7 +30,12 @@ class TestUploader(unittest.TestCase):
             pass
 
     # start()
-    def test_start(self):
+    def test_start(self, m):
+        requires = {
+            'uploader': ['upload_response', 'upload_response_upload_url']
+        }
+        register_uris(requires, m)
+
         uploader = Uploader(self.requester, 'upload_response', self.file)
         result = uploader.start()
 
@@ -49,8 +43,12 @@ class TestUploader(unittest.TestCase):
         assert isinstance(result[1], dict)
         assert 'url' in result[1]
 
-    # start()
-    def test_start_path(self):
+    def test_start_path(self, m):
+        requires = {
+            'uploader': ['upload_response', 'upload_response_upload_url']
+        }
+        register_uris(requires, m)
+
         uploader = Uploader(self.requester, 'upload_response', self.filename)
         result = uploader.start()
 
@@ -58,23 +56,29 @@ class TestUploader(unittest.TestCase):
         assert isinstance(result[1], dict)
         assert 'url' in result[1]
 
-    # start()
-    def test_start_file_does_not_exist(self):
+    def test_start_file_does_not_exist(self, m):
         with self.assertRaises(IOError):
             Uploader(self.requester, 'upload_response', 'test_file_not_real.xyz')
 
     # upload()
-    def test_upload_no_upload_url(self):
-        with self.assertRaises(Exception):
+    def test_upload_no_upload_url(self, m):
+        register_uris({'uploader': ['upload_response_no_upload_url']}, m)
+
+        with self.assertRaises(ValueError):
             Uploader(self.requester, 'upload_response_no_upload_url', self.filename).start()
 
-    # upload()
-    def test_upload_no_upload_params(self):
-        with self.assertRaises(Exception):
+    def test_upload_no_upload_params(self, m):
+        register_uris({'uploader': ['upload_response_no_upload_params']}, m)
+
+        with self.assertRaises(ValueError):
             Uploader(self.requester, 'upload_response_no_upload_params', self.filename).start()
 
-    # upload()
-    def test_upload_fail(self):
+    def test_upload_fail(self, m):
+        requires = {
+            'uploader': ['upload_fail', 'upload_response_fail']
+        }
+        register_uris(requires, m)
+
         uploader = Uploader(self.requester, 'upload_response_fail', self.file)
         result = uploader.start()
 
