@@ -732,6 +732,26 @@ class Course(CanvasObject):
             'courses/%s/group_categories' % (self.id)
         )
 
+    def get_discussion_topic(self, topic_id):
+        """
+        Return data on an individual discussion topic.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.show>`_
+
+        :param topic_id: The ID of the discussion topic.
+        :type topic_id: int
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        from pycanvas.discussion_topic import DiscussionTopic
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/discussion_topics/%s' % (self.id, topic_id)
+        )
+        return DiscussionTopic(self._requester, response.json())
+
 
 class CourseNickname(CanvasObject):
 

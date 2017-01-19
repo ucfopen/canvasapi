@@ -797,5 +797,15 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_discussion_topic": {
+		"method": "GET",
+		"endpoint": "courses/1/discussion_topics/1",
+		"data":
+			{
+				"id": 1,
+				"title": "Topic 1"
+			},
+		"status_code": 200
 	}
 }

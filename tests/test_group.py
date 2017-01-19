@@ -7,6 +7,7 @@ import requests_mock
 from pycanvas import Canvas
 from pycanvas.group import Group, GroupMembership, GroupCategory
 from pycanvas.course import Page
+from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.exceptions import RequiredFieldMissing
 from tests import settings
 from tests.util import register_uris
@@ -193,6 +194,17 @@ class TestGroup(unittest.TestCase):
 
         response = self.group.update_membership(1)
         assert isinstance(response, GroupMembership)
+
+    # get_discussion_topic()
+    def test_get_discussion_topic(self, m):
+        register_uris({'group':['get_discussion_topic']}, m)
+
+        group_id = 1
+        discussion = self.group.get_discussion_topic(group_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertEquals(group_id, discussion.id)
+
+
 
 
 @requests_mock.Mocker()

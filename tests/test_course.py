@@ -7,6 +7,7 @@ import requests_mock
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.course import Course, CourseNickname, Page
+from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from pycanvas.external_tool import ExternalTool
@@ -434,6 +435,16 @@ class TestCourse(unittest.TestCase):
         response = self.course.list_group_categories()
         category_list = [category for category in response]
         assert isinstance(category_list[0], GroupCategory)
+
+    # get_discussion_topic()
+    def test_get_discussion_topic(self, m):
+        register_uris({'course': ['get_discussion_topic']}, m)
+
+        topic_id = 1
+        discussion = self.course.get_discussion_topic(topic_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertEquals(topic_id, discussion.id)
+
 
 
 @requests_mock.Mocker()

@@ -587,5 +587,15 @@
 		    "url": "http://localhost:3000/api/v1/progress/2"
 		},
 		"status_code": 200
+	},
+	"get_discussion_topic": {
+		"method": "GET",
+		"endpoint": "groups/1/discussion_topics/1",
+		"data":
+			{
+				"id": 1,
+				"title": "Topic 1"
+			},
+		"status_code": 200
 	}
 }
