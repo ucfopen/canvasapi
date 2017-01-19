@@ -597,5 +597,20 @@
 				"title": "Topic 1"
 			},
 		"status_code": 200
+	},
+	"get_discussion_topics": {
+		"method": "GET",
+		"endpoint": "groups/1/discussion_topics",
+		"data": [
+			{
+				"id": 1,
+				"title": "Topic 1"
+			},
+			{
+				"id": 2,
+				"title": "Topic 2"
+			}
+		],
+		"status_code": 200
 	}
 }

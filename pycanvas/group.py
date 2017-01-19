@@ -370,6 +370,25 @@ class Group(CanvasObject):
         )
         return DiscussionTopic(self._requester, response.json())
 
+    def get_discussion_topics(self, **kwargs):
+        """
+        Returns the paginated list of discussion topics for this course or group.
+
+        :calls: `GET /api/v1/groups/:course_id/discussion_topics \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        from pycanvas.discussion_topic import DiscussionTopic
+
+        return PaginatedList(
+            DiscussionTopic,
+            self._requester,
+            'GET',
+            'groups/%s/discussion_topics' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
 
 class GroupMembership(CanvasObject):
 

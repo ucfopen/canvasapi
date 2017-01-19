@@ -204,7 +204,14 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertEquals(group_id, discussion.id)
 
+    # get_discussion_topics()
+    def test_get_discussion_topics(self, m):
+        register_uris({'group': ['get_discussion_topics']}, m)
 
+        response = self.group.get_discussion_topics()
+        discussion_list = [discussion for discussion in response]
+        self.assertIsInstance(discussion_list[0], DiscussionTopic)
+        self.assertEquals(2, len(discussion_list))
 
 
 @requests_mock.Mocker()
