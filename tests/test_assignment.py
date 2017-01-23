@@ -44,3 +44,21 @@ class TestAssignment(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.assignment)
         assert isinstance(string, str)
+
+@requests_mock.Mocker()
+class TestAssignmentGroup(unittest.TestCase):
+
+    @classmethod
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris({'course': ['get_by_id'],'assignment': ['get_assignment_group']}, m)
+
+            self.course = self.canvas.get_course(1)
+            self.assignment_group = self.course.get_assignment_group(5)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.assignment_group)
+        assert isinstance(string, str)

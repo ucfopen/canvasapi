@@ -20,5 +20,14 @@
 			"description": "Delete this assignment"
 		},
 		"status_code": 200
+	},
+	"get_assignment_group": {
+		"method": "GET",
+		"endpoint": "courses/1/assignment_groups/5",
+		"data": {
+			"id": 5,
+			"name": "Assignment Group 5"
+		},
+		"status_code": 200
 	}
 }

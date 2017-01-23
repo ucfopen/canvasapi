@@ -5,7 +5,7 @@ import os
 import requests_mock
 
 from pycanvas import Canvas
-from pycanvas.assignment import Assignment
+from pycanvas.assignment import Assignment, AssignmentGroup
 from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
@@ -435,6 +435,15 @@ class TestCourse(unittest.TestCase):
         category_list = [category for category in response]
         assert isinstance(category_list[0], GroupCategory)
 
+    # get_assignment_group()
+    def test_get_assignment_group(self, m):
+        register_uris({'assignment': ['get_assignment_group']}, m)
+
+        response = self.course.get_assignment_group(5)
+
+        self.assertIsInstance(response, AssignmentGroup)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertTrue(hasattr(response, 'name'))
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

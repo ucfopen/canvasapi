@@ -41,3 +41,8 @@ class Assignment(CanvasObject):
             super(Assignment, self).set_attributes(response.json())
 
         return Assignment(self._requester, response.json())
+
+class AssignmentGroup(CanvasObject):
+
+    def __str__(self):
+        return "{} ({})".format(self.name, self.id)

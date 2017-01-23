@@ -732,6 +732,24 @@ class Course(CanvasObject):
             'courses/%s/group_categories' % (self.id)
         )
 
+    def get_assignment_group(self, assignment_group_id, **kwargs):
+        """
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
+        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.show>`_
+
+        :param assignment_group_id: ID of assignment group.
+        :type assignment_group_id: int
+        :rtype: :class:`pycanvas.assignment.AssignmentGroup`
+        """
+        from pycanvas.assignment import AssignmentGroup
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/assignment_groups/%s' % (self.id, assignment_group_id),
+            **combine_kwargs(**kwargs)
+        )
+        return AssignmentGroup(self._requester, response.json())
 
 class CourseNickname(CanvasObject):
 
