@@ -1,4 +1,5 @@
 from pycanvas.canvas_object import CanvasObject
+from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.page import Page
 from pycanvas.paginated_list import PaginatedList
@@ -744,8 +745,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
-        from pycanvas.discussion_topic import DiscussionTopic
-
         response = self._requester.request(
             'GET',
             'courses/%s/discussion_topics/%s' % (self.id, topic_id)
@@ -761,8 +760,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
-        from pycanvas.discussion_topic import DiscussionTopic
-
         return PaginatedList(
             DiscussionTopic,
             self._requester,
@@ -780,7 +777,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
-        from pycanvas.discussion_topic import DiscussionTopic
         response = self._requester.request(
             'POST',
             'courses/%s/discussion_topics' % (self.id),
@@ -797,12 +793,27 @@ class Course(CanvasObject):
 
         :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
-        from pycanvas.discussion_topic import DiscussionTopic
         response = self._requester.request(
             'PUT',
             'courses/%s/discussion_topics/%s' % (self.id, topic_id)
         )
         return DiscussionTopic(self._requester, response.json())
+
+    def delete_discussion_topic(self, topic_id):
+        """
+        Deletes the discussion topic. This will also delete the assignment, if it's an assignment discussion.
+
+        :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
+
+        :rtype: :class: pycanvas.discussion_topic.DiscussionTopic
+        """
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/discussion_topics/%s' % (self.id, topic_id)
+        )
+        return 'deleted_at' in response.json()
+
 
 class CourseNickname(CanvasObject):
 
