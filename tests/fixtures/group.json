@@ -630,5 +630,15 @@
 			"title": "Topic 1"
 		},
 		"status_code": 200
+	},
+	"delete_discussion_topic": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1",
+		"data": {
+			"id": 1,
+			"title": "Topic 1",
+			"deleted_at": "2017-01-23T21:07:54Z"
+		},
+		"status_code": 200
 	}
 }

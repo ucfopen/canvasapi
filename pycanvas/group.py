@@ -421,6 +421,21 @@ class Group(CanvasObject):
         )
         return DiscussionTopic(self._requester, response.json())
 
+    def delete_discussion_topic(self, topic_id):
+        """
+        Deletes the discussion topic. This will also delete the assignment, if it's an assignment discussion.
+
+        :calls: `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
+
+        :rtype: :class: pycanvas.discussion_topic.DiscussionTopic
+        """
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/discussion_topics/%s' % (self.id, topic_id)
+        )
+        return 'deleted_at' in response.json()
+
 
 class GroupMembership(CanvasObject):
 

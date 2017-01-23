@@ -478,8 +478,7 @@ class TestCourse(unittest.TestCase):
 
         topic_id = 1
         topic = self.course.delete_discussion_topic(topic_id)
-        deleted = topic.delete()
-        self.assertEquals(deleted, True)
+        self.assertTrue(topic)
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

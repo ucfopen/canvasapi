@@ -230,6 +230,14 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertEquals(topic_id, discussion.id)
 
+    # delete_discussion_topic()
+    def test_delete_discussion_topic(self, m):
+        register_uris({'group': ['delete_discussion_topic']}, m)
+
+        topic_id = 1
+        topic = self.group.delete_discussion_topic(topic_id)
+        self.assertTrue(topic)
+
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):
 
