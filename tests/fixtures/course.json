@@ -822,5 +822,23 @@
 			}
 		],
 		"status_code": 200
+	},
+	"create_discussion_topic": {
+		"method": "POST",
+		"endpoint": "courses/1/discussion_topics",
+		"data": {
+			"id": 1,
+			"title": "Topic 1"
+		},
+		"status_code": 200
+	},
+	"update_discussion_topic": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1",
+		"data": {
+			"id": 1,
+			"title": "Topic 1"
+		},
+		"status_code": 200
 	}
 }

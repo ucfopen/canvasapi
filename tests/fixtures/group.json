@@ -591,8 +591,7 @@
 	"get_discussion_topic": {
 		"method": "GET",
 		"endpoint": "groups/1/discussion_topics/1",
-		"data":
-			{
+		"data": {
 				"id": 1,
 				"title": "Topic 1"
 			},
@@ -611,6 +610,25 @@
 				"title": "Topic 2"
 			}
 		],
+		"status_code": 200
+	},
+	"create_discussion_topic": {
+		"method": "POST",
+		"endpoint": "groups/1/discussion_topics",
+		"data": {
+			"id": 1,
+			"title": "Topic 1"
+		},
+		"status_code": 200
+
+	},
+	"update_discussion_topic": {
+		"method": "PUT",
+		"endpoint": "groups/1/discussion_topics/1",
+		"data": {
+			"id": 1,
+			"title": "Topic 1"
+		},
 		"status_code": 200
 	}
 }

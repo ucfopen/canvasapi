@@ -771,6 +771,39 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def create_discussion_topic(self, **kwargs):
+        """
+        Creates a new discussion topic for the course or group.
+
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        from pycanvas.discussion_topic import DiscussionTopic
+        response = self._requester.request(
+            'POST',
+            'courses/%s/discussion_topics' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return DiscussionTopic(self._requester, response.json())
+
+    def update_discussion_topic(self, topic_id, **kwargs):
+        """
+        Update an existing discussion topic for the course or group.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        from pycanvas.discussion_topic import DiscussionTopic
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/discussion_topics/%s' % (self.id, topic_id)
+        )
+        return DiscussionTopic(self._requester, response.json())
+
 class CourseNickname(CanvasObject):
 
     def __str__(self):

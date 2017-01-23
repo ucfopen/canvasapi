@@ -454,8 +454,23 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
         self.assertEquals(2, len(discussion_list))
 
+    # create_discussion_topic()
+    def test_create_discussion_topic(self, m):
+        register_uris({'course': ['create_discussion_topic']}, m)
 
+        title = "Topic 1"
+        discussion = self.course.create_discussion_topic()
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertEquals(title, discussion.title)
 
+    # update_topic_discussion()
+    def test_update_discussion_topic(self, m):
+        register_uris({'course': ['update_discussion_topic']}, m)
+
+        topic_id = 1
+        discussion = self.course.update_discussion_topic(topic_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertEquals(topic_id, discussion.id)
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

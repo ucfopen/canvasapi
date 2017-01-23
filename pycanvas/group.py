@@ -1,4 +1,5 @@
 from pycanvas.canvas_object import CanvasObject
+from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.util import combine_kwargs
@@ -379,7 +380,6 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
-        from pycanvas.discussion_topic import DiscussionTopic
 
         return PaginatedList(
             DiscussionTopic,
@@ -388,6 +388,38 @@ class Group(CanvasObject):
             'groups/%s/discussion_topics' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def create_discussion_topic(self, **kwargs):
+        """
+        Creates a new discussion topic for the course or group.
+
+        :calls: `POST /api/v1/courses/:group_id/discussion_topics \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'POST',
+            'groups/%s/discussion_topics' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return DiscussionTopic(self._requester, response.json())
+
+    def update_discussion_topic(self, topic_id, **kwargs):
+        """
+        Update an existing discussion topic for the course or group.
+
+        :calls: `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'PUT',
+            'groups/%s/discussion_topics/%s' % (self.id, topic_id),
+            **combine_kwargs(**kwargs)
+        )
+        return DiscussionTopic(self._requester, response.json())
 
 
 class GroupMembership(CanvasObject):
