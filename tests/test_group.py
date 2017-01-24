@@ -202,7 +202,9 @@ class TestGroup(unittest.TestCase):
         group_id = 1
         discussion = self.group.get_discussion_topic(group_id)
         self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'group_id')
         self.assertEquals(group_id, discussion.id)
+        self.assertEquals(discussion.group_id, 1)
 
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
@@ -211,15 +213,19 @@ class TestGroup(unittest.TestCase):
         response = self.group.get_discussion_topics()
         discussion_list = [discussion for discussion in response]
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
+        assert hasattr(discussion_list[0], 'group_id')
         self.assertEquals(2, len(discussion_list))
 
     # create_discussion_topic()
     def test_create_discussion_topic(self, m):
         register_uris({'group': ['create_discussion_topic']}, m)
 
+        title = "Topic 1"
         discussion = self.group.create_discussion_topic()
-
+        assert hasattr(discussion, 'group_id')
         self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertEquals(discussion.title, title)
+        self.assertEquals(discussion.group_id, 1)
 
     # update_discussion_topic()
     def test_update_discussion_topic(self, m):
@@ -228,15 +234,8 @@ class TestGroup(unittest.TestCase):
         topic_id = 1
         discussion = self.group.update_discussion_topic(topic_id)
         self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertEquals(topic_id, discussion.id)
-
-    # delete_discussion_topic()
-    def test_delete_discussion_topic(self, m):
-        register_uris({'group': ['delete_discussion_topic']}, m)
-
-        topic_id = 1
-        topic = self.group.delete_discussion_topic(topic_id)
-        self.assertTrue(topic)
+        assert hasattr(discussion, 'group_id')
+        self.assertEquals(discussion.group_id, 1)
 
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):

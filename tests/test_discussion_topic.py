@@ -3,6 +3,7 @@ import unittest
 import requests_mock
 
 from pycanvas import Canvas
+from pycanvas.discussion_topic import DiscussionTopic
 from tests import settings
 from tests.util import register_uris
 
@@ -27,5 +28,9 @@ class TestDiscussionTopic(unittest.TestCase):
 		string = str(self.discussion_topic)
 		self.assertIsInstance(string, str)
 
-	
-		
+	def test_delete(self, m):
+		register_uris({'discussion_topic': ['delete']}, m)
+
+		topic_id = 1
+		topic = self.discussion_topic.delete(topic_id)
+		self.assertTrue(topic)

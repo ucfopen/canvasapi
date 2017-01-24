@@ -443,7 +443,8 @@ class TestCourse(unittest.TestCase):
         topic_id = 1
         discussion = self.course.get_discussion_topic(topic_id)
         self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertEquals(topic_id, discussion.id)
+        assert hasattr(discussion, 'course_id')
+        self.assertEquals(discussion.course_id, 1)
 
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
@@ -452,6 +453,7 @@ class TestCourse(unittest.TestCase):
         response = self.course.get_discussion_topics()
         discussion_list = [discussion for discussion in response]
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
+        assert hasattr(discussion_list[0], 'course_id')
         self.assertEquals(2, len(discussion_list))
 
     # create_discussion_topic()
@@ -461,7 +463,9 @@ class TestCourse(unittest.TestCase):
         title = "Topic 1"
         discussion = self.course.create_discussion_topic()
         self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'course_id')
         self.assertEquals(title, discussion.title)
+        self.assertEquals(discussion.course_id, 1)
 
     # update_discussion_topic()
     def test_update_discussion_topic(self, m):
@@ -470,15 +474,9 @@ class TestCourse(unittest.TestCase):
         topic_id = 1
         discussion = self.course.update_discussion_topic(topic_id)
         self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'course_id')
         self.assertEquals(topic_id, discussion.id)
-
-    # delete_discussion_topic()
-    def test_delete_discussion_topic(self, m):
-        register_uris({'course': ['delete_discussion_topic']}, m)
-
-        topic_id = 1
-        topic = self.course.delete_discussion_topic(topic_id)
-        self.assertTrue(topic)
+        self.assertEquals(discussion.course_id, 1)
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

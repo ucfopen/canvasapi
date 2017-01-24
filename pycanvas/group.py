@@ -369,7 +369,11 @@ class Group(CanvasObject):
             'GET',
             'groups/%s/discussion_topics/%s' % (self.id, topic_id)
         )
-        return DiscussionTopic(self._requester, response.json())
+
+        response_json = response.json()
+        response_json.update({'group_id': self.id})
+
+        return DiscussionTopic(self._requester, response_json)
 
     def get_discussion_topics(self, **kwargs):
         """
@@ -386,6 +390,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/%s/discussion_topics' % (self.id),
+            {'group_id': self.id},
             **combine_kwargs(**kwargs)
         )
 
@@ -403,7 +408,11 @@ class Group(CanvasObject):
             'groups/%s/discussion_topics' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return DiscussionTopic(self._requester, response.json())
+
+        response_json = response.json()
+        response_json.update({'group_id': self.id})
+
+        return DiscussionTopic(self._requester, response_json)
 
     def update_discussion_topic(self, topic_id, **kwargs):
         """
@@ -419,23 +428,11 @@ class Group(CanvasObject):
             'groups/%s/discussion_topics/%s' % (self.id, topic_id),
             **combine_kwargs(**kwargs)
         )
-        return DiscussionTopic(self._requester, response.json())
 
-    def delete_discussion_topic(self, topic_id):
-        """
-        Deletes the discussion topic. This will also delete the assignment, if it's an assignment discussion.
+        response_json = response.json()
+        response_json.update({'group_id': self.id})
 
-        :calls: `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
-
-        :rtype: :class: pycanvas.discussion_topic.DiscussionTopic
-        """
-        response = self._requester.request(
-            'DELETE',
-            'courses/%s/discussion_topics/%s' % (self.id, topic_id)
-        )
-        return 'deleted_at' in response.json()
-
+        return DiscussionTopic(self._requester, response_json)
 
 class GroupMembership(CanvasObject):
 
