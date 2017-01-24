@@ -42,6 +42,7 @@ class Assignment(CanvasObject):
 
         return Assignment(self._requester, response.json())
 
+
 class AssignmentGroup(CanvasObject):
 
     def __str__(self):

@@ -45,6 +45,7 @@ class TestAssignment(unittest.TestCase):
         string = str(self.assignment)
         assert isinstance(string, str)
 
+
 @requests_mock.Mocker()
 class TestAssignmentGroup(unittest.TestCase):
 
@@ -53,7 +54,10 @@ class TestAssignmentGroup(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({'course': ['get_by_id'],'assignment': ['get_assignment_group']}, m)
+            register_uris({
+                'course': ['get_by_id'],
+                'assignment': ['get_assignment_group']
+            }, m)
 
             self.course = self.canvas.get_course(1)
             self.assignment_group = self.course.get_assignment_group(5)
@@ -63,7 +67,9 @@ class TestAssignmentGroup(unittest.TestCase):
         register_uris({'assignment': ['edit_assignment_group']}, m)
 
         name = 'New Name'
-        edited_assignment_group = self.assignment_group.edit(assignment_group={'name': name})
+        edited_assignment_group = self.assignment_group.edit(
+            assignment_group={'name': name}
+        )
 
         self.assertIsInstance(edited_assignment_group, AssignmentGroup)
         self.assertTrue(hasattr(edited_assignment_group, 'name'))

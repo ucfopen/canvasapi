@@ -449,15 +449,17 @@ class TestCourse(unittest.TestCase):
 
     # list_group_categories()
     def test_list_assignment_groups(self, m):
-        register_uris({'assignment': ['list_assignment_groups','get_assignment_group']}, m)
+        register_uris({
+            'assignment': ['list_assignment_groups', 'get_assignment_group']
+        }, m)
 
         response = self.course.list_assignment_groups()
-        assignment_group_list = [assignment_group for assignment_group in response]
-        self.assertIsInstance(assignment_group_list[0], AssignmentGroup)
-        self.assertTrue(hasattr(assignment_group_list[0], 'id'))
-        self.assertTrue(hasattr(assignment_group_list[0], 'name'))
-        self.assertTrue(hasattr(assignment_group_list[0], 'course_id'))
-        self.assertEqual(assignment_group_list[0].course_id, 1)
+        asnt_group_list = [assignment_group for assignment_group in response]
+        self.assertIsInstance(asnt_group_list[0], AssignmentGroup)
+        self.assertTrue(hasattr(asnt_group_list[0], 'id'))
+        self.assertTrue(hasattr(asnt_group_list[0], 'name'))
+        self.assertTrue(hasattr(asnt_group_list[0], 'course_id'))
+        self.assertEqual(asnt_group_list[0].course_id, 1)
 
     # create_assignment_group()
     def test_create_assignment_group(self, m):
@@ -468,6 +470,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(response, AssignmentGroup)
         self.assertTrue(hasattr(response, 'id'))
         self.assertEqual(response.id, 3)
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

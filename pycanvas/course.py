@@ -795,6 +795,7 @@ class Course(CanvasObject):
 
         return AssignmentGroup(self._requester, response.json())
 
+
 class CourseNickname(CanvasObject):
 
     def __str__(self):
