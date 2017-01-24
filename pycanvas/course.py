@@ -734,6 +734,7 @@ class Course(CanvasObject):
 
     def get_assignment_group(self, assignment_group_id, **kwargs):
         """
+        Retrieve specified assignment group for the specified course.
 
         :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
         <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.show>`_
@@ -749,7 +750,31 @@ class Course(CanvasObject):
             'courses/%s/assignment_groups/%s' % (self.id, assignment_group_id),
             **combine_kwargs(**kwargs)
         )
-        return AssignmentGroup(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return AssignmentGroup(self._requester, response_json)
+
+    def list_assignment_groups(self, **kwargs):
+        """
+        List assignment groups for the specified course.
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups \
+        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.assignment.AssignmentGroup`
+        """
+        from pycanvas.assignment import AssignmentGroup
+
+        return PaginatedList(
+            AssignmentGroup,
+            self._requester,
+            'GET',
+            'courses/%s/assignment_groups' % (self.id),
+            {'course_id': self.id},
+            **combine_kwargs(**kwargs)
+        )
 
 class CourseNickname(CanvasObject):
 
