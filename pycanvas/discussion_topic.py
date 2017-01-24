@@ -62,6 +62,30 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            '%ss/%s/discussion_topics/%s' % (self.parent_type, self.parent_id, self.id)
+            '%ss/%s/discussion_topics/%s' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            )
         )
         return 'deleted_at' in response.json()
+
+    def update_entry(self, entry_id, **kwargs):
+        """
+        Updates an existing discussion entry.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:id \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
+
+        :rtype: :class: pycanvas.discussion_topic.DiscussionTopic
+        """
+        response = self._requester.request(
+            'PUT',
+            '%ss/%s/discussion_topics/%s/entries/%s' % (
+                self.parent_type,
+                self.parent_id,
+                self.id,
+                entry_id
+            )
+        )
+        return 'updated_at' in response.json()
