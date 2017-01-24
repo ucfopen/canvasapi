@@ -43,6 +43,16 @@
 		],
 		"status_code": 200
 	},
+	"create_assignment_group": {
+		"method": "POST",
+		"endpoint": "courses/1/assignment_groups",
+		"data": {
+			"id": 3,
+			"course_id": 1,
+			"name": "Assignment Group 3"
+		},
+		"status_code": 200
+	},
 	"edit_assignment_group": {
 		"method": "PUT",
 		"endpoint": "courses/1/assignment_groups/5",
