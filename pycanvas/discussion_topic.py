@@ -1,4 +1,5 @@
 from pycanvas.canvas_object import CanvasObject
+from pycanvas.util import combine_kwargs
 
 class DiscussionTopic(CanvasObject):
     def __str__(self):
@@ -58,7 +59,8 @@ class DiscussionTopic(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id \
                 <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
 
-        :rtype: :class: pycanvas.discussion_topic.DiscussionTopic
+        :returns: True if the discussion topic was deleted, False otherwise.
+        :rtype: bool
         """
         response = self._requester.request(
             'DELETE',
@@ -77,7 +79,7 @@ class DiscussionTopic(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:id \
                 <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
 
-        :rtype: :class: pycanvas.discussion_topic.DiscussionTopic
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'PUT',
@@ -86,6 +88,28 @@ class DiscussionTopic(CanvasObject):
                 self.parent_id,
                 self.id,
                 entry_id
-            )
+            ),
+            **combine_kwargs(**kwargs)
         )
         return 'updated_at' in response.json()
+
+    def delete_entry(self, entry_id, **kwargs):
+        """
+        Delete a discussion entry.
+
+        :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:id \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.destroy>`_
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'DELETE',
+            '%ss/%s/discussion_topics/%s/entries/%s' % (
+                self.parent_type,
+                self.parent_id,
+                self.id,
+                entry_id
+            ),
+            **combine_kwargs(**kwargs)
+        )
+        return 'deleted_at' in response.json()
