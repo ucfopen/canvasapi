@@ -478,6 +478,7 @@ class TestCourse(unittest.TestCase):
         self.assertEquals(topic_id, discussion.id)
         self.assertEquals(discussion.course_id, 1)
 
+
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
 

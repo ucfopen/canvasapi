@@ -434,6 +434,7 @@ class Group(CanvasObject):
 
         return DiscussionTopic(self._requester, response_json)
 
+
 class GroupMembership(CanvasObject):
 
     def __str__(self):

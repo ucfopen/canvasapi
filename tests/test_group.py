@@ -197,7 +197,7 @@ class TestGroup(unittest.TestCase):
 
     # get_discussion_topic()
     def test_get_discussion_topic(self, m):
-        register_uris({'group':['get_discussion_topic']}, m)
+        register_uris({'group': ['get_discussion_topic']}, m)
 
         group_id = 1
         discussion = self.group.get_discussion_topic(group_id)
@@ -236,6 +236,7 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(discussion, DiscussionTopic)
         assert hasattr(discussion, 'group_id')
         self.assertEquals(discussion.group_id, 1)
+
 
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):

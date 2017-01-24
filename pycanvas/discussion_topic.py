@@ -1,6 +1,7 @@
 from pycanvas.canvas_object import CanvasObject
 from pycanvas.util import combine_kwargs
 
+
 class DiscussionTopic(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
