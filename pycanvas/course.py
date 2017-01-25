@@ -812,6 +812,26 @@ class Course(CanvasObject):
 
         return DiscussionTopic(self._requester, response_json)
 
+    def reorder_pinned_topics(self, order):
+        """
+        Puts the pinned discussion topics in the specified order. All pinned topics should be included.
+
+        :calls: POST /api/v1/courses/:course_id/discussion_topics/reorder \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
+
+        :param order: The ids of the pinned discussion topics in the desired order.
+            e.g. order=104,102,103
+
+        :rtype: :class: `pycanvas.discussion_topic.DiscussionTopic`
+        """
+        return PaginatedList(
+            DiscussionTopic,
+            self._requester,
+            'POST',
+            'courses/%s/discussion_topics/reorder' % (self.id),
+            {'course_id': self.id},
+            order=order
+        )
 
 class CourseNickname(CanvasObject):
 

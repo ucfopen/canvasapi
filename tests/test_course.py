@@ -478,6 +478,16 @@ class TestCourse(unittest.TestCase):
         self.assertEquals(topic_id, discussion.id)
         self.assertEquals(discussion.course_id, 1)
 
+    def test_reorder_pinned_topics(self, m):
+        register_uris({'course': ['reorder_pinned_topics']}, m)
+
+        order = 1, 2
+
+        discussions = self.course.reorder_pinned_topics(order=order)
+        discussion_list = [discussion for discussion in discussions]
+        self.assertIsInstance(discussion_list[0], DiscussionTopic)
+        assert hasattr(discussion_list[0], 'course_id')
+        self.assertEquals(2, len(discussion_list))
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

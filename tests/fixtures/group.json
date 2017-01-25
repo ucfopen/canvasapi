@@ -630,5 +630,20 @@
 			"title": "Topic 1"
 		},
 		"status_code": 200
+	},
+	"reorder_pinned_topics": {
+		"method": "POST",
+		"endpoint": "courses/1/discussion_topics/reorder",
+		"data": [
+			{
+				"id": 1,
+				"reorder": true
+			},
+			{
+				"id": 2,
+				"reorder": true
+			}
+		],
+		"status_code": 200
 	}
 }

@@ -22,6 +22,7 @@
 		"endpoint": "courses/1/discussion_topics/1/entries/1",
 		"data": {
 			"id": 1,
+			"user_id": 1,
 			"deleted_at": "2017-01-23T21:07:54Z"
 		}
 	}
