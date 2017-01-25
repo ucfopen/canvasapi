@@ -4,7 +4,9 @@ from datetime import datetime
 import requests_mock
 
 from pycanvas import Canvas
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.account import Account
+from pycanvas.calendar_event import CalendarEvent
 from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
 from pycanvas.group import Group, GroupCategory
@@ -334,3 +336,20 @@ class TestCanvas(unittest.TestCase):
             conversation_ids=conversation_ids
         )
         assert isinstance(result, ValueError)
+
+    # create_calendar_event()
+    def test_create_calendar_event(self, m):
+        register_uris({'calendar_event': ['create_calendar_event']}, m)
+
+        cal_event = {
+            "context_code": "course_123"
+        }
+        evnt = self.canvas.create_calendar_event(cal_event=cal_event)
+
+        self.assertIsInstance(evnt, CalendarEvent)
+        self.assertEqual(evnt.context_code, "course_123")
+        self.assertEqual(evnt.id, 234)
+
+    def test_create_calendar_event_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_calendar_event({})
