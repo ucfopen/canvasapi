@@ -566,7 +566,7 @@ class Canvas(object):
 
     def list_calendar_events(self, **kwargs):
         """
-        List calendar events that the current user can view or manage.
+        List calendar events.
 
         :calls: `GET /api/v1/calendar_events \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_

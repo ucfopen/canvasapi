@@ -1,3 +1,4 @@
+from pycanvas.calendar_event import CalendarEvent
 from pycanvas.canvas_object import CanvasObject
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.upload import Uploader
@@ -295,5 +296,22 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/self/groups',
+            **combine_kwargs(**kwargs)
+        )
+
+    def list_calendar_events_for_user(self, **kwargs):
+        """
+        List calendar events that the current user can view or manage.
+
+        :calls: `GET /api/v1/users/:user_id/calendar_events \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.user_index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.calendar_event.CalendarEvent`
+        """
+        return PaginatedList(
+            CalendarEvent,
+            self._requester,
+            'GET',
+            'users/%s/calendar_events' % (self.id),
             **combine_kwargs(**kwargs)
         )

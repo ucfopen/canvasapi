@@ -353,3 +353,11 @@ class TestCanvas(unittest.TestCase):
     def test_create_calendar_event_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.canvas.create_calendar_event({})
+
+    # list_calendar_events()
+    def test_list_calendar_events(self, m):
+        register_uris({'calendar_event': ['list_calendar_events']}, m)
+
+        cal_events = self.canvas.list_calendar_events()
+        cal_event_list = [cal_event for cal_event in cal_events]
+        self.assertEqual(len(cal_event_list), 2)
