@@ -21,6 +21,16 @@ class TestCalendarEvent(unittest.TestCase):
 
             self.calendar_event = self.canvas.get_calendar_event(567)
 
+    # delete()
+    def test_delete_calendar_event(self, m):
+        register_uris({'calendar_event': ['delete_calendar_event']}, m)
+
+        deleted_calendar_event = self.calendar_event.delete()
+
+        self.assertIsInstance(deleted_calendar_event, CalendarEvent)
+        self.assertTrue(hasattr(deleted_calendar_event, 'title'))
+        self.assertEqual(deleted_calendar_event.title, 'Test Event 3')
+
     # edit()
     def test_edit_calendar_event(self, m):
         register_uris({'calendar_event': ['edit_calendar_event']}, m)

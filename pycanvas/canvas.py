@@ -590,9 +590,9 @@ class Canvas(object):
         :calls: `GET /api/v1/calendar_events/:id \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.show>`_
 
-        :param calendar_events_id: The ID of the conversation.
+        :param calendar_events_id: The ID of the calendar event.
         :type calendar_events_id: `int`
-        :rtype: :class:`pycanvas.conversation.CalendarEvent`
+        :rtype: :class:`pycanvas.calendar_event.CalendarEvent`
         """
         from pycanvas.calendar_event import CalendarEvent
 

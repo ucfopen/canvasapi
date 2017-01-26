@@ -9,6 +9,17 @@
 		},
 		"status_code": 200
 	},
+	"delete_calendar_event": {
+		"method": "DELETE",
+		"endpoint": "calendar_events/567",
+		"data": {
+			"id": 567,
+			"context_code": "course_765",
+			"title": "Test Event 3",
+			"description": "Delete this assignment"
+		},
+		"status_code": 200
+	},
 	"edit_calendar_event": {
 		"method": "PUT",
 		"endpoint": "calendar_events/567",

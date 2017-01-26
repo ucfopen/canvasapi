@@ -4,6 +4,21 @@ from pycanvas.util import combine_kwargs
 
 class CalendarEvent(CanvasObject):
 
+    def delete(self):
+        """
+        Delete this calendar event.
+
+        :calls: `DELETE /api/v1/calendar_events/:id \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.destroy>`_
+
+        :rtype: :class:`pycanvas.calendar_event.CalendarEvent`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'calendar_events/%s' % (self.id)
+        )
+        return CalendarEvent(self._requester, response.json())
+
     def edit(self, **kwargs):
         """
         Modify this calendar event.
