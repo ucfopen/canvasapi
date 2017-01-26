@@ -361,3 +361,11 @@ class TestCanvas(unittest.TestCase):
         cal_events = self.canvas.list_calendar_events()
         cal_event_list = [cal_event for cal_event in cal_events]
         self.assertEqual(len(cal_event_list), 2)
+
+    # get_calendar_event()
+    def test_get_calendar_event(self, m):
+        register_uris({'calendar_event': ['get_calendar_event']}, m)
+
+        cal_event = self.canvas.get_calendar_event(567)
+        self.assertIsInstance(cal_event, CalendarEvent)
+        self.assertEqual(cal_event.title, "Test Event 3")
