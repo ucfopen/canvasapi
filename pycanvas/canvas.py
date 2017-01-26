@@ -583,21 +583,48 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
 
-    def get_calendar_event(self, calendar_events_id):
+    def get_calendar_event(self, calendar_event_id):
         """
         Return single Calendar Event by id
 
         :calls: `GET /api/v1/calendar_events/:id \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.show>`_
 
-        :param calendar_events_id: The ID of the calendar event.
-        :type calendar_events_id: `int`
+        :param calendar_event_id: The ID of the calendar event.
+        :type calendar_event_id: `int`
         :rtype: :class:`pycanvas.calendar_event.CalendarEvent`
         """
         from pycanvas.calendar_event import CalendarEvent
 
         response = self.__requester.request(
             'GET',
-            'calendar_events/%s' % (calendar_events_id)
+            'calendar_events/%s' % (calendar_event_id)
+        )
+        return CalendarEvent(self.__requester, response.json())
+
+    def reserve_time_slot(self, calendar_event_id, participant_id=None, **kwargs):
+        """
+        Return single Calendar Event by id
+
+        :calls: `POST /api/v1/calendar_events/:id/reservations \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.reserve>`_
+
+        :param calendar_event_id: The ID of the calendar event.
+        :type calendar_event_id: `int`
+        :rtype: :class:`pycanvas.calendar_event.CalendarEvent`
+        """
+        from pycanvas.calendar_event import CalendarEvent
+
+        if participant_id:
+            uri = 'calendar_events/%s/reservations/%s' % (
+                calendar_event_id, participant_id
+            )
+        else:
+            uri = 'calendar_events/%s/reservations' % (calendar_event_id)
+
+        response = self.__requester.request(
+            'POST',
+            uri,
+            **combine_kwargs(**kwargs)
         )
         return CalendarEvent(self.__requester, response.json())

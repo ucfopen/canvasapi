@@ -57,5 +57,26 @@
 			}
 		],
 		"status_code": 200
+	},
+	"reserve_time_slot": {
+		"method": "POST",
+		"endpoint": "calendar_events/567/reservations",
+		"data": {
+			"id": 567,
+			"context_code": "course_123",
+			"title": "Test Reservation"
+		},
+		"status_code": 200
+	},
+	"reserve_time_slot": {
+		"method": "POST",
+		"endpoint": "calendar_events/567/reservations/777",
+		"data": {
+			"id": 567,
+			"context_code": "course_123",
+			"title": "Test Reservation",
+			"user": 777
+		},
+		"status_code": 200
 	}
 }
