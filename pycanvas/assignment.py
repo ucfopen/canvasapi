@@ -68,7 +68,7 @@ class AssignmentGroup(CanvasObject):
 
         return AssignmentGroup(self._requester, response.json())
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this assignment.
 
@@ -80,5 +80,6 @@ class AssignmentGroup(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/%s/assignment_groups/%s' % (self.course_id, self.id),
+            **combine_kwargs(**kwargs)
         )
         return AssignmentGroup(self._requester, response.json())
