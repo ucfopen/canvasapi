@@ -68,7 +68,7 @@
 		},
 		"status_code": 200
 	},
-	"reserve_time_slot": {
+	"reserve_time_slot_participant_id": {
 		"method": "POST",
 		"endpoint": "calendar_events/567/reservations/777",
 		"data": {

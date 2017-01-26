@@ -379,7 +379,9 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(cal_event.title, "Test Reservation")
 
     def test_reserve_time_slot_by_participant_id(self, m):
-        register_uris({'calendar_event': ['reserve_time_slot']}, m)
+        register_uris({
+            'calendar_event': ['reserve_time_slot_participant_id']
+        }, m)
 
         cal_event = self.canvas.reserve_time_slot(
             calendar_event_id=567,

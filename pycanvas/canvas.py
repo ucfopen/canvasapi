@@ -602,7 +602,12 @@ class Canvas(object):
         )
         return CalendarEvent(self.__requester, response.json())
 
-    def reserve_time_slot(self, calendar_event_id, participant_id=None, **kwargs):
+    def reserve_time_slot(
+        self,
+        calendar_event_id,
+        participant_id=None,
+        **kwargs
+    ):
         """
         Return single Calendar Event by id
 
