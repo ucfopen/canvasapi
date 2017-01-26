@@ -37,7 +37,7 @@
 			"id": 5,
 			"course_id": 1,
 			"name": "New Name",
-			"description": "Delete this assignment"
+			"description": "Edit this assignment"
 		},
 		"status_code": 200
 	},

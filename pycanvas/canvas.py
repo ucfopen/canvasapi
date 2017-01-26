@@ -1,6 +1,5 @@
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.account import Account
-from pycanvas.calendar_event import CalendarEvent
 from pycanvas.course import Course
 from pycanvas.group import Group, GroupCategory
 from pycanvas.paginated_list import PaginatedList
@@ -574,6 +573,8 @@ class Canvas(object):
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.calendar_event.CalendarEvent`
         """
+        from pycanvas.calendar_event import CalendarEvent
+
         return PaginatedList(
             CalendarEvent,
             self.__requester,
@@ -593,7 +594,8 @@ class Canvas(object):
         :type calendar_events_id: `int`
         :rtype: :class:`pycanvas.conversation.CalendarEvent`
         """
-        from pycanvas.conversation import Conversation
+        from pycanvas.calendar_event import CalendarEvent
+
         response = self.__requester.request(
             'GET',
             'calendar_events/%s' % (calendar_events_id)
