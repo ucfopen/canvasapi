@@ -755,6 +755,28 @@ class Course(CanvasObject):
 
         return DiscussionTopic(self._requester, response_json)
 
+    def get_full_discussion_topic(self, topic_id):
+        """
+        Return a cached structure of the discussion topic.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
+
+        :param topic_id: The ID of the discussion topic.
+        :type topic_id: int
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/discussion_topics/%s/view' % (self.id, topic_id),
+        )
+
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return DiscussionTopic(self._requester, response_json)
+
     def get_discussion_topics(self, **kwargs):
         """
         Returns the paginated list of discussion topics for this course or group.
@@ -800,6 +822,9 @@ class Course(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id \
                 <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
 
+        :param topic_id: The ID of the discussion topic.
+        :type topic_id: int
+
         :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
@@ -832,6 +857,7 @@ class Course(CanvasObject):
             {'course_id': self.id},
             order=order
         )
+
 
 class CourseNickname(CanvasObject):
 

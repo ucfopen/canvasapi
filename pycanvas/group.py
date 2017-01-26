@@ -363,11 +363,31 @@ class Group(CanvasObject):
 
         :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
-        from pycanvas.discussion_topic import DiscussionTopic
-
         response = self._requester.request(
             'GET',
             'groups/%s/discussion_topics/%s' % (self.id, topic_id)
+        )
+
+        response_json = response.json()
+        response_json.update({'group_id': self.id})
+
+        return DiscussionTopic(self._requester, response_json)
+
+    def get_full_discussion_topic(self, topic_id):
+        """
+        Return a cached structure of the discussion topic.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
+
+        :param topic_id: The ID of the discussion topic.
+        :type topic_id: int
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'GET',
+            'groups/%s/discussion_topics/%s/view' % (self.id, topic_id),
         )
 
         response_json = response.json()
@@ -454,6 +474,7 @@ class Group(CanvasObject):
             {'group_id': self.id},
             order=order
         )
+
 
 class GroupMembership(CanvasObject):
 

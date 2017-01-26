@@ -446,6 +446,16 @@ class TestCourse(unittest.TestCase):
         assert hasattr(discussion, 'course_id')
         self.assertEquals(discussion.course_id, 1)
 
+    def test_get_full_discussion_topic(self, m):
+        register_uris({'course': ['get_full_discussion_topic']}, m)
+
+        topic_id = 1
+        discussion = self.course.get_full_discussion_topic(topic_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'view')
+        assert hasattr(discussion, 'participants')
+        self.assertEquals(discussion.course_id, 1)
+
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
         register_uris({'course': ['get_discussion_topics']}, m)
@@ -488,6 +498,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
         assert hasattr(discussion_list[0], 'course_id')
         self.assertEquals(2, len(discussion_list))
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

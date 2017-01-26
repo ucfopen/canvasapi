@@ -597,6 +597,23 @@
 			},
 		"status_code": 200
 	},
+	"get_full_discussion_topic": {
+		"method": "GET",
+		"endpoint": "groups/1/discussion_topics/1/view",
+		"data": {
+			"id": 1,
+			"view": [
+				{
+					"id": 1
+				}
+			],
+			"participants": [
+				{
+					"id": 1
+				}
+			]
+		}
+	},
 	"get_discussion_topics": {
 		"method": "GET",
 		"endpoint": "groups/1/discussion_topics",
@@ -633,7 +650,7 @@
 	},
 	"reorder_pinned_topics": {
 		"method": "POST",
-		"endpoint": "courses/1/discussion_topics/reorder",
+		"endpoint": "groups/1/discussion_topics/reorder",
 		"data": [
 			{
 				"id": 1,

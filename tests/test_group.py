@@ -227,6 +227,17 @@ class TestGroup(unittest.TestCase):
         self.assertEquals(discussion.title, title)
         self.assertEquals(discussion.group_id, 1)
 
+    # get_full_discussion_topic
+    def test_get_full_discussion_topic(self, m):
+        register_uris({'group': ['get_full_discussion_topic']}, m)
+
+        topic_id = 1
+        discussion = self.group.get_full_discussion_topic(topic_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'view')
+        assert hasattr(discussion, 'participants')
+        self.assertEquals(discussion.group_id, 1)
+
     # update_discussion_topic()
     def test_update_discussion_topic(self, m):
         register_uris({'group': ['update_discussion_topic']}, m)
@@ -238,14 +249,14 @@ class TestGroup(unittest.TestCase):
         self.assertEquals(discussion.group_id, 1)
 
     def test_reorder_pinned_topics(self, m):
-        register_uris({'course': ['reorder_pinned_topics']}, m)
+        register_uris({'group': ['reorder_pinned_topics']}, m)
 
         order = 1, 2
 
-        discussions = self.course.reorder_pinned_topics(order=order)
+        discussions = self.group.reorder_pinned_topics(order=order)
         discussion_list = [discussion for discussion in discussions]
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
-        assert hasattr(discussion_list[0], 'course_id')
+        assert hasattr(discussion_list[0], 'group_id')
         self.assertEquals(2, len(discussion_list))
 
 

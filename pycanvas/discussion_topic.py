@@ -18,7 +18,7 @@ class DiscussionTopic(CanvasObject):
         elif hasattr(self, 'group_id'):
             return self.group_id
         else:
-            raise ValueError("Page does not have a course_id or group_id")
+            raise ValueError("Discussion Topic does not have a course_id or group_id")
 
     @property
     def parent_type(self):
@@ -32,7 +32,7 @@ class DiscussionTopic(CanvasObject):
         elif hasattr(self, 'group_id'):
             return 'group'
         else:
-            raise ValueError("ExternalTool does not have a course_id or group_id")
+            raise ValueError("Discussion Topic does not have a course_id or group_id")
 
     def get_parent(self):
         """
