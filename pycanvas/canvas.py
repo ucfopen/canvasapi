@@ -563,3 +563,20 @@ class Canvas(object):
         )
 
         return CalendarEvent(self.__requester, response.json())
+
+    def list_calendar_events(self, **kwargs):
+        """
+        List calendar events that the current user can view or manage.
+
+        :calls: `GET /api/v1/calendar_events \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.calendar_event.CalendarEvent`
+        """
+        return PaginatedList(
+            Account,
+            self.__requester,
+            'GET',
+            'calendar_events',
+            **combine_kwargs(**kwargs)
+        )
