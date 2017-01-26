@@ -4,7 +4,6 @@ import requests_mock
 
 from pycanvas import Canvas
 from pycanvas.calendar_event import CalendarEvent
-from pycanvas.exceptions import RequiredFieldMissing
 from tests import settings
 from tests.util import register_uris
 

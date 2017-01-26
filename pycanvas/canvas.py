@@ -538,7 +538,7 @@ class Canvas(object):
 
     def create_calendar_event(self, cal_event, **kwargs):
         """
-        Create a new CalendarEvent.
+        Create a new Calendar Event.
 
         :calls: `POST /api/v1/calendar_events \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.create>`_
@@ -633,3 +633,78 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
         return CalendarEvent(self.__requester, response.json())
+
+    def list_appointment_groups(self, **kwargs):
+        """
+        List appointment groups.
+
+        :calls: `GET /api/v1/appointment_groups \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.appointment_group.AppointmentGroup`
+        """
+        from pycanvas.appointment_group import AppointmentGroup
+
+        return PaginatedList(
+            AppointmentGroup,
+            self.__requester,
+            'GET',
+            'appointment_groups',
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_appointment_group(self, appointment_group_id):
+        """
+        Return single Appointment Group by id
+
+        :calls: `GET /api/v1/appointment_groups/:id \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.show>`_
+
+        :param appointment_group_id: The ID of the appointment group.
+        :type appointment_group_id: `int`
+        :rtype: :class:`pycanvas.appointment_group.AppointmentGroup`
+        """
+        from pycanvas.appointment_group import AppointmentGroup
+
+        response = self.__requester.request(
+            'GET',
+            'appointment_groups/%s' % (appointment_group_id)
+        )
+        return AppointmentGroup(self.__requester, response.json())
+
+    def create_appointment_group(self, appt_group, title, **kwargs):
+        """
+        Create a new Appointment Group.
+
+        :calls: `POST /api/v1/appointment_groups \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.create>`_
+
+        :param appt_group: The attributes of the appointment group.
+        :type appt_group: `dict`
+        :param title: The title of the appointment group.
+        :type title: `str`
+        :rtype: :class:`pycanvas.appointment_group.AppointmentGroup
+        """
+        from pycanvas.appointment_group import AppointmentGroup
+
+        if isinstance(appt_group, dict) and 'context_codes' in appt_group:
+            kwargs['appointment_group'] = appt_group
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'appointment_group' is required."
+            )
+
+        if isinstance(title, str):
+            kwargs['title'] = title
+        else:
+            raise RequiredFieldMissing(
+                "String with key 'title' is required."
+            )
+
+        response = self.__requester.request(
+            'POST',
+            'appointment_groups',
+            **combine_kwargs(**kwargs)
+        )
+
+        return AppointmentGroup(self.__requester, response.json())

@@ -6,6 +6,7 @@ import requests_mock
 from pycanvas import Canvas
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.account import Account
+from pycanvas.appointment_group import AppointmentGroup
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
@@ -390,3 +391,19 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(cal_event, CalendarEvent)
         self.assertEqual(cal_event.title, "Test Reservation")
         self.assertEqual(cal_event.user, 777)
+
+    # list_appointment_groups()
+    def test_list_appointment_groups(self, m):
+        register_uris({'appointment_group': ['list_appointment_groups']}, m)
+
+        appt_groups = self.canvas.list_appointment_groups()
+        appt_groups_list = [appt_group for appt_group in appt_groups]
+        self.assertEqual(len(appt_groups_list), 2)
+
+    # get_appointment_group()
+    def test_get_appointment_group(self, m):
+        register_uris({'appointment_group': ['get_appointment_group']}, m)
+
+        appt_group = self.canvas.get_appointment_group(567)
+        self.assertIsInstance(appt_group, AppointmentGroup)
+        self.assertEqual(appt_group.title, "Test Group 3")
