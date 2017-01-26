@@ -5,7 +5,7 @@ import os
 import requests_mock
 
 from pycanvas import Canvas
-from pycanvas.assignment import Assignment
+from pycanvas.assignment import Assignment, AssignmentGroup
 from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
@@ -434,6 +434,42 @@ class TestCourse(unittest.TestCase):
         response = self.course.list_group_categories()
         category_list = [category for category in response]
         assert isinstance(category_list[0], GroupCategory)
+
+    # get_assignment_group()
+    def test_get_assignment_group(self, m):
+        register_uris({'assignment': ['get_assignment_group']}, m)
+
+        response = self.course.get_assignment_group(5)
+
+        self.assertIsInstance(response, AssignmentGroup)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertTrue(hasattr(response, 'name'))
+        self.assertTrue(hasattr(response, 'course_id'))
+        self.assertEqual(response.course_id, 1)
+
+    # list_group_categories()
+    def test_list_assignment_groups(self, m):
+        register_uris({
+            'assignment': ['list_assignment_groups', 'get_assignment_group']
+        }, m)
+
+        response = self.course.list_assignment_groups()
+        asnt_group_list = [assignment_group for assignment_group in response]
+        self.assertIsInstance(asnt_group_list[0], AssignmentGroup)
+        self.assertTrue(hasattr(asnt_group_list[0], 'id'))
+        self.assertTrue(hasattr(asnt_group_list[0], 'name'))
+        self.assertTrue(hasattr(asnt_group_list[0], 'course_id'))
+        self.assertEqual(asnt_group_list[0].course_id, 1)
+
+    # create_assignment_group()
+    def test_create_assignment_group(self, m):
+        register_uris({'assignment': ['create_assignment_group']}, m)
+
+        response = self.course.create_assignment_group()
+
+        self.assertIsInstance(response, AssignmentGroup)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertEqual(response.id, 3)
 
 
 @requests_mock.Mocker()
