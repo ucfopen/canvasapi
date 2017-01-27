@@ -792,8 +792,10 @@ class Course(CanvasObject):
             'courses/%s/assignment_groups' % (self.id),
             **combine_kwargs(**kwargs)
         )
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
 
-        return AssignmentGroup(self._requester, response.json())
+        return AssignmentGroup(self._requester, response_json)
 
     def create_external_tool(self, name, privacy_level, consumer_key, shared_secret, **kwargs):
         """
@@ -820,8 +822,10 @@ class Course(CanvasObject):
             'courses/%s/external_tools' % (self.id),
             **combine_kwargs(**kwargs)
         )
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
 
-        return ExternalTool(self._requester, response.json())
+        return ExternalTool(self._requester, response_json)
 
 
 class CourseNickname(CanvasObject):

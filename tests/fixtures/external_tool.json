@@ -19,16 +19,6 @@
 			"consumer_key": "key"
 		}
 	},
-	"create_tool_group": {
-		"method": "POST",
-		"endpoint": "groups/1/external_tools",
-		"data": {
-			"id": 30,
-			"name": "External Tool - Group",
-			"privacy_level": "public",
-			"consumer_key": "key"
-		}
-	},
 	"get_by_id_account": {
 		"method": "GET",
 		"endpoint": "accounts/1/external_tools/1",

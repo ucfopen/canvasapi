@@ -566,8 +566,10 @@ class Account(CanvasObject):
             'accounts/%s/external_tools' % (self.id),
             **combine_kwargs(**kwargs)
         )
+        response_json = response.json()
+        response_json.update({'account_id': self.id})
 
-        return ExternalTool(self._requester, response.json())
+        return ExternalTool(self._requester, response_json)
 
 
 class AccountNotification(CanvasObject):

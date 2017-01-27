@@ -237,21 +237,6 @@ class TestGroupMembership(unittest.TestCase):
         # the response should be an empty dict that evaluates to false
         assert not response
 
-    # create_external_tool()
-    def test_create_external_tool(self, m):
-        register_uris({'external_tool': ['create_tool_group']}, m)
-
-        response = self.group.create_external_tool(
-            name="External Tool - Group",
-            privacy_level="public",
-            consumer_key="key",
-            shared_secret="secret"
-        )
-
-        self.assertIsInstance(response, ExternalTool)
-        self.assertTrue(hasattr(response, 'id'))
-        self.assertEqual(response.id, 30)
-
 
 @requests_mock.Mocker()
 class TestGroupCategory(unittest.TestCase):
