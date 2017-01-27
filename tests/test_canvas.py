@@ -407,3 +407,32 @@ class TestCanvas(unittest.TestCase):
         appt_group = self.canvas.get_appointment_group(567)
         self.assertIsInstance(appt_group, AppointmentGroup)
         self.assertEqual(appt_group.title, "Test Group 3")
+
+    # create_appointment_group()
+    def test_create_appointment_group(self, m):
+        register_uris({'appointment_group': ['create_appointment_group']}, m)
+
+        evnt = self.canvas.create_appointment_group({
+            "context_codes": ["course_123"],
+            "title": "Test Group"
+        })
+
+        self.assertIsInstance(evnt, AppointmentGroup)
+        self.assertEqual(evnt.context_codes[0], "course_123")
+        self.assertEqual(evnt.id, 234)
+
+    def test_create_appointment_group_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_appointment_group({})
+
+    def test_create_appointment_group_fail_on_context_codes(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_appointment_group({
+                "title": "Test Group"
+            })
+
+    def test_create_appointment_group_fail_on_title(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_appointment_group({
+                "context_codes": "course_123"
+            })
