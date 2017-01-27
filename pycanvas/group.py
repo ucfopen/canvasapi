@@ -350,6 +350,34 @@ class Group(CanvasObject):
         )
         return GroupMembership(self._requester, response.json())
 
+    def create_external_tool(self, name, privacy_level, consumer_key, shared_secret, **kwargs):
+        """
+        Create an external tool in the current group.
+
+        :calls: `GET /api/v1/groups/:group_id/external_tools \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.create>`_
+
+        :param name: The name of the tool
+        :type name: str
+        :param privacy_level: What information to send to the external
+            tool. Options are "anonymous", "name_only", "public"
+        :type privacy_level: str
+        :param consumer_key: The consumer key for the external tool
+        :type consumer_key: str
+        :param shared_secret: The shared secret with the external tool
+        :type shared_secret: str
+        :rtype: :class:`pycanvas.external_tool.ExternalTool`
+        """
+        from pycanvas.external_tool import ExternalTool
+
+        response = self._requester.request(
+            'POST',
+            'groups/%s/external_tools' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return ExternalTool(self._requester, response.json())
+
 
 class GroupMembership(CanvasObject):
 

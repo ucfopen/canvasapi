@@ -8,6 +8,7 @@ from pycanvas import Canvas
 from pycanvas.group import Group, GroupMembership, GroupCategory
 from pycanvas.course import Page
 from pycanvas.exceptions import RequiredFieldMissing
+from pycanvas.external_tool import ExternalTool
 from tests import settings
 from tests.util import register_uris
 
@@ -235,6 +236,21 @@ class TestGroupMembership(unittest.TestCase):
         response = self.membership.remove_self()
         # the response should be an empty dict that evaluates to false
         assert not response
+
+    # create_external_tool()
+    def test_create_external_tool(self, m):
+        register_uris({'external_tool': ['create_tool_group']}, m)
+
+        response = self.group.create_external_tool(
+            name="External Tool - Group",
+            privacy_level="public",
+            consumer_key="key",
+            shared_secret="secret"
+        )
+
+        self.assertIsInstance(response, ExternalTool)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertEqual(response.id, 30)
 
 
 @requests_mock.Mocker()

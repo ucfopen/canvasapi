@@ -1,4 +1,34 @@
 {
+	"create_tool_account": {
+		"method": "POST",
+		"endpoint": "accounts/1/external_tools",
+		"data": {
+			"id": 10,
+			"name": "External Tool - Account",
+			"privacy_level": "public",
+			"consumer_key": "key"
+		}
+	},
+	"create_tool_course": {
+		"method": "POST",
+		"endpoint": "courses/1/external_tools",
+		"data": {
+			"id": 20,
+			"name": "External Tool - Course",
+			"privacy_level": "public",
+			"consumer_key": "key"
+		}
+	},
+	"create_tool_group": {
+		"method": "POST",
+		"endpoint": "groups/1/external_tools",
+		"data": {
+			"id": 30,
+			"name": "External Tool - Group",
+			"privacy_level": "public",
+			"consumer_key": "key"
+		}
+	},
 	"get_by_id_account": {
 		"method": "GET",
 		"endpoint": "accounts/1/external_tools/1",
