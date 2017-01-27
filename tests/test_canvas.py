@@ -421,10 +421,6 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(evnt.context_codes[0], "course_123")
         self.assertEqual(evnt.id, 234)
 
-    def test_create_appointment_group_fail(self, m):
-        with self.assertRaises(RequiredFieldMissing):
-            self.canvas.create_appointment_group({})
-
     def test_create_appointment_group_fail_on_context_codes(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.canvas.create_appointment_group({

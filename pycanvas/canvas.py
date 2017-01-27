@@ -694,18 +694,16 @@ class Canvas(object):
         ):
             kwargs['appointment_group'] = appt_group
 
-        elif not isinstance(appt_group, dict):
-            raise RequiredFieldMissing(
-                "Dictionary with key 'appt_group' is required."
-            )
-
-        elif 'context_codes' not in appt_group:
+        elif (
+            isinstance(appt_group, dict) and
+            'context_codes' not in appt_group
+        ):
             raise RequiredFieldMissing(
                 "Dictionary with key 'appt_group'"
                 " is missing key 'context_codes'."
             )
 
-        elif 'title' not in appt_group:
+        elif isinstance(appt_group, dict) and 'title' not in appt_group:
             raise RequiredFieldMissing(
                 "Dictionary with key 'appt_group' is missing key 'title'."
             )
