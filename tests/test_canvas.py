@@ -436,3 +436,11 @@ class TestCanvas(unittest.TestCase):
             self.canvas.create_appointment_group({
                 "context_codes": "course_123"
             })
+
+    # list_user_participants()
+    def test_list_user_participants(self, m):
+        register_uris({'appointment_group': ['list_user_participants']}, m)
+
+        users = self.canvas.list_user_participants(222)
+        users_list = [user for user in users]
+        self.assertEqual(len(users_list), 2)
