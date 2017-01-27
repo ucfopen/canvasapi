@@ -1,0 +1,90 @@
+{
+	"create_appointment_group": {
+		"method": "POST",
+		"endpoint": "appointment_groups",
+		"data": {
+			"id": 234,
+			"context_codes": ["course_123"],
+			"title": "Test Group"
+		},
+		"status_code": 200
+	},
+	"delete_appointment_group": {
+		"method": "DELETE",
+		"endpoint": "appointment_groups/567",
+		"data": {
+			"id": 567,
+			"context_codes": ["course_765"],
+			"title": "Test Group 3",
+			"description": "Delete this appointment group"
+		},
+		"status_code": 200
+	},
+	"edit_appointment_group": {
+		"method": "PUT",
+		"endpoint": "appointment_groups/567",
+		"data": {
+			"id": 567,
+			"title": "New Name",
+			"description": "Edit this appointment group"
+		},
+		"status_code": 200
+	},
+	"get_appointment_group": {
+		"method": "GET",
+		"endpoint": "appointment_groups/567",
+		"data": {
+			"id": 567,
+			"context_codes": ["course_765"],
+			"title": "Test Group 3"
+		},
+		"status_code": 200
+	},
+	"list_appointment_groups": {
+		"method": "GET",
+		"endpoint": "appointment_groups",
+		"data": [
+			{
+				"id": 123,
+				"context_codes": ["course_321"],
+				"title": "Test Group 1"
+			},
+			{
+				"id": 456,
+				"context_codes": ["course_654"],
+				"title": "Test Group 2"
+			}
+		],
+		"status_code": 200
+	},
+	"list_user_participants": {
+		"method": "GET",
+		"endpoint": "appointment_groups/222/users",
+		"data": [
+			{
+				"id": 123,
+				"name": "John Doe"
+			},
+			{
+				"id": 456,
+				"name": "John Smith"
+			}
+		],
+		"status_code": 200
+	},
+	"list_group_participants": {
+		"method": "GET",
+		"endpoint": "appointment_groups/222/groups",
+		"data": [
+			{
+				"id": 123,
+				"name": "John Doe"
+			},
+			{
+				"id": 456,
+				"name": "John Smith"
+			}
+		],
+		"status_code": 200
+	}
+}
