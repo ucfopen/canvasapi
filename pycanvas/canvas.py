@@ -687,11 +687,27 @@ class Canvas(object):
         """
         from pycanvas.appointment_group import AppointmentGroup
 
-        if isinstance(appt_group, dict) and 'context_codes' in appt_group and 'title' in appt_group:
+        if (
+                isinstance(appt_group, dict) and
+                'context_codes' in appt_group and
+                'title' in appt_group
+        ):
             kwargs['appointment_group'] = appt_group
-        else:
+
+        elif not isinstance(appt_group, dict):
             raise RequiredFieldMissing(
                 "Dictionary with key 'appt_group' is required."
+            )
+
+        elif 'context_codes' not in appt_group:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'appt_group'"
+                " is missing key 'context_codes'."
+            )
+
+        elif 'title' not in appt_group:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'appt_group' is missing key 'title'."
             )
 
         response = self.__requester.request(
