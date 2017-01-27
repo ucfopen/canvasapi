@@ -7,6 +7,7 @@ import requests_mock
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.avatar import Avatar
+from pycanvas.bookmark import Bookmark
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.course import Course
 from pycanvas.group import Group
@@ -223,3 +224,11 @@ class TestUser(unittest.TestCase):
         cal_event_list = [cal_event for cal_event in cal_events]
         self.assertEqual(len(cal_event_list), 2)
         self.assertIsInstance(cal_event_list[0], CalendarEvent)
+
+    # get_bookmark()
+    def test_get_bookmark(self, m):
+        register_uris({'bookmark': ['get_bookmark']}, m)
+
+        bookmark = self.user.get_bookmark(45)
+        self.assertIsInstance(bookmark, Bookmark)
+        self.assertEqual(bookmark.name, "Test Bookmark 3")

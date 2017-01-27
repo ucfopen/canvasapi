@@ -315,3 +315,22 @@ class User(CanvasObject):
             'users/%s/calendar_events' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def get_bookmark(self, bookmark_id):
+        """
+        Return single Bookmark by id
+
+        :calls: `GET /api/v1/users/self/bookmarks/:id \
+        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.show>`_
+
+        :param bookmark_id: The ID of the bookmark.
+        :type bookmark_id: `int`
+        :rtype: :class:`pycanvas.bookmark.Bookmark`
+        """
+        from pycanvas.bookmark import Bookmark
+
+        response = self._requester.request(
+            'GET',
+            'users/self/bookmarks/%s' % (bookmark_id)
+        )
+        return Bookmark(self._requester, response.json())
