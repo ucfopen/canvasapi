@@ -722,3 +722,24 @@ class Canvas(object):
             'appointment_groups/%s/users' % (appointment_group_id),
             **combine_kwargs(**kwargs)
         )
+
+    def list_group_participants(self, appointment_group_id, **kwargs):
+        """
+        List student group participants in this appointment group.
+
+        :calls: `GET /api/v1/appointment_groups/:id/groups \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.groups>`_
+
+        :param appointment_group_id: The ID of the appointment group.
+        :type appointment_group_id: `int`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        """
+        from pycanvas.group import Group
+
+        return PaginatedList(
+            Group,
+            self.__requester,
+            'GET',
+            'appointment_groups/%s/groups' % (appointment_group_id),
+            **combine_kwargs(**kwargs)
+        )

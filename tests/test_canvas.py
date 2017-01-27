@@ -444,3 +444,11 @@ class TestCanvas(unittest.TestCase):
         users = self.canvas.list_user_participants(222)
         users_list = [user for user in users]
         self.assertEqual(len(users_list), 2)
+
+    # list_group_participants()
+    def test_list_group_participants(self, m):
+        register_uris({'appointment_group': ['list_group_participants']}, m)
+
+        groups = self.canvas.list_group_participants(222)
+        groups_list = [group for group in groups]
+        self.assertEqual(len(groups_list), 2)
