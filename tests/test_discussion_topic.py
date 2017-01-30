@@ -29,10 +29,12 @@ class TestDiscussionTopic(unittest.TestCase):
             self.discussion_topic = self.course.get_discussion_topic(1)
             self.discussion_topic_group = self.group.get_discussion_topic(1)
 
+    # __str__()
     def test__str__(self, m):
         string = str(self.discussion_topic)
         self.assertIsInstance(string, str)
 
+    # delete()
     def test_delete(self, m):
         register_uris({'discussion_topic': ['delete']}, m)
 
@@ -40,6 +42,7 @@ class TestDiscussionTopic(unittest.TestCase):
         topic = self.discussion_topic.delete(topic_id)
         self.assertTrue(topic)
 
+    # update_entry()
     def test_update_entry(self, m):
         register_uris({'discussion_topic': ['update_entry']}, m)
 
@@ -47,12 +50,30 @@ class TestDiscussionTopic(unittest.TestCase):
         entry = self.discussion_topic.update_entry(entry_id)
         self.assertTrue(entry)
 
+    # delete_entry();
     def test_delete_entry(self, m):
         register_uris({'discussion_topic': ['delete_entry']}, m)
 
         entry_id = 1
         entry = self.discussion_topic.delete_entry(entry_id)
         self.assertTrue(entry)
+
+    # post_entry()
+    def test_post_entry(self, m):
+        register_uris({'discussion_topic': ['post_entry']}, m)
+
+        entry = self.discussion_topic.post_entry()
+        self.assertTrue(entry)
+
+    # list_entries()
+    def test_list_topic_entries(self, m):
+        register_uris({'discussion_topic': ['list_topic_entries']}, m)
+
+        entries = self.discussion_topic.list_topic_entries()
+        entry_list = [entry for entry in entries]
+        self.assertIsInstance(entry_list[0], DiscussionTopic)
+        self.assertEquals(entry_list[0].id, 1)
+        self.assertEquals(entry_list[0].user_id, 1)
 
     # parent_id
     def test_parent_id_course(self, m):

@@ -823,7 +823,8 @@
 					"id": 1
 				}
 			]
-		}
+		},
+		"status_code": 200
 	},
 	"get_discussion_topics": {
 		"method": "GET",

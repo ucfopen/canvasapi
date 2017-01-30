@@ -784,7 +784,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
 
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+                :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,
