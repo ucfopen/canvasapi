@@ -75,6 +75,26 @@ class TestDiscussionTopic(unittest.TestCase):
         self.assertEquals(entry_list[0].id, 1)
         self.assertEquals(entry_list[0].user_id, 1)
 
+    # post_reply()
+    def test_post_reply(self, m):
+        register_uris({'discussion_topic': ['post_reply']}, m)
+
+        message = "Message 1"
+        reply = self.discussion_topic.post_reply(1)
+        self.assertIsInstance(reply, DiscussionTopic)
+        self.assertEquals(reply.message, message)
+        assert hasattr(reply, 'created_at')
+        assert hasattr(reply, 'message')
+
+    # list_entry_replies()
+    def test_list_entry_replies(self, m):
+        register_uris({'discussion_topic': ['list_entry_replies']}, m)
+
+        replies = self.discussion_topic.list_entry_replies(1)
+        reply_list = [reply for reply in replies]
+        self.assertIsInstance(reply_list[0], DiscussionTopic)
+        self.assertEquals(reply_list[0].id, 1)
+
     # parent_id
     def test_parent_id_course(self, m):
         self.assertEquals(self.discussion_topic.parent_id, 1)

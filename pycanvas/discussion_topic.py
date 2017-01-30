@@ -63,6 +63,8 @@ class DiscussionTopic(CanvasObject):
                 `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id \
                 <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
 
+        :param topic_id: ID of a topic.
+        :type entry_id: int
         :returns: True if the discussion topic was deleted, False otherwise.
         :rtype: bool
         """
@@ -85,7 +87,9 @@ class DiscussionTopic(CanvasObject):
                 `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:id \
                 <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
 
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :param entry_id: ID of an entry.
+        :type entry_id: int
+        :rtype: bool
         """
         response = self._requester.request(
             'PUT',
@@ -108,7 +112,9 @@ class DiscussionTopic(CanvasObject):
                 `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:id \
                 <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.destroy>`_
 
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :param entry_id: ID of an entry.
+        :type entry_id: int
+        :rtype: bool
         """
         response = self._requester.request(
             'DELETE',
@@ -131,7 +137,7 @@ class DiscussionTopic(CanvasObject):
                 `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
                 <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry`_
 
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: bool
         """
         response = self._requester.request(
             'POST',
@@ -164,6 +170,58 @@ class DiscussionTopic(CanvasObject):
                 self.parent_type,
                 self.parent_id,
                 self.id
+            ),
+            **combine_kwargs(**kwargs)
+        )
+
+    def post_reply(self, entry_id, **kwargs):
+        """
+        Add a reply to an entry in a discussion topic.
+
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_ or \
+                `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
+
+        :param entry_id: ID of an entry.
+        :type entry_id: int
+        :rtype: :class: `pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'POST',
+            '%ss/%s/discussion_topics/%s/entries/%s/replies' % (
+                self.parent_type,
+                self.parent_id,
+                self.id,
+                entry_id
+            ),
+            **combine_kwargs(**kwargs)
+        )
+        return DiscussionTopic(self._requester, response.json())
+
+    def list_entry_replies(self, entry_id, **kwargs):
+        """
+        Retrieves the replies to a top-level entry in a discussion topic.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_ or \
+                `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
+
+        :param entry_id: ID of an entry.
+        :type entry_id: int
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+                :class:`pycanvas.discussion_topic_DiscussionTopic`
+        """
+        return PaginatedList(
+            DiscussionTopic,
+            self._requester,
+            'GET',
+            '%ss/%s/discussion_topics/%s/entries/%s/replies' % (
+                self.parent_type,
+                self.parent_id,
+                self.id,
+                entry_id
             ),
             **combine_kwargs(**kwargs)
         )
