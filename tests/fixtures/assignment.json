@@ -20,5 +20,57 @@
 			"description": "Delete this assignment"
 		},
 		"status_code": 200
+	},
+	"get_assignment_group": {
+		"method": "GET",
+		"endpoint": "courses/1/assignment_groups/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Assignment Group 5"
+		},
+		"status_code": 200
+	},
+	"list_assignment_groups": {
+		"method": "GET",
+		"endpoint": "courses/1/assignment_groups",
+		"data": [
+			{
+				"id": 5,
+				"course_id": 1,
+				"name": "Assignment Group 5"
+			}
+		],
+		"status_code": 200
+	},
+	"create_assignment_group": {
+		"method": "POST",
+		"endpoint": "courses/1/assignment_groups",
+		"data": {
+			"id": 3,
+			"course_id": 1,
+			"name": "Assignment Group 3"
+		},
+		"status_code": 200
+	},
+	"edit_assignment_group": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignment_groups/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "New Name"
+		},
+		"status_code": 200
+	},
+	"delete_assignment_group": {
+		"method": "DELETE",
+		"endpoint": "courses/1/assignment_groups/5",
+		"data": {
+			"id": 5,
+			"course_id": 1,
+			"name": "Assignment Group 5"
+		},
+		"status_code": 200
 	}
 }

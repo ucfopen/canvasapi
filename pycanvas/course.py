@@ -795,6 +795,50 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def get_assignment_group(self, assignment_group_id, **kwargs):
+        """
+        Retrieve specified assignment group for the specified course.
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
+        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.show>`_
+
+        :param assignment_group_id: ID of assignment group.
+        :type assignment_group_id: int
+        :rtype: :class:`pycanvas.assignment.AssignmentGroup`
+        """
+        from pycanvas.assignment import AssignmentGroup
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/assignment_groups/%s' % (self.id, assignment_group_id),
+            **combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return AssignmentGroup(self._requester, response_json)
+
+    def list_assignment_groups(self, **kwargs):
+        """
+        List assignment groups for the specified course.
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups \
+        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.assignment.AssignmentGroup`
+        """
+        from pycanvas.assignment import AssignmentGroup
+
+        return PaginatedList(
+            AssignmentGroup,
+            self._requester,
+            'GET',
+            'courses/%s/assignment_groups' % (self.id),
+            {'course_id': self.id},
+            **combine_kwargs(**kwargs)
+        )
+
     def create_discussion_topic(self, **kwargs):
         """
         Creates a new discussion topic for the course or group.
@@ -857,6 +901,25 @@ class Course(CanvasObject):
             {'course_id': self.id},
             order=order
         )
+
+    def create_assignment_group(self, **kwargs):
+        """
+        Create a new assignment group for this course.
+
+        :calls: `POST /api/v1/courses/:course_id/assignment_groups \
+        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.create>`_
+
+        :rtype: :class:`pycanvas.assignment.AssignmentGroup`
+        """
+        from pycanvas.assignment import AssignmentGroup
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/assignment_groups' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return AssignmentGroup(self._requester, response.json())
 
 
 class CourseNickname(CanvasObject):

@@ -5,7 +5,7 @@ import os
 import requests_mock
 
 from pycanvas import Canvas
-from pycanvas.assignment import Assignment
+from pycanvas.assignment import Assignment, AssignmentGroup
 from pycanvas.course import Course, CourseNickname, Page
 from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.enrollment import Enrollment
@@ -446,6 +446,7 @@ class TestCourse(unittest.TestCase):
         assert hasattr(discussion, 'course_id')
         self.assertEquals(discussion.course_id, 1)
 
+    # get_full_discussion_topic()
     def test_get_full_discussion_topic(self, m):
         register_uris({'course': ['get_full_discussion_topic']}, m)
 
@@ -488,6 +489,7 @@ class TestCourse(unittest.TestCase):
         self.assertEquals(topic_id, discussion.id)
         self.assertEquals(discussion.course_id, 1)
 
+    # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
         register_uris({'course': ['reorder_pinned_topics']}, m)
 
@@ -498,6 +500,42 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
         assert hasattr(discussion_list[0], 'course_id')
         self.assertEquals(2, len(discussion_list))
+
+    # get_assignment_group()
+    def test_get_assignment_group(self, m):
+        register_uris({'assignment': ['get_assignment_group']}, m)
+
+        response = self.course.get_assignment_group(5)
+
+        self.assertIsInstance(response, AssignmentGroup)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertTrue(hasattr(response, 'name'))
+        self.assertTrue(hasattr(response, 'course_id'))
+        self.assertEqual(response.course_id, 1)
+
+    # list_group_categories()
+    def test_list_assignment_groups(self, m):
+        register_uris({
+            'assignment': ['list_assignment_groups', 'get_assignment_group']
+        }, m)
+
+        response = self.course.list_assignment_groups()
+        asnt_group_list = [assignment_group for assignment_group in response]
+        self.assertIsInstance(asnt_group_list[0], AssignmentGroup)
+        self.assertTrue(hasattr(asnt_group_list[0], 'id'))
+        self.assertTrue(hasattr(asnt_group_list[0], 'name'))
+        self.assertTrue(hasattr(asnt_group_list[0], 'course_id'))
+        self.assertEqual(asnt_group_list[0].course_id, 1)
+
+    # create_assignment_group()
+    def test_create_assignment_group(self, m):
+        register_uris({'assignment': ['create_assignment_group']}, m)
+
+        response = self.course.create_assignment_group()
+
+        self.assertIsInstance(response, AssignmentGroup)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertEqual(response.id, 3)
 
 
 @requests_mock.Mocker()
