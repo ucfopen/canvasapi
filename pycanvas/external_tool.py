@@ -60,7 +60,7 @@ class ExternalTool(CanvasObject):
         Return a sessionless launch url for an external tool.
 
         :calls: `GET /api/v1/courses/:course_id/external_tools/sessionless_launch \
-        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.generate_sessionless_launch>`_ or \
+        <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.generate_sessionless_launch>`_ or \  # noqa
         `GET /api/v1/accounts/:account_id/external_tools/sessionless_launch \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.generate_sessionless_launch>`_
 
@@ -74,5 +74,5 @@ class ExternalTool(CanvasObject):
         )
         try:
             return response.json()['url']
-        except:
+        except KeyError:
             raise CanvasException('Canvas did not respond with a valid URL')
