@@ -4,7 +4,7 @@ from pycanvas.util import combine_kwargs
 
 class CalendarEvent(CanvasObject):
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this calendar event.
 
@@ -15,7 +15,8 @@ class CalendarEvent(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'calendar_events/%s' % (self.id)
+            'calendar_events/%s' % (self.id),
+            **combine_kwargs(**kwargs)
         )
         return CalendarEvent(self._requester, response.json())
 

@@ -536,24 +536,24 @@ class Canvas(object):
         except ValueError as e:
             return e
 
-    def create_calendar_event(self, cal_event, **kwargs):
+    def create_calendar_event(self, calendar_event, **kwargs):
         """
         Create a new Calendar Event.
 
         :calls: `POST /api/v1/calendar_events \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.create>`_
 
-        :param cal_event: The attributes of the calendar event.
-        :type cal_event: `dict`
+        :param calendar_event: The attributes of the calendar event.
+        :type calendar_event: `dict`
         :rtype: :class:`pycanvas.calendar_event.CalendarEvent
         """
         from pycanvas.calendar_event import CalendarEvent
 
-        if isinstance(cal_event, dict) and 'context_code' in cal_event:
-            kwargs['calendar_event'] = cal_event
+        if isinstance(calendar_event, dict) and 'context_code' in calendar_event:
+            kwargs['calendar_event'] = calendar_event
         else:
             raise RequiredFieldMissing(
-                "Dictionary with key 'calendar_event' is required."
+                "Dictionary with key 'context_codes' is required."
             )
 
         response = self.__requester.request(

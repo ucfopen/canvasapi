@@ -4,6 +4,7 @@ import requests_mock
 
 from pycanvas import Canvas
 from pycanvas.appointment_group import AppointmentGroup
+from pycanvas.exceptions import RequiredFieldMissing
 from tests import settings
 from tests.util import register_uris
 
@@ -36,12 +37,16 @@ class TestAppointmentGroup(unittest.TestCase):
 
         title = 'New Name'
         edited_appointment_group = self.appointment_group.edit(
-            appointment_group={'title': title}
+            appointment_group={'title': title, 'context_codes': {'course_765'}}
         )
 
         self.assertIsInstance(edited_appointment_group, AppointmentGroup)
         self.assertTrue(hasattr(edited_appointment_group, 'title'))
         self.assertEqual(edited_appointment_group.title, title)
+
+    def test_edit_appointment_group_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.appointment_group.edit({})
 
     # __str__()
     def test__str__(self, m):

@@ -4,12 +4,12 @@ from datetime import datetime
 import requests_mock
 
 from pycanvas import Canvas
-from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.account import Account
 from pycanvas.appointment_group import AppointmentGroup
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.group import Group, GroupCategory
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.progress import Progress
@@ -345,7 +345,7 @@ class TestCanvas(unittest.TestCase):
         cal_event = {
             "context_code": "course_123"
         }
-        evnt = self.canvas.create_calendar_event(cal_event=cal_event)
+        evnt = self.canvas.create_calendar_event(calendar_event=cal_event)
 
         self.assertIsInstance(evnt, CalendarEvent)
         self.assertEqual(evnt.context_code, "course_123")
