@@ -4,12 +4,12 @@ from datetime import datetime
 import requests_mock
 
 from pycanvas import Canvas
-from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.account import Account
 from pycanvas.appointment_group import AppointmentGroup
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.group import Group, GroupCategory
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.progress import Progress
@@ -345,7 +345,7 @@ class TestCanvas(unittest.TestCase):
         cal_event = {
             "context_code": "course_123"
         }
-        evnt = self.canvas.create_calendar_event(cal_event=cal_event)
+        evnt = self.canvas.create_calendar_event(calendar_event=cal_event)
 
         self.assertIsInstance(evnt, CalendarEvent)
         self.assertEqual(evnt.context_code, "course_123")
@@ -384,10 +384,7 @@ class TestCanvas(unittest.TestCase):
             'calendar_event': ['reserve_time_slot_participant_id']
         }, m)
 
-        cal_event = self.canvas.reserve_time_slot(
-            calendar_event_id=567,
-            participant_id=777
-        )
+        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567, participant_id=777)
         self.assertIsInstance(cal_event, CalendarEvent)
         self.assertEqual(cal_event.title, "Test Reservation")
         self.assertEqual(cal_event.user, 777)
@@ -429,9 +426,7 @@ class TestCanvas(unittest.TestCase):
 
     def test_create_appointment_group_fail_on_title(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.canvas.create_appointment_group({
-                "context_codes": "course_123"
-            })
+            self.canvas.create_appointment_group({"context_codes": "course_123"})
 
     # list_user_participants()
     def test_list_user_participants(self, m):
