@@ -1,5 +1,6 @@
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.canvas_object import CanvasObject
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.upload import Uploader
 from pycanvas.util import combine_kwargs, obj_or_id
@@ -333,4 +334,39 @@ class User(CanvasObject):
             'GET',
             'users/self/bookmarks/%s' % (bookmark_id)
         )
+        return Bookmark(self._requester, response.json())
+
+    def create_bookmark(self, name, url, **kwargs):
+        """
+        Create a new Bookmark.
+
+        :calls: `POST /api/v1/users/self/bookmarks \
+        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.create>`_
+
+        :param name: The name of the bookmark.
+        :type name: `str`
+        :param url: The url of the bookmark.
+        :type name: `str`
+        :rtype: :class:`pycanvas.bookmarks.Bookmark
+        """
+        from pycanvas.bookmark import Bookmark
+
+        if isinstance(name, str) and isinstance(url, str):
+            kwargs['url'] = url
+            kwargs['name'] = name
+        elif not isinstance(name, str):
+            raise RequiredFieldMissing("String paramater 'name' is missing")
+        elif not isinstance(url, str):
+            raise RequiredFieldMissing("String paramater 'url' is missing")
+
+        response = self._requester.request(
+            'POST',
+            'users/self/bookmarks',
+            **combine_kwargs(**kwargs)
+        )
+
+        print response.request.body
+
+        vars(response.request)
+
         return Bookmark(self._requester, response.json())
