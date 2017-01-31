@@ -344,7 +344,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/quizzes \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.quiz.Quiz`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+                :class:`pycanvas.quiz.Quiz`
         """
         from pycanvas.quiz import Quiz
         return PaginatedList(
@@ -413,7 +414,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.module.Module`
+                :class:`pycanvas.module.Module`
         """
         from pycanvas.module import Module
 
@@ -760,7 +761,7 @@ class Course(CanvasObject):
         Return a cached structure of the discussion topic.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
@@ -865,7 +866,7 @@ class Course(CanvasObject):
         Update an existing discussion topic for the course or group.
 
         :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
 
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
@@ -884,15 +885,16 @@ class Course(CanvasObject):
 
     def reorder_pinned_topics(self, order):
         """
-        Puts the pinned discussion topics in the specified order. All pinned topics should be included.
+        Puts the pinned discussion topics in the specified order.
+        All pinned topics should be included.
 
-        :calls: POST /api/v1/courses/:course_id/discussion_topics/reorder \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics/reorder \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
 
         :param order: The ids of the pinned discussion topics in the desired order.
             e.g. order=104,102,103
 
-        :rtype: :class: `pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,

@@ -59,9 +59,10 @@ class DiscussionTopic(CanvasObject):
         Deletes the discussion topic. This will also delete the assignment.
 
         :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_ or \
-                `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
+
+            or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
 
         :param topic_id: ID of a topic.
         :type entry_id: int
@@ -83,9 +84,10 @@ class DiscussionTopic(CanvasObject):
         Updates an existing discussion entry.
 
         :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_ or \
-                `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
+
+            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
 
         :param entry_id: ID of an entry.
         :type entry_id: int
@@ -108,9 +110,10 @@ class DiscussionTopic(CanvasObject):
         Delete a discussion entry.
 
         :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.destroy>`_ or \
-                `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.destroy>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.destroy>`_
+
+            or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.destroy>`_
 
         :param entry_id: ID of an entry.
         :type entry_id: int
@@ -133,9 +136,10 @@ class DiscussionTopic(CanvasObject):
         Creates a new entry in a discussion topic.
 
         :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_ or \
-                `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_
+
+            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_
 
         :rtype: bool
         """
@@ -154,10 +158,11 @@ class DiscussionTopic(CanvasObject):
         """
         Retreive the paginated top-level entries in a discussion topic.
 
-        :calls: GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_ or \
-                `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+
+            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
                 :class:`pycanvas.discussion_topic.DiscussionTopic`
@@ -178,14 +183,15 @@ class DiscussionTopic(CanvasObject):
         """
         Add a reply to an entry in a discussion topic.
 
-        :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_ or \
-                `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \  # noqa
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
+
+            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
 
         :param entry_id: ID of an entry.
         :type entry_id: int
-        :rtype: :class: `pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'POST',
@@ -203,15 +209,16 @@ class DiscussionTopic(CanvasObject):
         """
         Retrieves the replies to a top-level entry in a discussion topic.
 
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_ or \
-                `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \  # noqa
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
+
+            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
 
         :param entry_id: ID of an entry.
         :type entry_id: int
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-                :class:`pycanvas.discussion_topic_DiscussionTopic`
+                :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,

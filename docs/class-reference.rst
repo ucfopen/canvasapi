@@ -11,6 +11,7 @@ Class Reference
     calendar-event-ref
     conversation-ref
     course-ref
+    discussion-topic-ref
     external-tool-ref
     group-ref
     module-ref

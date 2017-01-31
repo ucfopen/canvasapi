@@ -20,7 +20,7 @@ class Group(CanvasObject):
         :param wiki_page: Details about the page to create.
         :type wiki_page: dict
         :returns: The created page.
-        :rtype: :class: `pycanvas.page.Page`
+        :rtype: :class:`pycanvas.page.Page`
         """
         from pycanvas.course import Page
 
@@ -304,6 +304,7 @@ class Group(CanvasObject):
 
         :calls: `GET /api/v1/groups/:group_id/users/:user_id \
             <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
+
             or `GET /api/v1/groups/:group_id/memberships/:membership_id
             <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
 
@@ -356,7 +357,7 @@ class Group(CanvasObject):
         """
         Return data on an individual discussion topic.
 
-        :calls: `GET /api/v1/groups/:group_id/discussion_topics/:topic_id` \
+        :calls: `GET /api/v1/groups/:group_id/discussion_topics/:topic_id \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.show>`_
 
         :param topic_id: The ID of the discussion topic.
@@ -379,7 +380,7 @@ class Group(CanvasObject):
         Return a cached structure of the discussion topic.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
@@ -440,7 +441,7 @@ class Group(CanvasObject):
         Update an existing discussion topic for the course or group.
 
         :calls: `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
 
         :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
@@ -457,15 +458,16 @@ class Group(CanvasObject):
 
     def reorder_pinned_topics(self, order):
         """
-        Puts the pinned discussion topics in the specified order. All pinned topics should be included.
+        Puts the pinned discussion topics in the specified order.
+        All pinned topics should be included.
 
-        :calls: POST /api/v1/courses/:course_id/discussion_topics/reorder \
-                <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics/reorder \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
 
         :param order: The ids of the pinned discussion topics in the desired order.
             e.g. order=104,102,103
 
-        :rtype: :class: `pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,
