@@ -106,7 +106,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/search_users \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.user.User`
         """
         from pycanvas.user import User
 
@@ -152,7 +153,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/recent_students \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.recent_students>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.user.User`
         """
         from pycanvas.user import User
 
@@ -345,7 +347,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-                :class:`pycanvas.quiz.Quiz`
+            :class:`pycanvas.quiz.Quiz`
         """
         from pycanvas.quiz import Quiz
         return PaginatedList(
@@ -414,7 +416,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-                :class:`pycanvas.module.Module`
+            :class:`pycanvas.module.Module`
         """
         from pycanvas.module import Module
 
@@ -578,7 +580,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
-        :rtype: :class:`pycanvas.course.Course`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.course.Course`
         """
         return PaginatedList(
             Page,
@@ -646,7 +649,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/sections \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
 
-        :rtype: :class:`pycanvas.section.Section`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.section.Section`
         """
         from pycanvas.section import Section
         return PaginatedList(
@@ -683,7 +687,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.course.Course`
         """
         from group import Group
         return PaginatedList(
@@ -786,7 +791,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-                :class:`pycanvas.discussion_topic.DiscussionTopic`
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,
@@ -894,7 +899,8 @@ class Course(CanvasObject):
         :param order: The ids of the pinned discussion topics in the desired order.
             e.g. order=104,102,103
 
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,

@@ -404,7 +404,8 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:course_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
 
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
 
         return PaginatedList(
@@ -467,7 +468,8 @@ class Group(CanvasObject):
         :param order: The ids of the pinned discussion topics in the desired order.
             e.g. order=104,102,103
 
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,

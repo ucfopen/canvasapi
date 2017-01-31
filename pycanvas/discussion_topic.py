@@ -65,7 +65,7 @@ class DiscussionTopic(CanvasObject):
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
 
         :param topic_id: ID of a topic.
-        :type entry_id: int
+        :type topic_id: int
         :returns: True if the discussion topic was deleted, False otherwise.
         :rtype: bool
         """
@@ -165,7 +165,7 @@ class DiscussionTopic(CanvasObject):
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-                :class:`pycanvas.discussion_topic.DiscussionTopic`
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,
@@ -218,7 +218,7 @@ class DiscussionTopic(CanvasObject):
         :param entry_id: ID of an entry.
         :type entry_id: int
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-                :class:`pycanvas.discussion_topic.DiscussionTopic`
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,
