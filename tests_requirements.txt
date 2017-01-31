@@ -1,4 +1,6 @@
 -r requirements.txt
 
 coverage==4.1
+pycodestyle==2.3.0
+pyflakes==1.5.0
 requests-mock==1.2.0
