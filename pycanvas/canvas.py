@@ -1,3 +1,4 @@
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.account import Account
 from pycanvas.course import Course
 from pycanvas.group import Group, GroupCategory
@@ -534,3 +535,219 @@ class Canvas(object):
 
         except ValueError as e:
             return e
+
+    def create_calendar_event(self, calendar_event, **kwargs):
+        """
+        Create a new Calendar Event.
+
+        :calls: `POST /api/v1/calendar_events \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.create>`_
+
+        :param calendar_event: The attributes of the calendar event.
+        :type calendar_event: `dict`
+        :rtype: :class:`pycanvas.calendar_event.CalendarEvent
+        """
+        from pycanvas.calendar_event import CalendarEvent
+
+        if isinstance(calendar_event, dict) and 'context_code' in calendar_event:
+            kwargs['calendar_event'] = calendar_event
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'context_codes' is required."
+            )
+
+        response = self.__requester.request(
+            'POST',
+            'calendar_events',
+            **combine_kwargs(**kwargs)
+        )
+
+        return CalendarEvent(self.__requester, response.json())
+
+    def list_calendar_events(self, **kwargs):
+        """
+        List calendar events.
+
+        :calls: `GET /api/v1/calendar_events \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.calendar_event.CalendarEvent`
+        """
+        from pycanvas.calendar_event import CalendarEvent
+
+        return PaginatedList(
+            CalendarEvent,
+            self.__requester,
+            'GET',
+            'calendar_events',
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_calendar_event(self, calendar_event_id):
+        """
+        Return single Calendar Event by id
+
+        :calls: `GET /api/v1/calendar_events/:id \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.show>`_
+
+        :param calendar_event_id: The ID of the calendar event.
+        :type calendar_event_id: `int`
+        :rtype: :class:`pycanvas.calendar_event.CalendarEvent`
+        """
+        from pycanvas.calendar_event import CalendarEvent
+
+        response = self.__requester.request(
+            'GET',
+            'calendar_events/%s' % (calendar_event_id)
+        )
+        return CalendarEvent(self.__requester, response.json())
+
+    def reserve_time_slot(self, calendar_event_id, participant_id=None, **kwargs):
+        """
+        Return single Calendar Event by id
+
+        :calls: `POST /api/v1/calendar_events/:id/reservations \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.reserve>`_
+
+        :param calendar_event_id: The ID of the calendar event.
+        :type calendar_event_id: `int`
+        :rtype: :class:`pycanvas.calendar_event.CalendarEvent`
+        """
+        from pycanvas.calendar_event import CalendarEvent
+
+        if participant_id:
+            uri = 'calendar_events/%s/reservations/%s' % (
+                calendar_event_id, participant_id
+            )
+        else:
+            uri = 'calendar_events/%s/reservations' % (calendar_event_id)
+
+        response = self.__requester.request(
+            'POST',
+            uri,
+            **combine_kwargs(**kwargs)
+        )
+        return CalendarEvent(self.__requester, response.json())
+
+    def list_appointment_groups(self, **kwargs):
+        """
+        List appointment groups.
+
+        :calls: `GET /api/v1/appointment_groups \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.appointment_group.AppointmentGroup`
+        """
+        from pycanvas.appointment_group import AppointmentGroup
+
+        return PaginatedList(
+            AppointmentGroup,
+            self.__requester,
+            'GET',
+            'appointment_groups',
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_appointment_group(self, appointment_group_id):
+        """
+        Return single Appointment Group by id
+
+        :calls: `GET /api/v1/appointment_groups/:id \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.show>`_
+
+        :param appointment_group_id: The ID of the appointment group.
+        :type appointment_group_id: `int`
+        :rtype: :class:`pycanvas.appointment_group.AppointmentGroup`
+        """
+        from pycanvas.appointment_group import AppointmentGroup
+
+        response = self.__requester.request(
+            'GET',
+            'appointment_groups/%s' % (appointment_group_id)
+        )
+        return AppointmentGroup(self.__requester, response.json())
+
+    def create_appointment_group(self, appointment_group, **kwargs):
+        """
+        Create a new Appointment Group.
+
+        :calls: `POST /api/v1/appointment_groups \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.create>`_
+
+        :param appointment_group: The attributes of the appointment group.
+        :type appointment_group: `dict`
+        :param title: The title of the appointment group.
+        :type title: `str`
+        :rtype: :class:`pycanvas.appointment_group.AppointmentGroup
+        """
+        from pycanvas.appointment_group import AppointmentGroup
+
+        if (
+                isinstance(appointment_group, dict) and
+                'context_codes' in appointment_group and
+                'title' in appointment_group
+        ):
+            kwargs['appointment_group'] = appointment_group
+
+        elif (
+            isinstance(appointment_group, dict) and
+            'context_codes' not in appointment_group
+        ):
+            raise RequiredFieldMissing(
+                "Dictionary with key 'context_codes' is missing."
+            )
+
+        elif isinstance(appointment_group, dict) and 'title' not in appointment_group:
+            raise RequiredFieldMissing("Dictionary with key 'title' is missing.")
+
+        response = self.__requester.request(
+            'POST',
+            'appointment_groups',
+            **combine_kwargs(**kwargs)
+        )
+
+        return AppointmentGroup(self.__requester, response.json())
+
+    def list_user_participants(self, appointment_group_id, **kwargs):
+        """
+        List user participants in this appointment group.
+
+        :calls: `GET /api/v1/appointment_groups/:id/users \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.users>`_
+
+        :param appointment_group_id: The ID of the appointment group.
+        :type appointment_group_id: `int`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+        """
+        from pycanvas.user import User
+
+        return PaginatedList(
+            User,
+            self.__requester,
+            'GET',
+            'appointment_groups/%s/users' % (appointment_group_id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def list_group_participants(self, appointment_group_id, **kwargs):
+        """
+        List student group participants in this appointment group.
+
+        :calls: `GET /api/v1/appointment_groups/:id/groups \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.groups>`_
+
+        :param appointment_group_id: The ID of the appointment group.
+        :type appointment_group_id: `int`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        """
+        from pycanvas.group import Group
+
+        return PaginatedList(
+            Group,
+            self.__requester,
+            'GET',
+            'appointment_groups/%s/groups' % (appointment_group_id),
+            **combine_kwargs(**kwargs)
+        )

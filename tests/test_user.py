@@ -7,6 +7,7 @@ import requests_mock
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment
 from pycanvas.avatar import Avatar
+from pycanvas.calendar_event import CalendarEvent
 from pycanvas.course import Course
 from pycanvas.group import Group
 from pycanvas.enrollment import Enrollment
@@ -204,6 +205,7 @@ class TestUser(unittest.TestCase):
         except OSError:
             pass
 
+    # list_groups()
     def test_list_groups(self, m):
         register_uris({'user': ['list_groups', 'list_groups2']}, m)
 
@@ -212,3 +214,12 @@ class TestUser(unittest.TestCase):
 
         assert len(group_list) == 4
         assert isinstance(group_list[0], Group)
+
+    # list_calendar_events_for_user()
+    def test_list_calendar_events_for_user(self, m):
+        register_uris({'user': ['list_calendar_events_for_user']}, m)
+
+        cal_events = self.user.list_calendar_events_for_user()
+        cal_event_list = [cal_event for cal_event in cal_events]
+        self.assertEqual(len(cal_event_list), 2)
+        self.assertIsInstance(cal_event_list[0], CalendarEvent)
