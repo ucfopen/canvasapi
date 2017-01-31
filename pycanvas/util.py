@@ -41,12 +41,12 @@ def obj_or_id(parameter, param_name, object_types):
     """
     try:
         return int(parameter)
-    except:
+    except (ValueError, TypeError):
         for obj_type in object_types:
             if isinstance(parameter, obj_type):
                 try:
                     return int(parameter.id)
-                except:
+                except Exception:
                     break
 
         obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
