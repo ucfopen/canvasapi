@@ -1,19 +1,7 @@
 # -*- coding: utf-8 -*-
 
-__version__ = '0.2'
-
-import exceptions
-import canvas
-import canvas_object
-import avatar
-import assignment
-import course
-import enrollment
-import requester
-import section
-import user
-import util
-import page_view
-import paginated_list
-
 from canvas import Canvas
+
+__all__ = ["Canvas"]
+
+__version__ = '0.2.0'

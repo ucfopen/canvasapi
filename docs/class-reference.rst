@@ -5,7 +5,10 @@ Class Reference
 
     canvas-ref
     account-ref
+    appointment-group-ref
     assignment-ref
+    avatar-ref
+    calendar-event-ref
     conversation-ref
     course-ref
     external-tool-ref
@@ -15,4 +18,5 @@ Class Reference
     progress-ref
     quiz-ref
     section-ref
+    upload-ref
     user-ref
