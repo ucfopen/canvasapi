@@ -1,8 +1,8 @@
 PyCanvas Changelog
 ==================
 
-Version 0.2
------------
+Version 0.2.0
+-------------
 
 **New Endpoint Coverage**
 
