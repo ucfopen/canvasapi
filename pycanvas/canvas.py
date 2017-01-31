@@ -214,7 +214,7 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.course_nickname.CourseNickname`
+            :class:`pycanvas.course.CourseNickname`
         """
         from pycanvas.course import CourseNickname
 
@@ -234,7 +234,7 @@ class Canvas(object):
 
         :param course_id: The ID of the course.
         :type course_id: int
-        :rtype: :class:`pycanvas.course_nickname.CourseNickname`
+        :rtype: :class:`pycanvas.course.CourseNickname`
         """
         from pycanvas.course import CourseNickname
 
@@ -251,7 +251,7 @@ class Canvas(object):
         :calls: `GET /api/v1/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.show>`_
 
-        :rtype: Section
+        :rtype: :class:`pycanvas.section.Section`
         """
         from pycanvas.section import Section
         response = self.__requester.request(
@@ -273,7 +273,7 @@ class Canvas(object):
         :type course_id: int
         :param nickname: The nickname for the course.
         :type nickname: str
-        :rtype: :class:`pycanvas.course_nickname.CourseNickname`
+        :rtype: :class:`pycanvas.course.CourseNickname`
         """
         from pycanvas.course import CourseNickname
 
@@ -436,6 +436,7 @@ class Canvas(object):
     def conversations_mark_all_as_read(self):
         """
         Mark all conversations as read.
+
         :calls: `POST /api/v1/conversations/mark_all_as_read \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.mark_all_as_read>`_
 
@@ -471,7 +472,7 @@ class Canvas(object):
         asynchronously.
 
         :calls: `GET /api/v1/conversations/batches \
-        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batches>`_
+            <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.batches>`_
 
         :returns: dict with list of batch objects - not currently a Class
         :rtype: `dict`
@@ -545,7 +546,7 @@ class Canvas(object):
 
         :param calendar_event: The attributes of the calendar event.
         :type calendar_event: `dict`
-        :rtype: :class:`pycanvas.calendar_event.CalendarEvent
+        :rtype: :class:`pycanvas.calendar_event.CalendarEvent`
         """
         from pycanvas.calendar_event import CalendarEvent
 
@@ -680,7 +681,7 @@ class Canvas(object):
         :type appointment_group: `dict`
         :param title: The title of the appointment group.
         :type title: `str`
-        :rtype: :class:`pycanvas.appointment_group.AppointmentGroup
+        :rtype: :class:`pycanvas.appointment_group.AppointmentGroup`
         """
         from pycanvas.appointment_group import AppointmentGroup
 

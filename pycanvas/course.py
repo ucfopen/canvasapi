@@ -596,7 +596,7 @@ class Course(CanvasObject):
         :param title: The title for the page.
         :type title: dict
         :returns: The created page.
-        :rtype: :class: `pycanvas.course.Course`
+        :rtype: :class:`pycanvas.course.Course`
         """
 
         if isinstance(wiki_page, dict) and 'title' in wiki_page:
@@ -625,7 +625,7 @@ class Course(CanvasObject):
         :param url: The url for the page.
         :type url: str
         :returns: The specified page.
-        :rtype: :class: `pycanvas.course.Course`
+        :rtype: :class:`pycanvas.course.Course`
         """
 
         response = self._requester.request(
@@ -644,7 +644,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/sections \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
 
-        :rtype: :class: `pycanvas.section.Section`
+        :rtype: :class:`pycanvas.section.Section`
         """
         from pycanvas.section import Section
         return PaginatedList(
@@ -678,7 +678,7 @@ class Course(CanvasObject):
         """
         Return list of active groups for the specified course.
 
-        :calls:`GET /api/v1/courses/:course_id/groups \
+        :calls: `GET /api/v1/courses/:course_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`

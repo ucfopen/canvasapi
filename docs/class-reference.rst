@@ -7,6 +7,7 @@ Class Reference
     account-ref
     appointment-group-ref
     assignment-ref
+    avatar-ref
     calendar-event-ref
     conversation-ref
     course-ref
@@ -17,4 +18,5 @@ Class Reference
     progress-ref
     quiz-ref
     section-ref
+    upload-ref
     user-ref

@@ -78,7 +78,7 @@ class Conversation(CanvasObject):
 
         :param body: The body of the conversation.
         :type body: str
-        :returns: `pycanvas.account.Conversation` with only the most recent message.
+        :returns: A conversation with only the most recent message.
         :rtype: :class:`pycanvas.account.Conversation`
         """
         response = self._requester.request(
