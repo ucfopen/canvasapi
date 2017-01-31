@@ -308,7 +308,8 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/calendar_events \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.user_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.calendar_event.CalendarEvent`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.calendar_event.CalendarEvent`
         """
         return PaginatedList(
             CalendarEvent,
