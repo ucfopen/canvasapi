@@ -1,3 +1,4 @@
+from pycanvas.bookmark import Bookmark
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.canvas_object import CanvasObject
 from pycanvas.exceptions import RequiredFieldMissing
@@ -315,6 +316,22 @@ class User(CanvasObject):
             'GET',
             'users/%s/calendar_events' % (self.id),
             **combine_kwargs(**kwargs)
+        )
+
+    def list_bookmarks(self, **kwargs):
+        """
+        List bookmarks that the current user can view or manage.
+
+        :calls: `GET /api/v1/users/self/bookmarks \
+        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.bookmark.Bookmark`
+        """
+        return PaginatedList(
+            Bookmark,
+            self._requester,
+            'GET',
+            'users/self/bookmarks'
         )
 
     def get_bookmark(self, bookmark_id):

@@ -34,7 +34,7 @@ class Bookmark(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-        if 'name' in response.json():
+        if 'name' in response.json() and 'url' in response.json():
             super(Bookmark, self).set_attributes(response.json())
 
         return Bookmark(self._requester, response.json())

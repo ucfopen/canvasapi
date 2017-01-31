@@ -4,7 +4,8 @@
 		"endpoint": "users/self/bookmarks",
 		"data": {
 			"id": 45,
-			"name": "Test Bookmark"
+			"name": "Test Bookmark",
+			"url": "https://www.google.com"
 		},
 		"status_code": 200
 	},
