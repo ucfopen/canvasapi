@@ -90,7 +90,7 @@ class Group(CanvasObject):
         :param url: The url for the page.
         :type url: str
         :returns: The specified page.
-        :rtype: :class: `pycanvas.groups.Group`
+        :rtype: :class:`pycanvas.groups.Group`
         """
         from pycanvas.course import Page
 
@@ -110,7 +110,7 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
-        :rtype: :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.page.Page`
         """
         from pycanvas.course import Page
@@ -301,9 +301,10 @@ class Group(CanvasObject):
         """
         List users in a group.
 
-        :calls: `GET /api/v1/groups/:group_id/users/:user_id or \
-        /api/v1/groups/:group_id/memberships/:membership_id \
-        <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
+        :calls: `GET /api/v1/groups/:group_id/users/:user_id \
+            <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
+            or `GET /api/v1/groups/:group_id/memberships/:membership_id
+            <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
 
         :param invitees: list of user ids
         :type invitees: integer list
@@ -382,7 +383,8 @@ class GroupMembership(CanvasObject):
         :param user: The user object or ID to remove from the group.
         :type user: :class:`pycanvas.user.User` or int
 
-        :rtype: empty dict
+        :returns: An empty dictionary
+        :rtype: dict
         """
         from pycanvas.user import User
         from pycanvas.util import obj_or_id
@@ -402,7 +404,8 @@ class GroupMembership(CanvasObject):
         :calls: `DELETE /api/v1/groups/:group_id/:type/:id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.destroy>`_
 
-        :rtype: empty dict
+        :returns: An empty dictionary
+        :rtype: dict
         """
         response = self._requester.request(
             'DELETE',
