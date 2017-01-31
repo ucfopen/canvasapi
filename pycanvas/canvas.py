@@ -571,7 +571,8 @@ class Canvas(object):
         :calls: `GET /api/v1/calendar_events \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.calendar_event.CalendarEvent`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.calendar_event.CalendarEvent`
         """
         from pycanvas.calendar_event import CalendarEvent
 
@@ -636,7 +637,8 @@ class Canvas(object):
         :calls: `GET /api/v1/appointment_groups \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.appointment_group.AppointmentGroup`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.appointment_group.AppointmentGroup`
         """
         from pycanvas.appointment_group import AppointmentGroup
 
@@ -667,15 +669,15 @@ class Canvas(object):
         )
         return AppointmentGroup(self.__requester, response.json())
 
-    def create_appointment_group(self, appt_group, **kwargs):
+    def create_appointment_group(self, appointment_group, **kwargs):
         """
         Create a new Appointment Group.
 
         :calls: `POST /api/v1/appointment_groups \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.create>`_
 
-        :param appt_group: The attributes of the appointment group.
-        :type appt_group: `dict`
+        :param appointment_group: The attributes of the appointment group.
+        :type appointment_group: `dict`
         :param title: The title of the appointment group.
         :type title: `str`
         :rtype: :class:`pycanvas.appointment_group.AppointmentGroup
@@ -683,23 +685,22 @@ class Canvas(object):
         from pycanvas.appointment_group import AppointmentGroup
 
         if (
-                isinstance(appt_group, dict) and
-                'context_codes' in appt_group and
-                'title' in appt_group
+                isinstance(appointment_group, dict) and
+                'context_codes' in appointment_group and
+                'title' in appointment_group
         ):
-            kwargs['appointment_group'] = appt_group
+            kwargs['appointment_group'] = appointment_group
 
         elif (
-            isinstance(appt_group, dict) and
-            'context_codes' not in appt_group
+            isinstance(appointment_group, dict) and
+            'context_codes' not in appointment_group
         ):
             raise RequiredFieldMissing(
-                "Dictionary with key 'appt_group'"
-                " is missing key 'context_codes'."
+                "Dictionary with key 'context_codes' is missing."
             )
 
-        elif isinstance(appt_group, dict) and 'title' not in appt_group:
-            raise RequiredFieldMissing("Dictionary with key 'appt_group' is missing key 'title'.")
+        elif isinstance(appointment_group, dict) and 'title' not in appointment_group:
+            raise RequiredFieldMissing("Dictionary with key 'title' is missing.")
 
         response = self.__requester.request(
             'POST',
