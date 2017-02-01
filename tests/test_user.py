@@ -10,7 +10,6 @@ from pycanvas.avatar import Avatar
 from pycanvas.bookmark import Bookmark
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.course import Course
-from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.group import Group
 from pycanvas.enrollment import Enrollment
 from pycanvas.page_view import PageView

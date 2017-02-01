@@ -1,7 +1,6 @@
 from pycanvas.bookmark import Bookmark
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.canvas_object import CanvasObject
-from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.upload import Uploader
 from pycanvas.util import combine_kwargs, obj_or_id
