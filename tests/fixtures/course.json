@@ -530,18 +530,18 @@
 		"data": {
 			"upload_url": "http://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
-			    "some_param": "param123",
-			    "a_different_param": "param456"
+				"some_param": "param123",
+				"a_different_param": "param456"
 			}
 		}
 	},
 	"upload_final": {
 		"method": "POST",
-        "endpoint": "files/upload_response_upload_url",
-        "data": {
-            "url": "great_url_success"
-        }
-    },
+		"endpoint": "files/upload_response_upload_url",
+		"data": {
+			"_url": "great_url_success"
+		}
+	},
 	"list_modules2": {
 		"method": "GET",
 		"endpoint": "courses/1/list_modules?page=2&per_page=2",

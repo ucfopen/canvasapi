@@ -65,11 +65,11 @@ class Uploader(object):
         response_json = self._requester.request(
             'POST',
             use_auth=False,
-            url=response.get('upload_url'),
+            _url=response.get('upload_url'),
             **kwargs
         ).json()
 
-        if 'url' in response_json:
+        if '_url' in response_json:
             return (True, response_json)
 
         return (False, response_json)

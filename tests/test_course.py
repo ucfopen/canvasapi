@@ -159,7 +159,7 @@ class TestCourse(unittest.TestCase):
 
         assert response[0] is True
         assert isinstance(response[1], dict)
-        assert 'url' in response[1]
+        assert '_url' in response[1]
 
         # http://stackoverflow.com/a/10840586
         # Not as stupid as it looks.

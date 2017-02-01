@@ -326,7 +326,8 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/self/bookmarks \
         <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.bookmark.Bookmark`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.bookmark.Bookmark`
         """
         return PaginatedList(
             Bookmark,
@@ -365,7 +366,7 @@ class User(CanvasObject):
         :type name: `str`
         :param url: The url of the bookmark.
         :type name: `str`
-        :rtype: :class:`pycanvas.bookmarks.Bookmark
+        :rtype: :class:`pycanvas.bookmarks.Bookmark`
         """
         from pycanvas.bookmark import Bookmark
 
@@ -382,8 +383,6 @@ class User(CanvasObject):
             'users/self/bookmarks',
             **combine_kwargs(**kwargs)
         )
-
-        print response.request.body
 
         vars(response.request)
 

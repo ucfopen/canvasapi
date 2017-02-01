@@ -10,6 +10,7 @@ from pycanvas.avatar import Avatar
 from pycanvas.bookmark import Bookmark
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.course import Course
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.group import Group
 from pycanvas.enrollment import Enrollment
 from pycanvas.page_view import PageView
@@ -197,7 +198,7 @@ class TestUser(unittest.TestCase):
 
         assert response[0] is True
         assert isinstance(response[1], dict)
-        assert 'url' in response[1]
+        assert '_url' in response[1]
 
         # http://stackoverflow.com/a/10840586
         # Not as stupid as it looks.
@@ -254,3 +255,11 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
+
+    def test_create_bookmark_fail_on_url(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.user.create_bookmark(name="Test Bookmark", bob="wrong")
+
+    def test_create_bookmark_fail_on_name(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.user.create_bookmark(url="https://google.com", bob="wrong")

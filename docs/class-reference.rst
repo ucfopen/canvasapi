@@ -8,6 +8,7 @@ Class Reference
     appointment-group-ref
     assignment-ref
     avatar-ref
+    bookmark-ref
     calendar-event-ref
     conversation-ref
     course-ref
