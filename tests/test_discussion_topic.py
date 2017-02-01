@@ -120,11 +120,80 @@ class TestDiscussionTopic(unittest.TestCase):
         topic = self.discussion_topic.mark_as_read()
         self.assertTrue(topic)
 
-    def test_mark_as_read_status_code(self, m):
-        register_uris({'discussion_topic': ['mark_as_read_status_code']}, m)
+    def test_mark_as_read_status(self, m):
+        register_uris({'discussion_topic': ['mark_as_read_status']}, m)
 
         topic = self.discussion_topic.mark_as_read()
         self.assertFalse(topic)
+
+    # mark_as_unread()
+    def test_mark_as_unread(self, m):
+        register_uris({'discussion_topic': ['mark_as_unread']}, m)
+
+        topic = self.discussion_topic.mark_as_unread()
+        self.assertTrue(topic)
+
+    def test_mark_as_unread_status(self, m):
+        register_uris({'discussion_topic': ['mark_as_unread_status']}, m)
+
+        topic = self.discussion_topic.mark_as_unread()
+        self.assertFalse(topic)
+
+    # mark_entry_as_read()
+    def test_mark_entry_as_read(self, m):
+        register_uris({'discussion_topic': ['mark_entry_as_read']}, m)
+
+        entry_id = 1
+        entry = self.discussion_topic.mark_entry_as_read(entry_id)
+        self.assertTrue(entry)
+
+    def test_mark_entry_as_read_status(self, m):
+        register_uris({'discussion_topic': ['mark_entry_as_read_status']}, m)
+
+        entry_id = 1
+        topic = self.discussion_topic.mark_entry_as_read(entry_id)
+        self.assertFalse(topic)
+
+    # mark_entry_as_unread()
+    def test_mark_entry_as_unread(self, m):
+        register_uris({'discussion_topic': ['mark_entry_as_unread']}, m)
+
+        entry_id = 1
+        entry = self.discussion_topic.mark_entry_as_unread(entry_id)
+        self.assertTrue(entry)
+
+    def test_mark_entry_as_unread_status(self, m):
+        register_uris({'discussion_topic': ['mark_entry_as_unread_status']}, m)
+
+        entry_id = 1
+        topic = self.discussion_topic.mark_entry_as_unread(entry_id)
+        self.assertFalse(topic)
+
+    # mark_entries_as_read()
+    def test_mark_entries_as_read(self, m):
+        register_uris({'discussion_topic': ['mark_entries_as_read']}, m)
+
+        entries = self.discussion_topic.mark_entries_as_read()
+        self.assertTrue(entries)
+
+    def test_mark_entries_as_read_status(self, m):
+        register_uris({'discussion_topic': ['mark_entries_as_read_status']}, m)
+
+        entries = self.discussion_topic.mark_entries_as_read()
+        self.assertFalse(entries)
+
+    # mark_entries_as_unread()
+    def test_mark_entries_as_unread(self, m):
+        register_uris({'discussion_topic': ['mark_entries_as_unread']}, m)
+
+        entries = self.discussion_topic.mark_entries_as_unread()
+        self.assertTrue(entries)
+
+    def test_mark_entries_as_unread_status(self, m):
+        register_uris({'discussion_topic': ['mark_entries_as_unread_status']}, m)
+
+        entries = self.discussion_topic.mark_entries_as_unread()
+        self.assertFalse(entries)
 
     # parent_id
     def test_parent_id_course(self, m):

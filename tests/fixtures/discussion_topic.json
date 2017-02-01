@@ -106,9 +106,59 @@
 		"endpoint": "courses/1/discussion_topics/1/read",
 		"status_code": 204
 	},
-	"mark_as_read_status_code": {
+	"mark_as_read_status": {
 		"method": "PUT",
 		"endpoint": "courses/1/discussion_topics/1/read",
+		"status_code": 403
+	},
+	"mark_as_unread": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1/read",
+		"status_code": 204
+	},
+	"mark_as_unread_status": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1/read",
+		"status_code": 403
+	},
+	"mark_entry_as_read": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1/entries/1/read",
+		"status_code": 204
+	},
+	"mark_entry_as_read_status": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1/entries/1/read",
+		"status_code": 403
+	},
+	"mark_entry_as_unread": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1/entries/1/read",
+		"status_code": 204
+	},
+	"mark_entry_as_unread_status": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1/entries/1/read",
+		"status_code": 403
+	},
+	"mark_entries_as_read": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1/read_all",
+		"status_code": 204
+	},
+	"mark_entries_as_read_status": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1/read_all",
+		"status_code": 403
+	},
+	"mark_entries_as_unread": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1/read_all",
+		"status_code": 204
+	},
+	"mark_entries_as_unread_status": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1/read_all",
 		"status_code": 403
 	}
 }

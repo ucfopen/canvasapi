@@ -302,3 +302,117 @@ class DiscussionTopic(CanvasObject):
             )
         )
         return response.status_code == 204
+
+    def mark_as_unread(self):
+        """
+        Mark the initial text of the discussion topic as unread.
+
+        :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/read \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_topic_read>`_
+
+            or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/read \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_topic_read>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'DELETE',
+            '%ss/%s/discussion_topics/%s/read' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            )
+        )
+        return response.status_code == 204
+
+    def mark_entry_as_read(self, entry_id):
+        """
+        Mark a discussion entry as read.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/read\
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_entry_read>`_
+
+            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/read \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_entry_read>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'PUT',
+            '%ss/%s/discussion_topics/%s/entries/%s/read' % (
+                self.parent_type,
+                self.parent_id,
+                self.id,
+                entry_id
+            )
+        )
+        return response.status_code == 204
+
+    def mark_entry_as_unread(self, entry_id):
+        """
+        Mark a discussion entry as unread.
+
+        :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/read \  # noqa
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_entry_unread>`_
+
+            or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/read \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_entry_unread>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'DELETE',
+            '%ss/%s/discussion_topics/%s/entries/%s/read' % (
+                self.parent_type,
+                self.parent_id,
+                self.id,
+                entry_id
+            )
+        )
+        return response.status_code == 204
+
+    def mark_entries_as_read(self, **kwargs):
+        """
+        Mark the discussion topic and all its entries as read.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/read_all \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_all_read>`_
+
+            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/read_all \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_all_read>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'PUT',
+            '%ss/%s/discussion_topics/%s/read_all' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            ),
+            **combine_kwargs(**kwargs)
+        )
+        return response.status_code == 204
+
+    def mark_entries_as_unread(self, **kwargs):
+        """
+        Mark the discussion topic and all its entries as read.
+
+        :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/read_all \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_all_read>`_
+
+            or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/read_all \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_all_read>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'DELETE',
+            '%ss/%s/discussion_topics/%s/read_all' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            ),
+            **combine_kwargs(**kwargs)
+        )
+        return response.status_code == 204
