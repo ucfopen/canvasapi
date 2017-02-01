@@ -373,10 +373,6 @@ class User(CanvasObject):
         if isinstance(name, str) and isinstance(url, str):
             kwargs['url'] = url
             kwargs['name'] = name
-        elif not isinstance(name, str):
-            raise RequiredFieldMissing("String paramater 'name' is missing")
-        elif not isinstance(url, str):
-            raise RequiredFieldMissing("String paramater 'url' is missing")
 
         response = self._requester.request(
             'POST',

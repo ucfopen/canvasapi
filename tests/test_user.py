@@ -255,11 +255,3 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
-
-    def test_create_bookmark_fail_on_url(self, m):
-        with self.assertRaises(RequiredFieldMissing):
-            self.user.create_bookmark(name="Test Bookmark", bob="wrong")
-
-    def test_create_bookmark_fail_on_name(self, m):
-        with self.assertRaises(RequiredFieldMissing):
-            self.user.create_bookmark(url="https://google.com", bob="wrong")
