@@ -79,6 +79,29 @@ class DiscussionTopic(CanvasObject):
         )
         return 'deleted_at' in response.json()
 
+    def update(self, **kwargs):
+        """
+        Updates an existing discussion topic for the course or group.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
+
+            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'PUT',
+            '%ss/%s/discussion_topics/%s' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            ),
+            **combine_kwargs(**kwargs)
+        )
+        return DiscussionTopic(self._requester, response.json())
+
     def update_entry(self, entry_id, **kwargs):
         """
         Updates an existing discussion entry.
@@ -232,3 +255,50 @@ class DiscussionTopic(CanvasObject):
             ),
             **combine_kwargs(**kwargs)
         )
+
+    def list_entries(self, **kwargs):
+        """
+        Retrieve a paginated list of discussion entries, given a list of ids.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+
+            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entry_list \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        return PaginatedList(
+            DiscussionTopic,
+            self._requester,
+            'GET',
+            '%ss/%s/discussion_topics/%s/entry_list' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            ),
+            **combine_kwargs(**kwargs)
+        )
+
+    def mark_as_read(self):
+        """
+        Mark the initial text of the discussion topic as read.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/read \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_topic_read>`_
+
+            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/read \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_topic_read>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'PUT',
+            '%ss/%s/discussion_topics/%s/read' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            )
+        )
+        return response.status_code == 204

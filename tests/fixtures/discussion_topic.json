@@ -9,6 +9,16 @@
 		},
 		"status_code": 200
 	},
+	"update": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"title": "Topic 1"
+		},
+		"status_code": 200
+	},
 	"update_entry": {
 		"method": "PUT",
 		"endpoint": "courses/1/discussion_topics/1/entries/1",
@@ -77,5 +87,28 @@
 			}
 		],
 		"status_code": 200
+	},
+	"list_entries": {
+		"method": "GET",
+		"endpoint": "courses/1/discussion_topics/1/entry_list",
+		"data": [
+			{
+				"id": 1
+			},
+			{
+				"id": 2
+			}
+		],
+		"status_code": 200
+	},
+	"mark_as_read": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1/read",
+		"status_code": 204
+	},
+	"mark_as_read_status_code": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1/read",
+		"status_code": 403
 	}
 }

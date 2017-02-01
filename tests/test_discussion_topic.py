@@ -42,6 +42,15 @@ class TestDiscussionTopic(unittest.TestCase):
         topic = self.discussion_topic.delete(topic_id)
         self.assertTrue(topic)
 
+    # update()
+    def test_update(self, m):
+        register_uris({'discussion_topic': ['update']}, m)
+
+        discussion = self.discussion_topic.update()
+        self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'course_id')
+        self.assertEquals(discussion.course_id, 1)
+
     # update_entry()
     def test_update_entry(self, m):
         register_uris({'discussion_topic': ['update_entry']}, m)
@@ -65,7 +74,7 @@ class TestDiscussionTopic(unittest.TestCase):
         entry = self.discussion_topic.post_entry()
         self.assertTrue(entry)
 
-    # list_entries()
+    # list_topic_entries()
     def test_list_topic_entries(self, m):
         register_uris({'discussion_topic': ['list_topic_entries']}, m)
 
@@ -94,6 +103,28 @@ class TestDiscussionTopic(unittest.TestCase):
         reply_list = [reply for reply in replies]
         self.assertIsInstance(reply_list[0], DiscussionTopic)
         self.assertEquals(reply_list[0].id, 1)
+
+    # list_entries()
+    def test_list_entries(self, m):
+        register_uris({'discussion_topic': ['list_entries']}, m)
+
+        entries = self.discussion_topic.list_entries()
+        entry_list = [entry for entry in entries]
+        self.assertIsInstance(entry_list[0], DiscussionTopic)
+        self.assertEquals(entry_list[0].id, 1)
+
+    # mark_as_read()
+    def test_mark_as_read(self, m):
+        register_uris({'discussion_topic': ['mark_as_read']}, m)
+
+        topic = self.discussion_topic.mark_as_read()
+        self.assertTrue(topic)
+
+    def test_mark_as_read_status_code(self, m):
+        register_uris({'discussion_topic': ['mark_as_read_status_code']}, m)
+
+        topic = self.discussion_topic.mark_as_read()
+        self.assertFalse(topic)
 
     # parent_id
     def test_parent_id_course(self, m):

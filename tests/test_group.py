@@ -238,16 +238,6 @@ class TestGroup(unittest.TestCase):
         self.assertEquals(discussion.title, title)
         self.assertEquals(discussion.group_id, 1)
 
-    # update_discussion_topic()
-    def test_update_discussion_topic(self, m):
-        register_uris({'group': ['update_discussion_topic']}, m)
-
-        topic_id = 1
-        discussion = self.group.update_discussion_topic(topic_id)
-        self.assertIsInstance(discussion, DiscussionTopic)
-        assert hasattr(discussion, 'group_id')
-        self.assertEquals(discussion.group_id, 1)
-
     # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
         register_uris({'group': ['reorder_pinned_topics']}, m)

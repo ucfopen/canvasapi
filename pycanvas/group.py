@@ -437,27 +437,7 @@ class Group(CanvasObject):
 
         return DiscussionTopic(self._requester, response_json)
 
-    def update_discussion_topic(self, topic_id, **kwargs):
-        """
-        Update an existing discussion topic for the course or group.
-
-        :calls: `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id \
-        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
-
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
-        """
-        response = self._requester.request(
-            'PUT',
-            'groups/%s/discussion_topics/%s' % (self.id, topic_id),
-            **combine_kwargs(**kwargs)
-        )
-
-        response_json = response.json()
-        response_json.update({'group_id': self.id})
-
-        return DiscussionTopic(self._requester, response_json)
-
-    def reorder_pinned_topics(self, order):
+    def reorder_pinned_topics(self, order, **kwargs):
         """
         Puts the pinned discussion topics in the specified order.
         All pinned topics should be included.
@@ -477,7 +457,8 @@ class Group(CanvasObject):
             'POST',
             'groups/%s/discussion_topics/reorder' % (self.id),
             {'group_id': self.id},
-            order=order
+            order=order,
+            **combine_kwargs(**kwargs)
         )
 
 

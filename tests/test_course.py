@@ -478,17 +478,6 @@ class TestCourse(unittest.TestCase):
         self.assertEquals(title, discussion.title)
         self.assertEquals(discussion.course_id, 1)
 
-    # update_discussion_topic()
-    def test_update_discussion_topic(self, m):
-        register_uris({'course': ['update_discussion_topic']}, m)
-
-        topic_id = 1
-        discussion = self.course.update_discussion_topic(topic_id)
-        self.assertIsInstance(discussion, DiscussionTopic)
-        assert hasattr(discussion, 'course_id')
-        self.assertEquals(topic_id, discussion.id)
-        self.assertEquals(discussion.course_id, 1)
-
     # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
         register_uris({'course': ['reorder_pinned_topics']}, m)
