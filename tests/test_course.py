@@ -482,13 +482,18 @@ class TestCourse(unittest.TestCase):
     def test_reorder_pinned_topics(self, m):
         register_uris({'course': ['reorder_pinned_topics']}, m)
 
-        order = 1, 2
+        order = [1, 2, 3]
 
         discussions = self.course.reorder_pinned_topics(order=order)
-        discussion_list = [discussion for discussion in discussions]
-        self.assertIsInstance(discussion_list[0], DiscussionTopic)
-        assert hasattr(discussion_list[0], 'course_id')
-        self.assertEquals(2, len(discussion_list))
+        self.assertTrue(discussions)
+
+    def test_reorder_pinned_topics_no_list(self, m):
+        register_uris({'course': ['reorder_pinned_topics_no_list']}, m)
+
+        order = "1, 2, 3"
+
+        with self.assertRaises(ValueError):
+            self.course.reorder_pinned_topics(order=order)
 
     # get_assignment_group()
     def test_get_assignment_group(self, m):

@@ -641,16 +641,19 @@
 	"reorder_pinned_topics": {
 		"method": "POST",
 		"endpoint": "groups/1/discussion_topics/reorder",
-		"data": [
-			{
-				"id": 1,
-				"reorder": true
-			},
-			{
-				"id": 2,
-				"reorder": true
-			}
-		],
+		"data": {
+			"reorder": true,
+			"order": [1, 2, 3]
+		},
+		"status_code": 200
+	},
+	"reorder_pinned_topics_no_list": {
+		"method": "POST",
+		"endpoint": "groups/1/discussion_topics/reorder",
+		"data": {
+			"reorder": true,
+			"order": "1, 2, 3"
+		},
 		"status_code": 200
 	}
 }

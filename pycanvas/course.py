@@ -866,7 +866,7 @@ class Course(CanvasObject):
 
         return DiscussionTopic(self._requester, response_json)
 
-    def reorder_pinned_topics(self, order, **kwargs):
+    def reorder_pinned_topics(self, order):
         """
         Puts the pinned discussion topics in the specified order.
         All pinned topics should be included.
@@ -876,19 +876,22 @@ class Course(CanvasObject):
 
         :param order: The ids of the pinned discussion topics in the desired order.
             e.g. order=104,102,103
+        :type order: list
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
             :class:`pycanvas.discussion_topic.DiscussionTopic`
         """
-        return PaginatedList(
-            DiscussionTopic,
-            self._requester,
+
+        if not isinstance(order, list):
+            raise ValueError("Param order needs to be string or a list.")
+
+        response = self._requester.request(
             'POST',
             'courses/%s/discussion_topics/reorder' % (self.id),
-            {'course_id': self.id},
-            order=order,
-            **combine_kwargs(**kwargs)
+            order=order
         )
+
+        return response.json().get('reorder')
 
     def create_assignment_group(self, **kwargs):
         """
