@@ -69,7 +69,7 @@ class Uploader(object):
             **kwargs
         ).json()
 
-        if '_url' in response_json:
+        if 'url' in response_json:
             return (True, response_json)
 
         return (False, response_json)

@@ -504,7 +504,7 @@
 		"method": "POST",
 		"endpoint": "files/upload_response_upload_url",
 		"data": {
-			"_url": "great_url_success"
+			"url": "great_url_success"
 		}
 	}
 }

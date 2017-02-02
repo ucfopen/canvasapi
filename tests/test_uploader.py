@@ -41,7 +41,7 @@ class TestUploader(unittest.TestCase):
 
         assert result[0] is True
         assert isinstance(result[1], dict)
-        assert '_url' in result[1]
+        assert 'url' in result[1]
 
     def test_start_path(self, m):
         requires = {
@@ -54,7 +54,7 @@ class TestUploader(unittest.TestCase):
 
         assert result[0] is True
         assert isinstance(result[1], dict)
-        assert '_url' in result[1]
+        assert 'url' in result[1]
 
     def test_start_file_does_not_exist(self, m):
         with self.assertRaises(IOError):
@@ -84,4 +84,4 @@ class TestUploader(unittest.TestCase):
 
         assert result[0] is False
         assert isinstance(result[1], dict)
-        assert '_url' not in result[1]
+        assert 'url' not in result[1]

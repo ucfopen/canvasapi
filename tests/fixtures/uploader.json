@@ -14,7 +14,7 @@
         "method": "POST",
         "endpoint": "upload_response_upload_url",
         "data": {
-            "_url": "great_url_success"
+            "url": "great_url_success"
         }
     },
     "upload_response_no_upload_url": {
