@@ -39,7 +39,8 @@ class TestBookmark(unittest.TestCase):
         register_uris({'bookmark': ['edit_bookmark']}, m)
 
         name = 'New Name'
-        edited_bookmark = self.bookmark.edit(name=name)
+        url = 'http//happy-place.com'
+        edited_bookmark = self.bookmark.edit(name=name, url=url)
 
         self.assertIsInstance(edited_bookmark, Bookmark)
         self.assertTrue(hasattr(edited_bookmark, 'name'))

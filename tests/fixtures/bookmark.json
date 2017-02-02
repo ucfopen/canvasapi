@@ -23,7 +23,8 @@
 		"endpoint": "users/self/bookmarks/45",
 		"data": {
 			"id": 45,
-			"name": "New Name"
+			"name": "New Name",
+			"url": "http://happy-place.com"
 		},
 		"status_code": 200
 	},
