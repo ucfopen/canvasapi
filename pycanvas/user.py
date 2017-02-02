@@ -369,13 +369,11 @@ class User(CanvasObject):
         """
         from pycanvas.bookmark import Bookmark
 
-        if isinstance(name, str) and isinstance(url, str):
-            kwargs['url'] = url
-            kwargs['name'] = name
-
         response = self._requester.request(
             'POST',
             'users/self/bookmarks',
+            name=name,
+            url=url,
             **combine_kwargs(**kwargs)
         )
 
