@@ -160,5 +160,30 @@
 		"method": "DELETE",
 		"endpoint": "courses/1/discussion_topics/1/read_all",
 		"status_code": 403
+	},
+	"rate_entry": {
+		"method": "POST",
+		"endpoint": "courses/1/discussion_topics/1/entries/1/rating",
+		"status_code": 204
+	},
+	"subscribe": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1/subscribed",
+		"status_code": 204
+	},
+	"subscribe_status": {
+		"method": "PUT",
+		"endpoint": "courses/1/discussion_topics/1/subscribed",
+		"status_code": 403
+	},
+	"unsubscribe": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1/subscribed",
+		"status_code": 204
+	},
+	"unsubscribe_status": {
+		"method": "DELETE",
+		"endpoint": "courses/1/discussion_topics/1/subscribed",
+		"status_code": 403
 	}
 }

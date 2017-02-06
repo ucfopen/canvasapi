@@ -416,3 +416,71 @@ class DiscussionTopic(CanvasObject):
             **combine_kwargs(**kwargs)
         )
         return response.status_code == 204
+
+    def rate_entry(self, entry_id, **kwargs):
+        """
+        Rate a discussion entry.
+
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/rating \ # noqa
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.rate_entry>`_
+
+            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/rating \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.rate_entry>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'POST',
+            '%ss/%s/discussion_topics/%s/entries/%s/rating' % (
+                self.parent_type,
+                self.parent_id,
+                self.id,
+                entry_id
+            ),
+            **combine_kwargs(**kwargs)
+        )
+        return response.status_code == 204
+
+    def subscribe(self):
+        """
+        Subscribe to a topic to receive notifications about new entries.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/subscribed \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.subscribe_topic>`_
+
+            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/subscribed \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.subscribe_topic>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'PUT',
+            '%ss/%s/discussion_topics/%s/subscribed' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            )
+        )
+        return response.status_code == 204
+
+    def unsubscribe(self):
+        """
+        Unsubscribe from a topic to stop receiving notifications about new entries.
+
+        :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/subscribed \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.unsubscribe_topic>`_
+
+            or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/subscribed \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.unsubscribe_topic>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'DELETE',
+            '%ss/%s/discussion_topics/%s/subscribed' % (
+                self.parent_type,
+                self.parent_id,
+                self.id
+            )
+        )
+        return response.status_code == 204

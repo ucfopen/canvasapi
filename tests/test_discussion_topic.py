@@ -195,6 +195,40 @@ class TestDiscussionTopic(unittest.TestCase):
         entries = self.discussion_topic.mark_entries_as_unread()
         self.assertFalse(entries)
 
+    # rate_entry()
+    def test_rate_entry(self, m):
+        register_uris({'discussion_topic': ['rate_entry']}, m)
+
+        entry_id = 1
+        entry = self.discussion_topic.rate_entry(entry_id)
+        self.assertTrue(entry)
+
+    # subscribe()
+    def test_subscribe(self, m):
+        register_uris({'discussion_topic': ['subscribe']}, m)
+
+        subscribe = self.discussion_topic.subscribe()
+        self.assertTrue(subscribe)
+
+    def test_subscribe_status(self, m):
+        register_uris({'discussion_topic': ['subscribe_status']}, m)
+
+        subscribe = self.discussion_topic.subscribe()
+        self.assertFalse(subscribe)
+
+    # unsubscribe()
+    def test_unsubscribe(self, m):
+        register_uris({'discussion_topic': ['unsubscribe']}, m)
+
+        unsubscribe = self.discussion_topic.unsubscribe()
+        self.assertTrue(unsubscribe)
+
+    def test_unsubscribe_status(self, m):
+        register_uris({'discussion_topic': ['unsubscribe_status']}, m)
+
+        unsubscribe = self.discussion_topic.unsubscribe()
+        self.assertFalse(unsubscribe)
+
     # parent_id
     def test_parent_id_course(self, m):
         self.assertEquals(self.discussion_topic.parent_id, 1)
