@@ -446,7 +446,7 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
 
         :param order: The ids of the pinned discussion topics in the desired order.
-            e.g. order=104,102,103
+            e.g. [104, 102, 103]
         :type order: list
 
         :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
