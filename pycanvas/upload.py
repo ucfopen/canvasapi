@@ -65,7 +65,7 @@ class Uploader(object):
         response_json = self._requester.request(
             'POST',
             use_auth=False,
-            url=response.get('upload_url'),
+            _url=response.get('upload_url'),
             **kwargs
         ).json()
 

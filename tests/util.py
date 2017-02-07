@@ -18,7 +18,7 @@ def register_uris(requirements, requests_mocker):
 
         try:
             data = json.loads(open('tests/fixtures/{}.json'.format(fixture)).read())
-        except:
+        except IOError:
             raise ValueError('Fixture {}.json contains invalid JSON.'.format(fixture))
 
         if not isinstance(objects, list):
@@ -34,7 +34,10 @@ def register_uris(requirements, requests_mocker):
                 ))
 
             method = requests_mock.ANY if obj['method'] == 'ANY' else obj['method']
-            url = requests_mock.ANY if obj['endpoint'] == 'ANY' else settings.BASE_URL + obj['endpoint']
+            if obj['endpoint'] == 'ANY':
+                url = requests_mock.ANY
+            else:
+                url = settings.BASE_URL + obj['endpoint']
 
             try:
                 requests_mocker.register_uri(

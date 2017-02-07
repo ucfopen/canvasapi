@@ -1,0 +1,55 @@
+{
+	"create_bookmark": {
+		"method": "POST",
+		"endpoint": "users/self/bookmarks",
+		"data": {
+			"id": 45,
+			"name": "Test Bookmark",
+			"url": "https://www.google.com"
+		},
+		"status_code": 200
+	},
+	"delete_bookmark": {
+		"method": "DELETE",
+		"endpoint": "users/self/bookmarks/45",
+		"data": {
+			"id": 45,
+			"name": "Test Bookmark 3"
+		},
+		"status_code": 200
+	},
+	"edit_bookmark": {
+		"method": "PUT",
+		"endpoint": "users/self/bookmarks/45",
+		"data": {
+			"id": 45,
+			"name": "New Name",
+			"url": "http://happy-place.com"
+		},
+		"status_code": 200
+	},
+	"get_bookmark": {
+		"method": "GET",
+		"endpoint": "users/self/bookmarks/45",
+		"data": {
+			"id": 45,
+			"name": "Test Bookmark 3"
+		},
+		"status_code": 200
+	},
+	"list_bookmarks": {
+		"method": "GET",
+		"endpoint": "users/self/bookmarks",
+		"data": [
+			{
+				"id": 56,
+				"name": "Test Bookmark 1"
+			},
+			{
+				"id": 67,
+				"name": "Test Bookmark 2"
+			}
+		],
+		"status_code": 200
+	}
+}

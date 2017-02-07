@@ -7,6 +7,7 @@ import requests_mock
 from pycanvas import Canvas
 from pycanvas.group import Group, GroupMembership, GroupCategory
 from pycanvas.course import Page
+from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.external_tool import ExternalTool
 from tests import settings
@@ -194,6 +195,66 @@ class TestGroup(unittest.TestCase):
 
         response = self.group.update_membership(1)
         assert isinstance(response, GroupMembership)
+
+    # get_discussion_topic()
+    def test_get_discussion_topic(self, m):
+        register_uris({'group': ['get_discussion_topic']}, m)
+
+        group_id = 1
+        discussion = self.group.get_discussion_topic(group_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'group_id')
+        self.assertEquals(group_id, discussion.id)
+        self.assertEquals(discussion.group_id, 1)
+
+    # get_full_discussion_topic
+    def test_get_full_discussion_topic(self, m):
+        register_uris({'group': ['get_full_discussion_topic']}, m)
+
+        topic_id = 1
+        discussion = self.group.get_full_discussion_topic(topic_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'view')
+        assert hasattr(discussion, 'participants')
+        self.assertEquals(discussion.group_id, 1)
+
+    # get_discussion_topics()
+    def test_get_discussion_topics(self, m):
+        register_uris({'group': ['get_discussion_topics']}, m)
+
+        response = self.group.get_discussion_topics()
+        discussion_list = [discussion for discussion in response]
+        self.assertIsInstance(discussion_list[0], DiscussionTopic)
+        assert hasattr(discussion_list[0], 'group_id')
+        self.assertEquals(2, len(discussion_list))
+
+    # create_discussion_topic()
+    def test_create_discussion_topic(self, m):
+        register_uris({'group': ['create_discussion_topic']}, m)
+
+        title = "Topic 1"
+        discussion = self.group.create_discussion_topic()
+        assert hasattr(discussion, 'group_id')
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertEquals(discussion.title, title)
+        self.assertEquals(discussion.group_id, 1)
+
+    # reorder_pinned_topics()
+    def test_reorder_pinned_topics(self, m):
+        register_uris({'group': ['reorder_pinned_topics']}, m)
+
+        order = [1, 2, 3]
+
+        discussions = self.group.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
+
+    def test_reorder_pinned_topics_no_list(self, m):
+        register_uris({'group': ['reorder_pinned_topics_no_list']}, m)
+
+        order = "1, 2, 3"
+
+        with self.assertRaises(ValueError):
+            self.group.reorder_pinned_topics(order=order)
 
 
 @requests_mock.Mocker()

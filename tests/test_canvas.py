@@ -5,8 +5,11 @@ import requests_mock
 
 from pycanvas import Canvas
 from pycanvas.account import Account
+from pycanvas.appointment_group import AppointmentGroup
+from pycanvas.calendar_event import CalendarEvent
 from pycanvas.conversation import Conversation
 from pycanvas.course import Course, CourseNickname
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.group import Group, GroupCategory
 from pycanvas.exceptions import ResourceDoesNotExist
 from pycanvas.progress import Progress
@@ -334,3 +337,109 @@ class TestCanvas(unittest.TestCase):
             conversation_ids=conversation_ids
         )
         assert isinstance(result, ValueError)
+
+    # create_calendar_event()
+    def test_create_calendar_event(self, m):
+        register_uris({'calendar_event': ['create_calendar_event']}, m)
+
+        cal_event = {
+            "context_code": "course_123"
+        }
+        evnt = self.canvas.create_calendar_event(calendar_event=cal_event)
+
+        self.assertIsInstance(evnt, CalendarEvent)
+        self.assertEqual(evnt.context_code, "course_123")
+        self.assertEqual(evnt.id, 234)
+
+    def test_create_calendar_event_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_calendar_event({})
+
+    # list_calendar_events()
+    def test_list_calendar_events(self, m):
+        register_uris({'calendar_event': ['list_calendar_events']}, m)
+
+        cal_events = self.canvas.list_calendar_events()
+        cal_event_list = [cal_event for cal_event in cal_events]
+        self.assertEqual(len(cal_event_list), 2)
+
+    # get_calendar_event()
+    def test_get_calendar_event(self, m):
+        register_uris({'calendar_event': ['get_calendar_event']}, m)
+
+        cal_event = self.canvas.get_calendar_event(567)
+        self.assertIsInstance(cal_event, CalendarEvent)
+        self.assertEqual(cal_event.title, "Test Event 3")
+
+    # reserve_time_slot()
+    def test_reserve_time_slot(self, m):
+        register_uris({'calendar_event': ['reserve_time_slot']}, m)
+
+        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567)
+        self.assertIsInstance(cal_event, CalendarEvent)
+        self.assertEqual(cal_event.title, "Test Reservation")
+
+    def test_reserve_time_slot_by_participant_id(self, m):
+        register_uris({
+            'calendar_event': ['reserve_time_slot_participant_id']
+        }, m)
+
+        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567, participant_id=777)
+        self.assertIsInstance(cal_event, CalendarEvent)
+        self.assertEqual(cal_event.title, "Test Reservation")
+        self.assertEqual(cal_event.user, 777)
+
+    # list_appointment_groups()
+    def test_list_appointment_groups(self, m):
+        register_uris({'appointment_group': ['list_appointment_groups']}, m)
+
+        appt_groups = self.canvas.list_appointment_groups()
+        appt_groups_list = [appt_group for appt_group in appt_groups]
+        self.assertEqual(len(appt_groups_list), 2)
+
+    # get_appointment_group()
+    def test_get_appointment_group(self, m):
+        register_uris({'appointment_group': ['get_appointment_group']}, m)
+
+        appt_group = self.canvas.get_appointment_group(567)
+        self.assertIsInstance(appt_group, AppointmentGroup)
+        self.assertEqual(appt_group.title, "Test Group 3")
+
+    # create_appointment_group()
+    def test_create_appointment_group(self, m):
+        register_uris({'appointment_group': ['create_appointment_group']}, m)
+
+        evnt = self.canvas.create_appointment_group({
+            "context_codes": ["course_123"],
+            "title": "Test Group"
+        })
+
+        self.assertIsInstance(evnt, AppointmentGroup)
+        self.assertEqual(evnt.context_codes[0], "course_123")
+        self.assertEqual(evnt.id, 234)
+
+    def test_create_appointment_group_fail_on_context_codes(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_appointment_group({
+                "title": "Test Group"
+            })
+
+    def test_create_appointment_group_fail_on_title(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_appointment_group({"context_codes": "course_123"})
+
+    # list_user_participants()
+    def test_list_user_participants(self, m):
+        register_uris({'appointment_group': ['list_user_participants']}, m)
+
+        users = self.canvas.list_user_participants(222)
+        users_list = [user for user in users]
+        self.assertEqual(len(users_list), 2)
+
+    # list_group_participants()
+    def test_list_group_participants(self, m):
+        register_uris({'appointment_group': ['list_group_participants']}, m)
+
+        groups = self.canvas.list_group_participants(222)
+        groups_list = [group for group in groups]
+        self.assertEqual(len(groups_list), 2)
