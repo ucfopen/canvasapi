@@ -7,6 +7,7 @@ import requests_mock
 from pycanvas import Canvas
 from pycanvas.assignment import Assignment, AssignmentGroup
 from pycanvas.course import Course, CourseNickname, Page
+from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.enrollment import Enrollment
 from pycanvas.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from pycanvas.external_tool import ExternalTool
@@ -434,6 +435,65 @@ class TestCourse(unittest.TestCase):
         response = self.course.list_group_categories()
         category_list = [category for category in response]
         assert isinstance(category_list[0], GroupCategory)
+
+    # get_discussion_topic()
+    def test_get_discussion_topic(self, m):
+        register_uris({'course': ['get_discussion_topic']}, m)
+
+        topic_id = 1
+        discussion = self.course.get_discussion_topic(topic_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'course_id')
+        self.assertEquals(discussion.course_id, 1)
+
+    # get_full_discussion_topic()
+    def test_get_full_discussion_topic(self, m):
+        register_uris({'course': ['get_full_discussion_topic']}, m)
+
+        topic_id = 1
+        discussion = self.course.get_full_discussion_topic(topic_id)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'view')
+        assert hasattr(discussion, 'participants')
+        self.assertEquals(discussion.course_id, 1)
+
+    # get_discussion_topics()
+    def test_get_discussion_topics(self, m):
+        register_uris({'course': ['get_discussion_topics']}, m)
+
+        response = self.course.get_discussion_topics()
+        discussion_list = [discussion for discussion in response]
+        self.assertIsInstance(discussion_list[0], DiscussionTopic)
+        assert hasattr(discussion_list[0], 'course_id')
+        self.assertEquals(2, len(discussion_list))
+
+    # create_discussion_topic()
+    def test_create_discussion_topic(self, m):
+        register_uris({'course': ['create_discussion_topic']}, m)
+
+        title = "Topic 1"
+        discussion = self.course.create_discussion_topic()
+        self.assertIsInstance(discussion, DiscussionTopic)
+        assert hasattr(discussion, 'course_id')
+        self.assertEquals(title, discussion.title)
+        self.assertEquals(discussion.course_id, 1)
+
+    # reorder_pinned_topics()
+    def test_reorder_pinned_topics(self, m):
+        register_uris({'course': ['reorder_pinned_topics']}, m)
+
+        order = [1, 2, 3]
+
+        discussions = self.course.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
+
+    def test_reorder_pinned_topics_no_list(self, m):
+        register_uris({'course': ['reorder_pinned_topics_no_list']}, m)
+
+        order = "1, 2, 3"
+
+        with self.assertRaises(ValueError):
+            self.course.reorder_pinned_topics(order=order)
 
     # get_assignment_group()
     def test_get_assignment_group(self, m):

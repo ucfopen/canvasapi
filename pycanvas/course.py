@@ -1,4 +1,5 @@
 from pycanvas.canvas_object import CanvasObject
+from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.page import Page
 from pycanvas.paginated_list import PaginatedList
@@ -105,7 +106,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/search_users \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.user.User`
         """
         from pycanvas.user import User
 
@@ -151,7 +153,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/recent_students \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.recent_students>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.user.User`
         """
         from pycanvas.user import User
 
@@ -343,7 +346,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/quizzes \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.quiz.Quiz`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.quiz.Quiz`
         """
         from pycanvas.quiz import Quiz
         return PaginatedList(
@@ -576,7 +580,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
-        :rtype: :class:`pycanvas.course.Course`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.course.Course`
         """
         return PaginatedList(
             Page,
@@ -644,7 +649,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/sections \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
 
-        :rtype: :class:`pycanvas.section.Section`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.section.Section`
         """
         from pycanvas.section import Section
         return PaginatedList(
@@ -681,7 +687,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.course.Course`
         """
         from group import Group
         return PaginatedList(
@@ -732,6 +739,69 @@ class Course(CanvasObject):
             'courses/%s/group_categories' % (self.id)
         )
 
+    def get_discussion_topic(self, topic_id):
+        """
+        Return data on an individual discussion topic.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.show>`_
+
+        :param topic_id: The ID of the discussion topic.
+        :type topic_id: int
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/discussion_topics/%s' % (self.id, topic_id)
+        )
+
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return DiscussionTopic(self._requester, response_json)
+
+    def get_full_discussion_topic(self, topic_id):
+        """
+        Return a cached structure of the discussion topic.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
+
+        :param topic_id: The ID of the discussion topic.
+        :type topic_id: int
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/discussion_topics/%s/view' % (self.id, topic_id),
+        )
+
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return DiscussionTopic(self._requester, response_json)
+
+    def get_discussion_topics(self, **kwargs):
+        """
+        Returns the paginated list of discussion topics for this course or group.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        return PaginatedList(
+            DiscussionTopic,
+            self._requester,
+            'GET',
+            'courses/%s/discussion_topics' % (self.id),
+            {'course_id': self.id},
+            **combine_kwargs(**kwargs)
+        )
+
     def get_assignment_group(self, assignment_group_id, **kwargs):
         """
         Retrieve specified assignment group for the specified course.
@@ -775,6 +845,53 @@ class Course(CanvasObject):
             {'course_id': self.id},
             **combine_kwargs(**kwargs)
         )
+
+    def create_discussion_topic(self, **kwargs):
+        """
+        Creates a new discussion topic for the course or group.
+
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
+
+        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/%s/discussion_topics' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return DiscussionTopic(self._requester, response_json)
+
+    def reorder_pinned_topics(self, order):
+        """
+        Puts the pinned discussion topics in the specified order.
+        All pinned topics should be included.
+
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics/reorder \
+        <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
+
+        :param order: The ids of the pinned discussion topics in the desired order.
+            e.g. [104, 102, 103]
+        :type order: list
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.discussion_topic.DiscussionTopic`
+        """
+
+        if not isinstance(order, list):
+            raise ValueError("Param order needs to be string or a list.")
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/discussion_topics/reorder' % (self.id),
+            order=order
+        )
+
+        return response.json().get('reorder')
 
     def create_assignment_group(self, **kwargs):
         """

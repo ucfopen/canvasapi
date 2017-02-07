@@ -797,5 +797,75 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_discussion_topic": {
+		"method": "GET",
+		"endpoint": "courses/1/discussion_topics/1",
+		"data":
+			{
+				"id": 1,
+				"title": "Topic 1"
+			},
+		"status_code": 200
+	},
+	"get_full_discussion_topic": {
+		"method": "GET",
+		"endpoint": "courses/1/discussion_topics/1/view",
+		"data": {
+			"id": 1,
+			"view": [
+				{
+					"id": 1
+				}
+			],
+			"participants": [
+				{
+					"id": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_discussion_topics": {
+		"method": "GET",
+		"endpoint": "courses/1/discussion_topics",
+		"data": [
+			{
+				"id": 1,
+				"title": "Topic 1"
+			},
+			{
+				"id": 2,
+				"title": "Topic 2"
+			}
+		],
+		"status_code": 200
+	},
+	"create_discussion_topic": {
+		"method": "POST",
+		"endpoint": "courses/1/discussion_topics",
+		"data": {
+			"id": 1,
+			"title": "Topic 1"
+		},
+		"status_code": 200
+	},
+	"reorder_pinned_topics": {
+		"method": "POST",
+		"endpoint": "courses/1/discussion_topics/reorder",
+		"data": {
+			"reorder": true,
+			"order": [1, 2, 3]
+		},
+		"status_code": 200
+	},
+	"reorder_pinned_topics_no_list": {
+		"method": "POST",
+		"endpoint": "courses/1/discussion_topics/reorder",
+		"data": {
+			"reorder": true,
+			"order": "1, 2, 3"
+		},
+		"status_code": 200
 	}
 }
