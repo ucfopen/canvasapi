@@ -22,7 +22,7 @@ class Requester(object):
         self.access_token = access_token
         self._session = requests.Session()
 
-    def request(self, method, endpoint=None, headers=None, use_auth=True, url=None, **kwargs):
+    def request(self, method, endpoint=None, headers=None, use_auth=True, _url=None, **kwargs):
         """
         Make a request to the Canvas API and return the response.
 
@@ -34,13 +34,13 @@ class Requester(object):
         :type headers: dict
         :param use_auth: Optional flag to remove the authentication header from the request.
         :type use_auth: bool
-        :param url: Optional argument to send a request to a URL outside of the Canvas API. \
+        :param _url: Optional argument to send a request to a URL outside of the Canvas API. \
                     If this is selected and an endpoint is provided, the endpoint will be \
-                    ignored and only the url argument will be used.
-        :type url: str
+                    ignored and only the _url argument will be used.
+        :type _url: str
         :rtype: str
         """
-        full_url = url if url else "%s%s" % (self.base_url, endpoint)
+        full_url = _url if _url else "%s%s" % (self.base_url, endpoint)
 
         if not headers:
             headers = {}

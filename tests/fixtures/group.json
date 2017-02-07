@@ -195,11 +195,11 @@
 	},
 	"upload_final": {
 		"method": "POST",
-        "endpoint": "files/upload_response_upload_url",
-        "data": {
-            "url": "great_url_success"
-        }
-    },
+		"endpoint": "files/upload_response_upload_url",
+		"data": {
+			"url": "great_url_success"
+		}
+	},
 	"preview_processed_html": {
 		"method": "POST",
 		"endpoint": "groups/1/preview_html",

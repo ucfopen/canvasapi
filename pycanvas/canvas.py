@@ -1,6 +1,6 @@
-from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.account import Account
 from pycanvas.course import Course
+from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.group import Group, GroupCategory
 from pycanvas.paginated_list import PaginatedList
 from pycanvas.requester import Requester

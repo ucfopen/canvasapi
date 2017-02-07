@@ -1,3 +1,4 @@
+from pycanvas.bookmark import Bookmark
 from pycanvas.calendar_event import CalendarEvent
 from pycanvas.canvas_object import CanvasObject
 from pycanvas.paginated_list import PaginatedList
@@ -316,3 +317,66 @@ class User(CanvasObject):
             'users/%s/calendar_events' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def list_bookmarks(self, **kwargs):
+        """
+        List bookmarks that the current user can view or manage.
+
+        :calls: `GET /api/v1/users/self/bookmarks \
+        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.bookmark.Bookmark`
+        """
+        return PaginatedList(
+            Bookmark,
+            self._requester,
+            'GET',
+            'users/self/bookmarks'
+        )
+
+    def get_bookmark(self, bookmark_id):
+        """
+        Return single Bookmark by id
+
+        :calls: `GET /api/v1/users/self/bookmarks/:id \
+        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.show>`_
+
+        :param bookmark_id: The ID of the bookmark.
+        :type bookmark_id: `int`
+        :rtype: :class:`pycanvas.bookmark.Bookmark`
+        """
+        from pycanvas.bookmark import Bookmark
+
+        response = self._requester.request(
+            'GET',
+            'users/self/bookmarks/%s' % (bookmark_id)
+        )
+        return Bookmark(self._requester, response.json())
+
+    def create_bookmark(self, name, url, **kwargs):
+        """
+        Create a new Bookmark.
+
+        :calls: `POST /api/v1/users/self/bookmarks \
+        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.create>`_
+
+        :param name: The name of the bookmark.
+        :type name: `str`
+        :param url: The url of the bookmark.
+        :type name: `str`
+        :rtype: :class:`pycanvas.bookmarks.Bookmark`
+        """
+        from pycanvas.bookmark import Bookmark
+
+        response = self._requester.request(
+            'POST',
+            'users/self/bookmarks',
+            name=name,
+            url=url,
+            **combine_kwargs(**kwargs)
+        )
+
+        vars(response.request)
+
+        return Bookmark(self._requester, response.json())
