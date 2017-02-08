@@ -9,7 +9,6 @@ from pycanvas.group import Group, GroupMembership, GroupCategory
 from pycanvas.course import Page
 from pycanvas.discussion_topic import DiscussionTopic
 from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.external_tool import ExternalTool
 from tests import settings
 from tests.util import register_uris
 
