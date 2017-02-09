@@ -55,6 +55,47 @@ class ExternalTool(CanvasObject):
         elif self.parent_type == 'course':
             return Course(self._requester, response.json())
 
+    def delete(self):
+        """
+        Remove the specified external tool.
+
+        :calls: `DELETE /api/v1/courses/:course_id/external_tools/:external_tool_id
+            <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.destroy`_
+            or `DELETE /api/v1/accounts/:account_id/external_tools/:external_tool_id
+            <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.destroy`_
+
+        :rtype: :class:`pycanvas.external_tool.ExternalTool`
+        """
+        response = self._requester.request(
+            'DELETE',
+            '%ss/%s/external_tools/%s' % (self.parent_type, self.parent_id, self.id)
+        )
+
+        return ExternalTool(self._requester, response.json())
+
+    def edit(self, **kwargs):
+        """
+        Update the specified external tool.
+
+        :calls: `PUT /api/v1/courses/:course_id/external_tools/:external_tool_id
+            <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.update>`_
+            or `PUT /api/v1/accounts/:account_id/external_tools/:external_tool_id
+            <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.update>`_
+
+        :rtype: :class:`pycanvas.external_tool.ExternalTool`
+        """
+        response = self._requester.request(
+            'PUT',
+            '%ss/%s/external_tools/%s' % (self.parent_type, self.parent_id, self.id),
+            **combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+
+        if 'name' in response_json:
+            super(ExternalTool, self).set_attributes(response_json)
+
+        return ExternalTool(self._requester, response_json)
+
     def get_sessionless_launch_url(self, **kwargs):
         """
         Return a sessionless launch url for an external tool.

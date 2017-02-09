@@ -69,6 +69,25 @@ class TestExternalTool(unittest.TestCase):
         register_uris({'course': ['get_by_id']}, m)
         self.assertIsInstance(self.ext_tool_course.get_parent(), Course)
 
+    # delete()
+    def test_delete(self, m):
+        register_uris({'external_tool': ['delete_tool_course']}, m)
+        deleted_tool = self.ext_tool_course.delete()
+
+        self.assertIsInstance(deleted_tool, ExternalTool)
+        self.assertTrue(hasattr(deleted_tool, 'name'))
+
+    # edit()
+    def test_edit(self, m):
+        register_uris({'external_tool': ['edit_tool_course']}, m)
+        new_name = "New Tool Name"
+
+        edited_tool = self.ext_tool_course.edit(name=new_name)
+
+        self.assertEqual(self.ext_tool_course.name, new_name)
+        self.assertIsInstance(edited_tool, ExternalTool)
+        self.assertEqual(edited_tool.name, new_name)
+
     # get_sessionless_launch_url()
     def test_get_sessionless_launch_url(self, m):
         requires = {'external_tool': ['get_sessionless_launch_url_course']}

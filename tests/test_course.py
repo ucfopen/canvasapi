@@ -531,6 +531,21 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(response, 'id'))
         self.assertEqual(response.id, 3)
 
+    # create_external_tool()
+    def test_create_external_tool(self, m):
+        register_uris({'external_tool': ['create_tool_course']}, m)
+
+        response = self.course.create_external_tool(
+            name="External Tool - Course",
+            privacy_level="public",
+            consumer_key="key",
+            shared_secret="secret"
+        )
+
+        self.assertIsInstance(response, ExternalTool)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertEqual(response.id, 20)
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
