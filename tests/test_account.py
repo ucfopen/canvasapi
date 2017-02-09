@@ -357,3 +357,18 @@ class TestAccount(unittest.TestCase):
         response = self.account.list_group_categories()
         category_list = [category for category in response]
         assert isinstance(category_list[0], GroupCategory)
+
+    # create_external_tool()
+    def test_create_external_tool(self, m):
+        register_uris({'external_tool': ['create_tool_account']}, m)
+
+        response = self.account.create_external_tool(
+            name="External Tool - Account",
+            privacy_level="public",
+            consumer_key="key",
+            shared_secret="secret"
+        )
+
+        self.assertIsInstance(response, ExternalTool)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertEqual(response.id, 10)
