@@ -48,7 +48,7 @@ class TestDiscussionTopic(unittest.TestCase):
 
         discussion = self.discussion_topic.update()
         self.assertIsInstance(discussion, DiscussionTopic)
-        assert hasattr(discussion, 'course_id')
+        self.assertTrue(hasattr(discussion, 'course_id'))
         self.assertEquals(discussion.course_id, 1)
 
     # update_entry()
@@ -92,8 +92,8 @@ class TestDiscussionTopic(unittest.TestCase):
         reply = self.discussion_topic.post_reply(1)
         self.assertIsInstance(reply, DiscussionTopic)
         self.assertEquals(reply.message, message)
-        assert hasattr(reply, 'created_at')
-        assert hasattr(reply, 'message')
+        self.assertTrue(hasattr(reply, 'created_at'))
+        self.assertTrue(hasattr(reply, 'message'))
 
     # list_entry_replies()
     def test_list_entry_replies(self, m):
@@ -257,9 +257,9 @@ class TestDiscussionTopic(unittest.TestCase):
     def test_get_parent_course(self, m):
         register_uris({'course': ['get_by_id']}, m)
 
-        assert isinstance(self.discussion_topic.get_parent(), Course)
+        self.assertIsInstance(self.discussion_topic.get_parent(), Course)
 
     def test_get_parent_group(self, m):
         register_uris({'group': ['get_by_id']}, m)
 
-        assert isinstance(self.discussion_topic_group.get_parent(), Group)
+        self.assertIsInstance(self.discussion_topic_group.get_parent(), Group)

@@ -24,4 +24,4 @@ class TestPageView(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.pageview)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)

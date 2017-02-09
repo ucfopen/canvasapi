@@ -33,7 +33,7 @@ class TestUser(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.user)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # get_profile()
     def test_get_profile(self, m):
@@ -41,8 +41,8 @@ class TestUser(unittest.TestCase):
 
         profile = self.user.get_profile()
 
-        assert isinstance(profile, dict)
-        assert 'name' in profile
+        self.assertIsInstance(profile, dict)
+        self.assertIn('name', profile)
 
     # get_page_views()
     def test_get_page_views(self, m):
@@ -51,8 +51,8 @@ class TestUser(unittest.TestCase):
         page_views = self.user.get_page_views()
         page_view_list = [view for view in page_views]
 
-        assert len(page_view_list) == 4
-        assert isinstance(page_view_list[0], PageView)
+        self.assertEqual(len(page_view_list), 4)
+        self.assertIsInstance(page_view_list[0], PageView)
 
     # get_courses()
     def test_get_courses(self, m):
@@ -61,8 +61,8 @@ class TestUser(unittest.TestCase):
         courses = self.user.get_courses()
         course_list = [course for course in courses]
 
-        assert len(course_list) == 4
-        assert isinstance(course_list[0], Course)
+        self.assertEqual(len(course_list), 4)
+        self.assertIsInstance(course_list[0], Course)
 
     # get_missing_submissions()
     def test_get_missing_submissions(self, m):
@@ -71,8 +71,8 @@ class TestUser(unittest.TestCase):
         missing_assigments = self.user.get_missing_submissions()
         assignment_list = [assignment for assignment in missing_assigments]
 
-        assert len(assignment_list) == 4
-        assert isinstance(assignment_list[0], Assignment)
+        self.assertEqual(len(assignment_list), 4)
+        self.assertIsInstance(assignment_list[0], Assignment)
 
     # update_settings()
     def test_update_settings(self, m):
@@ -80,9 +80,9 @@ class TestUser(unittest.TestCase):
 
         settings = self.user.update_settings(manual_mark_as_read=True)
 
-        assert isinstance(settings, dict)
-        assert 'manual_mark_as_read' in settings
-        assert settings['manual_mark_as_read'] is True
+        self.assertIsInstance(settings, dict)
+        self.assertIn('manual_mark_as_read', settings)
+        self.assertTrue(settings['manual_mark_as_read'])
 
     # get_color()
     def test_get_color(self, m):
@@ -90,9 +90,9 @@ class TestUser(unittest.TestCase):
 
         color = self.user.get_color("course_1")
 
-        assert isinstance(color, dict)
-        assert 'hexcode' in color
-        assert color['hexcode'] == "#abc123"
+        self.assertIsInstance(color, dict)
+        self.assertIn('hexcode', color)
+        self.assertEqual(color['hexcode'], "#abc123")
 
     # get_colors()
     def test_get_colors(self, m):
@@ -100,9 +100,9 @@ class TestUser(unittest.TestCase):
 
         colors = self.user.get_colors()
 
-        assert isinstance(colors, dict)
-        assert 'custom_colors' in colors
-        assert isinstance(colors['custom_colors'], dict)
+        self.assertIsInstance(colors, dict)
+        self.assertIn('custom_colors', colors)
+        self.assertIsInstance(colors['custom_colors'], dict)
 
     # update_color()
     def test_update_color(self, m):
@@ -111,9 +111,9 @@ class TestUser(unittest.TestCase):
         new_hexcode = "#f00f00"
         color = self.user.update_color("course_1", new_hexcode)
 
-        assert isinstance(color, dict)
-        assert 'hexcode' in color
-        assert color['hexcode'] == new_hexcode
+        self.assertIsInstance(color, dict)
+        self.assertIn('hexcode', color)
+        self.assertEqual(color['hexcode'], new_hexcode)
 
     def test_update_color_no_hashtag(self, m):
         register_uris({'user': ['color_update']}, m)
@@ -121,9 +121,9 @@ class TestUser(unittest.TestCase):
         new_hexcode = "f00f00"
         color = self.user.update_color("course_1", new_hexcode)
 
-        assert isinstance(color, dict)
-        assert 'hexcode' in color
-        assert color['hexcode'] == "#" + new_hexcode
+        self.assertIsInstance(color, dict)
+        self.assertIn('hexcode', color)
+        self.assertEqual(color['hexcode'], "#" + new_hexcode)
 
     # edit()
     def test_edit(self, m):
@@ -132,9 +132,9 @@ class TestUser(unittest.TestCase):
         new_name = "New User Name"
         self.user.edit(user={'name': new_name})
 
-        assert isinstance(self.user, User)
-        assert hasattr(self.user, 'name')
-        assert self.user.name == new_name
+        self.assertIsInstance(self.user, User)
+        self.assertTrue(hasattr(self.user, 'name'))
+        self.assertEqual(self.user.name, new_name)
 
     # merge_into()
     def test_merge_into_id(self, m):
@@ -142,9 +142,9 @@ class TestUser(unittest.TestCase):
 
         self.user.merge_into(2)
 
-        assert isinstance(self.user, User)
-        assert hasattr(self.user, 'name')
-        assert self.user.name == 'John Smith'
+        self.assertIsInstance(self.user, User)
+        self.assertTrue(hasattr(self.user, 'name'))
+        self.assertEqual(self.user.name, 'John Smith')
 
     def test_merge_into_user(self, m):
         register_uris({'user': ['get_by_id_2', 'merge']}, m)
@@ -152,9 +152,9 @@ class TestUser(unittest.TestCase):
         other_user = self.canvas.get_user(2)
         self.user.merge_into(other_user)
 
-        assert isinstance(self.user, User)
-        assert hasattr(self.user, 'name')
-        assert self.user.name == 'John Smith'
+        self.assertIsInstance(self.user, User)
+        self.assertTrue(hasattr(self.user, 'name'))
+        self.assertEqual(self.user.name, 'John Smith')
 
     # get_avatars()
     def test_get_avatars(self, m):
@@ -163,8 +163,8 @@ class TestUser(unittest.TestCase):
         avatars = self.user.get_avatars()
         avatar_list = [avatar for avatar in avatars]
 
-        assert len(avatar_list) == 4
-        assert isinstance(avatar_list[0], Avatar)
+        self.assertEqual(len(avatar_list), 4)
+        self.assertIsInstance(avatar_list[0], Avatar)
 
     # get_assignments()
     def test_user_assignments(self, m):
@@ -173,8 +173,8 @@ class TestUser(unittest.TestCase):
         assignments = self.user.get_assignments(1)
         assignment_list = [assignment for assignment in assignments]
 
-        assert isinstance(assignments[0], Assignment)
-        assert len(assignment_list) == 4
+        self.assertIsInstance(assignments[0], Assignment)
+        self.assertEqual(len(assignment_list), 4)
 
     # list_enrollments()
     def test_list_enrollments(self, m):
@@ -183,8 +183,8 @@ class TestUser(unittest.TestCase):
         enrollments = self.user.get_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
-        assert len(enrollment_list) == 4
-        assert isinstance(enrollment_list[0], Enrollment)
+        self.assertEqual(len(enrollment_list), 4)
+        self.assertIsInstance(enrollment_list[0], Enrollment)
 
     # upload()
     def test_upload(self, m):
@@ -195,9 +195,9 @@ class TestUser(unittest.TestCase):
 
         response = self.user.upload(file)
 
-        assert response[0] is True
-        assert isinstance(response[1], dict)
-        assert 'url' in response[1]
+        self.assertTrue(response[0])
+        self.assertIsInstance(response[1], dict)
+        self.assertIn('url', response[1])
 
         # http://stackoverflow.com/a/10840586
         # Not as stupid as it looks.
@@ -213,8 +213,8 @@ class TestUser(unittest.TestCase):
         groups = self.user.list_groups()
         group_list = [group for group in groups]
 
-        assert len(group_list) == 4
-        assert isinstance(group_list[0], Group)
+        self.assertEqual(len(group_list), 4)
+        self.assertIsInstance(group_list[0], Group)
 
     # list_calendar_events_for_user()
     def test_list_calendar_events_for_user(self, m):

@@ -23,7 +23,7 @@ class TestSection(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.section)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # list_enrollments()
     def test_get_enrollments(self, m):
@@ -32,33 +32,33 @@ class TestSection(unittest.TestCase):
         enrollments = self.section.get_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
-        assert len(enrollment_list) == 4
-        assert isinstance(enrollment_list[0], Enrollment)
+        self.assertEqual(len(enrollment_list), 4)
+        self.assertIsInstance(enrollment_list[0], Enrollment)
 
     def test_cross_list_section(self, m):
         register_uris({'section': ['crosslist_section']}, m)
 
         section = self.section.cross_list_section(2)
 
-        assert isinstance(section, Section)
+        self.assertIsInstance(section, Section)
 
     def test_decross_list_section(self, m):
         register_uris({'section': ['decross_section']}, m)
 
         section = self.section.decross_list_section()
 
-        assert isinstance(section, Section)
+        self.assertIsInstance(section, Section)
 
     def test_edit(self, m):
         register_uris({'section': ['edit']}, m)
 
         edit = self.section.edit()
 
-        assert isinstance(edit, Section)
+        self.assertIsInstance(edit, Section)
 
     def test_delete(self, m):
         register_uris({'section': ['delete']}, m)
 
         deleted_section = self.section.delete()
 
-        assert isinstance(deleted_section, Section)
+        self.assertIsInstance(deleted_section, Section)

@@ -29,25 +29,25 @@ class TestGroup(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.group)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # show_front_page()
     def test_show_front_page(self, m):
         register_uris({'group': ['show_front_page']}, m)
 
         front_page = self.group.show_front_page()
-        assert isinstance(front_page, Page)
-        assert hasattr(front_page, 'url')
-        assert hasattr(front_page, 'title')
+        self.assertIsInstance(front_page, Page)
+        self.assertTrue(hasattr(front_page, 'url'))
+        self.assertTrue(hasattr(front_page, 'title'))
 
     # create_front_page()
     def test_edit_front_page(self, m):
         register_uris({'group': ['edit_front_page']}, m)
 
         new_front_page = self.group.edit_front_page()
-        assert isinstance(new_front_page, Page)
-        assert hasattr(new_front_page, 'url')
-        assert hasattr(new_front_page, 'title')
+        self.assertIsInstance(new_front_page, Page)
+        self.assertTrue(hasattr(new_front_page, 'url'))
+        self.assertTrue(hasattr(new_front_page, 'title'))
 
     # list_pages()
     def test_get_pages(self, m):
@@ -55,10 +55,10 @@ class TestGroup(unittest.TestCase):
 
         pages = self.group.get_pages()
         page_list = [page for page in pages]
-        assert len(page_list) == 4
-        assert isinstance(page_list[0], Page)
-        assert hasattr(page_list[0], 'id')
-        assert page_list[0].group_id == self.group.id
+        self.assertEqual(len(page_list), 4)
+        self.assertIsInstance(page_list[0], Page)
+        self.assertTrue(hasattr(page_list[0], 'id'))
+        self.assertEqual(page_list[0].group_id, self.group.id)
 
     # create_page()
     def test_create_page(self, m):
@@ -66,11 +66,11 @@ class TestGroup(unittest.TestCase):
 
         title = 'New Page'
         new_page = self.group.create_page(wiki_page={'title': title})
-        assert isinstance(new_page, Page)
-        assert hasattr(new_page, 'title')
-        assert new_page.title == title
-        assert hasattr(new_page, 'id')
-        assert new_page.group_id == self.group.id
+        self.assertIsInstance(new_page, Page)
+        self.assertTrue(hasattr(new_page, 'title'))
+        self.assertEqual(new_page.title, title)
+        self.assertTrue(hasattr(new_page, 'id'))
+        self.assertEqual(new_page.group_id, self.group.id)
 
     def test_create_page_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -82,7 +82,7 @@ class TestGroup(unittest.TestCase):
 
         url = 'my-url'
         page = self.group.get_page(url)
-        assert isinstance(page, Page)
+        self.assertIsInstance(page, Page)
 
     # edit()
     def test_edit(self, m):
@@ -90,18 +90,18 @@ class TestGroup(unittest.TestCase):
 
         new_title = "New Group"
         response = self.group.edit(description=new_title)
-        assert isinstance(response, Group)
-        assert hasattr(response, 'description')
-        assert response.description == new_title
+        self.assertIsInstance(response, Group)
+        self.assertTrue(hasattr(response, 'description'))
+        self.assertEqual(response.description, new_title)
 
     # delete()
     def test_delete(self, m):
         register_uris({'group': ['delete']}, m)
 
         group = self.group.delete()
-        assert isinstance(group, Group)
-        assert hasattr(group, 'name')
-        assert hasattr(group, 'description')
+        self.assertIsInstance(group, Group)
+        self.assertTrue(hasattr(group, 'name'))
+        self.assertTrue(hasattr(group, 'description'))
 
     # invite()
     def test_invite(self, m):
@@ -110,8 +110,8 @@ class TestGroup(unittest.TestCase):
         user_list = ["1", "2"]
         response = self.group.invite(user_list)
         gmembership_list = [groupmembership for groupmembership in response]
-        assert isinstance(gmembership_list[0], GroupMembership)
-        assert len(gmembership_list) == 2
+        self.assertIsInstance(gmembership_list[0], GroupMembership)
+        self.assertEqual(len(gmembership_list), 2)
 
     # list_users()
     def test_list_users(self, m):
@@ -120,8 +120,8 @@ class TestGroup(unittest.TestCase):
         from pycanvas.user import User
         users = self.group.list_users()
         user_list = [user for user in users]
-        assert isinstance(user_list[0], User)
-        assert len(user_list) == 4
+        self.assertIsInstance(user_list[0], User)
+        self.assertEqual(len(user_list), 4)
 
     # remove_user()
     def test_remove_user(self, m):
@@ -129,7 +129,7 @@ class TestGroup(unittest.TestCase):
 
         from pycanvas.user import User
         response = self.group.remove_user(1)
-        assert isinstance(response, User)
+        self.assertIsInstance(response, User)
 
     # upload()
     def test_upload(self, m):
@@ -138,9 +138,9 @@ class TestGroup(unittest.TestCase):
         filename = 'testfile_%s' % uuid.uuid4().hex
         file = open(filename, 'w+')
         response = self.group.upload(file)
-        assert response[0] is True
-        assert isinstance(response[1], dict)
-        assert 'url' in response[1]
+        self.assertTrue(response[0])
+        self.assertIsInstance(response[1], dict)
+        self.assertIn('url', response[1])
         # http://stackoverflow.com/a/10840586
         # Not as stupid as it looks.
         try:
@@ -154,15 +154,15 @@ class TestGroup(unittest.TestCase):
 
         html_str = "<p>processed html</p>"
         response = self.group.preview_html(html_str)
-        assert response == html_str
+        self.assertEqual(response, html_str)
 
     # get_activity_stream_summary()
     def test_get_activity_stream_summary(self, m):
         register_uris({'group': ['activity_stream_summary']}, m)
 
         response = self.group.get_activity_stream_summary()
-        assert len(response) == 2
-        assert 'type' in response[0]
+        self.assertEqual(len(response), 2)
+        self.assertIn('type', response[0])
 
     # list_memberships()
     def test_list_memberships(self, m):
@@ -170,30 +170,30 @@ class TestGroup(unittest.TestCase):
 
         response = self.group.list_memberships()
         membership_list = [membership for membership in response]
-        assert len(membership_list) == 4
-        assert isinstance(membership_list[0], GroupMembership)
-        assert hasattr(membership_list[0], 'id')
+        self.assertEqual(len(membership_list), 4)
+        self.assertIsInstance(membership_list[0], GroupMembership)
+        self.assertTrue(hasattr(membership_list[0], 'id'))
 
     # get_membership()
     def test_get_membership(self, m):
         register_uris({'group': ['get_membership']}, m)
 
         response = self.group.get_membership(1, "users")
-        assert isinstance(response, GroupMembership)
+        self.assertIsInstance(response, GroupMembership)
 
     # create_membership()
     def test_create_membership(self, m):
         register_uris({'group': ['create_membership']}, m)
 
         response = self.group.create_membership(1)
-        assert isinstance(response, GroupMembership)
+        self.assertIsInstance(response, GroupMembership)
 
     # update_membership()
     def test_update_membership(self, m):
         register_uris({'group': ['update_membership_user']}, m)
 
         response = self.group.update_membership(1)
-        assert isinstance(response, GroupMembership)
+        self.assertIsInstance(response, GroupMembership)
 
     # get_discussion_topic()
     def test_get_discussion_topic(self, m):
@@ -202,7 +202,7 @@ class TestGroup(unittest.TestCase):
         group_id = 1
         discussion = self.group.get_discussion_topic(group_id)
         self.assertIsInstance(discussion, DiscussionTopic)
-        assert hasattr(discussion, 'group_id')
+        self.assertTrue(hasattr(discussion, 'group_id'))
         self.assertEquals(group_id, discussion.id)
         self.assertEquals(discussion.group_id, 1)
 
@@ -213,8 +213,8 @@ class TestGroup(unittest.TestCase):
         topic_id = 1
         discussion = self.group.get_full_discussion_topic(topic_id)
         self.assertIsInstance(discussion, DiscussionTopic)
-        assert hasattr(discussion, 'view')
-        assert hasattr(discussion, 'participants')
+        self.assertTrue(hasattr(discussion, 'view'))
+        self.assertTrue(hasattr(discussion, 'participants'))
         self.assertEquals(discussion.group_id, 1)
 
     # get_discussion_topics()
@@ -224,7 +224,7 @@ class TestGroup(unittest.TestCase):
         response = self.group.get_discussion_topics()
         discussion_list = [discussion for discussion in response]
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
-        assert hasattr(discussion_list[0], 'group_id')
+        self.assertTrue(hasattr(discussion_list[0], 'group_id'))
         self.assertEquals(2, len(discussion_list))
 
     # create_discussion_topic()
@@ -233,7 +233,7 @@ class TestGroup(unittest.TestCase):
 
         title = "Topic 1"
         discussion = self.group.create_discussion_topic()
-        assert hasattr(discussion, 'group_id')
+        self.assertTrue(hasattr(discussion, 'group_id'))
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertEquals(discussion.title, title)
         self.assertEquals(discussion.group_id, 1)
@@ -272,30 +272,32 @@ class TestGroupMembership(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.membership)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # update()
     def test_update(self, m):
         register_uris({'group': ['update_membership_membership']}, m)
 
         response = self.membership.update(mem_id=1, moderator=False)
-        assert isinstance(response, GroupMembership)
+        self.assertIsInstance(response, GroupMembership)
 
     # remove_user()
     def test_remove_user(self, m):
         register_uris({'group': ['remove_user']}, m)
 
         response = self.membership.remove_user(1)
-        # the response should be an empty dict that evaluates to false
-        assert not response
+
+        self.assertIsInstance(response, dict)
+        self.assertEqual(len(response), 0)
 
     # remove_self()
     def test_remove_self(self, m):
         register_uris({'group': ['remove_self']}, m)
 
         response = self.membership.remove_self()
-        # the response should be an empty dict that evaluates to false
-        assert not response
+
+        self.assertIsInstance(response, dict)
+        self.assertEqual(len(response), 0)
 
 
 @requests_mock.Mocker()
@@ -313,7 +315,7 @@ class TestGroupCategory(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.group_category)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # create_group()
     def test_create_group(self, m):
@@ -321,9 +323,9 @@ class TestGroupCategory(unittest.TestCase):
 
         test_str = "Test Create Group"
         response = self.group_category.create_group(name=test_str)
-        assert isinstance(response, Group)
-        assert hasattr(response, 'name')
-        assert response.name == test_str
+        self.assertIsInstance(response, Group)
+        self.assertTrue(hasattr(response, 'name'))
+        self.assertEqual(response.name, test_str)
 
     # update()
     def test_update(self, m):
@@ -331,15 +333,16 @@ class TestGroupCategory(unittest.TestCase):
 
         new_name = "Test Update Category"
         response = self.group_category.update(name=new_name)
-        assert isinstance(response, GroupCategory)
+        self.assertIsInstance(response, GroupCategory)
 
     # delete_category()
     def test_delete_category(self, m):
         register_uris({'group': ['category_delete_category']}, m)
 
         response = self.group_category.delete()
-        # the response should be an empty dict that evaluates to false
-        assert not response
+
+        self.assertIsInstance(response, dict)
+        self.assertEqual(len(response), 0)
 
     # list_groups()
     def test_list_groups(self, m):
@@ -347,9 +350,9 @@ class TestGroupCategory(unittest.TestCase):
 
         response = self.group_category.list_groups()
         group_list = [group for group in response]
-        assert len(group_list) == 2
-        assert isinstance(group_list[0], Group)
-        assert hasattr(group_list[0], 'id')
+        self.assertEqual(len(group_list), 2)
+        self.assertIsInstance(group_list[0], Group)
+        self.assertTrue(hasattr(group_list[0], 'id'))
 
     # list_users()
     def test_list_users(self, m):
@@ -359,9 +362,9 @@ class TestGroupCategory(unittest.TestCase):
 
         response = self.group_category.list_users()
         user_list = [user for user in response]
-        assert len(user_list) == 4
-        assert isinstance(user_list[0], User)
-        assert hasattr(user_list[0], 'user_id')
+        self.assertEqual(len(user_list), 4)
+        self.assertIsInstance(user_list[0], User)
+        self.assertTrue(hasattr(user_list[0], 'user_id'))
 
     # assign_members()
     def test_assign_members(self, m):
@@ -379,5 +382,5 @@ class TestGroupCategory(unittest.TestCase):
         result_true = self.group_category.assign_members(sync=True)
         return_false = self.group_category.assign_members()
 
-        assert isinstance(result_true, PaginatedList)
-        assert isinstance(return_false, Progress)
+        self.assertIsInstance(result_true, PaginatedList)
+        self.assertIsInstance(return_false, Progress)

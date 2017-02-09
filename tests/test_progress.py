@@ -30,11 +30,11 @@ class TestProgress(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.progress)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # query()
     def test_query(self, m):
         register_uris({'progress': ['progress_query']}, m)
 
         response = self.progress.query()
-        assert isinstance(response, Progress)
+        self.assertIsInstance(response, Progress)

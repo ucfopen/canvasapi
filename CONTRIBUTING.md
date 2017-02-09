@@ -133,11 +133,11 @@ def test_create_quiz(self):
 	title = 'Newer Title'
 	new_quiz = self.course.create_quiz(self.course.id, quiz={'title': title})
 
-	assert isinstance(new_quiz, Quiz)
-	assert hasattr(new_quiz, 'title')
-	assert new_quiz.title == title
-	assert hasattr(new_quiz, 'course_id')
-	assert new_quiz.course_id == self.course.id
+	self.assertIsInstance(new_quiz, Quiz)
+	self.assertTrue(hasattr(new_quiz, 'title'))
+	self.assertEqual(new_quiz.title, title)
+	self.assertTrue(hasattr(new_quiz, 'course_id'))
+	self.assertEqual(new_quiz.course_id, self.course.id)
 ```
 
 Take a look at the existing tests to get a feel for the process. Once you've written a few, it should be second nature.
