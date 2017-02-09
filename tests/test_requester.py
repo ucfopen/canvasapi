@@ -24,25 +24,25 @@ class TestRequester(unittest.TestCase):
         register_uris({'requests': ['get']}, m)
 
         response = self.requester.request('GET', 'fake_get_request')
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
     def test_request_post(self, m):
         register_uris({'requests': ['post']}, m)
 
         response = self.requester.request('POST', 'fake_post_request')
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
     def test_request_delete(self, m):
         register_uris({'requests': ['delete']}, m)
 
         response = self.requester.request('DELETE', 'fake_delete_request')
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
     def test_request_put(self, m):
         register_uris({'requests': ['put']}, m)
 
         response = self.requester.request('PUT', 'fake_put_request')
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
     def test_request_400(self, m):
         register_uris({'requests': ['400']}, m)

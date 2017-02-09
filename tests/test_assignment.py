@@ -28,9 +28,9 @@ class TestAssignment(unittest.TestCase):
         name = 'New Name'
         edited_assignment = self.assignment.edit(assignment={'name': name})
 
-        assert isinstance(edited_assignment, Assignment)
-        assert hasattr(edited_assignment, 'name')
-        assert edited_assignment.name == name
+        self.assertIsInstance(edited_assignment, Assignment)
+        self.assertTrue(hasattr(edited_assignment, 'name'))
+        self.assertEqual(edited_assignment.name, name)
 
     # delete()
     def test_delete_assignments(self, m):
@@ -38,12 +38,12 @@ class TestAssignment(unittest.TestCase):
 
         deleted_assignment = self.assignment.delete()
 
-        assert isinstance(deleted_assignment, Assignment)
+        self.assertIsInstance(deleted_assignment, Assignment)
 
     # __str__()
     def test__str__(self, m):
         string = str(self.assignment)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()
@@ -88,4 +88,4 @@ class TestAssignmentGroup(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.assignment_group)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)

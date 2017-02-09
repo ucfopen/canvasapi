@@ -24,7 +24,7 @@ class TestQuiz(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.quiz)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # edit()
     def test_edit(self, m):
@@ -33,11 +33,11 @@ class TestQuiz(unittest.TestCase):
         title = 'New Title'
         edited_quiz = self.quiz.edit(quiz={'title': title})
 
-        assert isinstance(edited_quiz, Quiz)
-        assert hasattr(edited_quiz, 'title')
-        assert edited_quiz.title == title
-        assert hasattr(edited_quiz, 'course_id')
-        assert edited_quiz.course_id == self.course.id
+        self.assertIsInstance(edited_quiz, Quiz)
+        self.assertTrue(hasattr(edited_quiz, 'title'))
+        self.assertEqual(edited_quiz.title, title)
+        self.assertTrue(hasattr(edited_quiz, 'course_id'))
+        self.assertEqual(edited_quiz.course_id, self.course.id)
 
     # delete()
     def test_delete(self, m):
@@ -46,8 +46,8 @@ class TestQuiz(unittest.TestCase):
         title = "Great Title"
         deleted_quiz = self.quiz.delete(quiz={'title': title})
 
-        assert isinstance(deleted_quiz, Quiz)
-        assert hasattr(deleted_quiz, 'title')
-        assert deleted_quiz.title == title
-        assert hasattr(deleted_quiz, 'course_id')
-        assert deleted_quiz.course_id == self.course.id
+        self.assertIsInstance(deleted_quiz, Quiz)
+        self.assertTrue(hasattr(deleted_quiz, 'title'))
+        self.assertEqual(deleted_quiz.title, title)
+        self.assertTrue(hasattr(deleted_quiz, 'course_id'))
+        self.assertEqual(deleted_quiz.course_id, self.course.id)

@@ -43,21 +43,21 @@ class TestCourse(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.course)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # conclude()
     def test_conclude(self, m):
         register_uris({'course': ['conclude']}, m)
 
         success = self.course.conclude()
-        assert success
+        self.assertTrue(success)
 
     # delete()
     def test_delete(self, m):
         register_uris({'course': ['delete']}, m)
 
         success = self.course.delete()
-        assert success
+        self.assertTrue(success)
 
     # update()
     def test_update(self, m):
@@ -65,7 +65,7 @@ class TestCourse(unittest.TestCase):
 
         new_name = 'New Name'
         self.course.update(course={'name': new_name})
-        assert self.course.name == new_name
+        self.assertEqual(self.course.name, new_name)
 
     # get_user()
     def test_get_user(self, m):
@@ -73,16 +73,16 @@ class TestCourse(unittest.TestCase):
 
         user = self.course.get_user(1)
 
-        assert isinstance(user, User)
-        assert hasattr(user, 'name')
+        self.assertIsInstance(user, User)
+        self.assertTrue(hasattr(user, 'name'))
 
     def test_get_user_id_type(self, m):
         register_uris({'course': ['get_user_id_type']}, m)
 
         user = self.course.get_user("SISLOGIN", "sis_login_id")
 
-        assert isinstance(user, User)
-        assert hasattr(user, 'name')
+        self.assertIsInstance(user, User)
+        self.assertTrue(hasattr(user, 'name'))
 
     # get_users()
     def test_get_users(self, m):
@@ -91,8 +91,8 @@ class TestCourse(unittest.TestCase):
         users = self.course.get_users()
         user_list = [user for user in users]
 
-        assert len(user_list) == 4
-        assert isinstance(user_list[0], User)
+        self.assertEqual(len(user_list), 4)
+        self.assertIsInstance(user_list[0], User)
 
     # enroll_user()
     def test_enroll_user(self, m):
@@ -106,9 +106,9 @@ class TestCourse(unittest.TestCase):
         user = self.canvas.get_user(1)
         enrollment = self.course.enroll_user(user, enrollment_type)
 
-        assert isinstance(enrollment, Enrollment)
-        assert hasattr(enrollment, 'type')
-        assert enrollment.type == enrollment_type
+        self.assertIsInstance(enrollment, Enrollment)
+        self.assertTrue(hasattr(enrollment, 'type'))
+        self.assertEqual(enrollment.type, enrollment_type)
 
     # get_recent_students()
     def test_get_recent_students(self, m):
@@ -118,9 +118,9 @@ class TestCourse(unittest.TestCase):
         students = self.course.get_recent_students()
         student_list = [student for student in students]
 
-        assert len(student_list) == 4
-        assert isinstance(student_list[0], User)
-        assert hasattr(student_list[0], 'name')
+        self.assertEqual(len(student_list), 4)
+        self.assertIsInstance(student_list[0], User)
+        self.assertTrue(hasattr(student_list[0], 'name'))
 
     # preview_html()
     def test_preview_html(self, m):
@@ -129,8 +129,8 @@ class TestCourse(unittest.TestCase):
         html_str = "<script></script><p>hello</p>"
         prev_html = self.course.preview_html(html_str)
 
-        assert isinstance(prev_html, (str, unicode))
-        assert prev_html == "<p>hello</p>"
+        self.assertIsInstance(prev_html, (str, unicode))
+        self.assertEqual(prev_html, "<p>hello</p>")
 
     # get_settings()
     def test_get_settings(self, m):
@@ -138,7 +138,7 @@ class TestCourse(unittest.TestCase):
 
         settings = self.course.get_settings()
 
-        assert isinstance(settings, dict)
+        self.assertIsInstance(settings, dict)
 
     # update_settings()
     def test_update_settings(self, m):
@@ -146,8 +146,8 @@ class TestCourse(unittest.TestCase):
 
         settings = self.course.update_settings()
 
-        assert isinstance(settings, dict)
-        assert settings['hide_final_grades'] is True
+        self.assertIsInstance(settings, dict)
+        self.assertTrue(settings['hide_final_grades'])
 
     # upload()
     def test_upload(self, m):
@@ -158,9 +158,9 @@ class TestCourse(unittest.TestCase):
 
         response = self.course.upload(file)
 
-        assert response[0] is True
-        assert isinstance(response[1], dict)
-        assert 'url' in response[1]
+        self.assertTrue(response[0])
+        self.assertIsInstance(response[1], dict)
+        self.assertIn('url', response[1])
 
         # http://stackoverflow.com/a/10840586
         # Not as stupid as it looks.
@@ -175,8 +175,8 @@ class TestCourse(unittest.TestCase):
 
         course = self.course.reset()
 
-        assert isinstance(course, Course)
-        assert hasattr(course, 'name')
+        self.assertIsInstance(course, Course)
+        self.assertTrue(hasattr(course, 'name'))
 
     # create_quiz()
     def test_create_quiz(self, m):
@@ -185,11 +185,11 @@ class TestCourse(unittest.TestCase):
         title = 'Newer Title'
         new_quiz = self.course.create_quiz({'title': title})
 
-        assert isinstance(new_quiz, Quiz)
-        assert hasattr(new_quiz, 'title')
-        assert new_quiz.title == title
-        assert hasattr(new_quiz, 'course_id')
-        assert new_quiz.course_id == self.course.id
+        self.assertIsInstance(new_quiz, Quiz)
+        self.assertTrue(hasattr(new_quiz, 'title'))
+        self.assertEqual(new_quiz.title, title)
+        self.assertTrue(hasattr(new_quiz, 'course_id'))
+        self.assertEqual(new_quiz.course_id, self.course.id)
 
     def test_create_quiz_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -201,9 +201,9 @@ class TestCourse(unittest.TestCase):
 
         target_quiz = self.course.get_quiz(1)
 
-        assert isinstance(target_quiz, Quiz)
-        assert hasattr(target_quiz, 'course_id')
-        assert target_quiz.course_id == self.course.id
+        self.assertIsInstance(target_quiz, Quiz)
+        self.assertTrue(hasattr(target_quiz, 'course_id'))
+        self.assertEqual(target_quiz.course_id, self.course.id)
 
     def test_get_quiz_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
@@ -218,10 +218,10 @@ class TestCourse(unittest.TestCase):
         quizzes = self.course.get_quizzes()
         quiz_list = [quiz for quiz in quizzes]
 
-        assert len(quiz_list) == 4
-        assert isinstance(quiz_list[0], Quiz)
-        assert hasattr(quiz_list[0], 'course_id')
-        assert quiz_list[0].course_id == self.course.id
+        self.assertEqual(len(quiz_list), 4)
+        self.assertIsInstance(quiz_list[0], Quiz)
+        self.assertTrue(hasattr(quiz_list[0], 'course_id'))
+        self.assertEqual(quiz_list[0].course_id, self.course.id)
 
     # get_modules()
     def test_get_modules(self, m):
@@ -230,10 +230,10 @@ class TestCourse(unittest.TestCase):
         modules = self.course.get_modules()
         module_list = [module for module in modules]
 
-        assert len(module_list) == 4
-        assert isinstance(module_list[0], Module)
-        assert hasattr(module_list[0], 'course_id')
-        assert module_list[0].course_id == self.course.id
+        self.assertEqual(len(module_list), 4)
+        self.assertIsInstance(module_list[0], Module)
+        self.assertTrue(hasattr(module_list[0], 'course_id'))
+        self.assertEqual(module_list[0].course_id, self.course.id)
 
     # get_module()
     def test_get_module(self, m):
@@ -241,9 +241,9 @@ class TestCourse(unittest.TestCase):
 
         target_module = self.course.get_module(1)
 
-        assert isinstance(target_module, Module)
-        assert hasattr(target_module, 'course_id')
-        assert target_module.course_id == self.course.id
+        self.assertIsInstance(target_module, Module)
+        self.assertTrue(hasattr(target_module, 'course_id'))
+        self.assertEqual(target_module.course_id, self.course.id)
 
     # create_module()
     def test_create_module(self, m):
@@ -252,10 +252,10 @@ class TestCourse(unittest.TestCase):
         name = 'Name'
         new_module = self.course.create_module(module={'name': name})
 
-        assert isinstance(new_module, Module)
-        assert hasattr(new_module, 'name')
-        assert hasattr(new_module, 'course_id')
-        assert new_module.course_id == self.course.id
+        self.assertIsInstance(new_module, Module)
+        self.assertTrue(hasattr(new_module, 'name'))
+        self.assertTrue(hasattr(new_module, 'course_id'))
+        self.assertEqual(new_module.course_id, self.course.id)
 
     def test_create_module_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -268,8 +268,8 @@ class TestCourse(unittest.TestCase):
         enrollments = self.course.get_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
 
-        assert len(enrollment_list) == 4
-        assert isinstance(enrollment_list[0], Enrollment)
+        self.assertEqual(len(enrollment_list), 4)
+        self.assertIsInstance(enrollment_list[0], Enrollment)
 
     # get_section
     def test_get_section(self, m):
@@ -277,7 +277,7 @@ class TestCourse(unittest.TestCase):
 
         section = self.course.get_section(1)
 
-        assert isinstance(section, Section)
+        self.assertIsInstance(section, Section)
 
     # create_assignment()
     def test_create_assignment(self, m):
@@ -287,10 +287,10 @@ class TestCourse(unittest.TestCase):
 
         assignment = self.course.create_assignment(assignment={'name': name})
 
-        assert isinstance(assignment, Assignment)
-        assert hasattr(assignment, 'name')
-        assert assignment.name == name
-        assert assignment.id == 5
+        self.assertIsInstance(assignment, Assignment)
+        self.assertTrue(hasattr(assignment, 'name'))
+        self.assertEqual(assignment.name, name)
+        self.assertEqual(assignment.id, 5)
 
     def test_create_assignment_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -302,8 +302,8 @@ class TestCourse(unittest.TestCase):
 
         assignment = self.course.get_assignment('5')
 
-        assert isinstance(assignment, Assignment)
-        assert hasattr(assignment, 'name')
+        self.assertIsInstance(assignment, Assignment)
+        self.assertTrue(hasattr(assignment, 'name'))
 
     # get_assignments()
     def test_get_assignments(self, m):
@@ -313,8 +313,8 @@ class TestCourse(unittest.TestCase):
         assignments = self.course.get_assignments()
         assignment_list = [assignment for assignment in assignments]
 
-        assert isinstance(assignments[0], Assignment)
-        assert len(assignment_list) == 4
+        self.assertIsInstance(assignments[0], Assignment)
+        self.assertEqual(len(assignment_list), 4)
 
     # show_front_page()
     def test_show_front_page(self, m):
@@ -322,9 +322,9 @@ class TestCourse(unittest.TestCase):
 
         front_page = self.course.show_front_page()
 
-        assert isinstance(front_page, Page)
-        assert hasattr(front_page, 'url')
-        assert hasattr(front_page, 'title')
+        self.assertIsInstance(front_page, Page)
+        self.assertTrue(hasattr(front_page, 'url'))
+        self.assertTrue(hasattr(front_page, 'title'))
 
     # create_front_page()
     def test_edit_front_page(self, m):
@@ -332,9 +332,9 @@ class TestCourse(unittest.TestCase):
 
         new_front_page = self.course.edit_front_page()
 
-        assert isinstance(new_front_page, Page)
-        assert hasattr(new_front_page, 'url')
-        assert hasattr(new_front_page, 'title')
+        self.assertIsInstance(new_front_page, Page)
+        self.assertTrue(hasattr(new_front_page, 'url'))
+        self.assertTrue(hasattr(new_front_page, 'title'))
 
     # get_page()
     def test_get_page(self, m):
@@ -343,7 +343,7 @@ class TestCourse(unittest.TestCase):
         url = 'my-url'
         page = self.course.get_page(url)
 
-        assert isinstance(page, Page)
+        self.assertIsInstance(page, Page)
 
     # get_pages()
     def test_get_pages(self, m):
@@ -352,10 +352,10 @@ class TestCourse(unittest.TestCase):
         pages = self.course.get_pages()
         page_list = [page for page in pages]
 
-        assert len(page_list) == 4
-        assert isinstance(page_list[0], Page)
-        assert hasattr(page_list[0], 'course_id')
-        assert page_list[0].course_id == self.course.id
+        self.assertEqual(len(page_list), 4)
+        self.assertIsInstance(page_list[0], Page)
+        self.assertTrue(hasattr(page_list[0], 'course_id'))
+        self.assertEqual(page_list[0].course_id, self.course.id)
 
     # create_page()
     def test_create_page(self, m):
@@ -364,11 +364,11 @@ class TestCourse(unittest.TestCase):
         title = "Newest Page"
         new_page = self.course.create_page(wiki_page={'title': title})
 
-        assert isinstance(new_page, Page)
-        assert hasattr(new_page, 'title')
-        assert new_page.title == title
-        assert hasattr(new_page, 'course_id')
-        assert new_page.course_id == self.course.id
+        self.assertIsInstance(new_page, Page)
+        self.assertTrue(hasattr(new_page, 'title'))
+        self.assertEqual(new_page.title, title)
+        self.assertTrue(hasattr(new_page, 'course_id'))
+        self.assertEqual(new_page.course_id, self.course.id)
 
     def test_create_page_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -380,8 +380,8 @@ class TestCourse(unittest.TestCase):
 
         tool = self.course.get_external_tool(1)
 
-        assert isinstance(tool, ExternalTool)
-        assert hasattr(tool, 'name')
+        self.assertIsInstance(tool, ExternalTool)
+        self.assertTrue(hasattr(tool, 'name'))
 
     # get_external_tools()
     def test_get_external_tools(self, m):
@@ -391,8 +391,8 @@ class TestCourse(unittest.TestCase):
         tools = self.course.get_external_tools()
         tool_list = [tool for tool in tools]
 
-        assert isinstance(tool_list[0], ExternalTool)
-        assert len(tool_list) == 4
+        self.assertIsInstance(tool_list[0], ExternalTool)
+        self.assertEqual(len(tool_list), 4)
 
     def test_list_sections(self, m):
         register_uris({'course': ['list_sections', 'list_sections2']}, m)
@@ -400,15 +400,15 @@ class TestCourse(unittest.TestCase):
         sections = self.course.list_sections()
         section_list = [sect for sect in sections]
 
-        assert isinstance(section_list[0], Section)
-        assert len(section_list) == 4
+        self.assertIsInstance(section_list[0], Section)
+        self.assertEqual(len(section_list), 4)
 
     def test_create_course_section(self, m):
         register_uris({'course': ['create_section']}, m)
 
         section = self.course.create_course_section()
 
-        assert isinstance(section, Section)
+        self.assertIsInstance(section, Section)
 
     def test_list_groups(self, m):
         requires = {'course': ['list_groups_context', 'list_groups_context2']}
@@ -417,8 +417,8 @@ class TestCourse(unittest.TestCase):
         groups = self.course.list_groups()
         group_list = [group for group in groups]
 
-        assert isinstance(group_list[0], Group)
-        assert len(group_list) == 4
+        self.assertIsInstance(group_list[0], Group)
+        self.assertEqual(len(group_list), 4)
 
     # create_group_category()
     def test_create_group_category(self, m):
@@ -426,7 +426,7 @@ class TestCourse(unittest.TestCase):
 
         name_str = "Test String"
         response = self.course.create_group_category(name=name_str)
-        assert isinstance(response, GroupCategory)
+        self.assertIsInstance(response, GroupCategory)
 
     # list_group_categories()
     def test_list_group_categories(self, m):
@@ -434,7 +434,7 @@ class TestCourse(unittest.TestCase):
 
         response = self.course.list_group_categories()
         category_list = [category for category in response]
-        assert isinstance(category_list[0], GroupCategory)
+        self.assertIsInstance(category_list[0], GroupCategory)
 
     # get_discussion_topic()
     def test_get_discussion_topic(self, m):
@@ -443,7 +443,7 @@ class TestCourse(unittest.TestCase):
         topic_id = 1
         discussion = self.course.get_discussion_topic(topic_id)
         self.assertIsInstance(discussion, DiscussionTopic)
-        assert hasattr(discussion, 'course_id')
+        self.assertTrue(hasattr(discussion, 'course_id'))
         self.assertEquals(discussion.course_id, 1)
 
     # get_full_discussion_topic()
@@ -453,8 +453,8 @@ class TestCourse(unittest.TestCase):
         topic_id = 1
         discussion = self.course.get_full_discussion_topic(topic_id)
         self.assertIsInstance(discussion, DiscussionTopic)
-        assert hasattr(discussion, 'view')
-        assert hasattr(discussion, 'participants')
+        self.assertTrue(hasattr(discussion, 'view'))
+        self.assertTrue(hasattr(discussion, 'participants'))
         self.assertEquals(discussion.course_id, 1)
 
     # get_discussion_topics()
@@ -464,7 +464,7 @@ class TestCourse(unittest.TestCase):
         response = self.course.get_discussion_topics()
         discussion_list = [discussion for discussion in response]
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
-        assert hasattr(discussion_list[0], 'course_id')
+        self.assertTrue(hasattr(discussion_list[0], 'course_id'))
         self.assertEquals(2, len(discussion_list))
 
     # create_discussion_topic()
@@ -474,7 +474,7 @@ class TestCourse(unittest.TestCase):
         title = "Topic 1"
         discussion = self.course.create_discussion_topic()
         self.assertIsInstance(discussion, DiscussionTopic)
-        assert hasattr(discussion, 'course_id')
+        self.assertTrue(hasattr(discussion, 'course_id'))
         self.assertEquals(title, discussion.title)
         self.assertEquals(discussion.course_id, 1)
 
@@ -561,7 +561,7 @@ class TestCourseNickname(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.nickname)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # remove()
     def test_remove(self, m):
@@ -569,5 +569,5 @@ class TestCourseNickname(unittest.TestCase):
 
         deleted_nick = self.nickname.remove()
 
-        assert isinstance(deleted_nick, CourseNickname)
-        assert hasattr(deleted_nick, 'nickname')
+        self.assertIsInstance(deleted_nick, CourseNickname)
+        self.assertTrue(hasattr(deleted_nick, 'nickname'))

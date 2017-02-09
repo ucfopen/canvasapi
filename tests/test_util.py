@@ -207,14 +207,14 @@ class TestUtil(unittest.TestCase):
     def test_obj_or_id_int(self, m):
         user_id = obj_or_id(1, 'user_id', (User,))
 
-        assert isinstance(user_id, int)
-        assert user_id == 1
+        self.assertIsInstance(user_id, int)
+        self.assertEqual(user_id, 1)
 
     def test_obj_or_id_str_valid(self, m):
         user_id = obj_or_id("1", 'user_id', (User,))
 
-        assert isinstance(user_id, int)
-        assert user_id == 1
+        self.assertIsInstance(user_id, int)
+        self.assertEqual(user_id, 1)
 
     def test_obj_or_id_str_invalid(self, m):
         with self.assertRaises(TypeError):
@@ -227,8 +227,8 @@ class TestUtil(unittest.TestCase):
 
         user_id = obj_or_id(user, 'user_id', (User,))
 
-        assert isinstance(user_id, int)
-        assert user_id == 1
+        self.assertIsInstance(user_id, int)
+        self.assertEqual(user_id, 1)
 
     def test_obj_or_id_obj_no_id(self, m):
         register_uris({'user': ['course_nickname']}, m)

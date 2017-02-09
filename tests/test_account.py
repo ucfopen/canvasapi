@@ -32,7 +32,7 @@ class TestAccount(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.account)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # close_notification_for_user()
     def test_close_notification_for_user_id(self, m):
@@ -42,8 +42,8 @@ class TestAccount(unittest.TestCase):
         notif_id = 1
         closed_notif = self.account.close_notification_for_user(user_id, notif_id)
 
-        assert isinstance(closed_notif, AccountNotification)
-        assert hasattr(closed_notif, 'subject')
+        self.assertIsInstance(closed_notif, AccountNotification)
+        self.assertTrue(hasattr(closed_notif, 'subject'))
 
     def test_close_notification_for_user_obj(self, m):
         register_uris({'account': ['close_notification']}, m)
@@ -57,8 +57,8 @@ class TestAccount(unittest.TestCase):
 
         new_account = self.account.create_account()
 
-        assert isinstance(new_account, Account)
-        assert hasattr(new_account, 'id')
+        self.assertIsInstance(new_account, Account)
+        self.assertTrue(hasattr(new_account, 'id'))
 
     # create_course()
     def test_create_course(self, m):
@@ -66,8 +66,8 @@ class TestAccount(unittest.TestCase):
 
         course = self.account.create_course()
 
-        assert isinstance(course, Course)
-        assert hasattr(course, 'name')
+        self.assertIsInstance(course, Course)
+        self.assertTrue(hasattr(course, 'name'))
 
     # create_subaccount()
     def test_create_subaccount(self, m):
@@ -76,11 +76,11 @@ class TestAccount(unittest.TestCase):
         subaccount_name = "New Subaccount"
         subaccount = self.account.create_subaccount({'name': subaccount_name})
 
-        assert isinstance(subaccount, Account)
-        assert hasattr(subaccount, 'name')
-        assert subaccount.name == subaccount_name
-        assert hasattr(subaccount, 'root_account_id')
-        assert subaccount.root_account_id == self.account.id
+        self.assertIsInstance(subaccount, Account)
+        self.assertTrue(hasattr(subaccount, 'name'))
+        self.assertEqual(subaccount.name, subaccount_name)
+        self.assertTrue(hasattr(subaccount, 'root_account_id'))
+        self.assertEqual(subaccount.root_account_id, self.account.id)
 
     def test_create_course_missing_field(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -93,9 +93,9 @@ class TestAccount(unittest.TestCase):
         unique_id = 123456
         user = self.account.create_user({'unique_id': unique_id})
 
-        assert isinstance(user, User)
-        assert hasattr(user, 'unique_id')
-        assert user.unique_id == unique_id
+        self.assertIsInstance(user, User)
+        self.assertTrue(hasattr(user, 'unique_id'))
+        self.assertEqual(user.unique_id, unique_id)
 
     def test_create_user_missing_field(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -114,11 +114,11 @@ class TestAccount(unittest.TestCase):
         }
         notif = self.account.create_notification(notif_dict)
 
-        assert isinstance(notif, AccountNotification)
-        assert hasattr(notif, 'subject')
-        assert notif.subject == subject
-        assert hasattr(notif, 'start_at_date')
-        assert isinstance(notif.start_at_date, datetime.datetime)
+        self.assertIsInstance(notif, AccountNotification)
+        self.assertTrue(hasattr(notif, 'subject'))
+        self.assertEqual(notif.subject, subject)
+        self.assertTrue(hasattr(notif, 'start_at_date'))
+        self.assertIsInstance(notif.start_at_date, datetime.datetime)
 
     def test_create_notification_missing_field(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -130,16 +130,16 @@ class TestAccount(unittest.TestCase):
 
         deleted_user = self.account.delete_user(self.user.id)
 
-        assert isinstance(deleted_user, User)
-        assert hasattr(deleted_user, 'name')
+        self.assertIsInstance(deleted_user, User)
+        self.assertTrue(hasattr(deleted_user, 'name'))
 
     def test_delete_user_obj(self, m):
         register_uris({'account': ['delete_user']}, m)
 
         deleted_user = self.account.delete_user(self.user)
 
-        assert isinstance(deleted_user, User)
-        assert hasattr(deleted_user, 'name')
+        self.assertIsInstance(deleted_user, User)
+        self.assertTrue(hasattr(deleted_user, 'name'))
 
     # get_courses()
     def test_get_courses(self, m):
@@ -149,9 +149,9 @@ class TestAccount(unittest.TestCase):
         courses = self.account.get_courses()
 
         course_list = [course for course in courses]
-        assert len(course_list) == 4
-        assert isinstance(course_list[0], Course)
-        assert hasattr(course_list[0], 'name')
+        self.assertEqual(len(course_list), 4)
+        self.assertIsInstance(course_list[0], Course)
+        self.assertTrue(hasattr(course_list[0], 'name'))
 
     # get_external_tool()
     def test_get_external_tool(self, m):
@@ -160,8 +160,8 @@ class TestAccount(unittest.TestCase):
 
         tool = self.account.get_external_tool(1)
 
-        assert isinstance(tool, ExternalTool)
-        assert hasattr(tool, 'name')
+        self.assertIsInstance(tool, ExternalTool)
+        self.assertTrue(hasattr(tool, 'name'))
 
     # get_external_tools()
     def test_get_external_tools(self, m):
@@ -171,8 +171,8 @@ class TestAccount(unittest.TestCase):
         tools = self.account.get_external_tools()
         tool_list = [tool for tool in tools]
 
-        assert isinstance(tool_list[0], ExternalTool)
-        assert len(tool_list) == 4
+        self.assertIsInstance(tool_list[0], ExternalTool)
+        self.assertEqual(len(tool_list), 4)
 
     # get_index_of_reports()
     def test_get_index_of_reports(self, m):
@@ -182,9 +182,9 @@ class TestAccount(unittest.TestCase):
         reports_index = self.account.get_index_of_reports("sis_export_csv")
 
         reports_index_list = [index for index in reports_index]
-        assert len(reports_index_list) == 4
-        assert isinstance(reports_index_list[0], AccountReport)
-        assert hasattr(reports_index_list[0], 'id')
+        self.assertEqual(len(reports_index_list), 4)
+        self.assertIsInstance(reports_index_list[0], AccountReport)
+        self.assertTrue(hasattr(reports_index_list[0], 'id'))
 
     # get_reports()
     def test_get_reports(self, m):
@@ -194,9 +194,9 @@ class TestAccount(unittest.TestCase):
         reports = self.account.get_reports()
 
         reports_list = [report for report in reports]
-        assert len(reports_list) == 4
-        assert isinstance(reports_list[0], AccountReport)
-        assert hasattr(reports_list[0], 'id')
+        self.assertEqual(len(reports_list), 4)
+        self.assertIsInstance(reports_list[0], AccountReport)
+        self.assertTrue(hasattr(reports_list[0], 'id'))
 
     # get_subaccounts()
     def test_get_subaccounts(self, m):
@@ -206,9 +206,9 @@ class TestAccount(unittest.TestCase):
         subaccounts = self.account.get_subaccounts()
 
         subaccounts_list = [account for account in subaccounts]
-        assert len(subaccounts_list) == 4
-        assert isinstance(subaccounts_list[0], Account)
-        assert hasattr(subaccounts_list[0], 'name')
+        self.assertEqual(len(subaccounts_list), 4)
+        self.assertIsInstance(subaccounts_list[0], Account)
+        self.assertTrue(hasattr(subaccounts_list[0], 'name'))
 
     # get_users()
     def test_get_users(self, m):
@@ -218,9 +218,9 @@ class TestAccount(unittest.TestCase):
         users = self.account.get_users()
 
         user_list = [user for user in users]
-        assert len(user_list) == 4
-        assert isinstance(user_list[0], User)
-        assert hasattr(user_list[0], 'name')
+        self.assertEqual(len(user_list), 4)
+        self.assertIsInstance(user_list[0], User)
+        self.assertTrue(hasattr(user_list[0], 'name'))
 
     # get_user_notifications()
     def test_get_user_notifications_id(self, m):
@@ -230,9 +230,9 @@ class TestAccount(unittest.TestCase):
         user_notifs = self.account.get_user_notifications(self.user.id)
 
         notif_list = [notif for notif in user_notifs]
-        assert len(notif_list) == 4
-        assert isinstance(user_notifs[0], AccountNotification)
-        assert hasattr(user_notifs[0], 'subject')
+        self.assertEqual(len(notif_list), 4)
+        self.assertIsInstance(user_notifs[0], AccountNotification)
+        self.assertTrue(hasattr(user_notifs[0], 'subject'))
 
     def test_get_user_notifications_obj(self, m):
         required = {'account': ['user_notifs', 'user_notifs_page_2']}
@@ -241,9 +241,9 @@ class TestAccount(unittest.TestCase):
         user_notifs = self.account.get_user_notifications(self.user)
 
         notif_list = [notif for notif in user_notifs]
-        assert len(notif_list) == 4
-        assert isinstance(user_notifs[0], AccountNotification)
-        assert hasattr(user_notifs[0], 'subject')
+        self.assertEqual(len(notif_list), 4)
+        self.assertIsInstance(user_notifs[0], AccountNotification)
+        self.assertTrue(hasattr(user_notifs[0], 'subject'))
 
     # update()
     def test_update(self, m):
@@ -274,55 +274,55 @@ class TestAccount(unittest.TestCase):
         roles = self.account.list_roles()
         role_list = [role for role in roles]
 
-        assert len(role_list) == 4
-        assert isinstance(role_list[0], Role)
-        assert hasattr(role_list[0], 'role')
-        assert hasattr(role_list[0], 'label')
+        self.assertEqual(len(role_list), 4)
+        self.assertIsInstance(role_list[0], Role)
+        self.assertTrue(hasattr(role_list[0], 'role'))
+        self.assertTrue(hasattr(role_list[0], 'label'))
 
     def test_get_role(self, m):
         register_uris({'account': ['get_role']}, m)
 
         target_role = self.account.get_role(2)
 
-        assert isinstance(target_role, Role)
-        assert hasattr(target_role, 'role')
-        assert hasattr(target_role, 'label')
+        self.assertIsInstance(target_role, Role)
+        self.assertTrue(hasattr(target_role, 'role'))
+        self.assertTrue(hasattr(target_role, 'label'))
 
     def test_create_role(self, m):
         register_uris({'account': ['create_role']}, m)
 
         new_role = self.account.create_role(1)
 
-        assert isinstance(new_role, Role)
-        assert hasattr(new_role, 'role')
-        assert hasattr(new_role, 'label')
+        self.assertIsInstance(new_role, Role)
+        self.assertTrue(hasattr(new_role, 'role'))
+        self.assertTrue(hasattr(new_role, 'label'))
 
     def test_deactivate_role(self, m):
         register_uris({'account': ['deactivate_role']}, m)
 
         old_role = self.account.deactivate_role(2)
 
-        assert isinstance(old_role, Role)
-        assert hasattr(old_role, 'role')
-        assert hasattr(old_role, 'label')
+        self.assertIsInstance(old_role, Role)
+        self.assertTrue(hasattr(old_role, 'role'))
+        self.assertTrue(hasattr(old_role, 'label'))
 
     def test_activate_role(self, m):
         register_uris({'account': ['activate_role']}, m)
 
         activated_role = self.account.activate_role(2)
 
-        assert isinstance(activated_role, Role)
-        assert hasattr(activated_role, 'role')
-        assert hasattr(activated_role, 'label')
+        self.assertIsInstance(activated_role, Role)
+        self.assertTrue(hasattr(activated_role, 'role'))
+        self.assertTrue(hasattr(activated_role, 'label'))
 
     def test_update_role(self, m):
         register_uris({'account': ['update_role']}, m)
 
         updated_role = self.account.update_role(2)
 
-        assert isinstance(updated_role, Role)
-        assert hasattr(updated_role, 'role')
-        assert hasattr(updated_role, 'label')
+        self.assertIsInstance(updated_role, Role)
+        self.assertTrue(hasattr(updated_role, 'role'))
+        self.assertTrue(hasattr(updated_role, 'label'))
 
     # get_enrollment()
     def test_get_enrollment(self, m):
@@ -330,7 +330,7 @@ class TestAccount(unittest.TestCase):
 
         target_enrollment = self.account.get_enrollment(1)
 
-        assert isinstance(target_enrollment, Enrollment)
+        self.assertIsInstance(target_enrollment, Enrollment)
 
     def test_list_groups(self, m):
         requires = {'account': ['list_groups_context', 'list_groups_context2']}
@@ -339,8 +339,8 @@ class TestAccount(unittest.TestCase):
         groups = self.account.list_groups()
         group_list = [group for group in groups]
 
-        assert isinstance(group_list[0], Group)
-        assert len(group_list) == 4
+        self.assertIsInstance(group_list[0], Group)
+        self.assertEqual(len(group_list), 4)
 
     # create_group_category()
     def test_create_group_category(self, m):
@@ -348,7 +348,7 @@ class TestAccount(unittest.TestCase):
 
         name_str = "Test String"
         response = self.account.create_group_category(name=name_str)
-        assert isinstance(response, GroupCategory)
+        self.assertIsInstance(response, GroupCategory)
 
     # list_group_categories()
     def test_list_group_categories(self, m):
@@ -356,7 +356,8 @@ class TestAccount(unittest.TestCase):
 
         response = self.account.list_group_categories()
         category_list = [category for category in response]
-        assert isinstance(category_list[0], GroupCategory)
+
+        self.assertIsInstance(category_list[0], GroupCategory)
 
     # create_external_tool()
     def test_create_external_tool(self, m):
