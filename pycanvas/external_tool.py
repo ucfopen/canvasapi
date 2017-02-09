@@ -64,7 +64,6 @@ class ExternalTool(CanvasObject):
             or `DELETE /api/v1/accounts/:account_id/external_tools/:external_tool_id
             <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.destroy`_
 
-        :returns: A representation of the deleted tool
         :rtype: :class:`pycanvas.external_tool.ExternalTool`
         """
         response = self._requester.request(
@@ -76,7 +75,7 @@ class ExternalTool(CanvasObject):
 
     def edit(self, **kwargs):
         """
-        Update the specified external tool. Uses same parameters as create.
+        Update the specified external tool.
 
         :calls: `PUT /api/v1/courses/:course_id/external_tools/:external_tool_id
             <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.update>`_
