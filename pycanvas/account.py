@@ -571,6 +571,44 @@ class Account(CanvasObject):
 
         return ExternalTool(self._requester, response_json)
 
+    def create_enrollment_term(self, **kwargs):
+        """
+        Create an enrollment term.
+
+        :calls: `POST /api/v1/accounts/:account_id/terms \
+        <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms.create>`_
+
+        :rtype: :class:`pycanvas.enrollment_term.EnrollmentTerm`
+        """
+        from pycanvas.enrollment_term import EnrollmentTerm
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/terms' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return EnrollmentTerm(self._requester, response.json())
+
+    def list_enrollment_terms(self, **kwargs):
+        """
+        List enrollment terms for a context
+
+        :calls: `GET /api/v1/accounts/:account_id/terms \
+        <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.index>`_
+
+        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
+            :class:`pycanvas.enrollment_term.EnrollmentTerm`
+        """
+        from enrollment_term import EnrollmentTerm
+
+        return PaginatedList(
+            EnrollmentTerm,
+            self._requester,
+            'GET',
+            'accounts/%s/terms' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
 
 class AccountNotification(CanvasObject):
 
