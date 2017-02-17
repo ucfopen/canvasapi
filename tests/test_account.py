@@ -7,6 +7,7 @@ from pycanvas import Canvas
 from pycanvas.account import Account, AccountNotification, AccountReport, Role
 from pycanvas.course import Course
 from pycanvas.enrollment import Enrollment
+from pycanvas.enrollment_term import EnrollmentTerm
 from pycanvas.external_tool import ExternalTool
 from pycanvas.exceptions import RequiredFieldMissing
 from pycanvas.group import Group, GroupCategory
@@ -373,3 +374,25 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(response, ExternalTool)
         self.assertTrue(hasattr(response, 'id'))
         self.assertEqual(response.id, 10)
+
+    # create_enrollment_term()
+    def test_create_enrollment_term(self, m):
+        register_uris({'enrollment_term': ['create_enrollment_term']}, m)
+
+        evnt = self.account.create_enrollment_term(
+            name="Test Enrollment Term",
+            id=45
+        )
+
+        self.assertIsInstance(evnt, EnrollmentTerm)
+        self.assertEqual(evnt.name, "Test Enrollment Term")
+        self.assertEqual(evnt.id, 45)
+
+    # list_enrollment_terms()
+    def test_list_enrollment_terms(self, m):
+        register_uris({'account': ['list_enrollment_terms']}, m)
+
+        response = self.account.list_enrollment_terms()
+        enrollment_terms_list = [category for category in response]
+
+        self.assertIsInstance(enrollment_terms_list[0], EnrollmentTerm)
