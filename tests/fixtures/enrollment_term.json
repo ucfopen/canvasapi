@@ -13,7 +13,7 @@
 		"endpoint": "accounts/1/terms/45",
 		"data": {
 			"id": 45,
-			"name": "Test Enrollment Term 3"
+			"name": "Test Enrollment Term"
 		},
 		"status_code": 200
 	},

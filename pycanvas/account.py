@@ -587,7 +587,10 @@ class Account(CanvasObject):
             'accounts/%s/terms' % (self.id),
             **combine_kwargs(**kwargs)
         )
-        return EnrollmentTerm(self._requester, response.json())
+        enrollment_term_json = response.json()
+        enrollment_term_json.update({'account_id': self.id})
+
+        return EnrollmentTerm(self._requester, enrollment_term_json)
 
     def list_enrollment_terms(self, **kwargs):
         """
@@ -606,6 +609,7 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/%s/terms' % (self.id),
+            {'account_id': self.id},
             **combine_kwargs(**kwargs)
         )
 
