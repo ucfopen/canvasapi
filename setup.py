@@ -16,16 +16,16 @@ setup(
     name='pycanvas',
     version=version,
     description='API wrapper for the Canvas LMS',
-    url='https://github.com/ucfopen/PyCanvas',
-    author='Techrangers (University of Central Florida)',
-    author_email='pycanvas@example.com',
+    url='https://github.com/ucfopen/canvas-api',
+    author='University of Central Florida - Center for Distributed Learning',
+    author_email='techrangers@ucf.edu',
     license='MIT License',
     packages=['pycanvas'],
     include_package_data=True,
     install_requires=['requests'],
     zip_safe=False,
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha'
+        'Development Status :: 3 - Alpha'
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: Information Technology',
