@@ -1,14 +1,14 @@
-# PyCanvas
-PyCanvas is a Python package that allows for simple access to the Instructure Canvas API.
+# canvas-api
+canvas-api is a Python package that allows for simple access to the Instructure Canvas API.
 
 ## Installation
 [internal only]
-`pip install git+https://example.com/changeme/pycanvas.git@stable`
+`pip install git+https://github.com/ucfopen/canvas-api.git@stable`
 
 ## Getting Started
 The first thing to do is open a connection with Canvas. You will need to provide the URL for the API endpoint of your Canvas instance as well as a valid API key.
 ```python
-from pycanvas import Canvas
+from canvas_api import Canvas
 
 api_url = "https://example.com/api/v1/"  # URL of API for your Canvas instance
 api_key = "p@$$w0rd"  # Your API key

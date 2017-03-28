@@ -2,8 +2,8 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.enrollment_term import EnrollmentTerm
+from canvas_api import Canvas
+from canvas_api.enrollment_term import EnrollmentTerm
 from tests import settings
 from tests.util import register_uris
 

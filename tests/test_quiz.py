@@ -3,8 +3,8 @@ import settings
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.quiz import Quiz
+from canvas_api import Canvas
+from canvas_api.quiz import Quiz
 from tests.util import register_uris
 
 

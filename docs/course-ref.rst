@@ -2,12 +2,12 @@
 Course
 ======
 
-.. autoclass:: pycanvas.course.Course
+.. autoclass:: canvas_api.course.Course
     :members:
 
 ==============
 CourseNickname
 ==============
 
-.. autoclass:: pycanvas.course.CourseNickname
+.. autoclass:: canvas_api.course.CourseNickname
 	:members:

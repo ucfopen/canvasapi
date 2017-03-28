@@ -1,4 +1,4 @@
-PyCanvas Deploy Procedures
+canvas-api Deploy Procedures
 ==========================
 
 Pre-Flight Checklist
@@ -14,7 +14,7 @@ Packaging
 
 Update version number in `setup.py`.
 
-Run `python setup.py sdist`. This should create a file in the `dist` directory called something like `pycanvas-0.0.0.tar.gz`.
+Run `python setup.py sdist`. This should create a file in the `dist` directory called something like `canvas-api-0.0.0.tar.gz`.
 
 Generate Documentation
 ----------------------

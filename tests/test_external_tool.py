@@ -2,11 +2,11 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.account import Account
-from pycanvas.course import Course
-from pycanvas.exceptions import CanvasException
-from pycanvas.external_tool import ExternalTool
+from canvas_api import Canvas
+from canvas_api.account import Account
+from canvas_api.course import Course
+from canvas_api.exceptions import CanvasException
+from canvas_api.external_tool import ExternalTool
 from tests import settings
 from tests.util import register_uris
 

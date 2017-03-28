@@ -2,12 +2,12 @@
 Module
 ======
 
-.. autoclass:: pycanvas.module.Module
+.. autoclass:: canvas_api.module.Module
     :members:
 
 ===========
 Module Item
 ===========
 
-.. autoclass:: pycanvas.module.ModuleItem
+.. autoclass:: canvas_api.module.ModuleItem
     :members:

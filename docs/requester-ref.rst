@@ -2,5 +2,5 @@
 Requester
 =========
 
-.. autoclass:: pycanvas.requester.Requester
+.. autoclass:: canvas_api.requester.Requester
     :members:

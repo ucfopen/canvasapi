@@ -2,12 +2,12 @@
 Assignment
 ==========
 
-.. autoclass:: pycanvas.assignment.Assignment
+.. autoclass:: canvas_api.assignment.Assignment
     :members:
 
 
 ================
 Assignment Group
 ================
-.. autoclass:: pycanvas.assignment.AssignmentGroup
+.. autoclass:: canvas_api.assignment.AssignmentGroup
     :members:

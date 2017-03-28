@@ -2,8 +2,8 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.assignment import Assignment, AssignmentGroup
+from canvas_api import Canvas
+from canvas_api.assignment import Assignment, AssignmentGroup
 from tests import settings
 from tests.util import register_uris
 

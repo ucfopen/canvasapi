@@ -1,4 +1,4 @@
-from pycanvas.canvas_object import CanvasObject
+from canvas_api.canvas_object import CanvasObject
 
 
 class Enrollment(CanvasObject):
@@ -18,7 +18,7 @@ class Enrollment(CanvasObject):
 
         :param task: The task to perform on the enrollment.
         :type task: str
-        :rtype: :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`canvas_api.enrollment.Enrollment`
         """
         ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
 
@@ -42,7 +42,7 @@ class Enrollment(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/enrollments/:id/reactivate \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reactivate>`_
 
-        :rtype: :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`canvas_api.enrollment.Enrollment`
         """
         response = self._requester.request(
             'PUT',

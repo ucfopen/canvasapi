@@ -2,5 +2,5 @@
 Calendar Event
 ==============
 
-.. autoclass:: pycanvas.calendar_event.CalendarEvent
+.. autoclass:: canvas_api.calendar_event.CalendarEvent
     :members:

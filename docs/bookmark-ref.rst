@@ -2,5 +2,5 @@
 Bookmark
 ========
 
-.. autoclass:: pycanvas.bookmark.Bookmark
+.. autoclass:: canvas_api.bookmark.Bookmark
     :members:

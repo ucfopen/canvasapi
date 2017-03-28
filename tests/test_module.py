@@ -3,9 +3,9 @@ import settings
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.module import Module, ModuleItem
+from canvas_api import Canvas
+from canvas_api.exceptions import RequiredFieldMissing
+from canvas_api.module import Module, ModuleItem
 from tests.util import register_uris
 
 

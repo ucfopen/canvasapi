@@ -2,5 +2,5 @@
 Progress
 ========
 
-.. autoclass:: pycanvas.progress.Progress
+.. autoclass:: canvas_api.progress.Progress
     :members:

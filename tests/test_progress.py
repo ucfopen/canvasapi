@@ -3,8 +3,8 @@ import unittest
 import requests_mock
 
 import settings
-from pycanvas.canvas import Canvas
-from pycanvas.progress import Progress
+from canvas_api.canvas import Canvas
+from canvas_api.progress import Progress
 from util import register_uris
 
 

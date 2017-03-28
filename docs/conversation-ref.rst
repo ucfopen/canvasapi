@@ -2,5 +2,5 @@
 Conversation
 ============
 
-.. autoclass:: pycanvas.conversation.Conversation
+.. autoclass:: canvas_api.conversation.Conversation
     :members:

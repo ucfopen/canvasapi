@@ -9,14 +9,14 @@ class CanvasObject(object):
     """
     Base class for all classes representing objects returned by the API.
 
-    This makes a call to :func:`pycanvas.canvas_object.CanvasObject.set_attributes`
+    This makes a call to :func:`canvas_api.canvas_object.CanvasObject.set_attributes`
     to dynamically construct this object's attributes with a JSON object.
     """
 
     def __init__(self, requester, attributes):
         """
         :param requester: The requester to pass HTTP requests through.
-        :type requester: :class:`pycanvas.requester.Requester`
+        :type requester: :class:`canvas_api.requester.Requester`
         :param attributes: The JSON object to build this object with.
         :type attributes: dict
         """

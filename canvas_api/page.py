@@ -1,6 +1,6 @@
-from pycanvas.canvas_object import CanvasObject
-from pycanvas.util import combine_kwargs
-from pycanvas.paginated_list import PaginatedList
+from canvas_api.canvas_object import CanvasObject
+from canvas_api.util import combine_kwargs
+from canvas_api.paginated_list import PaginatedList
 
 
 class Page(CanvasObject):
@@ -16,7 +16,7 @@ class Page(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/pages/:url \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update>`_
 
-        :rtype: :class:`pycanvas.course.Course`
+        :rtype: :class:`canvas_api.course.Course`
         """
         response = self._requester.request(
             'PUT',
@@ -37,7 +37,7 @@ class Page(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/pages/:url \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.destroy>`_
 
-        :rtype: :class:`pycanvas.course.Course`
+        :rtype: :class:`canvas_api.course.Course`
         """
         response = self._requester.request(
             'DELETE',
@@ -77,10 +77,10 @@ class Page(CanvasObject):
         """
         Return the object that spawned this page.
 
-        :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
+        :rtype: :class:`canvas_api.group.Group` or :class:`canvas_api.course.Course`
         """
-        from pycanvas.group import Group
-        from pycanvas.course import Course
+        from canvas_api.group import Group
+        from canvas_api.course import Course
 
         response = self._requester.request(
             'GET',
@@ -99,7 +99,7 @@ class Page(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions/latest \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_revision>`_
 
-        :rtype: :class:`pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`canvas_api.pagerevision.PageRevision`
         """
         response = self._requester.request(
             'GET',
@@ -118,7 +118,7 @@ class Page(CanvasObject):
         :param revision_id: The id of a specified revision.
         :type revision_id: int
         :returns: Contents of the page revision.
-        :rtype: :class:`pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`canvas_api.pagerevision.PageRevision`
         """
         response = self._requester.request(
             'GET',
@@ -145,8 +145,8 @@ class Page(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.pagerevision.PageRevision`
         """
         return PaginatedList(
             PageRevision,
@@ -166,7 +166,7 @@ class Page(CanvasObject):
         :param revision_id: The id of a specified revision.
         :type revision_id: int
         :returns: Contents of the page revision.
-        :rtype: :class:`pycanvas.pagerevision.PageRevision`
+        :rtype: :class:`canvas_api.pagerevision.PageRevision`
         """
         response = self._requester.request(
             'POST',
@@ -223,10 +223,10 @@ class PageRevision(CanvasObject):
         """
         Return the object that spawned this page.
 
-        :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
+        :rtype: :class:`canvas_api.group.Group` or :class:`canvas_api.course.Course`
         """
-        from pycanvas.group import Group
-        from pycanvas.course import Course
+        from canvas_api.group import Group
+        from canvas_api.course import Course
 
         response = self._requester.request(
             'GET',

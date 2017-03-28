@@ -2,5 +2,5 @@
 Quiz
 =====
 
-.. autoclass:: pycanvas.quiz.Quiz
+.. autoclass:: canvas_api.quiz.Quiz
     :members:
