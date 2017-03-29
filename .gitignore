@@ -6,6 +6,7 @@ build/
 coverage.xml
 htmlcov/
 env/
+venv/
 _build/
 _static/
 _templates/

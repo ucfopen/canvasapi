@@ -1,7 +1,7 @@
-from pycanvas.canvas_object import CanvasObject
-from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.paginated_list import PaginatedList
-from pycanvas.util import combine_kwargs, obj_or_id
+from canvas_api.canvas_object import CanvasObject
+from canvas_api.exceptions import RequiredFieldMissing
+from canvas_api.paginated_list import PaginatedList
+from canvas_api.util import combine_kwargs, obj_or_id
 
 
 class Account(CanvasObject):
@@ -18,12 +18,12 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_close_notification>`_
 
         :param user: The user object or ID to close the notificaton for.
-        :type user: :class:`pycanvas.user.User` or int
+        :type user: :class:`canvas_api.user.User` or int
         :param notification: The notification object or ID to close.
-        :type notification: :class:`pycanvas.account.AccountNotification` or int
-        :rtype: :class:`pycanvas.account.AccountNotification`
+        :type notification: :class:`canvas_api.account.AccountNotification` or int
+        :rtype: :class:`canvas_api.account.AccountNotification`
         """
-        from pycanvas.user import User
+        from canvas_api.user import User
 
         user_id = obj_or_id(user, "user", (User,))
         notif_id = obj_or_id(notification, "notif", (AccountNotification,))
@@ -41,7 +41,7 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/root_accounts \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
 
-        :rtype: :class:`pycanvas.account.Account`
+        :rtype: :class:`canvas_api.account.Account`
         """
         response = self._requester.request(
             'POST',
@@ -57,9 +57,9 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/courses \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.create>`_
 
-        :rtype: :class:`pycanvas.course.Course`
+        :rtype: :class:`canvas_api.course.Course`
         """
-        from pycanvas.course import Course
+        from canvas_api.course import Course
         response = self._requester.request(
             'POST',
             'accounts/%s/courses' % (self.id),
@@ -75,7 +75,7 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/sub_accounts \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
 
-        :rtype: :class:`pycanvas.account.Account`
+        :rtype: :class:`canvas_api.account.Account`
         """
         if isinstance(account, dict) and 'name' in account:
             kwargs['account'] = account
@@ -98,9 +98,9 @@ class Account(CanvasObject):
 
         :param pseudonym: The pseudonym of the account.
         :type pseudonym: dict
-        :rtype: :class:`pycanvas.user.User`
+        :rtype: :class:`canvas_api.user.User`
         """
-        from pycanvas.user import User
+        from canvas_api.user import User
 
         if isinstance(pseudonym, dict) and 'unique_id' in pseudonym:
             kwargs['pseudonym'] = pseudonym
@@ -123,7 +123,7 @@ class Account(CanvasObject):
 
         :param account_notification: The notification to create.
         :type account_notification: dict
-        :rtype: :class:`pycanvas.account.AccountNotification`
+        :rtype: :class:`canvas_api.account.AccountNotification`
         """
         required_key_list = ['subject', 'message', 'start_at', 'end_at']
         required_keys_present = all((x in account_notification for x in required_key_list))
@@ -159,10 +159,10 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.remove_user>`_
 
         :param user: The user object or ID to delete.
-        :type user: :class:`pycanvas.user.User` or int
-        :rtype: :class:`pycanvas.user.User`
+        :type user: :class:`canvas_api.user.User` or int
+        :rtype: :class:`canvas_api.user.User`
         """
-        from pycanvas.user import User
+        from canvas_api.user import User
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -179,9 +179,10 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/courses \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.courses_api>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.course.Course`
         """
-        from pycanvas.course import Course
+        from canvas_api.course import Course
 
         return PaginatedList(
             Course,
@@ -196,9 +197,9 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
 
-        :rtype: :class:`pycanvas.external_tool.ExternalTool`
+        :rtype: :class:`canvas_api.external_tool.ExternalTool`
         """
-        from pycanvas.external_tool import ExternalTool
+        from canvas_api.external_tool import ExternalTool
 
         response = self._requester.request(
             'GET',
@@ -214,10 +215,10 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/external_tools \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.external_tool.ExternalTool`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.external_tool.ExternalTool`
         """
-        from pycanvas.external_tool import ExternalTool
+        from canvas_api.external_tool import ExternalTool
 
         return PaginatedList(
             ExternalTool,
@@ -237,8 +238,8 @@ class Account(CanvasObject):
 
         :param report_type: The type of report.
         :type report_type: str
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.account.AccountReport`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.account.AccountReport`
         """
         return PaginatedList(
             AccountReport,
@@ -254,8 +255,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/reports \
         <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.available_reports>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.account.AccountReport`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.account.AccountReport`
         """
         return PaginatedList(
             AccountReport,
@@ -274,7 +275,8 @@ class Account(CanvasObject):
         :param recursive: If true, the entire account tree underneath this account will \
         be returned. If false, only direct sub-accounts of this  account will be returned.
         :type recursive: bool
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.Account`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.account.Account`
         """
         return PaginatedList(
             Account,
@@ -291,9 +293,9 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/users \
         <https://canvas.instructure.com/doc/api/users.html#method.users.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.user.User`
         """
-        from pycanvas.user import User
+        from canvas_api.user import User
 
         return PaginatedList(
             User,
@@ -313,11 +315,11 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_index>`_
 
         :param user: The user object or ID to retrieve notifications for.
-        :type user: :class:`pycanvas.user.User` or int
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.account.AccountNotification`
+        :type user: :class:`canvas_api.user.User` or int
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.account.AccountNotification`
         """
-        from pycanvas.user import User
+        from canvas_api.user import User
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -357,7 +359,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/roles \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.Role`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.account.Role`
         """
 
         return PaginatedList(
@@ -377,7 +380,7 @@ class Account(CanvasObject):
 
         :param role_id: The ID of the role.
         :type role_id: int
-        :rtype: :class:`pycanvas.account.Role`
+        :rtype: :class:`canvas_api.account.Role`
         """
 
         response = self._requester.request(
@@ -395,7 +398,7 @@ class Account(CanvasObject):
 
         :param label: The label for the role.
         :type label: str
-        :rtype: :class:`pycanvas.account.Role`
+        :rtype: :class:`canvas_api.account.Role`
         """
 
         response = self._requester.request(
@@ -415,7 +418,7 @@ class Account(CanvasObject):
 
         :param role_id: The ID of the role.
         :type role_id: int
-        :rtype: :class:`pycanvas.account.Role`
+        :rtype: :class:`canvas_api.account.Role`
         """
 
         response = self._requester.request(
@@ -434,7 +437,7 @@ class Account(CanvasObject):
 
         :param role_id: The ID of the role.
         :type role_id: int
-        :rtype: :class:`pycanvas.account.Role`
+        :rtype: :class:`canvas_api.account.Role`
         """
 
         response = self._requester.request(
@@ -453,7 +456,7 @@ class Account(CanvasObject):
 
         :param role_id: The ID of the role.
         :type role_id: int
-        :rtype: :class:`pycanvas.account.Role`
+        :rtype: :class:`canvas_api.account.Role`
         """
 
         response = self._requester.request(
@@ -472,9 +475,9 @@ class Account(CanvasObject):
 
         :param enrollment_id: The ID of the enrollment to retrieve.
         :type enrollment_id: int
-        :rtype: :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`canvas_api.enrollment.Enrollment`
         """
-        from pycanvas.enrollment import Enrollment
+        from canvas_api.enrollment import Enrollment
 
         response = self._requester.request(
             'GET',
@@ -490,7 +493,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.group.Group`
         """
         from group import Group
         return PaginatedList(
@@ -510,7 +513,7 @@ class Account(CanvasObject):
 
         :param name: Name of group category.
         :type name: str
-        :rtype: :class:`pycanvas.group.GroupCategory`
+        :rtype: :class:`canvas_api.group.GroupCategory`
         """
         from group import GroupCategory
 
@@ -529,8 +532,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.group.GroupCategory`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.group.GroupCategory`
         """
         from group import GroupCategory
 
@@ -557,9 +560,9 @@ class Account(CanvasObject):
         :type consumer_key: str
         :param shared_secret: The shared secret with the external tool
         :type shared_secret: str
-        :rtype: :class:`pycanvas.external_tool.ExternalTool`
+        :rtype: :class:`canvas_api.external_tool.ExternalTool`
         """
-        from pycanvas.external_tool import ExternalTool
+        from canvas_api.external_tool import ExternalTool
 
         response = self._requester.request(
             'POST',
@@ -578,9 +581,9 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/terms \
         <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms.create>`_
 
-        :rtype: :class:`pycanvas.enrollment_term.EnrollmentTerm`
+        :rtype: :class:`canvas_api.enrollment_term.EnrollmentTerm`
         """
-        from pycanvas.enrollment_term import EnrollmentTerm
+        from canvas_api.enrollment_term import EnrollmentTerm
 
         response = self._requester.request(
             'POST',
@@ -599,8 +602,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/terms \
         <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.enrollment_term.EnrollmentTerm`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.enrollment_term.EnrollmentTerm`
         """
         from enrollment_term import EnrollmentTerm
 

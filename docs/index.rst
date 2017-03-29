@@ -1,9 +1,9 @@
-.. PyCanvas documentation master file, created by
+.. canvas-api documentation master file, created by
    sphinx-quickstart on Wed Apr 27 15:40:16 2016.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to PyCanvas's documentation!
+Welcome to canvas-api's documentation!
 ====================================
 
 Contents:

@@ -2,9 +2,9 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.paginated_list import PaginatedList
-from pycanvas.user import User
+from canvas_api import Canvas
+from canvas_api.paginated_list import PaginatedList
+from canvas_api.user import User
 from tests import settings
 from tests.util import register_uris
 

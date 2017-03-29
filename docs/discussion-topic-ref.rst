@@ -2,5 +2,5 @@
 Discussion Topic
 ================
 
-.. autoclass:: pycanvas.discussion_topic.DiscussionTopic
+.. autoclass:: canvas_api.discussion_topic.DiscussionTopic
     :members:

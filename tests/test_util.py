@@ -2,10 +2,10 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.course import CourseNickname
-from pycanvas.user import User
-from pycanvas.util import combine_kwargs, obj_or_id
+from canvas_api import Canvas
+from canvas_api.course import CourseNickname
+from canvas_api.user import User
+from canvas_api.util import combine_kwargs, obj_or_id
 from tests import settings
 from tests.util import register_uris
 

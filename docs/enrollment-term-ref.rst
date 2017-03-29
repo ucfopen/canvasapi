@@ -2,5 +2,5 @@
 Enrollment Term
 ===============
 
-.. autoclass:: pycanvas.enrollment_term.EnrollmentTerm
+.. autoclass:: canvas_api.enrollment_term.EnrollmentTerm
     :members:

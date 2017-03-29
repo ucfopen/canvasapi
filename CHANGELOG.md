@@ -1,5 +1,5 @@
-PyCanvas Changelog
-==================
+Canvas-api Changelog
+====================
 
 Version 0.2.0
 -------------

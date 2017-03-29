@@ -2,8 +2,8 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.conversation import Conversation
+from canvas_api import Canvas
+from canvas_api.conversation import Conversation
 from tests import settings
 from tests.util import register_uris
 

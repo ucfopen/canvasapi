@@ -1,5 +1,5 @@
-from pycanvas.canvas_object import CanvasObject
-from pycanvas.util import combine_kwargs
+from canvas_api.canvas_object import CanvasObject
+from canvas_api.util import combine_kwargs
 
 
 class Bookmark(CanvasObject):
@@ -11,7 +11,7 @@ class Bookmark(CanvasObject):
         :calls: `DELETE /api/v1/users/self/bookmarks/:id \
         <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.destroy>`_
 
-        :rtype: :class:`pycanvas.bookmark.Bookmark`
+        :rtype: :class:`canvas_api.bookmark.Bookmark`
         """
         response = self._requester.request(
             'DELETE',
@@ -26,7 +26,7 @@ class Bookmark(CanvasObject):
         :calls: `PUT /api/v1/users/self/bookmarks/:id \
         <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.update>`_
 
-        :rtype: :class:`pycanvas.bookmark.Bookmark`
+        :rtype: :class:`canvas_api.bookmark.Bookmark`
         """
         response = self._requester.request(
             'PUT',

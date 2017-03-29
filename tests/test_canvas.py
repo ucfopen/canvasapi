@@ -3,18 +3,18 @@ from datetime import datetime
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.account import Account
-from pycanvas.appointment_group import AppointmentGroup
-from pycanvas.calendar_event import CalendarEvent
-from pycanvas.conversation import Conversation
-from pycanvas.course import Course, CourseNickname
-from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.group import Group, GroupCategory
-from pycanvas.exceptions import ResourceDoesNotExist
-from pycanvas.progress import Progress
-from pycanvas.section import Section
-from pycanvas.user import User
+from canvas_api import Canvas
+from canvas_api.account import Account
+from canvas_api.appointment_group import AppointmentGroup
+from canvas_api.calendar_event import CalendarEvent
+from canvas_api.conversation import Conversation
+from canvas_api.course import Course, CourseNickname
+from canvas_api.exceptions import RequiredFieldMissing
+from canvas_api.group import Group, GroupCategory
+from canvas_api.exceptions import ResourceDoesNotExist
+from canvas_api.progress import Progress
+from canvas_api.section import Section
+from canvas_api.user import User
 from tests import settings
 from tests.util import register_uris
 

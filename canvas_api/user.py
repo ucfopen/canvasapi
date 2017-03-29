@@ -1,9 +1,9 @@
-from pycanvas.bookmark import Bookmark
-from pycanvas.calendar_event import CalendarEvent
-from pycanvas.canvas_object import CanvasObject
-from pycanvas.paginated_list import PaginatedList
-from pycanvas.upload import Uploader
-from pycanvas.util import combine_kwargs, obj_or_id
+from canvas_api.bookmark import Bookmark
+from canvas_api.calendar_event import CalendarEvent
+from canvas_api.canvas_object import CanvasObject
+from canvas_api.paginated_list import PaginatedList
+from canvas_api.upload import Uploader
+from canvas_api.util import combine_kwargs, obj_or_id
 
 
 class User(CanvasObject):
@@ -33,9 +33,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/page_views \
         <https://canvas.instructure.com/doc/api/users.html#method.page_views.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.PageView`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.course.PageView`
         """
-        from pycanvas.page_view import PageView
+        from canvas_api.page_view import PageView
 
         return PaginatedList(
             PageView,
@@ -52,9 +53,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/courses \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.user_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.course.Course`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.course.Course`
         """
-        from pycanvas.course import Course
+        from canvas_api.course import Course
 
         return PaginatedList(
             Course,
@@ -72,10 +74,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/missing_submissions \
         <https://canvas.instructure.com/doc/api/users.html#method.users.missing_submissions>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.assignment.Assignment`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.assignment.Assignment`
         """
-        from pycanvas.assignment import Assignment
+        from canvas_api.assignment import Assignment
 
         return PaginatedList(
             Assignment,
@@ -166,7 +168,7 @@ class User(CanvasObject):
         :calls: `PUT /api/v1/users/:id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.update>`_
 
-        :rtype: :class:`pycanvas.user.User`
+        :rtype: :class:`canvas_api.user.User`
         """
         response = self._requester.request(
             'PUT',
@@ -184,8 +186,8 @@ class User(CanvasObject):
         <https://canvas.instructure.com/doc/api/users.html#method.users.merge_into>`_
 
         :param destination_user: The user to merge into.
-        :type destination_user: :class:`pycanvas.user.User`
-        :rtype: :class:`pycanvas.user.User`
+        :type destination_user: :class:`canvas_api.user.User`
+        :rtype: :class:`canvas_api.user.User`
         """
         dest_user_id = obj_or_id(destination_user, 'destination_user', (User, ))
 
@@ -203,9 +205,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/avatars \
         <https://canvas.instructure.com/doc/api/users.html#method.profile.profile_pics>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.avatar.Avatar`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.avatar.Avatar`
         """
-        from pycanvas.avatar import Avatar
+        from canvas_api.avatar import Avatar
 
         return PaginatedList(
             Avatar,
@@ -222,10 +225,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.user_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.assignment.Assignment`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.assignment.Assignment`
         """
-        from pycanvas.assignment import Assignment
+        from canvas_api.assignment import Assignment
 
         return PaginatedList(
             Assignment,
@@ -242,10 +245,10 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.enrollment.Enrollment`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.enrollment.Enrollment`
         """
-        from pycanvas.enrollment import Enrollment
+        from canvas_api.enrollment import Enrollment
 
         return PaginatedList(
             Enrollment,
@@ -288,7 +291,7 @@ class User(CanvasObject):
         :calls:`GET /api/v1/users/self/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.group.Group`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.group.Group`
         """
         from group import Group
 
@@ -307,8 +310,8 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/calendar_events \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.user_index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.calendar_event.CalendarEvent`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.calendar_event.CalendarEvent`
         """
         return PaginatedList(
             CalendarEvent,
@@ -325,8 +328,8 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/self/bookmarks \
         <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.bookmark.Bookmark`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.bookmark.Bookmark`
         """
         return PaginatedList(
             Bookmark,
@@ -344,9 +347,9 @@ class User(CanvasObject):
 
         :param bookmark_id: The ID of the bookmark.
         :type bookmark_id: `int`
-        :rtype: :class:`pycanvas.bookmark.Bookmark`
+        :rtype: :class:`canvas_api.bookmark.Bookmark`
         """
-        from pycanvas.bookmark import Bookmark
+        from canvas_api.bookmark import Bookmark
 
         response = self._requester.request(
             'GET',
@@ -365,9 +368,9 @@ class User(CanvasObject):
         :type name: `str`
         :param url: The url of the bookmark.
         :type name: `str`
-        :rtype: :class:`pycanvas.bookmarks.Bookmark`
+        :rtype: :class:`canvas_api.bookmarks.Bookmark`
         """
-        from pycanvas.bookmark import Bookmark
+        from canvas_api.bookmark import Bookmark
 
         response = self._requester.request(
             'POST',

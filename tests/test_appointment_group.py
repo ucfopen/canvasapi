@@ -2,9 +2,9 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.appointment_group import AppointmentGroup
-from pycanvas.exceptions import RequiredFieldMissing
+from canvas_api import Canvas
+from canvas_api.appointment_group import AppointmentGroup
+from canvas_api.exceptions import RequiredFieldMissing
 from tests import settings
 from tests.util import register_uris
 

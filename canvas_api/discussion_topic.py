@@ -1,6 +1,6 @@
-from pycanvas.canvas_object import CanvasObject
-from pycanvas.paginated_list import PaginatedList
-from pycanvas.util import combine_kwargs
+from canvas_api.canvas_object import CanvasObject
+from canvas_api.paginated_list import PaginatedList
+from canvas_api.util import combine_kwargs
 
 
 class DiscussionTopic(CanvasObject):
@@ -39,10 +39,10 @@ class DiscussionTopic(CanvasObject):
         """
         Return the object that spawned this page.
 
-        :rtype: :class:`pycanvas.group.Group` or :class:`pycanvas.course.Course`
+        :rtype: :class:`canvas_api.group.Group` or :class:`canvas_api.course.Course`
         """
-        from pycanvas.group import Group
-        from pycanvas.course import Course
+        from canvas_api.group import Group
+        from canvas_api.course import Course
 
         response = self._requester.request(
             'GET',
@@ -89,7 +89,7 @@ class DiscussionTopic(CanvasObject):
             or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
 
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvas_api.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'PUT',
@@ -187,8 +187,8 @@ class DiscussionTopic(CanvasObject):
             or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,
@@ -214,7 +214,7 @@ class DiscussionTopic(CanvasObject):
 
         :param entry_id: ID of an entry.
         :type entry_id: int
-        :rtype: :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvas_api.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'POST',
@@ -240,8 +240,8 @@ class DiscussionTopic(CanvasObject):
 
         :param entry_id: ID of an entry.
         :type entry_id: int
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,
@@ -266,8 +266,8 @@ class DiscussionTopic(CanvasObject):
             or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entry_list \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of
-            :class:`pycanvas.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
+            :class:`canvas_api.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,

@@ -1,6 +1,6 @@
 import requests
 
-from pycanvas.exceptions import (
+from canvas_api.exceptions import (
     BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
     Unauthorized
 )

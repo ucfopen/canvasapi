@@ -2,5 +2,5 @@
 Util
 ====
 
-.. automodule:: pycanvas.util
+.. automodule:: canvas_api.util
     :members:

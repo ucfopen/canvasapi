@@ -2,8 +2,8 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.bookmark import Bookmark
+from canvas_api import Canvas
+from canvas_api.bookmark import Bookmark
 from tests import settings
 from tests.util import register_uris
 

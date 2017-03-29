@@ -2,12 +2,12 @@
 Page
 ====
 
-.. autoclass:: pycanvas.page.Page
+.. autoclass:: canvas_api.page.Page
     :members:
 
 
 =============
 Page Revision
 =============
-.. autoclass:: pycanvas.page.PageRevision
+.. autoclass:: canvas_api.page.PageRevision
     :members:

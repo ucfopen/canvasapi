@@ -2,5 +2,5 @@
 Canvas Object
 =============
 
-.. autoclass:: pycanvas.canvas_object.CanvasObject
+.. autoclass:: canvas_api.canvas_object.CanvasObject
     :members:

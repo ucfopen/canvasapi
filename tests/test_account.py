@@ -3,15 +3,15 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.account import Account, AccountNotification, AccountReport, Role
-from pycanvas.course import Course
-from pycanvas.enrollment import Enrollment
-from pycanvas.enrollment_term import EnrollmentTerm
-from pycanvas.external_tool import ExternalTool
-from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.group import Group, GroupCategory
-from pycanvas.user import User
+from canvas_api import Canvas
+from canvas_api.account import Account, AccountNotification, AccountReport, Role
+from canvas_api.course import Course
+from canvas_api.enrollment import Enrollment
+from canvas_api.enrollment_term import EnrollmentTerm
+from canvas_api.external_tool import ExternalTool
+from canvas_api.exceptions import RequiredFieldMissing
+from canvas_api.group import Group, GroupCategory
+from canvas_api.user import User
 from tests import settings
 from tests.util import register_uris
 

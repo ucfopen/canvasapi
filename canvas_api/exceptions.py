@@ -24,12 +24,12 @@ class BadRequest(CanvasException):
 
 
 class InvalidAccessToken(CanvasException):
-    """PyCanvas was unable to make an API connection."""
+    """canvas-api was unable to make an API connection."""
     pass
 
 
 class Unauthorized(CanvasException):
-    """PyCanvas's key is valid, but is unauthorized to access the requested resource."""
+    """canvas-api's key is valid, but is unauthorized to access the requested resource."""
     pass
 
 

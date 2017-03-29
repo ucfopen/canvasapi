@@ -2,5 +2,5 @@
 Appointment Group
 =================
 
-.. autoclass:: pycanvas.appointment_group.AppointmentGroup
+.. autoclass:: canvas_api.appointment_group.AppointmentGroup
     :members:
