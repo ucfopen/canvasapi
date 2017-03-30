@@ -1,0 +1,53 @@
+{
+	"create_enrollment_term": {
+		"method": "POST",
+		"endpoint": "accounts/1/terms",
+		"data": {
+			"id": 45,
+			"name": "Test Enrollment Term"
+		},
+		"status_code": 200
+	},
+	"delete_enrollment_term": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/terms/45",
+		"data": {
+			"id": 45,
+			"name": "Test Enrollment Term"
+		},
+		"status_code": 200
+	},
+	"edit_enrollment_term": {
+		"method": "PUT",
+		"endpoint": "accounts/1/terms/45",
+		"data": {
+			"id": 45,
+			"name": "New Name"
+		},
+		"status_code": 200
+	},
+	"get_enrollment_term": {
+		"method": "GET",
+		"endpoint": "accounts/1/terms/45",
+		"data": {
+			"id": 45,
+			"name": "Test Enrollment Term 3"
+		},
+		"status_code": 200
+	},
+	"list_enrollment_terms": {
+		"method": "GET",
+		"endpoint": "accounts/1/terms",
+		"data": [
+			{
+				"id": 56,
+				"name": "Test Enrollment Term 1"
+			},
+			{
+				"id": 67,
+				"name": "Test Enrollment Term 2"
+			}
+		],
+		"status_code": 200
+	}
+}

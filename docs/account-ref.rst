@@ -2,14 +2,26 @@
 Account
 =======
 
-.. autoclass:: pycanvas.account.Account
+.. autoclass:: canvas_api.account.Account
     :members:
 
-.. autoclass:: pycanvas.account.AccountNotification
+===================
+AccountNotification
+===================
+
+.. autoclass:: canvas_api.account.AccountNotification
     :members:
 
-.. autoclass:: pycanvas.account.AccountReport
+=============
+AccountReport
+=============
+
+.. autoclass:: canvas_api.account.AccountReport
     :members:
 
-.. autoclass:: pycanvas.account.Role
+====
+Role
+====
+
+.. autoclass:: canvas_api.account.Role
     :members:

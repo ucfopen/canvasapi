@@ -4,8 +4,8 @@ import os
 
 import requests_mock
 
-from pycanvas.canvas import Canvas
-from pycanvas.upload import Uploader
+from canvas_api.canvas import Canvas
+from canvas_api.upload import Uploader
 from tests import settings
 from tests.util import register_uris
 
@@ -39,9 +39,9 @@ class TestUploader(unittest.TestCase):
         uploader = Uploader(self.requester, 'upload_response', self.file)
         result = uploader.start()
 
-        assert result[0] is True
-        assert isinstance(result[1], dict)
-        assert 'url' in result[1]
+        self.assertTrue(result[0])
+        self.assertIsInstance(result[1], dict)
+        self.assertIn('url', result[1])
 
     def test_start_path(self, m):
         requires = {
@@ -52,9 +52,9 @@ class TestUploader(unittest.TestCase):
         uploader = Uploader(self.requester, 'upload_response', self.filename)
         result = uploader.start()
 
-        assert result[0] is True
-        assert isinstance(result[1], dict)
-        assert 'url' in result[1]
+        self.assertTrue(result[0])
+        self.assertIsInstance(result[1], dict)
+        self.assertIn('url', result[1])
 
     def test_start_file_does_not_exist(self, m):
         with self.assertRaises(IOError):
@@ -82,6 +82,6 @@ class TestUploader(unittest.TestCase):
         uploader = Uploader(self.requester, 'upload_response_fail', self.file)
         result = uploader.start()
 
-        assert result[0] is False
-        assert isinstance(result[1], dict)
-        assert 'url' not in result[1]
+        self.assertFalse(result[0])
+        self.assertIsInstance(result[1], dict)
+        self.assertNotIn('url', result[1])

@@ -1,9 +1,13 @@
-=======
+======
 Module
-=======
+======
 
-.. autoclass:: pycanvas.module.Module
+.. autoclass:: canvas_api.module.Module
     :members:
 
-.. autoclass:: pycanvas.module.ModuleItem
+==========
+ModuleItem
+==========
+
+.. autoclass:: canvas_api.module.ModuleItem
     :members:

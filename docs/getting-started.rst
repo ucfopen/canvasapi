@@ -1,21 +1,21 @@
-Getting Started with PyCanvas
-=============================
+Getting Started with canvas-api
+===============================
 
-Installing PyCanvas
--------------------
+Installing canvas-api
+---------------------
 
-[SoonTM] You will eventually be able to install with pip::
+You can install with pip::
 
-    pip install git+ssh://git@example.com:changeme/pycanvas.git
+    pip install canvas-api
 
 Usage
 -----
 
-Before using PyCanvas, you'll need to instantiate a new Canvas object:
+Before using canvas-api, you'll need to instantiate a new Canvas object:
 
 .. code:: python
     
-    from pycanvas import Canvas
+    from canvas_api import Canvas
 
     canvas = Canvas(API_KEY, API_URL)
 
@@ -31,7 +31,7 @@ Let's write a script to print out all of the users in a course:
 
 .. code:: python
 
-    from pycanvas import Canvas, Course, User
+    from canvas_api import Canvas, Course, User
 
     # Set up our Canvas object
     canvas = Canvas(API_KEY, API_URL)
@@ -53,7 +53,7 @@ We can update a course's information as well:
 
 .. code:: python
 
-    from pycanvas import Canvas, Course
+    from canvas_api import Canvas, Course
 
      # Set up our Canvas object
     canvas = Canvas(API_KEY, API_URL)

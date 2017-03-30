@@ -2,8 +2,8 @@ import unittest
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.conversation import Conversation
+from canvas_api import Canvas
+from canvas_api.conversation import Conversation
 from tests import settings
 from tests.util import register_uris
 
@@ -23,7 +23,7 @@ class TestConversation(unittest.TestCase):
     # __str__()
     def test__str__(self, m):
         string = str(self.conversation)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
     # edit()
     def test_edit(self, m):
@@ -31,28 +31,28 @@ class TestConversation(unittest.TestCase):
 
         new_subject = "conversations api example"
         success = self.conversation.edit(subject=new_subject)
-        assert success
+        self.assertTrue(success)
 
     def test_edit_fail(self, m):
         requires = {'conversation': ['get_by_id_2', 'edit_conversation_fail']}
         register_uris(requires, m)
 
         temp_convo = self.canvas.get_conversation(2)
-        assert temp_convo.edit() is False
+        self.assertFalse(temp_convo.edit())
 
     # delete()
     def test_delete(self, m):
         register_uris({'conversation': ['delete_conversation']}, m)
 
         success = self.conversation.delete()
-        assert success
+        self.assertTrue(success)
 
     def test_delete_fail(self, m):
         requires = {'conversation': ['get_by_id_2', 'delete_conversation_fail']}
         register_uris(requires, m)
 
         temp_convo = self.canvas.get_conversation(2)
-        assert temp_convo.delete() is False
+        self.assertFalse(temp_convo.delete())
 
     # add_recipients()
     def test_add_recipients(self, m):
@@ -62,10 +62,10 @@ class TestConversation(unittest.TestCase):
         string_bob = "Bob was added to the conversation by Hank TA"
         string_joe = "Joe was added to the conversation by Hank TA"
         result = self.conversation.add_recipients([recipients['bob'], recipients['joe']])
-        assert hasattr(result, 'messages')
-        assert len(result.messages) == 2
-        assert result.messages[0]["body"] == string_bob
-        assert result.messages[1]["body"] == string_joe
+        self.assertTrue(hasattr(result, 'messages'))
+        self.assertEqual(len(result.messages), 2)
+        self.assertEqual(result.messages[0]["body"], string_bob)
+        self.assertEqual(result.messages[1]["body"], string_joe)
 
     # add_message()
     def test_add_message(self, m):
@@ -73,9 +73,9 @@ class TestConversation(unittest.TestCase):
 
         test_string = "add_message test body"
         result = self.conversation.add_message(test_string)
-        assert isinstance(result, Conversation)
-        assert len(result.messages) == 1
-        assert result.messages[0]['id'] == 3
+        self.assertIsInstance(result, Conversation)
+        self.assertEqual(len(result.messages), 1)
+        self.assertEqual(result.messages[0]['id'], 3)
 
     # delete_message()
     def test_delete_message(self, m):
@@ -83,5 +83,5 @@ class TestConversation(unittest.TestCase):
 
         id_list = [1]
         result = self.conversation.delete_messages(id_list)
-        assert 'subject' in result
-        assert result['id'] == 1
+        self.assertIn('subject', result)
+        self.assertEqual(result['id'], 1)

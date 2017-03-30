@@ -1,4 +1,4 @@
-# Contributing to PyCanvas
+# Contributing to canvas-api
 
 Thanks for your interest in contributing!
 
@@ -23,22 +23,22 @@ Below you'll find guidelines for contributing that will keep our codebase clean 
 ### Bug Reports
 
 #### Reporting bugs
-Bug reports are awesome. Writing quality bug reports helps us identify issues and solve them even faster. You can submit bug reports directly to our [issue tracker](https://example.com/changeme/pycanvas/issues).
+Bug reports are awesome. Writing quality bug reports helps us identify issues and solve them even faster. You can submit bug reports directly to our [issue tracker](https://github.com/ucfopen/canvas-api/issues).
 
 Here are a few things worth mentioning when making a report:
 
-* What **version** of PyCanvas are you running? (Use `pip list` -- we try to build frequently so "latest" isn't always accurate.)
+* What **version** of canvas-api are you running? (Use `pip list` -- we try to build frequently so "latest" isn't always accurate.)
 * What steps can be taken to **reproduce the issue**?
 * **Detail matters.** Try not to be too be verbose, but generally the more information, the better!
 
 ### Resolving issues
 We welcome pull requests for bug fixes and new features! Feel free to browse our open, unassigned issues and assign yourself to them. You can also filter by labels:
 
-* [simple](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=simple) -- easier issues to start working on; great for getting familiar with the codebase.
-* [api coverage](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=api+coverage) -- covering new endpoints or updating existing ones.
-* [internal](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=internal) -- updates to the engine to improve performance.
-* [major](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=major) -- difficult or major changes or additions that require familiarity with the library.
-* [bug](https://example.com/changeme/pycanvas/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=bug) -- happy little code accidents.
+* [simple](https://github.com/ucfopen/canvas-api/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=simple) -- easier issues to start working on; great for getting familiar with the codebase.
+* [api coverage](https://github.com/ucfopen/canvas-api/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=api+coverage) -- covering new endpoints or updating existing ones.
+* [internal](https://github.com/ucfopen/canvas-api/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=internal) -- updates to the engine to improve performance.
+* [major](https://github.com/ucfopen/canvas-api/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=major) -- difficult or major changes or additions that require familiarity with the library.
+* [bug](https://github.com/ucfopen/canvas-api/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=bug) -- happy little code accidents.
 
 
 Once you've found an issue you're interested in tackling, take a look at our [first contribution tutorial](#making-your-first-contribution) for information on our pull request policy.
@@ -49,7 +49,7 @@ Once you've found an issue you're interested in tackling, take a look at our [fi
 
 Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have pip, virtualenv, and git installed and are using a terminal. If not, please set those up before continuing.
 
-1. Clone our repository by executing `git clone git@example.com:changeme/pycanvas.git`
+1. Clone our repository by executing `git clone git@github.com:ucfopen/canvas-api.git`
 2. Pull the latest commit from the **master** branch: `git pull origin master` 
 3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git branch -b issue/1-test-issue-for-documentation`
 4. Set up a new virtual environment ( `virtualenv env` ) and activate it (`source env/bin/activate`)
@@ -133,53 +133,53 @@ def test_create_quiz(self):
 	title = 'Newer Title'
 	new_quiz = self.course.create_quiz(self.course.id, quiz={'title': title})
 
-	assert isinstance(new_quiz, Quiz)
-	assert hasattr(new_quiz, 'title')
-	assert new_quiz.title == title
-	assert hasattr(new_quiz, 'course_id')
-	assert new_quiz.course_id == self.course.id
+	self.assertIsInstance(new_quiz, Quiz)
+	self.assertTrue(hasattr(new_quiz, 'title'))
+	self.assertEqual(new_quiz.title, title)
+	self.assertTrue(hasattr(new_quiz, 'course_id'))
+	self.assertEqual(new_quiz.course_id, self.course.id)
 ```
 
 Take a look at the existing tests to get a feel for the process. Once you've written a few, it should be second nature.
 
 ##### Engine tests
 
-Not all of PyCanvas relies on networking. While these pieces are few and far between, we still need to verify that they're performing correctly. Writing tests for engine-level code is just as important as user-facing code and is a bit easier. You'll just need to follow the same process as you would for API tests, minus the fixtures.
+Not all of canvas-api relies on networking. While these pieces are few and far between, we still need to verify that they're performing correctly. Writing tests for engine-level code is just as important as user-facing code and is a bit easier. You'll just need to follow the same process as you would for API tests, minus the fixtures.
 
 #### Running tests / coverage reports
 
 Once you've written test case(s) for your issue, you'll need to run the test to verify that your changes are passing and haven't interfered with any other part of the library.
 
-You'll do this by running `coverage run -m unittest discover` from the main `pycanvas` directory. If your tests pass, you're ready to run a coverage report!
+You'll do this by running `coverage run -m unittest discover` from the main `canvas-api` directory. If your tests pass, you're ready to run a coverage report!
 
 Coverage reports tell us how much of our code is actually being tested. As of right now, we're happily maintaining 100% code coverage (🎉!) and our goal is to keep it there. Ensure you've covered your changes entirely by running `coverage report`. Your output should look something like this:
 
 ```
 Name                         Stmts   Miss  Cover
 ------------------------------------------------
-pycanvas/__init__.py            14      0   100%
-pycanvas/account.py             83      0   100%
-pycanvas/assignment.py          11      0   100%
-pycanvas/avatar.py               2      0   100%
-pycanvas/canvas.py              60      0   100%
-pycanvas/canvas_object.py       20      0   100%
-pycanvas/course.py             126      0   100%
-pycanvas/enrollment.py           2      0   100%
-pycanvas/exceptions.py          10      0   100%
-pycanvas/external_tool.py       33      0   100%
-pycanvas/module.py              62      0   100%
-pycanvas/page_view.py            4      0   100%
-pycanvas/paginated_list.py      66      0   100%
-pycanvas/quiz.py                15      0   100%
-pycanvas/requester.py           42      0   100%
-pycanvas/section.py              9      0   100%
-pycanvas/user.py                48      0   100%
-pycanvas/util.py                22      0   100%
+canvas_api/__init__.py            14      0   100%
+canvas_api/account.py             83      0   100%
+canvas_api/assignment.py          11      0   100%
+canvas_api/avatar.py               2      0   100%
+canvas_api/canvas.py              60      0   100%
+canvas_api/canvas_object.py       20      0   100%
+canvas_api/course.py             126      0   100%
+canvas_api/enrollment.py           2      0   100%
+canvas_api/exceptions.py          10      0   100%
+canvas_api/external_tool.py       33      0   100%
+canvas_api/module.py              62      0   100%
+canvas_api/page_view.py            4      0   100%
+canvas_api/paginated_list.py      66      0   100%
+canvas_api/quiz.py                15      0   100%
+canvas_api/requester.py           42      0   100%
+canvas_api/section.py              9      0   100%
+canvas_api/user.py                48      0   100%
+canvas_api/util.py                22      0   100%
 ------------------------------------------------
 TOTAL                          629      0   100%
 ```
 
-Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://example.com/changeme/pycanvas/merge_requests)!
+Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://github.com/ucfopen/canvas-api/merge_requests)!
 
 Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at master and then submit it for review.
 
@@ -210,7 +210,7 @@ Method docstrings should include a description, a link to the related API endpoi
 A description should be a concise, *action* statement (use "*write* a good docstring" over "*writes* a good docstring") that describes the method. Generally, the official API documentation's description is usable (make sure it's an **action statement** though). Special functionality should be documented. 
 
 #### Links to related API endpoints
-A link to a related API endpoint is denoted with `:calls:`. PyCanvas uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
+A link to a related API endpoint is denoted with `:calls:`. canvas-api uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
 
 ```
 :calls: `THE TEXT OF THE HYPERLINK \ 
@@ -250,13 +250,13 @@ In most cases, the return value is easy to infer based on the type and the descr
 **Return type** should always be included when a value is returned. If it's not a primitive type (int, str, bool, list, etc.) a fully-qualified class name should be included:
 
 ```
-:rtype: :class:`pycanvas.user.User`
+:rtype: :class:`canvas_api.user.User`
 ```
 
 In the event a PaginatedList is returned:
 
 ```
-:rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.user.User`
+:rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.user.User`
 ```
 
 #### Docstring Examples
@@ -272,7 +272,7 @@ Here are some real world examples of how docstrings should be formatted:
 
         :param account_id: The ID of the account to retrieve.
         :type account_id: int
-        :rtype: :class:`pycanvas.account.Account`
+        :rtype: :class:`canvas_api.account.Account`
         """
 ```
 
@@ -288,7 +288,7 @@ Here are some real world examples of how docstrings should be formatted:
         :calls: `GET /api/v1/accounts \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.index>`_
 
-        :rtype: :class:`pycanvas.paginated_list.PaginatedList` of :class:`pycanvas.account.Account`
+        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.account.Account`
         """
 ```
 

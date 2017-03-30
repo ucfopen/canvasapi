@@ -2,5 +2,5 @@
 Canvas
 ======
 
-.. autoclass:: pycanvas.Canvas
+.. autoclass:: canvas_api.Canvas
     :members:

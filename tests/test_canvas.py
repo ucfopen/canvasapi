@@ -3,15 +3,18 @@ from datetime import datetime
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.account import Account
-from pycanvas.conversation import Conversation
-from pycanvas.course import Course, CourseNickname
-from pycanvas.group import Group, GroupCategory
-from pycanvas.exceptions import ResourceDoesNotExist
-from pycanvas.progress import Progress
-from pycanvas.section import Section
-from pycanvas.user import User
+from canvas_api import Canvas
+from canvas_api.account import Account
+from canvas_api.appointment_group import AppointmentGroup
+from canvas_api.calendar_event import CalendarEvent
+from canvas_api.conversation import Conversation
+from canvas_api.course import Course, CourseNickname
+from canvas_api.exceptions import RequiredFieldMissing
+from canvas_api.group import Group, GroupCategory
+from canvas_api.exceptions import ResourceDoesNotExist
+from canvas_api.progress import Progress
+from canvas_api.section import Section
+from canvas_api.user import User
 from tests import settings
 from tests.util import register_uris
 
@@ -34,9 +37,9 @@ class TestCanvas(unittest.TestCase):
         }
         account = self.canvas.create_account(account=account_dict)
 
-        assert isinstance(account, Account)
-        assert hasattr(account, 'name')
-        assert account.name == name
+        self.assertIsInstance(account, Account)
+        self.assertTrue(hasattr(account, 'name'))
+        self.assertEqual(account.name, name)
 
     # get_account()
     def test_get_account(self, m):
@@ -44,7 +47,7 @@ class TestCanvas(unittest.TestCase):
 
         account = self.canvas.get_account(1)
 
-        assert isinstance(account, Account)
+        self.assertIsInstance(account, Account)
 
     def test_get_account_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
@@ -58,7 +61,7 @@ class TestCanvas(unittest.TestCase):
 
         accounts = self.canvas.get_accounts()
         account_list = [account for account in accounts]
-        assert len(account_list) == 2
+        self.assertEqual(len(account_list), 2)
 
     # get_course_accounts()
     def test_get_course_accounts(self, m):
@@ -66,7 +69,7 @@ class TestCanvas(unittest.TestCase):
 
         accounts = self.canvas.get_course_accounts()
         account_list = [account for account in accounts]
-        assert len(account_list) == 2
+        self.assertEqual(len(account_list), 2)
 
     # get_course()
     def test_get_course(self, m):
@@ -74,25 +77,25 @@ class TestCanvas(unittest.TestCase):
 
         course = self.canvas.get_course(1)
 
-        assert isinstance(course, Course)
-        assert hasattr(course, 'name')
+        self.assertIsInstance(course, Course)
+        self.assertTrue(hasattr(course, 'name'))
 
     def test_get_course_with_start_date(self, m):
         register_uris({'course': ['start_at_date']}, m)
 
         course = self.canvas.get_course(2)
 
-        assert hasattr(course, 'start_at')
-        assert isinstance(course.start_at, (str, unicode))
-        assert hasattr(course, 'start_at_date')
-        assert isinstance(course.start_at_date, datetime)
+        self.assertTrue(hasattr(course, 'start_at'))
+        self.assertIsInstance(course.start_at, (str, unicode))
+        self.assertTrue(hasattr(course, 'start_at_date'))
+        self.assertIsInstance(course.start_at_date, datetime)
 
     def test_get_course_non_unicode_char(self, m):
         register_uris({'course': ['unicode_encode_error']}, m)
 
         course = self.canvas.get_course(3)
 
-        assert hasattr(course, 'name')
+        self.assertTrue(hasattr(course, 'name'))
 
     def test_get_course_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
@@ -106,16 +109,16 @@ class TestCanvas(unittest.TestCase):
 
         user = self.canvas.get_user(1)
 
-        assert isinstance(user, User)
-        assert hasattr(user, 'name')
+        self.assertIsInstance(user, User)
+        self.assertTrue(hasattr(user, 'name'))
 
     def test_get_user_by_id_type(self, m):
         register_uris({'user': ['get_by_id_type']}, m)
 
         user = self.canvas.get_user('jdoe', 'sis_user_id')
 
-        assert isinstance(user, User)
-        assert hasattr(user, 'name')
+        self.assertIsInstance(user, User)
+        self.assertTrue(hasattr(user, 'name'))
 
     def test_get_user_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
@@ -130,8 +133,8 @@ class TestCanvas(unittest.TestCase):
         courses = self.canvas.get_courses(per_page=1)
 
         course_list = [course for course in courses]
-        assert len(course_list) == 4
-        assert isinstance(course_list[0], Course)
+        self.assertEqual(len(course_list), 4)
+        self.assertIsInstance(course_list[0], Course)
 
     # get_activity_stream_summary()
     def test_get_activity_stream_summary(self, m):
@@ -139,7 +142,7 @@ class TestCanvas(unittest.TestCase):
 
         summary = self.canvas.get_activity_stream_summary()
 
-        assert isinstance(summary, list)
+        self.assertIsInstance(summary, list)
 
     # get_todo_items()
     def test_get_todo_items(self, m):
@@ -147,7 +150,7 @@ class TestCanvas(unittest.TestCase):
 
         todo_items = self.canvas.get_todo_items()
 
-        assert isinstance(todo_items, list)
+        self.assertIsInstance(todo_items, list)
 
     # get_upcoming_events()
     def test_get_upcoming_events(self, m):
@@ -155,7 +158,7 @@ class TestCanvas(unittest.TestCase):
 
         events = self.canvas.get_upcoming_events()
 
-        assert isinstance(events, list)
+        self.assertIsInstance(events, list)
 
     # get_course_nicknames()
     def test_get_course_nicknames(self, m):
@@ -164,9 +167,9 @@ class TestCanvas(unittest.TestCase):
         nicknames = self.canvas.get_course_nicknames()
 
         nickname_list = [name for name in nicknames]
-        assert len(nickname_list) == 4
-        assert isinstance(nickname_list[0], CourseNickname)
-        assert hasattr(nickname_list[0], 'nickname')
+        self.assertEqual(len(nickname_list), 4)
+        self.assertIsInstance(nickname_list[0], CourseNickname)
+        self.assertTrue(hasattr(nickname_list[0], 'nickname'))
 
     # get_course_nickname()
     def test_get_course_nickname(self, m):
@@ -174,8 +177,8 @@ class TestCanvas(unittest.TestCase):
 
         nickname = self.canvas.get_course_nickname(1)
 
-        assert isinstance(nickname, CourseNickname)
-        assert hasattr(nickname, 'nickname')
+        self.assertIsInstance(nickname, CourseNickname)
+        self.assertTrue(hasattr(nickname, 'nickname'))
 
     def test_get_course_nickname_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
@@ -191,16 +194,16 @@ class TestCanvas(unittest.TestCase):
 
         nickname = self.canvas.set_course_nickname(1, name)
 
-        assert isinstance(nickname, CourseNickname)
-        assert hasattr(nickname, 'nickname')
-        assert nickname.nickname == name
+        self.assertIsInstance(nickname, CourseNickname)
+        self.assertTrue(hasattr(nickname, 'nickname'))
+        self.assertEqual(nickname.nickname, name)
 
     # clear_course_nicknames()
     def test_clear_course_nicknames(self, m):
         register_uris({'user': ['course_nicknames_delete']}, m)
 
         success = self.canvas.clear_course_nicknames()
-        assert success
+        self.assertTrue(success)
 
     # search_accounts()
     def test_search_accounts(self, m):
@@ -208,9 +211,9 @@ class TestCanvas(unittest.TestCase):
 
         domains = self.canvas.search_accounts()
 
-        assert isinstance(domains, list)
-        assert len(domains) == 1
-        assert 'name' in domains[0]
+        self.assertIsInstance(domains, list)
+        self.assertEqual(len(domains), 1)
+        self.assertIn('name', domains[0])
 
     # get_section()
     def test_get_section(self, m):
@@ -218,7 +221,7 @@ class TestCanvas(unittest.TestCase):
 
         info = self.canvas.get_section(1)
 
-        assert isinstance(info, Section)
+        self.assertIsInstance(info, Section)
 
     # create_group()
     def test_create_group(self, m):
@@ -226,9 +229,9 @@ class TestCanvas(unittest.TestCase):
 
         group = self.canvas.create_group()
 
-        assert isinstance(group, Group)
-        assert hasattr(group, 'name')
-        assert hasattr(group, 'description')
+        self.assertIsInstance(group, Group)
+        self.assertTrue(hasattr(group, 'name'))
+        self.assertTrue(hasattr(group, 'description'))
 
     # get_group()
     def test_get_group(self, m):
@@ -236,16 +239,16 @@ class TestCanvas(unittest.TestCase):
 
         group = self.canvas.get_group(1)
 
-        assert isinstance(group, Group)
-        assert hasattr(group, 'name')
-        assert hasattr(group, 'description')
+        self.assertIsInstance(group, Group)
+        self.assertTrue(hasattr(group, 'name'))
+        self.assertTrue(hasattr(group, 'description'))
 
     # get_group_category()
     def test_get_group_category(self, m):
         register_uris({'group': ['get_category_by_id']}, m)
 
         response = self.canvas.get_group_category(1)
-        assert isinstance(response, GroupCategory)
+        self.assertIsInstance(response, GroupCategory)
 
     # create_conversation()
     def test_create_conversation(self, m):
@@ -257,8 +260,8 @@ class TestCanvas(unittest.TestCase):
         conversations = self.canvas.create_conversation(recipients=recipients, body=body)
         conversation_list = [conversation for conversation in conversations]
 
-        assert isinstance(conversation_list[0], Conversation)
-        assert len(conversation_list) == 2
+        self.assertIsInstance(conversation_list[0], Conversation)
+        self.assertEqual(len(conversation_list), 2)
 
     # get_conversation()
     def test_get_conversation(self, m):
@@ -266,8 +269,8 @@ class TestCanvas(unittest.TestCase):
 
         convo = self.canvas.get_conversation(1)
 
-        assert isinstance(convo, Conversation)
-        assert hasattr(convo, 'subject')
+        self.assertIsInstance(convo, Conversation)
+        self.assertTrue(hasattr(convo, 'subject'))
 
     # get_conversations()
     def test_get_conversations(self, m):
@@ -279,31 +282,31 @@ class TestCanvas(unittest.TestCase):
         convos = self.canvas.get_conversations()
         conversation_list = [conversation for conversation in convos]
 
-        assert len(conversation_list) == 4
-        assert isinstance(conversation_list[0], Conversation)
+        self.assertEqual(len(conversation_list), 4)
+        self.assertIsInstance(conversation_list[0], Conversation)
 
     # mark_all_as_read()
     def test_conversations_mark_all_as_read(self, m):
         register_uris({'conversation': ['mark_all_as_read']}, m)
 
         result = self.canvas.conversations_mark_all_as_read()
-        assert result is True
+        self.assertTrue(result)
 
     # unread_count()
     def test_conversations_unread_count(self, m):
         register_uris({'conversation': ['unread_count']}, m)
 
         result = self.canvas.conversations_unread_count()
-        assert result['unread_count'] == "7"
+        self.assertEqual(result['unread_count'], "7")
 
     # get_running_batches()
     def test_conversations_get_running_batches(self, m):
         register_uris({'conversation': ['get_running_batches']}, m)
 
         result = self.canvas.conversations_get_running_batches()
-        assert len(result) == 2
-        assert 'body' in result[0]['message']
-        assert result[1]['message']['author_id'] == 1
+        self.assertEqual(len(result), 2)
+        self.assertIn('body', result[0]['message'])
+        self.assertEqual(result[1]['message']['author_id'], 1)
 
     # batch_update()
     def test_conversations_batch_update(self, m):
@@ -315,7 +318,7 @@ class TestCanvas(unittest.TestCase):
             event=this_event,
             conversation_ids=conversation_ids
         )
-        assert isinstance(result, Progress)
+        self.assertIsInstance(result, Progress)
 
     def test_conversations_batch_updated_fail_on_event(self, m):
         conversation_ids = [1, 2]
@@ -324,7 +327,7 @@ class TestCanvas(unittest.TestCase):
             event=this_event,
             conversation_ids=conversation_ids
         )
-        assert isinstance(result, ValueError)
+        self.assertIsInstance(result, ValueError)
 
     def test_conversations_batch_updated_fail_on_ids(self, m):
         conversation_ids = [None] * 501
@@ -333,4 +336,110 @@ class TestCanvas(unittest.TestCase):
             event=this_event,
             conversation_ids=conversation_ids
         )
-        assert isinstance(result, ValueError)
+        self.assertIsInstance(result, ValueError)
+
+    # create_calendar_event()
+    def test_create_calendar_event(self, m):
+        register_uris({'calendar_event': ['create_calendar_event']}, m)
+
+        cal_event = {
+            "context_code": "course_123"
+        }
+        evnt = self.canvas.create_calendar_event(calendar_event=cal_event)
+
+        self.assertIsInstance(evnt, CalendarEvent)
+        self.assertEqual(evnt.context_code, "course_123")
+        self.assertEqual(evnt.id, 234)
+
+    def test_create_calendar_event_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_calendar_event({})
+
+    # list_calendar_events()
+    def test_list_calendar_events(self, m):
+        register_uris({'calendar_event': ['list_calendar_events']}, m)
+
+        cal_events = self.canvas.list_calendar_events()
+        cal_event_list = [cal_event for cal_event in cal_events]
+        self.assertEqual(len(cal_event_list), 2)
+
+    # get_calendar_event()
+    def test_get_calendar_event(self, m):
+        register_uris({'calendar_event': ['get_calendar_event']}, m)
+
+        cal_event = self.canvas.get_calendar_event(567)
+        self.assertIsInstance(cal_event, CalendarEvent)
+        self.assertEqual(cal_event.title, "Test Event 3")
+
+    # reserve_time_slot()
+    def test_reserve_time_slot(self, m):
+        register_uris({'calendar_event': ['reserve_time_slot']}, m)
+
+        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567)
+        self.assertIsInstance(cal_event, CalendarEvent)
+        self.assertEqual(cal_event.title, "Test Reservation")
+
+    def test_reserve_time_slot_by_participant_id(self, m):
+        register_uris({
+            'calendar_event': ['reserve_time_slot_participant_id']
+        }, m)
+
+        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567, participant_id=777)
+        self.assertIsInstance(cal_event, CalendarEvent)
+        self.assertEqual(cal_event.title, "Test Reservation")
+        self.assertEqual(cal_event.user, 777)
+
+    # list_appointment_groups()
+    def test_list_appointment_groups(self, m):
+        register_uris({'appointment_group': ['list_appointment_groups']}, m)
+
+        appt_groups = self.canvas.list_appointment_groups()
+        appt_groups_list = [appt_group for appt_group in appt_groups]
+        self.assertEqual(len(appt_groups_list), 2)
+
+    # get_appointment_group()
+    def test_get_appointment_group(self, m):
+        register_uris({'appointment_group': ['get_appointment_group']}, m)
+
+        appt_group = self.canvas.get_appointment_group(567)
+        self.assertIsInstance(appt_group, AppointmentGroup)
+        self.assertEqual(appt_group.title, "Test Group 3")
+
+    # create_appointment_group()
+    def test_create_appointment_group(self, m):
+        register_uris({'appointment_group': ['create_appointment_group']}, m)
+
+        evnt = self.canvas.create_appointment_group({
+            "context_codes": ["course_123"],
+            "title": "Test Group"
+        })
+
+        self.assertIsInstance(evnt, AppointmentGroup)
+        self.assertEqual(evnt.context_codes[0], "course_123")
+        self.assertEqual(evnt.id, 234)
+
+    def test_create_appointment_group_fail_on_context_codes(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_appointment_group({
+                "title": "Test Group"
+            })
+
+    def test_create_appointment_group_fail_on_title(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_appointment_group({"context_codes": "course_123"})
+
+    # list_user_participants()
+    def test_list_user_participants(self, m):
+        register_uris({'appointment_group': ['list_user_participants']}, m)
+
+        users = self.canvas.list_user_participants(222)
+        users_list = [user for user in users]
+        self.assertEqual(len(users_list), 2)
+
+    # list_group_participants()
+    def test_list_group_participants(self, m):
+        register_uris({'appointment_group': ['list_group_participants']}, m)
+
+        groups = self.canvas.list_group_participants(222)
+        groups_list = [group for group in groups]
+        self.assertEqual(len(groups_list), 2)

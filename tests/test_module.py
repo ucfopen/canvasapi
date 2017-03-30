@@ -3,9 +3,9 @@ import settings
 
 import requests_mock
 
-from pycanvas import Canvas
-from pycanvas.exceptions import RequiredFieldMissing
-from pycanvas.module import Module, ModuleItem
+from canvas_api import Canvas
+from canvas_api.exceptions import RequiredFieldMissing
+from canvas_api.module import Module, ModuleItem
 from tests.util import register_uris
 
 
@@ -29,11 +29,11 @@ class TestModule(unittest.TestCase):
         name = 'New Name'
         edited_module = self.module.edit(module={'name': name})
 
-        assert isinstance(edited_module, Module)
-        assert hasattr(edited_module, 'name')
-        assert edited_module.name == name
-        assert hasattr(edited_module, 'course_id')
-        assert edited_module.course_id == self.course.id
+        self.assertIsInstance(edited_module, Module)
+        self.assertTrue(hasattr(edited_module, 'name'))
+        self.assertEqual(edited_module.name, name)
+        self.assertTrue(hasattr(edited_module, 'course_id'))
+        self.assertEqual(edited_module.course_id, self.course.id)
 
     # delete()
     def test_delete_module(self, m):
@@ -41,9 +41,9 @@ class TestModule(unittest.TestCase):
 
         deleted_module = self.module.delete()
 
-        assert isinstance(deleted_module, Module)
-        assert hasattr(deleted_module, 'course_id')
-        assert deleted_module.course_id == self.course.id
+        self.assertIsInstance(deleted_module, Module)
+        self.assertTrue(hasattr(deleted_module, 'course_id'))
+        self.assertEqual(deleted_module.course_id, self.course.id)
 
     # relock()
     def test_relock(self, m):
@@ -51,9 +51,9 @@ class TestModule(unittest.TestCase):
 
         relocked_module = self.module.relock()
 
-        assert isinstance(relocked_module, Module)
-        assert hasattr(relocked_module, 'course_id')
-        assert relocked_module.course_id == self.course.id
+        self.assertIsInstance(relocked_module, Module)
+        self.assertTrue(hasattr(relocked_module, 'course_id'))
+        self.assertEqual(relocked_module.course_id, self.course.id)
 
     # list_module_items()
     def test_list_module_items(self, m):
@@ -62,10 +62,10 @@ class TestModule(unittest.TestCase):
         module_items = self.module.list_module_items()
         module_item_list = [module_item for module_item in module_items]
 
-        assert len(module_item_list) == 4
-        assert isinstance(module_item_list[0], ModuleItem)
-        assert hasattr(module_item_list[0], 'course_id')
-        assert module_item_list[0].course_id == self.course.id
+        self.assertEqual(len(module_item_list), 4)
+        self.assertIsInstance(module_item_list[0], ModuleItem)
+        self.assertTrue(hasattr(module_item_list[0], 'course_id'))
+        self.assertEqual(module_item_list[0].course_id, self.course.id)
 
     # get_module_item()
     def test_get_module_item(self, m):
@@ -73,9 +73,9 @@ class TestModule(unittest.TestCase):
 
         module_item = self.module.get_module_item(1)
 
-        assert isinstance(module_item, ModuleItem)
-        assert hasattr(module_item, 'course_id')
-        assert module_item.course_id == self.course.id
+        self.assertIsInstance(module_item, ModuleItem)
+        self.assertTrue(hasattr(module_item, 'course_id'))
+        self.assertEqual(module_item.course_id, self.course.id)
 
     # create_module_item()
     def test_create_module_item(self, m):
@@ -87,9 +87,9 @@ class TestModule(unittest.TestCase):
                 'content_id': 1
             }
         )
-        assert isinstance(module_item, ModuleItem)
-        assert hasattr(module_item, 'course_id')
-        assert module_item.course_id == self.course.id
+        self.assertIsInstance(module_item, ModuleItem)
+        self.assertTrue(hasattr(module_item, 'course_id'))
+        self.assertEqual(module_item.course_id, self.course.id)
 
     def test_create_module_item_fail1(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -106,7 +106,7 @@ class TestModule(unittest.TestCase):
     # __str__
     def test__str__(self, m):
         string = str(self.module)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()
@@ -136,11 +136,11 @@ class TestModuleItem(unittest.TestCase):
             module_item={'title': title}
         )
 
-        assert isinstance(edited_module_item, ModuleItem)
-        assert hasattr(edited_module_item, 'title')
-        assert edited_module_item.title == title
-        assert hasattr(edited_module_item, 'course_id')
-        assert edited_module_item.course_id == self.course.id
+        self.assertIsInstance(edited_module_item, ModuleItem)
+        self.assertTrue(hasattr(edited_module_item, 'title'))
+        self.assertEqual(edited_module_item.title, title)
+        self.assertTrue(hasattr(edited_module_item, 'course_id'))
+        self.assertEqual(edited_module_item.course_id, self.course.id)
 
     # delete()
     def test_delete(self, m):
@@ -148,9 +148,9 @@ class TestModuleItem(unittest.TestCase):
 
         deleted_module_item = self.module_item.delete()
 
-        assert isinstance(deleted_module_item, ModuleItem)
-        assert hasattr(deleted_module_item, 'course_id')
-        assert deleted_module_item.course_id == self.course.id
+        self.assertIsInstance(deleted_module_item, ModuleItem)
+        self.assertTrue(hasattr(deleted_module_item, 'course_id'))
+        self.assertEqual(deleted_module_item.course_id, self.course.id)
 
     # complete(course_id, True)
     def test_complete(self, m):
@@ -158,10 +158,10 @@ class TestModuleItem(unittest.TestCase):
 
         completed_module_item = self.module_item.complete()
 
-        assert isinstance(completed_module_item, ModuleItem)
-        assert hasattr(completed_module_item, 'completion_requirement')
-        assert hasattr(completed_module_item, 'course_id')
-        assert completed_module_item.course_id == self.course.id
+        self.assertIsInstance(completed_module_item, ModuleItem)
+        self.assertTrue(hasattr(completed_module_item, 'completion_requirement'))
+        self.assertTrue(hasattr(completed_module_item, 'course_id'))
+        self.assertEqual(completed_module_item.course_id, self.course.id)
 
     # complete(course_id, False)
     def test_uncomplete(self, m):
@@ -169,11 +169,11 @@ class TestModuleItem(unittest.TestCase):
 
         completed_module_item = self.module_item.uncomplete()
 
-        assert isinstance(completed_module_item, ModuleItem)
-        assert hasattr(completed_module_item, 'completion_requirement')
-        assert hasattr(completed_module_item, 'course_id')
-        assert completed_module_item.course_id == self.course.id
+        self.assertIsInstance(completed_module_item, ModuleItem)
+        self.assertTrue(hasattr(completed_module_item, 'completion_requirement'))
+        self.assertTrue(hasattr(completed_module_item, 'course_id'))
+        self.assertEqual(completed_module_item.course_id, self.course.id)
 
     def test__str__(self, m):
         string = str(self.module_item)
-        assert isinstance(string, str)
+        self.assertIsInstance(string, str)

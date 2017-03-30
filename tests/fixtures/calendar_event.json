@@ -1,0 +1,82 @@
+{
+	"create_calendar_event": {
+		"method": "POST",
+		"endpoint": "calendar_events",
+		"data": {
+			"id": 234,
+			"context_code": "course_123",
+			"title": "Test Event"
+		},
+		"status_code": 200
+	},
+	"delete_calendar_event": {
+		"method": "DELETE",
+		"endpoint": "calendar_events/567",
+		"data": {
+			"id": 567,
+			"context_code": "course_765",
+			"title": "Test Event 3",
+			"description": "Delete this assignment"
+		},
+		"status_code": 200
+	},
+	"edit_calendar_event": {
+		"method": "PUT",
+		"endpoint": "calendar_events/567",
+		"data": {
+			"id": 567,
+			"course_id": 1,
+			"title": "New Name",
+			"description": "Edit this assignment"
+		},
+		"status_code": 200
+	},
+	"get_calendar_event": {
+		"method": "GET",
+		"endpoint": "calendar_events/567",
+		"data": {
+			"id": 567,
+			"context_code": "course_765",
+			"title": "Test Event 3"
+		},
+		"status_code": 200
+	},
+	"list_calendar_events": {
+		"method": "GET",
+		"endpoint": "calendar_events",
+		"data": [
+			{
+				"id": 123,
+				"context_code": "course_321",
+				"title": "Test Event 1"
+			},
+			{
+				"id": 456,
+				"context_code": "course_654",
+				"title": "Test Event 2"
+			}
+		],
+		"status_code": 200
+	},
+	"reserve_time_slot": {
+		"method": "POST",
+		"endpoint": "calendar_events/567/reservations",
+		"data": {
+			"id": 567,
+			"context_code": "course_123",
+			"title": "Test Reservation"
+		},
+		"status_code": 200
+	},
+	"reserve_time_slot_participant_id": {
+		"method": "POST",
+		"endpoint": "calendar_events/567/reservations/777",
+		"data": {
+			"id": 567,
+			"context_code": "course_123",
+			"title": "Test Reservation",
+			"user": 777
+		},
+		"status_code": 200
+	}
+}

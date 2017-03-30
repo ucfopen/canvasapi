@@ -1,6 +1,6 @@
 import unittest
 
-from pycanvas.canvas_object import CanvasObject
+from canvas_api.canvas_object import CanvasObject
 
 
 class TestCanvasObject(unittest.TestCase):
@@ -11,9 +11,9 @@ class TestCanvasObject(unittest.TestCase):
         canvas_obj = CanvasObject(None, attributes)
 
         prev_json = canvas_obj.to_json()
-        assert isinstance(prev_json, str)
+        self.assertIsInstance(prev_json, str)
 
         attributes.update({'name': 'Test Object 2'})
         canvas_obj.set_attributes(attributes)
 
-        assert canvas_obj.to_json() != prev_json
+        self.assertNotEqual(canvas_obj.to_json(), prev_json)

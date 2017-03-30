@@ -1,6 +1,6 @@
-======
+====
 User
-======
+====
 
-.. autoclass:: pycanvas.user.User
+.. autoclass:: canvas_api.user.User
     :members:

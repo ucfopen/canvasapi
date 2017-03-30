@@ -2,5 +2,5 @@
 Section
 =======
 
-.. autoclass:: pycanvas.section.Section
+.. autoclass:: canvas_api.section.Section
     :members:
