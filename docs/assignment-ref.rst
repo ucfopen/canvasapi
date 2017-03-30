@@ -6,8 +6,8 @@ Assignment
     :members:
 
 
-================
-Assignment Group
-================
+===============
+AssignmentGroup
+===============
 .. autoclass:: canvas_api.assignment.AssignmentGroup
     :members:

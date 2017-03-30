@@ -6,8 +6,8 @@ Page
     :members:
 
 
-=============
-Page Revision
-=============
+============
+PageRevision
+============
 .. autoclass:: canvas_api.page.PageRevision
     :members:

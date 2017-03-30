@@ -60,9 +60,9 @@ class ExternalTool(CanvasObject):
         Remove the specified external tool.
 
         :calls: `DELETE /api/v1/courses/:course_id/external_tools/:external_tool_id
-            <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.destroy`_
+            <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.destroy>`_
             or `DELETE /api/v1/accounts/:account_id/external_tools/:external_tool_id
-            <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.destroy`_
+            <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.destroy>`_
 
         :rtype: :class:`canvas_api.external_tool.ExternalTool`
         """

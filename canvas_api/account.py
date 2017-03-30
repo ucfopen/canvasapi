@@ -548,7 +548,7 @@ class Account(CanvasObject):
         """
         Create an external tool in the current account.
 
-        :calls: `GET /api/v1/accounts/:account_id/external_tools \
+        :calls: `POST /api/v1/accounts/:account_id/external_tools \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.create>`_
 
         :param name: The name of the tool

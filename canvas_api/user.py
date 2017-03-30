@@ -288,7 +288,7 @@ class User(CanvasObject):
         """
         Return the list of active groups for the user.
 
-        :calls:`GET /api/v1/users/self/groups \
+        :calls: `GET /api/v1/users/self/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.index>`_
 
         :rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.group.Group`

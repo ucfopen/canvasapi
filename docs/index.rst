@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to canvas-api's documentation!
-====================================
+======================================
 
 Contents:
 

@@ -206,10 +206,11 @@ class DiscussionTopic(CanvasObject):
         """
         Add a reply to an entry in a discussion topic.
 
-        :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \  # noqa
+        :calls: `POST
+            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
 
-            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
 
         :param entry_id: ID of an entry.
@@ -232,10 +233,12 @@ class DiscussionTopic(CanvasObject):
         """
         Retrieves the replies to a top-level entry in a discussion topic.
 
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \  # noqa
+        :calls: `GET
+            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
 
-            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+            or `GET
+            /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
 
         :param entry_id: ID of an entry.
@@ -352,10 +355,12 @@ class DiscussionTopic(CanvasObject):
         """
         Mark a discussion entry as unread.
 
-        :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/read \  # noqa
+        :calls: `DELETE
+            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/read \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_entry_unread>`_
 
-            or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/read \
+            or `DELETE
+            /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/read \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_entry_unread>`_
 
         :rtype: bool
@@ -421,10 +426,12 @@ class DiscussionTopic(CanvasObject):
         """
         Rate a discussion entry.
 
-        :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/rating \ # noqa
+        :calls: `POST
+            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/rating \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.rate_entry>`_
 
-            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/rating \
+            or `POST
+            /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/rating \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.rate_entry>`_
 
         :rtype: bool

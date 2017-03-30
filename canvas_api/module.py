@@ -146,7 +146,7 @@ class ModuleItem(CanvasObject):
         """
         Update this module item.
 
-        :calls: `PUT /api/v1/courses/:course_id/modules/:id \
+        :calls: `PUT /api/v1/courses/:course_id/modules/:module_id/items/:id \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.update>`_
 
         :returns: The updated module item.
