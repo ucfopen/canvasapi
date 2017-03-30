@@ -26,7 +26,7 @@ In the `docs` directory, run `make clean html`.
 Deploy
 ------
 
-Commit the new files and the changes to `setup.py` and push.
+Commit the new files and the changes to `__init__.py` and push.
 
 Create a merge request from `master` to `stable`, and merge.
 
