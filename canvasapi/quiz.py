@@ -1,5 +1,5 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.util import combine_kwargs
 
 
 class Quiz(CanvasObject):
@@ -15,7 +15,7 @@ class Quiz(CanvasObject):
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.update>`_
 
         :returns: The updated quiz.
-        :rtype: :class:`canvas_api.quiz.Quiz`
+        :rtype: :class:`canvasapi.quiz.Quiz`
         """
         response = self._requester.request(
             'PUT',
@@ -34,7 +34,7 @@ class Quiz(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/quizzes/:id \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.destroy>`_
 
-        :rtype: :class:`canvas_api.quiz.Quiz`
+        :rtype: :class:`canvasapi.quiz.Quiz`
         """
         response = self._requester.request(
             'DELETE',

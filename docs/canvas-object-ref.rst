@@ -2,5 +2,5 @@
 Canvas Object
 =============
 
-.. autoclass:: canvas_api.canvas_object.CanvasObject
+.. autoclass:: canvasapi.canvas_object.CanvasObject
     :members:

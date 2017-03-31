@@ -2,26 +2,26 @@
 Account
 =======
 
-.. autoclass:: canvas_api.account.Account
+.. autoclass:: canvasapi.account.Account
     :members:
 
 ===================
 AccountNotification
 ===================
 
-.. autoclass:: canvas_api.account.AccountNotification
+.. autoclass:: canvasapi.account.AccountNotification
     :members:
 
 =============
 AccountReport
 =============
 
-.. autoclass:: canvas_api.account.AccountReport
+.. autoclass:: canvasapi.account.AccountReport
     :members:
 
 ====
 Role
 ====
 
-.. autoclass:: canvas_api.account.Role
+.. autoclass:: canvasapi.account.Role
     :members:

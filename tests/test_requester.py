@@ -2,8 +2,8 @@ import unittest
 
 import requests_mock
 
-from canvas_api import Canvas
-from canvas_api.exceptions import (
+from canvasapi import Canvas
+from canvasapi.exceptions import (
     BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
     Unauthorized
 )

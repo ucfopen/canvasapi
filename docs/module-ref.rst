@@ -2,12 +2,12 @@
 Module
 ======
 
-.. autoclass:: canvas_api.module.Module
+.. autoclass:: canvasapi.module.Module
     :members:
 
 ==========
 ModuleItem
 ==========
 
-.. autoclass:: canvas_api.module.ModuleItem
+.. autoclass:: canvasapi.module.ModuleItem
     :members:

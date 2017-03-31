@@ -1,21 +1,21 @@
-Getting Started with canvas-api
+Getting Started with canvasapi
 ===============================
 
-Installing canvas-api
+Installing canvasapi
 ---------------------
 
 You can install with pip::
 
-    pip install canvas-api
+    pip install canvasapi
 
 Usage
 -----
 
-Before using canvas-api, you'll need to instantiate a new Canvas object:
+Before using canvasapi, you'll need to instantiate a new Canvas object:
 
 .. code:: python
     
-    from canvas_api import Canvas
+    from canvasapi import Canvas
 
     canvas = Canvas(API_KEY, API_URL)
 
@@ -31,7 +31,7 @@ Let's write a script to print out all of the users in a course:
 
 .. code:: python
 
-    from canvas_api import Canvas, Course, User
+    from canvasapi import Canvas, Course, User
 
     # Set up our Canvas object
     canvas = Canvas(API_KEY, API_URL)
@@ -53,7 +53,7 @@ We can update a course's information as well:
 
 .. code:: python
 
-    from canvas_api import Canvas, Course
+    from canvasapi import Canvas, Course
 
      # Set up our Canvas object
     canvas = Canvas(API_KEY, API_URL)

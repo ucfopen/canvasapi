@@ -2,5 +2,5 @@
 EnrollmentTerm
 ==============
 
-.. autoclass:: canvas_api.enrollment_term.EnrollmentTerm
+.. autoclass:: canvasapi.enrollment_term.EnrollmentTerm
     :members:

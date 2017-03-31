@@ -4,16 +4,16 @@ import os
 
 import requests_mock
 
-from canvas_api import Canvas
-from canvas_api.assignment import Assignment
-from canvas_api.avatar import Avatar
-from canvas_api.bookmark import Bookmark
-from canvas_api.calendar_event import CalendarEvent
-from canvas_api.course import Course
-from canvas_api.group import Group
-from canvas_api.enrollment import Enrollment
-from canvas_api.page_view import PageView
-from canvas_api.user import User
+from canvasapi import Canvas
+from canvasapi.assignment import Assignment
+from canvasapi.avatar import Avatar
+from canvasapi.bookmark import Bookmark
+from canvasapi.calendar_event import CalendarEvent
+from canvasapi.course import Course
+from canvasapi.group import Group
+from canvasapi.enrollment import Enrollment
+from canvasapi.page_view import PageView
+from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
 

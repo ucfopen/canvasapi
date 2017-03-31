@@ -1,6 +1,6 @@
 import unittest
 
-from canvas_api.canvas_object import CanvasObject
+from canvasapi.canvas_object import CanvasObject
 
 
 class TestCanvasObject(unittest.TestCase):

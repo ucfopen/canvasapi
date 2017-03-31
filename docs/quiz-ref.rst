@@ -2,5 +2,5 @@
 Quiz
 =====
 
-.. autoclass:: canvas_api.quiz.Quiz
+.. autoclass:: canvasapi.quiz.Quiz
     :members:

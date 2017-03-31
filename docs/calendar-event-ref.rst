@@ -2,5 +2,5 @@
 CalendarEvent
 =============
 
-.. autoclass:: canvas_api.calendar_event.CalendarEvent
+.. autoclass:: canvasapi.calendar_event.CalendarEvent
     :members:

@@ -1,4 +1,4 @@
-from canvas_api.canvas_object import CanvasObject
+from canvasapi.canvas_object import CanvasObject
 
 
 class Progress(CanvasObject):
@@ -13,7 +13,7 @@ class Progress(CanvasObject):
         :calls: `GET /api/v1/progress/:id \
         <https://canvas.instructure.com/doc/api/progress.html#method.progress.show>`_
 
-        :rtype: :class:`canvas_api.progress.Progress`
+        :rtype: :class:`canvasapi.progress.Progress`
         """
         response = self._requester.request(
             'GET',

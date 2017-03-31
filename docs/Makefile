@@ -96,9 +96,9 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/canvas-api.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/canvasapi.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/canvas-api.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/canvasapi.qhc"
 
 .PHONY: applehelp
 applehelp:
@@ -115,8 +115,8 @@ devhelp:
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/canvas-api"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/canvas-api"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/canvasapi"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/canvasapi"
 	@echo "# devhelp"
 
 .PHONY: epub

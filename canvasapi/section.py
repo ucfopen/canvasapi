@@ -1,6 +1,6 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.paginated_list import PaginatedList
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.paginated_list import PaginatedList
+from canvasapi.util import combine_kwargs
 
 
 class Section(CanvasObject):
@@ -19,10 +19,10 @@ class Section(CanvasObject):
         :calls: `GET /api/v1/sections/:section_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.enrollment.Enrollment`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.enrollment.Enrollment`
         """
-        from canvas_api.enrollment import Enrollment
+        from canvasapi.enrollment import Enrollment
 
         return PaginatedList(
             Enrollment,
@@ -40,7 +40,7 @@ class Section(CanvasObject):
         \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.crosslist>`_
 
-        :rtype: :class:`canvas_api.section.Section`
+        :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
             'POST',
@@ -55,7 +55,7 @@ class Section(CanvasObject):
         :calls: `DELETE /api/v1/sections/:id/crosslist \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.uncrosslist>`_
 
-        :rtype: :class:`canvas_api.section.Section`
+        :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
             "DELETE",
@@ -70,7 +70,7 @@ class Section(CanvasObject):
         :calls: `PUT /api/v1/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.update>`_
 
-        :rtype: :class:`canvas_api.section.Section`
+        :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
             "PUT",
@@ -85,7 +85,7 @@ class Section(CanvasObject):
         :calls: `DELETE /api/v1/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.destroy>`_
 
-        :rtype: :class:`canvas_api.section.Section`
+        :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
             "DELETE",

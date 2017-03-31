@@ -1,8 +1,8 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.discussion_topic import DiscussionTopic
-from canvas_api.exceptions import RequiredFieldMissing
-from canvas_api.paginated_list import PaginatedList
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.paginated_list import PaginatedList
+from canvasapi.util import combine_kwargs
 
 
 class Group(CanvasObject):
@@ -20,9 +20,9 @@ class Group(CanvasObject):
         :param wiki_page: Details about the page to create.
         :type wiki_page: dict
         :returns: The created page.
-        :rtype: :class:`canvas_api.page.Page`
+        :rtype: :class:`canvasapi.page.Page`
         """
-        from canvas_api.course import Page
+        from canvasapi.course import Page
 
         if isinstance(wiki_page, dict) and 'title' in wiki_page:
             kwargs['wiki_page'] = wiki_page
@@ -47,9 +47,9 @@ class Group(CanvasObject):
         :calls: `PUT /api/v1/groups/:group_id/front_page \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update_front_page>`_
 
-        :rtype: :class:`canvas_api.page.Page`
+        :rtype: :class:`canvasapi.page.Page`
         """
-        from canvas_api.course import Page
+        from canvasapi.course import Page
 
         response = self._requester.request(
             'PUT',
@@ -68,9 +68,9 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/front_page \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_front_page>`_
 
-        :rtype: :class:`canvas_api.group.Group`
+        :rtype: :class:`canvasapi.group.Group`
         """
-        from canvas_api.course import Page
+        from canvasapi.course import Page
 
         response = self._requester.request(
             'GET',
@@ -91,9 +91,9 @@ class Group(CanvasObject):
         :param url: The url for the page.
         :type url: str
         :returns: The specified page.
-        :rtype: :class:`canvas_api.groups.Group`
+        :rtype: :class:`canvasapi.groups.Group`
         """
-        from canvas_api.course import Page
+        from canvasapi.course import Page
 
         response = self._requester.request(
             'GET',
@@ -111,10 +111,10 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.page.Page`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.page.Page`
         """
-        from canvas_api.course import Page
+        from canvasapi.course import Page
         return PaginatedList(
             Page,
             self._requester,
@@ -131,7 +131,7 @@ class Group(CanvasObject):
         :calls: `PUT /api/v1/groups/:group_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.update>`_
 
-        :rtype: :class:`canvas_api.group.Group`
+        :rtype: :class:`canvasapi.group.Group`
         """
         response = self._requester.request(
             'PUT',
@@ -147,7 +147,7 @@ class Group(CanvasObject):
         :calls: `DELETE /api/v1/groups/:group_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.destroy>`_
 
-        :rtype: :class:`canvas_api.group.Group`
+        :rtype: :class:`canvasapi.group.Group`
         """
         response = self._requester.request(
             'DELETE',
@@ -165,8 +165,8 @@ class Group(CanvasObject):
         :param invitees: list of user ids
         :type invitees: integer list
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.group.GroupMembership`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.GroupMembership`
         """
         return PaginatedList(
             GroupMembership,
@@ -186,10 +186,10 @@ class Group(CanvasObject):
         :param invitees: list of user ids
         :type invitees: integer list
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.user.User`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
         """
-        from canvas_api.user import User
+        from canvasapi.user import User
         return PaginatedList(
             User,
             self._requester,
@@ -206,12 +206,12 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.destroy>`_
 
         :param user: The user object or ID to remove from the group.
-        :type user: :class:`canvas_api.user.User` or int
+        :type user: :class:`canvasapi.user.User` or int
 
-        :rtype: :class:`canvas_api.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
-        from canvas_api.user import User
-        from canvas_api.util import obj_or_id
+        from canvasapi.user import User
+        from canvasapi.util import obj_or_id
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -238,7 +238,7 @@ class Group(CanvasObject):
                     and the JSON response from the API.
         :rtype: tuple
         """
-        from canvas_api.upload import Uploader
+        from canvasapi.upload import Uploader
 
         return Uploader(
             self._requester,
@@ -287,8 +287,8 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/memberships \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.group.GroupMembership`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.GroupMembership`
         """
         return PaginatedList(
             GroupMembership,
@@ -311,7 +311,7 @@ class Group(CanvasObject):
         :param invitees: list of user ids
         :type invitees: integer list
 
-        :rtype: :class:`canvas_api.group.GroupMembership`
+        :rtype: :class:`canvasapi.group.GroupMembership`
         """
         response = self._requester.request(
             'GET',
@@ -327,7 +327,7 @@ class Group(CanvasObject):
         :calls: `POST /api/v1/groups/:group_id/memberships \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.create>`_
 
-        :rtype: :class:`canvas_api.group.GroupMembership`
+        :rtype: :class:`canvasapi.group.GroupMembership`
         """
         response = self._requester.request(
             'POST',
@@ -344,7 +344,7 @@ class Group(CanvasObject):
         :calls: `PUT /api/v1/groups/:group_id/users/:user_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.update>`_
 
-        :rtype: :class:`canvas_api.group.GroupMembership`
+        :rtype: :class:`canvasapi.group.GroupMembership`
         """
         response = self._requester.request(
             'PUT',
@@ -363,7 +363,7 @@ class Group(CanvasObject):
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'GET',
@@ -385,7 +385,7 @@ class Group(CanvasObject):
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'GET',
@@ -404,8 +404,8 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:course_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
 
         return PaginatedList(
@@ -424,7 +424,7 @@ class Group(CanvasObject):
         :calls: `POST /api/v1/courses/:group_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
 
-        :rtype: :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'POST',
@@ -449,8 +449,8 @@ class Group(CanvasObject):
             e.g. [104, 102, 103]
         :type order: list
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         if not isinstance(order, list):
             raise ValueError("Param order needs to be string or a list.")
@@ -476,7 +476,7 @@ class GroupMembership(CanvasObject):
         :calls: `PUT /api/v1/groups/:group_id/memberships/:membership_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.update>`_
 
-        :rtype: :class:`canvas_api.group.GroupMembership`
+        :rtype: :class:`canvasapi.group.GroupMembership`
         """
         response = self._requester.request(
             'PUT',
@@ -493,13 +493,13 @@ class GroupMembership(CanvasObject):
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.destroy>`_
 
         :param user: The user object or ID to remove from the group.
-        :type user: :class:`canvas_api.user.User` or int
+        :type user: :class:`canvasapi.user.User` or int
 
         :returns: An empty dictionary
         :rtype: dict
         """
-        from canvas_api.user import User
-        from canvas_api.util import obj_or_id
+        from canvasapi.user import User
+        from canvasapi.util import obj_or_id
 
         user_id = obj_or_id(user, "user", (User,))
 
@@ -538,7 +538,7 @@ class GroupCategory(CanvasObject):
         :calls: `POST /api/v1/group_categories/:group_category_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.create>`_
 
-        :rtype: :class:`canvas_api.group.Group`
+        :rtype: :class:`canvasapi.group.Group`
         """
         response = self._requester.request(
             'POST',
@@ -554,7 +554,7 @@ class GroupCategory(CanvasObject):
         :calls: `PUT /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.update>`_
 
-        :rtype: :class:`canvas_api.group.GroupCategory`
+        :rtype: :class:`canvasapi.group.GroupCategory`
         """
         response = self._requester.request(
             'PUT',
@@ -585,8 +585,8 @@ class GroupCategory(CanvasObject):
         :calls: `GET /api/v1/group_categories/:group_category_id/groups \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.groups>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.group.Group`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.Group`
         """
         return PaginatedList(
             Group,
@@ -602,10 +602,10 @@ class GroupCategory(CanvasObject):
         :calls: `GET /api/v1/group_categories/:group_category_id/users \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.users>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.user.User`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
         """
-        from canvas_api.user import User
+        from canvasapi.user import User
         return PaginatedList(
             User,
             self._requester,
@@ -621,11 +621,11 @@ class GroupCategory(CanvasObject):
         :calls: `POST /api/v1/group_categories/:group_category_id/assign_unassigned_members \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.assign_unassigned_members>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.user.User`
-            or :class:`canvas_api.progress.Progress`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
+            or :class:`canvasapi.progress.Progress`
         """
-        from canvas_api.user import User
-        from canvas_api.progress import Progress
+        from canvasapi.user import User
+        from canvasapi.progress import Progress
         if sync:
             return PaginatedList(
                 User,

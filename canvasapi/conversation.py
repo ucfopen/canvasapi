@@ -1,5 +1,5 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.util import combine_kwargs
 
 
 class Conversation(CanvasObject):
@@ -60,7 +60,7 @@ class Conversation(CanvasObject):
             with 'course\_' or 'group\_' respectively,
             e.g. recipients['1', '2', 'course_3']
         :type recipients:  `list` of `str`
-        :rtype: :class:`canvas_api.account.Conversation`
+        :rtype: :class:`canvasapi.account.Conversation`
         """
         response = self._requester.request(
             'POST',
@@ -79,7 +79,7 @@ class Conversation(CanvasObject):
         :param body: The body of the conversation.
         :type body: str
         :returns: A conversation with only the most recent message.
-        :rtype: :class:`canvas_api.account.Conversation`
+        :rtype: :class:`canvasapi.account.Conversation`
         """
         response = self._requester.request(
             'POST',

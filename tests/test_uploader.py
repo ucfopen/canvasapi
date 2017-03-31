@@ -4,8 +4,8 @@ import os
 
 import requests_mock
 
-from canvas_api.canvas import Canvas
-from canvas_api.upload import Uploader
+from canvasapi.canvas import Canvas
+from canvasapi.upload import Uploader
 from tests import settings
 from tests.util import register_uris
 

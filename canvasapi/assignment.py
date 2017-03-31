@@ -1,5 +1,5 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.util import combine_kwargs
 
 
 class Assignment(CanvasObject):
@@ -14,7 +14,7 @@ class Assignment(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/assignments/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments.destroy>`_
 
-        :rtype: :class:`canvas_api.assignment.Assignment`
+        :rtype: :class:`canvasapi.assignment.Assignment`
         """
         response = self._requester.request(
             'DELETE',
@@ -29,7 +29,7 @@ class Assignment(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/assignments/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.update>`_
 
-        :rtype: :class:`canvas_api.assignment.Assignment`
+        :rtype: :class:`canvasapi.assignment.Assignment`
         """
         response = self._requester.request(
             'PUT',
@@ -55,7 +55,7 @@ class AssignmentGroup(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
         <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.update>`_
 
-        :rtype: :class:`canvas_api.assignment.AssignmentGroup`
+        :rtype: :class:`canvasapi.assignment.AssignmentGroup`
         """
         response = self._requester.request(
             'PUT',
@@ -75,7 +75,7 @@ class AssignmentGroup(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
         <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.destroy>`_
 
-        :rtype: :class:`canvas_api.assignment.AssignmentGroup`
+        :rtype: :class:`canvasapi.assignment.AssignmentGroup`
         """
         response = self._requester.request(
             'DELETE',

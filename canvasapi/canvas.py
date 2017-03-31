@@ -1,11 +1,11 @@
-from canvas_api.account import Account
-from canvas_api.course import Course
-from canvas_api.exceptions import RequiredFieldMissing
-from canvas_api.group import Group, GroupCategory
-from canvas_api.paginated_list import PaginatedList
-from canvas_api.requester import Requester
-from canvas_api.user import User
-from canvas_api.util import combine_kwargs
+from canvasapi.account import Account
+from canvasapi.course import Course
+from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.group import Group, GroupCategory
+from canvasapi.paginated_list import PaginatedList
+from canvasapi.requester import Requester
+from canvasapi.user import User
+from canvasapi.util import combine_kwargs
 
 
 class Canvas(object):
@@ -29,7 +29,7 @@ class Canvas(object):
         :calls: `POST /api/v1/accounts \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
 
-        :rtype: :class:`canvas_api.account.Account`
+        :rtype: :class:`canvasapi.account.Account`
         """
         response = self.__requester.request(
             'POST',
@@ -47,7 +47,7 @@ class Canvas(object):
 
         :param account_id: The ID of the account to retrieve.
         :type account_id: int
-        :rtype: :class:`canvas_api.account.Account`
+        :rtype: :class:`canvasapi.account.Account`
         """
         response = self.__requester.request(
             'GET',
@@ -66,8 +66,8 @@ class Canvas(object):
         :calls: `GET /api/v1/accounts \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.account.Account`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.account.Account`
         """
         return PaginatedList(
             Account,
@@ -88,8 +88,8 @@ class Canvas(object):
         :calls: `GET /api/v1/course_accounts \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.course_accounts>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.account.Account`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.account.Account`
         """
         return PaginatedList(
             Account,
@@ -107,7 +107,7 @@ class Canvas(object):
 
         :param course_id: The ID of the course to retrieve.
         :type course_id: int
-        :rtype: :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.course.Course`
         """
         response = self.__requester.request(
             'GET',
@@ -132,7 +132,7 @@ class Canvas(object):
         :type user_id: str
         :param id_type: The ID type.
         :type id_type: str
-        :rtype: :class:`canvas_api.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
         if id_type:
             uri = 'users/%s:%s' % (id_type, user_id)
@@ -152,8 +152,8 @@ class Canvas(object):
         :calls: `GET /api/v1/courses \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.Course`
         """
         return PaginatedList(
             Course,
@@ -216,10 +216,10 @@ class Canvas(object):
         :calls: `GET /api/v1/users/self/course_nicknames \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.course.CourseNickname`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.CourseNickname`
         """
-        from canvas_api.course import CourseNickname
+        from canvasapi.course import CourseNickname
 
         return PaginatedList(
             CourseNickname,
@@ -237,9 +237,9 @@ class Canvas(object):
 
         :param course_id: The ID of the course.
         :type course_id: int
-        :rtype: :class:`canvas_api.course.CourseNickname`
+        :rtype: :class:`canvasapi.course.CourseNickname`
         """
-        from canvas_api.course import CourseNickname
+        from canvasapi.course import CourseNickname
 
         response = self.__requester.request(
             'GET',
@@ -254,9 +254,9 @@ class Canvas(object):
         :calls: `GET /api/v1/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.show>`_
 
-        :rtype: :class:`canvas_api.section.Section`
+        :rtype: :class:`canvasapi.section.Section`
         """
-        from canvas_api.section import Section
+        from canvasapi.section import Section
         response = self.__requester.request(
             'GET',
             'sections/%s' % (section_id)
@@ -276,9 +276,9 @@ class Canvas(object):
         :type course_id: int
         :param nickname: The nickname for the course.
         :type nickname: str
-        :rtype: :class:`canvas_api.course.CourseNickname`
+        :rtype: :class:`canvasapi.course.CourseNickname`
         """
-        from canvas_api.course import CourseNickname
+        from canvasapi.course import CourseNickname
 
         response = self.__requester.request(
             'PUT',
@@ -327,7 +327,7 @@ class Canvas(object):
         :calls: `POST /api/v1/groups/ \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.create>`_
 
-        :rtype: :class:`canvas_api.group.Group`
+        :rtype: :class:`canvasapi.group.Group`
         """
         response = self.__requester.request(
             'POST',
@@ -344,7 +344,7 @@ class Canvas(object):
         :calls: `GET /api/v1/groups/:group_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
 
-        :rtype: :class:`canvas_api.group.Group`
+        :rtype: :class:`canvasapi.group.Group`
         """
         response = self.__requester.request(
             'GET',
@@ -360,7 +360,7 @@ class Canvas(object):
         :calls: `GET /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
 
-        :rtype: :class:`canvas_api.group.GroupCategory`
+        :rtype: :class:`canvasapi.group.GroupCategory`
         """
         response = self.__requester.request(
             'GET',
@@ -382,10 +382,10 @@ class Canvas(object):
         :type recipients: `list` of `str`
         :param body: The body of the message being added.
         :type body: `str`
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.conversation.Conversation`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.conversation.Conversation`
         """
-        from canvas_api.conversation import Conversation
+        from canvasapi.conversation import Conversation
 
         return PaginatedList(
             Conversation,
@@ -406,9 +406,9 @@ class Canvas(object):
 
         :param conversation_id: The ID of the conversation.
         :type conversation_id: `int`
-        :rtype: :class:`canvas_api.conversation.Conversation`
+        :rtype: :class:`canvasapi.conversation.Conversation`
         """
-        from canvas_api.conversation import Conversation
+        from canvasapi.conversation import Conversation
         response = self.__requester.request(
             'GET',
             'conversations/%s' % (conversation_id),
@@ -423,10 +423,10 @@ class Canvas(object):
         :calls: `GET /api/v1/conversations \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of \
-        :class:`canvas_api.conversation.Conversation`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of \
+        :class:`canvasapi.conversation.Conversation`
         """
-        from canvas_api.conversation import Conversation
+        from canvasapi.conversation import Conversation
 
         return PaginatedList(
             Conversation,
@@ -498,10 +498,10 @@ class Canvas(object):
         :type conversation_ids: `list` of `str`
         :param event: The action to take on each conversation.
         :type event: `str`
-        :rtype: :class:`canvas_api.progress.Progress`
+        :rtype: :class:`canvasapi.progress.Progress`
         """
 
-        from canvas_api.progress import Progress
+        from canvasapi.progress import Progress
 
         ALLOWED_EVENTS = [
             'mark_as_read',
@@ -549,9 +549,9 @@ class Canvas(object):
 
         :param calendar_event: The attributes of the calendar event.
         :type calendar_event: `dict`
-        :rtype: :class:`canvas_api.calendar_event.CalendarEvent`
+        :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
-        from canvas_api.calendar_event import CalendarEvent
+        from canvasapi.calendar_event import CalendarEvent
 
         if isinstance(calendar_event, dict) and 'context_code' in calendar_event:
             kwargs['calendar_event'] = calendar_event
@@ -575,10 +575,10 @@ class Canvas(object):
         :calls: `GET /api/v1/calendar_events \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.calendar_event.CalendarEvent`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.calendar_event.CalendarEvent`
         """
-        from canvas_api.calendar_event import CalendarEvent
+        from canvasapi.calendar_event import CalendarEvent
 
         return PaginatedList(
             CalendarEvent,
@@ -597,9 +597,9 @@ class Canvas(object):
 
         :param calendar_event_id: The ID of the calendar event.
         :type calendar_event_id: `int`
-        :rtype: :class:`canvas_api.calendar_event.CalendarEvent`
+        :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
-        from canvas_api.calendar_event import CalendarEvent
+        from canvasapi.calendar_event import CalendarEvent
 
         response = self.__requester.request(
             'GET',
@@ -616,9 +616,9 @@ class Canvas(object):
 
         :param calendar_event_id: The ID of the calendar event.
         :type calendar_event_id: `int`
-        :rtype: :class:`canvas_api.calendar_event.CalendarEvent`
+        :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
-        from canvas_api.calendar_event import CalendarEvent
+        from canvasapi.calendar_event import CalendarEvent
 
         if participant_id:
             uri = 'calendar_events/%s/reservations/%s' % (
@@ -641,10 +641,10 @@ class Canvas(object):
         :calls: `GET /api/v1/appointment_groups \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.appointment_group.AppointmentGroup`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.appointment_group.AppointmentGroup`
         """
-        from canvas_api.appointment_group import AppointmentGroup
+        from canvasapi.appointment_group import AppointmentGroup
 
         return PaginatedList(
             AppointmentGroup,
@@ -663,9 +663,9 @@ class Canvas(object):
 
         :param appointment_group_id: The ID of the appointment group.
         :type appointment_group_id: `int`
-        :rtype: :class:`canvas_api.appointment_group.AppointmentGroup`
+        :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
-        from canvas_api.appointment_group import AppointmentGroup
+        from canvasapi.appointment_group import AppointmentGroup
 
         response = self.__requester.request(
             'GET',
@@ -684,9 +684,9 @@ class Canvas(object):
         :type appointment_group: `dict`
         :param title: The title of the appointment group.
         :type title: `str`
-        :rtype: :class:`canvas_api.appointment_group.AppointmentGroup`
+        :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
-        from canvas_api.appointment_group import AppointmentGroup
+        from canvasapi.appointment_group import AppointmentGroup
 
         if (
                 isinstance(appointment_group, dict) and
@@ -723,9 +723,9 @@ class Canvas(object):
 
         :param appointment_group_id: The ID of the appointment group.
         :type appointment_group_id: `int`
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.user.User`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
         """
-        from canvas_api.user import User
+        from canvasapi.user import User
 
         return PaginatedList(
             User,
@@ -744,9 +744,9 @@ class Canvas(object):
 
         :param appointment_group_id: The ID of the appointment group.
         :type appointment_group_id: `int`
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of :class:`canvas_api.group.Group`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
-        from canvas_api.group import Group
+        from canvasapi.group import Group
 
         return PaginatedList(
             Group,

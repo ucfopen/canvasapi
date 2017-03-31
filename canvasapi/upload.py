@@ -1,6 +1,6 @@
 import os
 
-from canvas_api.util import combine_kwargs
+from canvasapi.util import combine_kwargs
 
 
 class Uploader(object):
@@ -10,8 +10,8 @@ class Uploader(object):
 
     def __init__(self, requester, url, file, **kwargs):
         """
-        :param requester: The :class:`canvas_api.requester.Requester` to pass requests through.
-        :type requester: :class:`canvas_api.requester.Requester`
+        :param requester: The :class:`canvasapi.requester.Requester` to pass requests through.
+        :type requester: :class:`canvasapi.requester.Requester`
         :param url: The URL to upload the file to.
         :type url: str
         :param file: The file or path of the file to upload.

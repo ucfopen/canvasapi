@@ -2,8 +2,8 @@ import unittest
 
 import requests_mock
 
-from canvas_api import Canvas
-from canvas_api.calendar_event import CalendarEvent
+from canvasapi import Canvas
+from canvasapi.calendar_event import CalendarEvent
 from tests import settings
 from tests.util import register_uris
 

@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-docker build --force-rm -t canvas-api .
+docker build --force-rm -t canvasapi .

@@ -2,12 +2,12 @@
 Assignment
 ==========
 
-.. autoclass:: canvas_api.assignment.Assignment
+.. autoclass:: canvasapi.assignment.Assignment
     :members:
 
 
 ===============
 AssignmentGroup
 ===============
-.. autoclass:: canvas_api.assignment.AssignmentGroup
+.. autoclass:: canvasapi.assignment.AssignmentGroup
     :members:

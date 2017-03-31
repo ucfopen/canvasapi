@@ -1,5 +1,5 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.util import combine_kwargs
 
 
 class EnrollmentTerm(CanvasObject):
@@ -11,7 +11,7 @@ class EnrollmentTerm(CanvasObject):
         :calls: `DELETE /api/v1/accounts/:account_id/terms/:id \
         <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms.destroy>`_
 
-        :rtype: :class:`canvas_api.enrollment_term.EnrollmentTerm`
+        :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
         response = self._requester.request(
             'DELETE',
@@ -26,7 +26,7 @@ class EnrollmentTerm(CanvasObject):
         :calls: `PUT /api/v1/accounts/:account_id/terms/:id \
         <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms.update>`_
 
-        :rtype: :class:`canvas_api.enrollment_term.EnrollmentTerm`
+        :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
         response = self._requester.request(
             'PUT',

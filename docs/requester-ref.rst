@@ -2,5 +2,5 @@
 Requester
 =========
 
-.. autoclass:: canvas_api.requester.Requester
+.. autoclass:: canvasapi.requester.Requester
     :members:

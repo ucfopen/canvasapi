@@ -3,18 +3,18 @@ from datetime import datetime
 
 import requests_mock
 
-from canvas_api import Canvas
-from canvas_api.account import Account
-from canvas_api.appointment_group import AppointmentGroup
-from canvas_api.calendar_event import CalendarEvent
-from canvas_api.conversation import Conversation
-from canvas_api.course import Course, CourseNickname
-from canvas_api.exceptions import RequiredFieldMissing
-from canvas_api.group import Group, GroupCategory
-from canvas_api.exceptions import ResourceDoesNotExist
-from canvas_api.progress import Progress
-from canvas_api.section import Section
-from canvas_api.user import User
+from canvasapi import Canvas
+from canvasapi.account import Account
+from canvasapi.appointment_group import AppointmentGroup
+from canvasapi.calendar_event import CalendarEvent
+from canvasapi.conversation import Conversation
+from canvasapi.course import Course, CourseNickname
+from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.group import Group, GroupCategory
+from canvasapi.exceptions import ResourceDoesNotExist
+from canvasapi.progress import Progress
+from canvasapi.section import Section
+from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
 

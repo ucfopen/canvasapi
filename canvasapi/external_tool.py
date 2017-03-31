@@ -1,6 +1,6 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.exceptions import CanvasException
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.exceptions import CanvasException
+from canvasapi.util import combine_kwargs
 
 
 class ExternalTool(CanvasObject):
@@ -40,10 +40,10 @@ class ExternalTool(CanvasObject):
         """
         Return the object that spawned this tool.
 
-        :rtype: :class:`canvas_api.account.Account` or :class:`canvas_api.account.Course`
+        :rtype: :class:`canvasapi.account.Account` or :class:`canvasapi.account.Course`
         """
-        from canvas_api.account import Account
-        from canvas_api.course import Course
+        from canvasapi.account import Account
+        from canvasapi.course import Course
 
         response = self._requester.request(
             'GET',
@@ -64,7 +64,7 @@ class ExternalTool(CanvasObject):
             or `DELETE /api/v1/accounts/:account_id/external_tools/:external_tool_id
             <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.destroy>`_
 
-        :rtype: :class:`canvas_api.external_tool.ExternalTool`
+        :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         response = self._requester.request(
             'DELETE',
@@ -82,7 +82,7 @@ class ExternalTool(CanvasObject):
             or `PUT /api/v1/accounts/:account_id/external_tools/:external_tool_id
             <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.update>`_
 
-        :rtype: :class:`canvas_api.external_tool.ExternalTool`
+        :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         response = self._requester.request(
             'PUT',

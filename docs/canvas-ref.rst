@@ -2,5 +2,5 @@
 Canvas
 ======
 
-.. autoclass:: canvas_api.Canvas
+.. autoclass:: canvasapi.Canvas
     :members:

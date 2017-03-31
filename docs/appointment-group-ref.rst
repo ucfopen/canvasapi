@@ -2,5 +2,5 @@
 AppointmentGroup
 ================
 
-.. autoclass:: canvas_api.appointment_group.AppointmentGroup
+.. autoclass:: canvasapi.appointment_group.AppointmentGroup
     :members:

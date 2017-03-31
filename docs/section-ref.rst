@@ -2,5 +2,5 @@
 Section
 =======
 
-.. autoclass:: canvas_api.section.Section
+.. autoclass:: canvasapi.section.Section
     :members:

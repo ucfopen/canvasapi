@@ -2,5 +2,5 @@
 Progress
 ========
 
-.. autoclass:: canvas_api.progress.Progress
+.. autoclass:: canvasapi.progress.Progress
     :members:

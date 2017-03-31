@@ -2,10 +2,10 @@ import unittest
 
 import requests_mock
 
-from canvas_api import Canvas
-from canvas_api.discussion_topic import DiscussionTopic
-from canvas_api.course import Course
-from canvas_api.group import Group
+from canvasapi import Canvas
+from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.course import Course
+from canvasapi.group import Group
 from tests import settings
 from tests.util import register_uris
 

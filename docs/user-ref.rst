@@ -2,5 +2,5 @@
 User
 ====
 
-.. autoclass:: canvas_api.user.User
+.. autoclass:: canvasapi.user.User
     :members:

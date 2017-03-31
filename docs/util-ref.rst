@@ -2,5 +2,5 @@
 Util
 ====
 
-.. automodule:: canvas_api.util
+.. automodule:: canvasapi.util
     :members:

@@ -1,5 +1,5 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.util import combine_kwargs
 
 
 class CalendarEvent(CanvasObject):
@@ -11,7 +11,7 @@ class CalendarEvent(CanvasObject):
         :calls: `DELETE /api/v1/calendar_events/:id \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.destroy>`_
 
-        :rtype: :class:`canvas_api.calendar_event.CalendarEvent`
+        :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
         response = self._requester.request(
             'DELETE',
@@ -27,7 +27,7 @@ class CalendarEvent(CanvasObject):
         :calls: `PUT /api/v1/calendar_events/:id \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.update>`_
 
-        :rtype: :class:`canvas_api.calendar_event.CalendarEvent`
+        :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
         response = self._requester.request(
             'PUT',

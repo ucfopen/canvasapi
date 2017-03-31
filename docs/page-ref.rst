@@ -2,12 +2,12 @@
 Page
 ====
 
-.. autoclass:: canvas_api.page.Page
+.. autoclass:: canvasapi.page.Page
     :members:
 
 
 ============
 PageRevision
 ============
-.. autoclass:: canvas_api.page.PageRevision
+.. autoclass:: canvasapi.page.PageRevision
     :members:

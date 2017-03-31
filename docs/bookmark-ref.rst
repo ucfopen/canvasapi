@@ -2,5 +2,5 @@
 Bookmark
 ========
 
-.. autoclass:: canvas_api.bookmark.Bookmark
+.. autoclass:: canvasapi.bookmark.Bookmark
     :members:

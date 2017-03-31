@@ -2,5 +2,5 @@
 Uploader
 ========
 
-.. autoclass:: canvas_api.upload.Uploader
+.. autoclass:: canvasapi.upload.Uploader
     :members:

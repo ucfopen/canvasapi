@@ -1,14 +1,14 @@
-# canvas-api
-canvas-api is a Python package that allows for simple access to the Instructure Canvas API.
+# canvasapi
+canvasapi is a Python package that allows for simple access to the Instructure Canvas API.
 
 ## Installation
 [internal only]
-`pip install git+https://github.com/ucfopen/canvas-api.git@stable`
+`pip install git+https://github.com/ucfopen/canvasapi.git@stable`
 
 ## Getting Started
 The first thing to do is open a connection with Canvas. You will need to provide the URL for the API endpoint of your Canvas instance as well as a valid API key.
 ```python
-from canvas_api import Canvas
+from canvasapi import Canvas
 
 api_url = "https://example.com/api/v1/"  # URL of API for your Canvas instance
 api_key = "p@$$w0rd"  # Your API key

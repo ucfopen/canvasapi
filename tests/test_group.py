@@ -4,11 +4,11 @@ import uuid
 
 import requests_mock
 
-from canvas_api import Canvas
-from canvas_api.group import Group, GroupMembership, GroupCategory
-from canvas_api.course import Page
-from canvas_api.discussion_topic import DiscussionTopic
-from canvas_api.exceptions import RequiredFieldMissing
+from canvasapi import Canvas
+from canvasapi.group import Group, GroupMembership, GroupCategory
+from canvasapi.course import Page
+from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.exceptions import RequiredFieldMissing
 from tests import settings
 from tests.util import register_uris
 
@@ -117,7 +117,7 @@ class TestGroup(unittest.TestCase):
     def test_list_users(self, m):
         register_uris({'group': ['list_users', 'list_users_p2']}, m)
 
-        from canvas_api.user import User
+        from canvasapi.user import User
         users = self.group.list_users()
         user_list = [user for user in users]
         self.assertIsInstance(user_list[0], User)
@@ -127,7 +127,7 @@ class TestGroup(unittest.TestCase):
     def test_remove_user(self, m):
         register_uris({'group': ['remove_user']}, m)
 
-        from canvas_api.user import User
+        from canvasapi.user import User
         response = self.group.remove_user(1)
         self.assertIsInstance(response, User)
 
@@ -356,7 +356,7 @@ class TestGroupCategory(unittest.TestCase):
 
     # list_users()
     def test_list_users(self, m):
-        from canvas_api.user import User
+        from canvasapi.user import User
 
         register_uris({'group': ['category_list_users']}, m)
 
@@ -368,8 +368,8 @@ class TestGroupCategory(unittest.TestCase):
 
     # assign_members()
     def test_assign_members(self, m):
-        from canvas_api.progress import Progress
-        from canvas_api.paginated_list import PaginatedList
+        from canvasapi.progress import Progress
+        from canvasapi.paginated_list import PaginatedList
 
         requires = {
             'group': [

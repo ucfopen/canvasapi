@@ -1,6 +1,6 @@
 import requests
 
-from canvas_api.exceptions import (
+from canvasapi.exceptions import (
     BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
     Unauthorized
 )

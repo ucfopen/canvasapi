@@ -4,18 +4,18 @@ import os
 
 import requests_mock
 
-from canvas_api import Canvas
-from canvas_api.assignment import Assignment, AssignmentGroup
-from canvas_api.course import Course, CourseNickname, Page
-from canvas_api.discussion_topic import DiscussionTopic
-from canvas_api.enrollment import Enrollment
-from canvas_api.exceptions import ResourceDoesNotExist, RequiredFieldMissing
-from canvas_api.external_tool import ExternalTool
-from canvas_api.group import Group, GroupCategory
-from canvas_api.module import Module
-from canvas_api.quiz import Quiz
-from canvas_api.section import Section
-from canvas_api.user import User
+from canvasapi import Canvas
+from canvasapi.assignment import Assignment, AssignmentGroup
+from canvasapi.course import Course, CourseNickname, Page
+from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.enrollment import Enrollment
+from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
+from canvasapi.external_tool import ExternalTool
+from canvasapi.group import Group, GroupCategory
+from canvasapi.module import Module
+from canvasapi.quiz import Quiz
+from canvasapi.section import Section
+from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
 

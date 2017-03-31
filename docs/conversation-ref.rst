@@ -2,5 +2,5 @@
 Conversation
 ============
 
-.. autoclass:: canvas_api.conversation.Conversation
+.. autoclass:: canvasapi.conversation.Conversation
     :members:

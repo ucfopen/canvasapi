@@ -1,10 +1,10 @@
-from canvas_api.canvas_object import CanvasObject
-from canvas_api.discussion_topic import DiscussionTopic
-from canvas_api.exceptions import RequiredFieldMissing
-from canvas_api.page import Page
-from canvas_api.paginated_list import PaginatedList
-from canvas_api.upload import Uploader
-from canvas_api.util import combine_kwargs
+from canvasapi.canvas_object import CanvasObject
+from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.page import Page
+from canvasapi.paginated_list import PaginatedList
+from canvasapi.upload import Uploader
+from canvasapi.util import combine_kwargs
 
 
 class Course(CanvasObject):
@@ -81,9 +81,9 @@ class Course(CanvasObject):
         :type user_id: int
         :param user_id_type: The type of the ID to search for.
         :type user_id_type: str
-        :rtype: :class:`canvas_api.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
-        from canvas_api.user import User
+        from canvasapi.user import User
 
         if user_id_type:
             uri = 'courses/%s/users/%s:%s' % (self.id, user_id_type, user_id)
@@ -106,10 +106,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/search_users \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.user.User`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
         """
-        from canvas_api.user import User
+        from canvasapi.user import User
 
         return PaginatedList(
             User,
@@ -127,12 +127,12 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`_
 
         :param user: The user to enroll in this course.
-        :type user: :class:`canvas_api.user.User`
+        :type user: :class:`canvasapi.user.User`
         :param enrollment_type: The type of enrollment.
         :type enrollment_type: str
-        :rtype: :class:`canvas_api.enrollment.Enrollment`
+        :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
-        from canvas_api.enrollment import Enrollment
+        from canvasapi.enrollment import Enrollment
 
         kwargs['enrollment[user_id]'] = user.id
         kwargs['enrollment[type]'] = enrollment_type
@@ -153,10 +153,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/recent_students \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.recent_students>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.user.User`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
         """
-        from canvas_api.user import User
+        from canvasapi.user import User
 
         return PaginatedList(
             User,
@@ -244,7 +244,7 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/reset_content \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.reset_content>`_
 
-        :rtype: :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.course.Course`
         """
         response = self._requester.request(
             'POST',
@@ -259,10 +259,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.enrollment.Enrollment`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.enrollment.Enrollment`
         """
-        from canvas_api.enrollment import Enrollment
+        from canvasapi.enrollment import Enrollment
         return PaginatedList(
             Enrollment,
             self._requester,
@@ -280,9 +280,9 @@ class Course(CanvasObject):
 
         :param assignment_id: The ID of the assignment to retrieve.
         :type assignment_id: int
-        :rtype: :class:`canvas_api.assignment.Assignment`
+        :rtype: :class:`canvasapi.assignment.Assignment`
         """
-        from canvas_api.assignment import Assignment
+        from canvasapi.assignment import Assignment
 
         response = self._requester.request(
             'GET',
@@ -298,10 +298,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.assignment.Assignment`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.Assignment`
         """
-        from canvas_api.assignment import Assignment
+        from canvasapi.assignment import Assignment
 
         return PaginatedList(
             Assignment,
@@ -322,9 +322,9 @@ class Course(CanvasObject):
 
         :param assignment: The attributes of the assignment
         :type assignment: dict
-        :rtype: :class:`canvas_api.assignment.Assignment`
+        :rtype: :class:`canvasapi.assignment.Assignment`
         """
-        from canvas_api.assignment import Assignment
+        from canvasapi.assignment import Assignment
 
         if isinstance(assignment, dict) and 'name' in assignment:
             kwargs['assignment'] = assignment
@@ -346,10 +346,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/quizzes \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.quiz.Quiz`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.Quiz`
         """
-        from canvas_api.quiz import Quiz
+        from canvasapi.quiz import Quiz
         return PaginatedList(
             Quiz,
             self._requester,
@@ -368,9 +368,9 @@ class Course(CanvasObject):
 
         :param quiz_id: The ID of the quiz to retrieve.
         :type quiz_id: int
-        :rtype: :class:`canvas_api.quiz.Quiz`
+        :rtype: :class:`canvasapi.quiz.Quiz`
         """
-        from canvas_api.quiz import Quiz
+        from canvasapi.quiz import Quiz
         response = self._requester.request(
             'GET',
             'courses/%s/quizzes/%s' % (self.id, quiz_id)
@@ -389,9 +389,9 @@ class Course(CanvasObject):
 
         :param quiz: The attributes for the quiz.
         :type quiz: dict
-        :rtype: :class:`canvas_api.quiz.Quiz`
+        :rtype: :class:`canvasapi.quiz.Quiz`
         """
-        from canvas_api.quiz import Quiz
+        from canvasapi.quiz import Quiz
 
         if isinstance(quiz, dict) and 'title' in quiz:
             kwargs['quiz'] = quiz
@@ -415,10 +415,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/modules \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.module.Module`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.module.Module`
         """
-        from canvas_api.module import Module
+        from canvasapi.module import Module
 
         return PaginatedList(
             Module,
@@ -438,9 +438,9 @@ class Course(CanvasObject):
 
         :param module_id: The ID of the module to retrieve.
         :type module_id: int
-        :rtype: :class:`canvas_api.module.Module`
+        :rtype: :class:`canvasapi.module.Module`
         """
-        from canvas_api.module import Module
+        from canvasapi.module import Module
 
         response = self._requester.request(
             'GET',
@@ -461,9 +461,9 @@ class Course(CanvasObject):
         :param module: The attributes for the module.
         :type module: dict
         :returns: The created module.
-        :rtype: :class:`canvas_api.module.Module`
+        :rtype: :class:`canvasapi.module.Module`
         """
-        from canvas_api.module import Module
+        from canvasapi.module import Module
 
         if isinstance(module, dict) and 'name' in module:
             kwargs['module'] = module
@@ -485,9 +485,9 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
 
-        :rtype: :class:`canvas_api.external_tool.ExternalTool`
+        :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
-        from canvas_api.external_tool import ExternalTool
+        from canvasapi.external_tool import ExternalTool
 
         response = self._requester.request(
             'GET',
@@ -503,10 +503,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/external_tools \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.external_tool.ExternalTool`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.external_tool.ExternalTool`
         """
-        from canvas_api.external_tool import ExternalTool
+        from canvasapi.external_tool import ExternalTool
 
         return PaginatedList(
             ExternalTool,
@@ -526,9 +526,9 @@ class Course(CanvasObject):
 
         :param section_id: The ID of the section to retrieve.
         :type section_id: int
-        :rtype: :class:`canvas_api.section.Section`
+        :rtype: :class:`canvasapi.section.Section`
         """
-        from canvas_api.section import Section
+        from canvasapi.section import Section
 
         response = self._requester.request(
             'GET',
@@ -543,7 +543,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/front_page \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_front_page>`_
 
-        :rtype: :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.course.Course`
         """
         response = self._requester.request(
             'GET',
@@ -561,7 +561,7 @@ class Course(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/front_page \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update_front_page>`_
 
-        :rtype: :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.course.Course`
         """
         response = self._requester.request(
             'PUT',
@@ -580,8 +580,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.Course`
         """
         return PaginatedList(
             Page,
@@ -601,7 +601,7 @@ class Course(CanvasObject):
         :param title: The title for the page.
         :type title: dict
         :returns: The created page.
-        :rtype: :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.course.Course`
         """
 
         if isinstance(wiki_page, dict) and 'title' in wiki_page:
@@ -630,7 +630,7 @@ class Course(CanvasObject):
         :param url: The url for the page.
         :type url: str
         :returns: The specified page.
-        :rtype: :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.course.Course`
         """
 
         response = self._requester.request(
@@ -649,10 +649,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/sections \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.section.Section`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.section.Section`
         """
-        from canvas_api.section import Section
+        from canvasapi.section import Section
         return PaginatedList(
             Section,
             self._requester,
@@ -668,10 +668,10 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/sections \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.create>`_
 
-        :rtype: :class:`canvas_api.course.Section`
+        :rtype: :class:`canvasapi.course.Section`
         """
 
-        from canvas_api.section import Section
+        from canvasapi.section import Section
         response = self._requester.request(
             'POST',
             'courses/%s/sections' % (self.id),
@@ -687,8 +687,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.course.Course`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.Course`
         """
         from group import Group
         return PaginatedList(
@@ -708,9 +708,9 @@ class Course(CanvasObject):
 
         :param name: Name of the category.
         :type name: str
-        :rtype: :class:`canvas_api.group.GroupCategory`
+        :rtype: :class:`canvasapi.group.GroupCategory`
         """
-        from canvas_api.group import GroupCategory
+        from canvasapi.group import GroupCategory
 
         response = self._requester.request(
             'POST',
@@ -727,10 +727,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.group.GroupCategory`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.GroupCategory`
         """
-        from canvas_api.group import GroupCategory
+        from canvasapi.group import GroupCategory
 
         return PaginatedList(
             GroupCategory,
@@ -749,7 +749,7 @@ class Course(CanvasObject):
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'GET',
@@ -771,7 +771,7 @@ class Course(CanvasObject):
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'GET',
@@ -790,8 +790,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
             DiscussionTopic,
@@ -811,9 +811,9 @@ class Course(CanvasObject):
 
         :param assignment_group_id: ID of assignment group.
         :type assignment_group_id: int
-        :rtype: :class:`canvas_api.assignment.AssignmentGroup`
+        :rtype: :class:`canvasapi.assignment.AssignmentGroup`
         """
-        from canvas_api.assignment import AssignmentGroup
+        from canvasapi.assignment import AssignmentGroup
 
         response = self._requester.request(
             'GET',
@@ -832,10 +832,10 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/assignment_groups \
         <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups.index>`_
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.assignment.AssignmentGroup`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.AssignmentGroup`
         """
-        from canvas_api.assignment import AssignmentGroup
+        from canvasapi.assignment import AssignmentGroup
 
         return PaginatedList(
             AssignmentGroup,
@@ -853,7 +853,7 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
 
-        :rtype: :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
             'POST',
@@ -878,8 +878,8 @@ class Course(CanvasObject):
             e.g. [104, 102, 103]
         :type order: list
 
-        :rtype: :class:`canvas_api.paginated_list.PaginatedList` of
-            :class:`canvas_api.discussion_topic.DiscussionTopic`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
 
         if not isinstance(order, list):
@@ -900,9 +900,9 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/assignment_groups \
         <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.create>`_
 
-        :rtype: :class:`canvas_api.assignment.AssignmentGroup`
+        :rtype: :class:`canvasapi.assignment.AssignmentGroup`
         """
-        from canvas_api.assignment import AssignmentGroup
+        from canvasapi.assignment import AssignmentGroup
 
         response = self._requester.request(
             'POST',
@@ -930,9 +930,9 @@ class Course(CanvasObject):
         :type consumer_key: str
         :param shared_secret: The shared secret with the external tool
         :type shared_secret: str
-        :rtype: :class:`canvas_api.external_tool.ExternalTool`
+        :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
-        from canvas_api.external_tool import ExternalTool
+        from canvasapi.external_tool import ExternalTool
 
         response = self._requester.request(
             'POST',
@@ -958,7 +958,7 @@ class CourseNickname(CanvasObject):
         :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
 
-        :rtype: :class:`canvas_api.course.CourseNickname`
+        :rtype: :class:`canvasapi.course.CourseNickname`
         """
         response = self._requester.request(
             'DELETE',

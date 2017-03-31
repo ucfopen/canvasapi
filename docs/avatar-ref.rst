@@ -2,5 +2,5 @@
 Avatar
 ======
 
-.. autoclass:: canvas_api.avatar.Avatar
+.. autoclass:: canvasapi.avatar.Avatar
     :members:

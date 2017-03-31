@@ -2,19 +2,19 @@
 Group
 =====
 
-.. autoclass:: canvas_api.group.Group
+.. autoclass:: canvasapi.group.Group
     :members:
 
 ===============
 GroupMembership
 ===============
 
-.. autoclass:: canvas_api.group.GroupMembership
+.. autoclass:: canvasapi.group.GroupMembership
     :members:
 
 =============
 GroupCategory
 =============
 
-.. autoclass:: canvas_api.group.GroupCategory
+.. autoclass:: canvasapi.group.GroupCategory
     :members:
