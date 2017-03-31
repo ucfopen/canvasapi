@@ -4,8 +4,8 @@
 .DS_Store
 build/
 coverage.xml
+dist/
 htmlcov/
-env/
 venv/
 _build/
 _static/
