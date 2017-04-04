@@ -3,10 +3,10 @@ python:
   - 2.7
 install:
   - pip install -r tests_requirements.txt
-  # - pip install coveralls
 script:
   - coverage run -m unittest discover
   - pycodestyle canvasapi tests
   - pyflakes canvasapi tests
-# after_success:
-#   - coveralls
+notifications:
+  slack:
+    secure: xHVuVYH5czmSGX2JkazqN2nMDNqvA/X3DlaVHup7Qn2Pwd45ifUVVd/VoGrPdUPXsEIOE46eB8aRL93BOluSMBGSbD8T5dnHqE5bB/3Y16GIhpUvhZaJpF4XRUin1ew6b64iUrMQw4JMUYnjaWMoepmTCaOf+TxFFQl7RmH1X4GnzY3a4pxmEbNZV3jO5y+w454tZ2QNO3JE2QMtaSGxd5VU7mahOXbwI20BqbgIRfEHc7As3n0zHHHtNrEKoAYJXi5Jek6CMdKO4S2r5QH3E5Pr0Yq7ZRxMqndjLqtyAIWD25td+//VUpcRuzEJp8e48KiPNKlX45JYUU4EbUyY7mlA2I2pxm+PwvRjsQ6kADYs7UFB/yyt0wz+mkV2XT4AOrDfHXfM9P+PTILHg+pqmfGXab0MjS6FYVyvbOR/hQUIxhMh9iO68bC2Oc3ckO+wJxNjAJTggDlG1K6AUboH5WxldfLCh+AFQ8RV6T8TousNYnMJj5Umw/pcYF8AF4REqVxj+JqN4KPxWkCLmllYm/2GsNelM3SIOaeM0Z2vST0HPpeqRr8Be0Wfg2bBUn1Xwo7s51lg7aLMg8A1o7gN+gvRUwSUGbrK2NUVYE0RS/yH/82YukNYGNDp75wpWfA3g6Smnmsny0u9DRTsyGei5POm4QVl6WRZqm9kdQag2mc=
