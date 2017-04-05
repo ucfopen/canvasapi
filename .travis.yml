@@ -1,0 +1,12 @@
+language: python
+python:
+  - 2.7
+install:
+  - pip install -r tests_requirements.txt
+script:
+  - coverage run -m unittest discover
+  - pycodestyle canvasapi tests
+  - pyflakes canvasapi tests
+notifications:
+  slack:
+    secure: oLrAMXKVN9EKOyvROg5ZZUQgeleKq6lsVslm/Jtg516LtdBnLiAA672xMrwB0m8UtSJvoz4m1BrBQBeO+OzxlmioJHDvm//MMXv8wpfBdi18ojBA/5wjYfYP4eta/9j1x4myWH9ygcJOdKhALOSt4fwKsmIRDt6YTensOaqcCTiS2YjtAWMLrKvlathpdMokx0k7FVluJJ+zEfzNote75AP7yq6nFFe9j0ALX7YuNFytshZXi82aKZpAuUGMNLjcL+B5acLKSYqF214sTVETPa2mrhja+89+W9512X3ecRdHPC6Ud10ICD6ap0XMrOcgNW8XREV0pDIDPrMJgSUFiFWMhvrkMjfnmJB2nrINPTc3CrMmmk8Hk1XYta+iA4yAEUb9dhkKmkxMZWtn7TZ7DiKaAXznwj6poGrnN+NXeWfoJ0j2pAUrcO4Jn9e43+ORMDYqCFV3QemtykbX0HKgVfOTx5F1ZBGULiMi7U3q5naieGep5j+OxNI9bcQMUoM6O+VxmkjtB1/8/F7PlKHrA/7Z1+s+1HM00lSvw5qAhkInPgkLU+X495+TsEfqJuVZIUIAS1jDDSuo3bTHHUYzDwE9UF/dYN/nVDiUEVa4xYe+UrAFuPnezL/bdezVwzoGd1Mb5HKJxs90wxYIZFkReivA1z4bQsYh+A/QbYKewR0=
