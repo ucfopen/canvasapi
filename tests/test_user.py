@@ -9,7 +9,9 @@ from canvasapi.assignment import Assignment
 from canvasapi.avatar import Avatar
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
+from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.course import Course
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.group import Group
 from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
@@ -34,6 +36,31 @@ class TestUser(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.user)
         self.assertIsInstance(string, str)
+
+    # create_communication_channel()
+    def test_create_communication_channel_missing_type(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.user.create_communication_channel({})
+
+    def test_create_communication_channel_missing_address(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.user.create_communication_channel({'type': 'email'})
+
+    def test_create_communication_channel_invalid_type(self, m):
+        with self.assertRaises(ValueError):
+            self.user.create_communication_channel({'type': 'test'})
+
+    def test_create_communication_channel(self, m):
+        register_uris({'user': ['create_comm_channel']}, m)
+
+        address = 'user@example.com'
+        new_channel = self.user.create_communication_channel({
+            'type': 'push',
+            'address': address
+        })
+        self.assertIsInstance(new_channel, CommunicationChannel)
+        self.assertTrue(hasattr(new_channel, 'address'))
+        self.assertEqual(new_channel.address, address)
 
     # get_profile()
     def test_get_profile(self, m):
@@ -224,6 +251,15 @@ class TestUser(unittest.TestCase):
         cal_event_list = [cal_event for cal_event in cal_events]
         self.assertEqual(len(cal_event_list), 2)
         self.assertIsInstance(cal_event_list[0], CalendarEvent)
+
+    # list_communication_channels()
+    def test_list_communication_channels(self, m):
+        register_uris({'user': ['list_comm_channels', 'list_comm_channels2']}, m)
+
+        comm_channels = self.user.list_communication_channels()
+        channel_list = [channel for channel in comm_channels]
+        self.assertEqual(len(channel_list), 4)
+        self.assertIsInstance(channel_list[0], CommunicationChannel)
 
     # list_bookmarks()
     def test_list_bookmarks(self, m):

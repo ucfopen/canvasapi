@@ -1,6 +1,8 @@
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.communication_channel import CommunicationChannel
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -10,6 +12,44 @@ class User(CanvasObject):
 
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
+
+    def create_communication_channel(self, communication_channel, **kwargs):
+        """
+        Create a new communication channel for the user.
+
+        :calls: `POST /api/v1/users/:user_id/communication_channels \
+        <https://canvas.instructure.com/doc/api/communication_channels.html#method.communication_channels.create>`_
+
+        :rtype: :class:`canvasapi.communication_channel.CommunicationChannel`
+        """
+
+        # Check for required params 'type' and 'token'.
+        if (isinstance(communication_channel, dict) and 'type' in communication_channel):
+            # 'address' param is only required for types 'email' and 'sms'
+            if communication_channel['type'] in ['email', 'sms']:
+                if 'address' not in communication_channel:
+                    raise RequiredFieldMissing('Dictionary with key \'address\' is required.')
+            elif communication_channel['type'] != 'push':
+                raise ValueError(
+                    '\'{}\' is not a valid type. Please use \'email\', \'sms\' or \'push\''.format(
+                        communication_channel['type']
+                    )
+                )
+        else:
+            raise RequiredFieldMissing(
+                '\'communication_channel\' must be a dictionary with key \'type\'.'
+                'If the value of \'type\' is \'email\' or \'sms\', an additional'
+                'key \'address\' is required.'
+            )
+
+        kwargs['communication_channel'] = communication_channel
+
+        response = self._requester.request(
+            'POST',
+            'users/%s/communication_channels' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return CommunicationChannel(self._requester, response.json())
 
     def get_profile(self, **kwargs):
         """
@@ -321,6 +361,25 @@ class User(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def list_communication_channels(self, **kwargs):
+        """
+        List communication channels for the specified user, sorted by
+        position.
+
+        :calls: `GET /api/v1/users/:user_id/communication_channels \
+        <https://canvas.instructure.com/doc/api/communication_channels.html#method.communication_channels.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.communication_channel.CommunicationChannel`
+        """
+        return PaginatedList(
+            CommunicationChannel,
+            self._requester,
+            'GET',
+            'users/%s/communication_channels' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
     def list_bookmarks(self, **kwargs):
         """
         List bookmarks that the current user can view or manage.
@@ -379,7 +438,5 @@ class User(CanvasObject):
             url=url,
             **combine_kwargs(**kwargs)
         )
-
-        vars(response.request)
 
         return Bookmark(self._requester, response.json())
