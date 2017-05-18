@@ -11,6 +11,8 @@ from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from canvasapi.external_tool import ExternalTool
+from canvasapi.file import File
+from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.quiz import Quiz
@@ -545,6 +547,23 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(response, ExternalTool)
         self.assertTrue(hasattr(response, 'id'))
         self.assertEqual(response.id, 20)
+
+    # list_files()
+    def test_course_files(self, m):
+        register_uris({'course': ['list_course_files', 'list_course_files2']}, m)
+
+        files = self.course.list_files()
+        file_list = [file for file in files]
+        self.assertEqual(len(file_list), 4)
+        self.assertIsInstance(file_list[0], File)
+
+    # get_folder()
+    def test_get_folder(self, m):
+        register_uris({'course': ['get_folder']}, m)
+
+        folder = self.course.get_folder(1)
+        self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
 
 
 @requests_mock.Mocker()

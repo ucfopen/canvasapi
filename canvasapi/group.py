@@ -1,5 +1,6 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs
@@ -462,6 +463,43 @@ class Group(CanvasObject):
         )
 
         return response.json().get('reorder')
+
+    def list_files(self, **kwargs):
+        """
+        Returns the paginated list of files for the group.
+
+        :calls: `GET api/v1/courses/:group_id/files \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`
+
+        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+
+        return PaginatedList(
+            File,
+            self._requester,
+            'GET',
+            'groups/%s/files' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_folder(self, folder_id):
+        """
+        Returns the details for a group's folder
+
+        :calls: `GET /api/v1/groups/:group_id/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
+
+        :param account_id: The ID of the folder to retrieve.
+        :type folder_id: int
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'GET',
+            'groups/%s/folders/%s' % (self.id, folder_id)
+        )
+        return Folder(self._requester, response.json())
 
 
 class GroupMembership(CanvasObject):

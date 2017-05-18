@@ -1,6 +1,7 @@
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.folder import Folder
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -383,3 +384,40 @@ class User(CanvasObject):
         vars(response.request)
 
         return Bookmark(self._requester, response.json())
+
+    def list_files(self, **kwargs):
+        """
+        Returns the paginated list of files for the user.
+
+        :calls: `GET api/v1/courses/:user_id/files \
+            <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`
+
+        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+
+        return PaginatedList(
+            File,
+            self._requester,
+            'GET',
+            'users/%s/files' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_folder(self, folder_id):
+        """
+        Returns the details for a user's folder
+
+        :calls: `GET /api/v1/users/:user_id/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
+
+        :param account_id: The ID of the folder to retrieve.
+        :type folder_id: int
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'GET',
+            'users/%s/folders/%s' % (self.id, folder_id)
+        )
+        return Folder(self._requester, response.json())
