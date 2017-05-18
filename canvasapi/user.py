@@ -412,7 +412,7 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param account_id: The ID of the folder to retrieve.
+        :param folder_id: The ID of the folder to retrieve.
         :type folder_id: int
         :rtype: :class:`canvasapi.folder.Folder`
         """
