@@ -181,6 +181,18 @@
 		],
 		"status_code": 200
 	},
+	"get_folder": {
+        "method": "GET",
+        "endpoint": "courses/1/folders/1",
+        "data": {
+            "id": 1,
+            "files_count": 10,
+            "folders_count": 2,
+            "name": "Folder 1",
+            "full_name": "Folder 1"
+        },
+        "status_code": 200
+    },
 	"get_quiz": {
 		"method": "GET",
 		"endpoint": "courses/1/quizzes/1",
@@ -320,6 +332,43 @@
 				"course_id": 1,
 				"user_id": 8,
 				"type": "StudentEnrollment"
+			}
+		],
+		"status_code": 200
+	},
+	"list_course_files": {
+		"method": "GET",
+		"endpoint": "courses/1/files",
+		"data": [
+			{
+				"id": 1,
+				"size": 2939,
+				"display_name": "File1.txt"
+			},
+			{
+				"id": 2,
+				"size": 18380,
+				"display_name": "File_2.png"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/courses/1/files?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_course_files2": {
+		"method": "GET",
+		"endpoint": "courses/1/files?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"display_name": "File 3.jpg",
+				"size": 1298
+			},
+			{
+				"id": 4,
+				"display_name": "File 4.docx",
+				"size": 88920
 			}
 		],
 		"status_code": 200

@@ -9,6 +9,8 @@ from canvasapi.group import Group, GroupMembership, GroupCategory
 from canvasapi.course import Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.file import File
+from canvasapi.folder import Folder
 from tests import settings
 from tests.util import register_uris
 
@@ -254,6 +256,23 @@ class TestGroup(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.group.reorder_pinned_topics(order=order)
+
+    # list_files()
+    def test_group_files(self, m):
+        register_uris({'group': ['list_group_files', 'list_group_files2']}, m)
+
+        files = self.group.list_files()
+        file_list = [file for file in files]
+        self.assertEqual(len(file_list), 4)
+        self.assertIsInstance(file_list[0], File)
+
+    # get_folder()
+    def test_get_folder(self, m):
+        register_uris({'group': ['get_folder']}, m)
+
+        folder = self.group.get_folder(1)
+        self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
 
 
 @requests_mock.Mocker()

@@ -10,6 +10,8 @@ from canvasapi.avatar import Avatar
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.course import Course
+from canvasapi.file import File
+from canvasapi.folder import Folder
 from canvasapi.group import Group
 from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
@@ -254,3 +256,20 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
+
+    # list_files()
+    def test_user_files(self, m):
+        register_uris({'user': ['get_user_files', 'get_user_files2']}, m)
+
+        files = self.user.list_files()
+        file_list = [file for file in files]
+        self.assertEqual(len(file_list), 4)
+        self.assertIsInstance(file_list[0], File)
+
+    # get_folder()
+    def test_get_folder(self, m):
+        register_uris({'user': ['get_folder']}, m)
+
+        folder = self.user.get_folder(1)
+        self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
