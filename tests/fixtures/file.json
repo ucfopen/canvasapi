@@ -8,42 +8,5 @@
             "size": 5512
         },
         "status_code": 200
-    },
-    "list_folder_files": {
-        "method": "GET",
-        "endpoint": "folders/1/files",
-        "data": [
-            {
-                "id": 1,
-                "size": 2939,
-                "display_name": "File1.txt"
-            },
-            {
-                "id": 2,
-                "size": 18380,
-                "display_name": "File_2.png"
-            }
-        ],
-        "status_code": 200,
-        "headers": {
-            "Link": "<http://example.com/api/v1/folders/1/files?page=2&per_page=2>; rel=\"next\""
-        }
-    },
-    "list_folder_files2": {
-        "method": "GET",
-        "endpoint": "folders/1/files?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "display_name": "File 3.jpg",
-                "size": 1298
-            },
-            {
-                "id": 4,
-                "display_name": "File 4.docx",
-                "size": 88920
-            }
-        ],
-        "status_code": 200
     }
 }
