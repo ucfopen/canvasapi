@@ -625,11 +625,12 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.account.Login`
+            :class:`canvasapi.login.Login`
         """
+        from canvasapi.login import Login
 
         return PaginatedList(
-            Account,
+            Login,
             self._requester,
             'GET',
             'accounts/%s/logins' % (self.id),
@@ -652,3 +653,8 @@ class Role(CanvasObject):
 
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
+
+class Login(CanvasObject):
+
+    def __str__(self):
+        return "{} ({})".format(self.user_id, self.id)

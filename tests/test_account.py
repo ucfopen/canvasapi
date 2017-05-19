@@ -406,5 +406,5 @@ class TestAccount(unittest.TestCase):
         response = self.account.list_user_logins()
         login_list = [login for login in response]
 
-        self.assertIsInstance(login_list[0], Account)
+        self.assertIsInstance(login_list[0], Login)
         self.assertEqual(len(login_list), 2)
