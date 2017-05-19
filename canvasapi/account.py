@@ -627,7 +627,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.login.Login`
         """
-        from canvasapi.login import Login
 
         return PaginatedList(
             Login,
@@ -656,5 +655,5 @@ class Role(CanvasObject):
 
 class Login(CanvasObject):
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.user_id, self.id)
