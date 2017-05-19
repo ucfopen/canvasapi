@@ -616,6 +616,25 @@ class Account(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def list_user_logins(self, **kwargs):
+        """
+        Given a user ID, return that user's logins for the given account.
+
+        :calls: `GET /api/v1/accounts/:account_id/logins \
+        
+        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.account.Login`
+        """
+
+        return PaginatedList(
+            Account,
+            self._requester,
+            'GET',
+            'accounts/%s/logins' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
 
 class AccountNotification(CanvasObject):
 
