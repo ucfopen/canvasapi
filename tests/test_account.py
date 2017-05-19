@@ -12,6 +12,7 @@ from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.group import Group, GroupCategory
 from canvasapi.user import User
+from canvasapi.login import Login
 from tests import settings
 from tests.util import register_uris
 
@@ -396,3 +397,14 @@ class TestAccount(unittest.TestCase):
         enrollment_terms_list = [category for category in response]
 
         self.assertIsInstance(enrollment_terms_list[0], EnrollmentTerm)
+
+    # list_user_logins()
+    def test_list_user_logins(self,m):
+        requires ={'account': ['list_user_logins', 'list_user_logins_2']}
+        register_uris(requires, m)
+
+        response = self.account.list_user_logins()
+        login_list = [login for login in response]
+
+        self.assertIsInstance(login_list[0], Account)
+        self.assertEqual(len(login_list), 2)
