@@ -696,12 +696,12 @@
 		"endpoint": "accounts/1/logins/?page=2&per_page=2",
 		"data": [
 			{
-				"account_id": 1,
-				"id": 2,
+				"account_id": 2,
+				"id": 3,
 				"sis_user_id": null,
 				"unique_id": "belieber@example.com",
-				"user_id": 2,
-				"authentication_provider_id": 1,
+				"user_id": 3,
+				"authentication_provider_id": 2,
 				"authentication_provider_type": "facebook"
 			}
 		],

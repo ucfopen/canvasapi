@@ -383,3 +383,23 @@ class User(CanvasObject):
         vars(response.request)
 
         return Bookmark(self._requester, response.json())
+
+    def list_user_logins(self, **kwargs):
+        """
+        Given a user ID, return that user's logins for the given account.
+
+        :calls: `GET /api/v1/users/:user_id/logins \
+        
+        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.Login`
+        """
+
+        return PaginatedList(
+            User,
+            self._requester,
+            'GET',
+            'users/%s/logins' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
