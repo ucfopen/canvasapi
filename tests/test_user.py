@@ -273,3 +273,20 @@ class TestUser(unittest.TestCase):
         folder = self.user.get_folder(1)
         self.assertEqual(folder.name, "Folder 1")
         self.assertIsInstance(folder, Folder)
+
+    # list_folders()
+    def test_list_folders(self, m):
+        register_uris({'user': ['list_folders']}, m)
+
+        folders = self.user.list_folders()
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 2)
+        self.assertIsInstance(folder_list[0], Folder)
+
+    # create_folder()
+    def test_create_folder(self, m):
+        register_uris({'user': ['create_folder']}, m)
+
+        name_str = "Test String"
+        response = self.user.create_folder(name=name_str)
+        self.assertIsInstance(response, Folder)

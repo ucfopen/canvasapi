@@ -182,6 +182,17 @@
 		],
 		"status_code": 200
 	},
+	"create_folder": {
+        "method": "POST",
+        "endpoint": "users/1/folders",
+        "data": {
+            "id": 2,
+            "name": "Test String",
+            "locked": false,
+            "hidden": false
+        },
+        "status_code": 200
+    },
 	"edit": {
 		"method": "PUT",
 		"endpoint": "users/1",
@@ -355,6 +366,26 @@
 		],
 		"status_code": 200
 	},
+	"list_folders": {
+        "method": "GET",
+        "endpoint": "users/1/folders",
+        "data": [
+            {
+                "id": 2,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 2",
+                "full_name": "user_files/Folder 2"
+            },
+            {
+                "id": 3,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 3",
+                "full_name": "user_files/Folder 3"
+            }
+        ]
+    },
 	"list_groups": {
 		"method": "GET",
 		"endpoint": "users/self/groups",

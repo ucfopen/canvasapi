@@ -1,6 +1,4 @@
-import os
 import unittest
-import uuid
 
 import requests_mock
 
@@ -46,3 +44,29 @@ class TestFolder(unittest.TestCase):
         self.assertIsInstance(deleted_folder, Folder)
         self.assertTrue(hasattr(deleted_folder, 'name'))
         self.assertEqual(deleted_folder.full_name, "course_files/Folder 1")
+
+    # list_folders()
+    def test_list_folders(self, m):
+        register_uris({'folder': ['list_folders']}, m)
+
+        folders = self.folder.list_folders()
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 2)
+        self.assertIsInstance(folder_list[0], Folder)
+
+    # create_folder()
+    def test_create_folder(self, m):
+        register_uris({'folder': ['create_folder']}, m)
+
+        name_str = "Test String"
+        response = self.folder.create_folder(name=name_str)
+        self.assertIsInstance(response, Folder)
+
+    # update()
+    def test_update(self, m):
+        register_uris({'folder': ['update']}, m)
+
+        new_name = 'New Name'
+        response = self.folder.update(name=new_name)
+        self.assertIsInstance(response, Folder)
+        self.assertEqual(self.folder.name, new_name)

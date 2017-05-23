@@ -1,5 +1,6 @@
 from canvasapi.canvas_object import CanvasObject
 
+
 class File(CanvasObject):
 
     def __str__(self):

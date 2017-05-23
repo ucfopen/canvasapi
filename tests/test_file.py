@@ -1,6 +1,4 @@
-import os
 import unittest
-import uuid
 
 import requests_mock
 
@@ -18,8 +16,7 @@ class TestFile(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({'course': ['get_by_id', 'list_course_files',
-                'list_course_files2']}, m)
+            register_uris({'course': ['get_by_id', 'list_course_files', 'list_course_files2']}, m)
 
             self.course = self.canvas.get_course(1)
             self.file = self.course.list_files()[0]

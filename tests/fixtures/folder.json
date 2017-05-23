@@ -1,4 +1,15 @@
 {
+    "create_folder": {
+        "method": "POST",
+        "endpoint": "folders/1/folders",
+        "data": {
+            "id": 2,
+            "name": "Test String",
+            "locked": false,
+            "hidden": false
+        },
+        "status_code": 200
+    },
     "get_by_id": {
         "method": "GET",
         "endpoint": "folders/1",
@@ -59,5 +70,37 @@
             "full_name": "course_files/Folder 1"
         },
         "status_code": 200
+    },
+    "list_folders": {
+        "method": "GET",
+        "endpoint": "folders/1/folders",
+        "data": [
+            {
+                "id": 2,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 2",
+                "full_name": "course_files/Folder 2"
+            },
+            {
+                "id": 3,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 3",
+                "full_name": "course_files/Folder 3"
+            }
+        ],
+        "status_code": 200
+    },
+    "update": {
+        "method": "PUT",
+        "endpoint": "folders/1",
+        "data": {
+            "id": 1,
+            "files_count": 0,
+            "folders_count": 0,
+            "name": "New Name",
+            "full_name": "course_files/New Name"
+        }
     }
 }

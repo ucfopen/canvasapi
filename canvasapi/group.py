@@ -501,6 +501,43 @@ class Group(CanvasObject):
         )
         return Folder(self._requester, response.json())
 
+    def list_folders(self):
+        """
+        Returns the paginated list of all folders for the given context. This will be returned as a
+        flat list containing all subfolders as well.
+
+        :calls: `GET /api/v1/groups/:group_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`
+
+        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+        return PaginatedList(
+            Folder,
+            self._requester,
+            'GET',
+            'groups/%s/folders' % (self.id)
+        )
+
+    def create_folder(self, name, **kwargs):
+        """
+        Creates a folder in this group.
+
+        :calls: `POST /api/v1/groups/:group_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>
+
+        :param name: The name of the folder
+        :type name: str
+        :rtype :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'POST',
+            'groups/%s/folders' % self.id,
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return Folder(self._requester, response.json())
+
 
 class GroupMembership(CanvasObject):
 
