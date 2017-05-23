@@ -34,7 +34,7 @@ class Folder(CanvasObject):
           'force' flag.
 
         :calls: `DELETE /api/v1/folders/:id  \
-        <https://canvas.instructure.com/doc/api/files.html#method.files.destroy>`_
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.api_destroy>`_
 
         :rtype: :class:`canvasapi.folder.Folder`
         """
