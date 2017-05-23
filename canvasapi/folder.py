@@ -27,3 +27,19 @@ class Folder(CanvasObject):
             'folders/%s/files' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def delete(self):
+        """
+        Remove this folder. You can only delete empty folders unless you set the
+          'force' flag.
+
+        :calls: `DELETE /api/v1/folders/:id  \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.destroy>`_
+
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'folders/%s' % (self.id)
+        )
+        return Folder(self._requester, response.json())
