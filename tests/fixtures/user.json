@@ -384,7 +384,8 @@
                 "name": "Folder 3",
                 "full_name": "user_files/Folder 3"
             }
-        ]
+        ],
+        "status_code": 200
     },
 	"list_groups": {
 		"method": "GET",

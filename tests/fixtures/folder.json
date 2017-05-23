@@ -101,6 +101,7 @@
             "folders_count": 0,
             "name": "New Name",
             "full_name": "course_files/New Name"
-        }
+        },
+        "status_code": 200
     }
 }

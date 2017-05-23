@@ -503,7 +503,7 @@ class Group(CanvasObject):
 
     def list_folders(self):
         """
-        Returns the paginated list of all folders for the given context. This will be returned as a
+        Returns the paginated list of all folders for the given group. This will be returned as a
         flat list containing all subfolders as well.
 
         :calls: `GET /api/v1/groups/:group_id/folders \
