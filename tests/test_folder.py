@@ -36,3 +36,13 @@ class TestFolder(unittest.TestCase):
         file_list = [file for file in files]
         self.assertEqual(len(file_list), 4)
         self.assertIsInstance(file_list[0], File)
+
+    # delete()
+    def test_delete_file(self, m):
+        register_uris({'folder': ['delete_folder']}, m)
+
+        deleted_folder = self.folder.delete()
+
+        self.assertIsInstance(deleted_folder, Folder)
+        self.assertTrue(hasattr(deleted_folder, 'name'))
+        self.assertEqual(deleted_folder.full_name, "course_files/Folder 1")

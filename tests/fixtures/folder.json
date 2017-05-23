@@ -47,5 +47,17 @@
             }
         ],
         "status_code": 200
+    },
+    "delete_folder": {
+        "method": "DELETE",
+        "endpoint": "folders/1",
+        "data": {
+            "id": 1,
+            "files_count": 0,
+            "folders_count": 0,
+            "name": "Folder 1",
+            "full_name": "course_files/Folder 1"
+        },
+        "status_code": 200
     }
 }
