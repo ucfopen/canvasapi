@@ -390,7 +390,7 @@ class User(CanvasObject):
         Returns the paginated list of files for the user.
 
         :calls: `GET api/v1/courses/:user_id/files \
-            <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`
+            <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.file.File`
@@ -428,7 +428,7 @@ class User(CanvasObject):
         flat list containing all subfolders as well.
 
         :calls: `GET /api/v1/users/:user_id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
 
         :rtype :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.folder.Folder`
