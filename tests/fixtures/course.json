@@ -7,6 +7,17 @@
 		},
 		"status_code": 200
 	},
+	"create_folder": {
+        "method": "POST",
+        "endpoint": "courses/1/folders",
+        "data": {
+            "id": 2,
+            "name": "Test String",
+            "locked": false,
+            "hidden": false
+        },
+        "status_code": 200
+    },
 	"create_quiz": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes",
@@ -373,6 +384,27 @@
 		],
 		"status_code": 200
 	},
+	"list_folders": {
+        "method": "GET",
+        "endpoint": "courses/1/folders",
+        "data": [
+            {
+                "id": 2,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 2",
+                "full_name": "course_files/Folder 2"
+            },
+            {
+                "id": 3,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 3",
+                "full_name": "course_files/Folder 3"
+            }
+        ],
+        "status_code": 200
+    },
 	"list_quizzes": {
 		"method": "GET",
 		"endpoint": "courses/1/quizzes",

@@ -565,6 +565,23 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(folder.name, "Folder 1")
         self.assertIsInstance(folder, Folder)
 
+    # list_folders()
+    def test_list_folders(self, m):
+        register_uris({'course': ['list_folders']}, m)
+
+        folders = self.course.list_folders()
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 2)
+        self.assertIsInstance(folder_list[0], Folder)
+
+    # create_folder()
+    def test_create_folder(self, m):
+        register_uris({'course': ['create_folder']}, m)
+
+        name_str = "Test String"
+        response = self.course.create_folder(name=name_str)
+        self.assertIsInstance(response, Folder)
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
