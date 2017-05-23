@@ -734,6 +734,7 @@
                 "name": "Folder 3",
                 "full_name": "group_files/Folder 3"
             }
-        ]
+        ],
+        "status_code": 200
     }
 }
