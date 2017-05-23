@@ -950,7 +950,7 @@ class Course(CanvasObject):
         Returns the paginated list of files for the course.
 
         :calls: `GET api/v1/courses/:course_id/files \
-        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.file.File`
@@ -988,7 +988,7 @@ class Course(CanvasObject):
         flat list containing all subfolders as well.
 
         :calls: `GET /api/v1/courses/:course_id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
 
         :rtype :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.folder.Folder`
@@ -1005,7 +1005,7 @@ class Course(CanvasObject):
         Creates a folder in this course.
 
         :calls: `POST /api/v1/courses/:course_id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>_
 
         :param name: The name of the folder
         :type name: str

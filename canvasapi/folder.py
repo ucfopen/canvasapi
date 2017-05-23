@@ -13,7 +13,7 @@ class Folder(CanvasObject):
         Returns the paginated list of files for the folder.
 
         :calls: `GET api/v1/folders/:id/files \
-        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.file.File`
@@ -34,7 +34,7 @@ class Folder(CanvasObject):
           'force' flag.
 
         :calls: `DELETE /api/v1/folders/:id  \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.api_destroy>`
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.api_destroy>`_
 
         :rtype: :class:`canvasapi.folder.Folder`
         """
@@ -50,7 +50,7 @@ class Folder(CanvasObject):
         Returns the paginated list of folders in the folder.
 
         :calls: `GET /api/v1/folders/:id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.api_index>`
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.api_index>`_
 
         :rtype :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.folder.Folder`
@@ -67,7 +67,7 @@ class Folder(CanvasObject):
         Creates a folder within this folder.
 
         :calls: `POST /api/v1/folders/:folder_id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>_
 
         :param name: The name of the folder
         :type name: str
@@ -86,7 +86,7 @@ class Folder(CanvasObject):
         Updates a folder.
 
         :calls: `PUT /api/v1/folders/:id \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.update>
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.update>_
 
         :rtype :class:`canvasapi.folder.Folder`
         """
