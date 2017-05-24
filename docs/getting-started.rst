@@ -17,7 +17,7 @@ Before using canvasapi, you'll need to instantiate a new Canvas object:
     
     from canvasapi import Canvas
 
-    canvas = Canvas(API_KEY, API_URL)
+    canvas = Canvas(API_URL, API_KEY)
 
 You can now use :code:`canvas` to make API calls.
 
