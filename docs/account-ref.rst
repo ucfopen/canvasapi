@@ -25,12 +25,3 @@ Role
 
 .. autoclass:: canvasapi.account.Role
     :members:
-
-=====
-Login
-=====
-
-.. autoclass:: canvasapi.account.Login
-    :members:
-
-
