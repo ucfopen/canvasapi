@@ -621,12 +621,12 @@ class Account(CanvasObject):
         Given a user ID, return that user's logins for the given account.
 
         :calls: `GET /api/v1/accounts/:account_id/logins \
-        
         <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.login.Login`
+            :class:`canvasapi.account.Login`
         """
+        from login import Login
 
         return PaginatedList(
             Login,
@@ -635,6 +635,50 @@ class Account(CanvasObject):
             'accounts/%s/logins' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def create_user_login(self, user, login, **kwargs):
+        """
+        Create a new login for an existing user in the given account
+
+        :calls: `POST /api/v1/accounts/:account_id/logins \
+        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.create>`_
+
+        :param user: The ID of the user to create the login for
+        :type user: `dict`
+        :param login: The unique ID for the new login
+        :type login: `dict`
+        :rtype: :class:`canvasapi.account.Login`
+        """
+        from login import Login
+
+        required_key_list_user = ['id']
+        required_keys_present_user = all((x in user for x in required_key_list_user))
+        required_key_list_login = ['unique_id']
+        required_keys_present_login = all((x in login for x in required_key_list_login))
+
+        if isinstance(user, dict) and required_keys_present_user:
+            kwargs['user'] = user
+        else:
+            raise RequiredFieldMissing((
+                "user must be a dictionary with keys "
+                "'id'."
+            ))
+
+        if isinstance(login, dict) and required_keys_present_login:
+            kwargs['login'] = login
+        else:
+            raise RequiredFieldMissing((
+                "login must be a dictionary with keys "
+                "'unique_id'."
+            ))
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/logins' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Login(self._requester, response.json())
+
 
 class AccountNotification(CanvasObject):
 
@@ -652,8 +696,3 @@ class Role(CanvasObject):
 
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
-
-class Login(CanvasObject):
-
-    def __str__(self):  # pragma: no cover
-        return "{} ({})".format(self.user_id, self.id)

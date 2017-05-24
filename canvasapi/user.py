@@ -1,4 +1,5 @@
 from canvasapi.bookmark import Bookmark
+from canvasapi.login import Login
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
@@ -389,7 +390,6 @@ class User(CanvasObject):
         Given a user ID, return that user's logins for the given account.
 
         :calls: `GET /api/v1/users/:user_id/logins \
-        
         <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -397,7 +397,7 @@ class User(CanvasObject):
         """
 
         return PaginatedList(
-            User,
+            Login,
             self._requester,
             'GET',
             'users/%s/logins' % (self.id),

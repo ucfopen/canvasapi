@@ -14,6 +14,7 @@ from canvasapi.group import Group
 from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
 from canvasapi.user import User
+from canvasapi.login import Login
 from tests import settings
 from tests.util import register_uris
 
@@ -254,3 +255,14 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
+
+    # list_user_logins()
+    def test_list_user_logins(self, m):
+        requires = {'user': ['list_user_logins', 'list_user_logins_2']}
+        register_uris(requires, m)
+
+        response = self.user.list_user_logins()
+        login_list = [login for login in response]
+
+        self.assertIsInstance(login_list[0], Login)
+        self.assertEqual(len(login_list), 2)

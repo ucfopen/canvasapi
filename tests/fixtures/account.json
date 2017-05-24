@@ -706,5 +706,14 @@
 			}
 		],
 		"status_code": 200
+	},
+	"create_user_login": {
+		"method": "POST",
+		"endpoint": "accounts/1/logins",
+		"data": {
+			"id": 123,
+			"unique_id": 112233
+		}, 
+		"status_code": 200
 	}
 }
