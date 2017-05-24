@@ -624,7 +624,7 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.account.Login`
+            :class:`canvasapi.login.Login`
         """
         from login import Login
 
@@ -643,11 +643,11 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/logins \
         <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.create>`_
 
-        :param user: The ID of the user to create the login for
+        :param id: The ID of the user to create the login for
         :type user: `dict`
-        :param login: The unique ID for the new login
+        :param unique_id: The unique ID for the new login
         :type login: `dict`
-        :rtype: :class:`canvasapi.account.Login`
+        :rtype: :class:`canvasapi.login.Login`
         """
         from login import Login
 
