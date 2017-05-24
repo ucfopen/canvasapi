@@ -4,7 +4,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.account import Account, AccountNotification, AccountReport, Role, Login
+from canvasapi.account import Account, AccountNotification, AccountReport, Role
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
@@ -12,6 +12,7 @@ from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.group import Group, GroupCategory
 from canvasapi.user import User
+from canvasapi.login import Login
 from tests import settings
 from tests.util import register_uris
 
@@ -398,8 +399,8 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(enrollment_terms_list[0], EnrollmentTerm)
 
     # list_user_logins()
-    def test_list_user_logins(self,m):
-        requires ={'account': ['list_user_logins', 'list_user_logins_2']}
+    def test_list_user_logins(self, m):
+        requires = {'account': ['list_user_logins', 'list_user_logins_2']}
         register_uris(requires, m)
 
         response = self.account.list_user_logins()
@@ -407,3 +408,23 @@ class TestAccount(unittest.TestCase):
 
         self.assertIsInstance(login_list[0], Login)
         self.assertEqual(len(login_list), 2)
+
+    # create_user_login()
+    def test_create_user_login(self, m):
+        register_uris({'account': ['create_user_login']}, m)
+
+        response = self.account.create_user_login(user={'id': 123}, login={'unique_id': 112233})
+
+        self.assertIsInstance(response, Login)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertTrue(hasattr(response, 'unique_id'))
+        self.assertEqual(response.id, 123)
+        self.assertEqual(response.unique_id, 112233)
+
+    def test_create_user_login_fail_on_user_id(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.account.create_user_login(user={}, login={})
+
+    def test_create_user_login_fail_on_login_unique_id(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.account.create_user_login(user={'id': 123}, login={})
