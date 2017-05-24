@@ -4,6 +4,9 @@ from canvasapi.util import combine_kwargs
 
 class Login(CanvasObject):
 
+    def __str__(self):
+        return "{} ({})".format(self.id, self.unique_id)
+
     def delete(self):
         """
         Delete an existing login.
@@ -36,6 +39,3 @@ class Login(CanvasObject):
         )
 
         return Login(self._requester, response.json())
-
-    def __str__(self):
-        return "{} ({})".format(self.id, self.unique_id)
