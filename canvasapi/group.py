@@ -488,6 +488,8 @@ class Group(CanvasObject):
         :calls: `POST /api/v1/groups/:group_id/external_feeds \
         <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.create>`_
 
+        :param url: The urlof the external rss or atom feed
+        :type url: str
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
@@ -506,6 +508,8 @@ class Group(CanvasObject):
         :calls: `DELETE /api/v1/groups/:group_id/external_feeds/:external_feed_id \
         <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.destroy>`_
 
+        :param feed_id: The id of the feed to be deleted.
+        :type feed_id: int
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
