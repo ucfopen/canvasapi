@@ -524,9 +524,9 @@ class Group(CanvasObject):
         Creates a folder in this group.
 
         :calls: `POST /api/v1/groups/:group_id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>`_
 
-        :param name: The name of the folder
+        :param name: The name of the folder.
         :type name: str
         :rtype :class:`canvasapi.folder.Folder`
         """

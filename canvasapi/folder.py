@@ -67,9 +67,9 @@ class Folder(CanvasObject):
         Creates a folder within this folder.
 
         :calls: `POST /api/v1/folders/:folder_id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>_
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>`_
 
-        :param name: The name of the folder
+        :param name: The name of the folder.
         :type name: str
         :rtype :class:`canvasapi.folder.Folder`
         """
@@ -86,7 +86,7 @@ class Folder(CanvasObject):
         Updates a folder.
 
         :calls: `PUT /api/v1/folders/:id \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.update>_
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.update>`_
 
         :rtype :class:`canvasapi.folder.Folder`
         """
