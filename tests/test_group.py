@@ -9,6 +9,7 @@ from canvasapi.group import Group, GroupMembership, GroupCategory
 from canvasapi.course import Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.external_feed import ExternalFeed
 from tests import settings
 from tests.util import register_uris
 
@@ -254,6 +255,35 @@ class TestGroup(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.group.reorder_pinned_topics(order=order)
+
+    # list_external_feeds()
+    def test_list_external_feeds(self, m):
+        register_uris({'group': ['list_external_feeds']}, m)
+
+        feeds = self.group.list_external_feeds()
+        feed_list = [feed for feed in feeds]
+        self.assertEqual(len(feed_list), 2)
+        self.assertTrue(hasattr(feed_list[0], 'url'))
+        self.assertIsInstance(feed_list[0], ExternalFeed)
+
+    # create_external_feed()
+    def test_create_external_feed(self, m):
+        register_uris({'group': ['create_external_feed']}, m)
+
+        url_str = "http://example.com/myblog.rss"
+        response = self.group.create_external_feed(url=url_str)
+        self.assertIsInstance(response, ExternalFeed)
+
+    # delete_external_feed()
+    def test_delete_external_feed(self, m):
+        register_uris({'group': ['delete_external_feed']}, m)
+
+        ef_id = 1
+        deleted_ef = self.group.delete_external_feed(ef_id)
+
+        self.assertIsInstance(deleted_ef, ExternalFeed)
+        self.assertTrue(hasattr(deleted_ef, 'url'))
+        self.assertEqual(deleted_ef.display_name, "My Blog")
 
 
 @requests_mock.Mocker()

@@ -7,6 +7,16 @@
 		},
 		"status_code": 200
 	},
+	"create_external_feed": {
+		"method": "POST",
+		"endpoint": "courses/1/external_feeds",
+		"data": {
+			"id": 1,
+			"display_name": "My Blog",
+			"url": "http://example.com/myblog.rss"
+		},
+		"status_code": 200
+	},
 	"create_quiz": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes",
@@ -32,6 +42,16 @@
 		"endpoint": "courses/1",
 		"data": {
 			"delete": true
+		},
+		"status_code": 200
+	},
+	"delete_external_feed": {
+		"method": "DELETE",
+		"endpoint": "courses/1/external_feeds/1",
+		"data": {
+			"id": 1,
+			"display_name": "My Blog",
+			"url": "http://example.com/myblog.rss"
 		},
 		"status_code": 200
 	},
@@ -323,6 +343,23 @@
 			}
 		],
 		"status_code": 200
+	},
+	"list_external_feeds": {
+		"method": "GET",
+		"endpoint": "courses/1/external_feeds",
+		"data": [
+			{
+				"id": 1,
+				"display_name": "My Blog",
+				"url": "http://example.com/myblog.rss"
+			},
+			{
+				"id": 2,
+				"display_name": "My Blog 2",
+				"url": "http://example.com/myblog2.rss"
+			}
+		],
+        "status_code": 200
 	},
 	"list_quizzes": {
 		"method": "GET",
