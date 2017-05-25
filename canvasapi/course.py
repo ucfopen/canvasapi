@@ -1005,9 +1005,9 @@ class Course(CanvasObject):
         Creates a folder in this course.
 
         :calls: `POST /api/v1/courses/:course_id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>_
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>`_
 
-        :param name: The name of the folder
+        :param name: The name of the folder.
         :type name: str
         :rtype :class:`canvasapi.folder.Folder`
         """
