@@ -632,15 +632,6 @@ class TestCourse(unittest.TestCase):
 
         self.assertTrue(submission)
 
-    def test_mark_submission_as_read_status(self, m):
-        register_uris({'course': ['mark_submission_as_read_status']}, m)
-
-        submission_id = 1
-        user_id = 1
-        submission = self.course.mark_submission_as_read(submission_id, user_id)
-
-        self.assertFalse(submission)
-
     # mark_submission_as_unread
     def test_mark_submission_as_unread(self, m):
         register_uris({'course': ['mark_submission_as_unread']}, m)
@@ -650,15 +641,6 @@ class TestCourse(unittest.TestCase):
         submission = self.course.mark_submission_as_unread(submission_id, user_id)
 
         self.assertTrue(submission)
-
-    def test_mark_submission_as_unread_status(self, m):
-        register_uris({'course': ['mark_submission_as_unread_status']}, m)
-
-        submission_id = 1
-        user_id = 1
-        submission = self.course.mark_submission_as_unread(submission_id, user_id)
-
-        self.assertFalse(submission)
 
 
 @requests_mock.Mocker()

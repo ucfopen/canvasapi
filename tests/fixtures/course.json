@@ -967,19 +967,9 @@
 		"endpoint": "courses/1/assignments/1/submissions/1/read",
 		"status_code": 204
 	},
-	"mark_submission_as_read_status": {
-		"method": "PUT",
-		"endpoint": "courses/1/assignments/1/submissions/1/read",
-		"status_code": 403
-	},
 	"mark_submission_as_unread": {
 		"method": "DELETE",
 		"endpoint": "courses/1/assignments/1/submissions/1/read",
 		"status_code": 204
-	},
-	"mark_submission_as_unread_status": {
-		"method": "DELETE",
-		"endpoint": "courses/1/assignments/1/submissions/1/read",
-		"status_code": 403
 	}
 }
