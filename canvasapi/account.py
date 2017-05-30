@@ -643,20 +643,15 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/logins \
         <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.create>`_
 
-        :param user: The ID of the user to create the login for
+        :param user: The attributes of the user to create a login for
         :type user: `dict`
-        :param login: The unique ID for the new login
+        :param login: The attributes of the login to create
         :type login: `dict`
         :rtype: :class:`canvasapi.login.Login`
         """
         from login import Login
 
-        required_key_list_user = ['id']
-        required_keys_present_user = all((x in user for x in required_key_list_user))
-        required_key_list_login = ['unique_id']
-        required_keys_present_login = all((x in login for x in required_key_list_login))
-
-        if isinstance(user, dict) and required_keys_present_user:
+        if isinstance(user, dict) and 'id' in user:
             kwargs['user'] = user
         else:
             raise RequiredFieldMissing((
@@ -664,7 +659,7 @@ class Account(CanvasObject):
                 "'id'."
             ))
 
-        if isinstance(login, dict) and required_keys_present_login:
+        if isinstance(login, dict) and 'unique_id' in login:
             kwargs['login'] = login
         else:
             raise RequiredFieldMissing((
