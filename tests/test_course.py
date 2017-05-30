@@ -16,7 +16,7 @@ from canvasapi.module import Module
 from canvasapi.quiz import Quiz
 from canvasapi.section import Section
 from canvasapi.submission import Submission
-from canvasapi.user import User
+from canvasapi.user import User, UserDisplay
 from tests import settings
 from tests.util import register_uris
 
@@ -620,7 +620,7 @@ class TestCourse(unittest.TestCase):
         student_list = [student for student in students]
 
         self.assertEqual(len(student_list), 2)
-        self.assertIsInstance(student_list[0], User)
+        self.assertIsInstance(student_list[0], UserDisplay)
 
     # mark_submission_as_read
     def test_mark_submission_as_read(self, m):

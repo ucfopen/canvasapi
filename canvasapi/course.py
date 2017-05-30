@@ -5,7 +5,7 @@ from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
-from canvasapi.user import User
+from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs
 
 
@@ -1069,7 +1069,7 @@ class Course(CanvasObject):
             :class:`canvasapi.user.User`
         """
         return PaginatedList(
-            User,
+            UserDisplay,
             self._requester,
             'GET',
             'courses/%s/assignments/%s/gradeable_students' % (self.id, assignment_id)

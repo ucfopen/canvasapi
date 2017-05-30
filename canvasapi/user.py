@@ -383,3 +383,9 @@ class User(CanvasObject):
         vars(response.request)
 
         return Bookmark(self._requester, response.json())
+
+
+class UserDisplay(CanvasObject):
+
+    def __str__(self):
+        return str(self.display_name)

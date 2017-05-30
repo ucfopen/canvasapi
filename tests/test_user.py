@@ -254,3 +254,26 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
+
+
+@requests_mock.Mocker()
+class TestUserDisplay(unittest.TestCase):
+
+    @classmethod
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris({
+                'course': ['get_by_id', 'list_gradeable_students']
+            }, m)
+
+            self.course = self.canvas.get_course(1)
+            self.userDisplays = self.course.list_gradeable_students(1)
+            self.userDisplayList = [ud for ud in self.userDisplays]
+            self.userDisplay = self.userDisplayList[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.userDisplay)
+        self.assertIsInstance(string, str)
