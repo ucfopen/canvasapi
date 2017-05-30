@@ -1,5 +1,7 @@
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.submission import Submission
 from canvasapi.util import combine_kwargs
 
 
@@ -92,3 +94,155 @@ class Section(CanvasObject):
             "sections/%s" % (self.id)
         )
         return Section(self._requester, response.json())
+
+    def submit_assignment(self, assignment_id, submission, **kwargs):
+        """
+        Makes a submission for an assignment.
+
+        :calls: `POST /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
+
+        :param submission: The attributes of the submission.
+        :type submission: `dict`
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        if isinstance(submission, dict) and 'submission_type' in submission:
+            kwargs['submision'] = submission
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'submission_type' is required."
+            )
+
+        response = self._requester.request(
+            'POST',
+            'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return Submission(self._requester, response.json())
+
+    def list_submissions(self, assignment_id, **kwargs):
+        """
+        Makes a submission for an assignment.
+
+        :calls: `POST /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
+
+        :param assignment_id: The ID of the assignment.
+        :type assignment_id: `int`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        return PaginatedList(
+            Submission,
+            self._requester,
+            'GET',
+            'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def list_multiple_submissions(self, **kwargs):
+        """
+        List submissions for multiple assignments.
+        Get all existing submissions for a given set of students and assignments.
+
+        :calls: `GET /api/v1/sections/:section_id/students/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        return PaginatedList(
+            Submission,
+            self._requester,
+            'GET',
+            'sections/%s/students/submissions' % (self.id),
+            grouped=False,
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_submission(self, assignment_id, user_id, **kwargs):
+        """
+        Get a single submission, based on user id.
+
+        :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+
+        :param assignment_id: The ID of the assignment.
+        :type assignment_id: int
+        :param user_id: The ID of the user.
+        :type user_id: str
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        response = self._requester.request(
+            'GET',
+            'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Submission(self._requester, response.json())
+
+    def update_submission(self, assignment_id, user_id, **kwargs):
+        """
+        Comment on and/or update the grading for a student's assignment submission.
+
+        :calls: `PUT /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update>`_
+
+        :param assignment_id: The ID of the assignment.
+        :type assignment_id: int
+        :param user_id: The ID of the user.
+        :type user_id: str
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        response = self._requester.request(
+            'PUT',
+            'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
+            **combine_kwargs(**kwargs)
+        )
+
+        submission = self.get_submission(assignment_id, user_id)
+
+        if 'submission_type' in response.json():
+            super(Submission, submission).set_attributes(response.json())
+
+        return Submission(self._requester, response.json())
+
+    def mark_submission_as_read(self, assignment_id, user_id):
+        """
+        Mark submission as read. No request fields are necessary.
+
+        :calls: `PUT
+            /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id/read \
+            <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
+
+        :rtype: `bool`
+        """
+        response = self._requester.request(
+            'PUT',
+            'sections/%s/assignments/%s/submissions/%s/read' % (
+                self.id,
+                assignment_id,
+                user_id,
+            )
+        )
+        return response.status_code == 204
+
+    def mark_submission_as_unread(self, assignment_id, user_id):
+        """
+        Mark submission as unread. No request fields are necessary.
+
+        :calls: `DELETE
+            /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id/read \
+            <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
+
+        :rtype: `bool`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'sections/%s/assignments/%s/submissions/%s/read' % (
+                self.id,
+                assignment_id,
+                user_id,
+            ),
+        )
+        return response.status_code == 204

@@ -4,7 +4,9 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.enrollment import Enrollment
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.section import Section
+from canvasapi.submission import Submission
 from tests.util import register_uris
 
 
@@ -62,3 +64,105 @@ class TestSection(unittest.TestCase):
         deleted_section = self.section.delete()
 
         self.assertIsInstance(deleted_section, Section)
+
+    # submit_assignment()
+    def test_submit_assignment(self, m):
+        register_uris({'section': ['submit_assignment']}, m)
+
+        assignment_id = 1
+        sub_type = "online_upload"
+        sub_dict = {'submission_type': sub_type}
+        assignment = self.section.submit_assignment(assignment_id, sub_dict)
+
+        self.assertIsInstance(assignment, Submission)
+        self.assertTrue(hasattr(assignment, 'submission_type'))
+        self.assertEqual(assignment.submission_type, sub_type)
+
+    def test_subit_assignment_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.section.submit_assignment(1, {})
+
+    # list_submissions()
+    def test_list_submissions(self, m):
+        register_uris({'section': ['list_submissions']}, m)
+
+        assignment_id = 1
+        submissions = self.section.list_submissions(assignment_id)
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
+
+    # list_multiple_submission()
+    def test_list_multiple_submissions(self, m):
+        register_uris({'section': ['list_multiple_submissions']}, m)
+
+        submissions = self.section.list_multiple_submissions()
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
+
+    # get_submission()
+    def test_get_submission(self, m):
+        register_uris({'section': ['get_submission']}, m)
+
+        assignment_id = 1
+        user_id = 1
+        submission = self.section.get_submission(assignment_id, user_id)
+
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, 'submission_type'))
+
+    # update_submission()
+    def test_update_submission(self, m):
+        register_uris({'section': ['update_submission', 'get_submission']}, m)
+
+        assignment_id = 1
+        user_id = 1
+        submission = self.section.update_submission(
+            assignment_id,
+            user_id,
+            comment={'text_comment': "Test Comment"}
+        )
+
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, "text_comment"))
+
+    # mark_submission_as_read
+    def test_mark_submission_as_read(self, m):
+        register_uris({'section': ['mark_submission_as_read']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.section.mark_submission_as_read(submission_id, user_id)
+
+        self.assertTrue(submission)
+
+    def test_mark_submission_as_read_status(self, m):
+        register_uris({'section': ['mark_submission_as_read_status']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.section.mark_submission_as_read(submission_id, user_id)
+
+        self.assertFalse(submission)
+
+    # mark_submission_as_unread
+    def test_mark_submission_as_unread(self, m):
+        register_uris({'section': ['mark_submission_as_unread']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.section.mark_submission_as_unread(submission_id, user_id)
+
+        self.assertTrue(submission)
+
+    def test_mark_submission_as_unread_status(self, m):
+        register_uris({'section': ['mark_submission_as_unread_status']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.section.mark_submission_as_unread(submission_id, user_id)
+
+        self.assertFalse(submission)
