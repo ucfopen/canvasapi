@@ -616,6 +616,64 @@ class Account(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def list_user_logins(self, **kwargs):
+        """
+        Given a user ID, return that user's logins for the given account.
+
+        :calls: `GET /api/v1/accounts/:account_id/logins \
+        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.login.Login`
+        """
+        from login import Login
+
+        return PaginatedList(
+            Login,
+            self._requester,
+            'GET',
+            'accounts/%s/logins' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_user_login(self, user, login, **kwargs):
+        """
+        Create a new login for an existing user in the given account
+
+        :calls: `POST /api/v1/accounts/:account_id/logins \
+        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.create>`_
+
+        :param user: The attributes of the user to create a login for
+        :type user: `dict`
+        :param login: The attributes of the login to create
+        :type login: `dict`
+        :rtype: :class:`canvasapi.login.Login`
+        """
+        from login import Login
+
+        if isinstance(user, dict) and 'id' in user:
+            kwargs['user'] = user
+        else:
+            raise RequiredFieldMissing((
+                "user must be a dictionary with keys "
+                "'id'."
+            ))
+
+        if isinstance(login, dict) and 'unique_id' in login:
+            kwargs['login'] = login
+        else:
+            raise RequiredFieldMissing((
+                "login must be a dictionary with keys "
+                "'unique_id'."
+            ))
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/logins' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Login(self._requester, response.json())
+
 
 class AccountNotification(CanvasObject):
 
