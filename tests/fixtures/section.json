@@ -157,7 +157,8 @@
 				"assignments_id": 1,
 				"user_id": 1,
 				"html_url": "http://example.com/sections/1/assignments/1/submissions/1",
-				"submission_type": "online_upload"
+				"submission_type": "online_upload",
+				"excused": true
 		},
 		"status_code": 200
 	},

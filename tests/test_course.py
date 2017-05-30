@@ -15,6 +15,7 @@ from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.quiz import Quiz
 from canvasapi.section import Section
+from canvasapi.submission import Submission
 from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
@@ -545,6 +546,119 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(response, ExternalTool)
         self.assertTrue(hasattr(response, 'id'))
         self.assertEqual(response.id, 20)
+
+    # submit_assignment()
+    def test_submit_assignment(self, m):
+        register_uris({'course': ['submit_assignment']}, m)
+
+        assignment_id = 1
+        sub_type = "online_upload"
+        sub_dict = {'submission_type': sub_type}
+        assignment = self.course.submit_assignment(assignment_id, sub_dict)
+
+        self.assertIsInstance(assignment, Submission)
+        self.assertTrue(hasattr(assignment, 'submission_type'))
+        self.assertEqual(assignment.submission_type, sub_type)
+
+    def test_subit_assignment_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.submit_assignment(1, {})
+
+    # list_submissions()
+    def test_list_submissions(self, m):
+        register_uris({'course': ['list_submissions']}, m)
+
+        assignment_id = 1
+        submissions = self.course.list_submissions(assignment_id)
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
+
+    # list_multiple_submission()
+    def test_list_multiple_submissions(self, m):
+        register_uris({'course': ['list_multiple_submissions']}, m)
+
+        submissions = self.course.list_multiple_submissions()
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
+
+    # get_submission()
+    def test_get_submission(self, m):
+        register_uris({'course': ['get_submission']}, m)
+
+        assignment_id = 1
+        user_id = 1
+        submission = self.course.get_submission(assignment_id, user_id)
+
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, 'submission_type'))
+
+    # update_submission()
+    def test_update_submission(self, m):
+        register_uris({'course': ['update_submission', 'get_submission']}, m)
+
+        assignment_id = 1
+        user_id = 1
+        submission = self.course.update_submission(
+            assignment_id,
+            user_id,
+            submission={'excuse': True}
+        )
+
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, 'excused'))
+
+    # list_gradeable_students()
+    def test_list_gradeable_students(self, m):
+        register_uris({'course': ['list_gradeable_students']}, m)
+
+        assignment_id = 1
+        students = self.course.list_gradeable_students(assignment_id)
+        student_list = [student for student in students]
+
+        self.assertEqual(len(student_list), 2)
+        self.assertIsInstance(student_list[0], User)
+
+    # mark_submission_as_read
+    def test_mark_submission_as_read(self, m):
+        register_uris({'course': ['mark_submission_as_read']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.course.mark_submission_as_read(submission_id, user_id)
+
+        self.assertTrue(submission)
+
+    def test_mark_submission_as_read_status(self, m):
+        register_uris({'course': ['mark_submission_as_read_status']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.course.mark_submission_as_read(submission_id, user_id)
+
+        self.assertFalse(submission)
+
+    # mark_submission_as_unread
+    def test_mark_submission_as_unread(self, m):
+        register_uris({'course': ['mark_submission_as_unread']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.course.mark_submission_as_unread(submission_id, user_id)
+
+        self.assertTrue(submission)
+
+    def test_mark_submission_as_unread_status(self, m):
+        register_uris({'course': ['mark_submission_as_unread_status']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.course.mark_submission_as_unread(submission_id, user_id)
+
+        self.assertFalse(submission)
 
 
 @requests_mock.Mocker()

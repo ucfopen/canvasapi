@@ -123,11 +123,11 @@ class TestSection(unittest.TestCase):
         submission = self.section.update_submission(
             assignment_id,
             user_id,
-            comment={'text_comment': "Test Comment"}
+            submission={'excuse': True}
         )
 
         self.assertIsInstance(submission, Submission)
-        self.assertTrue(hasattr(submission, "text_comment"))
+        self.assertTrue(hasattr(submission, 'excused'))
 
     # mark_submission_as_read
     def test_mark_submission_as_read(self, m):
