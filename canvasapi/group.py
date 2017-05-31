@@ -1,5 +1,6 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs
@@ -518,6 +519,80 @@ class Group(CanvasObject):
             'groups/%s/external_feeds/%s' % (self.id, feed_id)
         )
         return ExternalFeed(self._requester, response.json())
+
+    def list_files(self, **kwargs):
+        """
+        Returns the paginated list of files for the group.
+
+        :calls: `GET api/v1/courses/:group_id/files \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
+
+        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+
+        return PaginatedList(
+            File,
+            self._requester,
+            'GET',
+            'groups/%s/files' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_folder(self, folder_id):
+        """
+        Returns the details for a group's folder
+
+        :calls: `GET /api/v1/groups/:group_id/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
+
+        :param folder_id: The ID of the folder to retrieve.
+        :type folder_id: int
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'GET',
+            'groups/%s/folders/%s' % (self.id, folder_id)
+        )
+        return Folder(self._requester, response.json())
+
+    def list_folders(self):
+        """
+        Returns the paginated list of all folders for the given group. This will be returned as a
+        flat list containing all subfolders as well.
+
+        :calls: `GET /api/v1/groups/:group_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
+
+        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+        return PaginatedList(
+            Folder,
+            self._requester,
+            'GET',
+            'groups/%s/folders' % (self.id)
+        )
+
+    def create_folder(self, name, **kwargs):
+        """
+        Creates a folder in this group.
+
+        :calls: `POST /api/v1/groups/:group_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>`_
+
+        :param name: The name of the folder.
+        :type name: str
+        :rtype :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'POST',
+            'groups/%s/folders' % self.id,
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return Folder(self._requester, response.json())
 
 
 class GroupMembership(CanvasObject):
