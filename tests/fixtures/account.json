@@ -671,5 +671,49 @@
 			"label": "Student"
 		},
 		"status_code": 200
+	},
+	"list_user_logins": {
+		"method": "GET",
+		"endpoint": "accounts/1/logins",
+		"data": [
+			{
+				"account_id": 1,
+				"id": 2,
+				"sis_user_id": null,
+				"unique_id": "belieber@example.com",
+				"user_id": 2,
+				"authentication_provider_id": 1,
+				"authentication_provider_type": "facebook"
+			}
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/accounts/1/logins/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_user_logins_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/logins/?page=2&per_page=2",
+		"data": [
+			{
+				"account_id": 2,
+				"id": 3,
+				"sis_user_id": null,
+				"unique_id": "belieber@example.com",
+				"user_id": 3,
+				"authentication_provider_id": 2,
+				"authentication_provider_type": "facebook"
+			}
+		],
+		"status_code": 200
+	},
+	"create_user_login": {
+		"method": "POST",
+		"endpoint": "accounts/1/logins",
+		"data": {
+			"id": 123,
+			"unique_id": 112233
+		}, 
+		"status_code": 200
 	}
 }

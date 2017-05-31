@@ -10,6 +10,8 @@ from canvasapi.course import Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
+from canvasapi.file import File
+from canvasapi.folder import Folder
 from tests import settings
 from tests.util import register_uris
 
@@ -284,6 +286,40 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(deleted_ef, ExternalFeed)
         self.assertTrue(hasattr(deleted_ef, 'url'))
         self.assertEqual(deleted_ef.display_name, "My Blog")
+
+    # list_files()
+    def test_group_files(self, m):
+        register_uris({'group': ['list_group_files', 'list_group_files2']}, m)
+
+        files = self.group.list_files()
+        file_list = [file for file in files]
+        self.assertEqual(len(file_list), 4)
+        self.assertIsInstance(file_list[0], File)
+
+    # get_folder()
+    def test_get_folder(self, m):
+        register_uris({'group': ['get_folder']}, m)
+
+        folder = self.group.get_folder(1)
+        self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
+
+    # list_folders()
+    def test_list_folders(self, m):
+        register_uris({'group': ['list_folders']}, m)
+
+        folders = self.group.list_folders()
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 2)
+        self.assertIsInstance(folder_list[0], Folder)
+
+    # create_folder()
+    def test_create_folder(self, m):
+        register_uris({'group': ['create_folder']}, m)
+
+        name_str = "Test String"
+        response = self.group.create_folder(name=name_str)
+        self.assertIsInstance(response, Folder)
 
 
 @requests_mock.Mocker()

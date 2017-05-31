@@ -10,10 +10,13 @@ from canvasapi.avatar import Avatar
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.course import Course
+from canvasapi.file import File
+from canvasapi.folder import Folder
 from canvasapi.group import Group
 from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
 from canvasapi.user import User
+from canvasapi.login import Login
 from tests import settings
 from tests.util import register_uris
 
@@ -254,3 +257,48 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
+
+    # list_files()
+    def test_user_files(self, m):
+        register_uris({'user': ['get_user_files', 'get_user_files2']}, m)
+
+        files = self.user.list_files()
+        file_list = [file for file in files]
+        self.assertEqual(len(file_list), 4)
+        self.assertIsInstance(file_list[0], File)
+
+    # get_folder()
+    def test_get_folder(self, m):
+        register_uris({'user': ['get_folder']}, m)
+
+        folder = self.user.get_folder(1)
+        self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
+
+    # list_folders()
+    def test_list_folders(self, m):
+        register_uris({'user': ['list_folders']}, m)
+
+        folders = self.user.list_folders()
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 2)
+        self.assertIsInstance(folder_list[0], Folder)
+
+    # create_folder()
+    def test_create_folder(self, m):
+        register_uris({'user': ['create_folder']}, m)
+
+        name_str = "Test String"
+        response = self.user.create_folder(name=name_str)
+        self.assertIsInstance(response, Folder)
+
+    # list_user_logins()
+    def test_list_user_logins(self, m):
+        requires = {'user': ['list_user_logins', 'list_user_logins_2']}
+        register_uris(requires, m)
+
+        response = self.user.list_user_logins()
+        login_list = [login for login in response]
+
+        self.assertIsInstance(login_list[0], Login)
+        self.assertEqual(len(login_list), 2)
