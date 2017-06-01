@@ -568,3 +568,9 @@ class User(CanvasObject):
             'users/%s/observees/%s' % (self.id, observee_id)
         )
         return User(self._requester, response.json())
+
+
+class UserDisplay(CanvasObject):
+
+    def __str__(self):
+        return str(self.display_name)
