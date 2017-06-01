@@ -951,7 +951,7 @@ class Course(CanvasObject):
         """
         Makes a submission for an assignment.
 
-        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions  \
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
 
         :param submission: The attributes of the submission.
