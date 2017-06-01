@@ -126,7 +126,7 @@ class Section(CanvasObject):
         Makes a submission for an assignment.
 
         :calls: `POST /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
         :param assignment_id: The ID of the assignment.
         :type assignment_id: `int`
@@ -166,7 +166,7 @@ class Section(CanvasObject):
         Get a single submission, based on user id.
 
         :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.show>`_
 
         :param assignment_id: The ID of the assignment.
         :type assignment_id: int
@@ -233,7 +233,7 @@ class Section(CanvasObject):
 
         :calls: `DELETE
             /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id/read \
-            <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
+            <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_unread>`_
 
         :rtype: `bool`
         """

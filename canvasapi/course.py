@@ -977,7 +977,7 @@ class Course(CanvasObject):
         Makes a submission for an assignment.
 
         :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions  \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
         :param assignment_id: The ID of the assignment.
         :type assignment_id: `int`
@@ -1017,7 +1017,7 @@ class Course(CanvasObject):
         Get a single submission, based on user id.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.show>`_
 
         :param assignment_id: The ID of the assignment.
         :type assignment_id: int
@@ -1063,7 +1063,7 @@ class Course(CanvasObject):
         List students eligible to submit the assignment.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/gradeable_students  \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.gradeable_students`_
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.gradeable_students>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.user.User`
@@ -1101,7 +1101,7 @@ class Course(CanvasObject):
 
         :calls: `DELETE
             /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/read \
-            <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
+            <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_unread>`_
 
         :rtype: `bool`
         """
