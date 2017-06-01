@@ -478,3 +478,9 @@ class User(CanvasObject):
             'users/%s/logins' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+
+class UserDisplay(CanvasObject):
+
+    def __str__(self):
+        return str(self.display_name)
