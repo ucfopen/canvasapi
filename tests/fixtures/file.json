@@ -1,0 +1,12 @@
+{
+    "delete_file": {
+        "method": "DELETE",
+        "endpoint": "files/1",
+        "data": {
+            "id": 1,
+            "display_name": "Bad File.docx",
+            "size": 5512
+        },
+        "status_code": 200
+    }
+}
