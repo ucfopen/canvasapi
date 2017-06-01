@@ -1,5 +1,4 @@
 from canvasapi.bookmark import Bookmark
-from canvasapi.login import Login
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.folder import Folder
@@ -468,8 +467,9 @@ class User(CanvasObject):
         <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.user.Login`
+            :class:`canvasapi.login.Login`
         """
+        from canvasapi.login import Login
 
         return PaginatedList(
             Login,
@@ -478,6 +478,96 @@ class User(CanvasObject):
             'users/%s/logins' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def list_observees(self, **kwargs):
+        """
+        List the users that the given user is observing
+
+        :calls:  `GET /api/v1/users/:user_id/observees \
+        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+
+        return PaginatedList(
+            User,
+            self._requester,
+            'GET',
+            'users/%s/observees' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def add_observee_with_credentials(self, **kwargs):
+        """
+        Register the given user to observe another user, given the observee's credentials.
+
+        :calls: `POST /api/v1/users/:user_id/observees \
+        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.create>`_
+
+        :rtype: :class:`canvasapi.user.User`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'users/%s/observees' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return User(self._requester, response.json())
+
+    def show_observee(self, observee_id):
+        """
+        Gets information about an observed user.
+
+        :calls: `GET /api/v1/users/:user_id/observees/:observee_id \
+        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.show>`_
+
+        :param unique_id: The login id for the user to observe.
+        :type observee: `dict`
+        :rtype: :class: `canvasapi.user.User`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'users/%s/observees/%s' % (self.id, observee_id)
+        )
+        return User(self._requester, response.json())
+
+    def add_observee(self, observee_id):
+        """
+        Registers a user as being observed by the given user.
+
+        :calls: `PUT /api/v1/users/:user_id/observees/:observee_id \
+        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.update>`_
+
+        :param unique_id: The login id for the user to observe.
+        :type observee: `dict`
+        :rtype: :class: `canvasapi.user.User`
+        """
+
+        response = self._requester.request(
+            'PUT',
+            'users/%s/observees/%s' % (self.id, observee_id)
+        )
+        return User(self._requester, response.json())
+
+    def remove_observee(self, observee_id):
+        """
+        Unregisters a user as being observed by the given user.
+
+        :calls: `DELETE /api/v1/users/:user_id/observees/:observee_id \
+        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.destroy>`_
+
+        :param unique_id: The login id for the user to observe.
+        :type observee: `dict`
+        :rtype: :class: `canvasapi.user.User`
+        """
+
+        response = self._requester.request(
+            'DELETE',
+            'users/%s/observees/%s' % (self.id, observee_id)
+        )
+        return User(self._requester, response.json())
 
 
 class UserDisplay(CanvasObject):
