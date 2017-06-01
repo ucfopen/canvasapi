@@ -182,6 +182,17 @@
 		],
 		"status_code": 200
 	},
+	"create_folder": {
+        "method": "POST",
+        "endpoint": "users/1/folders",
+        "data": {
+            "id": 2,
+            "name": "Test String",
+            "locked": false,
+            "hidden": false
+        },
+        "status_code": 200
+    },
 	"edit": {
 		"method": "PUT",
 		"endpoint": "users/1",
@@ -215,6 +226,18 @@
 			"name": "John Doe"
 		}
 	},
+	"get_folder": {
+        "method": "GET",
+        "endpoint": "users/1/folders/1",
+        "data": {
+            "id": 1,
+            "files_count": 10,
+            "folders_count": 2,
+            "name": "Folder 1",
+            "full_name": "Folder 1"
+        },
+        "status_code": 200
+    },
 	"get_user_assignments": {
 		"method": "GET",
 		"endpoint": "users/1/courses/1/assignments",
@@ -252,6 +275,43 @@
 				"course_id": 1,
 				"name": "Assignment 4",
 				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
+	"get_user_files": {
+		"method": "GET",
+		"endpoint": "users/1/files",
+		"data": [
+			{
+				"id": 1,
+				"size": 2939,
+				"display_name": "File1.txt"
+			},
+			{
+				"id": 2,
+				"size": 18380,
+				"display_name": "File_2.png"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/users/1/files?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_user_files2": {
+		"method": "GET",
+		"endpoint": "users/1/files?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"display_name": "File 3.jpg",
+				"size": 1298
+			},
+			{
+				"id": 4,
+				"display_name": "File 4.docx",
+				"size": 88920
 			}
 		],
 		"status_code": 200
@@ -306,6 +366,27 @@
 		],
 		"status_code": 200
 	},
+	"list_folders": {
+        "method": "GET",
+        "endpoint": "users/1/folders",
+        "data": [
+            {
+                "id": 2,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 2",
+                "full_name": "user_files/Folder 2"
+            },
+            {
+                "id": 3,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 3",
+                "full_name": "user_files/Folder 3"
+            }
+        ],
+        "status_code": 200
+    },
 	"list_groups": {
 		"method": "GET",
 		"endpoint": "users/self/groups",
@@ -506,5 +587,40 @@
 		"data": {
 			"url": "great_url_success"
 		}
+	},
+	"list_user_logins": {
+		"method": "GET",
+		"endpoint": "users/1/logins",
+		"data": [
+			{
+				"account_id": 1,
+				"id": 2,
+				"sis_user_id": null,
+				"unique_id": "belieber@example.com",
+				"user_id": 2,
+				"authentication_provider_id": 1,
+				"authentication_provider_type": "facebook"
+			}
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/users/1/logins/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_user_logins_2": {
+		"method": "GET",
+		"endpoint": "users/1/logins/?page=2&per_page=2",
+		"data": [
+			{
+				"account_id": 2,
+				"id": 3,
+				"sis_user_id": null,
+				"unique_id": "belieber@example.com",
+				"user_id": 3,
+				"authentication_provider_id": 2,
+				"authentication_provider_type": "facebook"
+			}
+		],
+		"status_code": 200
 	}
 }
