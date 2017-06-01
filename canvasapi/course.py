@@ -945,7 +945,6 @@ class Course(CanvasObject):
 
         return ExternalTool(self._requester, response_json)
 
-
     def list_external_feeds(self):
         """
         Returns the list of External Feeds this course.
