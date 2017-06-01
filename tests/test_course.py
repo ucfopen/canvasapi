@@ -18,6 +18,7 @@ from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.quiz import Quiz
 from canvasapi.section import Section
+from canvasapi.tab import Tab
 from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
@@ -611,6 +612,26 @@ class TestCourse(unittest.TestCase):
         name_str = "Test String"
         response = self.course.create_folder(name=name_str)
         self.assertIsInstance(response, Folder)
+
+    # list_tabs()
+    def test_list_tabs(self, m):
+        register_uris({'course': ['list_tabs']}, m)
+
+        tabs = self.course.list_tabs()
+        tab_list = [tab for tab in tabs]
+        self.assertEqual(len(tab_list), 2)
+        self.assertIsInstance(tab_list[0], Tab)
+
+    # update_tab()
+    def test_update_tab(self, m):
+        register_uris({'course': ['update_tab']}, m)
+
+        tab_id = "pages"
+        new_position = 3
+        tab = self.course.update_tab(tab_id, position=new_position)
+
+        self.assertIsInstance(tab, Tab)
+        self.assertEqual(tab.position, 3)
 
 
 @requests_mock.Mocker()
