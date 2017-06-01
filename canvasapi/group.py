@@ -472,7 +472,7 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/external_feeds \
         <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.index>`_
 
-        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
@@ -528,7 +528,7 @@ class Group(CanvasObject):
         :calls: `GET api/v1/courses/:group_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
-        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.file.File`
         """
         from canvasapi.file import File
@@ -566,7 +566,7 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/folders \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
 
-        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.folder.Folder`
         """
         return PaginatedList(
@@ -585,7 +585,7 @@ class Group(CanvasObject):
 
         :param name: The name of the folder.
         :type name: str
-        :rtype :class:`canvasapi.folder.Folder`
+        :rtype: :class:`canvasapi.folder.Folder`
         """
         response = self._requester.request(
             'POST',
