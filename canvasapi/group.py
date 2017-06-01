@@ -3,6 +3,7 @@ from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.tab import Tab
 from canvasapi.util import combine_kwargs
 
 
@@ -593,6 +594,25 @@ class Group(CanvasObject):
             **combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
+
+    def list_tabs(self, **kwargs):
+        """
+        List available tabs for a group.
+        Returns a list of navigation tabs available in the current context.
+
+        :calls: `GET /api/v1/groups/:group_id/tabs \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.tab.Tab`
+        """
+        return PaginatedList(
+            Tab,
+            self._requester,
+            'GET',
+            'groups/%s/tabs' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
 
 
 class GroupMembership(CanvasObject):
