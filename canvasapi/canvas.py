@@ -1,6 +1,7 @@
 from canvasapi.account import Account
 from canvasapi.course import Course
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
@@ -755,3 +756,20 @@ class Canvas(object):
             'appointment_groups/%s/groups' % (appointment_group_id),
             **combine_kwargs(**kwargs)
         )
+
+    def get_folder(self, folder_id):
+        """
+        Returns the details for a folder
+
+        :calls: `GET /api/v1/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
+
+        :param folder_id: The ID of the folder to retrieve.
+        :type folder_id: int
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self.__requester.request(
+            'GET',
+            'folders/%s' % (folder_id)
+        )
+        return Folder(self.__requester, response.json())
