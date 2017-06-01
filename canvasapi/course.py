@@ -945,6 +945,62 @@ class Course(CanvasObject):
 
         return ExternalTool(self._requester, response_json)
 
+    def list_external_feeds(self):
+        """
+        Returns the list of External Feeds this course.
+
+        :calls: `GET /api/v1/courses/:course_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.index>`_
+
+        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        return PaginatedList(
+            ExternalFeed,
+            self._requester,
+            'GET',
+            'courses/%s/external_feeds' % (self.id)
+        )
+
+    def create_external_feed(self, url, **kwargs):
+        """
+        Create a new external feed for the course.
+
+        :calls: `POST /api/v1/courses/:course_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.create>`_
+
+        :param url: The urlof the external rss or atom feed
+        :type url: str
+        :rtype: :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        response = self._requester.request(
+            'POST',
+            'courses/%s/external_feeds' % self.id,
+            url=url,
+            **combine_kwargs(**kwargs)
+        )
+        return ExternalFeed(self._requester, response.json())
+
+    def delete_external_feed(self, feed_id):
+        """
+        Deletes the external feed.
+
+        :calls: `DELETE /api/v1/courses/:course_id/external_feeds/:external_feed_id \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.destroy>`_
+
+        :param feed_id: The id of the feed to be deleted.
+        :type feed_id: int
+        :rtype: :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/external_feeds/%s' % (self.id, feed_id)
+        )
+        return ExternalFeed(self._requester, response.json())
+
     def list_files(self, **kwargs):
         """
         Returns the paginated list of files for the course.
