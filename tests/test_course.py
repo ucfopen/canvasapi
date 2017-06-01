@@ -10,6 +10,7 @@ from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
+from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
 from canvasapi.file import File
 from canvasapi.folder import Folder
@@ -643,6 +644,35 @@ class TestCourse(unittest.TestCase):
         submission = self.course.mark_submission_as_unread(submission_id, user_id)
 
         self.assertTrue(submission)
+
+    # list_external_feeds()
+    def test_list_external_feeds(self, m):
+        register_uris({'course': ['list_external_feeds']}, m)
+
+        feeds = self.course.list_external_feeds()
+        feed_list = [feed for feed in feeds]
+        self.assertEqual(len(feed_list), 2)
+        self.assertTrue(hasattr(feed_list[0], 'url'))
+        self.assertIsInstance(feed_list[0], ExternalFeed)
+
+    # create_external_feed()
+    def test_create_external_feed(self, m):
+        register_uris({'course': ['create_external_feed']}, m)
+
+        url_str = "http://example.com/myblog.rss"
+        response = self.course.create_external_feed(url=url_str)
+        self.assertIsInstance(response, ExternalFeed)
+
+    # delete_external_feed()
+    def test_delete_external_feed(self, m):
+        register_uris({'course': ['delete_external_feed']}, m)
+
+        ef_id = 1
+        deleted_ef = self.course.delete_external_feed(ef_id)
+
+        self.assertIsInstance(deleted_ef, ExternalFeed)
+        self.assertTrue(hasattr(deleted_ef, 'url'))
+        self.assertEqual(deleted_ef.display_name, "My Blog")
 
     # list_files()
     def test_course_files(self, m):
