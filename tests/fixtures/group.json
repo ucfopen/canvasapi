@@ -703,7 +703,7 @@
 			"url": "http://example.com/myblog.rss"
 		},
 		"status_code": 200
-	}
+	},
 	"list_group_files": {
 		"method": "GET",
 		"endpoint": "groups/1/files",
