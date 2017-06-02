@@ -443,3 +443,19 @@ class TestCanvas(unittest.TestCase):
         groups = self.canvas.list_group_participants(222)
         groups_list = [group for group in groups]
         self.assertEqual(len(groups_list), 2)
+
+    # search_recipients()
+    def test_search_recipients(self, m):
+        register_uris({'user': ['search_recipients']}, m)
+
+        recipients = self.canvas.search_recipients()
+        self.assertIsInstance(recipients, list)
+        self.assertEqual(len(recipients), 2)
+
+    # search_all_courses()
+    def test_search_all_courses(self, m):
+        register_uris({'course': ['search_all_courses']}, m)
+
+        courses = self.canvas.search_all_courses()
+        self.assertIsInstance(courses, list)
+        self.assertEqual(len(courses), 2)

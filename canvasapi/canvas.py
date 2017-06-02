@@ -773,3 +773,38 @@ class Canvas(object):
             'folders/%s' % (folder_id)
         )
         return Folder(self.__requester, response.json())
+
+    def search_recipients(self, **kwargs):
+        """
+        Find valid recipients (users, courses and groups) that the current user
+        can send messages to.
+        Returns a list of mixed data types.
+
+        :calls: `GET /api/v1/search/recipients  \
+        <https://canvas.instructure.com/doc/api/search.html#method.search.recipients>`_
+
+        :rtype: `list`
+        """
+        response = self.__requester.request(
+            'GET',
+            'search/recipients',
+            **combine_kwargs(**kwargs)
+        )
+        return response.json()
+
+    def search_all_courses(self, **kwargs):
+        """
+        List all the courses visible in the public index.
+        Returns a list of dicts, each containing a single course.
+
+        :calls: `GET /api/v1/search/all_courses \
+        <https://canvas.instructure.com/doc/api/search.html#method.search.all_courses>`_
+
+        :rtype: `list`
+        """
+        response = self.__requester.request(
+            'GET',
+            'search/all_courses',
+            **combine_kwargs(**kwargs)
+        )
+        return response.json()

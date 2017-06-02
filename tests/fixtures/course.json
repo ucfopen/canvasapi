@@ -1125,5 +1125,26 @@
 		"method": "DELETE",
 		"endpoint": "courses/1/assignments/1/submissions/1/read",
 		"status_code": 204
+	},
+	"search_all_courses": {
+		"method": "GET",
+		"endpoint": "search/all_courses",
+		"data": [
+			{
+				"course":
+				{
+					"id": 1,
+      				"name": "Course 1"
+				}
+			},
+			{
+				"course":
+				{
+					"id": 2,
+      				"name": "Course 2"
+				}
+			}
+		],
+		"status_code": 200
 	}
 }
