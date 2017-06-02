@@ -1134,14 +1134,14 @@
 				"course":
 				{
 					"id": 1,
-      				"name": "Course 1"
+					"name": "Course 1"
 				}
 			},
 			{
 				"course":
 				{
 					"id": 2,
-      				"name": "Course 2"
+					"name": "Course 2"
 				}
 			}
 		],
