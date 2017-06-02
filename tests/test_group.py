@@ -12,6 +12,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.tab import Tab
 from tests import settings
 from tests.util import register_uris
 
@@ -320,6 +321,15 @@ class TestGroup(unittest.TestCase):
         name_str = "Test String"
         response = self.group.create_folder(name=name_str)
         self.assertIsInstance(response, Folder)
+
+    # list_tabs()
+    def test_list_tabs(self, m):
+        register_uris({'group': ['list_tabs']}, m)
+
+        tabs = self.group.list_tabs()
+        tab_list = [tab for tab in tabs]
+        self.assertEqual(len(tab_list), 2)
+        self.assertIsInstance(tab_list[0], Tab)
 
 
 @requests_mock.Mocker()
