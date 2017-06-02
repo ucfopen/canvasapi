@@ -4,6 +4,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.tab import Tab
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
 from canvasapi.user import UserDisplay
@@ -1123,7 +1124,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/external_feeds \
         <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.index>`_
 
-        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
@@ -1179,7 +1180,7 @@ class Course(CanvasObject):
         :calls: `GET api/v1/courses/:course_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
-        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.file.File`
         """
         from canvasapi.file import File
@@ -1217,7 +1218,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/folders \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
 
-        :rtype :class:`canvasapi.paginated_list.PaginatedList` of
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.folder.Folder`
         """
         return PaginatedList(
@@ -1236,7 +1237,7 @@ class Course(CanvasObject):
 
         :param name: The name of the folder.
         :type name: str
-        :rtype :class:`canvasapi.folder.Folder`
+        :rtype: :class:`canvasapi.folder.Folder`
         """
         response = self._requester.request(
             'POST',
@@ -1245,6 +1246,42 @@ class Course(CanvasObject):
             **combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
+
+    def list_tabs(self, **kwargs):
+        """
+        List available tabs for a course.
+        Returns a list of navigation tabs available in the current context.
+
+        :calls: `GET /api/v1/courses/:course_id/tabs \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.tab.Tab`
+        """
+        return PaginatedList(
+            Tab,
+            self._requester,
+            'GET',
+            'courses/%s/tabs' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def update_tab(self, tab_id, **kwargs):
+        """
+        Update a tab for a course.
+
+        :calls: `PUT /api/v1/courses/:course_id/tabs/:tab_id \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.update>`_
+
+        :rtype: :class:`canvasapi.tab.Tab`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/tabs/%s' % (self.id, tab_id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return Tab(self._requester, response.json())
 
 
 class CourseNickname(CanvasObject):

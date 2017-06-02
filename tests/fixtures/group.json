@@ -773,5 +773,28 @@
       }
     ],
     "status_code": 200
-  }
+  },
+  "list_tabs": {
+		"method": "GET",
+		"endpoint": "groups/1/tabs",
+		"data": [
+			{
+			    "id": "home",
+			    "html_url": "/groups/1",
+			    "position": 1,
+			    "visibility": "public",
+			    "label": "Home",
+			    "type": "internal"
+		  	},
+			{
+			    "id": "pages",
+			    "html_url": "/groups/1/wiki",
+			    "position": 2,
+			    "visibility": "public",
+			    "label": "Pages",
+			    "type": "internal"
+			}
+		],
+		"status_code": 200
+	}
 }

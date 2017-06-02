@@ -986,6 +986,29 @@
 		},
 		"status_code": 200
 	},
+	"list_tabs": {
+		"method": "GET",
+		"endpoint": "courses/1/tabs",
+		"data": [
+			{
+			    "id": "home",
+			    "html_url": "/courses/1",
+			    "position": 1,
+			    "visibility": "public",
+			    "label": "Home",
+			    "type": "internal"
+		  	},
+			{
+			    "id": "pages",
+			    "html_url": "/courses/1/wiki",
+			    "position": 2,
+			    "visibility": "public",
+			    "label": "Pages",
+			    "type": "internal"
+			}
+		],
+		"status_code": 200
+	},
 	"submit_assignment": {
 		"method": "POST",
 		"endpoint": "courses/1/assignments/1/submissions",
@@ -1065,6 +1088,19 @@
 				"display_name": "Student 2"
 			}
 		],
+		"status_code": 200
+	},
+	"update_tab": {
+		"method": "PUT",
+		"endpoint": "courses/1/tabs/pages",
+		"data": {
+			"id": "pages",
+		    "html_url": "/courses/1/wiki",
+		    "position": 3,
+		    "visibility": "public",
+		    "label": "Pages",
+		    "type": "internal"
+		},
 		"status_code": 200
 	},
 	"update_submission": {
