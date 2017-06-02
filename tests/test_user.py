@@ -302,3 +302,69 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(login_list[0], Login)
         self.assertEqual(len(login_list), 2)
+
+    # list_observees()
+    def test_list_observees(self, m):
+        requires = {'user': ['list_observees', 'list_observees_2']}
+        register_uris(requires, m)
+
+        response = self.user.list_observees()
+        observees_list = [observees for observees in response]
+
+        self.assertIsInstance(observees_list[0], User)
+        self.assertEqual(len(observees_list), 4)
+
+    # add_observee_with_credentials()
+    def test_add_observee_with_credentials(self, m):
+        register_uris({'user': ['add_observee_with_credentials']}, m)
+
+        response = self.user.add_observee_with_credentials()
+
+        self.assertIsInstance(response, User)
+
+    # show_observee()
+    def test_show_observee(self, m):
+        register_uris({'user': ['show_observee']}, m)
+
+        response = self.user.show_observee(6)
+
+        self.assertIsInstance(response, User)
+
+    # add_observee()
+    def test_add_observee(self, m):
+        register_uris({'user': ['add_observee']}, m)
+
+        response = self.user.add_observee(7)
+
+        self.assertIsInstance(response, User)
+
+    # remove_observee()
+    def test_remove_observee(self, m):
+        register_uris({'user': ['remove_observee']}, m)
+
+        response = self.user.remove_observee(8)
+
+        self.assertIsInstance(response, User)
+
+
+@requests_mock.Mocker()
+class TestUserDisplay(unittest.TestCase):
+
+    @classmethod
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris({
+                'course': ['get_by_id', 'list_gradeable_students']
+            }, m)
+
+            self.course = self.canvas.get_course(1)
+            self.userDisplays = self.course.list_gradeable_students(1)
+            self.userDisplayList = [ud for ud in self.userDisplays]
+            self.userDisplay = self.userDisplayList[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.userDisplay)
+        self.assertIsInstance(string, str)
