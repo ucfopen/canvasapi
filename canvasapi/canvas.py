@@ -785,6 +785,9 @@ class Canvas(object):
 
         :rtype: `list`
         """
+        if 'search' not in kwargs:
+            kwargs['search'] = ' '
+
         response = self.__requester.request(
             'GET',
             'search/recipients',
