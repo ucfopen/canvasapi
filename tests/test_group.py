@@ -9,6 +9,10 @@ from canvasapi.group import Group, GroupMembership, GroupCategory
 from canvasapi.course import Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.external_feed import ExternalFeed
+from canvasapi.file import File
+from canvasapi.folder import Folder
+from canvasapi.tab import Tab
 from tests import settings
 from tests.util import register_uris
 
@@ -254,6 +258,78 @@ class TestGroup(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.group.reorder_pinned_topics(order=order)
+
+    # list_external_feeds()
+    def test_list_external_feeds(self, m):
+        register_uris({'group': ['list_external_feeds']}, m)
+
+        feeds = self.group.list_external_feeds()
+        feed_list = [feed for feed in feeds]
+        self.assertEqual(len(feed_list), 2)
+        self.assertTrue(hasattr(feed_list[0], 'url'))
+        self.assertIsInstance(feed_list[0], ExternalFeed)
+
+    # create_external_feed()
+    def test_create_external_feed(self, m):
+        register_uris({'group': ['create_external_feed']}, m)
+
+        url_str = "http://example.com/myblog.rss"
+        response = self.group.create_external_feed(url=url_str)
+        self.assertIsInstance(response, ExternalFeed)
+
+    # delete_external_feed()
+    def test_delete_external_feed(self, m):
+        register_uris({'group': ['delete_external_feed']}, m)
+
+        ef_id = 1
+        deleted_ef = self.group.delete_external_feed(ef_id)
+
+        self.assertIsInstance(deleted_ef, ExternalFeed)
+        self.assertTrue(hasattr(deleted_ef, 'url'))
+        self.assertEqual(deleted_ef.display_name, "My Blog")
+
+    # list_files()
+    def test_group_files(self, m):
+        register_uris({'group': ['list_group_files', 'list_group_files2']}, m)
+
+        files = self.group.list_files()
+        file_list = [file for file in files]
+        self.assertEqual(len(file_list), 4)
+        self.assertIsInstance(file_list[0], File)
+
+    # get_folder()
+    def test_get_folder(self, m):
+        register_uris({'group': ['get_folder']}, m)
+
+        folder = self.group.get_folder(1)
+        self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
+
+    # list_folders()
+    def test_list_folders(self, m):
+        register_uris({'group': ['list_folders']}, m)
+
+        folders = self.group.list_folders()
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 2)
+        self.assertIsInstance(folder_list[0], Folder)
+
+    # create_folder()
+    def test_create_folder(self, m):
+        register_uris({'group': ['create_folder']}, m)
+
+        name_str = "Test String"
+        response = self.group.create_folder(name=name_str)
+        self.assertIsInstance(response, Folder)
+
+    # list_tabs()
+    def test_list_tabs(self, m):
+        register_uris({'group': ['list_tabs']}, m)
+
+        tabs = self.group.list_tabs()
+        tab_list = [tab for tab in tabs]
+        self.assertEqual(len(tab_list), 2)
+        self.assertIsInstance(tab_list[0], Tab)
 
 
 @requests_mock.Mocker()
