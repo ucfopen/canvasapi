@@ -867,5 +867,177 @@
 			"order": "1, 2, 3"
 		},
 		"status_code": 200
+	},
+	"get_course_level_participation_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/activity",
+		"data": [
+			{ 
+				"date": "2012-01-24",
+				"participations": 3,
+				"views": 10
+			}
+		]
+	},
+	"get_course_level_assignment_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/assignments",
+		"data": [
+			{
+				"assignment_id": 1234,
+				"title": "Assignment 1",
+				"points_possible": 10,
+				"due_at": "2012-01-25T22:00:00-07:00",
+				"unlock_at": "2012-01-20T22:00:00-07:00",
+				"muted": false,
+				"min_score": 2,
+				"max_score": 10,
+				"median": 7,
+				"first_quartile": 4,
+				"third_quartile": 8,
+				"tardiness_breakdown": {
+					"on_time": 0.75,
+					"missing": 0.1,
+					"late": 0.15
+				}
+			},
+			{
+				"assignment_id": 1235,
+				"title": "Assignment 2",
+				"points_possible": 15,
+				"due_at": "2012-01-26T22:00:00-07:00",
+				"unlock_at": null,
+				"muted": true,
+				"min_score": 8,
+				"max_score": 8,
+				"median": 8,
+				"first_quartile": 8,
+				"third_quartile": 8,
+				"tardiness_breakdown": {
+					"on_time": 0.65,
+					"missing": 0.12,
+					"late": 0.23,
+					"total": 275
+				}
+			}
+		]
+	},
+	"get_course_level_student_summary_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/student_summaries",
+		"data": [
+			{
+				"id": 2346,
+				"page_views": 351,
+				"page_views_level": "1",
+				"max_page_view": 415,
+				"participations": 1,
+				"participations_level": "3",
+				"max_participations": 10,
+				"tardiness_breakdown": {
+					"total": 5,
+					"on_time": 3,
+					"late": 0,
+					"missing": 2,
+					"floating": 0
+				}
+			},
+			{
+				"id": 2345,
+				"page_views": 124,
+				"participations": 15,
+				"tardiness_breakdown": {
+					"total": 5,
+					"on_time": 1,
+					"late": 2,
+					"missing": 3,
+					"floating": 0
+				}
+			}
+		]
+	},
+	"get_user_in_a_course_level_participation_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/users/1/activity",
+		"data": [
+			{
+				"page_views": {
+					"2012-01-24T13:00:00-00:00": 19,
+					"2012-01-24T14:00:00-00:00": 13,
+					"2012-01-27T09:00:00-00:00": 23
+			},
+				"participations": [
+					{
+						"created_at": "2012-01-21T22:00:00-06:00",
+						"url": "https://canvas.example.com/path/to/canvas"
+					},
+					{
+						"created_at": "2012-01-27T22:00:00-06:00",
+						"url": "https://canvas.example.com/path/to/canvas"
+					}
+				]
+			}
+		]
+	},
+	"get_user_in_a_course_level_assignment_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/users/1/assignments",
+		"data": [
+			{
+				"assignment_id": 1234,
+				"title": "Assignment 1",
+				"points_possible": 10,
+				"due_at": "2012-01-25T22:00:00-07:00",
+				"unlock_at": "2012-01-20T22:00:00-07:00",
+				"muted": false,
+				"min_score": 2,
+				"max_score": 10,
+				"median": 7,
+				"first_quartile": 4,
+				"third_quartile": 8,
+				"module_ids": [
+					1,
+					2
+				],
+				"submission": {
+					"submitted_at": "2012-01-22T22:00:00-07:00",
+					"score": 10
+				}
+			},
+			{
+				"assignment_id": 1235,
+				"title": "Assignment 2",
+				"points_possible": 15,
+				"due_at": "2012-01-26T22:00:00-07:00",
+				"unlock_at": null,
+				"muted": true,
+				"min_score": 8,
+				"max_score": 8,
+				"median": 8,
+				"first_quartile": 8,
+				"third_quartile": 8,
+				"module_ids": [
+					1
+				],
+				"submission": {
+					"submitted_at": "2012-01-22T22:00:00-07:00"
+				}
+			}
+		]
+	},
+	"get_user_in_a_course_level_messaging_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/users/1/communication",
+		"data": [
+			{
+				"2012-01-24":{
+					"instructorMessages":1,
+					"studentMessages":2
+				},
+				"2012-01-27":{
+					"studentMessages":1
+				}
+			}
+		]
 	}
 }
