@@ -948,6 +948,110 @@ class Course(CanvasObject):
 
         return ExternalTool(self._requester, response_json)
 
+    def get_course_level_participation_data(self):
+        """
+        Return page view hits and participation numbers grouped by day through the course's history
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/activity' % (self.id)
+        )
+
+        return response.json()
+
+    def get_course_level_assignment_data(self, **kwargs):
+        """
+        Return a list of assignments for the course sorted by due date
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/assignments \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_assignments>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/assignments' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return response.json()
+
+    def get_course_level_student_summary_data(self, **kwargs):
+        """
+        Return a summary of per-user access information for all students in a course
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/student_summaries \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_student_summaries>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/student_summaries' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return response.json()
+
+    def get_user_in_a_course_level_participation_data(self, student_id):
+        """
+        Return page view hits grouped by hour and participation details through course's history
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/users/%s/activity' % (self.id, student_id)
+        )
+
+        return response.json()
+
+    def get_user_in_a_course_level_assignment_data(self, student_id):
+        """
+        Return a list of assignments for the course sorted by due date
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/assignments \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_assignments>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/users/%s/assignments' % (self.id, student_id)
+        )
+
+        return response.json()
+
+    def get_user_in_a_course_level_messaging_data(self, student_id):
+        """
+        Return messaging hits grouped by day through the entire history of the course
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/communication \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_messaging>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/users/%s/communication' % (self.id, student_id)
+        )
+
+        return response.json()
+
     def submit_assignment(self, assignment_id, submission, **kwargs):
         """
         Makes a submission for an assignment.

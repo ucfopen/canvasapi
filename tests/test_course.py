@@ -552,6 +552,54 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(response, 'id'))
         self.assertEqual(response.id, 20)
 
+    # get_course_level_participation_data()
+    def test_get_course_level_participation_data(self, m):
+        register_uris({'course': ['get_course_level_participation_data']}, m)
+
+        response = self.course.get_course_level_participation_data()
+
+        self.assertIsInstance(response, list)
+
+    # get_course_level_assignment_data()
+    def test_get_course_level_assignment_data(self, m):
+        register_uris({'course': ['get_course_level_assignment_data']}, m)
+
+        response = self.course.get_course_level_assignment_data()
+
+        self.assertIsInstance(response, list)
+
+    # get_course_level_student_summary_data()
+    def test_get_course_level_student_summary_data(self, m):
+        register_uris({'course': ['get_course_level_student_summary_data']}, m)
+
+        response = self.course.get_course_level_student_summary_data()
+
+        self.assertIsInstance(response, list)
+
+    # get_user_in_a_course_level_participation_data()
+    def test_get_user_in_a_course_level_participation_data(self, m):
+        register_uris({'course': ['get_user_in_a_course_level_participation_data']}, m)
+
+        response = self.course.get_user_in_a_course_level_participation_data(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_user_in_a_course_level_assignment_data()
+    def test_get_user_in_a_course_level_assignment_data(self, m):
+        register_uris({'course': ['get_user_in_a_course_level_assignment_data']}, m)
+
+        response = self.course.get_user_in_a_course_level_assignment_data(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_user_in_a_course_level_messaging_data()
+    def test_get_user_in_a_course_level_messaging_data(self, m):
+        register_uris({'course': ['get_user_in_a_course_level_messaging_data']}, m)
+
+        response = self.course.get_user_in_a_course_level_messaging_data(1)
+
+        self.assertIsInstance(response, list)
+
     # submit_assignment()
     def test_submit_assignment(self, m):
         register_uris({'course': ['submit_assignment']}, m)
