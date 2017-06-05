@@ -679,6 +679,150 @@ class Account(CanvasObject):
         )
         return Login(self._requester, response.json())
 
+    def get_department_level_participation_data_with_given_term(self, term_id):
+        """
+        Return page view hits all available or concluded courses in the given term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/terms/%s/activity' % (self.id, term_id)
+        )
+        return response.json()
+
+    def get_department_level_participation_data_current(self):
+        """
+        Return page view hits all available courses in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/current/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/current/activity' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_participation_data_completed(self):
+        """
+        Return page view hits all concluded courses in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/completed/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/completed/activity' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_grade_data_with_given_term(self, term_id):
+        """
+        Return the distribution of all available or concluded grades with the given term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/grades \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/terms/%s/grades' % (self.id, term_id)
+        )
+        return response.json()
+
+    def get_department_level_grade_data_current(self):
+        """
+        Return the distribution of all available grades in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/current/grades \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/current/grades' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_grade_data_completed(self):
+        """
+        Return the distribution of all concluded grades in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/completed/grades \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/completed/grades' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_statistics_with_given_term(self, term_id):
+        """
+        Return numeric statistics about the department with the given term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/statistics \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/terms/%s/statistics' % (self.id, term_id)
+        )
+        return response.json()
+
+    def get_department_level_statistics_current(self):
+        """
+        Return all available numeric statistics about the department in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/current/statistics \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/current/statistics' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_statistics_completed(self):
+        """
+        Return all available numeric statistics about the department in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/current/statistics \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/completed/statistics' % (self.id)
+        )
+        return response.json()
+
 
 class AccountNotification(CanvasObject):
 
