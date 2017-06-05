@@ -428,3 +428,75 @@ class TestAccount(unittest.TestCase):
     def test_create_user_login_fail_on_login_unique_id(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.account.create_user_login(user={'id': 123}, login={})
+
+    # get_department_level_participation_data_with_given_term()
+    def test_get_department_level_participation_data_with_given_term(self, m):
+        register_uris({'account': ['get_department_level_participation_data_with_given_term']}, m)
+
+        response = self.account.get_department_level_participation_data_with_given_term(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_participation_data_current()
+    def test_get_department_level_participation_data_current(self, m):
+        register_uris({'account': ['get_department_level_participation_data_current']}, m)
+
+        response = self.account.get_department_level_participation_data_current()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_participation_data_completed()
+    def test_get_department_level_participation_data_completed(self, m):
+        register_uris({'account': ['get_department_level_participation_data_completed']}, m)
+
+        response = self.account.get_department_level_participation_data_completed()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_grade_data_with_given_term()
+    def test_get_department_level_grade_data_with_given_term(self, m):
+        register_uris({'account': ['get_department_level_grade_data_with_given_term']}, m)
+
+        response = self.account.get_department_level_grade_data_with_given_term(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_grade_data_current()
+    def test_get_department_level_grade_data_current(self, m):
+        register_uris({'account': ['get_department_level_grade_data_current']}, m)
+
+        response = self.account.get_department_level_grade_data_current()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_grade_data_completed()
+    def test_get_department_level_grade_data_completed(self, m):
+        register_uris({'account': ['get_department_level_grade_data_completed']}, m)
+
+        response = self.account.get_department_level_grade_data_completed()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_statistics_with_given_term()
+    def test_get_department_level_statistics_with_given_term(self, m):
+        register_uris({'account': ['get_department_level_statistics_with_given_term']}, m)
+
+        response = self.account.get_department_level_statistics_with_given_term(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_statistics_current()
+    def test_get_department_level_statistics_current(self, m):
+        register_uris({'account': ['get_department_level_statistics_current']}, m)
+
+        response = self.account.get_department_level_statistics_current()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_statistics_completed()
+    def test_get_department_level_statistics_completed(self, m):
+        register_uris({'account': ['get_department_level_statistics_completed']}, m)
+
+        response = self.account.get_department_level_statistics_completed()
+
+        self.assertIsInstance(response, list)
