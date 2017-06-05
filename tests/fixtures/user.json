@@ -687,5 +687,24 @@
 			"id": 8,
 			"name": "User 8"
 		}
+	},
+	"search_recipients": {
+		"method": "GET",
+		"endpoint": "search/recipients",
+		"data": [
+  			{
+  				"id": "group_1",
+  				"name": "the group",
+  				"type": "context",
+  				"user_count": 3
+  			},
+  			{
+  				"id": 2,
+  				"name": "greg",
+  				"common_courses": {},
+  				"common_groups": {"1": ["Member"]}
+  			}
+		],
+		"status_code": 200
 	}
 }
