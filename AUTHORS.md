@@ -12,5 +12,8 @@ Patches and Suggestions
 - Devin Singh [@devints47](https://github.com/devints47)
 - Elise Heron [@thedarkestknight](https://github.com/thedarkestknight)
 - Ian Turgeon [@iturgeon](https://github.com/iturgeon)
+- John Raible [@rebelaide](https://github.com/rebelaide)
+- Nathan Dabu [@nathaned](https://github.com/nathaned)
 - Philip Carter [@phillyc](https://github.com/phillyc)
+- Tuan Pham [@tuanvpham](https://github.com/tuanvpham)
 - William Funk [@WilliamRADFunk](https://github.com/WilliamRADFunk)

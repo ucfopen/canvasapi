@@ -10,12 +10,18 @@ from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
+from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
+from canvasapi.file import File
+from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.quiz import Quiz
 from canvasapi.section import Section
+from canvasapi.tab import Tab
 from canvasapi.user import User
+from canvasapi.submission import Submission
+from canvasapi.user import UserDisplay
 from tests import settings
 from tests.util import register_uris
 
@@ -545,6 +551,232 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(response, ExternalTool)
         self.assertTrue(hasattr(response, 'id'))
         self.assertEqual(response.id, 20)
+
+    # get_course_level_participation_data()
+    def test_get_course_level_participation_data(self, m):
+        register_uris({'course': ['get_course_level_participation_data']}, m)
+
+        response = self.course.get_course_level_participation_data()
+
+        self.assertIsInstance(response, list)
+
+    # get_course_level_assignment_data()
+    def test_get_course_level_assignment_data(self, m):
+        register_uris({'course': ['get_course_level_assignment_data']}, m)
+
+        response = self.course.get_course_level_assignment_data()
+
+        self.assertIsInstance(response, list)
+
+    # get_course_level_student_summary_data()
+    def test_get_course_level_student_summary_data(self, m):
+        register_uris({'course': ['get_course_level_student_summary_data']}, m)
+
+        response = self.course.get_course_level_student_summary_data()
+
+        self.assertIsInstance(response, list)
+
+    # get_user_in_a_course_level_participation_data()
+    def test_get_user_in_a_course_level_participation_data(self, m):
+        register_uris({'course': ['get_user_in_a_course_level_participation_data']}, m)
+
+        response = self.course.get_user_in_a_course_level_participation_data(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_user_in_a_course_level_assignment_data()
+    def test_get_user_in_a_course_level_assignment_data(self, m):
+        register_uris({'course': ['get_user_in_a_course_level_assignment_data']}, m)
+
+        response = self.course.get_user_in_a_course_level_assignment_data(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_user_in_a_course_level_messaging_data()
+    def test_get_user_in_a_course_level_messaging_data(self, m):
+        register_uris({'course': ['get_user_in_a_course_level_messaging_data']}, m)
+
+        response = self.course.get_user_in_a_course_level_messaging_data(1)
+
+        self.assertIsInstance(response, list)
+
+    # submit_assignment()
+    def test_submit_assignment(self, m):
+        register_uris({'course': ['submit_assignment']}, m)
+
+        assignment_id = 1
+        sub_type = "online_upload"
+        sub_dict = {'submission_type': sub_type}
+        assignment = self.course.submit_assignment(assignment_id, sub_dict)
+
+        self.assertIsInstance(assignment, Submission)
+        self.assertTrue(hasattr(assignment, 'submission_type'))
+        self.assertEqual(assignment.submission_type, sub_type)
+
+    def test_subit_assignment_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.submit_assignment(1, {})
+
+    # list_submissions()
+    def test_list_submissions(self, m):
+        register_uris({'course': ['list_submissions']}, m)
+
+        assignment_id = 1
+        submissions = self.course.list_submissions(assignment_id)
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
+
+    # list_multiple_submission()
+    def test_list_multiple_submissions(self, m):
+        register_uris({'course': ['list_multiple_submissions']}, m)
+
+        submissions = self.course.list_multiple_submissions()
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
+
+    # get_submission()
+    def test_get_submission(self, m):
+        register_uris({'course': ['get_submission']}, m)
+
+        assignment_id = 1
+        user_id = 1
+        submission = self.course.get_submission(assignment_id, user_id)
+
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, 'submission_type'))
+
+    # update_submission()
+    def test_update_submission(self, m):
+        register_uris({'course': ['update_submission', 'get_submission']}, m)
+
+        assignment_id = 1
+        user_id = 1
+        submission = self.course.update_submission(
+            assignment_id,
+            user_id,
+            submission={'excuse': True}
+        )
+
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, 'excused'))
+
+    # list_gradeable_students()
+    def test_list_gradeable_students(self, m):
+        register_uris({'course': ['list_gradeable_students']}, m)
+
+        assignment_id = 1
+        students = self.course.list_gradeable_students(assignment_id)
+        student_list = [student for student in students]
+
+        self.assertEqual(len(student_list), 2)
+        self.assertIsInstance(student_list[0], UserDisplay)
+
+    # mark_submission_as_read
+    def test_mark_submission_as_read(self, m):
+        register_uris({'course': ['mark_submission_as_read']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.course.mark_submission_as_read(submission_id, user_id)
+
+        self.assertTrue(submission)
+
+    # mark_submission_as_unread
+    def test_mark_submission_as_unread(self, m):
+        register_uris({'course': ['mark_submission_as_unread']}, m)
+
+        submission_id = 1
+        user_id = 1
+        submission = self.course.mark_submission_as_unread(submission_id, user_id)
+
+        self.assertTrue(submission)
+
+    # list_external_feeds()
+    def test_list_external_feeds(self, m):
+        register_uris({'course': ['list_external_feeds']}, m)
+
+        feeds = self.course.list_external_feeds()
+        feed_list = [feed for feed in feeds]
+        self.assertEqual(len(feed_list), 2)
+        self.assertTrue(hasattr(feed_list[0], 'url'))
+        self.assertIsInstance(feed_list[0], ExternalFeed)
+
+    # create_external_feed()
+    def test_create_external_feed(self, m):
+        register_uris({'course': ['create_external_feed']}, m)
+
+        url_str = "http://example.com/myblog.rss"
+        response = self.course.create_external_feed(url=url_str)
+        self.assertIsInstance(response, ExternalFeed)
+
+    # delete_external_feed()
+    def test_delete_external_feed(self, m):
+        register_uris({'course': ['delete_external_feed']}, m)
+
+        ef_id = 1
+        deleted_ef = self.course.delete_external_feed(ef_id)
+
+        self.assertIsInstance(deleted_ef, ExternalFeed)
+        self.assertTrue(hasattr(deleted_ef, 'url'))
+        self.assertEqual(deleted_ef.display_name, "My Blog")
+
+    # list_files()
+    def test_course_files(self, m):
+        register_uris({'course': ['list_course_files', 'list_course_files2']}, m)
+
+        files = self.course.list_files()
+        file_list = [file for file in files]
+        self.assertEqual(len(file_list), 4)
+        self.assertIsInstance(file_list[0], File)
+
+    # get_folder()
+    def test_get_folder(self, m):
+        register_uris({'course': ['get_folder']}, m)
+
+        folder = self.course.get_folder(1)
+        self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
+
+    # list_folders()
+    def test_list_folders(self, m):
+        register_uris({'course': ['list_folders']}, m)
+
+        folders = self.course.list_folders()
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 2)
+        self.assertIsInstance(folder_list[0], Folder)
+
+    # create_folder()
+    def test_create_folder(self, m):
+        register_uris({'course': ['create_folder']}, m)
+
+        name_str = "Test String"
+        response = self.course.create_folder(name=name_str)
+        self.assertIsInstance(response, Folder)
+
+    # list_tabs()
+    def test_list_tabs(self, m):
+        register_uris({'course': ['list_tabs']}, m)
+
+        tabs = self.course.list_tabs()
+        tab_list = [tab for tab in tabs]
+        self.assertEqual(len(tab_list), 2)
+        self.assertIsInstance(tab_list[0], Tab)
+
+    # update_tab()
+    def test_update_tab(self, m):
+        register_uris({'course': ['update_tab']}, m)
+
+        tab_id = "pages"
+        new_position = 3
+        tab = self.course.update_tab(tab_id, position=new_position)
+
+        self.assertIsInstance(tab, Tab)
+        self.assertEqual(tab.position, 3)
 
 
 @requests_mock.Mocker()

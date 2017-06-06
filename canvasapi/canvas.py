@@ -1,6 +1,7 @@
 from canvasapi.account import Account
 from canvasapi.course import Course
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
@@ -755,3 +756,58 @@ class Canvas(object):
             'appointment_groups/%s/groups' % (appointment_group_id),
             **combine_kwargs(**kwargs)
         )
+
+    def get_folder(self, folder_id):
+        """
+        Returns the details for a folder
+
+        :calls: `GET /api/v1/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
+
+        :param folder_id: The ID of the folder to retrieve.
+        :type folder_id: int
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self.__requester.request(
+            'GET',
+            'folders/%s' % (folder_id)
+        )
+        return Folder(self.__requester, response.json())
+
+    def search_recipients(self, **kwargs):
+        """
+        Find valid recipients (users, courses and groups) that the current user
+        can send messages to.
+        Returns a list of mixed data types.
+
+        :calls: `GET /api/v1/search/recipients  \
+        <https://canvas.instructure.com/doc/api/search.html#method.search.recipients>`_
+
+        :rtype: `list`
+        """
+        if 'search' not in kwargs:
+            kwargs['search'] = ' '
+
+        response = self.__requester.request(
+            'GET',
+            'search/recipients',
+            **combine_kwargs(**kwargs)
+        )
+        return response.json()
+
+    def search_all_courses(self, **kwargs):
+        """
+        List all the courses visible in the public index.
+        Returns a list of dicts, each containing a single course.
+
+        :calls: `GET /api/v1/search/all_courses \
+        <https://canvas.instructure.com/doc/api/search.html#method.search.all_courses>`_
+
+        :rtype: `list`
+        """
+        response = self.__requester.request(
+            'GET',
+            'search/all_courses',
+            **combine_kwargs(**kwargs)
+        )
+        return response.json()

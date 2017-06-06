@@ -7,6 +7,27 @@
 		},
 		"status_code": 200
 	},
+	"create_external_feed": {
+		"method": "POST",
+		"endpoint": "courses/1/external_feeds",
+		"data": {
+			"id": 1,
+			"display_name": "My Blog",
+			"url": "http://example.com/myblog.rss"
+		},
+		"status_code": 200
+	},
+	"create_folder": {
+        "method": "POST",
+        "endpoint": "courses/1/folders",
+        "data": {
+            "id": 2,
+            "name": "Test String",
+            "locked": false,
+            "hidden": false
+        },
+        "status_code": 200
+  },
 	"create_quiz": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes",
@@ -32,6 +53,16 @@
 		"endpoint": "courses/1",
 		"data": {
 			"delete": true
+		},
+		"status_code": 200
+	},
+	"delete_external_feed": {
+		"method": "DELETE",
+		"endpoint": "courses/1/external_feeds/1",
+		"data": {
+			"id": 1,
+			"display_name": "My Blog",
+			"url": "http://example.com/myblog.rss"
 		},
 		"status_code": 200
 	},
@@ -181,6 +212,18 @@
 		],
 		"status_code": 200
 	},
+	"get_folder": {
+        "method": "GET",
+        "endpoint": "courses/1/folders/1",
+        "data": {
+            "id": 1,
+            "files_count": 10,
+            "folders_count": 2,
+            "name": "Folder 1",
+            "full_name": "Folder 1"
+        },
+        "status_code": 200
+    },
 	"get_quiz": {
 		"method": "GET",
 		"endpoint": "courses/1/quizzes/1",
@@ -324,6 +367,81 @@
 		],
 		"status_code": 200
 	},
+	"list_external_feeds": {
+		"method": "GET",
+		"endpoint": "courses/1/external_feeds",
+		"data": [
+			{
+				"id": 1,
+				"display_name": "My Blog",
+				"url": "http://example.com/myblog.rss"
+			},
+			{
+				"id": 2,
+				"display_name": "My Blog 2",
+				"url": "http://example.com/myblog2.rss"
+			}
+		],
+        "status_code": 200
+	},
+	"list_course_files": {
+		"method": "GET",
+		"endpoint": "courses/1/files",
+		"data": [
+			{
+				"id": 1,
+				"size": 2939,
+				"display_name": "File1.txt"
+			},
+			{
+				"id": 2,
+				"size": 18380,
+				"display_name": "File_2.png"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/courses/1/files?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_course_files2": {
+		"method": "GET",
+		"endpoint": "courses/1/files?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"display_name": "File 3.jpg",
+				"size": 1298
+			},
+			{
+				"id": 4,
+				"display_name": "File 4.docx",
+				"size": 88920
+			}
+		],
+		"status_code": 200
+	},
+	"list_folders": {
+        "method": "GET",
+        "endpoint": "courses/1/folders",
+        "data": [
+            {
+                "id": 2,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 2",
+                "full_name": "course_files/Folder 2"
+            },
+            {
+                "id": 3,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 3",
+                "full_name": "course_files/Folder 3"
+            }
+        ],
+        "status_code": 200
+  },
 	"list_quizzes": {
 		"method": "GET",
 		"endpoint": "courses/1/quizzes",
@@ -866,6 +984,339 @@
 			"reorder": true,
 			"order": "1, 2, 3"
 		},
+		"status_code": 200
+	},
+	"get_course_level_participation_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/activity",
+		"data": [
+			{ 
+				"date": "2012-01-24",
+				"participations": 3,
+				"views": 10
+			}
+		]
+	},
+	"get_course_level_assignment_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/assignments",
+		"data": [
+			{
+				"assignment_id": 1234,
+				"title": "Assignment 1",
+				"points_possible": 10,
+				"due_at": "2012-01-25T22:00:00-07:00",
+				"unlock_at": "2012-01-20T22:00:00-07:00",
+				"muted": false,
+				"min_score": 2,
+				"max_score": 10,
+				"median": 7,
+				"first_quartile": 4,
+				"third_quartile": 8,
+				"tardiness_breakdown": {
+					"on_time": 0.75,
+					"missing": 0.1,
+					"late": 0.15
+				}
+			},
+			{
+				"assignment_id": 1235,
+				"title": "Assignment 2",
+				"points_possible": 15,
+				"due_at": "2012-01-26T22:00:00-07:00",
+				"unlock_at": null,
+				"muted": true,
+				"min_score": 8,
+				"max_score": 8,
+				"median": 8,
+				"first_quartile": 8,
+				"third_quartile": 8,
+				"tardiness_breakdown": {
+					"on_time": 0.65,
+					"missing": 0.12,
+					"late": 0.23,
+					"total": 275
+				}
+			}
+		]
+	},
+	"get_course_level_student_summary_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/student_summaries",
+		"data": [
+			{
+				"id": 2346,
+				"page_views": 351,
+				"page_views_level": "1",
+				"max_page_view": 415,
+				"participations": 1,
+				"participations_level": "3",
+				"max_participations": 10,
+				"tardiness_breakdown": {
+					"total": 5,
+					"on_time": 3,
+					"late": 0,
+					"missing": 2,
+					"floating": 0
+				}
+			},
+			{
+				"id": 2345,
+				"page_views": 124,
+				"participations": 15,
+				"tardiness_breakdown": {
+					"total": 5,
+					"on_time": 1,
+					"late": 2,
+					"missing": 3,
+					"floating": 0
+				}
+			}
+		]
+	},
+	"get_user_in_a_course_level_participation_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/users/1/activity",
+		"data": [
+			{
+				"page_views": {
+					"2012-01-24T13:00:00-00:00": 19,
+					"2012-01-24T14:00:00-00:00": 13,
+					"2012-01-27T09:00:00-00:00": 23
+			},
+				"participations": [
+					{
+						"created_at": "2012-01-21T22:00:00-06:00",
+						"url": "https://canvas.example.com/path/to/canvas"
+					},
+					{
+						"created_at": "2012-01-27T22:00:00-06:00",
+						"url": "https://canvas.example.com/path/to/canvas"
+					}
+				]
+			}
+		]
+	},
+	"get_user_in_a_course_level_assignment_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/users/1/assignments",
+		"data": [
+			{
+				"assignment_id": 1234,
+				"title": "Assignment 1",
+				"points_possible": 10,
+				"due_at": "2012-01-25T22:00:00-07:00",
+				"unlock_at": "2012-01-20T22:00:00-07:00",
+				"muted": false,
+				"min_score": 2,
+				"max_score": 10,
+				"median": 7,
+				"first_quartile": 4,
+				"third_quartile": 8,
+				"module_ids": [
+					1,
+					2
+				],
+				"submission": {
+					"submitted_at": "2012-01-22T22:00:00-07:00",
+					"score": 10
+				}
+			},
+			{
+				"assignment_id": 1235,
+				"title": "Assignment 2",
+				"points_possible": 15,
+				"due_at": "2012-01-26T22:00:00-07:00",
+				"unlock_at": null,
+				"muted": true,
+				"min_score": 8,
+				"max_score": 8,
+				"median": 8,
+				"first_quartile": 8,
+				"third_quartile": 8,
+				"module_ids": [
+					1
+				],
+				"submission": {
+					"submitted_at": "2012-01-22T22:00:00-07:00"
+				}
+			}
+		]
+	},
+	"get_user_in_a_course_level_messaging_data": {
+		"method": "GET",
+		"endpoint": "courses/1/analytics/users/1/communication",
+		"data": [
+			{
+				"2012-01-24":{
+					"instructorMessages":1,
+					"studentMessages":2
+				},
+				"2012-01-27":{
+					"studentMessages":1
+				}
+			}
+		]
+	},
+	"list_tabs": {
+		"method": "GET",
+		"endpoint": "courses/1/tabs",
+		"data": [
+			{
+			    "id": "home",
+			    "html_url": "/courses/1",
+			    "position": 1,
+			    "visibility": "public",
+			    "label": "Home",
+			    "type": "internal"
+		  	},
+			{
+			    "id": "pages",
+			    "html_url": "/courses/1/wiki",
+			    "position": 2,
+			    "visibility": "public",
+			    "label": "Pages",
+			    "type": "internal"
+			}
+		],
+		"status_code": 200
+	},
+	"submit_assignment": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/submissions",
+		"data": {
+			"id": 1,
+			"assignment_id": 1,
+			"user_id": 1,
+			"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+			"submission_type": "online_upload"
+		},
+		"status_code": 200
+	},
+	"list_submissions": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/submissions",
+		"data": [
+			{
+				"id": 1,
+				"assignments_id": 1,
+				"user_id": 1,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"submission_type": "online_upload"
+			},
+			{
+				"id": 2,
+				"assignments_id": 1,
+				"user_id": 2,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/2",
+				"submission_type": "online_upload"
+			}
+		],
+		"status_code": 200
+	},
+	"list_multiple_submissions": {
+		"method": "GET",
+		"endpoint": "courses/1/students/submissions",
+		"data": [
+			{
+				"id": 1,
+				"assignments_id": 1,
+				"user_id": 1,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"submission_type": "online_upload"
+			},
+			{
+				"id": 2,
+				"assignments_id": 1,
+				"user_id": 2,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/2",
+				"submission_type": "online_upload"
+			}
+		],
+		"status_code": 200
+	},
+	"get_submission": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/submissions/1",
+		"data": {
+				"id": 1,
+				"assignments_id": 1,
+				"user_id": 1,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"submission_type": "online_upload"
+		},
+		"status_code": 200
+	},
+	"list_gradeable_students": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/gradeable_students",
+		"data": [
+			{
+				"id": 1,
+				"display_name": "Student 1"
+			},
+			{
+				"id": 2,
+				"display_name": "Student 2"
+			}
+		],
+		"status_code": 200
+	},
+	"update_tab": {
+		"method": "PUT",
+		"endpoint": "courses/1/tabs/pages",
+		"data": {
+			"id": "pages",
+		    "html_url": "/courses/1/wiki",
+		    "position": 3,
+		    "visibility": "public",
+		    "label": "Pages",
+		    "type": "internal"
+		},
+		"status_code": 200
+	},
+	"update_submission": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1/submissions/1",
+		"data": {
+				"id": 1,
+				"assignments_id": 1,
+				"user_id": 1,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"submission_type": "online_upload",
+				"excused": true
+		},
+		"status_code": 200
+	},
+	"mark_submission_as_read": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1/submissions/1/read",
+		"status_code": 204
+	},
+	"mark_submission_as_unread": {
+		"method": "DELETE",
+		"endpoint": "courses/1/assignments/1/submissions/1/read",
+		"status_code": 204
+	},
+	"search_all_courses": {
+		"method": "GET",
+		"endpoint": "search/all_courses",
+		"data": [
+			{
+				"course":
+				{
+					"id": 1,
+					"name": "Course 1"
+				}
+			},
+			{
+				"course":
+				{
+					"id": 2,
+					"name": "Course 2"
+				}
+			}
+		],
 		"status_code": 200
 	}
 }

@@ -1,58 +1,116 @@
-# canvasapi
-canvasapi is a Python package that allows for simple access to the Instructure Canvas API.
+[![CanvasAPI on PyPI](https://img.shields.io/pypi/v/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
+[![License](https://img.shields.io/pypi/l/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
+[![Build Status](https://travis-ci.org/ucfopen/canvasapi.svg?branch=master)](https://travis-ci.org/ucfopen/canvasapi)
+[![Coverage Status](https://coveralls.io/repos/github/ucfopen/canvasapi/badge.svg?branch=master)](https://coveralls.io/github/ucfopen/canvasapi?branch=master)
+[![Join UCF Open Slack Discussions](https://ucf-open-slackin.herokuapp.com/badge.svg)](https://ucf-open-slackin.herokuapp.com/)
+
+# CanvasAPI
+CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](https://canvas.instructure.com/doc/api/index.html). The library enables developers to programmatically manage Canvas courses, users, gradebooks, and more.
 
 ## Installation
+You can install CanvasAPI with pip:
+
 `pip install canvasapi`
 
-## Getting Started
-The first thing to do is open a connection with Canvas. You will need to provide the URL for the API endpoint of your Canvas instance as well as a valid API key.
+## Quickstart
+Getting started with CanvasAPI is easy.
+
+Like most API clients, CanvasAPI exposes a single class that provides access to the rest of the API: `Canvas`.
+
+The first thing to do is instantiate a new `Canvas` object by providing your Canvas instance’s root API URL and a valid API key:
 ```python
+# Import the Canvas class
 from canvasapi import Canvas
 
-api_url = "https://example.com/api/v1/"  # URL of API for your Canvas instance
-api_key = "p@$$w0rd"  # Your API key
+# Canvas API URL
+API_URL = "https://example.com/api/v1/"
+# Canvas API key
+API_KEY = "p@$$w0rd"
 
-canvas = Canvas(api_url, api_key)
+# Initialize a new Canvas object
+canvas = Canvas(API_URL, API_KEY)
 ```
 
-You can now use `canvas` to begin making API calls. Here are some examples:
+You can now use `canvas` to begin making API calls.
+
+### Working with Canvas Objects
+CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://pythonhosted.org/canvasapi/). Below, you’ll find a few examples of common CanvasAPI use cases.
+
+#### Course objects
+Courses can be retrieved from the API:
 ```python
-course = canvas.get_course('1111111')
+# Grab course 123456
+>>> course = canvas.get_course(123456)
+
+# Access the course's name
+>>> course.name
+'Test Course'
+
+# Update the course's name
+>>> course.update(name='New Course Name')
 ```
+
+See our documentation on [keyword arguments](#keyword-arguments) for more information about how `course.update()` handles the `name` argument.
+
+#### User objects
+Individual users can be pulled from the API as well:
+```python
+# Grab user 123
+>>> user = canvas.get_user(123)
+
+# Access the user's name
+>>> user.name
+'Test User'
+
+# Retrieve a list of courses the user is enrolled in
+>>> courses = user.get_courses()
+
+# Grab a different user by their SIS ID
+>>> sis_user = canvas.get_user('some_user', 'sis_login_id')
+```
+
+#### Paginated Lists
+Some calls, like the `user.get_courses()` call above, will request multiple objects from Canvas’s API. CanvasAPI collects these objects in a `PaginatedList` object. `PaginatedList` generally acts like a regular Python list. You can grab an element by index, iterate over it, and take a slice of it.
+
+**Warning**: `PaginatedList` lazily loads its elements. Unfortunately, there’s no way to determine the exact number of records Canvas will return without traversing the list fully. This means that `PaginatedList` isn’t aware of its own length and negative indexing is not currently supported.
+
+Let’s look at how we can use the `PaginatedList` returned by our `get_courses()` call:
 
 ```python
-user = canvas.get_user('5555555')
-print user.name
+# Retrieve a list of courses the user is enrolled in
+>>> courses = user.get_courses()
+
+>>> print courses
+<PaginatedList of type Course>
+
+# Access the first element in our list. You'll notice the first call takes a moment, but the next N-1 elements (where N = the per_page argument supplied; the default is 10) will be instantly accessible
+>>> print courses[0]
+TST101 Test Course (1234567)
+
+# Iterate over our course list
+>>> for course in courses:
+         print course
+
+TST101 Test Course 1 (1234567)
+TST102 Test Course 2 (1234568)
+TST103 Test Course 3 (1234569)
+
+# Take a slice of our course list
+>>> courses[:2]
+[TST101 Test Course 1 (1234567), TST102 Test Course 2 (1234568)]
 ```
 
-Some calls will return a `PaginatedList` object instead of a single object.
-```python
-users = course.get_users()
-print users
-```
+#### Keyword arguments
 
-```python
-<PaginatedList of type User>
-```
-
-This `PaginatedList` object is iterable. However, it doesn't contain any data until called. Calls to the API are made as-needed and results are stored in the object. You can use it like this:
-
-```python
-for user in users:
-    print user.name
-```
-
-You can also use indices:
-
-```python
-print users[2].name
-```
-
-And even slices!
+Most of Canvas’ API endpoints accept a variety of arguments. CanvasAPI allows developers to insert keyword arguments when making calls to endpoints that accept arguments.
 
 ```python
-for user in users[2:]:
-	print user.name
-```
+# Get all of the active courses a user is currently enrolled in
+>>> courses = user.get_courses(enrollment_status='active')
 
-**Warning**: Presently, there is no way to determine the exact number of records Canvas might return without brute forcing through all the API calls. This means that `PaginatedList` is not aware of it's own length and negative indicies and slices (`users[-1]`, `users[-1:]`, etc.) are not possible at this time.
+# Get all of the courses that a user is enrolled in as a Teaching Assistant
+>>> courses = user.get_courses(enrollment_type='TaEnrollment')
+
+# Fetch 50 objects per page when making calls that return a PaginatedList
+>>> courses = user.get_courses(per_page=50)
+```
