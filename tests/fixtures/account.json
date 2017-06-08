@@ -916,5 +916,78 @@
 				"assignments": 290
 			}
 		]
+	},
+	"list_authentication_providers": {
+		"method": "GET",
+		"endpoint": "accounts/1/authentication_providers",
+		"data": [
+			{
+				"id": 1,
+				"auth_type": "saml",
+				"position": 1
+			},
+			{
+				"id": 2,
+				"auth_type": "facebook",
+				"position": 1
+			}
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/accounts/1/authentication_providers/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_authentication_providers_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/authentication_providers/?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"auth_type": "canvas",
+				"position": 1
+			},
+			{
+				"id": 4,
+				"auth_type": "microsoft",
+				"position": 1
+			}
+		],
+		"status_code": 200
+	},
+	"add_authentication_providers": {
+		"method": "POST",
+		"endpoint": "accounts/1/authentication_providers",
+		"data":{
+			"id": 1,
+			"auth_type": "saml",
+			"position": 1
+		},
+		"status_code": 200
+	},
+	"get_authentication_providers": {
+		"method": "GET",
+		"endpoint": "accounts/1/authentication_providers/1",
+		"data": {
+			"id": 1,
+			"auth_type": "saml",
+			"position": 1
+		},
+		"status_code": 200
+	},
+	"show_account_auth_settings": {
+		"method": "GET",
+		"endpoint": "accounts/1/sso_settings",
+		"data": {
+			"login_handle_name": "Username",
+			"change_password_url": "https://example.com/reset_password"
+		}
+	},
+	"update_account_auth_settings": {
+		"method": "PUT",
+		"endpoint": "accounts/1/sso_settings",
+		"data": {
+			"login_handle_name": "Username",
+			"change_password_url": "https://example.com/reset_password"
+		}
 	}
 }
