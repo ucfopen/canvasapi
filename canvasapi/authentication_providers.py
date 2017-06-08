@@ -22,7 +22,10 @@ class AuthenticationProviders(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-        return AuthenticationProviders(self._requester, response.json())
+        if response.json().get('auth_type'):
+            super(AuthenticationProviders, self).set_attributes(response.json())
+
+        return response.json().get('auth_type')
 
     def delete(self):
         """

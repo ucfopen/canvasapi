@@ -31,17 +31,10 @@ class TestAuthenticationProviders(unittest.TestCase):
     def test_update_authentication_providers(self, m):
         register_uris({'authentication_providers': ['update_authentication_providers']}, m)
 
-        auth_type = 'New Authentication Providers'
+        new_auth_type = 'New Authentication Providers'
 
-        updated_authentication_providers = self.authentication_providers.update(
-            authentication_providers={
-                "auth_type": auth_type
-            }
-        )
-
-        self.assertIsInstance(updated_authentication_providers, AuthenticationProviders)
-        self.assertTrue(hasattr(updated_authentication_providers, 'auth_type'))
-        self.assertEqual(updated_authentication_providers.auth_type, auth_type)
+        self.authentication_providers.update(authentication_providers={"auth_type": new_auth_type})
+        self.assertEqual(self.authentication_providers.auth_type, new_auth_type)
 
     # delete()
     def test_delete_authentication_providers(self, m):
