@@ -44,7 +44,7 @@ class CommunicationChannel(CanvasObject):
                 self.id
             )
         )
-        return response.json['categories']
+        return response.json()['categories']
 
     def get_preference(self, notification):
         """
