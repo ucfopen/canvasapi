@@ -34,7 +34,7 @@ canvas = Canvas(API_URL, API_KEY)
 You can now use `canvas` to begin making API calls.
 
 ### Working with Canvas Objects
-CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://pythonhosted.org/canvasapi/). Below, you’ll find a few examples of common CanvasAPI use cases.
+CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://pythonhosted.org/canvasapi/class-reference.html). Below, you’ll find a few examples of common CanvasAPI use cases.
 
 #### Course objects
 Courses can be retrieved from the API:
@@ -83,7 +83,11 @@ Let’s look at how we can use the `PaginatedList` returned by our `get_courses(
 >>> print courses
 <PaginatedList of type Course>
 
-# Access the first element in our list. You'll notice the first call takes a moment, but the next N-1 elements (where N = the per_page argument supplied; the default is 10) will be instantly accessible
+# Access the first element in our list.
+#
+# You'll notice the first call takes a moment, but the next N-1
+# elements (where N = the per_page argument supplied; the default is 10)
+# will be instantly accessible.
 >>> print courses[0]
 TST101 Test Course (1234567)
 
@@ -102,7 +106,7 @@ TST103 Test Course 3 (1234569)
 
 #### Keyword arguments
 
-Most of Canvas’ API endpoints accept a variety of arguments. CanvasAPI allows developers to insert keyword arguments when making calls to endpoints that accept arguments.
+Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows developers to insert keyword arguments when making calls to endpoints that accept arguments.
 
 ```python
 # Get all of the active courses a user is currently enrolled in
