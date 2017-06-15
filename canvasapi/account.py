@@ -818,6 +818,103 @@ class Account(CanvasObject):
         )
         return response.json()
 
+    def add_authentication_providers(self, **kwargs):
+        """
+        Add external authentication providers for the account
+
+        :calls: `POST /api/v1/accounts/:account_id/authentication_providers \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.create>`_
+
+        :rtype: :class:`canvasapi.authentication_providers.AuthenticationProviders`
+        """
+        from canvasapi.authentication_providers import AuthenticationProviders
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/authentication_providers' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        authentication_providers_json = response.json()
+        authentication_providers_json.update({'account_id': self.id})
+
+        return AuthenticationProviders(self._requester, authentication_providers_json)
+
+    def list_authentication_providers(self, **kwargs):
+        """
+        Return the list of authentication providers
+
+        :calls: `GET /api/v1/accounts/:account_id/authentication_providers \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.authentication_providers.AuthenticationProviders`
+        """
+        from canvasapi.authentication_providers import AuthenticationProviders
+
+        return PaginatedList(
+            AuthenticationProviders,
+            self._requester,
+            'GET',
+            'accounts/%s/authentication_providers' % (self.id),
+            {'account_id': self.id},
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_authentication_providers(self, authentication_providers_id, **kwargs):
+        """
+        Get the specified authentication provider
+
+        :calls: `GET /api/v1/accounts/:account_id/authentication_providers/:id \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.show>`_
+
+        :rtype: :class:`canvasapi.authentication_providers.AuthenticationProviders`
+        """
+        from canvasapi.authentication_providers import AuthenticationProviders
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/authentication_providers/%s' % (self.id, authentication_providers_id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return AuthenticationProviders(self._requester, response.json())
+
+    def show_account_auth_settings(self, **kwargs):
+        """
+        Return the current state of each account level setting
+
+        :calls: `GET /api/v1/accounts/:account_id/sso_settings \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.show_sso_settings>`_
+
+        :rtype: :class:`canvasapi.account.SSOSettings`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/sso_settings' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return SSOSettings(self._requester, response.json())
+
+    def update_account_auth_settings(self, **kwargs):
+        """
+        Return the current state of account level after updated
+
+        :calls: `PUT /api/v1/accounts/:account_id/sso_settings \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.update_sso_settings>`_
+
+        :rtype: :class:`canvasapi.account.SSOSettings`
+        """
+
+        response = self._requester.request(
+            'PUT',
+            'accounts/%s/sso_settings' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return SSOSettings(self._requester, response.json())
+
 
 class AccountNotification(CanvasObject):
 
@@ -835,3 +932,9 @@ class Role(CanvasObject):
 
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
+
+
+class SSOSettings(CanvasObject):
+
+    def __str___(self):  # pragma: no cover
+        return"{} ({})".format(self.login_handle_name, self.change_password_url)

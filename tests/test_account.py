@@ -4,7 +4,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.account import Account, AccountNotification, AccountReport, Role
+from canvasapi.account import Account, AccountNotification, AccountReport, Role, SSOSettings
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
@@ -13,6 +13,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.group import Group, GroupCategory
 from canvasapi.user import User
 from canvasapi.login import Login
+from canvasapi.authentication_providers import AuthenticationProviders
 from tests import settings
 from tests.util import register_uris
 
@@ -500,3 +501,53 @@ class TestAccount(unittest.TestCase):
         response = self.account.get_department_level_statistics_completed()
 
         self.assertIsInstance(response, list)
+
+    # list_authentication_providers()
+    def test_list_authentication_providers(self, m):
+        requires = {'account': ['list_authentication_providers',
+                                'list_authentication_providers_2']}
+        register_uris(requires, m)
+
+        authentication_providers = self.account.list_authentication_providers()
+        authentication_providers_list = [
+            authentication_provider for authentication_provider in authentication_providers
+        ]
+
+        self.assertEqual(len(authentication_providers_list), 4)
+        self.assertIsInstance(authentication_providers_list[0], AuthenticationProviders)
+        self.assertTrue(hasattr(authentication_providers_list[0], 'auth_type'))
+        self.assertTrue(hasattr(authentication_providers_list[0], 'position'))
+
+    # add_authentication_providers()
+    def test_add_authentication_providers(self, m):
+        register_uris({'account': ['add_authentication_providers']}, m)
+
+        new_authentication_provider = self.account.add_authentication_providers()
+
+        self.assertIsInstance(new_authentication_provider, AuthenticationProviders)
+        self.assertTrue(hasattr(new_authentication_provider, 'auth_type'))
+        self.assertTrue(hasattr(new_authentication_provider, 'position'))
+
+    # get_authentication_providers()
+    def test_get_authentication_providers(self, m):
+        register_uris({'account': ['get_authentication_providers']}, m)
+
+        response = self.account.get_authentication_providers(1)
+
+        self.assertIsInstance(response, AuthenticationProviders)
+
+    # show_account_auth_settings()
+    def test_show_account_auth_settings(self, m):
+        register_uris({'account': ['show_account_auth_settings']}, m)
+
+        response = self.account.show_account_auth_settings()
+
+        self.assertIsInstance(response, SSOSettings)
+
+    # update_account_auth_settings()
+    def test_update_account_auth_settings(self, m):
+        register_uris({'account': ['update_account_auth_settings']}, m)
+
+        response = self.account.update_account_auth_settings()
+
+        self.assertIsInstance(response, SSOSettings)
