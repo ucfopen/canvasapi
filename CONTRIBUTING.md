@@ -1,4 +1,4 @@
-# Contributing to canvasapi
+# Contributing to CanvasAPI
 
 Thanks for your interest in contributing!
 
@@ -7,39 +7,44 @@ Below you'll find guidelines for contributing that will keep our codebase clean 
 ## Table of Contents
 
 * [How can I contribute?](#how-can-i-contribute)
-	* [Bug reports](#bug-reports)
-	* [Resolving issues](#resolving-issues)
-* [Making your first contribution](#making-your-first-contribution)
-	* [Setting up the environment](#setting-up-the-environment)
-	* [Writing tests](#writing-tests)
-	* [Running tests / coverage reports](#running-tests-coverage-reports)
+    * [Bug reports](#bug-reports)
+    * [Resolving issues](#resolving-issues)
+    * [Making your first contribution](#making-your-first-contribution)
+        * [Setting up the environment](#setting-up-the-environment)
+        * [Writing tests](#writing-tests)
+            * [API Coverage Tests](#api-coverage-tests)
+            * [Engine tests](#engine-tests)
+        * [Running tests / coverage reports](#running-tests-coverage-reports)
 * [Code style guidelines](#code-style-guidelines)
-	* [Foolish consistency](#foolish-consistency)
-	* [Method docstrings](#method-docstrings)
-		* [Docstring examples](#docstring-examples)
+    * [Foolish consistency](#foolish-consistency)
+    * [Method docstrings](#method-docstrings)
+        * [Descriptions](#descriptions)
+        * [Links to related API endpoints](#links-to-related-api-endpoints)
+        * [Parameters](#parameters)
+        * [Returns](#returns)
+        * [Docstring examples](#docstring-examples)
 
 ## How can I contribute?
 
 ### Bug Reports
 
-#### Reporting bugs
 Bug reports are awesome. Writing quality bug reports helps us identify issues and solve them even faster. You can submit bug reports directly to our [issue tracker](https://github.com/ucfopen/canvasapi/issues).
 
 Here are a few things worth mentioning when making a report:
 
-* What **version** of canvasapi are you running? (Use `pip list` -- we try to build frequently so "latest" isn't always accurate.)
+* What **version** of CanvasAPI are you running? (Use `pip show canvasapi` -- we try to build frequently so "latest" isn't always accurate.)
 * What steps can be taken to **reproduce the issue**?
 * **Detail matters.** Try not to be too be verbose, but generally the more information, the better!
 
 ### Resolving issues
+
 We welcome pull requests for bug fixes and new features! Feel free to browse our open, unassigned issues and assign yourself to them. You can also filter by labels:
 
-* [simple](https://github.com/ucfopen/canvasapi/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=simple) -- easier issues to start working on; great for getting familiar with the codebase.
-* [api coverage](https://github.com/ucfopen/canvasapi/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=api+coverage) -- covering new endpoints or updating existing ones.
-* [internal](https://github.com/ucfopen/canvasapi/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=internal) -- updates to the engine to improve performance.
-* [major](https://github.com/ucfopen/canvasapi/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=major) -- difficult or major changes or additions that require familiarity with the library.
-* [bug](https://github.com/ucfopen/canvasapi/issues?scope=all&sort=id_desc&state=opened&utf8=%E2%9C%93&label_name%5B%5D=bug) -- happy little code accidents.
-
+* [simple](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Asimple) -- easier issues to start working on; great for getting familiar with the codebase.
+* [api coverage](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Aapi-coverage) -- covering new endpoints or updating existing ones.
+* [internal](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Ainternal) -- updates to the engine to improve performance.
+* [major](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Amajor) -- difficult or major changes or additions that require familiarity with the library.
+* [bug](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Abug) -- happy little code accidents.
 
 Once you've found an issue you're interested in tackling, take a look at our [first contribution tutorial](#making-your-first-contribution) for information on our pull request policy.
 
@@ -63,88 +68,100 @@ Tests are a critical part of building applications, and we [pity the fool who do
 
 You'll notice our tests live in the creatively named `tests` directory. Within that directory, you'll see several files in the form `test_[class].py` and another directory named `fixtures`. Depending on the scope of the issue you're solving, you'll be writing two different kinds of tests.
 
-##### API coverage tests
+##### API Coverage Tests
 
-We use the [requests-mock](https://pypi.python.org/pypi/requests-mock) library to simulate API responses, and those mock responses live inside the `fixtures` directory in JSON files. Each file's name describes the endpoints that are contained within (course endpoints live in `course.json`, for example). Those fixtures are loaded by name within a test Python file. Let's look at `test_course.py`:
-
-```python
-  @classmethod
-   def setUpClass(self):
-       requires = {
-           'course': [
-               'create', 'create_assignment', 'deactivate_enrollment',
-               'enroll_user', 'get_all_assignments', 'get_all_assignments2',
-               'get_assignment_by_id'
-           ],
-           'external_tool': ['get_by_id_course'],
-           'quiz': ['get_by_id'],
-           'user': ['get_by_id']
-       }
-       
-	    adapter = requests_mock.Adapter()
-        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY, adapter)
-        register_uris(settings.BASE_URL, requires, adapter)
-```
-
-This file tests several different endpoints, all of which are included in a `requires` dict and then loaded by the `register_uris()` function in `tests.util`. The keys in the dictionary are the file names of the JSON files (without the extension) and the values are lists with elements that match the related keys in the JSON file.
-Once they're loaded with `register_uris()`, any attempt to access a URL that matches will return the local fixture rather than trying to access a remote server.
-
-Let's look at the first required fixture, `course create_quiz`:
-
-```
-"create": {
-	"method": "POST",
-	"endpoint": "courses/1/quizzes",
-	"data": {
-		"id": 1,
-		"title": "Newer Title"
-	},
-	"status_code": 200
-}
-```
-
-While we're at it, let's pull out the code in the library for creating a quiz:
+We use the [requests-mock](https://pypi.python.org/pypi/requests-mock) library to simulate API responses. Those mock responses live inside the `fixtures` directory in JSON files. Each files name describes the endpoints that are contained within. For example, course endpoints live in `course.json`. These fixtures are loaded on demand in a given test. Let's look at `test_get_user` in `test_course.py` as an example:
 
 ```python
-def create_quiz(self, title, **kwargs):
-	from quiz import Quiz
-	response = self._requester.request(
-	    'POST',
-	    'courses/%s/quizzes' % (self.id),
-	    **combine_kwargs(**kwargs)
-	)
+# get_user()
+def test_get_user(self, m):
+    register_uris({'course': ['get_user']}, m)
+
+    user = self.course.get_user(1)
+
+    self.assertIsInstance(user, User)
+    self.assertTrue(hasattr(user, 'name'))
 ```
 
-This code sends a POST request to the URL `courses/:course_id/quizzes`. With that information, we know that our fixture needs to contain `"method": "POST"` and `"endpoint": "courses/1/quizzes"`. You may be wondering where the ID (`courses/1`) came from. In our setUpClass method in `test_course.py`, we define a few starting objects to work with:
+Breakdown:
 
 ```python
-self.course = self.canvas.get_course(1)
-self.quiz = self.course.get_quiz(1)
-self.user = self.canvas.get_user(1)
+# get_user()
 ```
 
-For consistency, it's easiest to call give your fixture objects an ID of 1 unless you need a second object.
+It is common to have multiple tests for a single method. All related tests should be grouped together under a single comment with the name of the method being tested.
 
-In the actual test, we use the `create_quiz()` method of `Course` to create a quiz with some data:
+---
 
 ```python
-# create_quiz()
-def test_create_quiz(self):
-	title = 'Newer Title'
-	new_quiz = self.course.create_quiz(self.course.id, quiz={'title': title})
-
-	self.assertIsInstance(new_quiz, Quiz)
-	self.assertTrue(hasattr(new_quiz, 'title'))
-	self.assertEqual(new_quiz.title, title)
-	self.assertTrue(hasattr(new_quiz, 'course_id'))
-	self.assertEqual(new_quiz.course_id, self.course.id)
+def test_get_user(self, m):
 ```
 
-Take a look at the existing tests to get a feel for the process. Once you've written a few, it should be second nature.
+This is a standard Python `unittest` test method with one addition: the `m` variable is passed to all methods with names starting with `test`. `m` is a Mocker object that can be used to override the routing of HTTP requests.
+
+---
+
+```python
+register_uris({'course': ['get_user']}, m)
+```
+
+The `register_uris` function tells a mocker object which fixtures to load. It takes in two arguments: a dictionary describing which fixtures to load, and a mocker object.  The dictionary keys represent which file the desired fixtures are located in. The values are lists containing each desired fixture from that particular file. The example above will register the `get_user` fixture in `course.json`.
+
+Example Fixture:
+
+```json
+"get_user": {
+    "method": "GET",
+    "endpoint": "courses/1/users/1",
+    "data": {
+        "id": 1,
+        "name": "John Doe"
+    },
+    "status_code": 200
+},
+```
+
+When this fixture is loaded, all `GET` requests to a url matching `courses/1/users/1` will return a status code of 200 and the provided user data for John Doe.
+
+---
+
+```python
+user = self.course.get_user(1)
+
+self.assertIsInstance(user, User)
+self.assertTrue(hasattr(user, 'name'))
+```
+The rest is basic unit testing. Call the function to be tested, and assert various outcomes. If necessary, multiple tests can written for a single method. All related tests should appear together under the same comment, as described earlier.
+
+---
+
+It is common to need certain object(s) for multiple tests. For example, most methods in `test_course.py` require a `Course` object. In this case, save a course to the class in `self.course` for later use.
+
+Do this in the `setUp` class method:
+```python
+with requests_mock.Mocker() as m:
+    requires = {
+        'course': ['get_by_id', 'get_page'],
+        'quiz': ['get_by_id'],
+        'user': ['get_by_id']
+    }
+    register_uris(requires, m)
+
+    self.course = self.canvas.get_course(1)
+    self.page = self.course.get_page('my-url')
+    self.quiz = self.course.get_quiz(1)
+    self.user = self.canvas.get_user(1)
+```
+
+Since `setUp` is not a test method, it does not automatically get passed a Mocker object `m`. To use the mocker, all relevant code needs to be inside a `with` statement:
+
+```python
+with requests_mock.Mocker() as m:
+```
 
 ##### Engine tests
 
-Not all of canvasapi relies on networking. While these pieces are few and far between, we still need to verify that they're performing correctly. Writing tests for engine-level code is just as important as user-facing code and is a bit easier. You'll just need to follow the same process as you would for API tests, minus the fixtures.
+Not all of CanvasAPI relies on networking. While these pieces are few and far between, we still need to verify that they're performing correctly. Writing tests for engine-level code is just as important as user-facing code and is a bit easier. You'll just need to follow the same process as you would for API tests, minus the fixtures.
 
 #### Running tests / coverage reports
 
@@ -155,31 +172,21 @@ You'll do this by running `coverage run -m unittest discover` from the main `can
 Coverage reports tell us how much of our code is actually being tested. As of right now, we're happily maintaining 100% code coverage (🎉!) and our goal is to keep it there. Ensure you've covered your changes entirely by running `coverage report`. Your output should look something like this:
 
 ```
-Name                         Stmts   Miss  Cover
-------------------------------------------------
-canvasapi/__init__.py            14      0   100%
-canvasapi/account.py             83      0   100%
-canvasapi/assignment.py          11      0   100%
-canvasapi/avatar.py               2      0   100%
-canvasapi/canvas.py              60      0   100%
-canvasapi/canvas_object.py       20      0   100%
-canvasapi/course.py             126      0   100%
-canvasapi/enrollment.py           2      0   100%
-canvasapi/exceptions.py          10      0   100%
-canvasapi/external_tool.py       33      0   100%
-canvasapi/module.py              62      0   100%
-canvasapi/page_view.py            4      0   100%
-canvasapi/paginated_list.py      66      0   100%
-canvasapi/quiz.py                15      0   100%
-canvasapi/requester.py           42      0   100%
-canvasapi/section.py              9      0   100%
-canvasapi/user.py                48      0   100%
-canvasapi/util.py                22      0   100%
-------------------------------------------------
-TOTAL                          629      0   100%
+Name                             Stmts   Miss  Cover
+----------------------------------------------------
+canvasapi/__init__.py                3      0   100%
+canvasapi/account.py               166      0   100%
+canvasapi/appointment_group.py      17      0   100%
+canvasapi/assignment.py             24      0   100%
+[...]
+canvasapi/upload.py                 29      0   100%
+canvasapi/user.py                  101      0   100%
+canvasapi/util.py                   29      0   100%
+----------------------------------------------------
+TOTAL                             1586      0   100%
 ```
 
-Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://github.com/ucfopen/canvasapi/merge_requests)!
+Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://github.com/ucfopen/canvasapi/pulls)!
 
 Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at master and then submit it for review.
 
@@ -189,11 +196,17 @@ Be sure to include the issue number in the title with a pound sign in front of i
 We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/) specification as much as possible. In short, that means:
 
 * We use four spaces for indentation.
-* All Python files end with an empty new line.
-* Two spaces before a class declaration, one space before a function declaration.
-* Lines should be around 80 characters long. Once you get into the 85+ territory, consider breaking your code into separate lines.
+* Lines should be around 80 characters long, but up to 99 is allowed. Once you get into the 85+ territory, consider breaking your code into separate lines.
 
-It's a good idea to set up a Python linter for your text editor to point out errors.
+We use `pycodestyle` and `pyflakes` for linting:
+
+```
+pycodestyle canvasapi tests
+```
+
+```
+pyflakes canvasapi tests
+```
 
 ### Foolish consistency
 
@@ -210,11 +223,11 @@ Method docstrings should include a description, a link to the related API endpoi
 A description should be a concise, *action* statement (use "*write* a good docstring" over "*writes* a good docstring") that describes the method. Generally, the official API documentation's description is usable (make sure it's an **action statement** though). Special functionality should be documented. 
 
 #### Links to related API endpoints
-A link to a related API endpoint is denoted with `:calls:`. canvasapi uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
+A link to a related API endpoint is denoted with `:calls:`. CanvasAPI uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
 
 ```
 :calls: `THE TEXT OF THE HYPERLINK \ 
-		<https://the.url/to/use/>`_
+    <https://the.url/to/use/>`_
 ```
 
 Hyperlink text should match the text underneath the endpoint in the official Canvas API documentation. Generally, that looks like this:
@@ -228,8 +241,8 @@ Hyperlink text should match the text underneath the endpoint in the official Can
 #### Parameters
 Parameters should be listed in the order that they appear in the method prototype. They should take on the following form:
 ```
-	:param PARAMETER_NAME: PARAMETER_DESCRIPTION.
-	:type PARAMETER_NAME: PYTHON_TYPE
+:param PARAMETER_NAME: PARAMETER_DESCRIPTION.
+:type PARAMETER_NAME: PYTHON_TYPE
 ```
 
 #### Returns
@@ -237,17 +250,17 @@ Parameters should be listed in the order that they appear in the method prototyp
 
 ```python
 def uncheck_box(box_id):
-	"""
-	Uncheck the box with the given ID.
-	
-	:returns: True if the box was successfully unchecked, False otherwise.
-	:rtype: bool
-	"""
+    """
+    Uncheck the box with the given ID.
+
+    :returns: True if the box was successfully unchecked, False otherwise.
+    :rtype: bool
+    """
 ```
 
-In most cases, the return value is easy to infer based on the type and the description given in the docstring. Only use `:returns:` to clarify ambiguous cases (usually relating to boolean returns).
+In most cases, the return value is easy to infer based on the type and the description given in the docstring. `:returns:` is only necessary to clarify ambiguous cases.
 
-**Return type** should always be included when a value is returned. If it's not a primitive type (int, str, bool, list, etc.) a fully-qualified class name should be included:
+**Return type** should always be included when a value is returned. If it's not a primitive type (`int`, `str`, `bool`, `list`, etc.) a fully-qualified class name should be included:
 
 ```
 :rtype: :class:`canvasapi.user.User`
@@ -263,44 +276,44 @@ In the event a PaginatedList is returned:
 Here are some real world examples of how docstrings should be formatted:
 
 ```python
-    def get_account(self, account_id):
-        """
-        Retrieve information on an individual account.
+def get_account(self, account_id):
+    """
+    Retrieve information on an individual account.
 
-        :calls: `GET /api/v1/accounts/:id \
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`_
+    :calls: `GET /api/v1/accounts/:id \
+    <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`_
 
-        :param account_id: The ID of the account to retrieve.
-        :type account_id: int
-        :rtype: :class:`canvasapi.account.Account`
-        """
+    :param account_id: The ID of the account to retrieve.
+    :type account_id: int
+    :rtype: :class:`canvasapi.account.Account`
+    """
 ```
 
 ```python
-    def get_accounts(self, **kwargs):
-        """
-        List accounts that the current user can view or manage.
+def get_accounts(self, **kwargs):
+    """
+    List accounts that the current user can view or manage.
 
-        Typically, students and teachers will get an empty list in
-        response. Only account admins can view the accounts that they
-        are in.
+    Typically, students and teachers will get an empty list in
+    response. Only account admins can view the accounts that they
+    are in.
 
-        :calls: `GET /api/v1/accounts \
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.index>`_
+    :calls: `GET /api/v1/accounts \
+    <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.index>`_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.account.Account`
-        """
+    :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.account.Account`
+    """
 ```
 
 ```python
-    def clear_course_nicknames(self):
-        """
-        Remove all stored course nicknames.
+def clear_course_nicknames(self):
+    """
+    Remove all stored course nicknames.
 
-        :calls: `DELETE /api/v1/users/self/course_nicknames \
-        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
+    :calls: `DELETE /api/v1/users/self/course_nicknames \
+    <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
 
-        :returns: True if the nicknames were cleared, False otherwise.
-        :rtype: bool
-        """
+    :returns: True if the nicknames were cleared, False otherwise.
+    :rtype: bool
+    """
 ```
