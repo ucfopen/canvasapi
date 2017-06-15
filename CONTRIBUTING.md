@@ -70,7 +70,7 @@ You'll notice our tests live in the creatively named `tests` directory. Within t
 
 ##### API Coverage Tests
 
-We use the [requests-mock](https://pypi.python.org/pypi/requests-mock) library to simulate API responses. Those mock responses live inside the `fixtures` directory in JSON files. Each files name describes the endpoints that are contained within. For example, course endpoints live in `course.json`. These fixtures are loaded on demand in a given test. Let's look at `test_get_user` in `test_course.py` as an example:
+We use the [requests-mock](https://pypi.python.org/pypi/requests-mock) library to simulate API responses. Those mock responses live inside the `fixtures` directory in JSON files. Each file's name describes the endpoints that are contained within. For example, course endpoints live in `course.json`. These fixtures are loaded on demand in a given test. Let's look at `test_get_user` in `test_course.py` as an example:
 
 ```python
 # get_user()
@@ -188,7 +188,7 @@ TOTAL                             1586      0   100%
 
 Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://github.com/ucfopen/canvasapi/pulls)!
 
-Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at master and then submit it for review.
+Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at `develop` and then submit it for review.
 
 
 ## Code Style Guidelines
