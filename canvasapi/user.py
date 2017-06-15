@@ -1,6 +1,7 @@
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.folder import Folder
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
@@ -322,6 +323,25 @@ class User(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def list_communication_channels(self, **kwargs):
+        """
+        List communication channels for the specified user, sorted by
+        position.
+
+        :calls: `GET /api/v1/users/:user_id/communication_channels \
+        <https://canvas.instructure.com/doc/api/communication_channels.html#method.communication_channels.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.communication_channel.CommunicationChannel`
+        """
+        return PaginatedList(
+            CommunicationChannel,
+            self._requester,
+            'GET',
+            'users/%s/communication_channels' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
     def list_bookmarks(self, **kwargs):
         """
         List bookmarks that the current user can view or manage.
@@ -380,8 +400,6 @@ class User(CanvasObject):
             url=url,
             **combine_kwargs(**kwargs)
         )
-
-        vars(response.request)
 
         return Bookmark(self._requester, response.json())
 
