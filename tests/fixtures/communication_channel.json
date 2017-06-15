@@ -1,17 +1,4 @@
 {
-	"delete": {
-		"method": "DELETE",
-		"endpoint": "users/1/communication_channels/11",
-		"data": {
-			"id": 11,
-			"address": "user@example.com",
-			"type": "email",
-			"position": 1,
-			"user_id": 1,
-			"workflow_state": "active"
-		},
-		"status_code": 200
-	},
 	"list_preferences": {
         "method": "GET",
         "endpoint": "users/1/communication_channels/11/notification_preferences",
