@@ -1,0 +1,46 @@
+{
+	"list_preferences": {
+        "method": "GET",
+        "endpoint": "users/1/communication_channels/11/notification_preferences",
+        "data": {
+            "notification_preferences": [
+                {
+                    "frequency": "immediately",
+                    "notification": "new_announcement",
+                    "category": "announcement"
+                },
+                {
+                    "frequency": "weekly",
+                    "notification": "assignment_due_date_changed",
+                    "category": "due_date"
+                }
+            ]
+        },
+        "status_code": 200
+    },
+    "get_preference": {
+    	"method": "GET",
+    	"endpoint": "users/1/communication_channels/11/notification_preferences/new_announcement",
+    	"data": {
+			"notification_preferences": [
+		    	{
+		      		"frequency": "immediately",
+		      		"notification": "new_announcement",
+		      		"category": "announcement"
+		    	}
+		  	]
+		},
+		"status_code": 200
+    },
+    "list_preference_categories": {
+    	"method": "GET",
+    	"endpoint": "users/1/communication_channels/11/notification_preference_categories",
+    	"data": {
+    		"categories": [
+				"announcement",
+    			"due_date"
+    		]
+    	},
+    	"status_code": 200
+    }
+}

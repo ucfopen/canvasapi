@@ -9,6 +9,7 @@ from canvasapi.assignment import Assignment
 from canvasapi.avatar import Avatar
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
+from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.course import Course
 from canvasapi.file import File
 from canvasapi.folder import Folder
@@ -227,6 +228,15 @@ class TestUser(unittest.TestCase):
         cal_event_list = [cal_event for cal_event in cal_events]
         self.assertEqual(len(cal_event_list), 2)
         self.assertIsInstance(cal_event_list[0], CalendarEvent)
+
+    # list_communication_channels()
+    def test_list_communication_channels(self, m):
+        register_uris({'user': ['list_comm_channels', 'list_comm_channels2']}, m)
+
+        comm_channels = self.user.list_communication_channels()
+        channel_list = [channel for channel in comm_channels]
+        self.assertEqual(len(channel_list), 4)
+        self.assertIsInstance(channel_list[0], CommunicationChannel)
 
     # list_bookmarks()
     def test_list_bookmarks(self, m):
