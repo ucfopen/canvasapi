@@ -1,7 +1,9 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.tab import Tab
 from canvasapi.util import combine_kwargs
 
 
@@ -462,6 +464,155 @@ class Group(CanvasObject):
         )
 
         return response.json().get('reorder')
+
+    def list_external_feeds(self):
+        """
+        Returns the list of External Feeds this group.
+
+        :calls: `GET /api/v1/groups/:group_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        return PaginatedList(
+            ExternalFeed,
+            self._requester,
+            'GET',
+            'groups/%s/external_feeds' % (self.id)
+        )
+
+    def create_external_feed(self, url, **kwargs):
+        """
+        Create a new external feed for the group.
+
+        :calls: `POST /api/v1/groups/:group_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.create>`_
+
+        :param url: The urlof the external rss or atom feed
+        :type url: str
+        :rtype: :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        response = self._requester.request(
+            'POST',
+            'groups/%s/external_feeds' % self.id,
+            url=url,
+            **combine_kwargs(**kwargs)
+        )
+        return ExternalFeed(self._requester, response.json())
+
+    def delete_external_feed(self, feed_id):
+        """
+        Deletes the external feed.
+
+        :calls: `DELETE /api/v1/groups/:group_id/external_feeds/:external_feed_id \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.destroy>`_
+
+        :param feed_id: The id of the feed to be deleted.
+        :type feed_id: int
+        :rtype: :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        response = self._requester.request(
+            'DELETE',
+            'groups/%s/external_feeds/%s' % (self.id, feed_id)
+        )
+        return ExternalFeed(self._requester, response.json())
+
+    def list_files(self, **kwargs):
+        """
+        Returns the paginated list of files for the group.
+
+        :calls: `GET api/v1/courses/:group_id/files \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+
+        return PaginatedList(
+            File,
+            self._requester,
+            'GET',
+            'groups/%s/files' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_folder(self, folder_id):
+        """
+        Returns the details for a group's folder
+
+        :calls: `GET /api/v1/groups/:group_id/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
+
+        :param folder_id: The ID of the folder to retrieve.
+        :type folder_id: int
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'GET',
+            'groups/%s/folders/%s' % (self.id, folder_id)
+        )
+        return Folder(self._requester, response.json())
+
+    def list_folders(self):
+        """
+        Returns the paginated list of all folders for the given group. This will be returned as a
+        flat list containing all subfolders as well.
+
+        :calls: `GET /api/v1/groups/:group_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+        return PaginatedList(
+            Folder,
+            self._requester,
+            'GET',
+            'groups/%s/folders' % (self.id)
+        )
+
+    def create_folder(self, name, **kwargs):
+        """
+        Creates a folder in this group.
+
+        :calls: `POST /api/v1/groups/:group_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>`_
+
+        :param name: The name of the folder.
+        :type name: str
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'POST',
+            'groups/%s/folders' % self.id,
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return Folder(self._requester, response.json())
+
+    def list_tabs(self, **kwargs):
+        """
+        List available tabs for a group.
+        Returns a list of navigation tabs available in the current context.
+
+        :calls: `GET /api/v1/groups/:group_id/tabs \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.tab.Tab`
+        """
+        return PaginatedList(
+            Tab,
+            self._requester,
+            'GET',
+            'groups/%s/tabs' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
 
 
 class GroupMembership(CanvasObject):

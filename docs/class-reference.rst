@@ -7,6 +7,7 @@ Class Reference
     account-ref
     appointment-group-ref
     assignment-ref
+    authentication-provider-ref
     avatar-ref
     bookmark-ref
     calendar-event-ref
@@ -16,6 +17,7 @@ Class Reference
     enrollment-term-ref
     external-tool-ref
     group-ref
+    login-ref
     module-ref
     page-ref
     progress-ref

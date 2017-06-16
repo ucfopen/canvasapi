@@ -616,6 +616,305 @@ class Account(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
+    def list_user_logins(self, **kwargs):
+        """
+        Given a user ID, return that user's logins for the given account.
+
+        :calls: `GET /api/v1/accounts/:account_id/logins \
+        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.login.Login`
+        """
+        from login import Login
+
+        return PaginatedList(
+            Login,
+            self._requester,
+            'GET',
+            'accounts/%s/logins' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def create_user_login(self, user, login, **kwargs):
+        """
+        Create a new login for an existing user in the given account
+
+        :calls: `POST /api/v1/accounts/:account_id/logins \
+        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.create>`_
+
+        :param user: The attributes of the user to create a login for
+        :type user: `dict`
+        :param login: The attributes of the login to create
+        :type login: `dict`
+        :rtype: :class:`canvasapi.login.Login`
+        """
+        from login import Login
+
+        if isinstance(user, dict) and 'id' in user:
+            kwargs['user'] = user
+        else:
+            raise RequiredFieldMissing((
+                "user must be a dictionary with keys "
+                "'id'."
+            ))
+
+        if isinstance(login, dict) and 'unique_id' in login:
+            kwargs['login'] = login
+        else:
+            raise RequiredFieldMissing((
+                "login must be a dictionary with keys "
+                "'unique_id'."
+            ))
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/logins' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        return Login(self._requester, response.json())
+
+    def get_department_level_participation_data_with_given_term(self, term_id):
+        """
+        Return page view hits all available or concluded courses in the given term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/terms/%s/activity' % (self.id, term_id)
+        )
+        return response.json()
+
+    def get_department_level_participation_data_current(self):
+        """
+        Return page view hits all available courses in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/current/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/current/activity' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_participation_data_completed(self):
+        """
+        Return page view hits all concluded courses in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/completed/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/completed/activity' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_grade_data_with_given_term(self, term_id):
+        """
+        Return the distribution of all available or concluded grades with the given term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/grades \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/terms/%s/grades' % (self.id, term_id)
+        )
+        return response.json()
+
+    def get_department_level_grade_data_current(self):
+        """
+        Return the distribution of all available grades in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/current/grades \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/current/grades' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_grade_data_completed(self):
+        """
+        Return the distribution of all concluded grades in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/completed/grades \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/completed/grades' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_statistics_with_given_term(self, term_id):
+        """
+        Return numeric statistics about the department with the given term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/statistics \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/terms/%s/statistics' % (self.id, term_id)
+        )
+        return response.json()
+
+    def get_department_level_statistics_current(self):
+        """
+        Return all available numeric statistics about the department in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/current/statistics \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/current/statistics' % (self.id)
+        )
+        return response.json()
+
+    def get_department_level_statistics_completed(self):
+        """
+        Return all available numeric statistics about the department in the default term
+
+        :calls: `GET /api/v1/accounts/:account_id/analytics/current/statistics \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/analytics/completed/statistics' % (self.id)
+        )
+        return response.json()
+
+    def add_authentication_providers(self, **kwargs):
+        """
+        Add external authentication providers for the account
+
+        :calls: `POST /api/v1/accounts/:account_id/authentication_providers \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.create>`_
+
+        :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
+        """
+        from canvasapi.authentication_provider import AuthenticationProvider
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/authentication_providers' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+        authentication_providers_json = response.json()
+        authentication_providers_json.update({'account_id': self.id})
+
+        return AuthenticationProvider(self._requester, authentication_providers_json)
+
+    def list_authentication_providers(self, **kwargs):
+        """
+        Return the list of authentication providers
+
+        :calls: `GET /api/v1/accounts/:account_id/authentication_providers \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.authentication_provider.AuthenticationProvider`
+        """
+        from canvasapi.authentication_provider import AuthenticationProvider
+
+        return PaginatedList(
+            AuthenticationProvider,
+            self._requester,
+            'GET',
+            'accounts/%s/authentication_providers' % (self.id),
+            {'account_id': self.id},
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_authentication_providers(self, authentication_providers_id, **kwargs):
+        """
+        Get the specified authentication provider
+
+        :calls: `GET /api/v1/accounts/:account_id/authentication_providers/:id \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.show>`_
+
+        :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
+        """
+        from canvasapi.authentication_provider import AuthenticationProvider
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/authentication_providers/%s' % (self.id, authentication_providers_id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return AuthenticationProvider(self._requester, response.json())
+
+    def show_account_auth_settings(self, **kwargs):
+        """
+        Return the current state of each account level setting
+
+        :calls: `GET /api/v1/accounts/:account_id/sso_settings \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.show_sso_settings>`_
+
+        :rtype: :class:`canvasapi.account.SSOSettings`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/sso_settings' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return SSOSettings(self._requester, response.json())
+
+    def update_account_auth_settings(self, **kwargs):
+        """
+        Return the current state of account level after updated
+
+        :calls: `PUT /api/v1/accounts/:account_id/sso_settings \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.update_sso_settings>`_
+
+        :rtype: :class:`canvasapi.account.SSOSettings`
+        """
+
+        response = self._requester.request(
+            'PUT',
+            'accounts/%s/sso_settings' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return SSOSettings(self._requester, response.json())
+
 
 class AccountNotification(CanvasObject):
 
@@ -633,3 +932,9 @@ class Role(CanvasObject):
 
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
+
+
+class SSOSettings(CanvasObject):
+
+    def __str___(self):  # pragma: no cover
+        return"{} ({})".format(self.login_handle_name, self.change_password_url)

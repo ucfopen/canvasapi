@@ -671,5 +671,323 @@
 			"label": "Student"
 		},
 		"status_code": 200
+	},
+	"list_user_logins": {
+		"method": "GET",
+		"endpoint": "accounts/1/logins",
+		"data": [
+			{
+				"account_id": 1,
+				"id": 2,
+				"sis_user_id": null,
+				"unique_id": "belieber@example.com",
+				"user_id": 2,
+				"authentication_provider_id": 1,
+				"authentication_provider_type": "facebook"
+			}
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/accounts/1/logins/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_user_logins_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/logins/?page=2&per_page=2",
+		"data": [
+			{
+				"account_id": 2,
+				"id": 3,
+				"sis_user_id": null,
+				"unique_id": "belieber@example.com",
+				"user_id": 3,
+				"authentication_provider_id": 2,
+				"authentication_provider_type": "facebook"
+			}
+		],
+		"status_code": 200
+	},
+	"create_user_login": {
+		"method": "POST",
+		"endpoint": "accounts/1/logins",
+		"data": {
+			"id": 123,
+			"unique_id": 112233
+		}, 
+		"status_code": 200
+	},
+	"get_department_level_participation_data_with_given_term": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/terms/1/activity",
+		"data": [
+			{
+				"by_date": {
+					"2012-01-24": 1240,
+					"2012-01-27": 912
+				},
+				"by_category": {
+					"announcements": 54,
+					"assignments": 256,
+					"collaborations": 18,
+					"conferences": 26,
+					"discussions": 354,
+					"files": 132,
+					"general": 59,
+					"grades": 177,
+					"groups": 132,
+					"modules": 71,
+					"other": 412,
+					"pages": 105,
+					"quizzes": 356
+				}
+			}
+		]
+	},
+	"get_department_level_participation_data_current": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/current/activity",
+		"data": [
+			{
+				"by_date": {
+					"2012-01-24": 1240,
+					"2012-01-27": 912
+				},
+				"by_category": {
+					"announcements": 54,
+					"assignments": 256,
+					"collaborations": 18,
+					"conferences": 26,
+					"discussions": 354,
+					"files": 132,
+					"general": 59,
+					"grades": 177,
+					"groups": 132,
+					"modules": 71,
+					"other": 412,
+					"pages": 105,
+					"quizzes": 356
+				}
+			}
+		]
+	},
+	"get_department_level_participation_data_completed": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/completed/activity",
+		"data": [
+			{
+				"by_date": {
+					"2012-01-24": 1240,
+					"2012-01-27": 912
+				},
+				"by_category": {
+					"announcements": 54,
+					"assignments": 256,
+					"collaborations": 18,
+					"conferences": 26,
+					"discussions": 354,
+					"files": 132,
+					"general": 59,
+					"grades": 177,
+					"groups": 132,
+					"modules": 71,
+					"other": 412,
+					"pages": 105,
+					"quizzes": 356
+				}
+			}
+		]
+	},
+	"get_department_level_grade_data_with_given_term": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/terms/1/grades",
+		"data": [
+			{
+			  "0": "13435",
+			  "1": "41",
+			  "2": "58",
+			  "3": "27",
+			  "68": "1387",
+			  "69": "1412",
+			  "70": "2199",
+			  "85": "5575",
+			  "86": "6543",
+			  "87": "6144",
+			  "88": "7198",
+			  "89": "6561",
+			  "90": "8854",
+			  "91": "7745",
+			  "92": "8800",
+			  "93": "7798"
+			}
+		]
+	},
+	"get_department_level_grade_data_current": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/current/grades",
+		"data": [
+			{
+			  "0": "13435",
+			  "1": "41",
+			  "2": "58",
+			  "3": "27",
+			  "68": "1387",
+			  "69": "1412",
+			  "70": "2199",
+			  "85": "5575",
+			  "86": "6543",
+			  "87": "6144",
+			  "88": "7198",
+			  "89": "6561",
+			  "90": "8854",
+			  "91": "7745",
+			  "92": "8800",
+			  "93": "7798"
+			}
+		]
+	},
+	"get_department_level_grade_data_completed": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/completed/grades",
+		"data": [
+			{
+			  "0": "13435",
+			  "1": "41",
+			  "2": "58",
+			  "3": "27",
+			  "68": "1387",
+			  "69": "1412",
+			  "70": "2199",
+			  "85": "5575",
+			  "86": "6543",
+			  "87": "6144",
+			  "88": "7198",
+			  "89": "6561",
+			  "90": "8854",
+			  "91": "7745",
+			  "92": "8800",
+			  "93": "7798"
+			}
+		]
+	},
+	"get_department_level_statistics_with_given_term": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/terms/1/statistics",
+		"data": [
+			{
+				"courses": 27,
+				"subaccounts": 3,
+				"teachers": 36,
+				"students": 418,
+				"discussion_topics": 77,
+				"media_objects": 219,
+				"attachments": 1268,
+				"assignments": 290
+			}
+		]
+	},
+	"get_department_level_statistics_current": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/current/statistics",
+		"data": [
+			{
+				"courses": 27,
+				"subaccounts": 3,
+				"teachers": 36,
+				"students": 418,
+				"discussion_topics": 77,
+				"media_objects": 219,
+				"attachments": 1268,
+				"assignments": 290
+			}
+		]
+	},
+	"get_department_level_statistics_completed": {
+		"method": "GET",
+		"endpoint": "accounts/1/analytics/completed/statistics",
+		"data": [
+			{
+				"courses": 27,
+				"subaccounts": 3,
+				"teachers": 36,
+				"students": 418,
+				"discussion_topics": 77,
+				"media_objects": 219,
+				"attachments": 1268,
+				"assignments": 290
+			}
+		]
+	},
+	"list_authentication_providers": {
+		"method": "GET",
+		"endpoint": "accounts/1/authentication_providers",
+		"data": [
+			{
+				"id": 1,
+				"auth_type": "saml",
+				"position": 1
+			},
+			{
+				"id": 2,
+				"auth_type": "facebook",
+				"position": 1
+			}
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/accounts/1/authentication_providers/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_authentication_providers_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/authentication_providers/?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"auth_type": "canvas",
+				"position": 1
+			},
+			{
+				"id": 4,
+				"auth_type": "microsoft",
+				"position": 1
+			}
+		],
+		"status_code": 200
+	},
+	"add_authentication_providers": {
+		"method": "POST",
+		"endpoint": "accounts/1/authentication_providers",
+		"data":{
+			"id": 1,
+			"auth_type": "saml",
+			"position": 1
+		},
+		"status_code": 200
+	},
+	"get_authentication_providers": {
+		"method": "GET",
+		"endpoint": "accounts/1/authentication_providers/1",
+		"data": {
+			"id": 1,
+			"auth_type": "saml",
+			"position": 1
+		},
+		"status_code": 200
+	},
+	"show_account_auth_settings": {
+		"method": "GET",
+		"endpoint": "accounts/1/sso_settings",
+		"data": {
+			"login_handle_name": "Username",
+			"change_password_url": "https://example.com/reset_password"
+		}
+	},
+	"update_account_auth_settings": {
+		"method": "PUT",
+		"endpoint": "accounts/1/sso_settings",
+		"data": {
+			"login_handle_name": "Username",
+			"change_password_url": "https://example.com/reset_password"
+		}
 	}
 }

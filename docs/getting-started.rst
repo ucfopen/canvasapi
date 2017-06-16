@@ -1,23 +1,30 @@
-Getting Started with canvasapi
+Getting Started with CanvasAPI
 ===============================
 
-Installing canvasapi
+Installing CanvasAPI
 ---------------------
 
-You can install with pip::
+You can install CanvasAPI with pip::
 
     pip install canvasapi
 
 Usage
 -----
 
-Before using canvasapi, you'll need to instantiate a new Canvas object:
+Before using CanvasAPI, you'll need to instantiate a new Canvas object:
 
 .. code:: python
     
+    # Import the Canvas class
     from canvasapi import Canvas
 
-    canvas = Canvas(API_KEY, API_URL)
+    # Canvas API URL
+    API_URL = "https://example.com/api/v1/"
+    # Canvas API key
+    API_KEY = "p@$$w0rd"
+
+    # Initialize a new Canvas object
+    canvas = Canvas(API_URL, API_KEY)
 
 You can now use :code:`canvas` to make API calls.
 

@@ -9,11 +9,15 @@ from canvasapi.assignment import Assignment
 from canvasapi.avatar import Avatar
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
+from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.course import Course
+from canvasapi.file import File
+from canvasapi.folder import Folder
 from canvasapi.group import Group
 from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
 from canvasapi.user import User
+from canvasapi.login import Login
 from tests import settings
 from tests.util import register_uris
 
@@ -225,6 +229,15 @@ class TestUser(unittest.TestCase):
         self.assertEqual(len(cal_event_list), 2)
         self.assertIsInstance(cal_event_list[0], CalendarEvent)
 
+    # list_communication_channels()
+    def test_list_communication_channels(self, m):
+        register_uris({'user': ['list_comm_channels', 'list_comm_channels2']}, m)
+
+        comm_channels = self.user.list_communication_channels()
+        channel_list = [channel for channel in comm_channels]
+        self.assertEqual(len(channel_list), 4)
+        self.assertIsInstance(channel_list[0], CommunicationChannel)
+
     # list_bookmarks()
     def test_list_bookmarks(self, m):
         register_uris({'bookmark': ['list_bookmarks']}, m)
@@ -254,3 +267,114 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
+
+    # list_files()
+    def test_user_files(self, m):
+        register_uris({'user': ['get_user_files', 'get_user_files2']}, m)
+
+        files = self.user.list_files()
+        file_list = [file for file in files]
+        self.assertEqual(len(file_list), 4)
+        self.assertIsInstance(file_list[0], File)
+
+    # get_folder()
+    def test_get_folder(self, m):
+        register_uris({'user': ['get_folder']}, m)
+
+        folder = self.user.get_folder(1)
+        self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
+
+    # list_folders()
+    def test_list_folders(self, m):
+        register_uris({'user': ['list_folders']}, m)
+
+        folders = self.user.list_folders()
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 2)
+        self.assertIsInstance(folder_list[0], Folder)
+
+    # create_folder()
+    def test_create_folder(self, m):
+        register_uris({'user': ['create_folder']}, m)
+
+        name_str = "Test String"
+        response = self.user.create_folder(name=name_str)
+        self.assertIsInstance(response, Folder)
+
+    # list_user_logins()
+    def test_list_user_logins(self, m):
+        requires = {'user': ['list_user_logins', 'list_user_logins_2']}
+        register_uris(requires, m)
+
+        response = self.user.list_user_logins()
+        login_list = [login for login in response]
+
+        self.assertIsInstance(login_list[0], Login)
+        self.assertEqual(len(login_list), 2)
+
+    # list_observees()
+    def test_list_observees(self, m):
+        requires = {'user': ['list_observees', 'list_observees_2']}
+        register_uris(requires, m)
+
+        response = self.user.list_observees()
+        observees_list = [observees for observees in response]
+
+        self.assertIsInstance(observees_list[0], User)
+        self.assertEqual(len(observees_list), 4)
+
+    # add_observee_with_credentials()
+    def test_add_observee_with_credentials(self, m):
+        register_uris({'user': ['add_observee_with_credentials']}, m)
+
+        response = self.user.add_observee_with_credentials()
+
+        self.assertIsInstance(response, User)
+
+    # show_observee()
+    def test_show_observee(self, m):
+        register_uris({'user': ['show_observee']}, m)
+
+        response = self.user.show_observee(6)
+
+        self.assertIsInstance(response, User)
+
+    # add_observee()
+    def test_add_observee(self, m):
+        register_uris({'user': ['add_observee']}, m)
+
+        response = self.user.add_observee(7)
+
+        self.assertIsInstance(response, User)
+
+    # remove_observee()
+    def test_remove_observee(self, m):
+        register_uris({'user': ['remove_observee']}, m)
+
+        response = self.user.remove_observee(8)
+
+        self.assertIsInstance(response, User)
+
+
+@requests_mock.Mocker()
+class TestUserDisplay(unittest.TestCase):
+
+    @classmethod
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris({
+                'course': ['get_by_id', 'list_gradeable_students']
+            }, m)
+
+            self.course = self.canvas.get_course(1)
+            self.userDisplays = self.course.list_gradeable_students(1)
+            self.userDisplayList = [ud for ud in self.userDisplays]
+            self.userDisplay = self.userDisplayList[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.userDisplay)
+        self.assertIsInstance(string, str)

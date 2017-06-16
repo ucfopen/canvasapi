@@ -1,9 +1,13 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.folder import Folder
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.tab import Tab
+from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
+from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs
 
 
@@ -943,6 +947,445 @@ class Course(CanvasObject):
         response_json.update({'course_id': self.id})
 
         return ExternalTool(self._requester, response_json)
+
+    def get_course_level_participation_data(self):
+        """
+        Return page view hits and participation numbers grouped by day through the course's history
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/activity' % (self.id)
+        )
+
+        return response.json()
+
+    def get_course_level_assignment_data(self, **kwargs):
+        """
+        Return a list of assignments for the course sorted by due date
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/assignments \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_assignments>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/assignments' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return response.json()
+
+    def get_course_level_student_summary_data(self, **kwargs):
+        """
+        Return a summary of per-user access information for all students in a course
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/student_summaries \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_student_summaries>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/student_summaries' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return response.json()
+
+    def get_user_in_a_course_level_participation_data(self, student_id):
+        """
+        Return page view hits grouped by hour and participation details through course's history
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/activity \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_participation>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/users/%s/activity' % (self.id, student_id)
+        )
+
+        return response.json()
+
+    def get_user_in_a_course_level_assignment_data(self, student_id):
+        """
+        Return a list of assignments for the course sorted by due date
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/assignments \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_assignments>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/users/%s/assignments' % (self.id, student_id)
+        )
+
+        return response.json()
+
+    def get_user_in_a_course_level_messaging_data(self, student_id):
+        """
+        Return messaging hits grouped by day through the entire history of the course
+
+        :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/communication \
+        <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_messaging>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/%s/analytics/users/%s/communication' % (self.id, student_id)
+        )
+
+        return response.json()
+
+    def submit_assignment(self, assignment_id, submission, **kwargs):
+        """
+        Makes a submission for an assignment.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
+
+        :param submission: The attributes of the submission.
+        :type submission: `dict`
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        if isinstance(submission, dict) and 'submission_type' in submission:
+            kwargs['submision'] = submission
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'submission_type' is required."
+            )
+
+        response = self._requester.request(
+            'POST',
+            'courses/%s/assignments/%s/submissions' % (self.id, assignment_id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return Submission(self._requester, response.json())
+
+    def list_submissions(self, assignment_id, **kwargs):
+        """
+        Makes a submission for an assignment.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions  \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
+
+        :param assignment_id: The ID of the assignment.
+        :type assignment_id: `int`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        return PaginatedList(
+            Submission,
+            self._requester,
+            'GET',
+            'courses/%s/assignments/%s/submissions' % (self.id, assignment_id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def list_multiple_submissions(self, **kwargs):
+        """
+        List submissions for multiple assignments.
+        Get all existing submissions for a given set of students and assignments.
+
+        :calls: `GET /api/v1/courses/:course_id/students/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        return PaginatedList(
+            Submission,
+            self._requester,
+            'GET',
+            'courses/%s/students/submissions' % (self.id),
+            grouped=False,
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_submission(self, assignment_id, user_id, **kwargs):
+        """
+        Get a single submission, based on user id.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.show>`_
+
+        :param assignment_id: The ID of the assignment.
+        :type assignment_id: int
+        :param user_id: The ID of the user.
+        :type user_id: str
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
+            **combine_kwargs(**kwargs)
+        )
+        return Submission(self._requester, response.json())
+
+    def update_submission(self, assignment_id, user_id, **kwargs):
+        """
+        Comment on and/or update the grading for a student's assignment submission.
+
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update>`_
+
+        :param assignment_id: The ID of the assignment.
+        :type assignment_id: int
+        :param user_id: The ID of the user.
+        :type user_id: str
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
+            **combine_kwargs(**kwargs)
+        )
+
+        submission = self.get_submission(assignment_id, user_id)
+
+        if 'submission_type' in response.json():
+            super(Submission, submission).set_attributes(response.json())
+
+        return Submission(self._requester, response.json())
+
+    def list_gradeable_students(self, assignment_id):
+        """
+        List students eligible to submit the assignment.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/gradeable_students  \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.gradeable_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+        return PaginatedList(
+            UserDisplay,
+            self._requester,
+            'GET',
+            'courses/%s/assignments/%s/gradeable_students' % (self.id, assignment_id)
+        )
+
+    def mark_submission_as_read(self, assignment_id, user_id):
+        """
+        Mark submission as read. No request fields are necessary.
+
+        :calls: `PUT
+            /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/read \
+            <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
+
+        :rtype: `bool`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/assignments/%s/submissions/%s/read' % (
+                self.id,
+                assignment_id,
+                user_id,
+            )
+        )
+        return response.status_code == 204
+
+    def mark_submission_as_unread(self, assignment_id, user_id):
+        """
+        Mark submission as unread. No request fields are necessary.
+
+        :calls: `DELETE
+            /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/read \
+            <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_unread>`_
+
+        :rtype: `bool`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/assignments/%s/submissions/%s/read' % (
+                self.id,
+                assignment_id,
+                user_id,
+            ),
+        )
+        return response.status_code == 204
+
+    def list_external_feeds(self):
+        """
+        Returns the list of External Feeds this course.
+
+        :calls: `GET /api/v1/courses/:course_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        return PaginatedList(
+            ExternalFeed,
+            self._requester,
+            'GET',
+            'courses/%s/external_feeds' % (self.id)
+        )
+
+    def create_external_feed(self, url, **kwargs):
+        """
+        Create a new external feed for the course.
+
+        :calls: `POST /api/v1/courses/:course_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.create>`_
+
+        :param url: The urlof the external rss or atom feed
+        :type url: str
+        :rtype: :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        response = self._requester.request(
+            'POST',
+            'courses/%s/external_feeds' % self.id,
+            url=url,
+            **combine_kwargs(**kwargs)
+        )
+        return ExternalFeed(self._requester, response.json())
+
+    def delete_external_feed(self, feed_id):
+        """
+        Deletes the external feed.
+
+        :calls: `DELETE /api/v1/courses/:course_id/external_feeds/:external_feed_id \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.destroy>`_
+
+        :param feed_id: The id of the feed to be deleted.
+        :type feed_id: int
+        :rtype: :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        from canvasapi.external_feed import ExternalFeed
+        response = self._requester.request(
+            'DELETE',
+            'courses/%s/external_feeds/%s' % (self.id, feed_id)
+        )
+        return ExternalFeed(self._requester, response.json())
+
+    def list_files(self, **kwargs):
+        """
+        Returns the paginated list of files for the course.
+
+        :calls: `GET api/v1/courses/:course_id/files \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+
+        return PaginatedList(
+            File,
+            self._requester,
+            'GET',
+            'courses/%s/files' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def get_folder(self, folder_id):
+        """
+        Returns the details for a course folder
+
+        :calls: `GET /api/v1/courses/:course_id/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
+
+        :param folder_id: The ID of the folder to retrieve.
+        :type folder_id: int
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/folders/%s' % (self.id, folder_id)
+        )
+        return Folder(self._requester, response.json())
+
+    def list_folders(self):
+        """
+        Returns the paginated list of all folders for the given course. This will be returned as a
+        flat list containing all subfolders as well.
+
+        :calls: `GET /api/v1/courses/:course_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+        return PaginatedList(
+            Folder,
+            self._requester,
+            'GET',
+            'courses/%s/folders' % (self.id)
+        )
+
+    def create_folder(self, name, **kwargs):
+        """
+        Creates a folder in this course.
+
+        :calls: `POST /api/v1/courses/:course_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create>`_
+
+        :param name: The name of the folder.
+        :type name: str
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/%s/folders' % self.id,
+            name=name,
+            **combine_kwargs(**kwargs)
+        )
+        return Folder(self._requester, response.json())
+
+    def list_tabs(self, **kwargs):
+        """
+        List available tabs for a course.
+        Returns a list of navigation tabs available in the current context.
+
+        :calls: `GET /api/v1/courses/:course_id/tabs \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.tab.Tab`
+        """
+        return PaginatedList(
+            Tab,
+            self._requester,
+            'GET',
+            'courses/%s/tabs' % (self.id),
+            **combine_kwargs(**kwargs)
+        )
+
+    def update_tab(self, tab_id, **kwargs):
+        """
+        Update a tab for a course.
+
+        :calls: `PUT /api/v1/courses/:course_id/tabs/:tab_id \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.update>`_
+
+        :rtype: :class:`canvasapi.tab.Tab`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/%s/tabs/%s' % (self.id, tab_id),
+            **combine_kwargs(**kwargs)
+        )
+
+        return Tab(self._requester, response.json())
 
 
 class CourseNickname(CanvasObject):

@@ -25,3 +25,10 @@ Role
 
 .. autoclass:: canvasapi.account.Role
     :members:
+
+===========
+SSOSettings
+===========
+
+.. autoclass:: canvasapi.account.SSOSettings
+    :members:

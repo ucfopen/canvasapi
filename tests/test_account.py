@@ -4,7 +4,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.account import Account, AccountNotification, AccountReport, Role
+from canvasapi.account import Account, AccountNotification, AccountReport, Role, SSOSettings
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
@@ -12,6 +12,8 @@ from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.group import Group, GroupCategory
 from canvasapi.user import User
+from canvasapi.login import Login
+from canvasapi.authentication_provider import AuthenticationProvider
 from tests import settings
 from tests.util import register_uris
 
@@ -396,3 +398,156 @@ class TestAccount(unittest.TestCase):
         enrollment_terms_list = [category for category in response]
 
         self.assertIsInstance(enrollment_terms_list[0], EnrollmentTerm)
+
+    # list_user_logins()
+    def test_list_user_logins(self, m):
+        requires = {'account': ['list_user_logins', 'list_user_logins_2']}
+        register_uris(requires, m)
+
+        response = self.account.list_user_logins()
+        login_list = [login for login in response]
+
+        self.assertIsInstance(login_list[0], Login)
+        self.assertEqual(len(login_list), 2)
+
+    # create_user_login()
+    def test_create_user_login(self, m):
+        register_uris({'account': ['create_user_login']}, m)
+
+        response = self.account.create_user_login(user={'id': 123}, login={'unique_id': 112233})
+
+        self.assertIsInstance(response, Login)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertTrue(hasattr(response, 'unique_id'))
+        self.assertEqual(response.id, 123)
+        self.assertEqual(response.unique_id, 112233)
+
+    def test_create_user_login_fail_on_user_id(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.account.create_user_login(user={}, login={})
+
+    def test_create_user_login_fail_on_login_unique_id(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.account.create_user_login(user={'id': 123}, login={})
+
+    # get_department_level_participation_data_with_given_term()
+    def test_get_department_level_participation_data_with_given_term(self, m):
+        register_uris({'account': ['get_department_level_participation_data_with_given_term']}, m)
+
+        response = self.account.get_department_level_participation_data_with_given_term(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_participation_data_current()
+    def test_get_department_level_participation_data_current(self, m):
+        register_uris({'account': ['get_department_level_participation_data_current']}, m)
+
+        response = self.account.get_department_level_participation_data_current()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_participation_data_completed()
+    def test_get_department_level_participation_data_completed(self, m):
+        register_uris({'account': ['get_department_level_participation_data_completed']}, m)
+
+        response = self.account.get_department_level_participation_data_completed()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_grade_data_with_given_term()
+    def test_get_department_level_grade_data_with_given_term(self, m):
+        register_uris({'account': ['get_department_level_grade_data_with_given_term']}, m)
+
+        response = self.account.get_department_level_grade_data_with_given_term(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_grade_data_current()
+    def test_get_department_level_grade_data_current(self, m):
+        register_uris({'account': ['get_department_level_grade_data_current']}, m)
+
+        response = self.account.get_department_level_grade_data_current()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_grade_data_completed()
+    def test_get_department_level_grade_data_completed(self, m):
+        register_uris({'account': ['get_department_level_grade_data_completed']}, m)
+
+        response = self.account.get_department_level_grade_data_completed()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_statistics_with_given_term()
+    def test_get_department_level_statistics_with_given_term(self, m):
+        register_uris({'account': ['get_department_level_statistics_with_given_term']}, m)
+
+        response = self.account.get_department_level_statistics_with_given_term(1)
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_statistics_current()
+    def test_get_department_level_statistics_current(self, m):
+        register_uris({'account': ['get_department_level_statistics_current']}, m)
+
+        response = self.account.get_department_level_statistics_current()
+
+        self.assertIsInstance(response, list)
+
+    # get_department_level_statistics_completed()
+    def test_get_department_level_statistics_completed(self, m):
+        register_uris({'account': ['get_department_level_statistics_completed']}, m)
+
+        response = self.account.get_department_level_statistics_completed()
+
+        self.assertIsInstance(response, list)
+
+    # list_authentication_providers()
+    def test_list_authentication_providers(self, m):
+        requires = {'account': ['list_authentication_providers',
+                                'list_authentication_providers_2']}
+        register_uris(requires, m)
+
+        authentication_providers = self.account.list_authentication_providers()
+        authentication_providers_list = [
+            authentication_provider for authentication_provider in authentication_providers
+        ]
+
+        self.assertEqual(len(authentication_providers_list), 4)
+        self.assertIsInstance(authentication_providers_list[0], AuthenticationProvider)
+        self.assertTrue(hasattr(authentication_providers_list[0], 'auth_type'))
+        self.assertTrue(hasattr(authentication_providers_list[0], 'position'))
+
+    # add_authentication_providers()
+    def test_add_authentication_providers(self, m):
+        register_uris({'account': ['add_authentication_providers']}, m)
+
+        new_authentication_provider = self.account.add_authentication_providers()
+
+        self.assertIsInstance(new_authentication_provider, AuthenticationProvider)
+        self.assertTrue(hasattr(new_authentication_provider, 'auth_type'))
+        self.assertTrue(hasattr(new_authentication_provider, 'position'))
+
+    # get_authentication_providers()
+    def test_get_authentication_providers(self, m):
+        register_uris({'account': ['get_authentication_providers']}, m)
+
+        response = self.account.get_authentication_providers(1)
+
+        self.assertIsInstance(response, AuthenticationProvider)
+
+    # show_account_auth_settings()
+    def test_show_account_auth_settings(self, m):
+        register_uris({'account': ['show_account_auth_settings']}, m)
+
+        response = self.account.show_account_auth_settings()
+
+        self.assertIsInstance(response, SSOSettings)
+
+    # update_account_auth_settings()
+    def test_update_account_auth_settings(self, m):
+        register_uris({'account': ['update_account_auth_settings']}, m)
+
+        response = self.account.update_account_auth_settings()
+
+        self.assertIsInstance(response, SSOSettings)

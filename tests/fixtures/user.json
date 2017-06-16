@@ -182,6 +182,17 @@
 		],
 		"status_code": 200
 	},
+	"create_folder": {
+        "method": "POST",
+        "endpoint": "users/1/folders",
+        "data": {
+            "id": 2,
+            "name": "Test String",
+            "locked": false,
+            "hidden": false
+        },
+        "status_code": 200
+    },
 	"edit": {
 		"method": "PUT",
 		"endpoint": "users/1",
@@ -215,6 +226,18 @@
 			"name": "John Doe"
 		}
 	},
+	"get_folder": {
+        "method": "GET",
+        "endpoint": "users/1/folders/1",
+        "data": {
+            "id": 1,
+            "files_count": 10,
+            "folders_count": 2,
+            "name": "Folder 1",
+            "full_name": "Folder 1"
+        },
+        "status_code": 200
+    },
 	"get_user_assignments": {
 		"method": "GET",
 		"endpoint": "users/1/courses/1/assignments",
@@ -256,6 +279,43 @@
 		],
 		"status_code": 200
 	},
+	"get_user_files": {
+		"method": "GET",
+		"endpoint": "users/1/files",
+		"data": [
+			{
+				"id": 1,
+				"size": 2939,
+				"display_name": "File1.txt"
+			},
+			{
+				"id": 2,
+				"size": 18380,
+				"display_name": "File_2.png"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/users/1/files?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_user_files2": {
+		"method": "GET",
+		"endpoint": "users/1/files?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"display_name": "File 3.jpg",
+				"size": 1298
+			},
+			{
+				"id": 4,
+				"display_name": "File 4.docx",
+				"size": 88920
+			}
+		],
+		"status_code": 200
+	},
 	"list_calendar_events_for_user": {
 		"method": "GET",
 		"endpoint": "users/1/calendar_events",
@@ -269,6 +329,55 @@
 				"id": 456,
 				"context_code": "course_654",
 				"title": "Test Event 2"
+			}
+		],
+		"status_code": 200
+	},
+	"list_comm_channels": {
+		"method": "GET",
+		"endpoint": "users/1/communication_channels",
+		"data": [
+			{
+				"id": 11,
+				"address": "user@example.com",
+				"type": "email",
+				"position": 1,
+				"user_id": 1,
+				"workflow_state": "active"
+			},
+			{
+				"id": 12,
+				"address": "user2@example.com",
+				"type": "email",
+				"position": 2,
+				"user_id": 1,
+				"workflow_state": "active"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<http://example.com/api/v1/users/1/communication_channels?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"list_comm_channels2": {
+		"method": "GET",
+		"endpoint": "users/1/communication_channels?page=2&per_page=2",
+		"data": [
+			{
+				"id": 13,
+				"address": "5555555555@example.com",
+				"type": "sms",
+				"position": 3,
+				"user_id": 1,
+				"workflow_state": "active"
+			},
+			{
+				"id": 14,
+				"address": "For All Devices",
+				"type": "push",
+				"position": 4,
+				"user_id": 1,
+				"workflow_state": "active"
 			}
 		],
 		"status_code": 200
@@ -306,6 +415,27 @@
 		],
 		"status_code": 200
 	},
+	"list_folders": {
+        "method": "GET",
+        "endpoint": "users/1/folders",
+        "data": [
+            {
+                "id": 2,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 2",
+                "full_name": "user_files/Folder 2"
+            },
+            {
+                "id": 3,
+                "files_count": 0,
+                "folders_count": 0,
+                "name": "Folder 3",
+                "full_name": "user_files/Folder 3"
+            }
+        ],
+        "status_code": 200
+    },
 	"list_groups": {
 		"method": "GET",
 		"endpoint": "users/self/groups",
@@ -506,5 +636,124 @@
 		"data": {
 			"url": "great_url_success"
 		}
+	},
+	"list_user_logins": {
+		"method": "GET",
+		"endpoint": "users/1/logins",
+		"data": [
+			{
+				"account_id": 1,
+				"id": 2,
+				"sis_user_id": null,
+				"unique_id": "belieber@example.com",
+				"user_id": 2,
+				"authentication_provider_id": 1,
+				"authentication_provider_type": "facebook"
+			}
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/users/1/logins/?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_user_logins_2": {
+		"method": "GET",
+		"endpoint": "users/1/logins/?page=2&per_page=2",
+		"data": [
+			{
+				"account_id": 2,
+				"id": 3,
+				"sis_user_id": null,
+				"unique_id": "belieber@example.com",
+				"user_id": 3,
+				"authentication_provider_id": 2,
+				"authentication_provider_type": "facebook"
+			}
+		],
+		"status_code": 200
+	},
+	"list_observees": {
+		"method": "GET",
+		"endpoint": "users/1/observees",
+		"data": [
+			{
+				"id": 1,
+				"name": "User 1"
+			},
+			{
+				"id": 2,
+				"name": "User 2"
+			}
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/users/1/observees?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_observees_2": {
+		"method": "GET",
+		"endpoint": "users/1/observees?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "User 3"
+			},
+			{
+				"id": 4,
+				"name": "User 4"
+			}
+		],
+		"status_code": 200
+	},
+	"add_observee_with_credentials": {
+		"method": "POST",
+		"endpoint": "users/1/observees",
+		"data": {
+			"id": 5,
+			"name": "User 5"
+		}
+	},
+	"show_observee": {
+		"method": "GET",
+		"endpoint": "users/1/observees/6",
+		"data": {
+			"id": 6,
+			"name": "User 6"
+		}
+	},
+	"add_observee": {
+		"method": "PUT",
+		"endpoint": "users/1/observees/7",
+		"data": {
+			"id": 7,
+			"name": "User 7"
+		}
+	},
+	"remove_observee": {
+		"method": "DELETE",
+		"endpoint": "users/1/observees/8",
+		"data": {
+			"id": 8,
+			"name": "User 8"
+		}
+	},
+	"search_recipients": {
+		"method": "GET",
+		"endpoint": "search/recipients",
+		"data": [
+  			{
+  				"id": "group_1",
+  				"name": "the group",
+  				"type": "context",
+  				"user_count": 3
+  			},
+  			{
+  				"id": 2,
+  				"name": "greg",
+  				"common_courses": {},
+  				"common_groups": {"1": ["Member"]}
+  			}
+		],
+		"status_code": 200
 	}
 }
