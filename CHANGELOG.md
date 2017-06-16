@@ -1,5 +1,26 @@
 # Change Log
 
+## [0.4.0] - 2017-06-16
+### New Endpoint Coverage
+
+- Analytics
+- Announcement External Feeds
+- Authentication Providers
+- Communications Channels
+- Files
+- Logins
+- Notification Preferences
+- Submissions
+- Search
+- Tabs
+- User Observees
+
+### General
+
+- Set up TravisCI and Coveralls.
+- Added Badges to README.
+- Updated CONTRIBUTING.md to more accurately reflect our dev process.
+
 ## [0.3.0] - 2017-03-30
 ### New Endpoint Coverage
 
@@ -65,6 +86,7 @@
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.4.0]: https://github.com/ucfopen/canvasapi/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/ucfopen/canvasapi/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ucfopen/canvasapi/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/ucfopen/canvasapi/compare/v0.1.1...v0.1.2
