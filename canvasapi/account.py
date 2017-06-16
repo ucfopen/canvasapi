@@ -825,9 +825,9 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/authentication_providers \
         <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.create>`_
 
-        :rtype: :class:`canvasapi.authentication_providers.AuthenticationProviders`
+        :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
-        from canvasapi.authentication_providers import AuthenticationProviders
+        from canvasapi.authentication_provider import AuthenticationProvider
 
         response = self._requester.request(
             'POST',
@@ -837,7 +837,7 @@ class Account(CanvasObject):
         authentication_providers_json = response.json()
         authentication_providers_json.update({'account_id': self.id})
 
-        return AuthenticationProviders(self._requester, authentication_providers_json)
+        return AuthenticationProvider(self._requester, authentication_providers_json)
 
     def list_authentication_providers(self, **kwargs):
         """
@@ -847,12 +847,12 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.authentication_providers.AuthenticationProviders`
+            :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
-        from canvasapi.authentication_providers import AuthenticationProviders
+        from canvasapi.authentication_provider import AuthenticationProvider
 
         return PaginatedList(
-            AuthenticationProviders,
+            AuthenticationProvider,
             self._requester,
             'GET',
             'accounts/%s/authentication_providers' % (self.id),
@@ -867,9 +867,9 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/authentication_providers/:id \
         <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.show>`_
 
-        :rtype: :class:`canvasapi.authentication_providers.AuthenticationProviders`
+        :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
-        from canvasapi.authentication_providers import AuthenticationProviders
+        from canvasapi.authentication_provider import AuthenticationProvider
 
         response = self._requester.request(
             'GET',
@@ -877,7 +877,7 @@ class Account(CanvasObject):
             **combine_kwargs(**kwargs)
         )
 
-        return AuthenticationProviders(self._requester, response.json())
+        return AuthenticationProvider(self._requester, response.json())
 
     def show_account_auth_settings(self, **kwargs):
         """

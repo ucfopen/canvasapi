@@ -3,13 +3,13 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.authentication_providers import AuthenticationProviders
+from canvasapi.authentication_provider import AuthenticationProvider
 from tests import settings
 from tests.util import register_uris
 
 
 @requests_mock.Mocker()
-class TestAuthenticationProviders(unittest.TestCase):
+class TestAuthenticationProvider(unittest.TestCase):
 
     @classmethod
     def setUp(self):
@@ -42,7 +42,7 @@ class TestAuthenticationProviders(unittest.TestCase):
 
         deleted_authentication_providers = self.authentication_providers.delete()
 
-        self.assertIsInstance(deleted_authentication_providers, AuthenticationProviders)
+        self.assertIsInstance(deleted_authentication_providers, AuthenticationProvider)
         self.assertTrue(hasattr(deleted_authentication_providers, 'auth_type'))
         self.assertEqual(deleted_authentication_providers.auth_type, 'Authentication Providers')
 

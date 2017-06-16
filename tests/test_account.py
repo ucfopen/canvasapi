@@ -13,7 +13,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.group import Group, GroupCategory
 from canvasapi.user import User
 from canvasapi.login import Login
-from canvasapi.authentication_providers import AuthenticationProviders
+from canvasapi.authentication_provider import AuthenticationProvider
 from tests import settings
 from tests.util import register_uris
 
@@ -514,7 +514,7 @@ class TestAccount(unittest.TestCase):
         ]
 
         self.assertEqual(len(authentication_providers_list), 4)
-        self.assertIsInstance(authentication_providers_list[0], AuthenticationProviders)
+        self.assertIsInstance(authentication_providers_list[0], AuthenticationProvider)
         self.assertTrue(hasattr(authentication_providers_list[0], 'auth_type'))
         self.assertTrue(hasattr(authentication_providers_list[0], 'position'))
 
@@ -524,7 +524,7 @@ class TestAccount(unittest.TestCase):
 
         new_authentication_provider = self.account.add_authentication_providers()
 
-        self.assertIsInstance(new_authentication_provider, AuthenticationProviders)
+        self.assertIsInstance(new_authentication_provider, AuthenticationProvider)
         self.assertTrue(hasattr(new_authentication_provider, 'auth_type'))
         self.assertTrue(hasattr(new_authentication_provider, 'position'))
 
@@ -534,7 +534,7 @@ class TestAccount(unittest.TestCase):
 
         response = self.account.get_authentication_providers(1)
 
-        self.assertIsInstance(response, AuthenticationProviders)
+        self.assertIsInstance(response, AuthenticationProvider)
 
     # show_account_auth_settings()
     def test_show_account_auth_settings(self, m):

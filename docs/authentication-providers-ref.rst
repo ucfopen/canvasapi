@@ -1,6 +1,6 @@
-=======================
-AuthenticationProviders
-=======================
+======================
+AuthenticationProvider
+======================
 
-.. autoclass:: canvasapi.authentication_providers.AuthenticationProviders
+.. autoclass:: canvasapi.authentication_provider.AuthenticationProvider
     :members:

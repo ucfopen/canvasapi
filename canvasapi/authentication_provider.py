@@ -2,7 +2,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.util import combine_kwargs
 
 
-class AuthenticationProviders(CanvasObject):
+class AuthenticationProvider(CanvasObject):
 
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.auth_type, self.position)
@@ -14,7 +14,7 @@ class AuthenticationProviders(CanvasObject):
         :calls: `PUT /api/v1/accounts/:account_id/authentication_providers/:id \
         <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.update>`_
 
-        :rtype: :class:`canvasapi.authentication_providers.AuthenticationProviders`
+        :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
         response = self._requester.request(
             'PUT',
@@ -23,7 +23,7 @@ class AuthenticationProviders(CanvasObject):
         )
 
         if response.json().get('auth_type'):
-            super(AuthenticationProviders, self).set_attributes(response.json())
+            super(AuthenticationProvider, self).set_attributes(response.json())
 
         return response.json().get('auth_type')
 
@@ -34,10 +34,10 @@ class AuthenticationProviders(CanvasObject):
         :calls: `DELETE /api/v1/accounts/:account_id/authentication_providers/:id \
         <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.destroy>`_
 
-        :rtype: :class:`canvasapi.authentication_providers.AuthenticationProviders`
+        :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
         response = self._requester.request(
             'DELETE',
             'accounts/%s/authentication_providers/%s' % (self.account_id, self.id)
         )
-        return AuthenticationProviders(self._requester, response.json())
+        return AuthenticationProvider(self._requester, response.json())
