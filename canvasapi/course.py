@@ -694,7 +694,7 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.course.Course`
         """
-        from group import Group
+        from canvasapi.group import Group
         return PaginatedList(
             Group,
             self._requester,

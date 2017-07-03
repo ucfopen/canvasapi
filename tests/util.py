@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 
 import requests_mock
@@ -48,4 +49,4 @@ def register_uris(requirements, requests_mocker):
                     headers=obj.get('headers', {})
                 )
             except Exception as e:
-                print e
+                print(e)

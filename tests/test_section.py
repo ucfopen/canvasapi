@@ -1,5 +1,4 @@
 import unittest
-import settings
 import requests_mock
 
 from canvasapi import Canvas
@@ -7,6 +6,7 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.section import Section
 from canvasapi.submission import Submission
+from tests import settings
 from tests.util import register_uris
 
 

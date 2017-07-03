@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from canvas import Canvas
+from canvasapi.canvas import Canvas
 
 __all__ = ["Canvas"]
 

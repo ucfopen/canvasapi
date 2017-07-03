@@ -1,11 +1,11 @@
 import unittest
-import settings
 
 import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.module import Module, ModuleItem
+from tests import settings
 from tests.util import register_uris
 
 

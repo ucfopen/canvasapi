@@ -2,10 +2,10 @@ import unittest
 
 import requests_mock
 
-import settings
 from canvasapi.canvas import Canvas
 from canvasapi.progress import Progress
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 @requests_mock.Mocker()
