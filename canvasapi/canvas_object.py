@@ -67,11 +67,7 @@ class CanvasObject(object):
         for attribute, value in attributes.items():
             self.__setattr__(attribute, value)
 
-            try:
-                # datetime field
-                if DATE_PATTERN.match(str(value)):
-                    date = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
-                    self.__setattr__(attribute + '_date', date)
-            # Non-unicode character. We can skip over this attribute.
-            except UnicodeEncodeError:
-                continue
+            # datetime field
+            if DATE_PATTERN.match(str(value)):
+                date = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
+                self.__setattr__(attribute + '_date', date)
