@@ -1,6 +1,9 @@
+from __future__ import unicode_literals
 from datetime import datetime
 import json
 import re
+
+from builtins import str, object
 
 DATE_PATTERN = re.compile('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')
 
@@ -25,7 +28,7 @@ class CanvasObject(object):
 
     def __repr__(self):  # pragma: no cover
         classname = self.__class__.__name__
-        attrs = ', '.join(['%s=%s' % (attr, val) for attr, val in self.__dict__.iteritems() if attr != 'attributes'])  # noqa
+        attrs = ', '.join(['%s=%s' % (attr, val) for attr, val in self.__dict__.items() if attr != 'attributes'])  # noqa
         return '%s(%s)' % (classname, attrs)
 
     def to_json(self):
@@ -61,7 +64,7 @@ class CanvasObject(object):
         """
         self.attributes = attributes
 
-        for attribute, value in attributes.iteritems():
+        for attribute, value in attributes.items():
             self.__setattr__(attribute, value)
 
             try:

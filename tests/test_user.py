@@ -1,7 +1,9 @@
+from __future__ import unicode_literals
+import os
 import unittest
 import uuid
-import os
 
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas
@@ -25,7 +27,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestUser(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -194,10 +195,9 @@ class TestUser(unittest.TestCase):
     def test_upload(self, m):
         register_uris({'user': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_%s' % uuid.uuid4().hex
-        file = open(filename, 'w+')
-
-        response = self.user.upload(file)
+        filename = 'testfile_user_%s' % uuid.uuid4().hex
+        with open(filename, 'w+') as file:
+            response = self.user.upload(file)
 
         self.assertTrue(response[0])
         self.assertIsInstance(response[1], dict)
@@ -360,7 +360,6 @@ class TestUser(unittest.TestCase):
 @requests_mock.Mocker()
 class TestUserDisplay(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 

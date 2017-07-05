@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import unittest
 from datetime import datetime
 
@@ -22,7 +23,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestCanvas(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -86,7 +86,7 @@ class TestCanvas(unittest.TestCase):
         course = self.canvas.get_course(2)
 
         self.assertTrue(hasattr(course, 'start_at'))
-        self.assertIsInstance(course.start_at, (str, unicode))
+        self.assertIsInstance(course.start_at, str)
         self.assertTrue(hasattr(course, 'start_at_date'))
         self.assertIsInstance(course.start_at_date, datetime)
 

@@ -1,7 +1,9 @@
+from __future__ import unicode_literals
 import os
 import unittest
 import uuid
 
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas
@@ -20,7 +22,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestGroup(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -139,9 +140,9 @@ class TestGroup(unittest.TestCase):
     def test_upload(self, m):
         register_uris({'group': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_%s' % uuid.uuid4().hex
-        file = open(filename, 'w+')
-        response = self.group.upload(file)
+        filename = 'testfile_group_%s' % uuid.uuid4().hex
+        with open(filename, 'w+') as file:
+            response = self.group.upload(file)
         self.assertTrue(response[0])
         self.assertIsInstance(response[1], dict)
         self.assertIn('url', response[1])
@@ -207,8 +208,8 @@ class TestGroup(unittest.TestCase):
         discussion = self.group.get_discussion_topic(group_id)
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, 'group_id'))
-        self.assertEquals(group_id, discussion.id)
-        self.assertEquals(discussion.group_id, 1)
+        self.assertEqual(group_id, discussion.id)
+        self.assertEqual(discussion.group_id, 1)
 
     # get_full_discussion_topic
     def test_get_full_discussion_topic(self, m):
@@ -219,7 +220,7 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, 'view'))
         self.assertTrue(hasattr(discussion, 'participants'))
-        self.assertEquals(discussion.group_id, 1)
+        self.assertEqual(discussion.group_id, 1)
 
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
@@ -229,7 +230,7 @@ class TestGroup(unittest.TestCase):
         discussion_list = [discussion for discussion in response]
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
         self.assertTrue(hasattr(discussion_list[0], 'group_id'))
-        self.assertEquals(2, len(discussion_list))
+        self.assertEqual(2, len(discussion_list))
 
     # create_discussion_topic()
     def test_create_discussion_topic(self, m):
@@ -239,8 +240,8 @@ class TestGroup(unittest.TestCase):
         discussion = self.group.create_discussion_topic()
         self.assertTrue(hasattr(discussion, 'group_id'))
         self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertEquals(discussion.title, title)
-        self.assertEquals(discussion.group_id, 1)
+        self.assertEqual(discussion.title, title)
+        self.assertEqual(discussion.group_id, 1)
 
     # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
@@ -335,7 +336,6 @@ class TestGroup(unittest.TestCase):
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -379,7 +379,6 @@ class TestGroupMembership(unittest.TestCase):
 @requests_mock.Mocker()
 class TestGroupCategory(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         with requests_mock.Mocker() as m:

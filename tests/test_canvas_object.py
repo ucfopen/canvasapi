@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import unittest
 
 from canvasapi.canvas_object import CanvasObject

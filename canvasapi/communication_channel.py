@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.notification_preference import NotificationPreference
 

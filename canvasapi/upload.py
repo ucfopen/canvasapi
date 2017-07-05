@@ -1,4 +1,7 @@
+from __future__ import unicode_literals
 import os
+
+from builtins import object
 
 from canvasapi.util import combine_kwargs
 
@@ -54,9 +57,11 @@ class Uploader(object):
         """
         response = response.json()
         if not response.get('upload_url'):
+            self.file.close()
             raise ValueError('Bad API response. No upload_url.')
 
         if not response.get('upload_params'):
+            self.file.close()
             raise ValueError('Bad API response. No upload_params.')
 
         kwargs = response.get('upload_params')

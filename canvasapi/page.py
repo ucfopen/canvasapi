@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.util import combine_kwargs
 from canvasapi.paginated_list import PaginatedList
