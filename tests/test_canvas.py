@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import unittest
 from datetime import datetime
 
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas

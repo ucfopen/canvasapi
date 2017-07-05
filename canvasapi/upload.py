@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import os
 
-from builtins import object
+from builtins import object, str
 
 from canvasapi.util import combine_kwargs
 
