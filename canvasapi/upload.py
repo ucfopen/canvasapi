@@ -17,7 +17,7 @@ class Uploader(object):
         :type requester: :class:`canvasapi.requester.Requester`
         :param url: The URL to upload the file to.
         :type url: str
-        :param file: The file or path of the file to upload.
+        :param file: A file handler or path of the file to upload.
         :type file: file or str
         """
         if isinstance(file, str):
@@ -34,11 +34,29 @@ class Uploader(object):
 
     def start(self):
         """
-        Request an upload token.
-        """
-        # open file if using filename
-        file = open(self.file, 'rb') if self._using_filename else self.file
+        Kick off uploading process. Handles open/closing file if a path
+        is passed.
 
+        :calls: request_upload_token
+        :returns: True if the file uploaded successfully, False \
+            otherwise, and the JSON response from the API.
+        :rtype: tuple
+        """
+        if self._using_filename:
+            with open(self.file, 'rb') as file:
+                return self.request_upload_token(file)
+        else:
+            return self.request_upload_token(self.file)
+
+    def request_upload_token(self, file):
+        """
+        Request an upload token.
+
+        :param file: A file handler pointing to the file to upload.
+        :returns: True if the file uploaded successfully, False otherwise, \
+            and the JSON response from the API.
+        :rtype: tuple
+        """
         self.kwargs['name'] = os.path.basename(file.name)
         self.kwargs['size'] = os.fstat(file.fileno()).st_size
 
@@ -48,20 +66,17 @@ class Uploader(object):
             **combine_kwargs(**self.kwargs)
         )
 
-        # close file if using filename
-        if self._using_filename:
-            file.close()
+        return self.upload(response, file)
 
-        return self.upload(response)
-
-    def upload(self, response):
+    def upload(self, response, file):
         """
         Upload the file.
 
         :param response: The response from the upload request.
         :type response: dict
+        :param file: A file handler pointing to the file to upload.
         :returns: True if the file uploaded successfully, False otherwise, \
-                    and the JSON response from the API.
+            and the JSON response from the API.
         :rtype: tuple
         """
         response = response.json()
@@ -70,9 +85,6 @@ class Uploader(object):
 
         if not response.get('upload_params'):
             raise ValueError('Bad API response. No upload_params.')
-
-        # open file if using filename
-        file = open(self.file, 'rb') if self._using_filename else self.file
 
         kwargs = response.get('upload_params')
         kwargs['file'] = file
@@ -83,10 +95,6 @@ class Uploader(object):
             _url=response.get('upload_url'),
             **kwargs
         ).json()
-
-        # close file if using filename
-        if self._using_filename:
-            file.close()
 
         if 'url' in response_json:
             return (True, response_json)
