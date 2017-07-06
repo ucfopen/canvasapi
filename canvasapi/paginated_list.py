@@ -1,4 +1,7 @@
+from __future__ import unicode_literals
 import re
+
+from builtins import object
 
 
 class PaginatedList(object):
@@ -25,7 +28,7 @@ class PaginatedList(object):
 
     def __getitem__(self, index):
         assert isinstance(index, (int, slice))
-        if isinstance(index, (int, long)):
+        if isinstance(index, int):
             self.__get_up_to_index(index)
             return self.__elements[index]
         else:
@@ -81,7 +84,7 @@ class PaginatedList(object):
 
         return content
 
-    class _Slice:
+    class _Slice(object):
         def __init__(self, the_list, the_slice):
             self.__list = the_list
             self.__start = the_slice.start or 0

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import unittest
 
 import requests_mock
@@ -13,7 +14,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestUtil(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 

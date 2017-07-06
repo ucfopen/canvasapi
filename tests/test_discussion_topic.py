@@ -1,5 +1,7 @@
+from __future__ import unicode_literals
 import unittest
 
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas
@@ -13,7 +15,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestDiscussionTopic(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -49,7 +50,7 @@ class TestDiscussionTopic(unittest.TestCase):
         discussion = self.discussion_topic.update()
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, 'course_id'))
-        self.assertEquals(discussion.course_id, 1)
+        self.assertEqual(discussion.course_id, 1)
 
     # update_entry()
     def test_update_entry(self, m):
@@ -81,8 +82,8 @@ class TestDiscussionTopic(unittest.TestCase):
         entries = self.discussion_topic.list_topic_entries()
         entry_list = [entry for entry in entries]
         self.assertIsInstance(entry_list[0], DiscussionTopic)
-        self.assertEquals(entry_list[0].id, 1)
-        self.assertEquals(entry_list[0].user_id, 1)
+        self.assertEqual(entry_list[0].id, 1)
+        self.assertEqual(entry_list[0].user_id, 1)
 
     # post_reply()
     def test_post_reply(self, m):
@@ -91,7 +92,7 @@ class TestDiscussionTopic(unittest.TestCase):
         message = "Message 1"
         reply = self.discussion_topic.post_reply(1)
         self.assertIsInstance(reply, DiscussionTopic)
-        self.assertEquals(reply.message, message)
+        self.assertEqual(reply.message, message)
         self.assertTrue(hasattr(reply, 'created_at'))
         self.assertTrue(hasattr(reply, 'message'))
 
@@ -102,7 +103,7 @@ class TestDiscussionTopic(unittest.TestCase):
         replies = self.discussion_topic.list_entry_replies(1)
         reply_list = [reply for reply in replies]
         self.assertIsInstance(reply_list[0], DiscussionTopic)
-        self.assertEquals(reply_list[0].id, 1)
+        self.assertEqual(reply_list[0].id, 1)
 
     # list_entries()
     def test_list_entries(self, m):
@@ -111,7 +112,7 @@ class TestDiscussionTopic(unittest.TestCase):
         entries = self.discussion_topic.list_entries()
         entry_list = [entry for entry in entries]
         self.assertIsInstance(entry_list[0], DiscussionTopic)
-        self.assertEquals(entry_list[0].id, 1)
+        self.assertEqual(entry_list[0].id, 1)
 
     # mark_as_read()
     def test_mark_as_read(self, m):
@@ -231,10 +232,10 @@ class TestDiscussionTopic(unittest.TestCase):
 
     # parent_id
     def test_parent_id_course(self, m):
-        self.assertEquals(self.discussion_topic.parent_id, 1)
+        self.assertEqual(self.discussion_topic.parent_id, 1)
 
     def test_parent_id_group(self, m):
-        self.assertEquals(self.discussion_topic_group.parent_id, 1)
+        self.assertEqual(self.discussion_topic_group.parent_id, 1)
 
     def test_parent_id_no_id(self, m):
         discussion = DiscussionTopic(self.canvas._Canvas__requester, {'id': 1})
@@ -243,10 +244,10 @@ class TestDiscussionTopic(unittest.TestCase):
 
     # parent_type
     def test_parent_type_course(self, m):
-        self.assertEquals(self.discussion_topic.parent_type, 'course')
+        self.assertEqual(self.discussion_topic.parent_type, 'course')
 
     def test_parent_type_group(self, m):
-        self.assertEquals(self.discussion_topic_group.parent_type, 'group')
+        self.assertEqual(self.discussion_topic_group.parent_type, 'group')
 
     def test_parent_type_no_id(self, m):
         discussion = DiscussionTopic(self.canvas._Canvas__requester, {'id': 1})

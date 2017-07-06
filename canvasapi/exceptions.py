@@ -1,3 +1,8 @@
+from __future__ import unicode_literals
+
+from builtins import str
+
+
 class CanvasException(Exception):  # pragma: no cover
     """
     Base class for all errors returned by the Canvas API.

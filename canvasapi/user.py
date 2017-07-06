@@ -1,3 +1,7 @@
+from __future__ import unicode_literals
+
+from builtins import str
+
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
@@ -295,7 +299,7 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
-        from group import Group
+        from canvasapi.group import Group
 
         return PaginatedList(
             Group,

@@ -1,3 +1,4 @@
+from __future__ import print_function, unicode_literals
 import json
 
 import requests_mock
@@ -14,10 +15,11 @@ def register_uris(requirements, requests_mocker):
     :param requirements: dict
     :param requests_mocker: requests_mock.mocker.Mocker
     """
-    for fixture, objects in requirements.iteritems():
+    for fixture, objects in requirements.items():
 
         try:
-            data = json.loads(open('tests/fixtures/{}.json'.format(fixture)).read())
+            with open('tests/fixtures/{}.json'.format(fixture)) as file:
+                data = json.loads(file.read())
         except IOError:
             raise ValueError('Fixture {}.json contains invalid JSON.'.format(fixture))
 
@@ -48,4 +50,4 @@ def register_uris(requirements, requests_mocker):
                     headers=obj.get('headers', {})
                 )
             except Exception as e:
-                print e
+                print(e)

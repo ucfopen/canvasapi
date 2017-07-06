@@ -1,3 +1,8 @@
+from __future__ import unicode_literals
+
+from builtins import str
+
+
 def combine_kwargs(**kwargs):
     """
     Combines a list of keyword arguments into a single dictionary.
@@ -8,7 +13,7 @@ def combine_kwargs(**kwargs):
         new_prefix = prefix + '[' + str(key) + ']'
         if isinstance(value, dict):
             d = {}
-            for k, v in value.iteritems():
+            for k, v in value.items():
                 d.update(flatten_dict(new_prefix, k, v))
             return d
         else:
@@ -17,10 +22,10 @@ def combine_kwargs(**kwargs):
     combined_kwargs = {}
 
     # Loop through all kwargs.
-    for kw, arg in kwargs.iteritems():
+    for kw, arg in kwargs.items():
         if isinstance(arg, dict):
             # If the argument is a dictionary, flatten it.
-            for key, value in arg.iteritems():
+            for key, value in arg.items():
                 combined_kwargs.update(flatten_dict(str(kw), key, value))
         else:
             combined_kwargs.update({str(kw): arg})

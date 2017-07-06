@@ -1,5 +1,7 @@
+from __future__ import unicode_literals
 import unittest
-import settings
+
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas
@@ -7,13 +9,13 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.section import Section
 from canvasapi.submission import Submission
+from tests import settings
 from tests.util import register_uris
 
 
 @requests_mock.Mocker()
 class TestSection(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 

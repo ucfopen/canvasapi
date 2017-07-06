@@ -1,5 +1,7 @@
+from __future__ import unicode_literals
 import unittest
 
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas
@@ -14,7 +16,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestExternalTool(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -93,7 +94,7 @@ class TestExternalTool(unittest.TestCase):
         requires = {'external_tool': ['get_sessionless_launch_url_course']}
         register_uris(requires, m)
 
-        self.assertIsInstance(self.ext_tool_course.get_sessionless_launch_url(), (str, unicode))
+        self.assertIsInstance(self.ext_tool_course.get_sessionless_launch_url(), str)
 
     def test_get_sessionless_launch_url_no_url(self, m):
         requires = {
