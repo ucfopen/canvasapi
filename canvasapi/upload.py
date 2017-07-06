@@ -23,8 +23,9 @@ class Uploader(object):
         if isinstance(file, str):
             if not os.path.exists(file):
                 raise IOError('File ' + file + ' does not exist.')
-
-            file = open(file, 'rb')
+            self._using_filename = True
+        else:
+            self._using_filename = False
 
         self._requester = requester
         self.url = url
@@ -35,14 +36,22 @@ class Uploader(object):
         """
         Request an upload token.
         """
-        self.kwargs['name'] = os.path.basename(self.file.name)
-        self.kwargs['size'] = os.fstat(self.file.fileno()).st_size
+        # open file if using filename
+        file = open(self.file, 'rb') if self._using_filename else self.file
+
+        self.kwargs['name'] = os.path.basename(file.name)
+        self.kwargs['size'] = os.fstat(file.fileno()).st_size
 
         response = self._requester.request(
             'POST',
             self.url,
             **combine_kwargs(**self.kwargs)
         )
+
+        # close file if using filename
+        if self._using_filename:
+            file.close()
+
         return self.upload(response)
 
     def upload(self, response):
@@ -57,15 +66,16 @@ class Uploader(object):
         """
         response = response.json()
         if not response.get('upload_url'):
-            self.file.close()
             raise ValueError('Bad API response. No upload_url.')
 
         if not response.get('upload_params'):
-            self.file.close()
             raise ValueError('Bad API response. No upload_params.')
 
+        # open file if using filename
+        file = open(self.file, 'rb') if self._using_filename else self.file
+
         kwargs = response.get('upload_params')
-        kwargs['file'] = self.file
+        kwargs['file'] = file
 
         response_json = self._requester.request(
             'POST',
@@ -73,6 +83,10 @@ class Uploader(object):
             _url=response.get('upload_url'),
             **kwargs
         ).json()
+
+        # close file if using filename
+        if self._using_filename:
+            file.close()
 
         if 'url' in response_json:
             return (True, response_json)

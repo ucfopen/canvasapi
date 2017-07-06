@@ -23,6 +23,7 @@ class TestUploader(unittest.TestCase):
 
     def tearDown(self):
         self.file.close()
+
         # http://stackoverflow.com/a/10840586
         # Not as stupid as it looks.
         try:
