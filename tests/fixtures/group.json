@@ -608,6 +608,16 @@
 			},
 		"status_code": 200
 	},
+	"get_file": {
+		"method": "GET",
+		"endpoint": "groups/1/files/1",
+		"data": {
+			"id": 1,
+			"display_name": "Group_File.docx",
+			"size": 4096
+		},
+		"status_code": 200
+	},
 	"get_full_discussion_topic": {
 		"method": "GET",
 		"endpoint": "groups/1/discussion_topics/1/view",

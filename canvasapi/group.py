@@ -379,6 +379,25 @@ class Group(CanvasObject):
 
         return DiscussionTopic(self._requester, response_json)
 
+    def get_file(self, file_id, **kwargs):
+        """
+        Return the standard attachment json object for a file.
+
+        :calls: `GET /api/v1/groups/:group_id/files/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
+
+        :param file_id: The ID of the file to retrieve.
+        :type file_id: int
+        :rtype: :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+        response = self._requester.request(
+            'GET',
+            'groups/{}/files/{}'.format(self.id, file_id),
+            **combine_kwargs(**kwargs)
+        )
+        return File(self._requester, response.json())
+
     def get_full_discussion_topic(self, topic_id):
         """
         Return a cached structure of the discussion topic.

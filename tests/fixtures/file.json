@@ -8,5 +8,15 @@
             "size": 5512
         },
         "status_code": 200
+    },
+    "get_by_id": {
+        "method": "GET",
+        "endpoint": "files/1",
+        "data": {
+            "id": 1,
+            "display_name": "File.docx",
+            "size": 6144
+        },
+        "status_code": 200
     }
 }
