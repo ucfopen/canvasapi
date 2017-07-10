@@ -226,6 +226,16 @@
 			"name": "John Doe"
 		}
 	},
+	"get_file": {
+		"method": "GET",
+		"endpoint": "users/1/files/1",
+		"data": {
+			"id": 1,
+			"display_name": "User_File.docx",
+			"size": 1024
+		},
+		"status_code": 200
+	},
 	"get_folder": {
         "method": "GET",
         "endpoint": "users/1/folders/1",

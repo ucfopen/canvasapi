@@ -1,6 +1,11 @@
+from __future__ import unicode_literals
+
+from builtins import object
+
 from canvasapi.account import Account
 from canvasapi.course import Course
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.paginated_list import PaginatedList
@@ -757,9 +762,27 @@ class Canvas(object):
             **combine_kwargs(**kwargs)
         )
 
+    def get_file(self, file_id, **kwargs):
+        """
+        Return the standard attachment json object for a file.
+
+        :calls: `GET /api/v1/files/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
+
+        :param file_id: The ID of the file to retrieve.
+        :type file_id: int
+        :rtype: :class:`canvasapi.file.File`
+        """
+        response = self.__requester.request(
+            'GET',
+            'files/{}'.format(file_id),
+            **combine_kwargs(**kwargs)
+        )
+        return File(self.__requester, response.json())
+
     def get_folder(self, folder_id):
         """
-        Returns the details for a folder
+        Return the details for a folder
 
         :calls: `GET /api/v1/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_

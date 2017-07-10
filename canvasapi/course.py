@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
@@ -694,7 +696,7 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.course.Course`
         """
-        from group import Group
+        from canvasapi.group import Group
         return PaginatedList(
             Group,
             self._requester,
@@ -764,6 +766,25 @@ class Course(CanvasObject):
         response_json.update({'course_id': self.id})
 
         return DiscussionTopic(self._requester, response_json)
+
+    def get_file(self, file_id, **kwargs):
+        """
+        Return the standard attachment json object for a file.
+
+        :calls: `GET /api/v1/courses/:course_id/files/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
+
+        :param file_id: The ID of the file to retrieve.
+        :type file_id: int
+        :rtype: :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+        response = self._requester.request(
+            'GET',
+            'courses/{}/files/{}'.format(self.id, file_id),
+            **combine_kwargs(**kwargs)
+        )
+        return File(self._requester, response.json())
 
     def get_full_discussion_topic(self, topic_id):
         """

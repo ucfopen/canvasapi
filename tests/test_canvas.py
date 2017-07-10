@@ -1,6 +1,8 @@
+from __future__ import unicode_literals
 import unittest
 from datetime import datetime
 
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas
@@ -10,6 +12,7 @@ from canvasapi.calendar_event import CalendarEvent
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
 from canvasapi.exceptions import ResourceDoesNotExist
 from canvasapi.progress import Progress
@@ -22,7 +25,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestCanvas(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -86,7 +88,7 @@ class TestCanvas(unittest.TestCase):
         course = self.canvas.get_course(2)
 
         self.assertTrue(hasattr(course, 'start_at'))
-        self.assertIsInstance(course.start_at, (str, unicode))
+        self.assertIsInstance(course.start_at, str)
         self.assertTrue(hasattr(course, 'start_at_date'))
         self.assertIsInstance(course.start_at_date, datetime)
 
@@ -443,6 +445,15 @@ class TestCanvas(unittest.TestCase):
         groups = self.canvas.list_group_participants(222)
         groups_list = [group for group in groups]
         self.assertEqual(len(groups_list), 2)
+
+    # get_file()
+    def test_get_file(self, m):
+        register_uris({'file': ['get_by_id']}, m)
+
+        file = self.canvas.get_file(1)
+        self.assertIsInstance(file, File)
+        self.assertEqual(file.display_name, "File.docx")
+        self.assertEqual(file.size, 6144)
 
     # search_recipients()
     def test_search_recipients(self, m):

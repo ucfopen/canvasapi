@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import unittest
 
 import requests_mock
@@ -12,7 +13,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestPaginatedList(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         self.requester = self.canvas._Canvas__requester
@@ -100,7 +100,7 @@ class TestPaginatedList(unittest.TestCase):
         )
         list_1 = [item for item in pag_list]
         list_2 = [item for item in pag_list]
-        self.assertEqual(cmp(list_1, list_2), 0)
+        self.assertEqual(list_1, list_2)
 
     # get item
     def test_getitem_first(self, m):

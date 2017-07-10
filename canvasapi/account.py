@@ -1,3 +1,7 @@
+from __future__ import unicode_literals
+
+from builtins import str
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
@@ -495,7 +499,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
-        from group import Group
+        from canvasapi.group import Group
         return PaginatedList(
             Group,
             self._requester,
@@ -515,7 +519,7 @@ class Account(CanvasObject):
         :type name: str
         :rtype: :class:`canvasapi.group.GroupCategory`
         """
-        from group import GroupCategory
+        from canvasapi.group import GroupCategory
 
         response = self._requester.request(
             'POST',
@@ -535,7 +539,7 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.group.GroupCategory`
         """
-        from group import GroupCategory
+        from canvasapi.group import GroupCategory
 
         return PaginatedList(
             GroupCategory,
@@ -605,7 +609,7 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
-        from enrollment_term import EnrollmentTerm
+        from canvasapi.enrollment_term import EnrollmentTerm
 
         return PaginatedList(
             EnrollmentTerm,
@@ -626,7 +630,7 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.login.Login`
         """
-        from login import Login
+        from canvasapi.login import Login
 
         return PaginatedList(
             Login,
@@ -649,7 +653,7 @@ class Account(CanvasObject):
         :type login: `dict`
         :rtype: :class:`canvasapi.login.Login`
         """
-        from login import Login
+        from canvasapi.login import Login
 
         if isinstance(user, dict) and 'id' in user:
             kwargs['user'] = user

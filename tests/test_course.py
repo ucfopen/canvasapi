@@ -1,7 +1,9 @@
+from __future__ import unicode_literals
 import unittest
 import uuid
 import os
 
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas
@@ -29,7 +31,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestCourse(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -135,7 +136,7 @@ class TestCourse(unittest.TestCase):
         html_str = "<script></script><p>hello</p>"
         prev_html = self.course.preview_html(html_str)
 
-        self.assertIsInstance(prev_html, (str, unicode))
+        self.assertIsInstance(prev_html, str)
         self.assertEqual(prev_html, "<p>hello</p>")
 
     # get_settings()
@@ -159,10 +160,9 @@ class TestCourse(unittest.TestCase):
     def test_upload(self, m):
         register_uris({'course': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_%s' % uuid.uuid4().hex
-        file = open(filename, 'w+')
-
-        response = self.course.upload(file)
+        filename = 'testfile_course_%s' % uuid.uuid4().hex
+        with open(filename, 'w+') as file:
+            response = self.course.upload(file)
 
         self.assertTrue(response[0])
         self.assertIsInstance(response[1], dict)
@@ -450,7 +450,16 @@ class TestCourse(unittest.TestCase):
         discussion = self.course.get_discussion_topic(topic_id)
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, 'course_id'))
-        self.assertEquals(discussion.course_id, 1)
+        self.assertEqual(discussion.course_id, 1)
+
+    # get_file()
+    def test_get_file(self, m):
+        register_uris({'course': ['get_file']}, m)
+
+        file = self.course.get_file(1)
+        self.assertIsInstance(file, File)
+        self.assertEqual(file.display_name, 'Course_File.docx')
+        self.assertEqual(file.size, 2048)
 
     # get_full_discussion_topic()
     def test_get_full_discussion_topic(self, m):
@@ -461,7 +470,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, 'view'))
         self.assertTrue(hasattr(discussion, 'participants'))
-        self.assertEquals(discussion.course_id, 1)
+        self.assertEqual(discussion.course_id, 1)
 
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
@@ -471,7 +480,7 @@ class TestCourse(unittest.TestCase):
         discussion_list = [discussion for discussion in response]
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
         self.assertTrue(hasattr(discussion_list[0], 'course_id'))
-        self.assertEquals(2, len(discussion_list))
+        self.assertEqual(2, len(discussion_list))
 
     # create_discussion_topic()
     def test_create_discussion_topic(self, m):
@@ -481,8 +490,8 @@ class TestCourse(unittest.TestCase):
         discussion = self.course.create_discussion_topic()
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, 'course_id'))
-        self.assertEquals(title, discussion.title)
-        self.assertEquals(discussion.course_id, 1)
+        self.assertEqual(title, discussion.title)
+        self.assertEqual(discussion.course_id, 1)
 
     # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
@@ -782,7 +791,6 @@ class TestCourse(unittest.TestCase):
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 

@@ -1,17 +1,18 @@
+from __future__ import unicode_literals
 import unittest
 
+from builtins import str
 import requests_mock
 
-import settings
 from canvasapi.canvas import Canvas
 from canvasapi.progress import Progress
-from util import register_uris
+from tests import settings
+from tests.util import register_uris
 
 
 @requests_mock.Mocker()
 class TestProgress(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 

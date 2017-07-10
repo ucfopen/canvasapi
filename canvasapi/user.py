@@ -1,3 +1,7 @@
+from __future__ import unicode_literals
+
+from builtins import str
+
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
@@ -295,7 +299,7 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
-        from group import Group
+        from canvasapi.group import Group
 
         return PaginatedList(
             Group,
@@ -422,6 +426,25 @@ class User(CanvasObject):
             'users/%s/files' % (self.id),
             **combine_kwargs(**kwargs)
         )
+
+    def get_file(self, file_id, **kwargs):
+        """
+        Return the standard attachment json object for a file.
+
+        :calls: `GET /api/v1/users/:group_id/files/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
+
+        :param file_id: The ID of the file to retrieve.
+        :type file_id: int
+        :rtype: :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+        response = self._requester.request(
+            'GET',
+            'users/{}/files/{}'.format(self.id, file_id),
+            **combine_kwargs(**kwargs)
+        )
+        return File(self._requester, response.json())
 
     def get_folder(self, folder_id):
         """

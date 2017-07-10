@@ -1,18 +1,19 @@
+from __future__ import unicode_literals
 import unittest
-import settings
 
+from builtins import str
 import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.module import Module, ModuleItem
+from tests import settings
 from tests.util import register_uris
 
 
 @requests_mock.Mocker()
 class TestModule(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -112,7 +113,6 @@ class TestModule(unittest.TestCase):
 @requests_mock.Mocker()
 class TestModuleItem(unittest.TestCase):
 
-    @classmethod
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
