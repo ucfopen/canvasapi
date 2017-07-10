@@ -1,5 +1,18 @@
 # Change Log
 
+## [0.5.0] - 2017-07-10
+### New Endpoint Coverage
+
+- Files (Get file from Canvas, Course, Group, or User)
+
+### General
+
+- Added support for Python 3.3, 3.4, 3.5, and 3.6 while maintaining 2.7 compatibility.
+
+### Bugfixes
+
+- Fixed an issue where non-ASCII characters in CanvasObject data would throw UnicodeEncodeError exceptions.
+
 ## [0.4.0] - 2017-06-16
 ### New Endpoint Coverage
 
