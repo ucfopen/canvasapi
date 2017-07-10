@@ -277,6 +277,15 @@ class TestUser(unittest.TestCase):
         self.assertEqual(len(file_list), 4)
         self.assertIsInstance(file_list[0], File)
 
+    # get_file()
+    def test_get_file(self, m):
+        register_uris({'user': ['get_file']}, m)
+
+        file = self.user.get_file(1)
+        self.assertIsInstance(file, File)
+        self.assertEqual(file.display_name, 'User_File.docx')
+        self.assertEqual(file.size, 1024)
+
     # get_folder()
     def test_get_folder(self, m):
         register_uris({'user': ['get_folder']}, m)

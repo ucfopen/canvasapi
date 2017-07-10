@@ -452,6 +452,15 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(discussion, 'course_id'))
         self.assertEqual(discussion.course_id, 1)
 
+    # get_file()
+    def test_get_file(self, m):
+        register_uris({'course': ['get_file']}, m)
+
+        file = self.course.get_file(1)
+        self.assertIsInstance(file, File)
+        self.assertEqual(file.display_name, 'Course_File.docx')
+        self.assertEqual(file.size, 2048)
+
     # get_full_discussion_topic()
     def test_get_full_discussion_topic(self, m):
         register_uris({'course': ['get_full_discussion_topic']}, m)

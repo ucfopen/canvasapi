@@ -12,6 +12,7 @@ from canvasapi.calendar_event import CalendarEvent
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
 from canvasapi.exceptions import ResourceDoesNotExist
 from canvasapi.progress import Progress
@@ -444,6 +445,15 @@ class TestCanvas(unittest.TestCase):
         groups = self.canvas.list_group_participants(222)
         groups_list = [group for group in groups]
         self.assertEqual(len(groups_list), 2)
+
+    # get_file()
+    def test_get_file(self, m):
+        register_uris({'file': ['get_by_id']}, m)
+
+        file = self.canvas.get_file(1)
+        self.assertIsInstance(file, File)
+        self.assertEqual(file.display_name, "File.docx")
+        self.assertEqual(file.size, 6144)
 
     # search_recipients()
     def test_search_recipients(self, m):

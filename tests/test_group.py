@@ -211,6 +211,15 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(group_id, discussion.id)
         self.assertEqual(discussion.group_id, 1)
 
+    # get_file()
+    def test_get_file(self, m):
+        register_uris({'group': ['get_file']}, m)
+
+        file = self.group.get_file(1)
+        self.assertIsInstance(file, File)
+        self.assertEqual(file.display_name, 'Group_File.docx')
+        self.assertEqual(file.size, 4096)
+
     # get_full_discussion_topic
     def test_get_full_discussion_topic(self, m):
         register_uris({'group': ['get_full_discussion_topic']}, m)
