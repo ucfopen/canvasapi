@@ -1,8 +1,10 @@
 [![CanvasAPI on PyPI](https://img.shields.io/pypi/v/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![License](https://img.shields.io/pypi/l/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
+[![Documentation Status](https://readthedocs.org/projects/canvasapi/badge/?version=latest)](http://canvasapi.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.org/ucfopen/canvasapi.svg?branch=master)](https://travis-ci.org/ucfopen/canvasapi)
 [![Coverage Status](https://coveralls.io/repos/github/ucfopen/canvasapi/badge.svg?branch=master)](https://coveralls.io/github/ucfopen/canvasapi?branch=master)
 [![Join UCF Open Slack Discussions](https://ucf-open-slackin.herokuapp.com/badge.svg)](https://ucf-open-slackin.herokuapp.com/)
+
 
 # CanvasAPI
 CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](https://canvas.instructure.com/doc/api/index.html). The library enables developers to programmatically manage Canvas courses, users, gradebooks, and more.
@@ -11,6 +13,9 @@ CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](htt
 You can install CanvasAPI with pip:
 
 `pip install canvasapi`
+
+## Documentation
+Full documentation is available at [Read the Docs](http://canvasapi.readthedocs.io/).
 
 ## Quickstart
 Getting started with CanvasAPI is easy.
@@ -34,7 +39,7 @@ canvas = Canvas(API_URL, API_KEY)
 You can now use `canvas` to begin making API calls.
 
 ### Working with Canvas Objects
-CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://pythonhosted.org/canvasapi/class-reference.html). Below, you’ll find a few examples of common CanvasAPI use cases.
+CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://canvasapi.readthedocs.io/en/latest/class-reference.html). Below, you’ll find a few examples of common CanvasAPI use cases.
 
 #### Course objects
 Courses can be retrieved from the API:
