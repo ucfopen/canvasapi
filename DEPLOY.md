@@ -21,9 +21,7 @@ Run `python setup.py sdist`. This should create a file in the `dist` directory c
 Generate Documentation
 ----------------------
 
-In the `docs` directory, run `make clean html`.
-
-This will create all the documentation files in the `_build/html` directory
+Documentation should now be automatically pushed to readthedocs.
 
 
 Deploy
@@ -38,7 +36,5 @@ Tag the merge commit with the version number: `git tag -s v0.0.0  -m "Release ve
 Push the tag: `git push origin v0.0.0`
 
 Run `twine upload dist/canvasapi-0.0.0.tar.gz` to upload to PyPI.
-
-Compress all files in the `docs/_build/html` directory into a `.zip` file. Upload this file to PyPI to update the [documentation](https://pythonhosted.org/canvasapi/).
 
 Create release on GitHub for the new tag. Use the text from the changelog for content.
