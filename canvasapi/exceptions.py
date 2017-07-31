@@ -1,8 +1,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from builtins import str
+from six import python_2_unicode_compatible, text_type
 
 
+@python_2_unicode_compatible
 class CanvasException(Exception):  # pragma: no cover
     """
     Base class for all errors returned by the Canvas API.
@@ -13,14 +14,14 @@ class CanvasException(Exception):  # pragma: no cover
 
             errors = message.get('errors', False)
             if errors:
-                self.message = str(errors)
+                self.message = errors
             else:
                 self.message = ('Something went wrong. ', message)
         else:
             self.message = message
 
     def __str__(self):
-        return self.message
+        return text_type(self.message)
 
 
 class BadRequest(CanvasException):

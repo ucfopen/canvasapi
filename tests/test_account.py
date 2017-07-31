@@ -2,7 +2,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 import unittest
 
-from builtins import str
 import requests_mock
 
 from canvasapi import Canvas

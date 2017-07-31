@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from builtins import str
+from six import text_type
 
 
 def combine_kwargs(**kwargs):
@@ -10,7 +10,7 @@ def combine_kwargs(**kwargs):
     :rtype: dict
     """
     def flatten_dict(prefix, key, value):
-        new_prefix = prefix + '[' + str(key) + ']'
+        new_prefix = prefix + '[' + text_type(key) + ']'
         if isinstance(value, dict):
             d = {}
             for k, v in value.items():
@@ -26,9 +26,9 @@ def combine_kwargs(**kwargs):
         if isinstance(arg, dict):
             # If the argument is a dictionary, flatten it.
             for key, value in arg.items():
-                combined_kwargs.update(flatten_dict(str(kw), key, value))
+                combined_kwargs.update(flatten_dict(text_type(kw), key, value))
         else:
-            combined_kwargs.update({str(kw): arg})
+            combined_kwargs.update({text_type(kw): arg})
     return combined_kwargs
 
 

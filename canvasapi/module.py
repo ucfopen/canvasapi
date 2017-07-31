@@ -1,11 +1,14 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from six import python_2_unicode_compatible
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs
 
 
+@python_2_unicode_compatible
 class Module(CanvasObject):
 
     def __str__(self):
@@ -139,6 +142,7 @@ class Module(CanvasObject):
         return ModuleItem(self._requester, module_item_json)
 
 
+@python_2_unicode_compatible
 class ModuleItem(CanvasObject):
 
     def __str__(self):

@@ -3,7 +3,6 @@ import os
 import unittest
 import uuid
 
-from builtins import str
 import requests_mock
 
 from canvasapi import Canvas

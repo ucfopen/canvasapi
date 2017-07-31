@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 
-from builtins import object, str
+from six import string_types
 
 from canvasapi.util import combine_kwargs
 
@@ -20,7 +20,7 @@ class Uploader(object):
         :param file: A file handler or path of the file to upload.
         :type file: file or str
         """
-        if isinstance(file, str):
+        if isinstance(file, string_types):
             if not os.path.exists(file):
                 raise IOError('File ' + file + ' does not exist.')
             self._using_filename = True

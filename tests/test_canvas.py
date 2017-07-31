@@ -2,8 +2,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 from datetime import datetime
 
-from builtins import str
 import requests_mock
+from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.account import Account
@@ -88,7 +88,7 @@ class TestCanvas(unittest.TestCase):
         course = self.canvas.get_course(2)
 
         self.assertTrue(hasattr(course, 'start_at'))
-        self.assertIsInstance(course.start_at, str)
+        self.assertIsInstance(course.start_at, text_type)
         self.assertTrue(hasattr(course, 'start_at_date'))
         self.assertIsInstance(course.start_at_date, datetime)
 

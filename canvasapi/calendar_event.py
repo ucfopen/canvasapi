@@ -6,6 +6,9 @@ from canvasapi.util import combine_kwargs
 
 class CalendarEvent(CanvasObject):
 
+    def __str__(self):
+        return "{} ({})".format(self.title, self.id)
+
     def delete(self, **kwargs):
         """
         Delete this calendar event.
@@ -41,6 +44,3 @@ class CalendarEvent(CanvasObject):
             super(CalendarEvent, self).set_attributes(response.json())
 
         return CalendarEvent(self._requester, response.json())
-
-    def __str__(self):
-        return "{} ({})".format(self.title, self.id)

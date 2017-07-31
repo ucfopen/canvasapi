@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 import re
 
-from builtins import str, object
+from six import text_type
 
 DATE_PATTERN = re.compile('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')
 
@@ -68,6 +68,6 @@ class CanvasObject(object):
             self.__setattr__(attribute, value)
 
             # datetime field
-            if DATE_PATTERN.match(str(value)):
+            if DATE_PATTERN.match(text_type(value)):
                 date = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
                 self.__setattr__(attribute + '_date', date)

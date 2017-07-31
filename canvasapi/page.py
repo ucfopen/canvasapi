@@ -1,10 +1,13 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from six import python_2_unicode_compatible
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.util import combine_kwargs
 from canvasapi.paginated_list import PaginatedList
 
 
+@python_2_unicode_compatible
 class Page(CanvasObject):
 
     def __str__(self):
@@ -188,6 +191,7 @@ class Page(CanvasObject):
         return PageRevision(self._requester, pagerev_json)
 
 
+@python_2_unicode_compatible
 class PageRevision(CanvasObject):
 
     def __str__(self):

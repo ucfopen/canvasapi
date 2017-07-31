@@ -1,11 +1,12 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from builtins import str
+from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 
 
+@python_2_unicode_compatible
 class Submission(CanvasObject):
 
     def __str__(self):
-        return str(self.id)
+        return "{}".format(self.id)

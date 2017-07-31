@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
-from builtins import str
 import requests_mock
+from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.account import Account
@@ -94,7 +94,7 @@ class TestExternalTool(unittest.TestCase):
         requires = {'external_tool': ['get_sessionless_launch_url_course']}
         register_uris(requires, m)
 
-        self.assertIsInstance(self.ext_tool_course.get_sessionless_launch_url(), str)
+        self.assertIsInstance(self.ext_tool_course.get_sessionless_launch_url(), text_type)
 
     def test_get_sessionless_launch_url_no_url(self, m):
         requires = {

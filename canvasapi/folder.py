@@ -1,16 +1,17 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from builtins import str
+from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs
 
 
+@python_2_unicode_compatible
 class Folder(CanvasObject):
 
     def __str__(self):
-        return str(self.full_name)
+        return "{}".format(self.full_name)
 
     def list_files(self, **kwargs):
         """
