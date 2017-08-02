@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 import re
 from setuptools import setup
 
@@ -23,7 +23,7 @@ setup(
     license='MIT License',
     packages=['canvasapi'],
     include_package_data=True,
-    install_requires=['requests', 'future'],
+    install_requires=['requests', 'six'],
     zip_safe=False,
     classifiers=[
         'Development Status :: 3 - Alpha',

@@ -1,10 +1,13 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException
 from canvasapi.util import combine_kwargs
 
 
+@python_2_unicode_compatible
 class ExternalTool(CanvasObject):
 
     def __str__(self):

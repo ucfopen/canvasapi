@@ -1,9 +1,12 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.util import combine_kwargs
 
 
+@python_2_unicode_compatible
 class Assignment(CanvasObject):
 
     def __str__(self):
@@ -45,6 +48,7 @@ class Assignment(CanvasObject):
         return Assignment(self._requester, response.json())
 
 
+@python_2_unicode_compatible
 class AssignmentGroup(CanvasObject):
 
     def __str__(self):

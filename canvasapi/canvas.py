@@ -1,6 +1,4 @@
-from __future__ import unicode_literals
-
-from builtins import object
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 from canvasapi.account import Account
 from canvasapi.course import Course

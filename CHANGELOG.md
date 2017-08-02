@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.5.1] - 2017-08-02
+### General
+- Moved documentation to [Read the Docs](http://canvasapi.readthedocs.io).
+
+### Bugfixes
+
+- Fixed an issue where kwargs in Python 2.7 wouldn't be properly formatted when converted to get parameters.
+
 ## [0.5.0] - 2017-07-10
 ### New Endpoint Coverage
 
@@ -99,6 +107,8 @@
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.5.1]: https://github.com/ucfopen/canvasapi/compare/v0.5.0...v0.5.1
+[0.5.0]: https://github.com/ucfopen/canvasapi/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/ucfopen/canvasapi/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/ucfopen/canvasapi/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ucfopen/canvasapi/compare/v0.1.2...v0.2.0
