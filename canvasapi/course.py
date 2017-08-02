@@ -1,4 +1,6 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -13,6 +15,7 @@ from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs
 
 
+@python_2_unicode_compatible
 class Course(CanvasObject):
 
     def __str__(self):
@@ -1409,6 +1412,7 @@ class Course(CanvasObject):
         return Tab(self._requester, response.json())
 
 
+@python_2_unicode_compatible
 class CourseNickname(CanvasObject):
 
     def __str__(self):

@@ -1,10 +1,16 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.util import combine_kwargs
 
 
+@python_2_unicode_compatible
 class EnrollmentTerm(CanvasObject):
+
+    def __str__(self):
+        return "{} ({})".format(self.name, self.id)
 
     def delete(self):
         """
@@ -37,6 +43,3 @@ class EnrollmentTerm(CanvasObject):
         )
 
         return EnrollmentTerm(self._requester, response.json())
-
-    def __str__(self):
-        return "{} ({})".format(self.name, self.id)

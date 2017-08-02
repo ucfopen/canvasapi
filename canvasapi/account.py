@@ -1,6 +1,6 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-from builtins import str
+from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
@@ -8,6 +8,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
+@python_2_unicode_compatible
 class Account(CanvasObject):
 
     def __str__(self):
@@ -920,25 +921,29 @@ class Account(CanvasObject):
         return SSOSettings(self._requester, response.json())
 
 
+@python_2_unicode_compatible
 class AccountNotification(CanvasObject):
 
     def __str__(self):  # pragma: no cover
-        return str(self.subject)
+        return "{}".format(self.subject)
 
 
+@python_2_unicode_compatible
 class AccountReport(CanvasObject):
 
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.report, self.id)
 
 
+@python_2_unicode_compatible
 class Role(CanvasObject):
 
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
 
 
+@python_2_unicode_compatible
 class SSOSettings(CanvasObject):
 
-    def __str___(self):  # pragma: no cover
+    def __str__(self):  # pragma: no cover
         return"{} ({})".format(self.login_handle_name, self.change_password_url)

@@ -1,4 +1,6 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -9,6 +11,7 @@ from canvasapi.tab import Tab
 from canvasapi.util import combine_kwargs
 
 
+@python_2_unicode_compatible
 class Group(CanvasObject):
 
     def __str__(self):
@@ -636,6 +639,7 @@ class Group(CanvasObject):
         )
 
 
+@python_2_unicode_compatible
 class GroupMembership(CanvasObject):
 
     def __str__(self):
@@ -698,6 +702,7 @@ class GroupMembership(CanvasObject):
         return response.json()
 
 
+@python_2_unicode_compatible
 class GroupCategory(CanvasObject):
 
     def __str__(self):

@@ -1,10 +1,10 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 import uuid
 import os
 
-from builtins import str
 import requests_mock
+from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup
@@ -136,7 +136,7 @@ class TestCourse(unittest.TestCase):
         html_str = "<script></script><p>hello</p>"
         prev_html = self.course.preview_html(html_str)
 
-        self.assertIsInstance(prev_html, str)
+        self.assertIsInstance(prev_html, text_type)
         self.assertEqual(prev_html, "<p>hello</p>")
 
     # get_settings()

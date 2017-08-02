@@ -1,6 +1,6 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-from builtins import str
+from six import python_2_unicode_compatible
 
 from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
@@ -12,6 +12,7 @@ from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
+@python_2_unicode_compatible
 class User(CanvasObject):
 
     def __str__(self):
@@ -611,7 +612,8 @@ class User(CanvasObject):
         return User(self._requester, response.json())
 
 
+@python_2_unicode_compatible
 class UserDisplay(CanvasObject):
 
     def __str__(self):
-        return str(self.display_name)
+        return "{}".format(self.display_name)
