@@ -146,6 +146,21 @@
 		},
 		"status_code": 200
 	},
+	"get_by_sis_id": {
+		"method": "GET",
+		"endpoint": "accounts/sis_account_id:test-sis-id",
+		"data": {
+			"id": 10,
+			"sis_account_id": "test-sis-id",
+			"name": "Account From SIS",
+			"parent_account_id": null,
+			"root_account_id": null,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/New_York"
+		}
+	},
 	"get_courses": {
 		"method": "GET",
 		"endpoint": "accounts/1/courses",
