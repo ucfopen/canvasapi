@@ -380,7 +380,7 @@ class Canvas(object):
 
         :param group_id: The ID of the group to get.
         :type group_id: int or str
-        :param use_sis_id: Whether or not account_id is an sis ID.
+        :param use_sis_id: Whether or not group_id is an sis ID.
             Defaults to `False`.
         :type use_sis_id: bool
 
