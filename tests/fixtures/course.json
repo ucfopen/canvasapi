@@ -159,6 +159,22 @@
 		},
 		"status_code": 200
 	},
+	"get_by_sis_id": {
+		"method": "GET",
+		"endpoint": "courses/sis_course_id:test-sis-id",
+		"data": {
+			"id": 1,
+			"sis_course_id": "test-sis-id",
+			"course_code": "SIS101",
+			"name": "SIS Course",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
 	"get_external_tools": {
 		"method": "GET",
 		"endpoint": "courses/1/external_tools",

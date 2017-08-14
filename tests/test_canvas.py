@@ -51,6 +51,14 @@ class TestCanvas(unittest.TestCase):
 
         self.assertIsInstance(account, Account)
 
+    def test_get_account_sis_id(self, m):
+        register_uris({'account': ['get_by_sis_id']}, m)
+
+        account = self.canvas.get_account('test-sis-id', use_sis_id=True)
+
+        self.assertIsInstance(account, Account)
+        self.assertEqual(account.name, 'Account From SIS')
+
     def test_get_account_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
 
@@ -81,6 +89,14 @@ class TestCanvas(unittest.TestCase):
 
         self.assertIsInstance(course, Course)
         self.assertTrue(hasattr(course, 'name'))
+
+    def test_get_course_sis_id(self, m):
+        register_uris({'course': ['get_by_sis_id']}, m)
+
+        course = self.canvas.get_course('test-sis-id', use_sis_id=True)
+
+        self.assertIsInstance(course, Course)
+        self.assertEqual(course.name, 'SIS Course')
 
     def test_get_course_with_start_date(self, m):
         register_uris({'course': ['start_at_date']}, m)
@@ -225,6 +241,14 @@ class TestCanvas(unittest.TestCase):
 
         self.assertIsInstance(info, Section)
 
+    def test_get_section_sis_id(self, m):
+        register_uris({'section': ['get_by_sis_id']}, m)
+
+        section = self.canvas.get_section('test-sis-id', use_sis_id=True)
+
+        self.assertIsInstance(section, Section)
+        self.assertEqual(section.name, 'SIS Section')
+
     # create_group()
     def test_create_group(self, m):
         register_uris({'group': ['create']}, m)
@@ -244,6 +268,14 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(group, Group)
         self.assertTrue(hasattr(group, 'name'))
         self.assertTrue(hasattr(group, 'description'))
+
+    def test_get_group_sis_id(self, m):
+        register_uris({'group': ['get_by_sis_id']}, m)
+
+        group = self.canvas.get_group('test-sis-id', use_sis_id=True)
+
+        self.assertIsInstance(group, Group)
+        self.assertEqual(group.name, 'SIS Group')
 
     # get_group_category()
     def test_get_group_category(self, m):
