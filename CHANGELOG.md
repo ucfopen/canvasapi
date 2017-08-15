@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.6.0] - 2017-08-15
+### General
+- Added support for SIS IDs to get accounts, courses, groups and sections. (Thanks for the suggestion, [@sigurdurb](https://github.com/sigurdurb)!)
+
 ## [0.5.1] - 2017-08-02
 ### General
 - Moved documentation to [Read the Docs](http://canvasapi.readthedocs.io).
@@ -107,6 +111,7 @@
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.6.0]: https://github.com/ucfopen/canvasapi/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/ucfopen/canvasapi/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/ucfopen/canvasapi/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/ucfopen/canvasapi/compare/v0.3.0...v0.4.0
