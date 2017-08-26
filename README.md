@@ -8,17 +8,21 @@
 
 
 # CanvasAPI
+
 CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](https://canvas.instructure.com/doc/api/index.html). The library enables developers to programmatically manage Canvas courses, users, gradebooks, and more.
 
 ## Installation
+
 You can install CanvasAPI with pip:
 
 `pip install canvasapi`
 
 ## Documentation
+
 Full documentation is available at [Read the Docs](http://canvasapi.readthedocs.io/).
 
 ## Quickstart
+
 Getting started with CanvasAPI is easy.
 
 Like most API clients, CanvasAPI exposes a single class that provides access to the rest of the API: `Canvas`.
@@ -40,9 +44,11 @@ canvas = Canvas(API_URL, API_KEY)
 You can now use `canvas` to begin making API calls.
 
 ### Working with Canvas Objects
+
 CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://canvasapi.readthedocs.io/en/latest/class-reference.html). Below, you’ll find a few examples of common CanvasAPI use cases.
 
 #### Course objects
+
 Courses can be retrieved from the API:
 ```python
 # Grab course 123456
@@ -59,6 +65,7 @@ Courses can be retrieved from the API:
 See our documentation on [keyword arguments](#keyword-arguments) for more information about how `course.update()` handles the `name` argument.
 
 #### User objects
+
 Individual users can be pulled from the API as well:
 ```python
 # Grab user 123
@@ -76,6 +83,7 @@ Individual users can be pulled from the API as well:
 ```
 
 #### Paginated Lists
+
 Some calls, like the `user.get_courses()` call above, will request multiple objects from Canvas’s API. CanvasAPI collects these objects in a `PaginatedList` object. `PaginatedList` generally acts like a regular Python list. You can grab an element by index, iterate over it, and take a slice of it.
 
 **Warning**: `PaginatedList` lazily loads its elements. Unfortunately, there’s no way to determine the exact number of records Canvas will return without traversing the list fully. This means that `PaginatedList` isn’t aware of its own length and negative indexing is not currently supported.

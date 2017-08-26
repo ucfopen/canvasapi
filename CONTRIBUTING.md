@@ -217,12 +217,15 @@ An important tenet of PEP8 is to not get hung up on PEP8. While we try to be as 
 Below you'll find several established styles that'll help you along the way.
 
 ### Method docstrings
+
 Method docstrings should include a description, a link to the related API endpoint (if available), parameter name, parameter description, and parameter type, return description (if available), and return type. They should be included in the following order:
 
 #### Descriptions
+
 A description should be a concise, *action* statement (use "*write* a good docstring" over "*writes* a good docstring") that describes the method. Generally, the official API documentation's description is usable (make sure it's an **action statement** though). Special functionality should be documented.
 
 #### Links to related API endpoints
+
 A link to a related API endpoint is denoted with `:calls:`. CanvasAPI uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
 
 ```
@@ -239,6 +242,7 @@ Hyperlink text should match the text underneath the endpoint in the official Can
 **Note**: It's okay to go over 80 characters for the URL, it can't be helped. Use a backslash to split the hyperlink text from the actual URL to limit line length.
 
 #### Parameters
+
 Parameters should be listed in the order that they appear in the method prototype. They should take on the following form:
 ```
 :param PARAMETER_NAME: PARAMETER_DESCRIPTION.
@@ -246,6 +250,7 @@ Parameters should be listed in the order that they appear in the method prototyp
 ```
 
 #### Returns
+
 **Return description** should be listed first, if available. This should be included to clarify a returned value, for example:
 
 ```python
@@ -273,6 +278,7 @@ In the event a PaginatedList is returned:
 ```
 
 #### Docstring Examples
+
 Here are some real world examples of how docstrings should be formatted:
 
 ```python
