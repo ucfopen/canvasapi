@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from datetime import datetime
 import json
+import pytz
 import re
 
 from six import text_type
@@ -69,5 +70,6 @@ class CanvasObject(object):
 
             # datetime field
             if DATE_PATTERN.match(text_type(value)):
-                date = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
-                self.__setattr__(attribute + '_date', date)
+                naive = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
+                aware = naive.replace(tzinfo=pytz.utc)
+                self.__setattr__(attribute + '_date', aware)
