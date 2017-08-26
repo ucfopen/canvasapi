@@ -4,7 +4,6 @@ Development Lead
 - Matthew Emond <me@ucf.edu> [@Thetwam](https://github.com/Thetwam)
 - Jesse McBride <jm@ucf.edu> [@jessemcbride](https://github.com/jessemcbride)
 
-
 Patches and Suggestions
 =======================
 

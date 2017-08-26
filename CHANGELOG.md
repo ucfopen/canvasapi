@@ -90,7 +90,6 @@
 - Nested dictionaries are now allowed as kwargs
 - Split 401 into two exceptions: `InvalidAccessToken` if `'WWW-Authenticate'` header is present. Otherwise, `Unauthorized`.
 
-
 ### Bugfixes
 
 - Moved some incorrectly placed enrollment methods to the Enrollment class.

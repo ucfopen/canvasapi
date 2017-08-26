@@ -192,7 +192,6 @@ Certain statements can be omitted from the coverage report by adding `# pragma: 
 
 Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at `develop` and then submit it for review.
 
-
 ## Code Style Guidelines
 
 We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/) specification as much as possible. In short, that means:
