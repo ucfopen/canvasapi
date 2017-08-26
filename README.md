@@ -28,6 +28,7 @@ Getting started with CanvasAPI is easy.
 Like most API clients, CanvasAPI exposes a single class that provides access to the rest of the API: `Canvas`.
 
 The first thing to do is instantiate a new `Canvas` object by providing your Canvas instance’s root API URL and a valid API key:
+
 ```python
 # Import the Canvas class
 from canvasapi import Canvas
@@ -50,6 +51,7 @@ CanvasAPI converts the JSON responses from the Canvas API into Python objects. T
 #### Course objects
 
 Courses can be retrieved from the API:
+
 ```python
 # Grab course 123456
 >>> course = canvas.get_course(123456)
@@ -67,6 +69,7 @@ See our documentation on [keyword arguments](#keyword-arguments) for more inform
 #### User objects
 
 Individual users can be pulled from the API as well:
+
 ```python
 # Grab user 123
 >>> user = canvas.get_user(123)

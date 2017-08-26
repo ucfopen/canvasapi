@@ -131,6 +131,7 @@ user = self.course.get_user(1)
 self.assertIsInstance(user, User)
 self.assertTrue(hasattr(user, 'name'))
 ```
+
 The rest is basic unit testing. Call the function to be tested, and assert various outcomes. If necessary, multiple tests can written for a single method. All related tests should appear together under the same comment, as described earlier.
 
 ---
@@ -138,6 +139,7 @@ The rest is basic unit testing. Call the function to be tested, and assert vario
 It is common to need certain object(s) for multiple tests. For example, most methods in `test_course.py` require a `Course` object. In this case, save a course to the class in `self.course` for later use.
 
 Do this in the `setUp` class method:
+
 ```python
 with requests_mock.Mocker() as m:
     requires = {
@@ -244,6 +246,7 @@ Hyperlink text should match the text underneath the endpoint in the official Can
 #### Parameters
 
 Parameters should be listed in the order that they appear in the method prototype. They should take on the following form:
+
 ```
 :param PARAMETER_NAME: PARAMETER_DESCRIPTION.
 :type PARAMETER_NAME: PYTHON_TYPE
