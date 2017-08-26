@@ -173,7 +173,7 @@ You'll do this by running `coverage run -m unittest discover` from the main `can
 
 Coverage reports tell us how much of our code is actually being tested. As of right now, we're happily maintaining 100% code coverage (🎉!) and our goal is to keep it there. Ensure you've covered your changes entirely by running `coverage report`. Your output should look something like this:
 
-```
+```Formatted
 Name                             Stmts   Miss  Cover
 ----------------------------------------------------
 canvasapi/__init__.py                3      0   100%
@@ -201,11 +201,11 @@ We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/) 
 
 We use `pycodestyle` and `pyflakes` for linting:
 
-```
+```sh
 pycodestyle canvasapi tests
 ```
 
-```
+```sh
 pyflakes canvasapi tests
 ```
 
@@ -229,14 +229,14 @@ A description should be a concise, *action* statement (use "*write* a good docst
 
 A link to a related API endpoint is denoted with `:calls:`. CanvasAPI uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
 
-```
+```rst
 :calls: `THE TEXT OF THE HYPERLINK \
     <https://the.url/to/use/>`_
 ```
 
 Hyperlink text should match the text underneath the endpoint in the official Canvas API documentation. Generally, that looks like this:
 
-```
+```rst
 :calls: `HTTP_METHOD /api/v1/endpoint/:variable
 ```
 
@@ -246,7 +246,7 @@ Hyperlink text should match the text underneath the endpoint in the official Can
 
 Parameters should be listed in the order that they appear in the method prototype. They should take on the following form:
 
-```
+```rst
 :param PARAMETER_NAME: PARAMETER_DESCRIPTION.
 :type PARAMETER_NAME: PYTHON_TYPE
 ```
@@ -269,13 +269,13 @@ In most cases, the return value is easy to infer based on the type and the descr
 
 **Return type** should always be included when a value is returned. If it's not a primitive type (`int`, `str`, `bool`, `list`, etc.) a fully-qualified class name should be included:
 
-```
+```rst
 :rtype: :class:`canvasapi.user.User`
 ```
 
 In the event a PaginatedList is returned:
 
-```
+```rst
 :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
 ```
 
