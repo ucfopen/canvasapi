@@ -2,7 +2,7 @@
 
 Thanks for your interest in contributing!
 
-Below you'll find guidelines for contributing that will keep our codebase clean and happy. 
+Below you'll find guidelines for contributing that will keep our codebase clean and happy.
 
 ## Table of Contents
 
@@ -55,7 +55,7 @@ Once you've found an issue you're interested in tackling, take a look at our [fi
 Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have pip, virtualenv, and git installed and are using a terminal. If not, please set those up before continuing.
 
 1. Clone our repository by executing `git clone git@github.com:ucfopen/canvasapi.git`
-2. Pull the latest commit from the **master** branch: `git pull origin master` 
+2. Pull the latest commit from the **master** branch: `git pull origin master`
 3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git branch -b issue/1-test-issue-for-documentation`
 4. Set up a new virtual environment ( `virtualenv env` ) and activate it (`source env/bin/activate`)
 5. Install the required dependencies with `pip install -r dev_requirements.txt`
@@ -220,13 +220,13 @@ Below you'll find several established styles that'll help you along the way.
 Method docstrings should include a description, a link to the related API endpoint (if available), parameter name, parameter description, and parameter type, return description (if available), and return type. They should be included in the following order:
 
 #### Descriptions
-A description should be a concise, *action* statement (use "*write* a good docstring" over "*writes* a good docstring") that describes the method. Generally, the official API documentation's description is usable (make sure it's an **action statement** though). Special functionality should be documented. 
+A description should be a concise, *action* statement (use "*write* a good docstring" over "*writes* a good docstring") that describes the method. Generally, the official API documentation's description is usable (make sure it's an **action statement** though). Special functionality should be documented.
 
 #### Links to related API endpoints
 A link to a related API endpoint is denoted with `:calls:`. CanvasAPI uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
 
 ```
-:calls: `THE TEXT OF THE HYPERLINK \ 
+:calls: `THE TEXT OF THE HYPERLINK \
     <https://the.url/to/use/>`_
 ```
 
