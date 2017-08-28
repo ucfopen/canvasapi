@@ -24,7 +24,9 @@ class Requester(object):
         self.access_token = access_token
         self._session = requests.Session()
 
-    def request(self, method, endpoint=None, headers=None, use_auth=True, _url=None, **kwargs):
+    def request(
+            self, method, endpoint=None, headers=None, use_auth=True,
+            _url=None, _kwargs=None, **kwargs):
         """
         Make a request to the Canvas API and return the response.
 
@@ -34,12 +36,17 @@ class Requester(object):
         :type endpoint: str
         :param headers: Optional HTTP headers to be sent with the request.
         :type headers: dict
-        :param use_auth: Optional flag to remove the authentication header from the request.
+        :param use_auth: Optional flag to remove the authentication
+            header from the request.
         :type use_auth: bool
-        :param _url: Optional argument to send a request to a URL outside of the Canvas API. \
-                    If this is selected and an endpoint is provided, the endpoint will be \
-                    ignored and only the _url argument will be used.
+        :param _url: Optional argument to send a request to a URL
+            outside of the Canvas API. If this is selected and an
+            endpoint is provided, the endpoint will be ignored and
+            only the _url argument will be used.
         :type _url: str
+        :param _kwargs: A list of 2-tuples representing processed
+            keyword arguments to be sent to Canvas as params or data.
+        :type _kwargs: `list`
         :rtype: str
         """
         full_url = _url if _url else "%s%s" % (self.base_url, endpoint)
@@ -60,7 +67,12 @@ class Requester(object):
         elif method == 'PUT':
             req_method = self._put_request
 
-        response = req_method(full_url, headers, kwargs)
+        # Convert kwargs into list of 2-tuples and combine with _kwargs.
+        _kwargs = [] if _kwargs is None else _kwargs
+        for kw, arg, in kwargs.items():
+            _kwargs.append((kw, arg))
+
+        response = req_method(full_url, headers, _kwargs)
 
         if response.status_code == 400:
             raise BadRequest(response.json())

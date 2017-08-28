@@ -38,7 +38,7 @@ class Canvas(object):
         response = self.__requester.request(
             'POST',
             'accounts',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self.__requester, response.json())
 
@@ -78,7 +78,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'accounts',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_course_accounts(self):
@@ -116,7 +116,7 @@ class Canvas(object):
         response = self.__requester.request(
             'GET',
             'courses/%s' % (course_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Course(self.__requester, response.json())
 
@@ -164,7 +164,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'courses',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_activity_stream_summary(self):
@@ -320,7 +320,7 @@ class Canvas(object):
         response = self.__requester.request(
             'GET',
             'accounts/search',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
 
@@ -336,7 +336,7 @@ class Canvas(object):
         response = self.__requester.request(
             'POST',
             'groups',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
 
@@ -353,7 +353,7 @@ class Canvas(object):
         response = self.__requester.request(
             'GET',
             'groups/%s' % (group_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
 
@@ -398,7 +398,7 @@ class Canvas(object):
             'conversations',
             recipients=recipients,
             body=body,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_conversation(self, conversation_id, **kwargs):
@@ -416,7 +416,7 @@ class Canvas(object):
         response = self.__requester.request(
             'GET',
             'conversations/%s' % (conversation_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Conversation(self.__requester, response.json())
 
@@ -437,7 +437,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'conversations',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def conversations_mark_all_as_read(self):
@@ -567,7 +567,7 @@ class Canvas(object):
         response = self.__requester.request(
             'POST',
             'calendar_events',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return CalendarEvent(self.__requester, response.json())
@@ -589,7 +589,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'calendar_events',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_calendar_event(self, calendar_event_id):
@@ -634,7 +634,7 @@ class Canvas(object):
         response = self.__requester.request(
             'POST',
             uri,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return CalendarEvent(self.__requester, response.json())
 
@@ -655,7 +655,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'appointment_groups',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_appointment_group(self, appointment_group_id):
@@ -713,7 +713,7 @@ class Canvas(object):
         response = self.__requester.request(
             'POST',
             'appointment_groups',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return AppointmentGroup(self.__requester, response.json())
@@ -736,7 +736,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'appointment_groups/%s/users' % (appointment_group_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_group_participants(self, appointment_group_id, **kwargs):
@@ -757,7 +757,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'appointment_groups/%s/groups' % (appointment_group_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_file(self, file_id, **kwargs):
@@ -774,7 +774,7 @@ class Canvas(object):
         response = self.__requester.request(
             'GET',
             'files/{}'.format(file_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return File(self.__requester, response.json())
 
@@ -812,7 +812,7 @@ class Canvas(object):
         response = self.__requester.request(
             'GET',
             'search/recipients',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
 
@@ -829,6 +829,6 @@ class Canvas(object):
         response = self.__requester.request(
             'GET',
             'search/all_courses',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()

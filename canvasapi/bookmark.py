@@ -39,7 +39,7 @@ class Bookmark(CanvasObject):
         response = self._requester.request(
             'PUT',
             'users/self/bookmarks/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         if 'name' in response.json() and 'url' in response.json():
