@@ -1,11 +1,15 @@
 # Change Log
 
 ## [0.6.0] - 2017-08-15
+
 ### General
+
 - Added support for SIS IDs to get accounts, courses, groups and sections. (Thanks for the suggestion, [@sigurdurb](https://github.com/sigurdurb)!)
 
 ## [0.5.1] - 2017-08-02
+
 ### General
+
 - Moved documentation to [Read the Docs](http://canvasapi.readthedocs.io).
 
 ### Bugfixes
@@ -13,6 +17,7 @@
 - Fixed an issue where kwargs in Python 2.7 wouldn't be properly formatted when converted to get parameters.
 
 ## [0.5.0] - 2017-07-10
+
 ### New Endpoint Coverage
 
 - Files (Get file from Canvas, Course, Group, or User)
@@ -26,6 +31,7 @@
 - Fixed an issue where non-ASCII characters in CanvasObject data would throw UnicodeEncodeError exceptions.
 
 ## [0.4.0] - 2017-06-16
+
 ### New Endpoint Coverage
 
 - Analytics
@@ -47,6 +53,7 @@
 - Updated CONTRIBUTING.md to more accurately reflect our dev process.
 
 ## [0.3.0] - 2017-03-30
+
 ### New Endpoint Coverage
 
 - Appointment Groups
@@ -67,6 +74,7 @@
 - Changed `assert` statements to use the assertion methods built into unittest.
 
 ## [0.2.0] - 2017-01-04
+
 ### New Endpoint Coverage
 
 - Groups
@@ -82,7 +90,6 @@
 - Nested dictionaries are now allowed as kwargs
 - Split 401 into two exceptions: `InvalidAccessToken` if `'WWW-Authenticate'` header is present. Otherwise, `Unauthorized`.
 
-
 ### Bugfixes
 
 - Moved some incorrectly placed enrollment methods to the Enrollment class.
@@ -90,6 +97,7 @@
 - Minor text fixes.
 
 ## [0.1.2] - 2016-07-22
+
 ### New Endpoint Coverage
 
 - Getting a Group

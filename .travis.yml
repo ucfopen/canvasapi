@@ -8,10 +8,12 @@ python:
 install:
   - pip install -r tests_requirements.txt
   - pip install coveralls
+  - gem install mdl
 script:
   - coverage run -m unittest discover
   - pycodestyle canvasapi tests
   - pyflakes canvasapi tests
+  - mdl *.md
 after_success:
   - coveralls
 notifications:

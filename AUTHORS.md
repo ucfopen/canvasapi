@@ -1,12 +1,15 @@
+Authors
+=======
+
 Development Lead
-================
+----------------
 
 - Matthew Emond <me@ucf.edu> [@Thetwam](https://github.com/Thetwam)
 - Jesse McBride <jm@ucf.edu> [@jessemcbride](https://github.com/jessemcbride)
 
-
 Patches and Suggestions
-=======================
+-----------------------
+
 - Adrian Goetz [@a-goetz](https://github.com/a-goetz)
 - Anthony Rodriguez [@AnthonyRodriguez726](https://github.com/AnthonyRodriguez726)
 - Daniel Grobani [@dgrobani](https://github.com/dgrobani)

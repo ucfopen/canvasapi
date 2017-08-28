@@ -17,12 +17,10 @@ Update version number in `__init__.py`.
 
 Run `python setup.py sdist`. This should create a file in the `dist` directory called something like `canvasapi-0.0.0.tar.gz`.
 
-
 Generate Documentation
 ----------------------
 
 Documentation should now be automatically pushed to readthedocs.
-
 
 Deploy
 ------
