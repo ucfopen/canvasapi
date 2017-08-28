@@ -8,11 +8,11 @@ python:
 install:
   - pip install -r tests_requirements.txt
   - pip install coveralls
+  - pip install flake8
   - gem install mdl
 script:
   - coverage run -m unittest discover
-  - pycodestyle canvasapi tests
-  - pyflakes canvasapi tests
+  - flake8 canvasapi tests
   - mdl *.md
 after_success:
   - coveralls
