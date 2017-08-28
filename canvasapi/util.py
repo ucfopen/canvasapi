@@ -4,32 +4,48 @@ from six import text_type
 
 
 def combine_kwargs(**kwargs):
-    """
-    Combines a list of keyword arguments into a single dictionary.
+    combined_kwargs = []
 
-    :rtype: dict
-    """
-    def flatten_dict(prefix, key, value):
-        new_prefix = prefix + '[' + text_type(key) + ']'
-        if isinstance(value, dict):
-            d = {}
-            for k, v in value.items():
-                d.update(flatten_dict(new_prefix, k, v))
-            return d
-        else:
-            return {new_prefix: value}
-
-    combined_kwargs = {}
-
-    # Loop through all kwargs.
+    # Loop through all kwargs provided
     for kw, arg in kwargs.items():
-        if isinstance(arg, dict):
-            # If the argument is a dictionary, flatten it.
-            for key, value in arg.items():
-                combined_kwargs.update(flatten_dict(text_type(kw), key, value))
+        if isinstance(arg, (dict, list, tuple)):
+            for k, v in arg.items():
+                for x in recursive_function(k, v):
+                    combined_kwargs.append(('{}{}'.format(kw, x[0]), x[1]))
+            # do stuff with kw probably
+            # loop over list and add to combined_kwargs
         else:
-            combined_kwargs.update({text_type(kw): arg})
+            combined_kwargs.append((text_type(kw), arg))
+
     return combined_kwargs
+
+
+def recursive_function(key, obj):
+    """
+    :param obj: The object to translate into a kwarg
+
+    :returns: A list of tuples that...
+    :rtype: list
+    """
+    if isinstance(obj, dict):
+        # Add the word (e.g. "[key]")
+        new_list = []
+
+        for k, v in obj.items():
+            for x in recursive_function(k, v):
+                new_list.append(('[{}]{}'.format(key, x[0]), x[1]))
+        return new_list
+
+    elif isinstance(obj, (list, tuple)):
+        # Add empty brackets (i.e. "[]")
+        new_list = []
+        for i in obj:
+            for x in recursive_function(key, i):
+                new_list.append(('[]' + x[0], x[1]))
+        return new_list
+    else:
+        # Base case. Return list with tuple containing the value
+        return [('[{}]'.format(text_type(key)), obj)]
 
 
 def obj_or_id(parameter, param_name, object_types):
