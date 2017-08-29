@@ -9,6 +9,17 @@
 		},
 		"status_code": 200
 	},
+	"get_by_sis_id": {
+		"method": "GET",
+		"endpoint": "sections/sis_section_id:test-sis-id",
+		"data":{
+			"id": 10,
+			"sis_section_id": "test-sis-id",
+			"course_id": 1,
+			"name": "SIS Section"
+		},
+		"status_code": 200
+	},
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "sections/1/enrollments",

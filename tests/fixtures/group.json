@@ -19,6 +19,17 @@
 		},
 		"status_code": 200
 	},
+	"get_by_sis_id": {
+		"method": "GET",
+		"endpoint": "groups/sis_group_id:test-sis-id",
+		"data": {
+			"id": 10,
+			"sis_group_id": "test-sis-id",
+			"name": "SIS Group",
+			"description": "best SIS group ever"
+		},
+		"status_code": 200
+	},
 	"pages_get_page": {
 		"method": "GET",
 		"endpoint": "groups/1/pages/my-url",

@@ -8,6 +8,7 @@ from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
+from canvasapi.section import Section
 from canvasapi.user import User
 from canvasapi.util import combine_kwargs
 
@@ -42,7 +43,7 @@ class Canvas(object):
         )
         return Account(self.__requester, response.json())
 
-    def get_account(self, account_id):
+    def get_account(self, account_id, use_sis_id=False, **kwargs):
         """
         Retrieve information on an individual account.
 
@@ -50,12 +51,22 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`_
 
         :param account_id: The ID of the account to retrieve.
-        :type account_id: int
+        :type account_id: int or str
+        :param use_sis_id: Whether or not account_id is an sis ID.
+            Defaults to `False`.
+        :type use_sis_id: bool
+
         :rtype: :class:`canvasapi.account.Account`
         """
+        if use_sis_id:
+            uri_str = 'accounts/sis_account_id:{}'
+        else:
+            uri_str = 'accounts/{}'
+
         response = self.__requester.request(
             'GET',
-            'accounts/%s' % (account_id)
+            uri_str.format(account_id),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self.__requester, response.json())
 
@@ -102,7 +113,7 @@ class Canvas(object):
             'course_accounts',
         )
 
-    def get_course(self, course_id, **kwargs):
+    def get_course(self, course_id, use_sis_id=False, **kwargs):
         """
         Retrieve a course by its ID.
 
@@ -110,12 +121,20 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
         :param course_id: The ID of the course to retrieve.
-        :type course_id: int
+        :type course_id: int or str
+        :param use_sis_id: Whether or not course_id is an sis ID.
+            Defaults to `False`.
+        :type use_sis_id: bool
         :rtype: :class:`canvasapi.course.Course`
         """
+        if use_sis_id:
+            uri_str = 'courses/sis_course_id:{}'
+        else:
+            uri_str = 'courses/{}'
+
         response = self.__requester.request(
             'GET',
-            'courses/%s' % (course_id),
+            uri_str.format(course_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Course(self.__requester, response.json())
@@ -251,19 +270,30 @@ class Canvas(object):
         )
         return CourseNickname(self.__requester, response.json())
 
-    def get_section(self, section_id):
+    def get_section(self, section_id, use_sis_id=False, **kwargs):
         """
         Get details about a specific section.
 
         :calls: `GET /api/v1/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.show>`_
 
+        :param section_id: The ID of the section to get.
+        :type section_id: int or str
+        :param use_sis_id: Whether or not section_id is an sis ID.
+            Defaults to `False`.
+        :type use_sis_id: bool
+
         :rtype: :class:`canvasapi.section.Section`
         """
-        from canvasapi.section import Section
+        if use_sis_id:
+            uri_str = 'sections/sis_section_id:{}'
+        else:
+            uri_str = 'sections/{}'
+
         response = self.__requester.request(
             'GET',
-            'sections/%s' % (section_id)
+            uri_str.format(section_id),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Section(self.__requester, response.json())
 
@@ -340,7 +370,7 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
-    def get_group(self, group_id, **kwargs):
+    def get_group(self, group_id, use_sis_id=False, **kwargs):
         """
         Return the data for a single group. If the caller does not
         have permission to view the group a 401 will be returned.
@@ -348,11 +378,22 @@ class Canvas(object):
         :calls: `GET /api/v1/groups/:group_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
 
+        :param group_id: The ID of the group to get.
+        :type group_id: int or str
+        :param use_sis_id: Whether or not group_id is an sis ID.
+            Defaults to `False`.
+        :type use_sis_id: bool
+
         :rtype: :class:`canvasapi.group.Group`
         """
+        if use_sis_id:
+            uri_str = 'groups/sis_group_id:{}'
+        else:
+            uri_str = 'groups/{}'
+
         response = self.__requester.request(
             'GET',
-            'groups/%s' % (group_id),
+            uri_str.format(group_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
