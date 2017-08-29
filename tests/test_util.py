@@ -254,10 +254,12 @@ class TestUtil(unittest.TestCase):
             < result.index(('basic_list[]', 'bar'))
         )
         self.assertTrue(
-            result.index(('list_dicts[][l_d1b]', 'val1b'))
-            < result.index(('list_dicts[][l_d1a]', 'val1a'))
-            < result.index(('list_dicts[][l_d2b]', 'val2b'))
+            result.index(('list_dicts[][l_d1a]', 'val1a'))
             < result.index(('list_dicts[][l_d2a]', 'val2a'))
+        )
+        self.assertTrue(
+            result.index(('list_dicts[][l_d1b]', 'val1b'))
+            < result.index(('list_dicts[][l_d2b]', 'val2b'))
         )
         self.assertTrue(
             result.index(('nest_list[][]', '1a'))
