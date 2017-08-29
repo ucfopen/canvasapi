@@ -113,6 +113,8 @@ class Requester(object):
         for tup in data:
             if tup[0] == 'file':
                 file = {'file': tup[1]}
+                break
+
         # Remove file entry from data.
         data[:] = [tup for tup in data if tup[0] != 'file']
 
