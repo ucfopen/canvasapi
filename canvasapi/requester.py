@@ -107,11 +107,14 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        if 'file' in data:
-            file = {'file': data['file']}
-            del data['file']
-        else:
-            file = None
+
+        # Grab file from data.
+        file = None
+        for tup in data:
+            if tup[0] == 'file':
+                file = {'file': tup[1]}
+        # Remove file entry from data.
+        data[:] = [tup for tup in data if tup[0] != 'file']
 
         return self._session.post(url, headers=headers, data=data, files=file)
 
