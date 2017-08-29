@@ -8,12 +8,14 @@ def combine_kwargs(**kwargs):
 
     # Loop through all kwargs provided
     for kw, arg in kwargs.items():
-        if isinstance(arg, (dict, list, tuple)):
+        if isinstance(arg, dict):
             for k, v in arg.items():
                 for x in recursive_function(k, v):
                     combined_kwargs.append(('{}{}'.format(kw, x[0]), x[1]))
-            # do stuff with kw probably
-            # loop over list and add to combined_kwargs
+        elif isinstance(arg, (list, tuple)):
+            for i in arg:
+                for x in recursive_function('', i):
+                    combined_kwargs.append(('{}{}'.format(kw, x[0]), x[1]))
         else:
             combined_kwargs.append((text_type(kw), arg))
 
