@@ -92,7 +92,7 @@ class ExternalTool(CanvasObject):
         response = self._requester.request(
             'PUT',
             '%ss/%s/external_tools/%s' % (self.parent_type, self.parent_id, self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
 
@@ -116,7 +116,7 @@ class ExternalTool(CanvasObject):
         response = self._requester.request(
             'GET',
             '%ss/%s/external_tools/sessionless_launch' % (self.parent_type, self.parent_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         try:
             return response.json()['url']

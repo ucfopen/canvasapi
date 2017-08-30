@@ -24,7 +24,7 @@ class AuthenticationProvider(CanvasObject):
         response = self._requester.request(
             'PUT',
             'accounts/%s/authentication_providers/%s' % (self.account_id, self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         if response.json().get('auth_type'):

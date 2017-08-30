@@ -50,7 +50,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/page_views' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_courses(self, **kwargs):
@@ -70,7 +70,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/courses' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_missing_submissions(self):
@@ -105,7 +105,7 @@ class User(CanvasObject):
         response = self._requester.request(
             'PUT',
             'users/%s/settings' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
 
@@ -180,7 +180,7 @@ class User(CanvasObject):
         response = self._requester.request(
             'PUT',
             'users/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         super(User, self).set_attributes(response.json())
         return self
@@ -242,7 +242,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/courses/%s/assignments' % (self.id, course_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_enrollments(self, **kwargs):
@@ -262,7 +262,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/enrollments' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def upload(self, file, **kwargs):
@@ -307,7 +307,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/self/groups',
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_calendar_events_for_user(self, **kwargs):
@@ -325,7 +325,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/calendar_events' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_communication_channels(self, **kwargs):
@@ -344,7 +344,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/communication_channels' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_bookmarks(self, **kwargs):
@@ -403,7 +403,7 @@ class User(CanvasObject):
             'users/self/bookmarks',
             name=name,
             url=url,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return Bookmark(self._requester, response.json())
@@ -425,7 +425,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/files' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_file(self, file_id, **kwargs):
@@ -443,7 +443,7 @@ class User(CanvasObject):
         response = self._requester.request(
             'GET',
             'users/{}/files/{}'.format(self.id, file_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return File(self._requester, response.json())
 
@@ -497,7 +497,7 @@ class User(CanvasObject):
             'POST',
             'users/%s/folders' % self.id,
             name=name,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
 
@@ -518,7 +518,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/logins' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_observees(self, **kwargs):
@@ -537,7 +537,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'users/%s/observees' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def add_observee_with_credentials(self, **kwargs):
@@ -553,7 +553,7 @@ class User(CanvasObject):
         response = self._requester.request(
             'POST',
             'users/%s/observees' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return User(self._requester, response.json())
 

@@ -26,7 +26,7 @@ class Page(CanvasObject):
         response = self._requester.request(
             'PUT',
             '%ss/%s/pages/%s' % (self.parent_type, self.parent_id, self.url),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         page_json = response.json()
@@ -109,7 +109,7 @@ class Page(CanvasObject):
         response = self._requester.request(
             'GET',
             '%ss/%s/pages/%s/revisions/latest' % (self.parent_type, self.parent_id, self.url),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return PageRevision(self._requester, response.json())
 
@@ -133,7 +133,7 @@ class Page(CanvasObject):
                 self.url,
                 revision_id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
@@ -158,7 +158,7 @@ class Page(CanvasObject):
             self._requester,
             'GET',
             '%ss/%s/pages/%s/revisions' % (self.parent_type, self.parent_id, self.url),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def revert_to_revision(self, revision_id):

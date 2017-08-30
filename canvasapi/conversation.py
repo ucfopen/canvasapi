@@ -24,7 +24,7 @@ class Conversation(CanvasObject):
         response = self._requester.request(
             'PUT',
             'conversations/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         if response.json().get('id'):
@@ -90,7 +90,7 @@ class Conversation(CanvasObject):
             'POST',
             'conversations/%s/add_message' % (self.id),
             body=body,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Conversation(self._requester, response.json())
 

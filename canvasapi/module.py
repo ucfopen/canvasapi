@@ -89,7 +89,7 @@ class Module(CanvasObject):
             'GET',
             'courses/%s/modules/%s/items' % (self.course_id, self.id),
             {'course_id': self.course_id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_module_item(self, module_item_id, **kwargs):
@@ -104,7 +104,7 @@ class Module(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/modules/%s/items/%s' % (self.course_id, self.id, module_item_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -134,7 +134,7 @@ class Module(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/modules/%s/items' % (self.course_id, self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})

@@ -39,7 +39,7 @@ class EnrollmentTerm(CanvasObject):
         response = self._requester.request(
             'PUT',
             'accounts/%s/terms/%s' % (self.account_id, self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return EnrollmentTerm(self._requester, response.json())

@@ -21,34 +21,60 @@ class TestUtil(unittest.TestCase):
     def test_combine_kwargs_empty(self, m):
 
         result = combine_kwargs()
-        self.assertIsInstance(result, dict)
-        self.assertEqual(result, {})
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 0)
 
     def test_combine_kwargs_single(self, m):
         result = combine_kwargs(var='test')
-        self.assertIsInstance(result, dict)
-        self.assertTrue('var' in result)
-        self.assertEqual(result['var'], 'test')
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 1)
+        self.assertIn(('var', 'test'), result)
 
     def test_combine_kwargs_single_dict(self, m):
         result = combine_kwargs(var={'foo': 'bar'})
-        self.assertIsInstance(result, dict)
-        self.assertTrue('var[foo]' in result)
-        self.assertEqual(result['var[foo]'], 'bar')
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 1)
+        self.assertIn(('var[foo]', 'bar'), result)
+
+    def test_combine_kwargs_single_list_empty(self, m):
+        result = combine_kwargs(var=[])
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 0)
+
+    def test_combine_kwargs_single_list_single_item(self, m):
+        result = combine_kwargs(var=['test'])
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 1)
+        self.assertIn(('var[]', 'test'), result)
+
+    def test_combine_kwargs_single_list_multiple_items(self, m):
+        result = combine_kwargs(foo=['bar1', 'bar2', 'bar3', 'bar4'])
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 4)
+
+        self.assertIn(('foo[]', 'bar1'), result)
+        self.assertIn(('foo[]', 'bar2'), result)
+        self.assertIn(('foo[]', 'bar3'), result)
+        self.assertIn(('foo[]', 'bar4'), result)
+
+        # Ensure kwargs are in correct order
+        self.assertTrue(
+            result.index(('foo[]', 'bar1'))
+            < result.index(('foo[]', 'bar2'))
+            < result.index(('foo[]', 'bar3'))
+            < result.index(('foo[]', 'bar4'))
+        )
 
     def test_combine_kwargs_multiple_dicts(self, m):
         result = combine_kwargs(
             var1={'foo': 'bar'},
             var2={'fizz': 'buzz'}
         )
-        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result, list)
         self.assertEqual(len(result), 2)
 
-        self.assertIn('var1[foo]', result)
-        self.assertEqual(result['var1[foo]'], 'bar')
-
-        self.assertIn('var2[fizz]', result)
-        self.assertEqual(result['var2[fizz]'], 'buzz')
+        self.assertIn(('var1[foo]', 'bar'), result)
+        self.assertIn(('var2[fizz]', 'buzz'), result)
 
     def test_combine_kwargs_multiple_mixed(self, m):
         result = combine_kwargs(
@@ -56,27 +82,34 @@ class TestUtil(unittest.TestCase):
             var2={'fizz': 'buzz'},
             var3='foo',
             var4=42,
+            var5=['test1', 'test2', 'test3']
         )
-        self.assertIsInstance(result, dict)
-        self.assertEqual(len(result), 4)
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 7)
 
-        expected_keys = ['var1', 'var2[fizz]', 'var3', 'var4']
-        self.assertTrue(all(key in result for key in expected_keys))
+        self.assertIn(('var1', True), result)
+        self.assertIn(('var2[fizz]', 'buzz'), result)
+        self.assertIn(('var3', 'foo'), result)
+        self.assertIn(('var4', 42), result)
+        self.assertIn(('var5[]', 'test1'), result)
+        self.assertIn(('var5[]', 'test2'), result)
+        self.assertIn(('var5[]', 'test3'), result)
 
-        self.assertEqual(result['var1'], True)
-        self.assertEqual(result['var2[fizz]'], 'buzz')
-        self.assertEqual(result['var3'], 'foo')
-        self.assertEqual(result['var4'], 42)
+        # Ensure list kwargs are in correct order
+        self.assertTrue(
+            result.index(('var5[]', 'test1'))
+            < result.index(('var5[]', 'test2'))
+            < result.index(('var5[]', 'test3'))
+        )
 
     def test_combine_kwargs_nested_dict(self, m):
         result = combine_kwargs(dict={
             'key': {'subkey': 'value'}
         })
-        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result, list)
         self.assertEqual(len(result), 1)
 
-        self.assertIn('dict[key][subkey]', result)
-        self.assertEqual(result['dict[key][subkey]'], 'value')
+        self.assertIn(('dict[key][subkey]', 'value'), result)
 
     def test_combine_kwargs_multiple_nested_dicts(self, m):
         result = combine_kwargs(
@@ -101,38 +134,25 @@ class TestUtil(unittest.TestCase):
                 }
             }
         )
-        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result, list)
         self.assertEqual(len(result), 8)
 
-        expected_keys = [
-            'dict1[key1][subkey1-1]',
-            'dict1[key1][subkey1-2]',
-            'dict1[key2][subkey2-1]',
-            'dict1[key2][subkey2-2]',
-            'dict2[key1][subkey1-1]',
-            'dict2[key1][subkey1-2]',
-            'dict2[key2][subkey2-1]',
-            'dict2[key2][subkey2-2]',
-        ]
-        self.assertTrue(all(key in result for key in expected_keys))
-
-        self.assertEqual(result['dict1[key1][subkey1-1]'], 'value1-1')
-        self.assertEqual(result['dict1[key1][subkey1-2]'], 'value1-2')
-        self.assertEqual(result['dict1[key2][subkey2-1]'], 'value2-1')
-        self.assertEqual(result['dict1[key2][subkey2-2]'], 'value2-2')
-        self.assertEqual(result['dict2[key1][subkey1-1]'], 'value1-1')
-        self.assertEqual(result['dict2[key1][subkey1-2]'], 'value1-2')
-        self.assertEqual(result['dict2[key2][subkey2-1]'], 'value2-1')
-        self.assertEqual(result['dict2[key2][subkey2-2]'], 'value2-2')
+        self.assertIn(('dict1[key1][subkey1-1]', 'value1-1'), result)
+        self.assertIn(('dict1[key1][subkey1-2]', 'value1-2'), result)
+        self.assertIn(('dict1[key2][subkey2-1]', 'value2-1'), result)
+        self.assertIn(('dict1[key2][subkey2-2]', 'value2-2'), result)
+        self.assertIn(('dict2[key1][subkey1-1]', 'value1-1'), result)
+        self.assertIn(('dict2[key1][subkey1-2]', 'value1-2'), result)
+        self.assertIn(('dict2[key2][subkey2-1]', 'value2-1'), result)
+        self.assertIn(('dict2[key2][subkey2-2]', 'value2-2'), result)
 
     def test_combine_kwargs_super_nested_dict(self, m):
         result = combine_kwargs(
             big_dict={'a': {'b': {'c': {'d': {'e': 'We need to go deeper'}}}}}
         )
-        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result, list)
         self.assertEqual(len(result), 1)
-        self.assertIn('big_dict[a][b][c][d][e]', result)
-        self.assertEqual(result['big_dict[a][b][c][d][e]'], 'We need to go deeper')
+        self.assertIn(('big_dict[a][b][c][d][e]', 'We need to go deeper'), result)
 
     def test_combine_kwargs_the_gauntlet(self, m):
         result = combine_kwargs(
@@ -144,6 +164,7 @@ class TestUtil(unittest.TestCase):
             },
             true=False,
             life=42,
+            basic_list=['foo', 'bar'],
             days_of_xmas={
                 'first': {
                     1: 'partridge in a pear tree'
@@ -171,37 +192,83 @@ class TestUtil(unittest.TestCase):
                     '5': 'GOLDEN RINGS'
                 }
             },
-            super_nest={'1': {'2': {'3': {'4': {'5': {'6': 'tada'}}}}}}
+            super_nest={'1': {'2': {'3': {'4': {'5': {'6': 'tada'}}}}}},
+            list_dicts=[
+                {
+                    'l_d1a': 'val1a',
+                    'l_d1b': 'val1b'
+                },
+                {
+                    'l_d2a': 'val2a',
+                    'l_d2b': 'val2b'
+                }
+            ],
+            nest_list=[
+                ['1a', '1b'],
+                ['2a', '2b'],
+                ['3a', '3b']
+            ]
         )
-        self.assertIsInstance(result, dict)
-        self.assertEqual(len(result), 22)
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 34)
 
-        expected_keys = [
-            'foo',
-            'fb[3]',
-            'fb[5]',
-            'fb[15]',
-            'true',
-            'life',
-            'days_of_xmas[first][1]',
-            'days_of_xmas[second][1]',
-            'days_of_xmas[second][2]',
-            'days_of_xmas[third][1]',
-            'days_of_xmas[third][2]',
-            'days_of_xmas[third][3]',
-            'days_of_xmas[fourth][1]',
-            'days_of_xmas[fourth][2]',
-            'days_of_xmas[fourth][3]',
-            'days_of_xmas[fourth][4]',
-            'days_of_xmas[fifth][1]',
-            'days_of_xmas[fifth][2]',
-            'days_of_xmas[fifth][3]',
-            'days_of_xmas[fifth][4]',
-            'days_of_xmas[fifth][5]',
-            'super_nest[1][2][3][4][5][6]'
-        ]
+        # Check that all keys were generated correctly
+        self.assertIn(('foo', 'bar'), result)
+        self.assertIn(('fb[3]', 'fizz'), result)
+        self.assertIn(('fb[5]', 'buzz'), result)
+        self.assertIn(('fb[15]', 'fizzbuzz'), result)
+        self.assertIn(('true', False), result)
+        self.assertIn(('life', 42), result)
+        self.assertIn(('basic_list[]', 'foo'), result)
+        self.assertIn(('basic_list[]', 'bar'), result)
+        self.assertIn(('days_of_xmas[first][1]', 'partridge in a pear tree'), result)
+        self.assertIn(('days_of_xmas[second][1]', 'partridge in a pear tree'), result)
+        self.assertIn(('days_of_xmas[second][2]', 'turtle doves'), result)
+        self.assertIn(('days_of_xmas[third][1]', 'partridge in a pear tree'), result)
+        self.assertIn(('days_of_xmas[third][2]', 'turtle doves'), result)
+        self.assertIn(('days_of_xmas[third][3]', 'french hens'), result)
+        self.assertIn(('days_of_xmas[fourth][1]', 'partridge in a pear tree'), result)
+        self.assertIn(('days_of_xmas[fourth][2]', 'turtle doves'), result)
+        self.assertIn(('days_of_xmas[fourth][3]', 'french hens'), result)
+        self.assertIn(('days_of_xmas[fourth][4]', 'mocking birds'), result)
+        self.assertIn(('days_of_xmas[fifth][1]', 'partridge in a pear tree'), result)
+        self.assertIn(('days_of_xmas[fifth][2]', 'turtle doves'), result)
+        self.assertIn(('days_of_xmas[fifth][3]', 'french hens'), result)
+        self.assertIn(('days_of_xmas[fifth][4]', 'mocking birds'), result)
+        self.assertIn(('days_of_xmas[fifth][5]', 'GOLDEN RINGS'), result)
+        self.assertIn(('super_nest[1][2][3][4][5][6]', 'tada'), result)
+        self.assertIn(('list_dicts[][l_d1b]', 'val1b'), result)
+        self.assertIn(('list_dicts[][l_d1a]', 'val1a'), result)
+        self.assertIn(('list_dicts[][l_d2b]', 'val2b'), result)
+        self.assertIn(('list_dicts[][l_d2a]', 'val2a'), result)
+        self.assertIn(('nest_list[][]', '1a'), result)
+        self.assertIn(('nest_list[][]', '1b'), result)
+        self.assertIn(('nest_list[][]', '2a'), result)
+        self.assertIn(('nest_list[][]', '2b'), result)
+        self.assertIn(('nest_list[][]', '3a'), result)
+        self.assertIn(('nest_list[][]', '3b'), result)
 
-        self.assertTrue(all(key in result for key in expected_keys))
+        # Ensure list kwargs are in correct order
+        self.assertTrue(
+            result.index(('basic_list[]', 'foo'))
+            < result.index(('basic_list[]', 'bar'))
+        )
+        self.assertTrue(
+            result.index(('list_dicts[][l_d1a]', 'val1a'))
+            < result.index(('list_dicts[][l_d2a]', 'val2a'))
+        )
+        self.assertTrue(
+            result.index(('list_dicts[][l_d1b]', 'val1b'))
+            < result.index(('list_dicts[][l_d2b]', 'val2b'))
+        )
+        self.assertTrue(
+            result.index(('nest_list[][]', '1a'))
+            < result.index(('nest_list[][]', '1b'))
+            < result.index(('nest_list[][]', '2a'))
+            < result.index(('nest_list[][]', '2b'))
+            < result.index(('nest_list[][]', '3a'))
+            < result.index(('nest_list[][]', '3b'))
+        )
 
     # obj_or_id()
     def test_obj_or_id_int(self, m):
