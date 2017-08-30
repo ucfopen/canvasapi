@@ -23,7 +23,7 @@ setup(
     license='MIT License',
     packages=['canvasapi'],
     include_package_data=True,
-    install_requires=['requests', 'six'],
+    install_requires=['pytz', 'requests', 'six'],
     zip_safe=False,
     classifiers=[
         'Development Status :: 3 - Alpha',
