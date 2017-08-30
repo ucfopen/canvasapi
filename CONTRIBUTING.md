@@ -199,14 +199,10 @@ We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/) 
 * We use four spaces for indentation.
 * Lines should be around 80 characters long, but up to 99 is allowed. Once you get into the 85+ territory, consider breaking your code into separate lines.
 
-We use `pycodestyle` and `pyflakes` for linting:
+We use `flake8` for linting:
 
 ```sh
-pycodestyle canvasapi tests
-```
-
-```sh
-pyflakes canvasapi tests
+flake8 canvasapi tests
 ```
 
 ### Foolish consistency
