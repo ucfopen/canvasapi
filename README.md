@@ -134,3 +134,7 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
 # Fetch 50 objects per page when making calls that return a PaginatedList
 >>> courses = user.get_courses(per_page=50)
 ```
+
+## Contact Us
+
+Need help? Have an idea? Just want to say hi? Come join us on the [UCF Open Slack Channel](https://ucf-open-slackin.herokuapp.com) and join the `#canvasapi` channel!

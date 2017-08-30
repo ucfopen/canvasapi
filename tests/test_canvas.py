@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 from datetime import datetime
 
+import pytz
 import requests_mock
 from six import text_type
 
@@ -107,6 +108,7 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(course.start_at, text_type)
         self.assertTrue(hasattr(course, 'start_at_date'))
         self.assertIsInstance(course.start_at_date, datetime)
+        self.assertEqual(course.start_at_date.tzinfo, pytz.utc)
 
     def test_get_course_non_unicode_char(self, m):
         register_uris({'course': ['unicode_encode_error']}, m)
