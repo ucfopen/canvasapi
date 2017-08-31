@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+from datetime import datetime
 
 import requests
 
@@ -58,6 +59,20 @@ class Requester(object):
             auth_header = {'Authorization': 'Bearer %s' % (self.access_token)}
             headers.update(auth_header)
 
+        # Convert kwargs into list of 2-tuples and combine with _kwargs.
+        _kwargs = [] if _kwargs is None else _kwargs
+        for kw, arg, in kwargs.items():
+            _kwargs.append((kw, arg))
+
+        # Do any final argument processing before sending to request method.
+        for i, kwarg in enumerate(_kwargs):
+            kw, arg = kwarg
+
+            # Convert any datetime objects into ISO 8601 formatted strings.
+            if isinstance(arg, datetime):
+                _kwargs[i] = (kw, arg.isoformat())
+
+        # Determine the appropriate request method.
         if method == 'GET':
             req_method = self._get_request
         elif method == 'POST':
@@ -67,13 +82,10 @@ class Requester(object):
         elif method == 'PUT':
             req_method = self._put_request
 
-        # Convert kwargs into list of 2-tuples and combine with _kwargs.
-        _kwargs = [] if _kwargs is None else _kwargs
-        for kw, arg, in kwargs.items():
-            _kwargs.append((kw, arg))
-
+        # Call the request method
         response = req_method(full_url, headers, _kwargs)
 
+        # Raise for status codes
         if response.status_code == 400:
             raise BadRequest(response.json())
         elif response.status_code == 401:
