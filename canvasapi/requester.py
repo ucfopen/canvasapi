@@ -61,8 +61,7 @@ class Requester(object):
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
         _kwargs = [] if _kwargs is None else _kwargs
-        for kw, arg, in kwargs.items():
-            _kwargs.append((kw, arg))
+        _kwargs.extend(kwargs.items())
 
         # Do any final argument processing before sending to request method.
         for i, kwarg in enumerate(_kwargs):
