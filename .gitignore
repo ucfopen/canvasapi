@@ -3,6 +3,8 @@
 .DS_Store
 /*.egg-info
 /.coverage
+/.project
+/.pyproject
 /_build/
 /_static/
 /_templates/
