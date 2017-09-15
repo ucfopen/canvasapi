@@ -1,7 +1,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+import warnings
 
 import requests_mock
+from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.enrollment import Enrollment
@@ -103,6 +105,25 @@ class TestSection(unittest.TestCase):
 
         self.assertEqual(len(submission_list), 2)
         self.assertIsInstance(submission_list[0], Submission)
+
+    def test_list_multiple_submissions_grouped_param(self, m):
+        register_uris({'section': ['list_multiple_submissions']}, m)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            warnings.simplefilter('always')
+            submissions = self.section.list_multiple_submissions(grouped=True)
+            submission_list = [submission for submission in submissions]
+
+            # Ensure using the `grouped` param raises a warning
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, UserWarning)
+            self.assertEqual(
+                text_type(warning_list[-1].message),
+                'The `grouped` parameter must be empty. Removing kwarg `grouped`.'
+            )
+
+            self.assertEqual(len(submission_list), 2)
+            self.assertIsInstance(submission_list[0], Submission)
 
     # get_submission()
     def test_get_submission(self, m):

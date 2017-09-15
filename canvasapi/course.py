@@ -1136,7 +1136,7 @@ class Course(CanvasObject):
             :class:`canvasapi.submission.Submission`
         """
         if 'grouped' in kwargs:
-            warn("The `grouped` parameter must be empty. Removing kwarg `grouped`.")
+            warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
             del kwargs['grouped']
 
         return PaginatedList(
