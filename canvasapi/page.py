@@ -30,7 +30,7 @@ class Page(CanvasObject):
         )
 
         page_json = response.json()
-        page_json.update({'course_id': self.id})
+        page_json.update({'course_id': self.course_id})
         super(Page, self).set_attributes(page_json)
 
         return self
