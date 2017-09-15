@@ -597,7 +597,8 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/pages' % (self.id),
-            {'course_id': self.id}
+            {'course_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_page(self, wiki_page, **kwargs):
