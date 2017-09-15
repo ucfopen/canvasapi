@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+from warnings import warn
 
 from six import python_2_unicode_compatible
 
@@ -1134,12 +1135,15 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
+        if 'grouped' in kwargs:
+            warn("The `grouped` parameter must be empty. Removing kwarg `grouped`.")
+            del kwargs['grouped']
+
         return PaginatedList(
             Submission,
             self._requester,
             'GET',
             'courses/%s/students/submissions' % (self.id),
-            grouped=False,
             _kwargs=combine_kwargs(**kwargs)
         )
 
