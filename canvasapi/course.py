@@ -1417,32 +1417,32 @@ class Course(CanvasObject):
 
         return Tab(self._requester, response.json())
 
-    def get_rubric(course, rub_id, **kwargs):
+    def get_rubric(self, rub_id, **kwargs):
         """
         Get a single rubric, based on rubric id.
 
         :calls: `GET /api/v1/courses/:course_id/rubrics/:id \
         <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.show>`_
-        
+
         :param rub_id: The ID of the rubric.
         :type rub_id: int
         :rtype: :class:`canvasapi.rubric.Rubric`
         """
         response = self._requester.request(
             'GET',
-            'courses/%s/rubrics/%s' % (course.id, rub_id),
+            'courses/%s/rubrics/%s' % (self.id, rub_id),
             **combine_kwargs(**kwargs)
             )
 
         return Rubric(self._requester, response.json())
 
-    def list_rubrics(course, **kwargs):
+    def list_rubrics(self, **kwargs):
         """
         Get a single rubric, based on rubric id.
 
         :calls: `GET /api/v1/courses/:course_id/rubrics \
         <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
-        
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.rubric.Rubric`
         """
@@ -1450,7 +1450,7 @@ class Course(CanvasObject):
             Rubric,
             self._requester,
             'GET',
-            'courses/%s/rubrics' % (course.id),
+            'courses/%s/rubrics' % (self.id),
             **combine_kwargs(**kwargs)
         )
 
