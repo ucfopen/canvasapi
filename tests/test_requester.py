@@ -1,7 +1,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+from datetime import datetime
 import unittest
 
+import requests
 import requests_mock
+from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.exceptions import (
@@ -26,10 +29,40 @@ class TestRequester(unittest.TestCase):
         response = self.requester.request('GET', 'fake_get_request')
         self.assertEqual(response.status_code, 200)
 
+    def test_request_get_datetime(self, m):
+        date = datetime.today()
+
+        def custom_matcher(request):
+            match_query = 'date={}'.format(quote(date.isoformat()).lower())
+            if request.query == match_query:
+                resp = requests.Response()
+                resp.status_code = 200
+                return resp
+
+        m.add_matcher(custom_matcher)
+
+        response = self.requester.request('GET', 'test', date=date)
+        self.assertEqual(response.status_code, 200)
+
     def test_request_post(self, m):
         register_uris({'requests': ['post']}, m)
 
         response = self.requester.request('POST', 'fake_post_request')
+        self.assertEqual(response.status_code, 200)
+
+    def test_request_post_datetime(self, m):
+        date = datetime.today()
+
+        def custom_matcher(request):
+            match_text = 'date={}'.format(quote(date.isoformat()))
+            if request.text == match_text:
+                resp = requests.Response()
+                resp.status_code = 200
+                return resp
+
+        m.add_matcher(custom_matcher)
+
+        response = self.requester.request('POST', 'test', date=date)
         self.assertEqual(response.status_code, 200)
 
     def test_request_delete(self, m):

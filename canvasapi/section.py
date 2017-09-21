@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+from warnings import warn
 
 from six import python_2_unicode_compatible
 
@@ -36,7 +37,7 @@ class Section(CanvasObject):
             self._requester,
             'GET',
             'sections/%s/enrollments' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def cross_list_section(self, new_course_id):
@@ -121,7 +122,7 @@ class Section(CanvasObject):
         response = self._requester.request(
             'POST',
             'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return Submission(self._requester, response.json())
@@ -143,7 +144,7 @@ class Section(CanvasObject):
             self._requester,
             'GET',
             'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_multiple_submissions(self, **kwargs):
@@ -157,13 +158,16 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
+        if 'grouped' in kwargs:
+            warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
+            del kwargs['grouped']
+
         return PaginatedList(
             Submission,
             self._requester,
             'GET',
             'sections/%s/students/submissions' % (self.id),
-            grouped=False,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_submission(self, assignment_id, user_id, **kwargs):
@@ -182,7 +186,7 @@ class Section(CanvasObject):
         response = self._requester.request(
             'GET',
             'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Submission(self._requester, response.json())
 
@@ -202,7 +206,7 @@ class Section(CanvasObject):
         response = self._requester.request(
             'PUT',
             'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         submission = self.get_submission(assignment_id, user_id)

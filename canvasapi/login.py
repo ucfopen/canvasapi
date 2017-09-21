@@ -40,7 +40,7 @@ class Login(CanvasObject):
         response = self._requester.request(
             'PUT',
             'accounts/%s/logins/%s' % (self.id, self.unique_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return Login(self._requester, response.json())

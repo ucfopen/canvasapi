@@ -63,7 +63,7 @@ class Uploader(object):
         response = self._requester.request(
             'POST',
             self.url,
-            **combine_kwargs(**self.kwargs)
+            _kwargs=combine_kwargs(**self.kwargs)
         )
 
         return self.upload(response, file)

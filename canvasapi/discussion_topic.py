@@ -103,7 +103,7 @@ class DiscussionTopic(CanvasObject):
                 self.parent_id,
                 self.id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return DiscussionTopic(self._requester, response.json())
 
@@ -129,7 +129,7 @@ class DiscussionTopic(CanvasObject):
                 self.id,
                 entry_id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return 'updated_at' in response.json()
 
@@ -155,7 +155,7 @@ class DiscussionTopic(CanvasObject):
                 self.id,
                 entry_id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return 'deleted_at' in response.json()
 
@@ -178,7 +178,7 @@ class DiscussionTopic(CanvasObject):
                 self.parent_id,
                 self.id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return 'created_at' in response.json()
 
@@ -204,7 +204,7 @@ class DiscussionTopic(CanvasObject):
                 self.parent_id,
                 self.id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def post_reply(self, entry_id, **kwargs):
@@ -230,7 +230,7 @@ class DiscussionTopic(CanvasObject):
                 self.id,
                 entry_id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return DiscussionTopic(self._requester, response.json())
 
@@ -261,7 +261,7 @@ class DiscussionTopic(CanvasObject):
                 self.id,
                 entry_id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_entries(self, **kwargs):
@@ -286,7 +286,7 @@ class DiscussionTopic(CanvasObject):
                 self.parent_id,
                 self.id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def mark_as_read(self):
@@ -400,7 +400,7 @@ class DiscussionTopic(CanvasObject):
                 self.parent_id,
                 self.id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.status_code == 204
 
@@ -423,7 +423,7 @@ class DiscussionTopic(CanvasObject):
                 self.parent_id,
                 self.id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.status_code == 204
 
@@ -449,7 +449,7 @@ class DiscussionTopic(CanvasObject):
                 self.id,
                 entry_id
             ),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.status_code == 204
 

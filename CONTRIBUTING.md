@@ -2,7 +2,7 @@
 
 Thanks for your interest in contributing!
 
-Below you'll find guidelines for contributing that will keep our codebase clean and happy. 
+Below you'll find guidelines for contributing that will keep our codebase clean and happy.
 
 ## Table of Contents
 
@@ -55,8 +55,8 @@ Once you've found an issue you're interested in tackling, take a look at our [fi
 Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have pip, virtualenv, and git installed and are using a terminal. If not, please set those up before continuing.
 
 1. Clone our repository by executing `git clone git@github.com:ucfopen/canvasapi.git`
-2. Pull the latest commit from the **master** branch: `git pull origin master` 
-3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git branch -b issue/1-test-issue-for-documentation`
+2. Pull the latest commit from the **master** branch: `git pull origin master`
+3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git checkout -b issue/1-test-issue-for-documentation`
 4. Set up a new virtual environment ( `virtualenv env` ) and activate it (`source env/bin/activate`)
 5. Install the required dependencies with `pip install -r dev_requirements.txt`
 
@@ -131,6 +131,7 @@ user = self.course.get_user(1)
 self.assertIsInstance(user, User)
 self.assertTrue(hasattr(user, 'name'))
 ```
+
 The rest is basic unit testing. Call the function to be tested, and assert various outcomes. If necessary, multiple tests can written for a single method. All related tests should appear together under the same comment, as described earlier.
 
 ---
@@ -138,6 +139,7 @@ The rest is basic unit testing. Call the function to be tested, and assert vario
 It is common to need certain object(s) for multiple tests. For example, most methods in `test_course.py` require a `Course` object. In this case, save a course to the class in `self.course` for later use.
 
 Do this in the `setUp` class method:
+
 ```python
 with requests_mock.Mocker() as m:
     requires = {
@@ -171,7 +173,7 @@ You'll do this by running `coverage run -m unittest discover` from the main `can
 
 Coverage reports tell us how much of our code is actually being tested. As of right now, we're happily maintaining 100% code coverage (🎉!) and our goal is to keep it there. Ensure you've covered your changes entirely by running `coverage report`. Your output should look something like this:
 
-```
+```Formatted
 Name                             Stmts   Miss  Cover
 ----------------------------------------------------
 canvasapi/__init__.py                3      0   100%
@@ -190,7 +192,6 @@ Certain statements can be omitted from the coverage report by adding `# pragma: 
 
 Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at `develop` and then submit it for review.
 
-
 ## Code Style Guidelines
 
 We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/) specification as much as possible. In short, that means:
@@ -198,14 +199,10 @@ We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/) 
 * We use four spaces for indentation.
 * Lines should be around 80 characters long, but up to 99 is allowed. Once you get into the 85+ territory, consider breaking your code into separate lines.
 
-We use `pycodestyle` and `pyflakes` for linting:
+We use `flake8` for linting:
 
-```
-pycodestyle canvasapi tests
-```
-
-```
-pyflakes canvasapi tests
+```sh
+flake8 canvasapi tests
 ```
 
 ### Foolish consistency
@@ -217,35 +214,41 @@ An important tenet of PEP8 is to not get hung up on PEP8. While we try to be as 
 Below you'll find several established styles that'll help you along the way.
 
 ### Method docstrings
+
 Method docstrings should include a description, a link to the related API endpoint (if available), parameter name, parameter description, and parameter type, return description (if available), and return type. They should be included in the following order:
 
 #### Descriptions
-A description should be a concise, *action* statement (use "*write* a good docstring" over "*writes* a good docstring") that describes the method. Generally, the official API documentation's description is usable (make sure it's an **action statement** though). Special functionality should be documented. 
+
+A description should be a concise, *action* statement (use "*write* a good docstring" over "*writes* a good docstring") that describes the method. Generally, the official API documentation's description is usable (make sure it's an **action statement** though). Special functionality should be documented.
 
 #### Links to related API endpoints
+
 A link to a related API endpoint is denoted with `:calls:`. CanvasAPI uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
 
-```
-:calls: `THE TEXT OF THE HYPERLINK \ 
+```rst
+:calls: `THE TEXT OF THE HYPERLINK \
     <https://the.url/to/use/>`_
 ```
 
 Hyperlink text should match the text underneath the endpoint in the official Canvas API documentation. Generally, that looks like this:
 
-```
+```rst
 :calls: `HTTP_METHOD /api/v1/endpoint/:variable
 ```
 
 **Note**: It's okay to go over 80 characters for the URL, it can't be helped. Use a backslash to split the hyperlink text from the actual URL to limit line length.
 
 #### Parameters
+
 Parameters should be listed in the order that they appear in the method prototype. They should take on the following form:
-```
+
+```rst
 :param PARAMETER_NAME: PARAMETER_DESCRIPTION.
 :type PARAMETER_NAME: PYTHON_TYPE
 ```
 
 #### Returns
+
 **Return description** should be listed first, if available. This should be included to clarify a returned value, for example:
 
 ```python
@@ -262,17 +265,18 @@ In most cases, the return value is easy to infer based on the type and the descr
 
 **Return type** should always be included when a value is returned. If it's not a primitive type (`int`, `str`, `bool`, `list`, etc.) a fully-qualified class name should be included:
 
-```
+```rst
 :rtype: :class:`canvasapi.user.User`
 ```
 
 In the event a PaginatedList is returned:
 
-```
+```rst
 :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
 ```
 
 #### Docstring Examples
+
 Here are some real world examples of how docstrings should be formatted:
 
 ```python

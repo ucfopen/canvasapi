@@ -5,31 +5,73 @@ from six import text_type
 
 def combine_kwargs(**kwargs):
     """
-    Combines a list of keyword arguments into a single dictionary.
+    Flatten a series of keyword arguments from complex combinations of
+    dictionaries and lists into a list of tuples representing
+    properly-formatted parameters to pass to the Requester object.
 
-    :rtype: dict
+    :param kwargs: A dictionary containing keyword arguments to be
+        flattened into properly-formatted parameters.
+    :type kwargs: dict
+
+    :returns: A list of tuples that represent flattened kwargs. The
+        first element is a string representing the key. The second
+        element is the value.
+    :rtype: `list` of `tuple`
     """
-    def flatten_dict(prefix, key, value):
-        new_prefix = prefix + '[' + text_type(key) + ']'
-        if isinstance(value, dict):
-            d = {}
-            for k, v in value.items():
-                d.update(flatten_dict(new_prefix, k, v))
-            return d
-        else:
-            return {new_prefix: value}
+    combined_kwargs = []
 
-    combined_kwargs = {}
-
-    # Loop through all kwargs.
+    # Loop through all kwargs provided
     for kw, arg in kwargs.items():
         if isinstance(arg, dict):
-            # If the argument is a dictionary, flatten it.
-            for key, value in arg.items():
-                combined_kwargs.update(flatten_dict(text_type(kw), key, value))
+            for k, v in arg.items():
+                for tup in flatten_kwarg(k, v):
+                    combined_kwargs.append(('{}{}'.format(kw, tup[0]), tup[1]))
+        elif isinstance(arg, (list, tuple)):
+            for i in arg:
+                for tup in flatten_kwarg('', i):
+                    combined_kwargs.append(('{}{}'.format(kw, tup[0]), tup[1]))
         else:
-            combined_kwargs.update({text_type(kw): arg})
+            combined_kwargs.append((text_type(kw), arg))
+
     return combined_kwargs
+
+
+def flatten_kwarg(key, obj):
+    """
+    Recursive call to flatten sections of a kwarg to be combined
+
+    :param key: The partial keyword to add to the full keyword
+    :type key: str
+    :param obj: The object to translate into a kwarg. If the type is
+        `dict`, the key parameter will be added to the keyword between
+        square brackets and recursively call this function. If the type
+        is `list`, or `tuple`, a set of empty brackets will be appended
+        to the keyword and recursively call this function. Otherwise,
+        the function returns with the final keyword and value.
+
+    :returns: A list of tuples that represent flattened kwargs. The
+        first element is a string representing the key. The second
+        element is the value.
+    :rtype: `list` of `tuple`
+    """
+    if isinstance(obj, dict):
+        # Add the word (e.g. "[key]")
+        new_list = []
+        for k, v in obj.items():
+            for tup in flatten_kwarg(k, v):
+                new_list.append(('[{}]{}'.format(key, tup[0]), tup[1]))
+        return new_list
+
+    elif isinstance(obj, (list, tuple)):
+        # Add empty brackets (i.e. "[]")
+        new_list = []
+        for i in obj:
+            for tup in flatten_kwarg(key, i):
+                new_list.append(('[]' + tup[0], tup[1]))
+        return new_list
+    else:
+        # Base case. Return list with tuple containing the value
+        return [('[{}]'.format(text_type(key)), obj)]
 
 
 def obj_or_id(parameter, param_name, object_types):
