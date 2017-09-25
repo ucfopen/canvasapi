@@ -1,6 +1,5 @@
 -r requirements.txt
 
 coverage
-pycodestyle
-pyflakes
+flake8
 requests-mock
