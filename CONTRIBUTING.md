@@ -15,6 +15,7 @@ Below you'll find guidelines for contributing that will keep our codebase clean 
             * [API Coverage Tests](#api-coverage-tests)
             * [Engine tests](#engine-tests)
         * [Running tests / coverage reports](#running-tests-coverage-reports)
+        * [Making a Pull Request](#making-a-pull-request)
 * [Code style guidelines](#code-style-guidelines)
     * [Foolish consistency](#foolish-consistency)
     * [Method docstrings](#method-docstrings)
@@ -32,7 +33,8 @@ Bug reports are awesome. Writing quality bug reports helps us identify issues an
 
 Here are a few things worth mentioning when making a report:
 
-* What **version** of CanvasAPI are you running? (Use `pip show canvasapi` -- we try to build frequently so "latest" isn't always accurate.)
+* What **version** of CanvasAPI are you running? (`pip show canvasapi`)
+* What **version** of Python are you using? (`python --version`)
 * What steps can be taken to **reproduce the issue**?
 * **Detail matters.** Try not to be too be verbose, but generally the more information, the better!
 
@@ -42,9 +44,13 @@ We welcome pull requests for bug fixes and new features! Feel free to browse our
 
 * [simple](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Asimple) -- easier issues to start working on; great for getting familiar with the codebase.
 * [api coverage](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Aapi-coverage) -- covering new endpoints or updating existing ones.
-* [internal](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Ainternal) -- updates to the engine to improve performance.
+* [enhancement](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Aenhancement) -- updates to the engine to improve performance or add new functionality.
 * [major](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Amajor) -- difficult or major changes or additions that require familiarity with the library.
 * [bug](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Abug) -- happy little code accidents.
+* [fixed-in-develop](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Afixed-in-develop) -- issues that have been resolved but the changes are not in the latest release yet.
+* [canvas-bug](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Acanvas-bug) -- confirmed to be an issue with the Canvas LMS rather than the CanvasAPI library.
+* [help wanted](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3A"help%20wanted") -- we need *your* help to figure these out!
+* [documentation](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Adocumentation) -- issues relating to Documentation. Specifically, any of the `.md` files or our [class reference docs](http://canvasapi.readthedocs.io/en/latest/).
 
 Once you've found an issue you're interested in tackling, take a look at our [first contribution tutorial](#making-your-first-contribution) for information on our pull request policy.
 
@@ -55,7 +61,7 @@ Once you've found an issue you're interested in tackling, take a look at our [fi
 Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have pip, virtualenv, and git installed and are using a terminal. If not, please set those up before continuing.
 
 1. Clone our repository by executing `git clone git@github.com:ucfopen/canvasapi.git`
-2. Pull the latest commit from the **master** branch: `git pull origin master`
+2. Pull the latest commit from the **develop** branch: `git pull origin develop`
 3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git checkout -b issue/1-test-issue-for-documentation`
 4. Set up a new virtual environment ( `virtualenv env` ) and activate it (`source env/bin/activate`)
 5. Install the required dependencies with `pip install -r dev_requirements.txt`
@@ -189,6 +195,8 @@ TOTAL                             1586      0   100%
 ```
 
 Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://github.com/ucfopen/canvasapi/pulls)!
+
+#### Making a Pull Request
 
 Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at `develop` and then submit it for review.
 
