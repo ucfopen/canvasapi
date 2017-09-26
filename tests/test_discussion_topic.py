@@ -4,7 +4,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.discussion_topic import DiscussionTopic, DiscussionEntry
 from canvasapi.course import Course
 from canvasapi.group import Group
 from tests import settings
@@ -80,7 +80,7 @@ class TestDiscussionTopic(unittest.TestCase):
 
         entries = self.discussion_topic.list_topic_entries()
         entry_list = [entry for entry in entries]
-        self.assertIsInstance(entry_list[0], DiscussionTopic)
+        self.assertIsInstance(entry_list[0], DiscussionEntry)
         self.assertEqual(entry_list[0].id, 1)
         self.assertEqual(entry_list[0].user_id, 1)
 
@@ -231,27 +231,27 @@ class TestDiscussionTopic(unittest.TestCase):
 
     # parent_id
     def test_parent_id_course(self, m):
-        self.assertEqual(self.discussion_topic.parent_id, 1)
+        self.assertEqual(self.discussion_topic._parent_id, 1)
 
     def test_parent_id_group(self, m):
-        self.assertEqual(self.discussion_topic_group.parent_id, 1)
+        self.assertEqual(self.discussion_topic_group._parent_id, 1)
 
     def test_parent_id_no_id(self, m):
         discussion = DiscussionTopic(self.canvas._Canvas__requester, {'id': 1})
         with self.assertRaises(ValueError):
-            discussion.parent_id
+            discussion._parent_id
 
     # parent_type
     def test_parent_type_course(self, m):
-        self.assertEqual(self.discussion_topic.parent_type, 'course')
+        self.assertEqual(self.discussion_topic._parent_type, 'course')
 
     def test_parent_type_group(self, m):
-        self.assertEqual(self.discussion_topic_group.parent_type, 'group')
+        self.assertEqual(self.discussion_topic_group._parent_type, 'group')
 
     def test_parent_type_no_id(self, m):
         discussion = DiscussionTopic(self.canvas._Canvas__requester, {'id': 1})
         with self.assertRaises(ValueError):
-            discussion.parent_type
+            discussion._parent_type
 
     # get_parent()
     def test_get_parent_course(self, m):

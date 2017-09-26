@@ -13,9 +13,9 @@ class DiscussionTopic(CanvasObject):
         return "{} ({})".format(self.title, self.id)
 
     @property
-    def parent_id(self):
+    def _parent_id(self):
         """
-        Return the id of the course or group that spawned this page.
+        Return the id of the course or group that spawned this discussion topic.
 
         :rtype: int
         """
@@ -27,9 +27,9 @@ class DiscussionTopic(CanvasObject):
             raise ValueError("Discussion Topic does not have a course_id or group_id")
 
     @property
-    def parent_type(self):
+    def _parent_type(self):
         """
-        Return whether the page was spawned from a course or group.
+        Return whether the discussion topic was spawned from a course or group.
 
         :rtype: str
         """
@@ -42,7 +42,7 @@ class DiscussionTopic(CanvasObject):
 
     def get_parent(self):
         """
-        Return the object that spawned this page.
+        Return the object that spawned this discussion topic.
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """
@@ -51,12 +51,12 @@ class DiscussionTopic(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            '%ss/%s' % (self.parent_type, self.parent_id)
+            '%ss/%s' % (self._parent_type, self._parent_id)
         )
 
-        if self.parent_type == 'group':
+        if self._parent_type == 'group':
             return Group(self._requester, response.json())
-        elif self.parent_type == 'course':
+        elif self._parent_type == 'course':
             return Course(self._requester, response.json())
 
     def delete(self, topic_id):
@@ -77,8 +77,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '%ss/%s/discussion_topics/%s' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             )
         )
@@ -99,8 +99,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '%ss/%s/discussion_topics/%s' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             ),
             _kwargs=combine_kwargs(**kwargs)
@@ -124,8 +124,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '%ss/%s/discussion_topics/%s/entries/%s' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id,
                 entry_id
             ),
@@ -150,8 +150,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '%ss/%s/discussion_topics/%s/entries/%s' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id,
                 entry_id
             ),
@@ -174,8 +174,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'POST',
             '%ss/%s/discussion_topics/%s/entries' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             ),
             _kwargs=combine_kwargs(**kwargs)
@@ -184,7 +184,7 @@ class DiscussionTopic(CanvasObject):
 
     def list_topic_entries(self, **kwargs):
         """
-        Retreive the paginated top-level entries in a discussion topic.
+        Retreive the top-level entries in a discussion topic.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
@@ -196,12 +196,12 @@ class DiscussionTopic(CanvasObject):
             :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         return PaginatedList(
-            DiscussionTopic,
+            DiscussionEntry,
             self._requester,
             'GET',
             '%ss/%s/discussion_topics/%s/entries' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             ),
             _kwargs=combine_kwargs(**kwargs)
@@ -225,8 +225,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'POST',
             '%ss/%s/discussion_topics/%s/entries/%s/replies' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id,
                 entry_id
             ),
@@ -256,8 +256,8 @@ class DiscussionTopic(CanvasObject):
             self._requester,
             'GET',
             '%ss/%s/discussion_topics/%s/entries/%s/replies' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id,
                 entry_id
             ),
@@ -282,8 +282,8 @@ class DiscussionTopic(CanvasObject):
             self._requester,
             'GET',
             '%ss/%s/discussion_topics/%s/entry_list' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             ),
             _kwargs=combine_kwargs(**kwargs)
@@ -304,8 +304,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '%ss/%s/discussion_topics/%s/read' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             )
         )
@@ -326,8 +326,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '%ss/%s/discussion_topics/%s/read' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             )
         )
@@ -348,8 +348,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '%ss/%s/discussion_topics/%s/entries/%s/read' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id,
                 entry_id
             )
@@ -373,8 +373,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '%ss/%s/discussion_topics/%s/entries/%s/read' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id,
                 entry_id
             )
@@ -396,8 +396,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '%ss/%s/discussion_topics/%s/read_all' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             ),
             _kwargs=combine_kwargs(**kwargs)
@@ -419,8 +419,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '%ss/%s/discussion_topics/%s/read_all' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             ),
             _kwargs=combine_kwargs(**kwargs)
@@ -444,8 +444,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'POST',
             '%ss/%s/discussion_topics/%s/entries/%s/rating' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id,
                 entry_id
             ),
@@ -468,8 +468,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '%ss/%s/discussion_topics/%s/subscribed' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             )
         )
@@ -490,9 +490,66 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '%ss/%s/discussion_topics/%s/subscribed' % (
-                self.parent_type,
-                self.parent_id,
+                self._parent_type,
+                self._parent_id,
                 self.id
             )
         )
         return response.status_code == 204
+
+
+@python_2_unicode_compatible
+class DiscussionEntry(CanvasObject):
+    def __str__(self):
+        return "{} ({})".format(self.message, self.id)
+
+    @property
+    def _discussion_parent_id(self):
+        """
+        Return the id of the course or group that spawned the discussion topic.
+
+        :rtype: int
+        """
+        if hasattr(self, 'course_id'):
+            return self.course_id
+        elif hasattr(self, 'group_id'):
+            return self.group_id
+        else:
+            raise ValueError("Discussion Topic does not have a course_id or group_id")
+
+    @property
+    def _discussion_parent_type(self):
+        """
+        Return whether the discussion topic was spawned from a course or group.
+
+        :rtype: str
+        """
+        if hasattr(self, 'course_id'):
+            return 'course'
+        elif hasattr(self, 'group_id'):
+            return 'group'
+        else:
+            raise ValueError("Discussion Topic does not have a course_id or group_id")
+
+    def get_discussion(self):
+        """
+        Return the discussion topic object this entry is related to
+
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
+        """
+
+        response = self._requester.request(
+            'GET',
+            '{}s/{}/discussion_topics/{}'.format(
+                self._discussion_parent_type,
+                self._discussion_parent_id,
+                self.discussion_id
+            )
+        )
+
+        response_json = response.json()
+        response_json.update(
+            {'{}_id'.format(self._discussion_parent_type): self._discussion_parent_id}
+        )
+
+        return DiscussionTopic(self._requester, response.json())
