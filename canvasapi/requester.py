@@ -60,7 +60,7 @@ class Requester(object):
             headers.update(auth_header)
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
-        _kwargs = [] if _kwargs is None else _kwargs
+        _kwargs = _kwargs or []
         _kwargs.extend(kwargs.items())
 
         # Do any final argument processing before sending to request method.
