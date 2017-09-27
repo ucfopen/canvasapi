@@ -51,7 +51,7 @@ class DiscussionTopic(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            '%ss/%s' % (self._parent_type, self._parent_id)
+            '{}s/{}'.format(self._parent_type, self._parent_id)
         )
 
         if self._parent_type == 'group':
@@ -76,7 +76,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            '%ss/%s/discussion_topics/%s' % (
+            '{}s/{}/discussion_topics/{}'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -98,7 +98,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '%ss/%s/discussion_topics/%s' % (
+            '{}s/{}/discussion_topics/{}'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -173,7 +173,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            '%ss/%s/discussion_topics/%s/entries' % (
+            '{}s/{}/discussion_topics/{}/entries'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -199,7 +199,7 @@ class DiscussionTopic(CanvasObject):
             DiscussionEntry,
             self._requester,
             'GET',
-            '%ss/%s/discussion_topics/%s/entries' % (
+            '{}s/{}/discussion_topics/{}/entries'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -266,7 +266,8 @@ class DiscussionTopic(CanvasObject):
 
     def list_entries(self, **kwargs):
         """
-        Retrieve a paginated list of discussion entries, given a list of ids.
+        Retrieve a paginated list of discussion entries, given a list
+        of ids. Entries will be returned in id order, smallest id first.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
@@ -281,7 +282,7 @@ class DiscussionTopic(CanvasObject):
             DiscussionTopic,
             self._requester,
             'GET',
-            '%ss/%s/discussion_topics/%s/entry_list' % (
+            '{}s/{}/discussion_topics/{}/entry_list'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -303,7 +304,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '%ss/%s/discussion_topics/%s/read' % (
+            '{}s/{}/discussion_topics/{}/read'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -325,7 +326,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            '%ss/%s/discussion_topics/%s/read' % (
+            '{}s/{}/discussion_topics/{}/read'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -395,7 +396,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '%ss/%s/discussion_topics/%s/read_all' % (
+            '{}s/{}/discussion_topics/{}/read_all'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -418,7 +419,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            '%ss/%s/discussion_topics/%s/read_all' % (
+            '{}s/{}/discussion_topics/{}/read_all'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -467,7 +468,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '%ss/%s/discussion_topics/%s/subscribed' % (
+            '{}s/{}/discussion_topics/{}/subscribed'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
@@ -489,7 +490,7 @@ class DiscussionTopic(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            '%ss/%s/discussion_topics/%s/subscribed' % (
+            '{}s/{}/discussion_topics/{}/subscribed'.format(
                 self._parent_type,
                 self._parent_id,
                 self.id
