@@ -920,6 +920,56 @@ class Account(CanvasObject):
 
         return SSOSettings(self._requester, response.json())
 
+    def get_root_outcome_group(self):
+        """
+        Redirect to root outcome group for context
+
+        :calls: `GET /api/v1/accounts/:account_id/root_outcome_group \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>`_
+
+        Convenience redirect to find the root outcome group for
+        a particular context. Will redirect to the appropriate
+        outcome group's URL.
+        """
+        from canvasapi.outcome import OutcomeGroup
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/root_outcome_group' % (self.id)
+        )
+        return OutcomeGroup(self._requester, response.json())
+
+    def get_groups_in_context(self):
+        """
+        Get all outcome groups for context - BETA
+
+        :calls: `GET /api/v1/accounts/:account_id/outcome_groups \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.index>`_
+
+        Returns a list of OutcomeGroups.
+        """
+        from canvasapi.outcome import OutcomeGroup
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/outcome_groups' % (self.id)
+        )
+        return OutcomeGroup(self._requester, response.json())
+
+    def get_all_outcome_links_in_context(self):
+        """
+        Get all outcome links for context - BETA
+
+        :calls: `GET /api/v1/accounts/:account_id/outcome_group_links \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link_index>`_
+
+        Returns a list of OutcomeLinks
+        """
+        from canvasapi.outcome import OutcomeLink
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/outcome_group_links' % (self.id)
+        )
+        return OutcomeLink(self._requester, response.json())
+
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):

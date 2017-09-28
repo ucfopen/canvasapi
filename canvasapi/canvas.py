@@ -873,3 +873,20 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
+
+    def get_root_outcome_group(self):
+        """
+        Redirect to root outcome group for context
+
+        :calls: `GET /api/v1/global/root_outcome_group \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>
+
+        Convenience redirect to find the root outcome group for
+        a particular context. Will redirect to the appropriate
+        outcome group's URL.
+        """
+        response = self._requester.request(
+            'GET',
+            'global/root_outcome_group'
+        )
+        return response.json()
