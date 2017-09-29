@@ -5,7 +5,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from tests import settings
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
