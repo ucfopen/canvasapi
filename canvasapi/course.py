@@ -801,17 +801,13 @@ class Course(CanvasObject):
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
+        :rtype: dict
         """
         response = self._requester.request(
             'GET',
             'courses/%s/discussion_topics/%s/view' % (self.id, topic_id),
         )
-
-        response_json = response.json()
-        response_json.update({'course_id': self.id})
-
-        return DiscussionTopic(self._requester, response_json)
+        return response.json()
 
     def get_discussion_topics(self, **kwargs):
         """

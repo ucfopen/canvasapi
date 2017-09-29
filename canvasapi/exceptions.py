@@ -30,12 +30,12 @@ class BadRequest(CanvasException):
 
 
 class InvalidAccessToken(CanvasException):
-    """canvasapi was unable to make an API connection."""
+    """CanvasAPI was unable to make an API connection."""
     pass
 
 
 class Unauthorized(CanvasException):
-    """canvasapi's key is valid, but is unauthorized to access the requested resource."""
+    """CanvasAPI's key is valid, but is unauthorized to access the requested resource."""
     pass
 
 
@@ -46,4 +46,9 @@ class ResourceDoesNotExist(CanvasException):
 
 class RequiredFieldMissing(CanvasException):
     """A required field is missing."""
+    pass
+
+
+class Forbidden(CanvasException):
+    """Canvas has denied access to the resource for this user"""
     pass

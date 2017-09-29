@@ -405,29 +405,25 @@ class Group(CanvasObject):
         """
         Return a cached structure of the discussion topic.
 
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
+        :calls: `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/view \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
+        :rtype: dict
         """
         response = self._requester.request(
             'GET',
             'groups/%s/discussion_topics/%s/view' % (self.id, topic_id),
         )
-
-        response_json = response.json()
-        response_json.update({'group_id': self.id})
-
-        return DiscussionTopic(self._requester, response_json)
+        return response.json()
 
     def get_discussion_topics(self, **kwargs):
         """
         Returns the paginated list of discussion topics for this course or group.
 
-        :calls: `GET /api/v1/groups/:course_id/discussion_topics \
+        :calls: `GET /api/v1/groups/:group_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -447,7 +443,7 @@ class Group(CanvasObject):
         """
         Creates a new discussion topic for the course or group.
 
-        :calls: `POST /api/v1/courses/:group_id/discussion_topics \
+        :calls: `POST /api/v1/groups/:group_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
 
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
@@ -549,7 +545,7 @@ class Group(CanvasObject):
         """
         Returns the paginated list of files for the group.
 
-        :calls: `GET api/v1/courses/:group_id/files \
+        :calls: `GET api/v1/groups/:group_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
