@@ -72,7 +72,7 @@ Courses can be retrieved from the API:
 'Test Course'
 
 # Update the course's name
->>> course.update(name='New Course Name')
+>>> course.update(course={name: 'New Course Name'})
 ```
 
 See our documentation on [keyword arguments](#keyword-arguments) for more information about how `course.update()` handles the `name` argument.
