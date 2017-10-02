@@ -48,7 +48,7 @@ Courses can be retrieved from the API:
     'Test Course'
 
     # Update the course's name
-    >>> course.update(course={name: 'New Course Name'})
+    >>> course.update(course={'name': 'New Course Name'})
 
 See our documentation on `keyword arguments`_ for more information about how :code:`course.update()` handles the :code:`name` argument.
 
