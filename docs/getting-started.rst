@@ -41,7 +41,7 @@ Let's write a script to print out all of the users in a course:
     from canvasapi import Canvas, Course, User
 
     # Set up our Canvas object
-    canvas = Canvas(API_KEY, API_URL)
+    canvas = Canvas(API_URL, API_KEY)
 
     # First, retrieve the Course object
     course = canvas.get_course(1234567)
@@ -63,7 +63,7 @@ We can update a course's information as well:
     from canvasapi import Canvas, Course
 
      # Set up our Canvas object
-    canvas = Canvas(API_KEY, API_URL)
+    canvas = Canvas(API_URL, API_KEY)
 
     # First, retrieve the Course object
     course = canvas.get_course(1234567)
