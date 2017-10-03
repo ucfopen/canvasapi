@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from six import python_2_unicode_compatible
+from six import python_2_unicode_compatible, text_type
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -478,8 +478,13 @@ class Group(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
-        if not isinstance(order, list):
-            raise ValueError("Param order needs to be string or a list.")
+        # Convert list or tuple to comma-separated string
+        if isinstance(order, (list, tuple)):
+            order = ",".join(map(text_type, order))
+
+        # Check if is a string with commas
+        if not isinstance(order, text_type) or "," not in order:
+            raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
             'POST',
