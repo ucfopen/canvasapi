@@ -1106,7 +1106,7 @@ class Course(CanvasObject):
 
     def list_submissions(self, assignment_id, **kwargs):
         """
-        Makes a submission for an assignment.
+        Get all existing submissions for an assignment.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
