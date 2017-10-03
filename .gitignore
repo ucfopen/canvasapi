@@ -12,6 +12,7 @@
 /build/
 /coverage.xml
 /dist/
+/docs/_build/
 /env/
 /htmlcov/
 \#*#
