@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import os
 import unittest
 import uuid
 
@@ -15,7 +14,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.tab import Tab
 from tests import settings
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -145,12 +144,8 @@ class TestGroup(unittest.TestCase):
         self.assertTrue(response[0])
         self.assertIsInstance(response[1], dict)
         self.assertIn('url', response[1])
-        # http://stackoverflow.com/a/10840586
-        # Not as stupid as it looks.
-        try:
-            os.remove(filename)
-        except OSError:
-            pass
+
+        cleanup_file(filename)
 
     # preview_processed_html()
     def test_preview_processed_html(self, m):
