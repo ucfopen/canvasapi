@@ -881,12 +881,12 @@ class Canvas(object):
         :calls: `GET /api/v1/global/root_outcome_group \
         <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>
 
-        Convenience redirect to find the root outcome group for
-        a particular context. Will redirect to the appropriate
-        outcome group's URL.
+        :returns: The OutcomeGroup of the context.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        response = self._requester.request(
+        from canvasapi.outcome import OutcomeGroup
+        response = self.__requester.request(
             'GET',
             'global/root_outcome_group'
         )
-        return response.json()
+        return OutcomeGroup(self.__requester, response.json())

@@ -1423,9 +1423,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/root_outcome_group \
         <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>`_
 
-        Convenience redirect to find the root outcome group for
-        a particular context. Will redirect to the appropriate
-        outcome group's URL.
+        :returns: The OutcomeGroup of the context.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
         from canvasapi.outcome import OutcomeGroup
         response = self._requester.request(
@@ -1434,21 +1433,24 @@ class Course(CanvasObject):
         )
         return OutcomeGroup(self._requester, response.json())
 
-    def get_groups_in_context(self):
+    def get_outcome_groups_in_context(self):
         """
         Get all outcome groups for context - BETA
 
         :calls: `GET /api/v1/courses/:course_id/outcome_groups \
         <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.index>`_
 
-        Returns a list of OutcomeGroups.
+        :returns: Paginated List of OutcomesGroups in the context.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.outcome.OutcomeGroups`
         """
         from canvasapi.outcome import OutcomeGroup
-        response = self._requester.request(
+        return PaginatedList(
+            OutcomeGroup,
+            self._requester,
             'GET',
             'courses/%s/outcome_groups' % (self.id)
         )
-        return OutcomeGroup(self._requester, response.json())
 
     def get_all_outcome_links_in_context(self):
         """
@@ -1457,14 +1459,17 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/outcome_group_links \
         <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link_index>`_
 
-        Returns a list of OutcomeLinks
+        :returns: Paginated List of OutcomesLinks in the context.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.outcome.OutcomeLink`
         """
         from canvasapi.outcome import OutcomeLink
-        response = self._requester.request(
+        return PaginatedList(
+            OutcomeLink,
+            self._requester,
             'GET',
             'courses/%s/outcome_group_links' % (self.id)
         )
-        return OutcomeLink(self._requester, response.json())
 
 
 @python_2_unicode_compatible

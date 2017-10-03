@@ -13,6 +13,7 @@ from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.group import Group, GroupCategory
+from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.user import User
 from canvasapi.login import Login
 from canvasapi.authentication_provider import AuthenticationProvider
@@ -553,3 +554,33 @@ class TestAccount(unittest.TestCase):
         response = self.account.update_account_auth_settings()
 
         self.assertIsInstance(response, SSOSettings)
+
+    # get_root_outcome_group()
+    def test_get_root_outcome_group(self, m):
+        register_uris({'outcome': ['account_root_outcome_group']}, m)
+
+        outcome_group = self.account.get_root_outcome_group()
+
+        self.assertIsInstance(outcome_group, OutcomeGroup)
+        self.assertEqual(outcome_group.id, 1)
+        self.assertEqual(outcome_group.title, "ROOT")
+
+    # get_outcome_groups_in_context()
+    def test_get_outcome_groups_in_context(self, m):
+        register_uris({'outcome': ['account_outcome_groups_in_context']}, m)
+
+        outcome_group_list = self.account.get_outcome_groups_in_context()
+
+        self.assertIsInstance(outcome_group_list[0], OutcomeGroup)
+        self.assertEqual(outcome_group_list[0].id, 1)
+        self.assertEqual(outcome_group_list[0].title, "ROOT")
+
+    # get_all_outcome_links_in_context()
+    def test_get_outcome_links_in_context(self, m):
+        register_uris({'outcome': ['account_outcome_links_in_context']}, m)
+
+        outcome_link_list = self.account.get_all_outcome_links_in_context()
+
+        self.assertIsInstance(outcome_link_list[0], OutcomeLink)
+        self.assertEqual(outcome_link_list[0].outcome_group['id'], 2)
+        self.assertEqual(outcome_link_list[0].outcome_group['title'], "test outcome")
