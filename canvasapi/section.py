@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+from warnings import warn
 
 from six import python_2_unicode_compatible
 
@@ -36,7 +37,7 @@ class Section(CanvasObject):
             self._requester,
             'GET',
             'sections/%s/enrollments' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def cross_list_section(self, new_course_id):
@@ -121,14 +122,16 @@ class Section(CanvasObject):
         response = self._requester.request(
             'POST',
             'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
+        response_json = response.json()
+        response_json.update(section_id=self.id)
 
-        return Submission(self._requester, response.json())
+        return Submission(self._requester, response_json)
 
     def list_submissions(self, assignment_id, **kwargs):
         """
-        Makes a submission for an assignment.
+        Get all existing submissions for an assignment.
 
         :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
@@ -143,7 +146,8 @@ class Section(CanvasObject):
             self._requester,
             'GET',
             'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
-            **combine_kwargs(**kwargs)
+            {'section_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_multiple_submissions(self, **kwargs):
@@ -157,13 +161,17 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
+        if 'grouped' in kwargs:
+            warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
+            del kwargs['grouped']
+
         return PaginatedList(
             Submission,
             self._requester,
             'GET',
             'sections/%s/students/submissions' % (self.id),
-            grouped=False,
-            **combine_kwargs(**kwargs)
+            {'section_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_submission(self, assignment_id, user_id, **kwargs):
@@ -182,9 +190,12 @@ class Section(CanvasObject):
         response = self._requester.request(
             'GET',
             'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
-        return Submission(self._requester, response.json())
+        response_json = response.json()
+        response_json.update(section_id=self.id)
+
+        return Submission(self._requester, response_json)
 
     def update_submission(self, assignment_id, user_id, **kwargs):
         """
@@ -202,15 +213,18 @@ class Section(CanvasObject):
         response = self._requester.request(
             'PUT',
             'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         submission = self.get_submission(assignment_id, user_id)
 
-        if 'submission_type' in response.json():
-            super(Submission, submission).set_attributes(response.json())
+        response_json = response.json()
+        response_json.update(section_id=self.id)
 
-        return Submission(self._requester, response.json())
+        if 'submission_type' in response_json:
+            super(Submission, submission).set_attributes(response_json)
+
+        return Submission(self._requester, response_json)
 
     def mark_submission_as_read(self, assignment_id, user_id):
         """

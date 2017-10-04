@@ -1,13 +1,4 @@
 -r tests_requirements.txt
 
-alabaster
-Babel
-docutils
-imagesize
-Jinja2
-MarkupSafe
-Pygments
-pytz
-snowballstemmer
 Sphinx
 sphinx-rtd-theme

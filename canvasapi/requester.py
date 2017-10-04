@@ -1,10 +1,11 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+from datetime import datetime
 
 import requests
 
 from canvasapi.exceptions import (
-    BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
-    Unauthorized
+    BadRequest, CanvasException, Forbidden, InvalidAccessToken,
+    ResourceDoesNotExist, Unauthorized
 )
 
 
@@ -24,7 +25,9 @@ class Requester(object):
         self.access_token = access_token
         self._session = requests.Session()
 
-    def request(self, method, endpoint=None, headers=None, use_auth=True, _url=None, **kwargs):
+    def request(
+            self, method, endpoint=None, headers=None, use_auth=True,
+            _url=None, _kwargs=None, **kwargs):
         """
         Make a request to the Canvas API and return the response.
 
@@ -34,12 +37,17 @@ class Requester(object):
         :type endpoint: str
         :param headers: Optional HTTP headers to be sent with the request.
         :type headers: dict
-        :param use_auth: Optional flag to remove the authentication header from the request.
+        :param use_auth: Optional flag to remove the authentication
+            header from the request.
         :type use_auth: bool
-        :param _url: Optional argument to send a request to a URL outside of the Canvas API. \
-                    If this is selected and an endpoint is provided, the endpoint will be \
-                    ignored and only the _url argument will be used.
+        :param _url: Optional argument to send a request to a URL
+            outside of the Canvas API. If this is selected and an
+            endpoint is provided, the endpoint will be ignored and
+            only the _url argument will be used.
         :type _url: str
+        :param _kwargs: A list of 2-tuples representing processed
+            keyword arguments to be sent to Canvas as params or data.
+        :type _kwargs: `list`
         :rtype: str
         """
         full_url = _url if _url else "%s%s" % (self.base_url, endpoint)
@@ -51,6 +59,19 @@ class Requester(object):
             auth_header = {'Authorization': 'Bearer %s' % (self.access_token)}
             headers.update(auth_header)
 
+        # Convert kwargs into list of 2-tuples and combine with _kwargs.
+        _kwargs = _kwargs or []
+        _kwargs.extend(kwargs.items())
+
+        # Do any final argument processing before sending to request method.
+        for i, kwarg in enumerate(_kwargs):
+            kw, arg = kwarg
+
+            # Convert any datetime objects into ISO 8601 formatted strings.
+            if isinstance(arg, datetime):
+                _kwargs[i] = (kw, arg.isoformat())
+
+        # Determine the appropriate request method.
         if method == 'GET':
             req_method = self._get_request
         elif method == 'POST':
@@ -60,8 +81,10 @@ class Requester(object):
         elif method == 'PUT':
             req_method = self._put_request
 
-        response = req_method(full_url, headers, kwargs)
+        # Call the request method
+        response = req_method(full_url, headers, _kwargs)
 
+        # Raise for status codes
         if response.status_code == 400:
             raise BadRequest(response.json())
         elif response.status_code == 401:
@@ -69,6 +92,8 @@ class Requester(object):
                 raise InvalidAccessToken(response.json())
             else:
                 raise Unauthorized(response.json())
+        elif response.status_code == 403:
+            raise Forbidden(response.text)
         elif response.status_code == 404:
             raise ResourceDoesNotExist('Not Found')
         elif response.status_code == 500:
@@ -95,11 +120,16 @@ class Requester(object):
         :param params: dict
         :param data: dict
         """
-        if 'file' in data:
-            file = {'file': data['file']}
-            del data['file']
-        else:
-            file = None
+
+        # Grab file from data.
+        file = None
+        for tup in data:
+            if tup[0] == 'file':
+                file = {'file': tup[1]}
+                break
+
+        # Remove file entry from data.
+        data[:] = [tup for tup in data if tup[0] != 'file']
 
         return self._session.post(url, headers=headers, data=data, files=file)
 

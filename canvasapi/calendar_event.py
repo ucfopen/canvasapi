@@ -21,7 +21,7 @@ class CalendarEvent(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'calendar_events/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return CalendarEvent(self._requester, response.json())
 
@@ -37,7 +37,7 @@ class CalendarEvent(CanvasObject):
         response = self._requester.request(
             'PUT',
             'calendar_events/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         if 'title' in response.json():

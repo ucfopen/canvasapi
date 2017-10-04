@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from six import python_2_unicode_compatible
+from six import python_2_unicode_compatible, text_type
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -39,7 +39,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'POST',
             'groups/%s/pages' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         page_json = response.json()
@@ -61,7 +61,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'PUT',
             'groups/%s/front_page' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         page_json = response.json()
         page_json.update({'group_id': self.id})
@@ -128,7 +128,7 @@ class Group(CanvasObject):
             'GET',
             'groups/%s/pages' % (self.id),
             {'group_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def edit(self, **kwargs):
@@ -143,7 +143,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'PUT',
             'groups/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self._requester, response.json())
 
@@ -202,7 +202,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/%s/users' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def remove_user(self, user):
@@ -302,7 +302,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/%s/memberships' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_membership(self, user_id, membership_type):
@@ -340,7 +340,7 @@ class Group(CanvasObject):
             'POST',
             'groups/%s/memberships' % (self.id),
             user_id=user_id,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return GroupMembership(self._requester, response.json())
 
@@ -356,7 +356,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'PUT',
             'groups/%s/users/%s' % (self.id, user_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return GroupMembership(self._requester, response.json())
 
@@ -397,7 +397,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'GET',
             'groups/{}/files/{}'.format(self.id, file_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return File(self._requester, response.json())
 
@@ -405,29 +405,25 @@ class Group(CanvasObject):
         """
         Return a cached structure of the discussion topic.
 
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
+        :calls: `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/view \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
+        :rtype: dict
         """
         response = self._requester.request(
             'GET',
             'groups/%s/discussion_topics/%s/view' % (self.id, topic_id),
         )
-
-        response_json = response.json()
-        response_json.update({'group_id': self.id})
-
-        return DiscussionTopic(self._requester, response_json)
+        return response.json()
 
     def get_discussion_topics(self, **kwargs):
         """
         Returns the paginated list of discussion topics for this course or group.
 
-        :calls: `GET /api/v1/groups/:course_id/discussion_topics \
+        :calls: `GET /api/v1/groups/:group_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -440,14 +436,14 @@ class Group(CanvasObject):
             'GET',
             'groups/%s/discussion_topics' % (self.id),
             {'group_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_discussion_topic(self, **kwargs):
         """
         Creates a new discussion topic for the course or group.
 
-        :calls: `POST /api/v1/courses/:group_id/discussion_topics \
+        :calls: `POST /api/v1/groups/:group_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
 
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
@@ -455,7 +451,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'POST',
             'groups/%s/discussion_topics' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         response_json = response.json()
@@ -478,8 +474,13 @@ class Group(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
-        if not isinstance(order, list):
-            raise ValueError("Param order needs to be string or a list.")
+        # Convert list or tuple to comma-separated string
+        if isinstance(order, (list, tuple)):
+            order = ",".join([text_type(topic_id) for topic_id in order])
+
+        # Check if is a string with commas
+        if not isinstance(order, text_type) or "," not in order:
+            raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
             'POST',
@@ -523,7 +524,7 @@ class Group(CanvasObject):
             'POST',
             'groups/%s/external_feeds' % self.id,
             url=url,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return ExternalFeed(self._requester, response.json())
 
@@ -549,7 +550,7 @@ class Group(CanvasObject):
         """
         Returns the paginated list of files for the group.
 
-        :calls: `GET api/v1/courses/:group_id/files \
+        :calls: `GET api/v1/groups/:group_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -562,7 +563,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/%s/files' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_folder(self, folder_id):
@@ -615,7 +616,7 @@ class Group(CanvasObject):
             'POST',
             'groups/%s/folders' % self.id,
             name=name,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
 
@@ -635,7 +636,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/%s/tabs' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
 
@@ -657,7 +658,7 @@ class GroupMembership(CanvasObject):
         response = self._requester.request(
             'PUT',
             'groups/%s/memberships/%s' % (self.id, mem_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return GroupMembership(self._requester, response.json())
 
@@ -720,7 +721,7 @@ class GroupCategory(CanvasObject):
         response = self._requester.request(
             'POST',
             'group_categories/%s/groups' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self._requester, response.json())
 
@@ -736,7 +737,7 @@ class GroupCategory(CanvasObject):
         response = self._requester.request(
             'PUT',
             'group_categories/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return GroupCategory(self._requester, response.json())
 
@@ -788,7 +789,7 @@ class GroupCategory(CanvasObject):
             self._requester,
             'GET',
             'group_categories/%s/users' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def assign_members(self, sync=False):

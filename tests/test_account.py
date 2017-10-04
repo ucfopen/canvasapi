@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import datetime
+import pytz
 import unittest
 
 import requests_mock
@@ -122,6 +123,7 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(notif.subject, subject)
         self.assertTrue(hasattr(notif, 'start_at_date'))
         self.assertIsInstance(notif.start_at_date, datetime.datetime)
+        self.assertEqual(notif.start_at_date.tzinfo, pytz.utc)
 
     def test_create_notification_missing_field(self, m):
         with self.assertRaises(RequiredFieldMissing):

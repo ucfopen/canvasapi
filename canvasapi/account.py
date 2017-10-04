@@ -51,7 +51,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/root_accounts' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self._requester, response.json())
 
@@ -69,7 +69,7 @@ class Account(CanvasObject):
             'POST',
             'accounts/%s/courses' % (self.id),
             account_id=self.id,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Course(self._requester, response.json())
 
@@ -90,7 +90,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/sub_accounts' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self._requester, response.json())
 
@@ -115,7 +115,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/users' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return User(self._requester, response.json())
 
@@ -144,7 +144,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/account_notifications' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return AccountNotification(self._requester, response.json())
 
@@ -194,7 +194,7 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/%s/courses' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_external_tool(self, tool_id):
@@ -231,7 +231,7 @@ class Account(CanvasObject):
             'GET',
             'accounts/%s/external_tools' % (self.id),
             {'account_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_index_of_reports(self, report_type):
@@ -307,7 +307,7 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/%s/users' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_user_notifications(self, user):
@@ -348,7 +348,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'PUT',
             'accounts/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         if 'name' in response.json():
@@ -373,7 +373,7 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/%s/roles' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_role(self, role_id):
@@ -410,7 +410,7 @@ class Account(CanvasObject):
             'POST',
             'accounts/%s/roles' % (self.id),
             label=label,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
@@ -429,7 +429,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'accounts/%s/roles/%s' % (self.id, role_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
@@ -448,7 +448,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/roles/%s/activate' % (self.id, role_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
@@ -467,7 +467,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'PUT',
             'accounts/%s/roles/%s' % (self.id, role_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
@@ -487,7 +487,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'GET',
             'accounts/%s/enrollments/%s' % (self.id, enrollment_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Enrollment(self._requester, response.json())
 
@@ -506,7 +506,7 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/%s/groups' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_group_category(self, name, **kwargs):
@@ -526,7 +526,7 @@ class Account(CanvasObject):
             'POST',
             'accounts/%s/group_categories' % (self.id),
             name=name,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return GroupCategory(self._requester, response.json())
 
@@ -572,7 +572,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/external_tools' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
         response_json.update({'account_id': self.id})
@@ -593,7 +593,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/terms' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         enrollment_term_json = response.json()
         enrollment_term_json.update({'account_id': self.id})
@@ -618,7 +618,7 @@ class Account(CanvasObject):
             'GET',
             'accounts/%s/terms' % (self.id),
             {'account_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_user_logins(self, **kwargs):
@@ -638,7 +638,7 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/%s/logins' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_user_login(self, user, login, **kwargs):
@@ -675,7 +675,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/logins' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Login(self._requester, response.json())
 
@@ -837,7 +837,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/%s/authentication_providers' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         authentication_providers_json = response.json()
         authentication_providers_json.update({'account_id': self.id})
@@ -862,7 +862,7 @@ class Account(CanvasObject):
             'GET',
             'accounts/%s/authentication_providers' % (self.id),
             {'account_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_authentication_providers(self, authentication_providers_id, **kwargs):
@@ -879,7 +879,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'GET',
             'accounts/%s/authentication_providers/%s' % (self.id, authentication_providers_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return AuthenticationProvider(self._requester, response.json())
@@ -897,7 +897,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'GET',
             'accounts/%s/sso_settings' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return SSOSettings(self._requester, response.json())
@@ -915,7 +915,7 @@ class Account(CanvasObject):
         response = self._requester.request(
             'PUT',
             'accounts/%s/sso_settings' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return SSOSettings(self._requester, response.json())

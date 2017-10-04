@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+from warnings import warn
 
-from six import python_2_unicode_compatible
+from six import python_2_unicode_compatible, text_type
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -70,7 +71,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/%s' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         if response.json().get('name'):
@@ -125,7 +126,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/search_users' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def enroll_user(self, user, enrollment_type, **kwargs):
@@ -149,7 +150,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/enrollments' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return Enrollment(self._requester, response.json())
@@ -230,8 +231,6 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/files \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.create_file>`_
 
-        :param path: The path of the file to upload.
-        :type path: str
         :param file: The file or path of the file to upload.
         :type file: file or str
         :returns: True if the file uploaded successfully, False otherwise, \
@@ -277,7 +276,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/enrollments' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_assignment(self, assignment_id, **kwargs):
@@ -296,7 +295,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/assignments/%s' % (self.id, assignment_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Assignment(self._requester, response.json())
 
@@ -317,7 +316,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/assignments' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_assignment(self, assignment, **kwargs):
@@ -343,7 +342,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/assignments' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return Assignment(self._requester, response.json())
@@ -365,7 +364,7 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/quizzes' % (self.id),
             {'course_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_quiz(self, quiz_id):
@@ -410,7 +409,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/quizzes' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         quiz_json = response.json()
         quiz_json.update({'course_id': self.id})
@@ -435,7 +434,7 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/modules' % (self.id),
             {'course_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_module(self, module_id, **kwargs):
@@ -482,7 +481,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/modules' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         module_json = response.json()
         module_json.update({'course_id': self.id})
@@ -523,7 +522,7 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/external_tools' % (self.id),
             {'course_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_section(self, section_id):
@@ -575,7 +574,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/%s/front_page' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         page_json = response.json()
         page_json.update({'course_id': self.id})
@@ -597,7 +596,8 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/pages' % (self.id),
-            {'course_id': self.id}
+            {'course_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_page(self, wiki_page, **kwargs):
@@ -621,7 +621,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/pages' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         page_json = response.json()
@@ -667,7 +667,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/sections' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_course_section(self, **kwargs):
@@ -684,7 +684,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/sections' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return Section(self._requester, response.json())
@@ -705,7 +705,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/groups' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_group_category(self, name, **kwargs):
@@ -725,7 +725,7 @@ class Course(CanvasObject):
             'POST',
             'courses/%s/group_categories' % (self.id),
             name=name,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return GroupCategory(self._requester, response.json())
 
@@ -785,7 +785,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/files/{}'.format(self.id, file_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return File(self._requester, response.json())
 
@@ -799,17 +799,13 @@ class Course(CanvasObject):
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
+        :rtype: dict
         """
         response = self._requester.request(
             'GET',
             'courses/%s/discussion_topics/%s/view' % (self.id, topic_id),
         )
-
-        response_json = response.json()
-        response_json.update({'course_id': self.id})
-
-        return DiscussionTopic(self._requester, response_json)
+        return response.json()
 
     def get_discussion_topics(self, **kwargs):
         """
@@ -827,7 +823,7 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/discussion_topics' % (self.id),
             {'course_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_assignment_group(self, assignment_group_id, **kwargs):
@@ -846,7 +842,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/assignment_groups/%s' % (self.id, assignment_group_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
         response_json.update({'course_id': self.id})
@@ -871,7 +867,7 @@ class Course(CanvasObject):
             'GET',
             'courses/%s/assignment_groups' % (self.id),
             {'course_id': self.id},
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_discussion_topic(self, **kwargs):
@@ -886,7 +882,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/discussion_topics' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         response_json = response.json()
@@ -903,15 +899,19 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
 
         :param order: The ids of the pinned discussion topics in the desired order.
-            e.g. [104, 102, 103]
-        :type order: list
+            e.g. [104, 102, 103], (104, 102, 103), or "104,102,103"
+        :type order: list, tuple, or string
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
+        # Convert list or tuple to comma-separated string
+        if isinstance(order, (list, tuple)):
+            order = ",".join([text_type(topic_id) for topic_id in order])
 
-        if not isinstance(order, list):
-            raise ValueError("Param order needs to be string or a list.")
+        # Check if is a string with commas
+        if not isinstance(order, text_type) or "," not in order:
+            raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
             'POST',
@@ -935,7 +935,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/assignment_groups' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
         response_json.update({'course_id': self.id})
@@ -965,7 +965,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/external_tools' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
         response_json.update({'course_id': self.id})
@@ -1002,7 +1002,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/analytics/assignments' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return response.json()
@@ -1020,7 +1020,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/analytics/student_summaries' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return response.json()
@@ -1097,14 +1097,16 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/%s/assignments/%s/submissions' % (self.id, assignment_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
+        response_json = response.json()
+        response_json.update(course_id=self.id)
 
-        return Submission(self._requester, response.json())
+        return Submission(self._requester, response_json)
 
     def list_submissions(self, assignment_id, **kwargs):
         """
-        Makes a submission for an assignment.
+        Get all existing submissions for an assignment.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
@@ -1119,7 +1121,8 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/assignments/%s/submissions' % (self.id, assignment_id),
-            **combine_kwargs(**kwargs)
+            {'course_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def list_multiple_submissions(self, **kwargs):
@@ -1133,13 +1136,17 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
+        if 'grouped' in kwargs:
+            warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
+            del kwargs['grouped']
+
         return PaginatedList(
             Submission,
             self._requester,
             'GET',
             'courses/%s/students/submissions' % (self.id),
-            grouped=False,
-            **combine_kwargs(**kwargs)
+            {'course_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_submission(self, assignment_id, user_id, **kwargs):
@@ -1158,9 +1165,12 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
-        return Submission(self._requester, response.json())
+        response_json = response.json()
+        response_json.update(course_id=self.id)
+
+        return Submission(self._requester, response_json)
 
     def update_submission(self, assignment_id, user_id, **kwargs):
         """
@@ -1178,15 +1188,18 @@ class Course(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
+
+        response_json = response.json()
+        response_json.update(course_id=self.id)
 
         submission = self.get_submission(assignment_id, user_id)
 
-        if 'submission_type' in response.json():
-            super(Submission, submission).set_attributes(response.json())
+        if 'submission_type' in response_json:
+            super(Submission, submission).set_attributes(response_json)
 
-        return Submission(self._requester, response.json())
+        return Submission(self._requester, response_json)
 
     def list_gradeable_students(self, assignment_id):
         """
@@ -1279,7 +1292,7 @@ class Course(CanvasObject):
             'POST',
             'courses/%s/external_feeds' % self.id,
             url=url,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return ExternalFeed(self._requester, response.json())
 
@@ -1318,7 +1331,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/files' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_folder(self, folder_id):
@@ -1371,7 +1384,7 @@ class Course(CanvasObject):
             'POST',
             'courses/%s/folders' % self.id,
             name=name,
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
 
@@ -1391,7 +1404,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/tabs' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def update_tab(self, tab_id, **kwargs):
@@ -1406,7 +1419,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/%s/tabs/%s' % (self.id, tab_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return Tab(self._requester, response.json())
