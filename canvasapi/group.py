@@ -480,7 +480,7 @@ class Group(CanvasObject):
         """
         # Convert list or tuple to comma-separated string
         if isinstance(order, (list, tuple)):
-            order = ",".join(map(text_type, order))
+            order = ",".join([text_type(topic_id) for topic_id in order])
 
         # Check if is a string with commas
         if not isinstance(order, text_type) or "," not in order:
