@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import os
 import unittest
 import uuid
 
@@ -20,7 +19,7 @@ from canvasapi.page_view import PageView
 from canvasapi.user import User
 from canvasapi.login import Login
 from tests import settings
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -202,12 +201,7 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(response[1], dict)
         self.assertIn('url', response[1])
 
-        # http://stackoverflow.com/a/10840586
-        # Not as stupid as it looks.
-        try:
-            os.remove(filename)
-        except OSError:
-            pass
+        cleanup_file(filename)
 
     # list_groups()
     def test_list_groups(self, m):
