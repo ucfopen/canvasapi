@@ -1,5 +1,33 @@
 # Change Log
 
+## [0.7.0] - 2017-10-04
+
+Thanks to all the contributors who helped with this release: [@stephenwoosley](https://github.com/stephenwoosley), [@jackrsteiner](https://github.com/jackrsteiner), and [@allygator](https://github.com/allygator). You guys are awesome!
+
+Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggestions, and pull requests. Couldn't have done all this without you!
+
+### New Endpoint Coverage
+
+- Upload file to a Submission Comment (`Submission.upload_comment()`)
+
+### General
+
+- Switched to `flake8` instead of just `pyflakes` and `pycodestyle`.
+- Added markdown linter and fixed related issues.
+- `DateTime` "Smart Objects" are now timezone aware.
+- Keyword arguments now support lists and tuples. Can be nested in other lists and/or inside dictionaries. See issue [#55](https://github.com/ucfopen/canvasapi/issues/55) for details.
+- `DateTime` objects passed as params now auto-format to ISO 8601 strings.
+- Added table of contents to README.
+- Updated "Getting Started" page in Documentation to match README.
+
+### Bugfixes
+
+- Fixed an issue where editing a page would report a missing ID.
+- Fixed an issue where kwargs weren't passed along in `Course.get_pages()`.
+- Fixed an issue where `Course.list_multiple_submissions()` would always set grouped to `True`. It now correctly always sets grouped to `False` by removing the param.
+- Fixed several issues relating to `DiscussionTopic` methods returning incorrect types.
+- Fixed an issue where reordering pinned topics had no valid values for the order param.
+
 ## [0.6.0] - 2017-08-15
 
 ### General
@@ -119,6 +147,7 @@
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.7.0]: https://github.com/ucfopen/canvasapi/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/ucfopen/canvasapi/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/ucfopen/canvasapi/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/ucfopen/canvasapi/compare/v0.4.0...v0.5.0
