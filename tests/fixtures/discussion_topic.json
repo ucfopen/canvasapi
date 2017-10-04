@@ -24,6 +24,9 @@
 		"endpoint": "courses/1/discussion_topics/1/entries/1",
 		"data": {
 			"id": 1,
+			"user_id": 1,
+			"user_name": "John Doe",
+			"message": "Top Level Entry [Updated]",
 			"updated_at": "2017-01-24T21:00:56Z"
 		},
 		"status_code": 200
@@ -34,6 +37,8 @@
 		"data": {
 			"id": 1,
 			"user_id": 1,
+			"user_name": "John Doe",
+			"message": "Top Level Entry",
 			"deleted_at": "2017-01-23T21:07:54Z"
 		},
 		"status_code": 200
@@ -42,7 +47,9 @@
 		"method": "POST",
 		"endpoint": "courses/1/discussion_topics/1/entries",
 		"data": {
-			"id": 1,
+			"id": 4,
+			"user_id": 1,
+			"user_name": "John Doe",
 			"created_at": "2017-01-30T20:18:20Z",
 			"message": "Test Message"
 		},
@@ -54,11 +61,15 @@
 		"data": [
 			{
 				"id": 1,
-				"user_id": 1
+				"user_id": 1,
+				"user_name": "John Doe",
+				"message": "Top Level Entry"
 			},
 			{
 				"id": 2,
-				"user_id": 2
+				"user_id": 2,
+				"user_name": "John Smith",
+				"message": "Top Level Entry #2"
 			}
 		],
 		"status_code": 200
@@ -67,8 +78,9 @@
 		"method": "POST",
 		"endpoint": "courses/1/discussion_topics/1/entries/1/replies",
 		"data": {
-			"id": 1,
-			"message": "Message 1",
+			"id": 5,
+			"message": "Reply message 1",
+			"user_name": "John Smith",
 			"created_at": "2017-01-30T22:00:48Z"
 		},
 		"status_code":200
@@ -78,12 +90,14 @@
 		"endpoint": "courses/1/discussion_topics/1/entries/1/replies",
 		"data": [
 			{
-				"id": 1,
-				"message": "Message 1"
+				"id": 5,
+				"message": "Reply message 1",
+				"user_name": "John Smith"
 			},
 			{
-				"id": 2,
-				"message": "Message 2"
+				"id": 6,
+				"message": "Reply message 2",
+				"user_name": "John Doe"
 			}
 		],
 		"status_code": 200
@@ -93,10 +107,48 @@
 		"endpoint": "courses/1/discussion_topics/1/entry_list",
 		"data": [
 			{
-				"id": 1
+				"id": 1,
+				"user_id": 1,
+				"user_name": "John Doe",
+				"message": "Top Level Entry"
 			},
 			{
-				"id": 2
+				"id": 2,
+				"user_id": 2,
+				"user_name": "John Smith",
+				"message": "Top Level Entry #2"
+			},
+			{
+				"id": 3,
+				"user_id": 1,
+				"user_name": "John Doe",
+				"message": "Lower level entry"
+			}
+		],
+		"status_code": 200
+	},
+	"list_entries_single": {
+		"method": "GET",
+		"endpoint": "courses/1/discussion_topics/1/entry_list",
+		"data": [
+			{
+				"id": 1,
+				"user_id": 1,
+				"user_name": "John Doe",
+				"message": "Top Level Entry"
+			}
+		],
+		"status_code": 200
+	},
+	"list_entries_single_group": {
+		"method": "GET",
+		"endpoint": "groups/1/discussion_topics/1/entry_list",
+		"data": [
+			{
+				"id": 1,
+				"user_id": 1,
+				"user_name": "John Doe",
+				"message": "Top Level Entry"
 			}
 		],
 		"status_code": 200
@@ -106,9 +158,10 @@
 		"endpoint": "courses/1/discussion_topics/1/read",
 		"status_code": 204
 	},
-	"mark_as_read_status": {
+	"mark_as_read_403": {
 		"method": "PUT",
 		"endpoint": "courses/1/discussion_topics/1/read",
+		"data": "require_initial_post",
 		"status_code": 403
 	},
 	"mark_as_unread": {
@@ -116,9 +169,10 @@
 		"endpoint": "courses/1/discussion_topics/1/read",
 		"status_code": 204
 	},
-	"mark_as_unread_status": {
+	"mark_as_unread_403": {
 		"method": "DELETE",
 		"endpoint": "courses/1/discussion_topics/1/read",
+		"data": "require_initial_post",
 		"status_code": 403
 	},
 	"mark_entry_as_read": {
@@ -126,9 +180,10 @@
 		"endpoint": "courses/1/discussion_topics/1/entries/1/read",
 		"status_code": 204
 	},
-	"mark_entry_as_read_status": {
+	"mark_entry_as_read_403": {
 		"method": "PUT",
 		"endpoint": "courses/1/discussion_topics/1/entries/1/read",
+		"data": "require_initial_post",
 		"status_code": 403
 	},
 	"mark_entry_as_unread": {
@@ -136,9 +191,10 @@
 		"endpoint": "courses/1/discussion_topics/1/entries/1/read",
 		"status_code": 204
 	},
-	"mark_entry_as_unread_status": {
+	"mark_entry_as_unread_403": {
 		"method": "DELETE",
 		"endpoint": "courses/1/discussion_topics/1/entries/1/read",
+		"data": "require_initial_post",
 		"status_code": 403
 	},
 	"mark_entries_as_read": {
@@ -146,9 +202,10 @@
 		"endpoint": "courses/1/discussion_topics/1/read_all",
 		"status_code": 204
 	},
-	"mark_entries_as_read_status": {
+	"mark_entries_as_read_403": {
 		"method": "PUT",
 		"endpoint": "courses/1/discussion_topics/1/read_all",
+		"data": "require_initial_post",
 		"status_code": 403
 	},
 	"mark_entries_as_unread": {
@@ -156,9 +213,10 @@
 		"endpoint": "courses/1/discussion_topics/1/read_all",
 		"status_code": 204
 	},
-	"mark_entries_as_unread_status": {
+	"mark_entries_as_unread_403": {
 		"method": "DELETE",
 		"endpoint": "courses/1/discussion_topics/1/read_all",
+		"data": "require_initial_post",
 		"status_code": 403
 	},
 	"rate_entry": {
@@ -171,9 +229,10 @@
 		"endpoint": "courses/1/discussion_topics/1/subscribed",
 		"status_code": 204
 	},
-	"subscribe_status": {
+	"subscribe_403": {
 		"method": "PUT",
 		"endpoint": "courses/1/discussion_topics/1/subscribed",
+		"data": "require_initial_post",
 		"status_code": 403
 	},
 	"unsubscribe": {
@@ -181,9 +240,10 @@
 		"endpoint": "courses/1/discussion_topics/1/subscribed",
 		"status_code": 204
 	},
-	"unsubscribe_status": {
+	"unsubscribe_403": {
 		"method": "DELETE",
 		"endpoint": "courses/1/discussion_topics/1/subscribed",
+		"data": "require_initial_post",
 		"status_code": 403
 	}
 }
