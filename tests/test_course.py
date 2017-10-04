@@ -462,10 +462,11 @@ class TestCourse(unittest.TestCase):
 
         topic_id = 1
         discussion = self.course.get_full_discussion_topic(topic_id)
-        self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertTrue(hasattr(discussion, 'view'))
-        self.assertTrue(hasattr(discussion, 'participants'))
-        self.assertEqual(discussion.course_id, 1)
+        self.assertIsInstance(discussion, dict)
+        self.assertIn('view', discussion)
+        self.assertIn('participants', discussion)
+        self.assertIn('id', discussion)
+        self.assertEqual(discussion['id'], topic_id)
 
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
