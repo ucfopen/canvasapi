@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from warnings import warn
 
-from six import python_2_unicode_compatible
+from six import python_2_unicode_compatible, text_type
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -899,15 +899,19 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
 
         :param order: The ids of the pinned discussion topics in the desired order.
-            e.g. [104, 102, 103]
-        :type order: list
+            e.g. [104, 102, 103], (104, 102, 103), or "104,102,103"
+        :type order: list, tuple, or string
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
+        # Convert list or tuple to comma-separated string
+        if isinstance(order, (list, tuple)):
+            order = ",".join([text_type(topic_id) for topic_id in order])
 
-        if not isinstance(order, list):
-            raise ValueError("Param order needs to be string or a list.")
+        # Check if is a string with commas
+        if not isinstance(order, text_type) or "," not in order:
+            raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
             'POST',

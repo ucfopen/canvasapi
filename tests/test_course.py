@@ -3,8 +3,10 @@ import unittest
 import uuid
 import warnings
 
+import requests
 import requests_mock
 from six import text_type
+from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup
@@ -491,18 +493,37 @@ class TestCourse(unittest.TestCase):
 
     # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
-        register_uris({'course': ['reorder_pinned_topics']}, m)
+        # Custom matcher to test that params are set correctly
+        def custom_matcher(request):
+            match_text = '1,2,3'
+            if request.text == 'order={}'.format(quote(match_text)):
+                resp = requests.Response()
+                resp._content = b'{"reorder": true, "order": [1, 2, 3]}'
+                resp.status_code = 200
+                return resp
+
+        m.add_matcher(custom_matcher)
 
         order = [1, 2, 3]
-
         discussions = self.course.reorder_pinned_topics(order=order)
         self.assertTrue(discussions)
 
-    def test_reorder_pinned_topics_no_list(self, m):
-        register_uris({'course': ['reorder_pinned_topics_no_list']}, m)
+    def test_reorder_pinned_topics_tuple(self, m):
+        register_uris({'course': ['reorder_pinned_topics']}, m)
 
-        order = "1, 2, 3"
+        order = (1, 2, 3)
+        discussions = self.course.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
 
+    def test_reorder_pinned_topics_comma_separated_string(self, m):
+        register_uris({'course': ['reorder_pinned_topics']}, m)
+
+        order = "1,2,3"
+        discussions = self.course.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
+
+    def test_reorder_pinned_topics_invalid_input(self, m):
+        order = "invalid string"
         with self.assertRaises(ValueError):
             self.course.reorder_pinned_topics(order=order)
 
