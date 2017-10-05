@@ -65,6 +65,35 @@ class TestUtil(unittest.TestCase):
             < result.index(('foo[]', 'bar4'))
         )
 
+    def test_combine_kwargs_single_generator_empty(self, m):
+        result = combine_kwargs(var=(value for value in ()))
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 0)
+
+    def test_combine_kwargs_single_generator_single_item(self, m):
+        result = combine_kwargs(var=(value for value in ('test',)))
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 1)
+        self.assertIn(('var[]', 'test'), result)
+
+    def test_combine_kwargs_single_generator_multiple_items(self, m):
+        result = combine_kwargs(foo=(value for value in ('bar1', 'bar2', 'bar3', 'bar4')))
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 4)
+
+        self.assertIn(('foo[]', 'bar1'), result)
+        self.assertIn(('foo[]', 'bar2'), result)
+        self.assertIn(('foo[]', 'bar3'), result)
+        self.assertIn(('foo[]', 'bar4'), result)
+
+        # Ensure kwargs are in correct order
+        self.assertTrue(
+            result.index(('foo[]', 'bar1'))
+            < result.index(('foo[]', 'bar2'))
+            < result.index(('foo[]', 'bar3'))
+            < result.index(('foo[]', 'bar4'))
+        )
+
     def test_combine_kwargs_multiple_dicts(self, m):
         result = combine_kwargs(
             var1={'foo': 'bar'},
@@ -207,10 +236,11 @@ class TestUtil(unittest.TestCase):
                 ['1a', '1b'],
                 ['2a', '2b'],
                 ['3a', '3b']
-            ]
+            ],
+            generator=(v for v in ('g1', 'g2', 'g3')),
         )
         self.assertIsInstance(result, list)
-        self.assertEqual(len(result), 34)
+        self.assertEqual(len(result), 37)
 
         # Check that all keys were generated correctly
         self.assertIn(('foo', 'bar'), result)
@@ -247,6 +277,9 @@ class TestUtil(unittest.TestCase):
         self.assertIn(('nest_list[][]', '2b'), result)
         self.assertIn(('nest_list[][]', '3a'), result)
         self.assertIn(('nest_list[][]', '3b'), result)
+        self.assertIn(('generator[]', 'g1'), result)
+        self.assertIn(('generator[]', 'g2'), result)
+        self.assertIn(('generator[]', 'g3'), result)
 
         # Ensure list kwargs are in correct order
         self.assertTrue(
@@ -268,6 +301,11 @@ class TestUtil(unittest.TestCase):
             < result.index(('nest_list[][]', '2b'))
             < result.index(('nest_list[][]', '3a'))
             < result.index(('nest_list[][]', '3b'))
+        )
+        self.assertTrue(
+            result.index(('generator[]', 'g1'))
+            < result.index(('generator[]', 'g2'))
+            < result.index(('generator[]', 'g3'))
         )
 
     # obj_or_id()
