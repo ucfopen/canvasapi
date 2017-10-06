@@ -77,6 +77,14 @@ class OutcomeGroup(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
 
+    def context_ref(self):
+        if self.context_type == 'Course':
+            return 'courses/%s' % (self.context_id)
+        elif self.context_type == 'Account':
+            return 'accounts/%s' % (self.context_id)
+        elif self.context_type is None:
+            return 'global'
+
     def show(self):
         """
         Returns the details of the Outcome Group with the given id.
@@ -91,21 +99,10 @@ class OutcomeGroup(CanvasObject):
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        if self.context_type == 'Course':
-            response = self._requester.request(
-                'GET',
-                'courses/%s/outcome_groups/%s' % (self.context_id, self.id)
-            )
-        elif self.context_type == 'Account':
-            response = self._requester.request(
-                'GET',
-                'accounts/%s/outcome_groups/%s' % (self.context_id, self.id)
-            )
-        else:  # context_type and context_id should be "null" if global. Test this.
-            response = self._requester.request(
-                'GET',
-                'global/outcome_groups/%s' % (self.id)
-            )
+        response = self._requester.request(
+            'GET',
+            '%s/outcome_groups/%s' % (self.context_ref(), self.id)
+        )
 
         return OutcomeGroup(self._requester, response.json())
 
@@ -123,24 +120,11 @@ class OutcomeGroup(CanvasObject):
         :returns: True if updated, False otherwise.
         :rtype: bool
         """
-        if self.context_type == 'Course':
-            response = self._requester.request(
-                'PUT',
-                'courses/%s/outcome_groups/%s' % (self.context_id, self.id),
-                _kwargs=combine_kwargs(**kwargs)
-            )
-        elif self.context_type == 'Account':
-            response = self._requester.request(
-                'PUT',
-                'accounts/%s/outcome_groups/%s' % (self.context_id, self.id),
-                _kwargs=combine_kwargs(**kwargs)
-            )
-        else:  # context_type and context_id should be "null" if global. Test this.
-            response = self._requester.request(
-                'PUT',
-                'global/outcome_groups/%s' % (self.id),
-                _kwargs=combine_kwargs(**kwargs)
-            )
+        response = self._requester.request(
+            'PUT',
+            '%s/outcome_groups/%s' % (self.context_ref(), self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
 
         if 'id' in response.json():
             super(OutcomeGroup, self).set_attributes(response.json())
@@ -161,21 +145,10 @@ class OutcomeGroup(CanvasObject):
         :returns: True if successful, false if failed.
         :rtype: bool
         """
-        if self.context_type == 'Course':
-            response = self._requester.request(
-                'DELETE',
-                'courses/%s/outcome_groups/%s' % (self.context_id, self.id)
-            )
-        elif self.context_type == 'Account':
-            response = self._requester.request(
-                'DELETE',
-                'accounts/%s/outcome_groups/%s' % (self.context_id, self.id)
-            )
-        else:  # context_type and context_id should be "null" if global. Test this.
-            response = self._requester.request(
-                'DELETE',
-                'global/outcome_groups/%s' % (self.id)
-            )
+        response = self._requester.request(
+            'DELETE',
+            '%s/outcome_groups/%s' % (self.context_ref(), self.id)
+        )
 
         if 'id' in response.json():
             super(OutcomeGroup, self).set_attributes(response.json())
@@ -197,30 +170,13 @@ class OutcomeGroup(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.outcome.OutcomeLink`
         """
-        if self.context_type == 'Course':
-            return PaginatedList(
-                OutcomeLink,
-                self._requester,
-                'GET',
-                'courses/%s/outcome_groups/%s/outcomes' % (self.context_id, self.id),
-                _kwargs=combine_kwargs(**kwargs)
-            )
-        elif self.context_type == 'Account':
-            return PaginatedList(
-                OutcomeLink,
-                self._requester,
-                'GET',
-                'accounts/%s/outcome_groups/%s/outcomes' % (self.context_id, self.id),
-                _kwargs=combine_kwargs(**kwargs)
-            )
-        else:
-            return PaginatedList(
-                OutcomeLink,
-                self._requester,
-                'GET',
-                'global/outcome_groups/%s/outcomes' % (self.id),
-                _kwargs=combine_kwargs(**kwargs)
-            )
+        return PaginatedList(
+            OutcomeLink,
+            self._requester,
+            'GET',
+            '%s/outcome_groups/%s/outcomes' % (self.context_ref(), self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
 
     def link_existing(self, outcome):
         """
@@ -238,32 +194,14 @@ class OutcomeGroup(CanvasObject):
         """
         outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
 
-        if self.context_type == 'Course':
-            response = self._requester.request(
-                'PUT',
-                'courses/%s/outcome_groups/%s/outcomes/%s' % (
-                    self.context_id,
-                    self.id,
-                    outcome_id
-                )
+        response = self._requester.request(
+            'PUT',
+            '%s/outcome_groups/%s/outcomes/%s' % (
+                self.context_ref(),
+                self.id,
+                outcome_id
             )
-        elif self.context_type == 'Account':
-            response = self._requester.request(
-                'PUT',
-                'accounts/%s/outcome_groups/%s/outcomes/%s' % (
-                    self.context_id,
-                    self.id,
-                    outcome_id
-                )
-            )
-        else:  # context_type and context_id should be "null" if global. Test this.
-            response = self._requester.request(
-                'PUT',
-                'global/outcome_groups/%s/outcomes/%s' % (
-                    self.id,
-                    outcome_id
-                )
-            )
+        )
 
         return OutcomeLink(self._requester, response.json())
 
@@ -284,27 +222,12 @@ class OutcomeGroup(CanvasObject):
         :returns: OutcomeLink object with current OutcomeGroup and newly linked Outcome.
         :rtype: :class:`canvasapi.outcome.OutcomeLink`
         """
-        if self.context_type == 'Course':
-            response = self._requester.request(
-                'POST',
-                'courses/%s/outcome_groups/%s/outcomes' % (self.context_id, self.id),
-                title=title,
-                _kwargs=combine_kwargs(**kwargs)
-            )
-        elif self.context_type == 'Account':
-            response = self._requester.request(
-                'POST',
-                'accounts/%s/outcome_groups/%s/outcomes' % (self.context_id, self.id),
-                title=title,
-                _kwargs=combine_kwargs(**kwargs)
-            )
-        else:  # context_type and context_id should be "null" if global. Test this.
-            response = self._requester.request(
-                'POST',
-                'global/outcome_groups/%s/outcomes' % (self.id),
-                title=title,
-                _kwargs=combine_kwargs(**kwargs)
-            )
+        response = self._requester.request(
+            'POST',
+            '%s/outcome_groups/%s/outcomes' % (self.context_ref(), self.id),
+            title=title,
+            _kwargs=combine_kwargs(**kwargs)
+        )
 
         return OutcomeLink(self._requester, response.json())
 
@@ -324,32 +247,14 @@ class OutcomeGroup(CanvasObject):
         """
         outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
 
-        if self.context_type == 'Course':
-            response = self._requester.request(
-                'DELETE',
-                'courses/%s/outcome_groups/%s/outcomes/%s' % (
-                    self.context_id,
-                    self.id,
-                    outcome_id
-                )
+        response = self._requester.request(
+            'DELETE',
+            '%s/outcome_groups/%s/outcomes/%s' % (
+                self.context_ref(),
+                self.id,
+                outcome_id
             )
-        elif self.context_type == 'Account':
-            response = self._requester.request(
-                'DELETE',
-                'accounts/%s/outcome_groups/%s/outcomes/%s' % (
-                    self.context_id,
-                    self.id,
-                    outcome_id
-                )
-            )
-        else:  # context_type and context_id should be "null" if global. Test this.
-            response = self._requester.request(
-                'DELETE',
-                'global/outcome_groups/%s/outcomes/%s' % (
-                    self.id,
-                    outcome_id
-                )
-            )
+        )
 
         if 'context_id' in response.json():
             super(OutcomeGroup, self).set_attributes(response.json())
@@ -371,27 +276,12 @@ class OutcomeGroup(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.outcome.OutcomeGroup`
         """
-        if self.context_type == 'Course':
-            return PaginatedList(
-                OutcomeGroup,
-                self._requester,
-                'GET',
-                'courses/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id)
-            )
-        elif self.context_type == 'Account':
-            return PaginatedList(
-                OutcomeGroup,
-                self._requester,
-                'GET',
-                'accounts/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id)
-            )
-        else:
-            return PaginatedList(
-                OutcomeGroup,
-                self._requester,
-                'GET',
-                'global/outcome_groups/%s/subgroups' % (self.id)
-            )
+        return PaginatedList(
+            OutcomeGroup,
+            self._requester,
+            'GET',
+            '%s/outcome_groups/%s/subgroups' % (self.context_ref(), self.id)
+        )
 
     def create_subgroup(self, title, **kwargs):
         """
@@ -410,27 +300,12 @@ class OutcomeGroup(CanvasObject):
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        if self.context_type == 'Course':
-            response = self._requester.request(
-                'POST',
-                'courses/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id),
-                title=title,
-                _kwargs=combine_kwargs(**kwargs)
-            )
-        elif self.context_type == 'Account':
-            response = self._requester.request(
-                'POST',
-                'accounts/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id),
-                title=title,
-                _kwargs=combine_kwargs(**kwargs)
-            )
-        else:
-            response = self._requester.request(
-                'POST',
-                'global/outcome_groups/%s/subgroups' % (self.id),
-                title=title,
-                _kwargs=combine_kwargs(**kwargs)
-            )
+        response = self._requester.request(
+            'POST',
+            '%s/outcome_groups/%s/subgroups' % (self.context_ref(), self.id),
+            title=title,
+            _kwargs=combine_kwargs(**kwargs)
+        )
 
         return OutcomeGroup(self._requester, response.json())
 
@@ -451,23 +326,10 @@ class OutcomeGroup(CanvasObject):
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        if self.context_type == 'Course':
-            response = self._requester.request(
-                'POST',
-                'courses/%s/outcome_groups/%s/import' % (self.context_id, self.id),
-                source_outcome_group_id=source_outcome_group_id
-            )
-        elif self.context_type == 'Account':
-            response = self._requester.request(
-                'POST',
-                'accounts/%s/outcome_groups/%s/import' % (self.context_id, self.id),
-                source_outcome_group_id=source_outcome_group_id
-            )
-        else:  # context_type and context_id should be "null" if global. Test this.
-            response = self._requester.request(
-                'POST',
-                'global/outcome_groups/%s/import' % (self.id),
-                source_outcome_group_id=source_outcome_group_id
-            )
+        response = self._requester.request(
+            'POST',
+            '%s/outcome_groups/%s/import' % (self.context_ref(), self.id),
+            source_outcome_group_id=source_outcome_group_id
+        )
 
         return OutcomeGroup(self._requester, response.json())
