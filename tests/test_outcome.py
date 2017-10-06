@@ -254,42 +254,155 @@ class TestOutcomeGroup(unittest.TestCase):
         self.assertIsInstance(result, OutcomeLink)
         self.assertEqual(result.outcome_group['id'], 2)
 
-    '''
     # link_new()
     def test_link_new(self, m):
-        TEST_OBJ = "replace this"
+        register_uris(
+            {
+                'outcome': [
+                    'outcome_group_link_new_global',
+                    'outcome_group_link_new_account',
+                    'outcome_group_link_new_course'
+                ]
+            }, m)
 
-        self.assertIsInstance(TEST_OBJ, OutcomeLink)
-    '''
+        new_title = "New Outcome"
 
-    '''
+        result = self.canvas_outcome_group.link_new(title=new_title)
+        self.assertIsInstance(result, OutcomeLink)
+        self.assertEqual(result.outcome_group['id'], 1)
+        self.assertEqual(result.outcome['id'], 2)
+        self.assertEqual(result.outcome['context_type'], None)
+
+        result = self.account_outcome_group.link_new(title=new_title)
+        self.assertIsInstance(result, OutcomeLink)
+        self.assertEqual(result.outcome_group['id'], 1)
+        self.assertEqual(result.outcome['id'], 2)
+        self.assertEqual(result.outcome['context_type'], 'Account')
+
+        result = self.course_outcome_group.link_new(title=new_title)
+        self.assertIsInstance(result, OutcomeLink)
+        self.assertEqual(result.outcome_group['id'], 1)
+        self.assertEqual(result.outcome['id'], 2)
+        self.assertEqual(result.outcome['context_type'], 'Course')
+
     # unlink_outcome()
     def test_unlink_outcome(self, m):
-        TEST_OBJ = "replace this"
+        register_uris(
+            {
+                'outcome': [
+                    'outcome_example',
+                    'outcome_group_unlink_outcome_global',
+                    'outcome_group_unlink_outcome_account',
+                    'outcome_group_unlink_outcome_course'
+                ]
+            }, m)
 
-        self.assertIsInstance(TEST_OBJ, OutcomeLink)
-    '''
+        result = self.canvas_outcome_group.unlink_outcome(self.example_outcome)
+        self.assertTrue(result)
 
-    '''
+        result = self.account_outcome_group.unlink_outcome(self.example_outcome)
+        self.assertTrue(result)
+
+        result = self.course_outcome_group.unlink_outcome(self.example_outcome)
+        self.assertTrue(result)
+
+        result = self.canvas_outcome_group.unlink_outcome(3)
+        self.assertTrue(result)
+
+        result = self.account_outcome_group.unlink_outcome(3)
+        self.assertTrue(result)
+
+        result = self.course_outcome_group.unlink_outcome(3)
+        self.assertTrue(result)
+
     # list_subgroups()
     def test_list_subgroups(self, m):
-        TEST_OBJ = "replace this"
+        register_uris(
+            {
+                'outcome': [
+                    'outcome_group_list_subgroups_global',
+                    'outcome_group_list_subgroups_account',
+                    'outcome_group_list_subgroups_course'
+                ]
+            }, m)
 
-        self.assertIsInstance(TEST_OBJ[0], OutcomeGroup)
-    '''
+        result = self.canvas_outcome_group.list_subgroups()
+        self.assertIsInstance(result[0], OutcomeGroup)
+        self.assertEqual(result[0].id, 2)
+        self.assertEqual(result[0].title, "Global Listed Subgroup Title 1")
+        self.assertIsInstance(result[1], OutcomeGroup)
+        self.assertEqual(result[1].id, 3)
+        self.assertEqual(result[1].title, "Global Listed Subgroup Title 2")
 
-    '''
+        result = self.account_outcome_group.list_subgroups()
+        self.assertIsInstance(result[0], OutcomeGroup)
+        self.assertEqual(result[0].id, 2)
+        self.assertEqual(result[0].title, "Account Listed Subgroup Title 1")
+        self.assertIsInstance(result[1], OutcomeGroup)
+        self.assertEqual(result[1].id, 3)
+        self.assertEqual(result[1].title, "Account Listed Subgroup Title 2")
+
+        result = self.course_outcome_group.list_subgroups()
+        self.assertIsInstance(result[0], OutcomeGroup)
+        self.assertEqual(result[0].id, 2)
+        self.assertEqual(result[0].title, "Course Listed Subgroup Title 1")
+        self.assertIsInstance(result[1], OutcomeGroup)
+        self.assertEqual(result[1].id, 3)
+        self.assertEqual(result[1].title, "Course Listed Subgroup Title 2")
+
     # create_subgroup()
     def test_create_subgroup(self, m):
-        TEST_OBJ = "replace this"
+        register_uris(
+            {
+                'outcome': [
+                    'outcome_group_create_subgroup_global',
+                    'outcome_group_create_subgroup_account',
+                    'outcome_group_create_subgroup_course'
+                ]
+            }, m)
 
-        self.assertIsInstance(TEST_OBJ, OutcomeGroup)
-    '''
+        new_title = "New Subgroup Title"
 
-    '''
+        result = self.canvas_outcome_group.create_subgroup(new_title)
+        self.assertEqual(self.canvas_outcome_group.id, result.parent_outcome_group['id'])
+        self.assertEqual(result.parent_outcome_group['title'], "Parent of Subgroup")
+        self.assertEqual(result.title, "New Subgroup Title")
+
+        result = self.account_outcome_group.create_subgroup(new_title)
+        self.assertEqual(self.canvas_outcome_group.id, result.parent_outcome_group['id'])
+        self.assertEqual(result.parent_outcome_group['title'], "Parent of Subgroup")
+        self.assertEqual(result.title, "New Subgroup Title")
+
+        result = self.course_outcome_group.create_subgroup(new_title)
+        self.assertEqual(self.canvas_outcome_group.id, result.parent_outcome_group['id'])
+        self.assertEqual(result.parent_outcome_group['title'], "Parent of Subgroup")
+        self.assertEqual(result.title, "New Subgroup Title")
+
     # import_outcome_group()
     def test_import_outcome_group(self, m):
-        TEST_OBJ = "replace this"
+        register_uris(
+            {
+                'outcome': [
+                    'outcome_group_import_outcome_group_global',
+                    'outcome_group_import_outcome_group_account',
+                    'outcome_group_import_outcome_group_course'
+                ]
+            }, m)
 
-        self.assertIsInstance(TEST_OBJ, OutcomeGroup)
-    '''
+        result = self.canvas_outcome_group.import_outcome_group(3)
+        self.assertEqual(result.id, 4)
+        self.assertEqual(result.title, "Global Imported Subgroup Title")
+        self.assertEqual(result.parent_outcome_group['id'], self.canvas_outcome_group.id)
+        self.assertEqual(result.parent_outcome_group['title'], self.canvas_outcome_group.title)
+
+        result = self.account_outcome_group.import_outcome_group(3)
+        self.assertEqual(result.id, 4)
+        self.assertEqual(result.title, "Account Imported Subgroup Title")
+        self.assertEqual(result.parent_outcome_group['id'], self.account_outcome_group.id)
+        self.assertEqual(result.parent_outcome_group['title'], self.account_outcome_group.title)
+
+        result = self.course_outcome_group.import_outcome_group(3)
+        self.assertEqual(result.id, 4)
+        self.assertEqual(result.title, "Course Imported Subgroup Title")
+        self.assertEqual(result.parent_outcome_group['id'], self.course_outcome_group.id)
+        self.assertEqual(result.parent_outcome_group['title'], self.course_outcome_group.title)

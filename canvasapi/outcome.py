@@ -267,7 +267,7 @@ class OutcomeGroup(CanvasObject):
 
         return OutcomeLink(self._requester, response.json())
 
-    def link_new(self, **kwargs):
+    def link_new(self, title, **kwargs):
         """
         Create a new Outcome and link it to this OutcomeGroup
 
@@ -278,7 +278,8 @@ class OutcomeGroup(CanvasObject):
             or `POST /api/v1/courses/:course_id/outcome_groups/:id/outcomes \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
 
-        :params: title, description, ratings, and mastery points. Title is the only required param.
+        :params: title, description, ratings, and mastery points.
+            Title is the only required param.
 
         :returns: OutcomeLink object with current OutcomeGroup and newly linked Outcome.
         :rtype: :class:`canvasapi.outcome.OutcomeLink`
@@ -286,25 +287,28 @@ class OutcomeGroup(CanvasObject):
         if self.context_type == 'Course':
             response = self._requester.request(
                 'POST',
-                'courses/%s/outcome_groups/%s/outcomes/%s' % (self.context_id, self.id),
+                'courses/%s/outcome_groups/%s/outcomes' % (self.context_id, self.id),
+                title=title,
                 _kwargs=combine_kwargs(**kwargs)
             )
         elif self.context_type == 'Account':
             response = self._requester.request(
                 'POST',
-                'accounts/%s/outcome_groups/%s/outcomes/%s' % (self.context_id, self.id),
+                'accounts/%s/outcome_groups/%s/outcomes' % (self.context_id, self.id),
+                title=title,
                 _kwargs=combine_kwargs(**kwargs)
             )
         else:  # context_type and context_id should be "null" if global. Test this.
             response = self._requester.request(
                 'POST',
-                'global/outcome_groups/%s/outcomes/%s' % (self.id),
+                'global/outcome_groups/%s/outcomes' % (self.id),
+                title=title,
                 _kwargs=combine_kwargs(**kwargs)
             )
 
         return OutcomeLink(self._requester, response.json())
 
-    def unlink_outcome(self, outcome_id):
+    def unlink_outcome(self, outcome):
         """
         Remove an Outcome from and OutcomeLink
 
@@ -315,9 +319,11 @@ class OutcomeGroup(CanvasObject):
             or `DELETE /api/v1/courses/:course_id/outcome_groups/:id/outcomes/:outcome_id \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.unlink`_
 
-        :returns: OutcomeLink object with current OutcomeGroup and newly linked Outcome.
-        :rtype: :class:`canvasapi.outcome.OutcomeLink`
+        :returns: True if successful, false if failed.
+        :rtype: bool
         """
+        outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
+
         if self.context_type == 'Course':
             response = self._requester.request(
                 'DELETE',
@@ -345,7 +351,10 @@ class OutcomeGroup(CanvasObject):
                 )
             )
 
-        return OutcomeLink(self._requester, response.json())
+        if 'context_id' in response.json():
+            super(OutcomeGroup, self).set_attributes(response.json())
+
+        return 'context_id' in response.json()
 
     def list_subgroups(self):
         """
@@ -376,7 +385,7 @@ class OutcomeGroup(CanvasObject):
                 'GET',
                 'accounts/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id)
             )
-        else:  # context_type and context_id should be "null" if global. Test this.
+        else:
             return PaginatedList(
                 OutcomeGroup,
                 self._requester,
@@ -384,7 +393,7 @@ class OutcomeGroup(CanvasObject):
                 'global/outcome_groups/%s/subgroups' % (self.id)
             )
 
-    def create_subgroup(self, **kwargs):
+    def create_subgroup(self, title, **kwargs):
         """
         Create a subgroup of the current group
 
@@ -395,6 +404,9 @@ class OutcomeGroup(CanvasObject):
             or `POST /api/v1/courses/:course_id/outcome_groups/:id/subgroups \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.create>`_
 
+        :param title: The title of the subgroup.
+        :type title: str
+
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
@@ -402,18 +414,21 @@ class OutcomeGroup(CanvasObject):
             response = self._requester.request(
                 'POST',
                 'courses/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id),
+                title=title,
                 _kwargs=combine_kwargs(**kwargs)
             )
         elif self.context_type == 'Account':
             response = self._requester.request(
                 'POST',
                 'accounts/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id),
+                title=title,
                 _kwargs=combine_kwargs(**kwargs)
             )
-        else:  # context_type and context_id should be "null" if global. Test this.
+        else:
             response = self._requester.request(
                 'POST',
                 'global/outcome_groups/%s/subgroups' % (self.id),
+                title=title,
                 _kwargs=combine_kwargs(**kwargs)
             )
 
@@ -430,6 +445,9 @@ class OutcomeGroup(CanvasObject):
             or `POST /api/v1/courses/:course_id/outcome_groups/:id/import \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.import>`_
 
+        :param source_outcome_group_id: The id of the Outcome Group to be imported.
+        :type source_outcome_group_id: int
+
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
@@ -437,19 +455,19 @@ class OutcomeGroup(CanvasObject):
             response = self._requester.request(
                 'POST',
                 'courses/%s/outcome_groups/%s/import' % (self.context_id, self.id),
-                source_outcome_group_id
+                source_outcome_group_id=source_outcome_group_id
             )
         elif self.context_type == 'Account':
             response = self._requester.request(
                 'POST',
                 'accounts/%s/outcome_groups/%s/import' % (self.context_id, self.id),
-                source_outcome_group_id
+                source_outcome_group_id=source_outcome_group_id
             )
         else:  # context_type and context_id should be "null" if global. Test this.
             response = self._requester.request(
                 'POST',
                 'global/outcome_groups/%s/import' % (self.id),
-                source_outcome_group_id
+                source_outcome_group_id=source_outcome_group_id
             )
 
         return OutcomeGroup(self._requester, response.json())
