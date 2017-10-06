@@ -4,8 +4,6 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.account import Account
-from canvasapi.course import Course
 from canvasapi.outcome import Outcome, OutcomeGroup, OutcomeLink
 from tests import settings
 from tests.util import register_uris
