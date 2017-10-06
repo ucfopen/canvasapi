@@ -16,7 +16,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
 from canvasapi.exceptions import ResourceDoesNotExist
-from canvasapi.outcome import OutcomeGroup
+from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.user import User
@@ -505,6 +505,14 @@ class TestCanvas(unittest.TestCase):
         courses = self.canvas.search_all_courses()
         self.assertIsInstance(courses, list)
         self.assertEqual(len(courses), 2)
+
+    # get_outcome()
+    def test_show(self, m):
+        register_uris({'outcome': ['outcome_show']}, m)
+
+        result = self.canvas.get_outcome(3)
+        self.assertIsInstance(result, Outcome)
+        self.assertEqual(result.id, 3)
 
     # get_root_outcome_group()
     def test_get_root_outcome_group(self, m):

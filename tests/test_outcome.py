@@ -37,12 +37,6 @@ class TestOutcome(unittest.TestCase):
         string = str(self.example_outcome)
         self.assertIsInstance(string, str)
 
-    # show()
-    def test_show(self, m):
-        register_uris({'outcome': ['outcome_show']}, m)
-        test_show = self.example_outcome.show()
-        self.assertIsInstance(test_show, Outcome)
-
     # update()
     def test_update(self, m):
         register_uris({'outcome': ['outcome_update']}, m)

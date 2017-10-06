@@ -1,4 +1,26 @@
 {
+    "outcome_show": {
+        "method": "GET",
+        "endpoint": "outcomes/3",
+        "data": {
+            "id": 3,
+            "url": "/api/v1/outcomes/3",
+            "context_id": 1,
+            "context_type": "Account",
+            "title": "Outcome Show Example",
+            "display_name": "My Favorite Outcome",
+            "description": "Outcome description",
+            "vendor_guid": "customid9000",
+            "points_possible": 5,
+            "mastery_points": 3,
+            "calculation_method": "decaying_average",
+            "calculation_int": 75,
+            "ratings": null,
+            "can_edit": true,
+            "can_unlink": true,
+            "assessed": true
+        }
+    },
     "account_root_outcome_group": {
         "method": "GET",
         "endpoint": "accounts/1/root_outcome_group",
@@ -247,28 +269,6 @@
         "status_code": 200
     },
     "outcome_example": {
-        "method": "GET",
-        "endpoint": "outcomes/3",
-        "data": {
-            "id": 3,
-            "url": "/api/v1/outcomes/3",
-            "context_id": 1,
-            "context_type": "Account",
-            "title": "Outcome Show Example",
-            "display_name": "My Favorite Outcome",
-            "description": "Outcome description",
-            "vendor_guid": "customid9000",
-            "points_possible": 5,
-            "mastery_points": 3,
-            "calculation_method": "decaying_average",
-            "calculation_int": 75,
-            "ratings": null,
-            "can_edit": true,
-            "can_unlink": true,
-            "assessed": true
-        }
-    },
-    "outcome_show": {
         "method": "GET",
         "endpoint": "outcomes/3",
         "data": {

@@ -13,22 +13,6 @@ class Outcome(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
 
-    def show(self, **kwargs):
-        """
-        Returns the details of the outcome with the given id.
-
-        :calls: `GET /api/v1/outcomes/:id \
-        <https://canvas.instructure.com/doc/api/outcomes.html#method.outcomes_api.show>`_
-
-        :returns: Itself as an object.
-        :rtype: :class:`canvasapi.outcome.Outcome`
-        """
-        response = self._requester.request(
-            'GET',
-            'outcomes/%s' % (self.id)
-        )
-        return Outcome(self._requester, response.json())
-
     def update(self, **kwargs):
         """
         Modify an existing outcome.

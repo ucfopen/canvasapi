@@ -874,6 +874,25 @@ class Canvas(object):
         )
         return response.json()
 
+    def get_outcome(self, outcome):
+        """
+        Returns the details of the outcome with the given id.
+
+        :calls: `GET /api/v1/outcomes/:id \
+        <https://canvas.instructure.com/doc/api/outcomes.html#method.outcomes_api.show>`_
+
+        :returns: An Outcome object.
+        :rtype: :class:`canvasapi.outcome.Outcome`
+        """
+        from canvasapi.outcome import Outcome
+        from canvasapi.util import obj_or_id
+        outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
+        response = self.__requester.request(
+            'GET',
+            'outcomes/%s' % (outcome_id)
+        )
+        return Outcome(self.__requester, response.json())
+
     def get_root_outcome_group(self):
         """
         Redirect to root outcome group for context
