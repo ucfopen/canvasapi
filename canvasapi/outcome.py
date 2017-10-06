@@ -4,7 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -36,15 +36,19 @@ class Outcome(CanvasObject):
         :calls: `PUT /api/v1/outcomes/:id \
         <https://canvas.instructure.com/doc/api/outcomes.html#method.outcomes_api.update>`_
 
-        :returns: Updated Outcome object.
-        :rtype: :class:`canvasapi.outcome.Outcome`
+        :returns: True if updated, False otherwise.
+        :rtype: bool
         """
         response = self._requester.request(
             'PUT',
             'outcomes/%s' % (self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return Outcome(self._requester, response.json())
+
+        if 'id' in response.json():
+            super(Outcome, self).set_attributes(response.json())
+
+        return 'id' in response.json()
 
 
 @python_2_unicode_compatible
@@ -56,6 +60,15 @@ class OutcomeLink(CanvasObject):
             self.outcome,
             self.url
         )
+
+    def get_outcome(self):
+        oid = self.outcome['id']
+        response = self._requester.request(
+            'GET',
+            'outcomes/%s' % (oid)
+        )
+
+        return Outcome(self._requester, response.json())
 
 
 @python_2_unicode_compatible
@@ -78,12 +91,12 @@ class OutcomeGroup(CanvasObject):
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             response = self._requester.request(
                 'GET',
                 'courses/%s/outcome_groups/%s' % (self.context_id, self.id)
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             response = self._requester.request(
                 'GET',
                 'accounts/%s/outcome_groups/%s' % (self.context_id, self.id)
@@ -107,16 +120,16 @@ class OutcomeGroup(CanvasObject):
             or `PUT /api/v1/courses/:course_id/outcome_groups/:id \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update`_
 
-        :returns: Updated object as an OutcomeGroup object.
-        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        :returns: True if updated, False otherwise.
+        :rtype: bool
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             response = self._requester.request(
                 'PUT',
                 'courses/%s/outcome_groups/%s' % (self.context_id, self.id),
                 _kwargs=combine_kwargs(**kwargs)
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             response = self._requester.request(
                 'PUT',
                 'accounts/%s/outcome_groups/%s' % (self.context_id, self.id),
@@ -129,7 +142,10 @@ class OutcomeGroup(CanvasObject):
                 _kwargs=combine_kwargs(**kwargs)
             )
 
-        return OutcomeGroup(self._requester, response.json())
+        if 'id' in response.json():
+            super(OutcomeGroup, self).set_attributes(response.json())
+
+        return 'id' in response.json()
 
     def delete(self):
         """
@@ -142,15 +158,15 @@ class OutcomeGroup(CanvasObject):
             or `DELETE /api/v1/courses/:course_id/outcome_groups/:id \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.destroy`_
 
-        :returns: Deleted OutcomeGroup object.
-        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        :returns: True if successful, false if failed.
+        :rtype: bool
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             response = self._requester.request(
                 'DELETE',
                 'courses/%s/outcome_groups/%s' % (self.context_id, self.id)
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             response = self._requester.request(
                 'DELETE',
                 'accounts/%s/outcome_groups/%s' % (self.context_id, self.id)
@@ -161,7 +177,10 @@ class OutcomeGroup(CanvasObject):
                 'global/outcome_groups/%s' % (self.id)
             )
 
-        return OutcomeGroup(self._requester, response.json())
+        if 'id' in response.json():
+            super(OutcomeGroup, self).set_attributes(response.json())
+
+        return 'id' in response.json()
 
     def list_linked_outcomes(self, **kwargs):
         """
@@ -178,7 +197,7 @@ class OutcomeGroup(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.outcome.OutcomeLink`
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             return PaginatedList(
                 OutcomeLink,
                 self._requester,
@@ -186,7 +205,7 @@ class OutcomeGroup(CanvasObject):
                 'courses/%s/outcome_groups/%s/outcomes' % (self.context_id, self.id),
                 _kwargs=combine_kwargs(**kwargs)
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             return PaginatedList(
                 OutcomeLink,
                 self._requester,
@@ -194,7 +213,7 @@ class OutcomeGroup(CanvasObject):
                 'accounts/%s/outcome_groups/%s/outcomes' % (self.context_id, self.id),
                 _kwargs=combine_kwargs(**kwargs)
             )
-        else:  # context_type and context_id should be "null" if global. Test this.
+        else:
             return PaginatedList(
                 OutcomeLink,
                 self._requester,
@@ -203,7 +222,7 @@ class OutcomeGroup(CanvasObject):
                 _kwargs=combine_kwargs(**kwargs)
             )
 
-    def link_existing(self, outcome_id):
+    def link_existing(self, outcome):
         """
         Link to an existing Outcome.
 
@@ -217,7 +236,9 @@ class OutcomeGroup(CanvasObject):
         :returns: OutcomeLink object with current OutcomeGroup and newly linked Outcome.
         :rtype: :class:`canvasapi.outcome.OutcomeLink`
         """
-        if self.context_type is "Course":
+        outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
+
+        if self.context_type == 'Course':
             response = self._requester.request(
                 'PUT',
                 'courses/%s/outcome_groups/%s/outcomes/%s' % (
@@ -226,7 +247,7 @@ class OutcomeGroup(CanvasObject):
                     outcome_id
                 )
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             response = self._requester.request(
                 'PUT',
                 'accounts/%s/outcome_groups/%s/outcomes/%s' % (
@@ -257,16 +278,18 @@ class OutcomeGroup(CanvasObject):
             or `POST /api/v1/courses/:course_id/outcome_groups/:id/outcomes \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
 
+        :params: title, description, ratings, and mastery points. Title is the only required param.
+
         :returns: OutcomeLink object with current OutcomeGroup and newly linked Outcome.
         :rtype: :class:`canvasapi.outcome.OutcomeLink`
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             response = self._requester.request(
                 'POST',
                 'courses/%s/outcome_groups/%s/outcomes/%s' % (self.context_id, self.id),
                 _kwargs=combine_kwargs(**kwargs)
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             response = self._requester.request(
                 'POST',
                 'accounts/%s/outcome_groups/%s/outcomes/%s' % (self.context_id, self.id),
@@ -295,7 +318,7 @@ class OutcomeGroup(CanvasObject):
         :returns: OutcomeLink object with current OutcomeGroup and newly linked Outcome.
         :rtype: :class:`canvasapi.outcome.OutcomeLink`
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             response = self._requester.request(
                 'DELETE',
                 'courses/%s/outcome_groups/%s/outcomes/%s' % (
@@ -304,7 +327,7 @@ class OutcomeGroup(CanvasObject):
                     outcome_id
                 )
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             response = self._requester.request(
                 'DELETE',
                 'accounts/%s/outcome_groups/%s/outcomes/%s' % (
@@ -339,14 +362,14 @@ class OutcomeGroup(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.outcome.OutcomeGroup`
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             return PaginatedList(
                 OutcomeGroup,
                 self._requester,
                 'GET',
                 'courses/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id)
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             return PaginatedList(
                 OutcomeGroup,
                 self._requester,
@@ -375,13 +398,13 @@ class OutcomeGroup(CanvasObject):
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             response = self._requester.request(
                 'POST',
                 'courses/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id),
                 _kwargs=combine_kwargs(**kwargs)
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             response = self._requester.request(
                 'POST',
                 'accounts/%s/outcome_groups/%s/subgroups' % (self.context_id, self.id),
@@ -410,13 +433,13 @@ class OutcomeGroup(CanvasObject):
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        if self.context_type is "Course":
+        if self.context_type == 'Course':
             response = self._requester.request(
                 'POST',
                 'courses/%s/outcome_groups/%s/import' % (self.context_id, self.id),
                 source_outcome_group_id
             )
-        elif self.context_type is "Account":
+        elif self.context_type == 'Account':
             response = self._requester.request(
                 'POST',
                 'accounts/%s/outcome_groups/%s/import' % (self.context_id, self.id),
