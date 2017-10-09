@@ -9,15 +9,9 @@ from canvasapi.user import User
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 from itertools import chain
 from six import integer_types, iterkeys, itervalues, iteritems
+from six.moves import zip
 from tests import settings
 from tests.util import register_uris
-
-try:
-    # in Python 2.x, iterator-returning zip function is "itertools.izip"
-    from itertools import izip as zip
-except ImportError:
-    # in Python 3.x, iterator-returning zip function is "zip" built-in
-    pass
 
 
 @requests_mock.Mocker()
