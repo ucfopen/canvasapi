@@ -8,7 +8,7 @@ from canvasapi.course import CourseNickname
 from canvasapi.user import User
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 from itertools import chain
-from six import integer_types
+from six import integer_types, iterkeys, itervalues, iteritems
 from tests import settings
 from tests.util import register_uris
 
@@ -68,13 +68,13 @@ class TestUtil(unittest.TestCase):
         self.assertTrue(is_multivalued(iter({'key': 'value'})))
 
     def test_is_multivalued_dict_keys(self, m):
-        self.assertTrue(is_multivalued({'key': 'value'}.keys()))
+        self.assertTrue(is_multivalued(iterkeys({'key': 'value'})))
 
     def test_is_multivalued_dict_values(self, m):
-        self.assertTrue(is_multivalued({'key': 'value'}.values()))
+        self.assertTrue(is_multivalued(itervalues({'key': 'value'})))
 
     def test_is_multivalued_dict_items(self, m):
-        self.assertTrue(is_multivalued({'key': 'value'}.items()))
+        self.assertTrue(is_multivalued(iteritems({'key': 'value'})))
 
     def test_is_multivalued_generator_expr(self, m):
         self.assertTrue(is_multivalued(item for item in ('item',)))
