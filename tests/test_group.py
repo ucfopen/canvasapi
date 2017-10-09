@@ -1,9 +1,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import os
 import unittest
 import uuid
 
+import requests
 import requests_mock
+from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.group import Group, GroupMembership, GroupCategory
@@ -15,7 +16,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.tab import Tab
 from tests import settings
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -145,12 +146,8 @@ class TestGroup(unittest.TestCase):
         self.assertTrue(response[0])
         self.assertIsInstance(response[1], dict)
         self.assertIn('url', response[1])
-        # http://stackoverflow.com/a/10840586
-        # Not as stupid as it looks.
-        try:
-            os.remove(filename)
-        except OSError:
-            pass
+
+        cleanup_file(filename)
 
     # preview_processed_html()
     def test_preview_processed_html(self, m):
@@ -225,10 +222,11 @@ class TestGroup(unittest.TestCase):
 
         topic_id = 1
         discussion = self.group.get_full_discussion_topic(topic_id)
-        self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertTrue(hasattr(discussion, 'view'))
-        self.assertTrue(hasattr(discussion, 'participants'))
-        self.assertEqual(discussion.group_id, 1)
+        self.assertIsInstance(discussion, dict)
+        self.assertIn('view', discussion)
+        self.assertIn('participants', discussion)
+        self.assertIn('id', discussion)
+        self.assertEqual(discussion['id'], topic_id)
 
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
@@ -253,18 +251,37 @@ class TestGroup(unittest.TestCase):
 
     # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
-        register_uris({'group': ['reorder_pinned_topics']}, m)
+        # Custom matcher to test that params are set correctly
+        def custom_matcher(request):
+            match_text = '1,2,3'
+            if request.text == 'order={}'.format(quote(match_text)):
+                resp = requests.Response()
+                resp._content = b'{"reorder": true, "order": [1, 2, 3]}'
+                resp.status_code = 200
+                return resp
+
+        m.add_matcher(custom_matcher)
 
         order = [1, 2, 3]
-
         discussions = self.group.reorder_pinned_topics(order=order)
         self.assertTrue(discussions)
 
-    def test_reorder_pinned_topics_no_list(self, m):
-        register_uris({'group': ['reorder_pinned_topics_no_list']}, m)
+    def test_reorder_pinned_topics_tuple(self, m):
+        register_uris({'group': ['reorder_pinned_topics']}, m)
 
-        order = "1, 2, 3"
+        order = (1, 2, 3)
+        discussions = self.group.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
 
+    def test_reorder_pinned_topics_comma_separated_string(self, m):
+        register_uris({'group': ['reorder_pinned_topics']}, m)
+
+        order = "1,2,3"
+        discussions = self.group.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
+
+    def test_reorder_pinned_topics_invalid_input(self, m):
+        order = "invalid string"
         with self.assertRaises(ValueError):
             self.group.reorder_pinned_topics(order=order)
 

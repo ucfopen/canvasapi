@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from six import python_2_unicode_compatible
+from six import python_2_unicode_compatible, text_type
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -405,29 +405,25 @@ class Group(CanvasObject):
         """
         Return a cached structure of the discussion topic.
 
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
+        :calls: `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/view \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
+        :rtype: dict
         """
         response = self._requester.request(
             'GET',
             'groups/%s/discussion_topics/%s/view' % (self.id, topic_id),
         )
-
-        response_json = response.json()
-        response_json.update({'group_id': self.id})
-
-        return DiscussionTopic(self._requester, response_json)
+        return response.json()
 
     def get_discussion_topics(self, **kwargs):
         """
         Returns the paginated list of discussion topics for this course or group.
 
-        :calls: `GET /api/v1/groups/:course_id/discussion_topics \
+        :calls: `GET /api/v1/groups/:group_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -447,7 +443,7 @@ class Group(CanvasObject):
         """
         Creates a new discussion topic for the course or group.
 
-        :calls: `POST /api/v1/courses/:group_id/discussion_topics \
+        :calls: `POST /api/v1/groups/:group_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
 
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
@@ -478,8 +474,13 @@ class Group(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
-        if not isinstance(order, list):
-            raise ValueError("Param order needs to be string or a list.")
+        # Convert list or tuple to comma-separated string
+        if isinstance(order, (list, tuple)):
+            order = ",".join([text_type(topic_id) for topic_id in order])
+
+        # Check if is a string with commas
+        if not isinstance(order, text_type) or "," not in order:
+            raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
             'POST',
@@ -549,7 +550,7 @@ class Group(CanvasObject):
         """
         Returns the paginated list of files for the group.
 
-        :calls: `GET api/v1/courses/:group_id/files \
+        :calls: `GET api/v1/groups/:group_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of

@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from warnings import warn
 
-from six import python_2_unicode_compatible
+from six import python_2_unicode_compatible, text_type
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -231,8 +231,6 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/files \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.create_file>`_
 
-        :param path: The path of the file to upload.
-        :type path: str
         :param file: The file or path of the file to upload.
         :type file: file or str
         :returns: True if the file uploaded successfully, False otherwise, \
@@ -801,17 +799,13 @@ class Course(CanvasObject):
         :param topic_id: The ID of the discussion topic.
         :type topic_id: int
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
+        :rtype: dict
         """
         response = self._requester.request(
             'GET',
             'courses/%s/discussion_topics/%s/view' % (self.id, topic_id),
         )
-
-        response_json = response.json()
-        response_json.update({'course_id': self.id})
-
-        return DiscussionTopic(self._requester, response_json)
+        return response.json()
 
     def get_discussion_topics(self, **kwargs):
         """
@@ -905,15 +899,19 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.reorder>`_
 
         :param order: The ids of the pinned discussion topics in the desired order.
-            e.g. [104, 102, 103]
-        :type order: list
+            e.g. [104, 102, 103], (104, 102, 103), or "104,102,103"
+        :type order: list, tuple, or string
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
+        # Convert list or tuple to comma-separated string
+        if isinstance(order, (list, tuple)):
+            order = ",".join([text_type(topic_id) for topic_id in order])
 
-        if not isinstance(order, list):
-            raise ValueError("Param order needs to be string or a list.")
+        # Check if is a string with commas
+        if not isinstance(order, text_type) or "," not in order:
+            raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
             'POST',
@@ -1101,12 +1099,14 @@ class Course(CanvasObject):
             'courses/%s/assignments/%s/submissions' % (self.id, assignment_id),
             _kwargs=combine_kwargs(**kwargs)
         )
+        response_json = response.json()
+        response_json.update(course_id=self.id)
 
-        return Submission(self._requester, response.json())
+        return Submission(self._requester, response_json)
 
     def list_submissions(self, assignment_id, **kwargs):
         """
-        Makes a submission for an assignment.
+        Get all existing submissions for an assignment.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
@@ -1121,6 +1121,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/assignments/%s/submissions' % (self.id, assignment_id),
+            {'course_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -1144,6 +1145,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/students/submissions' % (self.id),
+            {'course_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -1165,7 +1167,10 @@ class Course(CanvasObject):
             'courses/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return Submission(self._requester, response.json())
+        response_json = response.json()
+        response_json.update(course_id=self.id)
+
+        return Submission(self._requester, response_json)
 
     def update_submission(self, assignment_id, user_id, **kwargs):
         """
@@ -1186,12 +1191,15 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+        response_json = response.json()
+        response_json.update(course_id=self.id)
+
         submission = self.get_submission(assignment_id, user_id)
 
-        if 'submission_type' in response.json():
-            super(Submission, submission).set_attributes(response.json())
+        if 'submission_type' in response_json:
+            super(Submission, submission).set_attributes(response_json)
 
-        return Submission(self._requester, response.json())
+        return Submission(self._requester, response_json)
 
     def list_gradeable_students(self, assignment_id):
         """
