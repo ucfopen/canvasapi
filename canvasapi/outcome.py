@@ -25,7 +25,7 @@ class Outcome(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'outcomes/%s' % (self.id),
+            'outcomes/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -45,14 +45,51 @@ class OutcomeLink(CanvasObject):
             self.url
         )
 
+    def context_ref(self):
+        if self.context_type == 'Course':
+            return 'courses/{}'.format(self.context_id)
+        elif self.context_type == 'Account':
+            return 'accounts/{}'.format(self.context_id)
+
     def get_outcome(self):
+        """
+        Return the linked outcome
+
+        :calls: `GET /api/v1/outcomes/:id \
+        <https://canvas.instructure.com/doc/api/outcomes.html#method.outcomes_api.show>`_
+
+        :returns: Outcome object that was in the OutcomeLink
+        :rtype: :class:`canvasapi.outcome.Outcome`
+        """
         oid = self.outcome['id']
         response = self._requester.request(
             'GET',
-            'outcomes/%s' % (oid)
+            'outcomes/{}'.format(oid)
         )
 
         return Outcome(self._requester, response.json())
+
+    def get_outcome_group(self):
+        """
+        Return the linked outcome group
+
+        :calls: `GET /api/v1/global/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
+            or `GET /api/v1/accounts/:account_id/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
+            or `GET /api/v1/courses/:course_id/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
+
+        :returns: Linked outcome group object.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        ogid = self.outcome_group['id']
+        response = self._requester.request(
+            'GET',
+            '{}/outcome_groups/{}'.format(self.context_ref(), ogid)
+        )
+
+        return OutcomeGroup(self._requester, response.json())
 
 
 @python_2_unicode_compatible
@@ -63,32 +100,11 @@ class OutcomeGroup(CanvasObject):
 
     def context_ref(self):
         if self.context_type == 'Course':
-            return 'courses/%s' % (self.context_id)
+            return 'courses/{}'.format(self.context_id)
         elif self.context_type == 'Account':
-            return 'accounts/%s' % (self.context_id)
+            return 'accounts/{}'.format(self.context_id)
         elif self.context_type is None:
             return 'global'
-
-    def show(self):
-        """
-        Returns the details of the Outcome Group with the given id.
-
-        :calls: `GET /api/v1/global/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
-            or `GET /api/v1/accounts/:account_id/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
-            or `GET /api/v1/courses/:course_id/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
-
-        :returns: Itself as an OutcomeGroup object.
-        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
-        """
-        response = self._requester.request(
-            'GET',
-            '%s/outcome_groups/%s' % (self.context_ref(), self.id)
-        )
-
-        return OutcomeGroup(self._requester, response.json())
 
     def update(self, **kwargs):
         """
@@ -106,7 +122,7 @@ class OutcomeGroup(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '%s/outcome_groups/%s' % (self.context_ref(), self.id),
+            '{}/outcome_groups/{}'.format(self.context_ref(), self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -131,7 +147,7 @@ class OutcomeGroup(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            '%s/outcome_groups/%s' % (self.context_ref(), self.id)
+            '{}/outcome_groups/{}'.format(self.context_ref(), self.id)
         )
 
         if 'id' in response.json():
@@ -158,7 +174,7 @@ class OutcomeGroup(CanvasObject):
             OutcomeLink,
             self._requester,
             'GET',
-            '%s/outcome_groups/%s/outcomes' % (self.context_ref(), self.id),
+            '{}/outcome_groups/{}/outcomes'.format(self.context_ref(), self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -180,7 +196,7 @@ class OutcomeGroup(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            '%s/outcome_groups/%s/outcomes/%s' % (
+            '{}/outcome_groups/{}/outcomes/{}'.format(
                 self.context_ref(),
                 self.id,
                 outcome_id
@@ -200,15 +216,15 @@ class OutcomeGroup(CanvasObject):
             or `POST /api/v1/courses/:course_id/outcome_groups/:id/outcomes \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
 
-        :params: title, description, ratings, and mastery points.
-            Title is the only required param.
+        :param title: The title of the new outcome.
+        :type title: str
 
         :returns: OutcomeLink object with current OutcomeGroup and newly linked Outcome.
         :rtype: :class:`canvasapi.outcome.OutcomeLink`
         """
         response = self._requester.request(
             'POST',
-            '%s/outcome_groups/%s/outcomes' % (self.context_ref(), self.id),
+            '{}/outcome_groups/{}/outcomes'.format(self.context_ref(), self.id),
             title=title,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -233,7 +249,7 @@ class OutcomeGroup(CanvasObject):
 
         response = self._requester.request(
             'DELETE',
-            '%s/outcome_groups/%s/outcomes/%s' % (
+            '{}/outcome_groups/{}/outcomes/{}'.format(
                 self.context_ref(),
                 self.id,
                 outcome_id
@@ -264,7 +280,7 @@ class OutcomeGroup(CanvasObject):
             OutcomeGroup,
             self._requester,
             'GET',
-            '%s/outcome_groups/%s/subgroups' % (self.context_ref(), self.id)
+            '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id)
         )
 
     def create_subgroup(self, title, **kwargs):
@@ -286,7 +302,7 @@ class OutcomeGroup(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            '%s/outcome_groups/%s/subgroups' % (self.context_ref(), self.id),
+            '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id),
             title=title,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -312,7 +328,7 @@ class OutcomeGroup(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            '%s/outcome_groups/%s/import' % (self.context_ref(), self.id),
+            '{}/outcome_groups/{}/import'.format(self.context_ref(), self.id),
             source_outcome_group_id=source_outcome_group_id
         )
 

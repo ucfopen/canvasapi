@@ -507,12 +507,14 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(len(courses), 2)
 
     # get_outcome()
-    def test_show(self, m):
-        register_uris({'outcome': ['outcome_show']}, m)
+    def test_get_outcome(self, m):
+        register_uris({'outcome': ['canvas_get_outcome']}, m)
 
-        result = self.canvas.get_outcome(3)
-        self.assertIsInstance(result, Outcome)
-        self.assertEqual(result.id, 3)
+        outcome_group = self.canvas.get_outcome(3)
+
+        self.assertIsInstance(outcome_group, Outcome)
+        self.assertEqual(outcome_group.id, 3)
+        self.assertEqual(outcome_group.title, "Outcome Show Example")
 
     # get_root_outcome_group()
     def test_get_root_outcome_group(self, m):
@@ -523,3 +525,13 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(outcome_group, OutcomeGroup)
         self.assertEqual(outcome_group.id, 1)
         self.assertEqual(outcome_group.title, "ROOT")
+
+    # get_outcome_group()
+    def test_get_outcome_group(self, m):
+        register_uris({'outcome': ['canvas_get_outcome_group']}, m)
+
+        outcome_group = self.canvas.get_outcome_group(1)
+
+        self.assertIsInstance(outcome_group, OutcomeGroup)
+        self.assertEqual(outcome_group.id, 1)
+        self.assertEqual(outcome_group.title, "Canvas outcome group title")

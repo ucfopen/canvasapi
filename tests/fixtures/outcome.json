@@ -1,26 +1,4 @@
 {
-    "outcome_show": {
-        "method": "GET",
-        "endpoint": "outcomes/3",
-        "data": {
-            "id": 3,
-            "url": "/api/v1/outcomes/3",
-            "context_id": 1,
-            "context_type": "Account",
-            "title": "Outcome Show Example",
-            "display_name": "My Favorite Outcome",
-            "description": "Outcome description",
-            "vendor_guid": "customid9000",
-            "points_possible": 5,
-            "mastery_points": 3,
-            "calculation_method": "decaying_average",
-            "calculation_int": 75,
-            "ratings": null,
-            "can_edit": true,
-            "can_unlink": true,
-            "assessed": true
-        }
-    },
     "account_root_outcome_group": {
         "method": "GET",
         "endpoint": "accounts/1/root_outcome_group",
@@ -33,6 +11,24 @@
             "title": "ROOT",
             "description": null,
             "vendor_guid": null,
+            "subgroups_url": "/api/v1/accounts/1/outcome_groups/1/subgroups",
+            "outcomes_url": "/api/v1/accounts/1/outcome_groups/1/outcomes",
+            "import_url": "/api/v1/accounts/1/outcome_groups/1/import",
+            "can_edit": true
+        }
+    },
+    "account_get_outcome_group": {
+        "method": "GET",
+        "endpoint": "accounts/1/outcome_groups/1",
+        "data": {
+            "id": 1,
+            "url": "/api/v1/accounts/1/outcome_groups/1",
+            "parent_outcome_group": null,
+            "context_id": 1,
+            "context_type": "Account",
+            "title": "Account outcome group title",
+            "description": "Outcome group description",
+            "vendor_guid": "customid9000",
             "subgroups_url": "/api/v1/accounts/1/outcome_groups/1/subgroups",
             "outcomes_url": "/api/v1/accounts/1/outcome_groups/1/outcomes",
             "import_url": "/api/v1/accounts/1/outcome_groups/1/import",
@@ -135,6 +131,28 @@
             }
         ]
     },
+    "canvas_get_outcome": {
+        "method": "GET",
+        "endpoint": "outcomes/3",
+        "data": {
+            "id": 3,
+            "url": "/api/v1/outcomes/3",
+            "context_id": 1,
+            "context_type": "Account",
+            "title": "Outcome Show Example",
+            "display_name": "My Favorite Outcome",
+            "description": "Outcome description",
+            "vendor_guid": "customid9000",
+            "points_possible": 5,
+            "mastery_points": 3,
+            "calculation_method": "decaying_average",
+            "calculation_int": 75,
+            "ratings": null,
+            "can_edit": true,
+            "can_unlink": true,
+            "assessed": true
+        }
+    },
     "canvas_root_outcome_group": {
         "method": "GET",
         "endpoint": "global/root_outcome_group",
@@ -153,6 +171,24 @@
             "can_edit": false
         }
     },
+    "canvas_get_outcome_group": {
+        "method": "GET",
+        "endpoint": "global/outcome_groups/1",
+        "data": {
+            "id": 1,
+            "url": "/api/v1/global/outcome_groups/1",
+            "parent_outcome_group": null,
+            "context_id": null,
+            "context_type": null,
+            "title": "Canvas outcome group title",
+            "description": "Outcome group description",
+            "vendor_guid": "customid9000",
+            "subgroups_url": "/api/v1/accounts/1/outcome_groups/1/subgroups",
+            "outcomes_url": "/api/v1/accounts/1/outcome_groups/1/outcomes",
+            "import_url": "/api/v1/accounts/1/outcome_groups/1/import",
+            "can_edit": true
+        }
+    },
     "course_root_outcome_group": {
         "method": "GET",
         "endpoint": "courses/1/root_outcome_group",
@@ -168,6 +204,24 @@
             "subgroups_url": "/api/v1/courses/1/outcome_groups/1/subgroups",
             "outcomes_url": "/api/v1/courses/1/outcome_groups/1/outcomes",
             "import_url": "/api/v1/courses/1/outcome_groups/1/import",
+            "can_edit": true
+        }
+    },
+    "course_get_outcome_group": {
+        "method": "GET",
+        "endpoint": "courses/1/outcome_groups/1",
+        "data": {
+            "id": 1,
+            "url": "/api/v1/courses/1/outcome_groups/1",
+            "parent_outcome_group": null,
+            "context_id": 1,
+            "context_type": "Course",
+            "title": "Course outcome group title",
+            "description": "Outcome group description",
+            "vendor_guid": "customid9000",
+            "subgroups_url": "/api/v1/accounts/1/outcome_groups/1/subgroups",
+            "outcomes_url": "/api/v1/accounts/1/outcome_groups/1/outcomes",
+            "import_url": "/api/v1/accounts/1/outcome_groups/1/import",
             "can_edit": true
         }
     },
@@ -290,6 +344,42 @@
             "assessed": true
         }
     },
+    "outcome_group_example_account": {
+        "method": "GET",
+        "endpoint": "accounts/1/outcome_groups/2",
+        "data": {
+            "id": 2,
+            "url": "/api/v1/accounts/1/outcome_groups/2",
+            "parent_outcome_group": null,
+            "context_id": 1,
+            "context_type": "Course",
+            "title": "Course outcome group title",
+            "description": "Outcome group description",
+            "vendor_guid": "customid9000",
+            "subgroups_url": "/api/v1/accounts/1/outcome_groups/2/subgroups",
+            "outcomes_url": "/api/v1/accounts/1/outcome_groups/2/outcomes",
+            "import_url": "/api/v1/accounts/1/outcome_groups/2/import",
+            "can_edit": true
+        }
+    },
+    "outcome_group_example_course": {
+        "method": "GET",
+        "endpoint": "courses/1/outcome_groups/2",
+        "data": {
+            "id": 2,
+            "url": "/api/v1/courses/1/outcome_groups/2",
+            "parent_outcome_group": null,
+            "context_id": 1,
+            "context_type": "Course",
+            "title": "Course outcome group title",
+            "description": "Outcome group description",
+            "vendor_guid": "customid9000",
+            "subgroups_url": "/api/v1/courses/1/outcome_groups/2/subgroups",
+            "outcomes_url": "/api/v1/courses/1/outcome_groups/2/outcomes",
+            "import_url": "/api/v1/courses/1/outcome_groups/2/import",
+            "can_edit": true
+        }
+    },
     "outcome_update": {
         "method": "PUT",
         "endpoint": "outcomes/3",
@@ -310,60 +400,6 @@
             "can_edit": true,
             "can_unlink": true,
             "assessed": true
-        }
-    },
-    "outcome_group_show_global": {
-        "method": "GET",
-        "endpoint": "global/outcome_groups/1",
-        "data": {
-            "id": 1,
-            "url": "/api/v1/global/outcome_groups/1",
-            "parent_outcome_group": null,
-            "context_id": 1,
-            "context_type": null,
-            "title": "Outcome group title",
-            "description": "Outcome group description",
-            "vendor_guid": "customid9000",
-            "subgroups_url": "/api/v1/accounts/1/outcome_groups/1/subgroups",
-            "outcomes_url": "/api/v1/accounts/1/outcome_groups/1/outcomes",
-            "import_url": "/api/v1/accounts/1/outcome_groups/1/import",
-            "can_edit": true
-        }
-    },
-    "outcome_group_show_account": {
-        "method": "GET",
-        "endpoint": "accounts/1/outcome_groups/1",
-        "data": {
-            "id": 1,
-            "url": "/api/v1/accounts/1/outcome_groups/1",
-            "parent_outcome_group": null,
-            "context_id": 1,
-            "context_type": "Account",
-            "title": "Outcome group title",
-            "description": "Outcome group description",
-            "vendor_guid": "customid9000",
-            "subgroups_url": "/api/v1/accounts/1/outcome_groups/1/subgroups",
-            "outcomes_url": "/api/v1/accounts/1/outcome_groups/1/outcomes",
-            "import_url": "/api/v1/accounts/1/outcome_groups/1/import",
-            "can_edit": true
-        }
-    },
-    "outcome_group_show_course": {
-        "method": "GET",
-        "endpoint": "courses/1/outcome_groups/1",
-        "data": {
-            "id": 1,
-            "url": "/api/v1/courses/1/outcome_groups/1",
-            "parent_outcome_group": null,
-            "context_id": 1,
-            "context_type": "Course",
-            "title": "Outcome group title",
-            "description": "Outcome group description",
-            "vendor_guid": "customid9000",
-            "subgroups_url": "/api/v1/accounts/1/outcome_groups/1/subgroups",
-            "outcomes_url": "/api/v1/accounts/1/outcome_groups/1/outcomes",
-            "import_url": "/api/v1/accounts/1/outcome_groups/1/import",
-            "can_edit": true
         }
     },
     "outcome_group_update_global": {
@@ -1068,8 +1104,6 @@
             "description": null
         }
     },
-
-
     "outcome_group_import_outcome_group_global": {
         "method": "POST",
         "endpoint": "global/outcome_groups/1/import",

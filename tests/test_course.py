@@ -818,6 +818,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_group.id, 1)
         self.assertEqual(outcome_group.title, "ROOT")
 
+    # get_outcome_group()
+    def test_get_outcome_group(self, m):
+        register_uris({'outcome': ['course_get_outcome_group']}, m)
+
+        outcome_group = self.course.get_outcome_group(1)
+
+        self.assertIsInstance(outcome_group, OutcomeGroup)
+        self.assertEqual(outcome_group.id, 1)
+        self.assertEqual(outcome_group.title, "Course outcome group title")
+
     # get_outcome_groups_in_context()
     def test_get_outcome_groups_in_context(self, m):
         register_uris({'outcome': ['course_outcome_groups_in_context']}, m)

@@ -55,14 +55,17 @@ class TestOutcomeLink(unittest.TestCase):
         with requests_mock.Mocker() as m:
             register_uris(
                 {
+                    'account': ['get_by_id'],
                     'course': ['get_by_id'],
                     'outcome': [
-                        'course_root_outcome_group',
+                        'account_outcome_links_in_context',
                         'course_outcome_links_in_context'
                     ]
                 }, m
             )
 
+            self.account = self.canvas.get_account(1)
+            self.account_outcome_links = self.account.get_all_outcome_links_in_context()
             self.course = self.canvas.get_course(1)
             self.course_outcome_links = self.course.get_all_outcome_links_in_context()
 
@@ -71,6 +74,29 @@ class TestOutcomeLink(unittest.TestCase):
         register_uris({'outcome': ['course_outcome_links_in_context']}, m)
         string = str(self.course_outcome_links[0])
         self.assertIsInstance(string, str)
+
+    # get_outcome()
+    def test_get_outcome(self, m):
+        register_uris({'outcome': ['outcome_example', 'course_outcome_links_in_context']}, m)
+        result = self.course_outcome_links[0].get_outcome()
+        self.assertIsInstance(result, Outcome)
+
+    # get_outcome_group()
+    def test_get_outcome_group(self, m):
+        register_uris(
+            {
+                'outcome': [
+                    'outcome_group_example_account',
+                    'account_outcome_links_in_context',
+                    'outcome_group_example_course',
+                    'course_outcome_links_in_context'
+                ]
+                }, m
+            )
+        result = self.course_outcome_links[0].get_outcome_group()
+        self.assertIsInstance(result, OutcomeGroup)
+        result = self.account_outcome_links[0].get_outcome_group()
+        self.assertIsInstance(result, OutcomeGroup)
 
 
 @requests_mock.Mocker()
@@ -111,24 +137,6 @@ class TestOutcomeGroup(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.canvas_outcome_group)
         self.assertIsInstance(string, str)
-
-    # show()
-    def test_show(self, m):
-        register_uris(
-            {
-                'outcome': [
-                    'outcome_group_show_global',
-                    'outcome_group_show_account',
-                    'outcome_group_show_course'
-                ]
-            }, m)
-        test_show_outcome_group = self.account_outcome_group.show()
-        self.assertIsInstance(test_show_outcome_group, OutcomeGroup)
-        self.assertEqual(test_show_outcome_group.context_type, 'Account')
-        test_show_outcome_group = self.canvas_outcome_group.show()
-        self.assertIsInstance(test_show_outcome_group, OutcomeGroup)
-        test_show_outcome_group = self.course_outcome_group.show()
-        self.assertIsInstance(test_show_outcome_group, OutcomeGroup)
 
     # update()
     def test_update(self, m):
