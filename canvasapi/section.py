@@ -124,12 +124,14 @@ class Section(CanvasObject):
             'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
             _kwargs=combine_kwargs(**kwargs)
         )
+        response_json = response.json()
+        response_json.update(section_id=self.id)
 
-        return Submission(self._requester, response.json())
+        return Submission(self._requester, response_json)
 
     def list_submissions(self, assignment_id, **kwargs):
         """
-        Makes a submission for an assignment.
+        Get all existing submissions for an assignment.
 
         :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
@@ -144,6 +146,7 @@ class Section(CanvasObject):
             self._requester,
             'GET',
             'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
+            {'section_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -167,6 +170,7 @@ class Section(CanvasObject):
             self._requester,
             'GET',
             'sections/%s/students/submissions' % (self.id),
+            {'section_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -188,7 +192,10 @@ class Section(CanvasObject):
             'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return Submission(self._requester, response.json())
+        response_json = response.json()
+        response_json.update(section_id=self.id)
+
+        return Submission(self._requester, response_json)
 
     def update_submission(self, assignment_id, user_id, **kwargs):
         """
@@ -211,10 +218,13 @@ class Section(CanvasObject):
 
         submission = self.get_submission(assignment_id, user_id)
 
-        if 'submission_type' in response.json():
-            super(Submission, submission).set_attributes(response.json())
+        response_json = response.json()
+        response_json.update(section_id=self.id)
 
-        return Submission(self._requester, response.json())
+        if 'submission_type' in response_json:
+            super(Submission, submission).set_attributes(response_json)
+
+        return Submission(self._requester, response_json)
 
     def mark_submission_as_read(self, assignment_id, user_id):
         """

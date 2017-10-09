@@ -4,8 +4,8 @@ from datetime import datetime
 import requests
 
 from canvasapi.exceptions import (
-    BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
-    Unauthorized
+    BadRequest, CanvasException, Forbidden, InvalidAccessToken,
+    ResourceDoesNotExist, Unauthorized
 )
 
 
@@ -60,7 +60,7 @@ class Requester(object):
             headers.update(auth_header)
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
-        _kwargs = [] if _kwargs is None else _kwargs
+        _kwargs = _kwargs or []
         _kwargs.extend(kwargs.items())
 
         # Do any final argument processing before sending to request method.
@@ -92,6 +92,8 @@ class Requester(object):
                 raise InvalidAccessToken(response.json())
             else:
                 raise Unauthorized(response.json())
+        elif response.status_code == 403:
+            raise Forbidden(response.text)
         elif response.status_code == 404:
             raise ResourceDoesNotExist('Not Found')
         elif response.status_code == 500:

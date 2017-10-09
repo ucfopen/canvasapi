@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import json
+import os
 
 import requests_mock
 
@@ -51,3 +52,15 @@ def register_uris(requirements, requests_mocker):
                 )
             except Exception as e:
                 print(e)
+
+
+def cleanup_file(filename):
+    """
+    Remove a test file from the system. If the file doesn't exist, ignore.
+
+    `Not as stupid as it looks. <http://stackoverflow.com/a/10840586>_`
+    """
+    try:
+        os.remove(filename)
+    except OSError:
+        pass
