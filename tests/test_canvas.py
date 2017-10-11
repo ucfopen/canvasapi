@@ -16,6 +16,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
 from canvasapi.exceptions import ResourceDoesNotExist
+from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.user import User
@@ -504,3 +505,33 @@ class TestCanvas(unittest.TestCase):
         courses = self.canvas.search_all_courses()
         self.assertIsInstance(courses, list)
         self.assertEqual(len(courses), 2)
+
+    # get_outcome()
+    def test_get_outcome(self, m):
+        register_uris({'outcome': ['canvas_get_outcome']}, m)
+
+        outcome_group = self.canvas.get_outcome(3)
+
+        self.assertIsInstance(outcome_group, Outcome)
+        self.assertEqual(outcome_group.id, 3)
+        self.assertEqual(outcome_group.title, "Outcome Show Example")
+
+    # get_root_outcome_group()
+    def test_get_root_outcome_group(self, m):
+        register_uris({'outcome': ['canvas_root_outcome_group']}, m)
+
+        outcome_group = self.canvas.get_root_outcome_group()
+
+        self.assertIsInstance(outcome_group, OutcomeGroup)
+        self.assertEqual(outcome_group.id, 1)
+        self.assertEqual(outcome_group.title, "ROOT")
+
+    # get_outcome_group()
+    def test_get_outcome_group(self, m):
+        register_uris({'outcome': ['canvas_get_outcome_group']}, m)
+
+        outcome_group = self.canvas.get_outcome_group(1)
+
+        self.assertIsInstance(outcome_group, OutcomeGroup)
+        self.assertEqual(outcome_group.id, 1)
+        self.assertEqual(outcome_group.title, "Canvas outcome group title")

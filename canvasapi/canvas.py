@@ -158,9 +158,9 @@ class Canvas(object):
         :rtype: :class:`canvasapi.user.User`
         """
         if id_type:
-            uri = 'users/%s:%s' % (id_type, user_id)
+            uri = 'users/{}:{}'.format(id_type, user_id)
         else:
-            uri = 'users/%s' % (user_id)
+            uri = 'users/{}'.format(user_id)
 
         response = self.__requester.request(
             'GET',
@@ -266,7 +266,7 @@ class Canvas(object):
 
         response = self.__requester.request(
             'GET',
-            'users/self/course_nicknames/%s' % (course_id)
+            'users/self/course_nicknames/{}'.format(course_id)
         )
         return CourseNickname(self.__requester, response.json())
 
@@ -316,7 +316,7 @@ class Canvas(object):
 
         response = self.__requester.request(
             'PUT',
-            'users/self/course_nicknames/%s' % (course_id),
+            'users/self/course_nicknames/{}'.format(course_id),
             nickname=nickname
         )
         return CourseNickname(self.__requester, response.json())
@@ -409,7 +409,7 @@ class Canvas(object):
         """
         response = self.__requester.request(
             'GET',
-            'group_categories/%s' % (cat_id)
+            'group_categories/{}'.format(cat_id)
         )
         return GroupCategory(self.__requester, response.json())
 
@@ -456,7 +456,7 @@ class Canvas(object):
         from canvasapi.conversation import Conversation
         response = self.__requester.request(
             'GET',
-            'conversations/%s' % (conversation_id),
+            'conversations/{}'.format(conversation_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Conversation(self.__requester, response.json())
@@ -560,7 +560,7 @@ class Canvas(object):
         try:
             if event not in ALLOWED_EVENTS:
                 raise ValueError(
-                    '%s is not a valid action. Please use one of the following: %s' % (
+                    '{} is not a valid action. Please use one of the following: {}'.format(
                         event,
                         ','.join(ALLOWED_EVENTS)
                     )
@@ -568,7 +568,7 @@ class Canvas(object):
 
             if len(conversation_ids) > 500:
                 raise ValueError(
-                    'You have requested %s updates, which exceeds the limit of 500' % (
+                    'You have requested {} updates, which exceeds the limit of 500'.format(
                         len(conversation_ids)
                     )
                 )
@@ -648,7 +648,7 @@ class Canvas(object):
 
         response = self.__requester.request(
             'GET',
-            'calendar_events/%s' % (calendar_event_id)
+            'calendar_events/{}'.format(calendar_event_id)
         )
         return CalendarEvent(self.__requester, response.json())
 
@@ -666,11 +666,11 @@ class Canvas(object):
         from canvasapi.calendar_event import CalendarEvent
 
         if participant_id:
-            uri = 'calendar_events/%s/reservations/%s' % (
+            uri = 'calendar_events/{}/reservations/{}'.format(
                 calendar_event_id, participant_id
             )
         else:
-            uri = 'calendar_events/%s/reservations' % (calendar_event_id)
+            uri = 'calendar_events/{}/reservations'.format(calendar_event_id)
 
         response = self.__requester.request(
             'POST',
@@ -714,7 +714,7 @@ class Canvas(object):
 
         response = self.__requester.request(
             'GET',
-            'appointment_groups/%s' % (appointment_group_id)
+            'appointment_groups/{}'.format(appointment_group_id)
         )
         return AppointmentGroup(self.__requester, response.json())
 
@@ -776,7 +776,7 @@ class Canvas(object):
             User,
             self.__requester,
             'GET',
-            'appointment_groups/%s/users' % (appointment_group_id),
+            'appointment_groups/{}/users'.format(appointment_group_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -797,7 +797,7 @@ class Canvas(object):
             Group,
             self.__requester,
             'GET',
-            'appointment_groups/%s/groups' % (appointment_group_id),
+            'appointment_groups/{}/groups'.format(appointment_group_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -832,7 +832,7 @@ class Canvas(object):
         """
         response = self.__requester.request(
             'GET',
-            'folders/%s' % (folder_id)
+            'folders/{}'.format(folder_id)
         )
         return Folder(self.__requester, response.json())
 
@@ -873,3 +873,65 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
+
+    def get_outcome(self, outcome):
+        """
+        Returns the details of the outcome with the given id.
+
+        :calls: `GET /api/v1/outcomes/:id \
+        <https://canvas.instructure.com/doc/api/outcomes.html#method.outcomes_api.show>`_
+
+        :param outcome: The outcome object or ID to return.
+        :type outcome: :class:`canvasapi.outcome.Outcome` or int
+
+        :returns: An Outcome object.
+        :rtype: :class:`canvasapi.outcome.Outcome`
+        """
+        from canvasapi.outcome import Outcome
+        from canvasapi.util import obj_or_id
+
+        outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
+        response = self.__requester.request(
+            'GET',
+            'outcomes/{}'.format(outcome_id)
+        )
+        return Outcome(self.__requester, response.json())
+
+    def get_root_outcome_group(self):
+        """
+        Redirect to root outcome group for context
+
+        :calls: `GET /api/v1/global/root_outcome_group \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>
+
+        :returns: The OutcomeGroup of the context.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        from canvasapi.outcome import OutcomeGroup
+
+        response = self.__requester.request(
+            'GET',
+            'global/root_outcome_group'
+        )
+        return OutcomeGroup(self.__requester, response.json())
+
+    def get_outcome_group(self, group):
+        """
+        Returns the details of the Outcome Group with the given id.
+
+        :calls: `GET /api/v1/global/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
+
+        :returns: An outcome group object.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        from canvasapi.outcome import OutcomeGroup
+        from canvasapi.util import obj_or_id
+
+        outcome_group_id = obj_or_id(group, "id", (OutcomeGroup,))
+        response = self.__requester.request(
+            'GET',
+            'global/outcome_groups/{}'.format(outcome_group_id)
+        )
+
+        return OutcomeGroup(self.__requester, response.json())

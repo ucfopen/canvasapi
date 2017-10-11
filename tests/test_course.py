@@ -20,6 +20,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
+from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.quiz import Quiz
 from canvasapi.section import Section
 from canvasapi.tab import Tab
@@ -822,6 +823,46 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(tab, Tab)
         self.assertEqual(tab.position, 3)
+
+    # get_root_outcome_group()
+    def test_get_root_outcome_group(self, m):
+        register_uris({'outcome': ['course_root_outcome_group']}, m)
+
+        outcome_group = self.course.get_root_outcome_group()
+
+        self.assertIsInstance(outcome_group, OutcomeGroup)
+        self.assertEqual(outcome_group.id, 1)
+        self.assertEqual(outcome_group.title, "ROOT")
+
+    # get_outcome_group()
+    def test_get_outcome_group(self, m):
+        register_uris({'outcome': ['course_get_outcome_group']}, m)
+
+        outcome_group = self.course.get_outcome_group(1)
+
+        self.assertIsInstance(outcome_group, OutcomeGroup)
+        self.assertEqual(outcome_group.id, 1)
+        self.assertEqual(outcome_group.title, "Course outcome group title")
+
+    # get_outcome_groups_in_context()
+    def test_get_outcome_groups_in_context(self, m):
+        register_uris({'outcome': ['course_outcome_groups_in_context']}, m)
+
+        outcome_group_list = self.course.get_outcome_groups_in_context()
+
+        self.assertIsInstance(outcome_group_list[0], OutcomeGroup)
+        self.assertEqual(outcome_group_list[0].id, 1)
+        self.assertEqual(outcome_group_list[0].title, "ROOT")
+
+    # get_all_outcome_links_in_context()
+    def test_get_outcome_links_in_context(self, m):
+        register_uris({'outcome': ['course_outcome_links_in_context']}, m)
+
+        outcome_link_list = self.course.get_all_outcome_links_in_context()
+
+        self.assertIsInstance(outcome_link_list[0], OutcomeLink)
+        self.assertEqual(outcome_link_list[0].outcome_group['id'], 2)
+        self.assertEqual(outcome_link_list[0].outcome_group['title'], "test outcome")
 
 
 @requests_mock.Mocker()
