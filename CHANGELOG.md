@@ -1,5 +1,11 @@
 # Change Log
 
+## [Unreleased]
+
+### General
+
+- Added support for other iterables as parameter values. (Thanks, [@liblit](https://github.com/liblit))
+
 ## [0.7.0] - 2017-10-04
 
 Thanks to all the contributors who helped with this release: [@stephenwoosley](https://github.com/stephenwoosley), [@jackrsteiner](https://github.com/jackrsteiner), and [@allygator](https://github.com/allygator). You guys are awesome!
@@ -147,6 +153,7 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.7.0...develop
 [0.7.0]: https://github.com/ucfopen/canvasapi/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/ucfopen/canvasapi/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/ucfopen/canvasapi/compare/v0.5.0...v0.5.1

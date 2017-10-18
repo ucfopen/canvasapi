@@ -8,7 +8,7 @@ from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, is_multivalued
 
 
 @python_2_unicode_compatible
@@ -469,13 +469,13 @@ class Group(CanvasObject):
 
         :param order: The ids of the pinned discussion topics in the desired order.
             e.g. [104, 102, 103]
-        :type order: list
+        :type order: iterable sequence of values
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         # Convert list or tuple to comma-separated string
-        if isinstance(order, (list, tuple)):
+        if is_multivalued(order):
             order = ",".join([text_type(topic_id) for topic_id in order])
 
         # Check if is a string with commas
