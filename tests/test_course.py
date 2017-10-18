@@ -20,7 +20,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
-from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.outcome import OutcomeGroup, OutcomeLink, OutcomeResult
 from canvasapi.quiz import Quiz
 from canvasapi.section import Section
 from canvasapi.tab import Tab
@@ -863,6 +863,24 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(outcome_link_list[0], OutcomeLink)
         self.assertEqual(outcome_link_list[0].outcome_group['id'], 2)
         self.assertEqual(outcome_link_list[0].outcome_group['title'], "test outcome")
+
+    # get_outcome_results()
+    def test_get_outcome_results(self, m):
+        register_uris({'outcome': ['course_get_outcome_result_rollups']}, m)
+
+        settings = self.course.get_outcome_results()
+
+        self.assertIsInstance(settings, OutcomeResult)
+        self.assertTrue(settings[''])
+
+    # get_outcome_result_rollups()
+    def test_get_outcome_result_rollups(self, m):
+        register_uris({'outcome': ['course_get_outcome_result_rollups']}, m)
+
+        settings = self.course.get_outcome_result_rollups()
+
+        self.assertIsInstance(settings, dict)
+        self.assertTrue(settings[''])
 
 
 @requests_mock.Mocker()

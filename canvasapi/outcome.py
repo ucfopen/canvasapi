@@ -333,3 +333,11 @@ class OutcomeGroup(CanvasObject):
         )
 
         return OutcomeGroup(self._requester, response.json())
+
+
+@python_2_unicode_compatible
+class OutcomeResult(CanvasObject):
+
+    def __str__(self):
+        return "{} ({})".format(self.title, self.url)
+

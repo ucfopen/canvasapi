@@ -1506,6 +1506,45 @@ class Course(CanvasObject):
             'courses/{}/outcome_group_links'.format(self.id)
         )
 
+    def get_outcome_results(self, **kwargs):
+        """
+        Get all outcome results for context - BETA
+
+        :calls: `GET /api/v1/courses/:course_id/outcome_results \
+        <https://canvas.instructure.com/doc/api/outcome_results.html#method.outcome_results.index>`_
+
+        :returns: Paginated List of OutcomesResult in the context.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.outcome.OutcomeResult`
+        """
+        from canvasapi.outcome import OutcomeResult
+
+        return PaginatedList(
+            OutcomeResult,
+            self._requester,
+            'GET',
+            'courses/{}/outcome_results'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_outcome_result_rollups(self, **kwargs):
+        """
+        Get all outcome result rollups for context - BETA
+
+        :calls: `GET /api/v1/courses/:course_id/outcome_results \
+        <https://canvas.instructure.com/doc/api/outcome_results.html#method.outcome_results.rollups>`_
+
+        :returns: List of outcome result rollups in the context.
+        :rtype: dict
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/{}/outcome_rollups'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return response.json()
+
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
