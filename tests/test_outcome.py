@@ -406,19 +406,3 @@ class TestOutcomeGroup(unittest.TestCase):
         self.assertEqual(result.title, "Course Imported Subgroup Title")
         self.assertEqual(result.parent_outcome_group['id'], self.course_outcome_group.id)
         self.assertEqual(result.parent_outcome_group['title'], self.course_outcome_group.title)
-
-
-@requests_mock.Mocker()
-class TestOutcomeResult(unittest.TestCase):
-    def setUp(self):
-        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
-
-        with requests_mock.Mocker() as m:
-            register_uris(
-                {
-                    'course': ['get_by_id'],
-                    'outcome': []
-                }, m
-            )
-
-            self.course = self.canvas.get_course(1)

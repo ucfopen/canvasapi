@@ -322,6 +322,92 @@
         ],
         "status_code": 200
     },
+    "course_get_outcome_results": {
+        "method": "GET",
+        "endpoint": "courses/1/outcome_results",
+        "data": {
+            "outcome_results": [
+                {
+                    "id": 10,
+                    "score": 6,
+                    "submitted_or_assessed_at": "2013-02-01T00:00:00-06:00",
+                    "links": {
+                        "user":"3",
+                        "learning_outcome":"97",
+                        "alignment":"53"
+                    },
+                    "percent": 0.65
+                },
+                {
+                    "id": 11,
+                    "score": 6,
+                    "submitted_or_assessed_at": "2013-02-01T00:00:00-06:00",
+                    "links": {
+                        "user":"3",
+                        "learning_outcome":"97",
+                        "alignment":"53"
+                    },
+                    "percent": 0.65
+                }
+            ]
+        }
+    },
+    "course_get_outcome_result_rollups": {
+        "method": "GET",
+        "endpoint": "courses/1/outcome_rollups",
+        "data": {
+            "rollups": [
+                {
+                    "scores": [
+                        {
+                            "score": 3,
+                            "count": 6,
+                            "links": {"outcome":"1"}
+                        },
+                        {
+                            "score": 3,
+                            "count": 6,
+                            "links": {"outcome":"2"}
+                        }
+                    ],
+                    "links": {
+                        "user": "1",
+                        "section": "1"
+                    }
+                },
+                {
+                    "scores": [
+                        {
+                            "score": 3,
+                            "count": 6,
+                            "links": {"outcome":"1"}
+                        },
+                        {
+                            "score": 3,
+                            "count": 6,
+                            "links": {"outcome":"2"}
+                        }
+                    ],
+                    "links": {
+                        "user": "2",
+                        "section": "1"
+                    }
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "per_page": 10,
+                    "current": "https://canvas.instructure.com/api/v1/courses/1/outcome_rollups?page=1&per_page=10",
+                    "first": "https://canvas.instructure.com/api/v1/courses/1/outcome_rollups?page=1&per_page=10",
+                    "last": "https://canvas.instructure.com/api/v1/courses/1/outcome_rollups?page=1&per_page=10",
+                    "page": 1,
+                    "template": "https://canvas.instructure.com/api/v1/courses/1/outcome_rollups?page={page}&per_page=10",
+                    "count": 2,
+                    "page_count": 1
+                }
+            }
+        }
+    },
     "outcome_example": {
         "method": "GET",
         "endpoint": "outcomes/3",
@@ -1180,92 +1266,6 @@
             "context_id": 1,
             "context_type": "Course",
             "description": null
-        }
-    },
-    "course_get_outcome_results": {
-        "method": "GET",
-        "endpoint": "courses/1/outcome_rollups",
-        "data": {
-            "outcome_results": [
-                {
-                    "id": 10,
-                    "score": 6,
-                    "submitted_or_assessed_at": "2013-02-01T00:00:00-06:00",
-                    "links": {
-                        "user":"3",
-                        "learning_outcome":"97",
-                        "alignment":"53"
-                    },
-                    "percent": 0.65
-                },
-                {
-                    "id": 11,
-                    "score": 6,
-                    "submitted_or_assessed_at": "2013-02-01T00:00:00-06:00",
-                    "links": {
-                        "user":"3",
-                        "learning_outcome":"97",
-                        "alignment":"53"
-                    },
-                    "percent": 0.65
-                }
-            ]
-        }
-    },
-    "course_get_outcome_result_rollups": {
-        "method": "GET",
-        "endpoint": "courses/1/outcome_rollups",
-        "data": {
-            "rollups": [
-                {
-                    "scores": [
-                        {
-                            "score": 3,
-                            "count": 6,
-                            "links": {"outcome":"1"}
-                        },
-                        {
-                            "score": 3,
-                            "count": 6,
-                            "links": {"outcome":"2"}
-                        }
-                    ],
-                    "links": {
-                        "user": "1",
-                        "section": "1"
-                    }
-                },
-                {
-                    "scores": [
-                        {
-                            "score": 3,
-                            "count": 6,
-                            "links": {"outcome":"1"}
-                        },
-                        {
-                            "score": 3,
-                            "count": 6,
-                            "links": {"outcome":"2"}
-                        }
-                    ],
-                    "links": {
-                        "user": "2",
-                        "section": "1"
-                    }
-                }
-            ],
-            "meta": {
-                "pagination": {
-                    "per_page": 10,
-                    "current": "https://canvas.instructure.com/api/v1/courses/1/outcome_rollups?page=1&per_page=10",
-                    "first": "https://canvas.instructure.com/api/v1/courses/1/outcome_rollups?page=1&per_page=10",
-                    "last": "https://canvas.instructure.com/api/v1/courses/1/outcome_rollups?page=1&per_page=10",
-                    "page": 1,
-                    "template": "https://canvas.instructure.com/api/v1/courses/1/outcome_rollups?page={page}&per_page=10",
-                    "count": 2,
-                    "page_count": 1
-                }
-            }
         }
     }
 }

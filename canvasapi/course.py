@@ -1517,15 +1517,13 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.outcome.OutcomeResult`
         """
-        from canvasapi.outcome import OutcomeResult
-
-        return PaginatedList(
-            OutcomeResult,
-            self._requester,
+        response = self._requester.request(
             'GET',
             'courses/{}/outcome_results'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
+
+        return response.json()
 
     def get_outcome_result_rollups(self, **kwargs):
         """
