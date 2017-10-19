@@ -871,7 +871,6 @@ class TestCourse(unittest.TestCase):
         result = self.course.get_outcome_results()
 
         self.assertIsInstance(result, dict)
-        # self.assertTrue(True)
 
     # get_outcome_result_rollups()
     def test_get_outcome_result_rollups(self, m):
