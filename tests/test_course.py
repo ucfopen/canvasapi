@@ -871,6 +871,7 @@ class TestCourse(unittest.TestCase):
         result = self.course.get_outcome_results()
 
         self.assertIsInstance(result, dict)
+        self.assertIsInstance(result['outcome_results'], list)
 
     # get_outcome_result_rollups()
     def test_get_outcome_result_rollups(self, m):
@@ -879,6 +880,7 @@ class TestCourse(unittest.TestCase):
         result = self.course.get_outcome_result_rollups()
 
         self.assertIsInstance(result, dict)
+        self.assertIsInstance(result['rollups'], list)
 
 
 @requests_mock.Mocker()
