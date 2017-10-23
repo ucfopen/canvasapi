@@ -163,7 +163,7 @@ class TestCourse(unittest.TestCase):
     def test_upload(self, m):
         register_uris({'course': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_course_%s' % uuid.uuid4().hex
+        filename = 'testfile_course_{}'.format(uuid.uuid4().hex)
         with open(filename, 'w+') as file:
             response = self.course.upload(file)
 

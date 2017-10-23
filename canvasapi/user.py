@@ -29,7 +29,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/profile' % (self.id)
+            'users/{}/profile'.format(self.id)
         )
         return response.json()
 
@@ -49,7 +49,7 @@ class User(CanvasObject):
             PageView,
             self._requester,
             'GET',
-            'users/%s/page_views' % (self.id),
+            'users/{}/page_views'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -69,7 +69,7 @@ class User(CanvasObject):
             Course,
             self._requester,
             'GET',
-            'users/%s/courses' % (self.id),
+            'users/{}/courses'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -90,7 +90,7 @@ class User(CanvasObject):
             Assignment,
             self._requester,
             'GET',
-            'users/%s/missing_submissions' % (self.id)
+            'users/{}/missing_submissions'.format(self.id)
         )
 
     def update_settings(self, **kwargs):
@@ -104,7 +104,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'users/%s/settings' % (self.id),
+            'users/{}/settings'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
@@ -124,7 +124,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/colors/%s' % (self.id, asset_string)
+            'users/{}/colors/{}'.format(self.id, asset_string)
         )
         return response.json()
 
@@ -139,7 +139,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/colors' % (self.id)
+            'users/{}/colors'.format(self.id)
         )
         return response.json()
 
@@ -163,7 +163,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'users/%s/colors/%s' % (self.id, asset_string),
+            'users/{}/colors/{}'.format(self.id, asset_string),
             hexcode=hexcode
         )
         return response.json()
@@ -179,7 +179,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'users/%s' % (self.id),
+            'users/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         super(User, self).set_attributes(response.json())
@@ -200,7 +200,7 @@ class User(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'users/%s/merge_into/%s' % (self.id, dest_user_id),
+            'users/{}/merge_into/{}'.format(self.id, dest_user_id),
         )
         super(User, self).set_attributes(response.json())
         return self
@@ -221,10 +221,10 @@ class User(CanvasObject):
             Avatar,
             self._requester,
             'GET',
-            'users/%s/avatars' % (self.id)
+            'users/{}/avatars'.format(self.id)
         )
 
-    def get_assignments(self, course_id, **kwargs):
+    def get_assignments(self, course, **kwargs):
         """
         Return the list of assignments for this user if the current
         user (the API key owner) has rights to view. See List assignments for valid arguments.
@@ -236,12 +236,15 @@ class User(CanvasObject):
             :class:`canvasapi.assignment.Assignment`
         """
         from canvasapi.assignment import Assignment
+        from canvasapi.course import Course
+
+        course_id = obj_or_id(course, "id", (Course,))
 
         return PaginatedList(
             Assignment,
             self._requester,
             'GET',
-            'users/%s/courses/%s/assignments' % (self.id, course_id),
+            'users/{}/courses/{}/assignments'.format(self.id, course_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -261,7 +264,7 @@ class User(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'users/%s/enrollments' % (self.id),
+            'users/{}/enrollments'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -286,7 +289,7 @@ class User(CanvasObject):
         """
         return Uploader(
             self._requester,
-            'users/%s/files' % (self.id),
+            'users/{}/files'.format(self.id),
             file,
             **kwargs
         ).start()
@@ -324,7 +327,7 @@ class User(CanvasObject):
             CalendarEvent,
             self._requester,
             'GET',
-            'users/%s/calendar_events' % (self.id),
+            'users/{}/calendar_events'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -343,7 +346,7 @@ class User(CanvasObject):
             CommunicationChannel,
             self._requester,
             'GET',
-            'users/%s/communication_channels' % (self.id),
+            'users/{}/communication_channels'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -364,7 +367,7 @@ class User(CanvasObject):
             'users/self/bookmarks'
         )
 
-    def get_bookmark(self, bookmark_id):
+    def get_bookmark(self, bookmark):
         """
         Return single Bookmark by id
 
@@ -377,9 +380,11 @@ class User(CanvasObject):
         """
         from canvasapi.bookmark import Bookmark
 
+        bookmark_id = obj_or_id(bookmark, "id", (Bookmark,))
+
         response = self._requester.request(
             'GET',
-            'users/self/bookmarks/%s' % (bookmark_id)
+            'users/self/bookmarks/{}'.format(bookmark_id)
         )
         return Bookmark(self._requester, response.json())
 
@@ -424,11 +429,11 @@ class User(CanvasObject):
             File,
             self._requester,
             'GET',
-            'users/%s/files' % (self.id),
+            'users/{}/files'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_file(self, file_id, **kwargs):
+    def get_file(self, file, **kwargs):
         """
         Return the standard attachment json object for a file.
 
@@ -440,6 +445,9 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.file.File`
         """
         from canvasapi.file import File
+
+        file_id = obj_or_id(file, "id", (File,))
+
         response = self._requester.request(
             'GET',
             'users/{}/files/{}'.format(self.id, file_id),
@@ -447,7 +455,7 @@ class User(CanvasObject):
         )
         return File(self._requester, response.json())
 
-    def get_folder(self, folder_id):
+    def get_folder(self, folder):
         """
         Returns the details for a user's folder
 
@@ -458,9 +466,13 @@ class User(CanvasObject):
         :type folder_id: int
         :rtype: :class:`canvasapi.folder.Folder`
         """
+        from canvasapi.folder import Folder
+
+        folder_id = obj_or_id(folder, "id", (Folder,))
+
         response = self._requester.request(
             'GET',
-            'users/%s/folders/%s' % (self.id, folder_id)
+            'users/{}/folders/{}'.format(self.id, folder_id)
         )
         return Folder(self._requester, response.json())
 
@@ -479,7 +491,7 @@ class User(CanvasObject):
             Folder,
             self._requester,
             'GET',
-            'users/%s/folders' % (self.id)
+            'users/{}/folders'.format(self.id)
         )
 
     def create_folder(self, name, **kwargs):
@@ -495,8 +507,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'users/%s/folders' % self.id,
-            name=name,
+            'users/{}/folders'.format(self.id, name=name),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
@@ -517,7 +528,7 @@ class User(CanvasObject):
             Login,
             self._requester,
             'GET',
-            'users/%s/logins' % (self.id),
+            'users/{}/logins'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -536,7 +547,7 @@ class User(CanvasObject):
             User,
             self._requester,
             'GET',
-            'users/%s/observees' % (self.id),
+            'users/{}/observees'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -552,7 +563,7 @@ class User(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'users/%s/observees' % (self.id),
+            'users/{}/observees'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return User(self._requester, response.json())
@@ -571,7 +582,7 @@ class User(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'users/%s/observees/%s' % (self.id, observee_id)
+            'users/{}/observees/{}'.format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 
@@ -589,7 +600,7 @@ class User(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'users/%s/observees/%s' % (self.id, observee_id)
+            'users/{}/observees/{}'.format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 
@@ -607,7 +618,7 @@ class User(CanvasObject):
 
         response = self._requester.request(
             'DELETE',
-            'users/%s/observees/%s' % (self.id, observee_id)
+            'users/{}/observees/{}'.format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 

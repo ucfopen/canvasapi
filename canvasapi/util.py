@@ -120,5 +120,5 @@ def obj_or_id(parameter, param_name, object_types):
                     break
 
         obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
-        message = 'Parameter %s must be of type %s or int.' % (param_name, obj_type_list)
+        message = 'Parameter {} must be of type {} or int.'.format(param_name, obj_type_list)
         raise TypeError(message)

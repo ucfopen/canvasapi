@@ -25,7 +25,7 @@ class Module(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/modules/%s' % (self.course_id, self.id),
+            'courses/{}/modules/{}'.format(self.course_id, self.id),
             **kwargs
         )
         module_json = response.json()
@@ -44,7 +44,7 @@ class Module(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/modules/%s' % (self.course_id, self.id),
+            'courses/{}/modules/{}'.format(self.course_id, self.id),
         )
         module_json = response.json()
         module_json.update({'course_id': self.course_id})
@@ -66,7 +66,7 @@ class Module(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/modules/%s/relock' % (self.course_id, self.id),
+            'courses/{}/modules/{}/relock'.format(self.course_id, self.id),
         )
         module_json = response.json()
         module_json.update({'course_id': self.course_id})
@@ -87,7 +87,7 @@ class Module(CanvasObject):
             ModuleItem,
             self._requester,
             'GET',
-            'courses/%s/modules/%s/items' % (self.course_id, self.id),
+            'courses/{}/modules/{}/items'.format(self.course_id, self.id),
             {'course_id': self.course_id},
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -103,7 +103,7 @@ class Module(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'courses/%s/modules/%s/items/%s' % (self.course_id, self.id, module_item_id),
+            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.id, module_item_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         module_item_json = response.json()
@@ -133,7 +133,7 @@ class Module(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'courses/%s/modules/%s/items' % (self.course_id, self.id),
+            'courses/{}/modules/{}/items'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         module_item_json = response.json()
@@ -160,7 +160,7 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/modules/%s/items/%s' % (self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.module_id, self.id),
             **kwargs
         )
         module_item_json = response.json()
@@ -179,7 +179,7 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/modules/%s/items/%s' % (self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.module_id, self.id),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -197,7 +197,7 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/modules/%s/items/%s/done' % (self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}/done'.format(self.course_id, self.module_id, self.id),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -215,7 +215,7 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/modules/%s/items/%s/done' % (self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}/done'.format(self.course_id, self.module_id, self.id),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})

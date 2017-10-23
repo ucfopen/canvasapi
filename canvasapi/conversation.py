@@ -23,7 +23,7 @@ class Conversation(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'conversations/%s' % (self.id),
+            'conversations/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -44,7 +44,7 @@ class Conversation(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'conversations/%s' % (self.id)
+            'conversations/{}'.format(self.id)
         )
 
         if response.json().get('id'):
@@ -69,7 +69,7 @@ class Conversation(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'conversations/%s/add_recipients' % (self.id),
+            'conversations/{}/add_recipients'.format(self.id),
             recipients=recipients
         )
         return Conversation(self._requester, response.json())
@@ -88,7 +88,7 @@ class Conversation(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'conversations/%s/add_message' % (self.id),
+            'conversations/{}/add_message'.format(self.id),
             body=body,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -110,7 +110,7 @@ class Conversation(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'conversations/%s/remove_messages' % (self.id),
+            'conversations/{}/remove_messages'.format(self.id),
             remove=remove
         )
         return response.json()

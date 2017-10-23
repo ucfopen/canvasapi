@@ -36,7 +36,7 @@ class Section(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'sections/%s/enrollments' % (self.id),
+            'sections/{}/enrollments'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -52,7 +52,7 @@ class Section(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'sections/%s/crosslist/%s' % (self.id, new_course_id)
+            'sections/{}/crosslist/{}'.format(self.id, new_course_id)
         )
         return Section(self._requester, response.json())
 
@@ -66,8 +66,8 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            "DELETE",
-            "sections/%s/crosslist" % (self.id)
+            'DELETE',
+            'sections/{}/crosslist'.format(self.id)
         )
         return Section(self._requester, response.json())
 
@@ -81,8 +81,8 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            "PUT",
-            "sections/%s" % (self.id)
+            'PUT',
+            'sections/{}'.format(self.id)
         )
         return Section(self._requester, response.json())
 
@@ -96,8 +96,8 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            "DELETE",
-            "sections/%s" % (self.id)
+            'DELETE',
+            'sections/{}'.format(self.id)
         )
         return Section(self._requester, response.json())
 
@@ -121,7 +121,7 @@ class Section(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
+            'sections/{}/assignments/{}/submissions'.format(self.id, assignment_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
@@ -145,7 +145,7 @@ class Section(CanvasObject):
             Submission,
             self._requester,
             'GET',
-            'sections/%s/assignments/%s/submissions' % (self.id, assignment_id),
+            'sections/{}/assignments/{}/submissions'.format(self.id, assignment_id),
             {'section_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -169,7 +169,7 @@ class Section(CanvasObject):
             Submission,
             self._requester,
             'GET',
-            'sections/%s/students/submissions' % (self.id),
+            'sections/{}/students/submissions'.format(self.id),
             {'section_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -189,7 +189,7 @@ class Section(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
+            'sections/{}/assignments/{}/submissions/{}'.format(self.id, assignment_id, user_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
@@ -212,7 +212,7 @@ class Section(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'sections/%s/assignments/%s/submissions/%s' % (self.id, assignment_id, user_id),
+            'sections/{}/assignments/{}/submissions/{}'.format(self.id, assignment_id, user_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -238,7 +238,7 @@ class Section(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'sections/%s/assignments/%s/submissions/%s/read' % (
+            'sections/{}/assignments/{}/submissions/{}/read'.format(
                 self.id,
                 assignment_id,
                 user_id,
@@ -258,7 +258,7 @@ class Section(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'sections/%s/assignments/%s/submissions/%s/read' % (
+            'sections/{}/assignments/{}/submissions/{}/read'.format(
                 self.id,
                 assignment_id,
                 user_id,

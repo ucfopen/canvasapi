@@ -50,13 +50,13 @@ class Requester(object):
         :type _kwargs: `list`
         :rtype: str
         """
-        full_url = _url if _url else "%s%s" % (self.base_url, endpoint)
+        full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
 
         if not headers:
             headers = {}
 
         if use_auth:
-            auth_header = {'Authorization': 'Bearer %s' % (self.access_token)}
+            auth_header = {'Authorization': 'Bearer {}'.format(self.access_token)}
             headers.update(auth_header)
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.

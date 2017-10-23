@@ -17,7 +17,7 @@ class TestUploader(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         self.requester = self.canvas._Canvas__requester
 
-        self.filename = 'testfile_uploader_%s' % uuid.uuid4().hex
+        self.filename = 'testfile_uploader_{}'.format(uuid.uuid4().hex)
         self.file = open(self.filename, 'w+')
 
     def tearDown(self):

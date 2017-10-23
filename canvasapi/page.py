@@ -25,7 +25,7 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '%ss/%s/pages/%s' % (self.parent_type, self.parent_id, self.url),
+            '{}s/{}/pages/{}'.format(self.parent_type, self.parent_id, self.url),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -46,7 +46,7 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/pages/%s' % (self.course_id, self.url)
+            'courses/{}/pages/{}'.format(self.course_id, self.url)
         )
         return Page(self._requester, response.json())
 
@@ -89,7 +89,7 @@ class Page(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            '%ss/%s' % (self.parent_type, self.parent_id)
+            '{}s/{}'.format(self.parent_type, self.parent_id)
         )
 
         if self.parent_type == 'group':
@@ -108,7 +108,7 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            '%ss/%s/pages/%s/revisions/latest' % (self.parent_type, self.parent_id, self.url),
+            '{}s/{}/pages/{}/revisions/latest'.format(self.parent_type, self.parent_id, self.url),
             _kwargs=combine_kwargs(**kwargs)
         )
         return PageRevision(self._requester, response.json())
@@ -127,7 +127,7 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            '%ss/%s/pages/%s/revisions/%s' % (
+            '{}s/{}/pages/{}/revisions/{}'.format(
                 self.parent_type,
                 self.parent_id,
                 self.url,
@@ -157,7 +157,7 @@ class Page(CanvasObject):
             PageRevision,
             self._requester,
             'GET',
-            '%ss/%s/pages/%s/revisions' % (self.parent_type, self.parent_id, self.url),
+            '{}s/{}/pages/{}/revisions'.format(self.parent_type, self.parent_id, self.url),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -175,7 +175,7 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            '%ss/%s/pages/%s/revisions/%s' % (
+            '{}s/{}/pages/{}/revisions/{}'.format(
                 self.parent_type,
                 self.parent_id,
                 self.url,
@@ -236,7 +236,7 @@ class PageRevision(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            '%ss/%s' % (self.parent_type, self.parent_id)
+            '{}s/{}'.format(self.parent_type, self.parent_id)
         )
 
         if self.parent_type == 'group':

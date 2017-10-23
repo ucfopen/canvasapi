@@ -29,7 +29,7 @@ class Folder(CanvasObject):
             File,
             self._requester,
             'GET',
-            'folders/%s/files' % (self.id),
+            'folders/{}/files'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -45,7 +45,7 @@ class Folder(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'folders/%s' % (self.id),
+            'folders/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
@@ -64,7 +64,7 @@ class Folder(CanvasObject):
             Folder,
             self._requester,
             'GET',
-            'folders/%s/folders' % (self.id)
+            'folders/{}/folders'.format(self.id)
         )
 
     def create_folder(self, name, **kwargs):
@@ -80,8 +80,7 @@ class Folder(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'folders/%s/folders' % self.id,
-            name=name,
+            'folders/{}/folders'.format(self.id, name=name),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
@@ -97,7 +96,7 @@ class Folder(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'folders/%s' % self.id,
+            'folders/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 

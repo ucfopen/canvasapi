@@ -23,7 +23,7 @@ class AuthenticationProvider(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'accounts/%s/authentication_providers/%s' % (self.account_id, self.id),
+            'accounts/{}/authentication_providers/{}'.format(self.account_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -43,6 +43,6 @@ class AuthenticationProvider(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'accounts/%s/authentication_providers/%s' % (self.account_id, self.id)
+            'accounts/{}/authentication_providers/{}'.format(self.account_id, self.id)
         )
         return AuthenticationProvider(self._requester, response.json())

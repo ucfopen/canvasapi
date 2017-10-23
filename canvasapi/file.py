@@ -22,6 +22,6 @@ class File(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'files/%s' % (self.id)
+            'files/{}'.format(self.id)
         )
         return File(self._requester, response.json())
