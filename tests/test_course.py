@@ -864,6 +864,24 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_link_list[0].outcome_group['id'], 2)
         self.assertEqual(outcome_link_list[0].outcome_group['title'], "test outcome")
 
+    # get_outcome_results()
+    def test_get_outcome_results(self, m):
+        register_uris({'outcome': ['course_get_outcome_results']}, m)
+
+        result = self.course.get_outcome_results()
+
+        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result['outcome_results'], list)
+
+    # get_outcome_result_rollups()
+    def test_get_outcome_result_rollups(self, m):
+        register_uris({'outcome': ['course_get_outcome_result_rollups']}, m)
+
+        result = self.course.get_outcome_result_rollups()
+
+        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result['rollups'], list)
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
