@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Outcomes (Thanks, [@a-goetz](https://github.com/a-goetz))
+
 ### General
 
 - Added support for other iterables as parameter values. (Thanks, [@liblit](https://github.com/liblit))
