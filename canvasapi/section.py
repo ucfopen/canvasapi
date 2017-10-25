@@ -44,15 +44,17 @@ class Section(CanvasObject):
         """
         Move the Section to another course.
 
-        :calls: `POST /api/v1/sections/:id/crosslist/:new_course_id
-        \
+        :calls: `POST /api/v1/sections/:id/crosslist/:new_course_id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.crosslist>`_
+
+        :param new_course: The Object or ID of the new course.
+        :type new_course: :class:`canvasapi.course.Course` or int
 
         :rtype: :class:`canvasapi.section.Section`
         """
         from canvasapi.course import Course
 
-        new_course_id = obj_or_id(new_course, "id", (Course,))
+        new_course_id = obj_or_id(new_course, "new_course", (Course,))
 
         response = self._requester.request(
             'POST',
@@ -112,13 +114,16 @@ class Section(CanvasObject):
         :calls: `POST /api/v1/sections/:section_id/assignments/:assignment_id/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
 
+        :param assignment: The Object or ID of the assignment.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
         :param submission: The attributes of the submission.
-        :type submission: `dict`
+        :type submission: dict
+
         :rtype: :class:`canvasapi.submission.Submission`
         """
         from canvasapi.assignment import Assignment
 
-        assignment_id = obj_or_id(assignment, "id", (Assignment,))
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
         if isinstance(submission, dict) and 'submission_type' in submission:
             kwargs['submision'] = submission
@@ -144,14 +149,15 @@ class Section(CanvasObject):
         :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
-        :param assignment_id: The ID of the assignment.
-        :type assignment_id: int
+        :param assignment: The Object or ID of the assignment.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
         from canvasapi.assignment import Assignment
 
-        assignment_id = obj_or_id(assignment, "id", (Assignment,))
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
         return PaginatedList(
             Submission,
@@ -193,17 +199,18 @@ class Section(CanvasObject):
         :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.show>`_
 
-        :param assignment_id: The ID of the assignment.
-        :type assignment_id: int
-        :param user_id: The ID of the user.
-        :type user_id: str
+        :param assignment: The Object or ID of the assignment.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The Object or ID of the user.
+        :type user: :class:`canvasapi.user.User` or int or str
+
         :rtype: :class:`canvasapi.submission.Submission`
         """
         from canvasapi.assignment import Assignment
         from canvasapi.user import User
 
-        assignment_id = obj_or_id(assignment, "id", (Assignment,))
-        user_id = obj_or_id(user, "id", (User,))
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'GET',
@@ -222,17 +229,18 @@ class Section(CanvasObject):
         :calls: `PUT /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update>`_
 
-        :param assignment_id: The ID of the assignment.
-        :type assignment_id: int
-        :param user_id: The ID of the user.
-        :type user_id: str
+        :param assignment: The Object or ID of the assignment.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The Object or ID of the user.
+        :type user: :class:`canvasapi.user.User` or int or str
+
         :rtype: :class:`canvasapi.submission.Submission`
         """
         from canvasapi.assignment import Assignment
         from canvasapi.user import User
 
-        assignment_id = obj_or_id(assignment, "id", (Assignment,))
-        user_id = obj_or_id(user, "id", (User,))
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'PUT',
@@ -258,13 +266,18 @@ class Section(CanvasObject):
             /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id/read \
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
 
+        :param assignment: The Object or ID of the assignment.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The Object or ID of the user.
+        :type user: :class:`canvasapi.user.User` or int or str
+
         :rtype: `bool`
         """
         from canvasapi.assignment import Assignment
         from canvasapi.user import User
 
-        assignment_id = obj_or_id(assignment, "id", (Assignment,))
-        user_id = obj_or_id(user, "id", (User,))
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'PUT',
@@ -284,13 +297,18 @@ class Section(CanvasObject):
             /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id/read \
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_unread>`_
 
+        :param assignment: The Object or ID of the assignment.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The Object or ID of the user.
+        :type user: :class:`canvasapi.user.User` or int or str
+
         :rtype: `bool`
         """
         from canvasapi.assignment import Assignment
         from canvasapi.user import User
 
-        assignment_id = obj_or_id(assignment, "id", (Assignment,))
-        user_id = obj_or_id(user, "id", (User,))
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'DELETE',

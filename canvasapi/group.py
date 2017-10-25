@@ -315,13 +315,13 @@ class Group(CanvasObject):
             <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
 
         :param user: list of user ids
-        :type user: int or :class:`canvasapi.user.User`
+        :type user: :class:`canvasapi.user.User`or int
 
         :rtype: :class:`canvasapi.group.GroupMembership`
         """
         from canvasapi.user import User
 
-        user_id = obj_or_id(user, "id", (User,))
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'GET',
@@ -338,13 +338,13 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.create>`_
 
         :param user: The Object or ID of the user.
-        :type user: int or :class:`canvasapi.user.User`
+        :type user: :class:`canvasapi.user.User`or int
 
         :rtype: :class:`canvasapi.group.GroupMembership`
         """
         from canvasapi.user import User
 
-        user_id = obj_or_id(user, "id", (User,))
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'POST',
@@ -362,13 +362,13 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.update>`_
 
         :param user: The Object or ID of the user.
-        :type user: int or :class:`canvasapi.user.User`
+        :type user: :class:`canvasapi.user.User`or int
 
         :rtype: :class:`canvasapi.group.GroupMembership`
         """
         from canvasapi.user import User
 
-        user_id = obj_or_id(user, "id", (User,))
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'PUT',
@@ -385,11 +385,11 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.show>`_
 
         :param topic: The Object or ID of the discussion topic.
-        :type topic: int or :class:`canvasapi.discussion_topic.DiscussionTopic`
+        :type topic: :class:`canvasapi.discussion_topic.DiscussionTopic`or int
 
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
-        topic_id = obj_or_id(topic, "id", (DiscussionTopic,))
+        topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
 
         response = self._requester.request(
             'GET',
@@ -408,13 +408,13 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/files/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
 
-        :param file_id: The Object or ID of the file to retrieve.
-        :type file_id: int or :class:`canvasapi.file.File`
+        :param file: The Object or ID of the file to retrieve.
+        :type file: :class:`canvasapi.file.File` or int
 
         :rtype: :class:`canvasapi.file.File`
         """
         from canvasapi.file import File
-        file_id = obj_or_id(file, "id", (File,))
+        file_id = obj_or_id(file, "file", (File,))
 
         response = self._requester.request(
             'GET',
@@ -431,11 +431,11 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
         :param topic: The Object or ID of the discussion topic.
-        :type topic: int or :class:`canvasapi.discussion_topic.DiscussionTopic`
+        :type topic: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
 
         :rtype: dict
         """
-        topic_id = obj_or_id(topic, "id", (DiscussionTopic,))
+        topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
 
         response = self._requester.request(
             'GET',
@@ -558,14 +558,14 @@ class Group(CanvasObject):
         :calls: `DELETE /api/v1/groups/:group_id/external_feeds/:external_feed_id \
         <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.destroy>`_
 
-        :param feed_id: The object or id of the feed to be deleted.
-        :type feed_id: int or :class:`canvasapi.external_feed.ExternalFeed`
+        :param feed: The object or id of the feed to be deleted.
+        :type feed: :class:`canvasapi.external_feed.ExternalFeed` or int
 
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
 
-        feed_id = obj_or_id(feed, "id", (ExternalFeed,))
+        feed_id = obj_or_id(feed, "feed", (ExternalFeed,))
 
         response = self._requester.request(
             'DELETE',
@@ -600,11 +600,12 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param folder_id: The ID of the folder to retrieve.
-        :type folder_id: int
+        :param folder: The Object or ID of the folder to retrieve.
+        :type folder: :class:`canvasapi.folder.Folder` or int
+
         :rtype: :class:`canvasapi.folder.Folder`
         """
-        folder_id = obj_or_id(folder, "id", (Folder,))
+        folder_id = obj_or_id(folder, "folder", (Folder,))
 
         response = self._requester.request(
             'GET',
@@ -706,7 +707,7 @@ class GroupMembership(CanvasObject):
         """
         from canvasapi.user import User
 
-        user_id = obj_or_id(user, "id", (User,))
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'DELETE',
