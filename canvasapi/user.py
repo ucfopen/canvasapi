@@ -238,7 +238,7 @@ class User(CanvasObject):
         from canvasapi.assignment import Assignment
         from canvasapi.course import Course
 
-        course_id = obj_or_id(course, "id", (Course,))
+        course_id = obj_or_id(course, "course", (Course,))
 
         return PaginatedList(
             Assignment,
@@ -380,7 +380,7 @@ class User(CanvasObject):
         """
         from canvasapi.bookmark import Bookmark
 
-        bookmark_id = obj_or_id(bookmark, "id", (Bookmark,))
+        bookmark_id = obj_or_id(bookmark, "bookmark", (Bookmark,))
 
         response = self._requester.request(
             'GET',
@@ -446,7 +446,7 @@ class User(CanvasObject):
         """
         from canvasapi.file import File
 
-        file_id = obj_or_id(file, "id", (File,))
+        file_id = obj_or_id(file, "file", (File,))
 
         response = self._requester.request(
             'GET',
@@ -468,7 +468,7 @@ class User(CanvasObject):
         """
         from canvasapi.folder import Folder
 
-        folder_id = obj_or_id(folder, "id", (Folder,))
+        folder_id = obj_or_id(folder, "folder", (Folder,))
 
         response = self._requester.request(
             'GET',
@@ -507,7 +507,8 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'users/{}/folders'.format(self.id, name=name),
+            'users/{}/folders'.format(self.id),
+            name=name,
             _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
