@@ -80,7 +80,8 @@ class Folder(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'folders/{}/folders'.format(self.id, name=name),
+            'folders/{}/folders'.format(self.id),
+            name=name,
             _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
