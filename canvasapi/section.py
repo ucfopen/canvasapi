@@ -7,7 +7,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.submission import Submission
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -40,7 +40,7 @@ class Section(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def cross_list_section(self, new_course_id):
+    def cross_list_section(self, new_course):
         """
         Move the Section to another course.
 
@@ -50,6 +50,10 @@ class Section(CanvasObject):
 
         :rtype: :class:`canvasapi.section.Section`
         """
+        from canvasapi.course import Course
+
+        new_course_id = obj_or_id(new_course, "id", (Course,))
+
         response = self._requester.request(
             'POST',
             'sections/{}/crosslist/{}'.format(self.id, new_course_id)
@@ -101,7 +105,7 @@ class Section(CanvasObject):
         )
         return Section(self._requester, response.json())
 
-    def submit_assignment(self, assignment_id, submission, **kwargs):
+    def submit_assignment(self, assignment, submission, **kwargs):
         """
         Makes a submission for an assignment.
 
@@ -112,6 +116,10 @@ class Section(CanvasObject):
         :type submission: `dict`
         :rtype: :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+
+        assignment_id = obj_or_id(assignment, "id", (Assignment,))
+
         if isinstance(submission, dict) and 'submission_type' in submission:
             kwargs['submision'] = submission
         else:
@@ -129,7 +137,7 @@ class Section(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def list_submissions(self, assignment_id, **kwargs):
+    def list_submissions(self, assignment, **kwargs):
         """
         Get all existing submissions for an assignment.
 
@@ -137,10 +145,14 @@ class Section(CanvasObject):
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
         :param assignment_id: The ID of the assignment.
-        :type assignment_id: `int`
+        :type assignment_id: int
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+
+        assignment_id = obj_or_id(assignment, "id", (Assignment,))
+
         return PaginatedList(
             Submission,
             self._requester,
@@ -174,7 +186,7 @@ class Section(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_submission(self, assignment_id, user_id, **kwargs):
+    def get_submission(self, assignment, user, **kwargs):
         """
         Get a single submission, based on user id.
 
@@ -187,6 +199,12 @@ class Section(CanvasObject):
         :type user_id: str
         :rtype: :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        assignment_id = obj_or_id(assignment, "id", (Assignment,))
+        user_id = obj_or_id(user, "id", (User,))
+
         response = self._requester.request(
             'GET',
             'sections/{}/assignments/{}/submissions/{}'.format(self.id, assignment_id, user_id),
@@ -197,7 +215,7 @@ class Section(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def update_submission(self, assignment_id, user_id, **kwargs):
+    def update_submission(self, assignment, user, **kwargs):
         """
         Comment on and/or update the grading for a student's assignment submission.
 
@@ -210,6 +228,12 @@ class Section(CanvasObject):
         :type user_id: str
         :rtype: :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        assignment_id = obj_or_id(assignment, "id", (Assignment,))
+        user_id = obj_or_id(user, "id", (User,))
+
         response = self._requester.request(
             'PUT',
             'sections/{}/assignments/{}/submissions/{}'.format(self.id, assignment_id, user_id),
@@ -226,7 +250,7 @@ class Section(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def mark_submission_as_read(self, assignment_id, user_id):
+    def mark_submission_as_read(self, assignment, user):
         """
         Mark submission as read. No request fields are necessary.
 
@@ -236,6 +260,12 @@ class Section(CanvasObject):
 
         :rtype: `bool`
         """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        assignment_id = obj_or_id(assignment, "id", (Assignment,))
+        user_id = obj_or_id(user, "id", (User,))
+
         response = self._requester.request(
             'PUT',
             'sections/{}/assignments/{}/submissions/{}/read'.format(
@@ -246,7 +276,7 @@ class Section(CanvasObject):
         )
         return response.status_code == 204
 
-    def mark_submission_as_unread(self, assignment_id, user_id):
+    def mark_submission_as_unread(self, assignment, user):
         """
         Mark submission as unread. No request fields are necessary.
 
@@ -256,6 +286,12 @@ class Section(CanvasObject):
 
         :rtype: `bool`
         """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        assignment_id = obj_or_id(assignment, "id", (Assignment,))
+        user_id = obj_or_id(user, "id", (User,))
+
         response = self._requester.request(
             'DELETE',
             'sections/{}/assignments/{}/submissions/{}/read'.format(

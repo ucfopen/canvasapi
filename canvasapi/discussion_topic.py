@@ -4,7 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -59,7 +59,7 @@ class DiscussionTopic(CanvasObject):
         elif self._parent_type == 'course':
             return Course(self._requester, response.json())
 
-    def delete(self, topic_id):
+    def delete(self):
         """
         Deletes the discussion topic. This will also delete the assignment.
 
@@ -69,8 +69,6 @@ class DiscussionTopic(CanvasObject):
             or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
 
-        :param topic_id: ID of a topic.
-        :type topic_id: int
         :returns: True if the discussion topic was deleted, False otherwise.
         :rtype: bool
         """

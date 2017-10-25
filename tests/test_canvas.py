@@ -412,7 +412,7 @@ class TestCanvas(unittest.TestCase):
     def test_reserve_time_slot(self, m):
         register_uris({'calendar_event': ['reserve_time_slot']}, m)
 
-        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567)
+        cal_event = self.canvas.reserve_time_slot(calendar_event=567)
         self.assertIsInstance(cal_event, CalendarEvent)
         self.assertEqual(cal_event.title, "Test Reservation")
 
@@ -421,7 +421,7 @@ class TestCanvas(unittest.TestCase):
             'calendar_event': ['reserve_time_slot_participant_id']
         }, m)
 
-        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567, participant_id=777)
+        cal_event = self.canvas.reserve_time_slot(calendar_event=567, participant_id=777)
         self.assertIsInstance(cal_event, CalendarEvent)
         self.assertEqual(cal_event.title, "Test Reservation")
         self.assertEqual(cal_event.user, 777)

@@ -375,7 +375,7 @@ class User(CanvasObject):
         <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.show>`_
 
         :param bookmark_id: The ID of the bookmark.
-        :type bookmark_id: `int`
+        :type bookmark_id: int
         :rtype: :class:`canvasapi.bookmark.Bookmark`
         """
         from canvasapi.bookmark import Bookmark

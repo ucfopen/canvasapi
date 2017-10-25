@@ -13,7 +13,7 @@ from canvasapi.tab import Tab
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
 from canvasapi.user import UserDisplay
-from canvasapi.util import combine_kwargs, is_multivalued
+from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -79,7 +79,7 @@ class Course(CanvasObject):
 
         return response.json().get('name')
 
-    def get_user(self, user_id, user_id_type=None):
+    def get_user(self, user, user_id_type=None):
         """
         Retrieve a user by their ID. `user_id_type` denotes which endpoint to try as there are
         several different ids that can pull the same user record from Canvas.
@@ -87,17 +87,19 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/users/:id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
 
-        :param user_id: The ID of the user to retrieve.
-        :type user_id: int
+        :param user: The Object or ID of the user to retrieve.
+        :type user: :class:`canvasapi.user.User` or int
         :param user_id_type: The type of the ID to search for.
         :type user_id_type: str
+
         :rtype: :class:`canvasapi.user.User`
         """
         from canvasapi.user import User
 
         if user_id_type:
-            uri = 'courses/{}/users/{}:{}'.format(self.id, user_id_type, user_id)
+            uri = 'courses/{}/users/{}:{}'.format(self.id, user_id_type, user)
         else:
+            user_id = obj_or_id(user, "user", (User,))
             uri = 'courses/{}/users/{}'.format(self.id, user_id)
 
         response = self._requester.request(
@@ -279,18 +281,21 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_assignment(self, assignment_id, **kwargs):
+    def get_assignment(self, assignment, **kwargs):
         """
         Return the assignment with the given ID.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.show>`_
 
-        :param assignment_id: The ID of the assignment to retrieve.
-        :type assignment_id: int
+        :param assignment: The Object or ID of the assignment to retrieve.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+
         :rtype: :class:`canvasapi.assignment.Assignment`
         """
         from canvasapi.assignment import Assignment
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
         response = self._requester.request(
             'GET',
@@ -367,18 +372,21 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_quiz(self, quiz_id):
+    def get_quiz(self, quiz):
         """
         Return the quiz with the given id.
 
         :calls: `GET /api/v1/courses/:course_id/quizzes/:id \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.show>`_
 
-        :param quiz_id: The ID of the quiz to retrieve.
-        :type quiz_id: int
+        :param quiz: The Object or ID of the quiz to retrieve.
+        :type quiz: :class:`canvasapi.quiz.Quiz` or int
         :rtype: :class:`canvasapi.quiz.Quiz`
         """
         from canvasapi.quiz import Quiz
+
+        quiz_id = obj_or_id(quiz, "quiz", (Quiz,))
+
         response = self._requester.request(
             'GET',
             'courses/{}/quizzes/{}'.format(self.id, quiz_id)
@@ -437,18 +445,21 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_module(self, module_id, **kwargs):
+    def get_module(self, module, **kwargs):
         """
         Retrieve a single module by ID.
 
         :calls: `GET /api/v1/courses/:course_id/modules/:id \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.show>`_
 
-        :param module_id: The ID of the module to retrieve.
-        :type module_id: int
+        :param module: The Object or ID of the module to retrieve.
+        :type module: :class:`canvasapi.module.Module` or int
+
         :rtype: :class:`canvasapi.module.Module`
         """
         from canvasapi.module import Module
+
+        module_id = obj_or_id(module, "module", (Module,))
 
         response = self._requester.request(
             'GET',
@@ -488,14 +499,19 @@ class Course(CanvasObject):
 
         return Module(self._requester, module_json)
 
-    def get_external_tool(self, tool_id):
+    def get_external_tool(self, tool):
         """
         :calls: `GET /api/v1/courses/:course_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
 
+        :param tool: The Object or ID of the tool to retrieve.
+        :type tool: :class:`canvasapi.external_tool.ExternalTool` or int
+
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         from canvasapi.external_tool import ExternalTool
+
+        tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
             'GET',
@@ -525,18 +541,21 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_section(self, section_id):
+    def get_section(self, section):
         """
         Retrieve a section.
 
         :calls: `GET /api/v1/courses/:course_id/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
 
-        :param section_id: The ID of the section to retrieve.
-        :type section_id: int
+        :param section: The Object or ID of the section to retrieve.
+        :type section: :class:`canvasapi.section.Section` or int
+
         :rtype: :class:`canvasapi.section.Section`
         """
         from canvasapi.section import Section
+
+        section_id = obj_or_id(section, "section", (Section,))
 
         response = self._requester.request(
             'GET',
@@ -748,18 +767,42 @@ class Course(CanvasObject):
             'courses/{}/group_categories'.format(self.id)
         )
 
-    def get_discussion_topic(self, topic_id):
+    def get_file(self, file, **kwargs):
+        """
+        Return the standard attachment json object for a file.
+
+        :calls: `GET /api/v1/courses/:course_id/files/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
+
+        :param file: The Object or ID of the file to retrieve.
+        :type file: :class:`canvasapi.file.File` or int
+        :rtype: :class:`canvasapi.file.File`
+        """
+        from canvasapi.file import File
+
+        file_id = obj_or_id(file, "file", (File,))
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/files/{}'.format(self.id, file_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return File(self._requester, response.json())
+
+    def get_discussion_topic(self, topic):
         """
         Return data on an individual discussion topic.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.show>`_
 
-        :param topic_id: The ID of the discussion topic.
-        :type topic_id: int
+        :param topic_id: The Object or ID of the discussion topic.
+        :type topic_id: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
 
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
+        topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
+
         response = self._requester.request(
             'GET',
             'courses/{}/discussion_topics/{}'.format(self.id, topic_id)
@@ -770,37 +813,20 @@ class Course(CanvasObject):
 
         return DiscussionTopic(self._requester, response_json)
 
-    def get_file(self, file_id, **kwargs):
-        """
-        Return the standard attachment json object for a file.
-
-        :calls: `GET /api/v1/courses/:course_id/files/:id \
-        <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
-
-        :param file_id: The ID of the file to retrieve.
-        :type file_id: int
-        :rtype: :class:`canvasapi.file.File`
-        """
-        from canvasapi.file import File
-        response = self._requester.request(
-            'GET',
-            'courses/{}/files/{}'.format(self.id, file_id),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-        return File(self._requester, response.json())
-
-    def get_full_discussion_topic(self, topic_id):
+    def get_full_discussion_topic(self, topic):
         """
         Return a cached structure of the discussion topic.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
-        :param topic_id: The ID of the discussion topic.
-        :type topic_id: int
+        :param topic_id: The Object or ID of the discussion topic.
+        :type topic_id: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
 
         :rtype: dict
         """
+        topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
+
         response = self._requester.request(
             'GET',
             'courses/{}/discussion_topics/{}/view'.format(self.id, topic_id),
@@ -826,18 +852,21 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_assignment_group(self, assignment_group_id, **kwargs):
+    def get_assignment_group(self, assignment_group, **kwargs):
         """
         Retrieve specified assignment group for the specified course.
 
         :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
         <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.show>`_
 
-        :param assignment_group_id: ID of assignment group.
-        :type assignment_group_id: int
+        :param assignment_group: Object or ID of assignment group.
+        :type assignment_group: :class:`canvasapi.assignment.AssignmentGroup` or int
+
         :rtype: :class:`canvasapi.assignment.AssignmentGroup`
         """
         from canvasapi.assignment import AssignmentGroup
+
+        assignment_group_id = obj_or_id(assignment_group, "assignment_group", (AssignmentGroup,))
 
         response = self._requester.request(
             'GET',
@@ -1025,68 +1054,94 @@ class Course(CanvasObject):
 
         return response.json()
 
-    def get_user_in_a_course_level_participation_data(self, student_id):
+    def get_user_in_a_course_level_participation_data(self, user):
         """
         Return page view hits grouped by hour and participation details through course's history
 
         :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/activity \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_participation>`_
 
+        :param user: The Object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: dict
         """
+        from canvasapi.user import User
+
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'GET',
-            'courses/{}/analytics/users/{}/activity'.format(self.id, student_id)
+            'courses/{}/analytics/users/{}/activity'.format(self.id, user_id)
         )
 
         return response.json()
 
-    def get_user_in_a_course_level_assignment_data(self, student_id):
+    def get_user_in_a_course_level_assignment_data(self, user):
         """
         Return a list of assignments for the course sorted by due date
 
         :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/assignments \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_assignments>`_
 
+        :param user: The Object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: dict
         """
+        from canvasapi.user import User
+
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'GET',
-            'courses/{}/analytics/users/{}/assignments'.format(self.id, student_id)
+            'courses/{}/analytics/users/{}/assignments'.format(self.id, user_id)
         )
 
         return response.json()
 
-    def get_user_in_a_course_level_messaging_data(self, student_id):
+    def get_user_in_a_course_level_messaging_data(self, user):
         """
         Return messaging hits grouped by day through the entire history of the course
 
         :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/communication \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_messaging>`_
 
+        :param user: The Object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: dict
         """
+        from canvasapi.user import User
+
+        user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
             'GET',
-            'courses/{}/analytics/users/{}/communication'.format(self.id, student_id)
+            'courses/{}/analytics/users/{}/communication'.format(self.id, user_id)
         )
 
         return response.json()
 
-    def submit_assignment(self, assignment_id, submission, **kwargs):
+    def submit_assignment(self, assignment, submission, **kwargs):
         """
         Makes a submission for an assignment.
 
         :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
 
+        :param assignment: The Object or ID of the related assignment
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+
         :param submission: The attributes of the submission.
-        :type submission: `dict`
+        :type submission: dict
+
         :rtype: :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+
         if isinstance(submission, dict) and 'submission_type' in submission:
             kwargs['submision'] = submission
         else:
@@ -1112,7 +1167,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
         :param assignment_id: The ID of the assignment.
-        :type assignment_id: `int`
+        :type assignment_id: int
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
@@ -1149,19 +1204,26 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_submission(self, assignment_id, user_id, **kwargs):
+    def get_submission(self, assignment, user, **kwargs):
         """
         Get a single submission, based on user id.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.show>`_
 
-        :param assignment_id: The ID of the assignment.
-        :type assignment_id: int
-        :param user_id: The ID of the user.
-        :type user_id: str
+        :param assignment: The Object or ID of the related assignment
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The Object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
+
         response = self._requester.request(
             'GET',
             'courses/{}/assignments/{}/submissions/{}'.format(self.id, assignment_id, user_id),
@@ -1172,19 +1234,26 @@ class Course(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def update_submission(self, assignment_id, user_id, **kwargs):
+    def update_submission(self, assignment, user, **kwargs):
         """
         Comment on and/or update the grading for a student's assignment submission.
 
         :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update>`_
 
-        :param assignment_id: The ID of the assignment.
-        :type assignment_id: int
-        :param user_id: The ID of the user.
-        :type user_id: str
+        :param assignment: The Object or ID of the related assignment
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The Object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
+
         response = self._requester.request(
             'PUT',
             'courses/{}/assignments/{}/submissions/{}'.format(self.id, assignment_id, user_id),
@@ -1201,16 +1270,23 @@ class Course(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def list_gradeable_students(self, assignment_id):
+    def list_gradeable_students(self, assignment):
         """
         List students eligible to submit the assignment.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/gradeable_students  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.gradeable_students>`_
 
+        :param assignment: The Object or ID of the related assignment
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.user.User`
         """
+        from canvasapi.assignment import Assignment
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+
         return PaginatedList(
             UserDisplay,
             self._requester,
@@ -1218,7 +1294,7 @@ class Course(CanvasObject):
             'courses/{}/assignments/{}/gradeable_students'.format(self.id, assignment_id)
         )
 
-    def mark_submission_as_read(self, assignment_id, user_id):
+    def mark_submission_as_read(self, assignment, user):
         """
         Mark submission as read. No request fields are necessary.
 
@@ -1226,8 +1302,19 @@ class Course(CanvasObject):
             /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/read \
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
 
+        :param assignment: The Object or ID of the related assignment
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The Object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: `bool`
         """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
+
         response = self._requester.request(
             'PUT',
             'courses/{}/assignments/{}/submissions/{}/read'.format(
@@ -1238,7 +1325,7 @@ class Course(CanvasObject):
         )
         return response.status_code == 204
 
-    def mark_submission_as_unread(self, assignment_id, user_id):
+    def mark_submission_as_unread(self, assignment, user):
         """
         Mark submission as unread. No request fields are necessary.
 
@@ -1246,8 +1333,19 @@ class Course(CanvasObject):
             /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/read \
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_unread>`_
 
+        :param assignment: The Object or ID of the related assignment
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The Object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: `bool`
         """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
+
         response = self._requester.request(
             'DELETE',
             'courses/{}/assignments/{}/submissions/{}/read'.format(
@@ -1296,18 +1394,22 @@ class Course(CanvasObject):
         )
         return ExternalFeed(self._requester, response.json())
 
-    def delete_external_feed(self, feed_id):
+    def delete_external_feed(self, feed):
         """
         Deletes the external feed.
 
         :calls: `DELETE /api/v1/courses/:course_id/external_feeds/:external_feed_id \
         <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.destroy>`_
 
-        :param feed_id: The id of the feed to be deleted.
-        :type feed_id: int
+        :param feed: The Object or ID of the feed to be deleted.
+        :type feed: :class:`canvasapi.external_feed.ExternalFeed` or int
+
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
+
+        feed_id = obj_or_id(feed, "feed", (ExternalFeed,))
+
         response = self._requester.request(
             'DELETE',
             'courses/{}/external_feeds/{}'.format(self.id, feed_id)
@@ -1334,17 +1436,20 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_folder(self, folder_id):
+    def get_folder(self, folder):
         """
         Returns the details for a course folder
 
         :calls: `GET /api/v1/courses/:course_id/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param folder_id: The ID of the folder to retrieve.
-        :type folder_id: int
+        :param folder_id: The Object or ID of the folder to retrieve.
+        :type folder_id: :class:`canvasapi.folder.Folder` or int
+
         :rtype: :class:`canvasapi.folder.Folder`
         """
+        folder_id = obj_or_id(folder, "folder", (Folder,))
+
         response = self._requester.request(
             'GET',
             'courses/{}/folders/{}'.format(self.id, folder_id)
@@ -1456,9 +1561,9 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
         from canvasapi.outcome import OutcomeGroup
-        from canvasapi.util import obj_or_id
 
-        outcome_group_id = obj_or_id(group, "id", (OutcomeGroup,))
+        outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
+
         response = self._requester.request(
             'GET',
             'courses/{}/outcome_groups/{}'.format(self.id, outcome_group_id)

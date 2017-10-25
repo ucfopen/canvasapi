@@ -5,7 +5,7 @@ from six import python_2_unicode_compatible
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -92,15 +92,20 @@ class Module(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_module_item(self, module_item_id, **kwargs):
+    def get_module_item(self, module_item, **kwargs):
         """
         Retrieve a module item by ID.
 
         :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items/:id \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.show>`_
 
+        :param module_item: The Object or ID of the module item.
+        :type module_item: :class:`canvasapi.module.ModuleItem` or dict
+
         :rtype: :class:`canvasapi.module.ModuleItem`
         """
+        module_item_id = obj_or_id(module_item, "module_item", (ModuleItem,))
+
         response = self._requester.request(
             'GET',
             'courses/{}/modules/{}/items/{}'.format(self.course_id, self.id, module_item_id),
