@@ -23,7 +23,7 @@ class Bookmark(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'users/self/bookmarks/%s' % (self.id)
+            'users/self/bookmarks/{}'.format(self.id)
         )
         return Bookmark(self._requester, response.json())
 
@@ -38,7 +38,7 @@ class Bookmark(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'users/self/bookmarks/%s' % (self.id),
+            'users/self/bookmarks/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 

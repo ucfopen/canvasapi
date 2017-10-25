@@ -24,7 +24,7 @@ class CommunicationChannel(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/communication_channels/%s/notification_preferences' % (
+            'users/{}/communication_channels/{}/notification_preferences'.format(
                 self.user_id,
                 self.id
             )
@@ -44,7 +44,7 @@ class CommunicationChannel(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/communication_channels/%s/notification_preference_categories' % (
+            'users/{}/communication_channels/{}/notification_preference_categories'.format(
                 self.user_id,
                 self.id
             )
@@ -66,7 +66,7 @@ class CommunicationChannel(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/communication_channels/%s/notification_preferences/%s' % (
+            'users/{}/communication_channels/{}/notification_preferences/{}'.format(
                 self.user_id,
                 self.id,
                 notification

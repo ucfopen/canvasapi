@@ -140,7 +140,7 @@ class TestGroup(unittest.TestCase):
     def test_upload(self, m):
         register_uris({'group': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_group_%s' % uuid.uuid4().hex
+        filename = 'testfile_group_{}'.format(uuid.uuid4().hex)
         with open(filename, 'w+') as file:
             response = self.group.upload(file)
         self.assertTrue(response[0])

@@ -24,7 +24,7 @@ class AppointmentGroup(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'appointment_groups/%s' % (self.id),
+            'appointment_groups/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return AppointmentGroup(self._requester, response.json())
@@ -47,7 +47,7 @@ class AppointmentGroup(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'appointment_groups/%s' % (self.id),
+            'appointment_groups/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 

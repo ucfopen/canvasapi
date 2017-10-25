@@ -38,7 +38,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'groups/%s/pages' % (self.id),
+            'groups/{}/pages'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -60,7 +60,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'groups/%s/front_page' % (self.id),
+            'groups/{}/front_page'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         page_json = response.json()
@@ -81,7 +81,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'groups/%s/front_page' % (self.id)
+            'groups/{}/front_page'.format(self.id)
         )
         page_json = response.json()
         page_json.update({'group_id': self.id})
@@ -104,7 +104,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'groups/%s/pages/%s' % (self.id, url)
+            'groups/{}/pages/{}'.format(self.id, url)
         )
         page_json = response.json()
         page_json.update({'group_id': self.id})
@@ -126,7 +126,7 @@ class Group(CanvasObject):
             Page,
             self._requester,
             'GET',
-            'groups/%s/pages' % (self.id),
+            'groups/{}/pages'.format(self.id),
             {'group_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -142,7 +142,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'groups/%s' % (self.id),
+            'groups/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self._requester, response.json())
@@ -158,7 +158,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'groups/%s' % (self.id)
+            'groups/{}'.format(self.id)
         )
         return Group(self._requester, response.json())
 
@@ -179,7 +179,7 @@ class Group(CanvasObject):
             GroupMembership,
             self._requester,
             'POST',
-            'groups/%s/invite' % (self.id),
+            'groups/{}/invite'.format(self.id),
             invitees=invitees
         )
 
@@ -201,7 +201,7 @@ class Group(CanvasObject):
             User,
             self._requester,
             'GET',
-            'groups/%s/users' % (self.id),
+            'groups/{}/users'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -224,7 +224,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'DELETE',
-            'groups/%s/users/%s' % (self.id, user_id),
+            'groups/{}/users/{}'.format(self.id, user_id),
         )
         return User(self._requester, response.json())
 
@@ -249,7 +249,7 @@ class Group(CanvasObject):
 
         return Uploader(
             self._requester,
-            'groups/%s/files' % (self.id),
+            'groups/{}/files'.format(self.id),
             file,
             **kwargs
         ).start()
@@ -267,7 +267,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'groups/%s/preview_html' % (self.id),
+            'groups/{}/preview_html'.format(self.id),
             html=html
         )
         return response.json().get('html', '')
@@ -283,7 +283,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'groups/%s/activity_stream/summary' % (self.id)
+            'groups/{}/activity_stream/summary'.format(self.id)
         )
         return response.json()
 
@@ -301,7 +301,7 @@ class Group(CanvasObject):
             GroupMembership,
             self._requester,
             'GET',
-            'groups/%s/memberships' % (self.id),
+            'groups/{}/memberships'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -322,7 +322,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'groups/%s/%s/%s' % (self.id, membership_type, user_id)
+            'groups/{}/{}/{}'.format(self.id, membership_type, user_id)
         )
         return GroupMembership(self._requester, response.json())
 
@@ -338,7 +338,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'groups/%s/memberships' % (self.id),
+            'groups/{}/memberships'.format(self.id),
             user_id=user_id,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -355,7 +355,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'groups/%s/users/%s' % (self.id, user_id),
+            'groups/{}/users/{}'.format(self.id, user_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return GroupMembership(self._requester, response.json())
@@ -374,7 +374,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'groups/%s/discussion_topics/%s' % (self.id, topic_id)
+            'groups/{}/discussion_topics/{}'.format(self.id, topic_id)
         )
 
         response_json = response.json()
@@ -415,7 +415,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'groups/%s/discussion_topics/%s/view' % (self.id, topic_id),
+            'groups/{}/discussion_topics/{}/view'.format(self.id, topic_id),
         )
         return response.json()
 
@@ -434,7 +434,7 @@ class Group(CanvasObject):
             DiscussionTopic,
             self._requester,
             'GET',
-            'groups/%s/discussion_topics' % (self.id),
+            'groups/{}/discussion_topics'.format(self.id),
             {'group_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -450,7 +450,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'groups/%s/discussion_topics' % (self.id),
+            'groups/{}/discussion_topics'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -484,7 +484,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'groups/%s/discussion_topics/reorder' % (self.id),
+            'groups/{}/discussion_topics/reorder'.format(self.id),
             order=order
         )
 
@@ -505,7 +505,7 @@ class Group(CanvasObject):
             ExternalFeed,
             self._requester,
             'GET',
-            'groups/%s/external_feeds' % (self.id)
+            'groups/{}/external_feeds'.format(self.id)
         )
 
     def create_external_feed(self, url, **kwargs):
@@ -522,7 +522,7 @@ class Group(CanvasObject):
         from canvasapi.external_feed import ExternalFeed
         response = self._requester.request(
             'POST',
-            'groups/%s/external_feeds' % self.id,
+            'groups/{}/external_feeds'.format(self.id),
             url=url,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -542,7 +542,7 @@ class Group(CanvasObject):
         from canvasapi.external_feed import ExternalFeed
         response = self._requester.request(
             'DELETE',
-            'groups/%s/external_feeds/%s' % (self.id, feed_id)
+            'groups/{}/external_feeds/{}'.format(self.id, feed_id)
         )
         return ExternalFeed(self._requester, response.json())
 
@@ -562,7 +562,7 @@ class Group(CanvasObject):
             File,
             self._requester,
             'GET',
-            'groups/%s/files' % (self.id),
+            'groups/{}/files'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -579,7 +579,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'groups/%s/folders/%s' % (self.id, folder_id)
+            'groups/{}/folders/{}'.format(self.id, folder_id)
         )
         return Folder(self._requester, response.json())
 
@@ -598,7 +598,7 @@ class Group(CanvasObject):
             Folder,
             self._requester,
             'GET',
-            'groups/%s/folders' % (self.id)
+            'groups/{}/folders'.format(self.id)
         )
 
     def create_folder(self, name, **kwargs):
@@ -614,7 +614,7 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'groups/%s/folders' % self.id,
+            'groups/{}/folders'.format(self.id),
             name=name,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -635,7 +635,7 @@ class Group(CanvasObject):
             Tab,
             self._requester,
             'GET',
-            'groups/%s/tabs' % (self.id),
+            'groups/{}/tabs'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -657,7 +657,7 @@ class GroupMembership(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'groups/%s/memberships/%s' % (self.id, mem_id),
+            'groups/{}/memberships/{}'.format(self.id, mem_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return GroupMembership(self._requester, response.json())
@@ -682,7 +682,7 @@ class GroupMembership(CanvasObject):
 
         response = self._requester.request(
             'DELETE',
-            'groups/%s/users/%s' % (self.id, user_id),
+            'groups/{}/users/{}'.format(self.id, user_id),
         )
         return response.json()
 
@@ -698,7 +698,7 @@ class GroupMembership(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'groups/%s/memberships/self' % (self.id),
+            'groups/{}/memberships/self'.format(self.id),
         )
         return response.json()
 
@@ -720,7 +720,7 @@ class GroupCategory(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'group_categories/%s/groups' % (self.id),
+            'group_categories/{}/groups'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self._requester, response.json())
@@ -736,7 +736,7 @@ class GroupCategory(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'group_categories/%s' % (self.id),
+            'group_categories/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return GroupCategory(self._requester, response.json())
@@ -752,7 +752,7 @@ class GroupCategory(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'group_categories/%s' % (self.id)
+            'group_categories/{}'.format(self.id)
         )
         return response.json()
 
@@ -770,7 +770,7 @@ class GroupCategory(CanvasObject):
             Group,
             self._requester,
             'GET',
-            'group_categories/%s/groups' % (self.id)
+            'group_categories/{}/groups'.format(self.id)
         )
 
     def list_users(self, **kwargs):
@@ -788,7 +788,7 @@ class GroupCategory(CanvasObject):
             User,
             self._requester,
             'GET',
-            'group_categories/%s/users' % (self.id),
+            'group_categories/{}/users'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -809,11 +809,11 @@ class GroupCategory(CanvasObject):
                 User,
                 self._requester,
                 'POST',
-                'group_categories/%s/assign_unassigned_members' % (self.id)
+                'group_categories/{}/assign_unassigned_members'.format(self.id)
             )
         else:
             response = self._requester.request(
                 'POST',
-                'group_categories/%s/assign_unassigned_members' % (self.id)
+                'group_categories/{}/assign_unassigned_members'.format(self.id)
             )
             return Progress(self._requester, response.json())

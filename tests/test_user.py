@@ -193,7 +193,7 @@ class TestUser(unittest.TestCase):
     def test_upload(self, m):
         register_uris({'user': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_user_%s' % uuid.uuid4().hex
+        filename = 'testfile_user_{}'.format(uuid.uuid4().hex)
         with open(filename, 'w+') as file:
             response = self.user.upload(file)
 
