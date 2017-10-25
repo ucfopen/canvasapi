@@ -271,7 +271,7 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(file_list[0], File)
 
     # get_file()
-    def test_get_file(self, m):
+    def test_get_file_id(self, m):
         register_uris({'user': ['get_file']}, m)
 
         file = self.user.get_file(1)
@@ -279,12 +279,39 @@ class TestUser(unittest.TestCase):
         self.assertEqual(file.display_name, 'User_File.docx')
         self.assertEqual(file.size, 1024)
 
+    # get_file()
+    def test_get_file_obj(self, m):
+        register_uris({'user': ['get_file', 'get_user_files']}, m)
+
+        files = self.user.list_files()
+
+        example_file = files[0]
+
+        file = self.user.get_file(example_file)
+        self.assertIsInstance(file, File)
+        self.assertEqual(file.display_name, 'User_File.docx')
+        self.assertEqual(file.size, 1024)
+
     # get_folder()
-    def test_get_folder(self, m):
+    def test_get_folder_id(self, m):
         register_uris({'user': ['get_folder']}, m)
 
         folder = self.user.get_folder(1)
         self.assertEqual(folder.name, "Folder 1")
+        self.assertIsInstance(folder, Folder)
+
+    # get_folder()
+    def test_get_folder_obj(self, m):
+        register_uris(
+            {
+                'user': ['create_folder', 'get_folder_2']
+            }, m)
+
+        name_str = "Test String"
+        folder_obj = self.user.create_folder(name=name_str)
+
+        folder = self.user.get_folder(folder_obj)
+        self.assertEqual(folder.name, "Folder 2")
         self.assertIsInstance(folder, Folder)
 
     # list_folders()
