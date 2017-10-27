@@ -232,7 +232,6 @@ class TestGroup(unittest.TestCase):
                     'update_membership_user'
                 ]
             }, m)
-        from canvasapi.user import User
 
         updated_membership_by_id = self.group.update_membership(1)
         self.assertIsInstance(updated_membership_by_id, GroupMembership)

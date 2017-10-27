@@ -506,7 +506,13 @@ class TestCanvas(unittest.TestCase):
 
     # list_user_participants()
     def test_list_user_participants(self, m):
-        register_uris({'appointment_group': ['get_appointment_group_222', 'list_user_participants']}, m)
+        register_uris(
+            {
+                'appointment_group': [
+                    'get_appointment_group_222',
+                    'list_user_participants'
+                ]
+            }, m)
 
         users_by_id = self.canvas.list_user_participants(222)
         users_list_by_id = [user for user in users_by_id]
@@ -519,7 +525,13 @@ class TestCanvas(unittest.TestCase):
 
     # list_group_participants()
     def test_list_group_participants(self, m):
-        register_uris({'appointment_group': ['get_appointment_group_222', 'list_group_participants']}, m)
+        register_uris(
+            {
+                'appointment_group': [
+                    'get_appointment_group_222',
+                    'list_group_participants'
+                ]
+            }, m)
 
         groups_by_id = self.canvas.list_group_participants(222)
         groups_list_by_id = [group for group in groups_by_id]

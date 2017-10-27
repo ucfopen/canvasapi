@@ -769,7 +769,14 @@ class TestCourse(unittest.TestCase):
 
     # update_submission()
     def test_update_submission(self, m):
-        register_uris({'course': ['get_assignment_by_id_2', 'update_submission', 'get_submission']}, m)
+        register_uris(
+            {
+                'course': [
+                    'get_assignment_by_id_2',
+                    'update_submission',
+                    'get_submission'
+                ]
+            }, m)
 
         assignment_for_id = 1
         user_id = 1
@@ -778,10 +785,8 @@ class TestCourse(unittest.TestCase):
             user_id,
             submission={'excuse': True}
         )
-
         self.assertIsInstance(submission, Submission)
         self.assertTrue(hasattr(submission, 'excused'))
-
 
         assignment_for_obj = self.course.get_assignment(1)
         submission = self.course.update_submission(
@@ -789,7 +794,6 @@ class TestCourse(unittest.TestCase):
             self.user,
             submission={'excuse': True}
         )
-
         self.assertIsInstance(submission, Submission)
         self.assertTrue(hasattr(submission, 'excused'))
 
