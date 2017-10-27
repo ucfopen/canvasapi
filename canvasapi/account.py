@@ -390,7 +390,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.Role`
         """
-        role_id = obj_or_id(role, "id", (Role,))
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'GET',
@@ -429,7 +429,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.Role`
         """
-        role_id = obj_or_id(role, "id", (Role,))
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'DELETE',
@@ -449,7 +449,7 @@ class Account(CanvasObject):
         :type role_id: :class:`canvasapi.account.Role` or int
         :rtype: :class:`canvasapi.account.Role`
         """
-        role_id = obj_or_id(role, "id", (Role,))
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'POST',
@@ -470,7 +470,7 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.Role`
         """
-        role_id = obj_or_id(role, "id", (Role,))
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'PUT',
@@ -493,7 +493,7 @@ class Account(CanvasObject):
         """
         from canvasapi.enrollment import Enrollment
 
-        enrollment_id = obj_or_id(enrollment, "id", (Enrollment,))
+        enrollment_id = obj_or_id(enrollment, "enrollment", (Enrollment,))
 
         response = self._requester.request(
             'GET',
@@ -891,7 +891,7 @@ class Account(CanvasObject):
         """
         from canvasapi.authentication_provider import AuthenticationProvider
         authentication_providers_id = obj_or_id(
-            authentication_provider, "id", (
+            authentication_provider, "authentication provider", (
                 AuthenticationProvider,
             )
         )
@@ -973,7 +973,7 @@ class Account(CanvasObject):
         """
         from canvasapi.outcome import OutcomeGroup
 
-        outcome_group_id = obj_or_id(group, "id", (OutcomeGroup,))
+        outcome_group_id = obj_or_id(group, "outcome group", (OutcomeGroup,))
         response = self._requester.request(
             'GET',
             'accounts/{}/outcome_groups/{}'.format(self.id, outcome_group_id)
