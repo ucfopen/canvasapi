@@ -876,7 +876,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_authentication_providers(self, authentication_provider, **kwargs):
+    def get_authentication_provider(self, authentication_provider, **kwargs):
         """
         Get the specified authentication provider
 
