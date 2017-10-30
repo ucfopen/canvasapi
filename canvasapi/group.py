@@ -546,7 +546,8 @@ class Group(CanvasObject):
         from canvasapi.external_feed import ExternalFeed
         response = self._requester.request(
             'POST',
-            'groups/{}/external_feeds'.format(self.id, url=url),
+            'groups/{}/external_feeds'.format(self.id),
+            url=url,
             _kwargs=combine_kwargs(**kwargs)
         )
         return ExternalFeed(self._requester, response.json())
@@ -644,7 +645,8 @@ class Group(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'groups/{}/folders'.format(self.id, name=name),
+            'groups/{}/folders'.format(self.id),
+            name=name,
             _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())

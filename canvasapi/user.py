@@ -514,7 +514,8 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'users/{}/folders'.format(self.id, name=name),
+            'users/{}/folders'.format(self.id),
+            name=name,
             _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
