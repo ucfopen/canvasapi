@@ -50,7 +50,7 @@ class Canvas(object):
         :calls: `GET /api/v1/accounts/:id \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`_
 
-        :param account: The Object or ID of the account to retrieve.
+        :param account: The object or ID of the account to retrieve.
         :type account: int, str or :class:`canvasapi.account.Account`
         :param use_sis_id: Whether or not account_id is an sis ID.
             Defaults to `False`.
@@ -122,7 +122,7 @@ class Canvas(object):
         :calls: `GET /courses/:id \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
-        :param course: The Object or ID of the course to retrieve.
+        :param course: The object or ID of the course to retrieve.
         :type course: int, str or :class:`canvasapi.course.Course`
         :param use_sis_id: Whether or not course_id is an sis ID.
             Defaults to `False`.
@@ -156,7 +156,7 @@ class Canvas(object):
         :calls: `GET /users/:id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
 
-        :param user: The user's Object or ID.
+        :param user: The user's object or ID.
         :type user: :class:`canvasapi.user.User` or int
         :param id_type: The ID type.
         :type id_type: str
@@ -266,7 +266,7 @@ class Canvas(object):
         :calls: `GET /api/v1/users/self/course_nicknames/:course_id \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.show>`_
 
-        :param course: The Object or ID of the course.
+        :param course: The object or ID of the course.
         :type course: :class:`canvasapi.course.Course` or int
 
         :rtype: :class:`canvasapi.course.CourseNickname`
@@ -288,7 +288,7 @@ class Canvas(object):
         :calls: `GET /api/v1/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.show>`_
 
-        :param section: The Object or ID of the section to get.
+        :param section: The object or ID of the section to get.
         :type section: :class:`canvasapi.section.Section` or int
         :param use_sis_id: Whether or not section_id is an sis ID.
             Defaults to `False`.
@@ -394,7 +394,7 @@ class Canvas(object):
         :calls: `GET /api/v1/groups/:group_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
 
-        :param group: The Object or ID of the group to get.
+        :param group: The object or ID of the group to get.
         :type group: :class:`canvasapi.group.Group` or int
 
         :param use_sis_id: Whether or not group_id is an sis ID.
@@ -425,7 +425,7 @@ class Canvas(object):
         :calls: `GET /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
 
-        :param category: The Object or ID of the category.
+        :param category: The object or ID of the category.
         :type category: :class:`canvasapi.group.GroupCategory` or int
 
         :rtype: :class:`canvasapi.group.GroupCategory`
@@ -474,7 +474,7 @@ class Canvas(object):
         :calls: `GET /api/v1/conversations/:id \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.show>`_
 
-        :param conversation: The Object or ID of the conversation.
+        :param conversation: The object or ID of the conversation.
         :type conversation: :class:`canvasapi.conversation.Conversation` or int
 
         :rtype: :class:`canvasapi.conversation.Conversation`
@@ -669,7 +669,7 @@ class Canvas(object):
         :calls: `GET /api/v1/calendar_events/:id \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.show>`_
 
-        :param calendar_event: The Object or ID of the calendar event.
+        :param calendar_event: The object or ID of the calendar event.
         :type calendar_event: :class:`canvasapi.calendar_event.CalendarEvent` or int
 
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
@@ -691,7 +691,7 @@ class Canvas(object):
         :calls: `POST /api/v1/calendar_events/:id/reservations \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.reserve>`_
 
-        :param calendar_event: The Object or ID of the calendar event.
+        :param calendar_event: The object or ID of the calendar event.
         :type calendar_event: :class:`canvasapi.calendar_event.CalendarEvent` or int
 
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
@@ -806,8 +806,8 @@ class Canvas(object):
         :calls: `GET /api/v1/appointment_groups/:id/users \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.users>`_
 
-        :param appointment_group_id: The Object or ID of the appointment group.
-        :type appointment_group_id: :class:`canvasapi.appointment_group.AppointmentGroup` or int
+        :param appointment_group: The object or ID of the appointment group.
+        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
         """
@@ -833,7 +833,7 @@ class Canvas(object):
         :calls: `GET /api/v1/appointment_groups/:id/groups \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.groups>`_
 
-        :param appointment_group: The Object or ID of the appointment group.
+        :param appointment_group: The object or ID of the appointment group.
         :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
@@ -860,7 +860,7 @@ class Canvas(object):
         :calls: `GET /api/v1/files/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
 
-        :param file: The Object or ID of the file to retrieve.
+        :param file: The object or ID of the file to retrieve.
         :type file: :class:`canvasapi.file.File` or int
 
         :rtype: :class:`canvasapi.file.File`
@@ -881,7 +881,7 @@ class Canvas(object):
         :calls: `GET /api/v1/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param folder: The Object or ID of the folder to retrieve.
+        :param folder: The object or ID of the folder to retrieve.
         :type folder: :class:`canvasapi.folder.Folder` or int
 
         :rtype: :class:`canvasapi.folder.Folder`
@@ -979,7 +979,7 @@ class Canvas(object):
         :calls: `GET /api/v1/global/outcome_groups/:id \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
 
-        :param group: The outcome group Object or ID to return.
+        :param group: The outcome group object or ID to return.
         :type group: :class:`canvasapi.outcome.OutcomeGroup` or int
 
         :returns: An outcome group object.

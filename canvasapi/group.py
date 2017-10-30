@@ -337,7 +337,7 @@ class Group(CanvasObject):
         :calls: `POST /api/v1/groups/:group_id/memberships \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.create>`_
 
-        :param user: The Object or ID of the user.
+        :param user: The object or ID of the user.
         :type user: :class:`canvasapi.user.User`or int
 
         :rtype: :class:`canvasapi.group.GroupMembership`
@@ -361,7 +361,7 @@ class Group(CanvasObject):
         :calls: `PUT /api/v1/groups/:group_id/users/:user_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.update>`_
 
-        :param user: The Object or ID of the user.
+        :param user: The object or ID of the user.
         :type user: :class:`canvasapi.user.User`or int
 
         :rtype: :class:`canvasapi.group.GroupMembership`
@@ -384,7 +384,7 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/discussion_topics/:topic_id \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.show>`_
 
-        :param topic: The Object or ID of the discussion topic.
+        :param topic: The object or ID of the discussion topic.
         :type topic: :class:`canvasapi.discussion_topic.DiscussionTopic`or int
 
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
@@ -408,7 +408,7 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/files/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
 
-        :param file: The Object or ID of the file to retrieve.
+        :param file: The object or ID of the file to retrieve.
         :type file: :class:`canvasapi.file.File` or int
 
         :rtype: :class:`canvasapi.file.File`
@@ -430,7 +430,7 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/view \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
-        :param topic: The Object or ID of the discussion topic.
+        :param topic: The object or ID of the discussion topic.
         :type topic: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
 
         :rtype: dict
@@ -601,7 +601,7 @@ class Group(CanvasObject):
         :calls: `GET /api/v1/groups/:group_id/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param folder: The Object or ID of the folder to retrieve.
+        :param folder: The object or ID of the folder to retrieve.
         :type folder: :class:`canvasapi.folder.Folder` or int
 
         :rtype: :class:`canvasapi.folder.Folder`

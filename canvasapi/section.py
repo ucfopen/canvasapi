@@ -47,7 +47,7 @@ class Section(CanvasObject):
         :calls: `POST /api/v1/sections/:id/crosslist/:new_course_id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.crosslist>`_
 
-        :param new_course: The Object or ID of the new course.
+        :param new_course: The object or ID of the new course.
         :type new_course: :class:`canvasapi.course.Course` or int
 
         :rtype: :class:`canvasapi.section.Section`
@@ -114,7 +114,7 @@ class Section(CanvasObject):
         :calls: `POST /api/v1/sections/:section_id/assignments/:assignment_id/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
 
-        :param assignment: The Object or ID of the assignment.
+        :param assignment: The object or ID of the assignment.
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
         :param submission: The attributes of the submission.
         :type submission: dict
@@ -149,7 +149,7 @@ class Section(CanvasObject):
         :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
-        :param assignment: The Object or ID of the assignment.
+        :param assignment: The object or ID of the assignment.
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -199,9 +199,9 @@ class Section(CanvasObject):
         :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.show>`_
 
-        :param assignment: The Object or ID of the assignment.
+        :param assignment: The object or ID of the assignment.
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The Object or ID of the user.
+        :param user: The object or ID of the user.
         :type user: :class:`canvasapi.user.User` or int or str
 
         :rtype: :class:`canvasapi.submission.Submission`
@@ -229,9 +229,9 @@ class Section(CanvasObject):
         :calls: `PUT /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update>`_
 
-        :param assignment: The Object or ID of the assignment.
+        :param assignment: The object or ID of the assignment.
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The Object or ID of the user.
+        :param user: The object or ID of the user.
         :type user: :class:`canvasapi.user.User` or int or str
 
         :rtype: :class:`canvasapi.submission.Submission`
@@ -266,9 +266,9 @@ class Section(CanvasObject):
             /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id/read \
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
 
-        :param assignment: The Object or ID of the assignment.
+        :param assignment: The object or ID of the assignment.
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The Object or ID of the user.
+        :param user: The object or ID of the user.
         :type user: :class:`canvasapi.user.User` or int or str
 
         :rtype: `bool`
@@ -297,9 +297,9 @@ class Section(CanvasObject):
             /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id/read \
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_unread>`_
 
-        :param assignment: The Object or ID of the assignment.
+        :param assignment: The object or ID of the assignment.
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The Object or ID of the user.
+        :param user: The object or ID of the user.
         :type user: :class:`canvasapi.user.User` or int or str
 
         :rtype: `bool`

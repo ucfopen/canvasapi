@@ -189,7 +189,7 @@ class OutcomeGroup(CanvasObject):
             or `PUT /api/v1/courses/:course_id/outcome_groups/:id/outcomes/:outcome_id \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
 
-        :param outcome: The Object or ID of the outcome.
+        :param outcome: The object or ID of the outcome.
         :type outcome: :class:`canvasapi.outcome.Outcome` or int
 
         :returns: OutcomeLink object with current OutcomeGroup and newly linked Outcome.
@@ -245,7 +245,7 @@ class OutcomeGroup(CanvasObject):
             or `DELETE /api/v1/courses/:course_id/outcome_groups/:id/outcomes/:outcome_id \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.unlink`_
 
-        :param outcome: The Object or ID of the outcome.
+        :param outcome: The object or ID of the outcome.
         :type outcome: :class:`canvasapi.outcome.Outcome` or int
 
         :returns: True if successful, false if failed.

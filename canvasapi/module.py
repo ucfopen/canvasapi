@@ -99,7 +99,7 @@ class Module(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items/:id \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.show>`_
 
-        :param module_item: The Object or ID of the module item.
+        :param module_item: The object or ID of the module item.
         :type module_item: :class:`canvasapi.module.ModuleItem` or dict
 
         :rtype: :class:`canvasapi.module.ModuleItem`

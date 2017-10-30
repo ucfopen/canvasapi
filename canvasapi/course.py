@@ -87,7 +87,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/users/:id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
 
-        :param user: The Object or ID of the user to retrieve.
+        :param user: The object or ID of the user to retrieve.
         :type user: :class:`canvasapi.user.User` or int
         :param user_id_type: The type of the ID to search for.
         :type user_id_type: str
@@ -288,7 +288,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/assignments/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.show>`_
 
-        :param assignment: The Object or ID of the assignment to retrieve.
+        :param assignment: The object or ID of the assignment to retrieve.
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
 
         :rtype: :class:`canvasapi.assignment.Assignment`
@@ -379,8 +379,9 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/quizzes/:id \
         <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.show>`_
 
-        :param quiz: The Object or ID of the quiz to retrieve.
+        :param quiz: The object or ID of the quiz to retrieve.
         :type quiz: :class:`canvasapi.quiz.Quiz` or int
+
         :rtype: :class:`canvasapi.quiz.Quiz`
         """
         from canvasapi.quiz import Quiz
@@ -452,7 +453,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/modules/:id \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_modules_api.show>`_
 
-        :param module: The Object or ID of the module to retrieve.
+        :param module: The object or ID of the module to retrieve.
         :type module: :class:`canvasapi.module.Module` or int
 
         :rtype: :class:`canvasapi.module.Module`
@@ -504,7 +505,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
 
-        :param tool: The Object or ID of the tool to retrieve.
+        :param tool: The object or ID of the tool to retrieve.
         :type tool: :class:`canvasapi.external_tool.ExternalTool` or int
 
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
@@ -548,7 +549,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
 
-        :param section: The Object or ID of the section to retrieve.
+        :param section: The object or ID of the section to retrieve.
         :type section: :class:`canvasapi.section.Section` or int
 
         :rtype: :class:`canvasapi.section.Section`
@@ -774,8 +775,9 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/files/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
 
-        :param file: The Object or ID of the file to retrieve.
+        :param file: The object or ID of the file to retrieve.
         :type file: :class:`canvasapi.file.File` or int
+
         :rtype: :class:`canvasapi.file.File`
         """
         from canvasapi.file import File
@@ -796,8 +798,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.show>`_
 
-        :param topic_id: The Object or ID of the discussion topic.
-        :type topic_id: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
+        :param topic: The object or ID of the discussion topic.
+        :type topic: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
 
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
@@ -820,8 +822,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/view \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.view>`_
 
-        :param topic_id: The Object or ID of the discussion topic.
-        :type topic_id: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
+        :param topic: The object or ID of the discussion topic.
+        :type topic: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
 
         :rtype: dict
         """
@@ -859,7 +861,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
         <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.show>`_
 
-        :param assignment_group: Object or ID of assignment group.
+        :param assignment_group: object or ID of assignment group.
         :type assignment_group: :class:`canvasapi.assignment.AssignmentGroup` or int
 
         :rtype: :class:`canvasapi.assignment.AssignmentGroup`
@@ -1061,7 +1063,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/activity \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_participation>`_
 
-        :param user: The Object or ID of the related user
+        :param user: The object or ID of the related user
         :type user: :class:`canvasapi.user.User` or int
 
         :rtype: dict
@@ -1084,7 +1086,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/assignments \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_assignments>`_
 
-        :param user: The Object or ID of the related user
+        :param user: The object or ID of the related user
         :type user: :class:`canvasapi.user.User` or int
 
         :rtype: dict
@@ -1107,7 +1109,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/analytics/users/:student_id/communication \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.student_in_course_messaging>`_
 
-        :param user: The Object or ID of the related user
+        :param user: The object or ID of the related user
         :type user: :class:`canvasapi.user.User` or int
 
         :rtype: dict
@@ -1130,7 +1132,7 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
 
-        :param assignment: The Object or ID of the related assignment
+        :param assignment: The object or ID of the related assignment
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
 
         :param submission: The attributes of the submission.
@@ -1211,9 +1213,9 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.show>`_
 
-        :param assignment: The Object or ID of the related assignment
+        :param assignment: The object or ID of the related assignment
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The Object or ID of the related user
+        :param user: The object or ID of the related user
         :type user: :class:`canvasapi.user.User` or int
 
         :rtype: :class:`canvasapi.submission.Submission`
@@ -1241,9 +1243,9 @@ class Course(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update>`_
 
-        :param assignment: The Object or ID of the related assignment
+        :param assignment: The object or ID of the related assignment
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The Object or ID of the related user
+        :param user: The object or ID of the related user
         :type user: :class:`canvasapi.user.User` or int
 
         :rtype: :class:`canvasapi.submission.Submission`
@@ -1277,7 +1279,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/gradeable_students  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.gradeable_students>`_
 
-        :param assignment: The Object or ID of the related assignment
+        :param assignment: The object or ID of the related assignment
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -1302,9 +1304,9 @@ class Course(CanvasObject):
             /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/read \
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
 
-        :param assignment: The Object or ID of the related assignment
+        :param assignment: The object or ID of the related assignment
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The Object or ID of the related user
+        :param user: The object or ID of the related user
         :type user: :class:`canvasapi.user.User` or int
 
         :rtype: `bool`
@@ -1333,9 +1335,9 @@ class Course(CanvasObject):
             /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/read \
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_unread>`_
 
-        :param assignment: The Object or ID of the related assignment
+        :param assignment: The object or ID of the related assignment
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The Object or ID of the related user
+        :param user: The object or ID of the related user
         :type user: :class:`canvasapi.user.User` or int
 
         :rtype: `bool`
@@ -1401,7 +1403,7 @@ class Course(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/external_feeds/:external_feed_id \
         <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.destroy>`_
 
-        :param feed: The Object or ID of the feed to be deleted.
+        :param feed: The object or ID of the feed to be deleted.
         :type feed: :class:`canvasapi.external_feed.ExternalFeed` or int
 
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
@@ -1443,8 +1445,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param folder_id: The Object or ID of the folder to retrieve.
-        :type folder_id: :class:`canvasapi.folder.Folder` or int
+        :param folder: The object or ID of the folder to retrieve.
+        :type folder: :class:`canvasapi.folder.Folder` or int
 
         :rtype: :class:`canvasapi.folder.Folder`
         """

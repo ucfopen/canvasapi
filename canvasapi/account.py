@@ -166,6 +166,7 @@ class Account(CanvasObject):
 
         :param user: The user object or ID to delete.
         :type user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.user.User`
         """
         from canvasapi.user import User
@@ -320,7 +321,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/users/:user_id/account_notifications \
         <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_index>`_
 
-        :param user: The user Object or ID to retrieve notifications for.
+        :param user: The user object or ID to retrieve notifications for.
         :type user: :class:`canvasapi.user.User` or int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -385,8 +386,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
 
-        :param role_id: The Object or ID of the role.
-        :type role_id: :class:`canvasapi.account.Role` or int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
 
         :rtype: :class:`canvasapi.account.Role`
         """
@@ -424,8 +425,8 @@ class Account(CanvasObject):
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`_
 
-        :param role_id: The Object or ID of the role.
-        :type role_id: :class:`canvasapi.account.Role` or int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
 
         :rtype: :class:`canvasapi.account.Role`
         """
@@ -445,8 +446,8 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/roles/:id/activate \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`_
 
-        :param role_id: The Object or ID of the role.
-        :type role_id: :class:`canvasapi.account.Role` or int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
         :rtype: :class:`canvasapi.account.Role`
         """
         role_id = obj_or_id(role, "role", (Role,))
@@ -465,8 +466,8 @@ class Account(CanvasObject):
         :calls: `PUT /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`_
 
-        :param role_id: The Object or ID of the role.
-        :type role_id: :class:`canvasapi.account.Role` or int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
 
         :rtype: :class:`canvasapi.account.Role`
         """
@@ -486,8 +487,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/enrollments/:id \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.show>`_
 
-        :param enrollment_id: The Object or ID of the enrollment to retrieve.
-        :type enrollment_id: :class:`canvasapi.enrollment.Enrollment` or int
+        :param enrollment: The object or ID of the enrollment to retrieve.
+        :type enrollment: :class:`canvasapi.enrollment.Enrollment` or int
 
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
@@ -883,7 +884,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/authentication_providers/:id \
         <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.show>`_
 
-        :param authentication_provider: The Object or ID of the authentication provider
+        :param authentication_provider: The object or ID of the authentication provider
         :type authentication_provider:
             :class:`canvasapi.authentication_provider.AuthenticationProvider` or int
 
