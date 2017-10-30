@@ -28,11 +28,12 @@ class TestAccount(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {'account': ['get_by_id'], 'user': ['get_by_id']}
+            requires = {'account': ['get_by_id', 'get_role'], 'user': ['get_by_id']}
             register_uris(requires, m)
 
             self.account = self.canvas.get_account(1)
             self.user = self.canvas.get_user(1)
+            self.role = self.account.get_role(2)
 
     # __str__()
     def test__str__(self, m):
@@ -288,17 +289,20 @@ class TestAccount(unittest.TestCase):
     def test_get_role(self, m):
         register_uris({'account': ['get_role']}, m)
 
-        target_role = self.account.get_role(2)
+        target_role_by_id = self.account.get_role(2)
+        self.assertIsInstance(target_role_by_id, Role)
+        self.assertTrue(hasattr(target_role_by_id, 'role'))
+        self.assertTrue(hasattr(target_role_by_id, 'label'))
 
-        self.assertIsInstance(target_role, Role)
-        self.assertTrue(hasattr(target_role, 'role'))
-        self.assertTrue(hasattr(target_role, 'label'))
+        target_role_by_obj = self.account.get_role(self.role)
+        self.assertIsInstance(target_role_by_obj, Role)
+        self.assertTrue(hasattr(target_role_by_obj, 'role'))
+        self.assertTrue(hasattr(target_role_by_obj, 'label'))
 
     def test_create_role(self, m):
         register_uris({'account': ['create_role']}, m)
 
         new_role = self.account.create_role(1)
-
         self.assertIsInstance(new_role, Role)
         self.assertTrue(hasattr(new_role, 'role'))
         self.assertTrue(hasattr(new_role, 'label'))
@@ -306,37 +310,51 @@ class TestAccount(unittest.TestCase):
     def test_deactivate_role(self, m):
         register_uris({'account': ['deactivate_role']}, m)
 
-        old_role = self.account.deactivate_role(2)
+        old_role_by_id = self.account.deactivate_role(2)
+        self.assertIsInstance(old_role_by_id, Role)
+        self.assertTrue(hasattr(old_role_by_id, 'role'))
+        self.assertTrue(hasattr(old_role_by_id, 'label'))
 
-        self.assertIsInstance(old_role, Role)
-        self.assertTrue(hasattr(old_role, 'role'))
-        self.assertTrue(hasattr(old_role, 'label'))
+        old_role_by_obj = self.account.deactivate_role(self.role)
+        self.assertIsInstance(old_role_by_obj, Role)
+        self.assertTrue(hasattr(old_role_by_obj, 'role'))
+        self.assertTrue(hasattr(old_role_by_obj, 'label'))
 
     def test_activate_role(self, m):
         register_uris({'account': ['activate_role']}, m)
 
-        activated_role = self.account.activate_role(2)
+        activated_role_by_id = self.account.activate_role(2)
+        self.assertIsInstance(activated_role_by_id, Role)
+        self.assertTrue(hasattr(activated_role_by_id, 'role'))
+        self.assertTrue(hasattr(activated_role_by_id, 'label'))
 
-        self.assertIsInstance(activated_role, Role)
-        self.assertTrue(hasattr(activated_role, 'role'))
-        self.assertTrue(hasattr(activated_role, 'label'))
+        activated_role_by_obj = self.account.activate_role(self.role)
+        self.assertIsInstance(activated_role_by_obj, Role)
+        self.assertTrue(hasattr(activated_role_by_obj, 'role'))
+        self.assertTrue(hasattr(activated_role_by_obj, 'label'))
 
     def test_update_role(self, m):
         register_uris({'account': ['update_role']}, m)
 
-        updated_role = self.account.update_role(2)
+        updated_role_by_id = self.account.update_role(2)
+        self.assertIsInstance(updated_role_by_id, Role)
+        self.assertTrue(hasattr(updated_role_by_id, 'role'))
+        self.assertTrue(hasattr(updated_role_by_id, 'label'))
 
-        self.assertIsInstance(updated_role, Role)
-        self.assertTrue(hasattr(updated_role, 'role'))
-        self.assertTrue(hasattr(updated_role, 'label'))
+        updated_role_by_obj = self.account.update_role(self.role)
+        self.assertIsInstance(updated_role_by_obj, Role)
+        self.assertTrue(hasattr(updated_role_by_obj, 'role'))
+        self.assertTrue(hasattr(updated_role_by_obj, 'label'))
 
     # get_enrollment()
     def test_get_enrollment(self, m):
         register_uris({'enrollment': ['get_by_id']}, m)
 
-        target_enrollment = self.account.get_enrollment(1)
+        enrollment_by_id = self.account.get_enrollment(1)
+        self.assertIsInstance(enrollment_by_id, Enrollment)
 
-        self.assertIsInstance(target_enrollment, Enrollment)
+        enrollment_by_obj = self.account.get_enrollment(enrollment_by_id)
+        self.assertIsInstance(enrollment_by_obj, Enrollment)
 
     def test_list_groups(self, m):
         requires = {'account': ['list_groups_context', 'list_groups_context2']}
@@ -531,13 +549,17 @@ class TestAccount(unittest.TestCase):
         self.assertTrue(hasattr(new_authentication_provider, 'auth_type'))
         self.assertTrue(hasattr(new_authentication_provider, 'position'))
 
-    # get_authentication_providers()
-    def test_get_authentication_providers(self, m):
+    # get_authentication_provider()
+    def test_get_authentication_provider(self, m):
         register_uris({'account': ['get_authentication_providers']}, m)
 
-        response = self.account.get_authentication_providers(1)
+        authentication_provider_by_id = self.account.get_authentication_provider(1)
+        self.assertIsInstance(authentication_provider_by_id, AuthenticationProvider)
 
-        self.assertIsInstance(response, AuthenticationProvider)
+        authentication_provider_by_obj = self.account.get_authentication_provider(
+            authentication_provider_by_id
+        )
+        self.assertIsInstance(authentication_provider_by_obj, AuthenticationProvider)
 
     # show_account_auth_settings()
     def test_show_account_auth_settings(self, m):
@@ -569,11 +591,15 @@ class TestAccount(unittest.TestCase):
     def test_get_outcome_group(self, m):
         register_uris({'outcome': ['account_get_outcome_group']}, m)
 
-        outcome_group = self.account.get_outcome_group(1)
+        outcome_group_by_id = self.account.get_outcome_group(1)
+        self.assertIsInstance(outcome_group_by_id, OutcomeGroup)
+        self.assertEqual(outcome_group_by_id.id, 1)
+        self.assertEqual(outcome_group_by_id.title, "Account outcome group title")
 
-        self.assertIsInstance(outcome_group, OutcomeGroup)
-        self.assertEqual(outcome_group.id, 1)
-        self.assertEqual(outcome_group.title, "Account outcome group title")
+        outcome_group_by_obj = self.account.get_outcome_group(outcome_group_by_id)
+        self.assertIsInstance(outcome_group_by_obj, OutcomeGroup)
+        self.assertEqual(outcome_group_by_obj.id, 1)
+        self.assertEqual(outcome_group_by_obj.title, "Account outcome group title")
 
     # get_outcome_groups_in_context()
     def test_get_outcome_groups_in_context(self, m):

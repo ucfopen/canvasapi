@@ -39,9 +39,8 @@ class TestDiscussionTopic(unittest.TestCase):
     def test_delete(self, m):
         register_uris({'discussion_topic': ['delete']}, m)
 
-        topic_id = 1
-        topic = self.discussion_topic.delete(topic_id)
-        self.assertTrue(topic)
+        response = self.discussion_topic.delete()
+        self.assertTrue(response)
 
     # update()
     def test_update(self, m):

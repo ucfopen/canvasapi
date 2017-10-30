@@ -26,12 +26,13 @@ class Account(CanvasObject):
         :type user: :class:`canvasapi.user.User` or int
         :param notification: The notification object or ID to close.
         :type notification: :class:`canvasapi.account.AccountNotification` or int
+
         :rtype: :class:`canvasapi.account.AccountNotification`
         """
         from canvasapi.user import User
 
         user_id = obj_or_id(user, "user", (User,))
-        notif_id = obj_or_id(notification, "notif", (AccountNotification,))
+        notif_id = obj_or_id(notification, "notification", (AccountNotification,))
 
         response = self._requester.request(
             'DELETE',
@@ -165,6 +166,7 @@ class Account(CanvasObject):
 
         :param user: The user object or ID to delete.
         :type user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.user.User`
         """
         from canvasapi.user import User
@@ -321,6 +323,7 @@ class Account(CanvasObject):
 
         :param user: The user object or ID to retrieve notifications for.
         :type user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.AccountNotification`
         """
@@ -376,17 +379,19 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_role(self, role_id):
+    def get_role(self, role):
         """
         Retrieve a role by ID.
 
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
 
-        :param role_id: The ID of the role.
-        :type role_id: int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
+
         :rtype: :class:`canvasapi.account.Role`
         """
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'GET',
@@ -405,7 +410,6 @@ class Account(CanvasObject):
         :type label: str
         :rtype: :class:`canvasapi.account.Role`
         """
-
         response = self._requester.request(
             'POST',
             'accounts/{}/roles'.format(self.id),
@@ -414,17 +418,19 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def deactivate_role(self, role_id, **kwargs):
+    def deactivate_role(self, role, **kwargs):
         """
         Deactivate a custom role.
 
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`_
 
-        :param role_id: The ID of the role.
-        :type role_id: int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
+
         :rtype: :class:`canvasapi.account.Role`
         """
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'DELETE',
@@ -433,17 +439,18 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def activate_role(self, role_id, **kwargs):
+    def activate_role(self, role, **kwargs):
         """
         Reactivate an inactive role.
 
         :calls: `POST /api/v1/accounts/:account_id/roles/:id/activate \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`_
 
-        :param role_id: The ID of the role.
-        :type role_id: int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
         :rtype: :class:`canvasapi.account.Role`
         """
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'POST',
@@ -452,17 +459,19 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def update_role(self, role_id, **kwargs):
+    def update_role(self, role, **kwargs):
         """
         Update permissions for an existing role.
 
         :calls: `PUT /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`_
 
-        :param role_id: The ID of the role.
-        :type role_id: int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
+
         :rtype: :class:`canvasapi.account.Role`
         """
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'PUT',
@@ -471,18 +480,21 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def get_enrollment(self, enrollment_id, **kwargs):
+    def get_enrollment(self, enrollment, **kwargs):
         """
         Get an enrollment object by ID.
 
         :calls: `GET /api/v1/accounts/:account_id/enrollments/:id \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.show>`_
 
-        :param enrollment_id: The ID of the enrollment to retrieve.
-        :type enrollment_id: int
+        :param enrollment: The object or ID of the enrollment to retrieve.
+        :type enrollment: :class:`canvasapi.enrollment.Enrollment` or int
+
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
         from canvasapi.enrollment import Enrollment
+
+        enrollment_id = obj_or_id(enrollment, "enrollment", (Enrollment,))
 
         response = self._requester.request(
             'GET',
@@ -865,16 +877,25 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_authentication_providers(self, authentication_providers_id, **kwargs):
+    def get_authentication_provider(self, authentication_provider, **kwargs):
         """
         Get the specified authentication provider
 
         :calls: `GET /api/v1/accounts/:account_id/authentication_providers/:id \
         <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.show>`_
 
+        :param authentication_provider: The object or ID of the authentication provider
+        :type authentication_provider:
+            :class:`canvasapi.authentication_provider.AuthenticationProvider` or int
+
         :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
         from canvasapi.authentication_provider import AuthenticationProvider
+        authentication_providers_id = obj_or_id(
+            authentication_provider, "authentication provider", (
+                AuthenticationProvider,
+            )
+        )
 
         response = self._requester.request(
             'GET',
@@ -952,9 +973,8 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
         from canvasapi.outcome import OutcomeGroup
-        from canvasapi.util import obj_or_id
 
-        outcome_group_id = obj_or_id(group, "id", (OutcomeGroup,))
+        outcome_group_id = obj_or_id(group, "outcome group", (OutcomeGroup,))
         response = self._requester.request(
             'GET',
             'accounts/{}/outcome_groups/{}'.format(self.id, outcome_group_id)

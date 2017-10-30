@@ -192,8 +192,9 @@ class User(CanvasObject):
         :calls: `PUT /api/v1/users/:id/merge_into/:destination_user_id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.merge_into>`_
 
-        :param destination_user: The user to merge into.
-        :type destination_user: :class:`canvasapi.user.User`
+        :param destination_user: The object or ID of the user to merge into.
+        :type destination_user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.user.User`
         """
         dest_user_id = obj_or_id(destination_user, 'destination_user', (User, ))
@@ -231,6 +232,9 @@ class User(CanvasObject):
 
         :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.user_index>`_
+
+        :param course: The object or ID of the course to retrieve.
+        :type course: :class:`canvasapi.course.Course` or int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.assignment.Assignment`
@@ -374,8 +378,9 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/self/bookmarks/:id \
         <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.show>`_
 
-        :param bookmark_id: The ID of the bookmark.
-        :type bookmark_id: `int`
+        :param bookmark: The object or ID of the bookmark.
+        :type bookmark: :class:`canvasapi.bookmark.Bookmark` or int
+
         :rtype: :class:`canvasapi.bookmark.Bookmark`
         """
         from canvasapi.bookmark import Bookmark
@@ -440,8 +445,9 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:group_id/files/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
 
-        :param file_id: The ID of the file to retrieve.
-        :type file_id: int
+        :param file: The object or ID of the file to retrieve.
+        :type file: :class:`canvasapi.file.File` or int
+
         :rtype: :class:`canvasapi.file.File`
         """
         from canvasapi.file import File
@@ -462,8 +468,9 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param folder_id: The ID of the folder to retrieve.
-        :type folder_id: int
+        :param folder: The object or ID of the folder to retrieve.
+        :type folder: :class:`canvasapi.folder.Folder` or int
+
         :rtype: :class:`canvasapi.folder.Folder`
         """
         from canvasapi.folder import Folder

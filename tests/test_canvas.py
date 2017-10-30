@@ -49,9 +49,11 @@ class TestCanvas(unittest.TestCase):
     def test_get_account(self, m):
         register_uris({'account': ['get_by_id']}, m)
 
-        account = self.canvas.get_account(1)
+        account_by_id = self.canvas.get_account(1)
+        self.assertIsInstance(account_by_id, Account)
 
-        self.assertIsInstance(account, Account)
+        account_by_obj = self.canvas.get_account(account_by_id)
+        self.assertIsInstance(account_by_obj, Account)
 
     def test_get_account_sis_id(self, m):
         register_uris({'account': ['get_by_sis_id']}, m)
@@ -87,10 +89,13 @@ class TestCanvas(unittest.TestCase):
     def test_get_course(self, m):
         register_uris({'course': ['get_by_id']}, m)
 
-        course = self.canvas.get_course(1)
+        course_by_id = self.canvas.get_course(1)
+        self.assertIsInstance(course_by_id, Course)
+        self.assertTrue(hasattr(course_by_id, 'name'))
 
-        self.assertIsInstance(course, Course)
-        self.assertTrue(hasattr(course, 'name'))
+        course_by_obj = self.canvas.get_course(course_by_id)
+        self.assertIsInstance(course_by_obj, Course)
+        self.assertTrue(hasattr(course_by_obj, 'name'))
 
     def test_get_course_sis_id(self, m):
         register_uris({'course': ['get_by_sis_id']}, m)
@@ -128,10 +133,13 @@ class TestCanvas(unittest.TestCase):
     def test_get_user(self, m):
         register_uris({'user': ['get_by_id']}, m)
 
-        user = self.canvas.get_user(1)
+        user_by_id = self.canvas.get_user(1)
+        self.assertIsInstance(user_by_id, User)
+        self.assertTrue(hasattr(user_by_id, 'name'))
 
-        self.assertIsInstance(user, User)
-        self.assertTrue(hasattr(user, 'name'))
+        user_by_obj = self.canvas.get_user(user_by_id)
+        self.assertIsInstance(user_by_obj, User)
+        self.assertTrue(hasattr(user_by_obj, 'name'))
 
     def test_get_user_by_id_type(self, m):
         register_uris({'user': ['get_by_id_type']}, m)
@@ -194,12 +202,16 @@ class TestCanvas(unittest.TestCase):
 
     # get_course_nickname()
     def test_get_course_nickname(self, m):
-        register_uris({'user': ['course_nickname']}, m)
+        register_uris({'course': ['get_by_id'], 'user': ['course_nickname']}, m)
 
-        nickname = self.canvas.get_course_nickname(1)
+        nickname_by_id = self.canvas.get_course_nickname(1)
+        self.assertIsInstance(nickname_by_id, CourseNickname)
+        self.assertTrue(hasattr(nickname_by_id, 'nickname'))
 
-        self.assertIsInstance(nickname, CourseNickname)
-        self.assertTrue(hasattr(nickname, 'nickname'))
+        course_for_obj = self.canvas.get_course(1)
+        nickname_by_obj = self.canvas.get_course_nickname(course_for_obj)
+        self.assertIsInstance(nickname_by_obj, CourseNickname)
+        self.assertTrue(hasattr(nickname_by_obj, 'nickname'))
 
     def test_get_course_nickname_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
@@ -209,15 +221,18 @@ class TestCanvas(unittest.TestCase):
 
     # set_course_nickname()
     def test_set_course_nickname(self, m):
-        register_uris({'user': ['course_nickname_set']}, m)
+        register_uris({'course': ['get_by_id'], 'user': ['course_nickname_set']}, m)
 
         name = 'New Course Nickname'
+        nickname_by_id = self.canvas.set_course_nickname(1, name)
+        self.assertIsInstance(nickname_by_id, CourseNickname)
+        self.assertTrue(hasattr(nickname_by_id, 'nickname'))
+        self.assertEqual(nickname_by_id.nickname, name)
 
-        nickname = self.canvas.set_course_nickname(1, name)
-
-        self.assertIsInstance(nickname, CourseNickname)
-        self.assertTrue(hasattr(nickname, 'nickname'))
-        self.assertEqual(nickname.nickname, name)
+        course_for_obj = self.canvas.get_course(1)
+        nickname_by_obj = self.canvas.set_course_nickname(course_for_obj, name)
+        self.assertIsInstance(nickname_by_obj, CourseNickname)
+        self.assertTrue(hasattr(nickname_by_obj, 'nickname'))
 
     # clear_course_nicknames()
     def test_clear_course_nicknames(self, m):
@@ -240,9 +255,11 @@ class TestCanvas(unittest.TestCase):
     def test_get_section(self, m):
         register_uris({'section': ['get_by_id']}, m)
 
-        info = self.canvas.get_section(1)
+        section_by_id = self.canvas.get_section(1)
+        self.assertIsInstance(section_by_id, Section)
 
-        self.assertIsInstance(info, Section)
+        section_by_obj = self.canvas.get_section(section_by_id)
+        self.assertIsInstance(section_by_obj, Section)
 
     def test_get_section_sis_id(self, m):
         register_uris({'section': ['get_by_sis_id']}, m)
@@ -266,11 +283,15 @@ class TestCanvas(unittest.TestCase):
     def test_get_group(self, m):
         register_uris({'group': ['get_by_id']}, m)
 
-        group = self.canvas.get_group(1)
+        group_by_id = self.canvas.get_group(1)
+        self.assertIsInstance(group_by_id, Group)
+        self.assertTrue(hasattr(group_by_id, 'name'))
+        self.assertTrue(hasattr(group_by_id, 'description'))
 
-        self.assertIsInstance(group, Group)
-        self.assertTrue(hasattr(group, 'name'))
-        self.assertTrue(hasattr(group, 'description'))
+        group_by_obj = self.canvas.get_group(group_by_id)
+        self.assertIsInstance(group_by_obj, Group)
+        self.assertTrue(hasattr(group_by_obj, 'name'))
+        self.assertTrue(hasattr(group_by_obj, 'description'))
 
     def test_get_group_sis_id(self, m):
         register_uris({'group': ['get_by_sis_id']}, m)
@@ -284,8 +305,11 @@ class TestCanvas(unittest.TestCase):
     def test_get_group_category(self, m):
         register_uris({'group': ['get_category_by_id']}, m)
 
-        response = self.canvas.get_group_category(1)
-        self.assertIsInstance(response, GroupCategory)
+        group_category_by_id = self.canvas.get_group_category(1)
+        self.assertIsInstance(group_category_by_id, GroupCategory)
+
+        group_category_by_obj = self.canvas.get_group_category(group_category_by_id)
+        self.assertIsInstance(group_category_by_obj, GroupCategory)
 
     # create_conversation()
     def test_create_conversation(self, m):
@@ -304,10 +328,13 @@ class TestCanvas(unittest.TestCase):
     def test_get_conversation(self, m):
         register_uris({'conversation': ['get_by_id']}, m)
 
-        convo = self.canvas.get_conversation(1)
+        conversation_by_id = self.canvas.get_conversation(1)
+        self.assertIsInstance(conversation_by_id, Conversation)
+        self.assertTrue(hasattr(conversation_by_id, 'subject'))
 
-        self.assertIsInstance(convo, Conversation)
-        self.assertTrue(hasattr(convo, 'subject'))
+        conversation_by_obj = self.canvas.get_conversation(conversation_by_id)
+        self.assertIsInstance(conversation_by_obj, Conversation)
+        self.assertTrue(hasattr(conversation_by_obj, 'subject'))
 
     # get_conversations()
     def test_get_conversations(self, m):
@@ -404,24 +431,32 @@ class TestCanvas(unittest.TestCase):
     def test_get_calendar_event(self, m):
         register_uris({'calendar_event': ['get_calendar_event']}, m)
 
-        cal_event = self.canvas.get_calendar_event(567)
-        self.assertIsInstance(cal_event, CalendarEvent)
-        self.assertEqual(cal_event.title, "Test Event 3")
+        calendar_event_by_id = self.canvas.get_calendar_event(567)
+        self.assertIsInstance(calendar_event_by_id, CalendarEvent)
+        self.assertEqual(calendar_event_by_id.title, "Test Event 3")
+
+        calendar_event_by_obj = self.canvas.get_calendar_event(calendar_event_by_id)
+        self.assertIsInstance(calendar_event_by_obj, CalendarEvent)
+        self.assertEqual(calendar_event_by_obj.title, "Test Event 3")
 
     # reserve_time_slot()
     def test_reserve_time_slot(self, m):
         register_uris({'calendar_event': ['reserve_time_slot']}, m)
 
-        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567)
-        self.assertIsInstance(cal_event, CalendarEvent)
-        self.assertEqual(cal_event.title, "Test Reservation")
+        calendar_event_by_id = self.canvas.reserve_time_slot(calendar_event=567)
+        self.assertIsInstance(calendar_event_by_id, CalendarEvent)
+        self.assertEqual(calendar_event_by_id.title, "Test Reservation")
+
+        calendar_event_by_obj = self.canvas.reserve_time_slot(calendar_event=calendar_event_by_id)
+        self.assertIsInstance(calendar_event_by_obj, CalendarEvent)
+        self.assertEqual(calendar_event_by_obj.title, "Test Reservation")
 
     def test_reserve_time_slot_by_participant_id(self, m):
         register_uris({
             'calendar_event': ['reserve_time_slot_participant_id']
         }, m)
 
-        cal_event = self.canvas.reserve_time_slot(calendar_event_id=567, participant_id=777)
+        cal_event = self.canvas.reserve_time_slot(calendar_event=567, participant_id=777)
         self.assertIsInstance(cal_event, CalendarEvent)
         self.assertEqual(cal_event.title, "Test Reservation")
         self.assertEqual(cal_event.user, 777)
@@ -438,9 +473,13 @@ class TestCanvas(unittest.TestCase):
     def test_get_appointment_group(self, m):
         register_uris({'appointment_group': ['get_appointment_group']}, m)
 
-        appt_group = self.canvas.get_appointment_group(567)
-        self.assertIsInstance(appt_group, AppointmentGroup)
-        self.assertEqual(appt_group.title, "Test Group 3")
+        appointment_group_by_id = self.canvas.get_appointment_group(567)
+        self.assertIsInstance(appointment_group_by_id, AppointmentGroup)
+        self.assertEqual(appointment_group_by_id.title, "Test Group 3")
+
+        appointment_group_by_obj = self.canvas.get_appointment_group(appointment_group_by_id)
+        self.assertIsInstance(appointment_group_by_obj, AppointmentGroup)
+        self.assertEqual(appointment_group_by_obj.title, "Test Group 3")
 
     # create_appointment_group()
     def test_create_appointment_group(self, m):
@@ -467,28 +506,55 @@ class TestCanvas(unittest.TestCase):
 
     # list_user_participants()
     def test_list_user_participants(self, m):
-        register_uris({'appointment_group': ['list_user_participants']}, m)
+        register_uris(
+            {
+                'appointment_group': [
+                    'get_appointment_group_222',
+                    'list_user_participants'
+                ]
+            }, m)
 
-        users = self.canvas.list_user_participants(222)
-        users_list = [user for user in users]
-        self.assertEqual(len(users_list), 2)
+        users_by_id = self.canvas.list_user_participants(222)
+        users_list_by_id = [user for user in users_by_id]
+        self.assertEqual(len(users_list_by_id), 2)
+
+        appointment_group_for_obj = self.canvas.get_appointment_group(222)
+        users_by_id = self.canvas.list_user_participants(appointment_group_for_obj)
+        users_list_by_id = [user for user in users_by_id]
+        self.assertEqual(len(users_list_by_id), 2)
 
     # list_group_participants()
     def test_list_group_participants(self, m):
-        register_uris({'appointment_group': ['list_group_participants']}, m)
+        register_uris(
+            {
+                'appointment_group': [
+                    'get_appointment_group_222',
+                    'list_group_participants'
+                ]
+            }, m)
 
-        groups = self.canvas.list_group_participants(222)
-        groups_list = [group for group in groups]
-        self.assertEqual(len(groups_list), 2)
+        groups_by_id = self.canvas.list_group_participants(222)
+        groups_list_by_id = [group for group in groups_by_id]
+        self.assertEqual(len(groups_list_by_id), 2)
+
+        appointment_group_for_obj = self.canvas.get_appointment_group(222)
+        groups_by_obj = self.canvas.list_group_participants(appointment_group_for_obj)
+        groups_list_by_obj = [group for group in groups_by_obj]
+        self.assertEqual(len(groups_list_by_obj), 2)
 
     # get_file()
     def test_get_file(self, m):
         register_uris({'file': ['get_by_id']}, m)
 
-        file = self.canvas.get_file(1)
-        self.assertIsInstance(file, File)
-        self.assertEqual(file.display_name, "File.docx")
-        self.assertEqual(file.size, 6144)
+        file_by_id = self.canvas.get_file(1)
+        self.assertIsInstance(file_by_id, File)
+        self.assertEqual(file_by_id.display_name, "File.docx")
+        self.assertEqual(file_by_id.size, 6144)
+
+        file_by_obj = self.canvas.get_file(file_by_id)
+        self.assertIsInstance(file_by_obj, File)
+        self.assertEqual(file_by_obj.display_name, "File.docx")
+        self.assertEqual(file_by_obj.size, 6144)
 
     # search_recipients()
     def test_search_recipients(self, m):
@@ -510,18 +576,21 @@ class TestCanvas(unittest.TestCase):
     def test_get_outcome(self, m):
         register_uris({'outcome': ['canvas_get_outcome']}, m)
 
-        outcome_group = self.canvas.get_outcome(3)
+        outcome_group_by_id = self.canvas.get_outcome(3)
+        self.assertIsInstance(outcome_group_by_id, Outcome)
+        self.assertEqual(outcome_group_by_id.id, 3)
+        self.assertEqual(outcome_group_by_id.title, "Outcome Show Example")
 
-        self.assertIsInstance(outcome_group, Outcome)
-        self.assertEqual(outcome_group.id, 3)
-        self.assertEqual(outcome_group.title, "Outcome Show Example")
+        outcome_group_by_obj = self.canvas.get_outcome(outcome_group_by_id)
+        self.assertIsInstance(outcome_group_by_obj, Outcome)
+        self.assertEqual(outcome_group_by_obj.id, 3)
+        self.assertEqual(outcome_group_by_obj.title, "Outcome Show Example")
 
     # get_root_outcome_group()
     def test_get_root_outcome_group(self, m):
         register_uris({'outcome': ['canvas_root_outcome_group']}, m)
 
         outcome_group = self.canvas.get_root_outcome_group()
-
         self.assertIsInstance(outcome_group, OutcomeGroup)
         self.assertEqual(outcome_group.id, 1)
         self.assertEqual(outcome_group.title, "ROOT")
@@ -530,8 +599,12 @@ class TestCanvas(unittest.TestCase):
     def test_get_outcome_group(self, m):
         register_uris({'outcome': ['canvas_get_outcome_group']}, m)
 
-        outcome_group = self.canvas.get_outcome_group(1)
+        outcome_group_by_id = self.canvas.get_outcome_group(1)
+        self.assertIsInstance(outcome_group_by_id, OutcomeGroup)
+        self.assertEqual(outcome_group_by_id.id, 1)
+        self.assertEqual(outcome_group_by_id.title, "Canvas outcome group title")
 
-        self.assertIsInstance(outcome_group, OutcomeGroup)
-        self.assertEqual(outcome_group.id, 1)
-        self.assertEqual(outcome_group.title, "Canvas outcome group title")
+        outcome_group_by_obj = self.canvas.get_outcome_group(outcome_group_by_id)
+        self.assertIsInstance(outcome_group_by_obj, OutcomeGroup)
+        self.assertEqual(outcome_group_by_obj.id, 1)
+        self.assertEqual(outcome_group_by_obj.title, "Canvas outcome group title")
