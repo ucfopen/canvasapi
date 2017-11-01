@@ -79,7 +79,10 @@ class Account(CanvasObject):
         Add a new sub-account to a given account.
 
         :calls: `POST /api/v1/accounts/:account_id/sub_accounts \
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
+        <https://canvas.instructure.com/doc/api/accounts.html#method.sub_accounts.create>`_
+
+        :param account: The name of the account
+        :type account: str
 
         :rtype: :class:`canvasapi.account.Account`
         """
@@ -203,6 +206,9 @@ class Account(CanvasObject):
         """
         :calls: `GET /api/v1/accounts/:account_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
+
+        :param tool_id: The id of the tool
+        :type tool_id: int
 
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
@@ -698,6 +704,9 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/activity \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
 
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
+
         :rtype: dict
         """
 
@@ -746,6 +755,9 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/grades \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
 
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
+
         :rtype: dict
         """
 
@@ -793,6 +805,9 @@ class Account(CanvasObject):
 
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/statistics \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
+
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
 
         :rtype: dict
         """
