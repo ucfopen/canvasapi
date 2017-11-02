@@ -694,6 +694,9 @@ class Canvas(object):
         :param calendar_event: The object or ID of the calendar event.
         :type calendar_event: :class:`canvasapi.calendar_event.CalendarEvent` or int
 
+        :param participant_id: The ID of the participant, if given.
+        :type participant_id: str
+
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
         from canvasapi.calendar_event import CalendarEvent

@@ -36,6 +36,9 @@ class AppointmentGroup(CanvasObject):
         :calls: `PUT /api/v1/appointment_groups/:id \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.update>`_
 
+        :param appointment_group: Dict containing an array of context codes
+        :type appointment_group: dict
+
         :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
         if isinstance(appointment_group, dict) and 'context_codes' in appointment_group:
