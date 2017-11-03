@@ -76,7 +76,7 @@
 		"method": "GET",
 		"endpoint": "courses/1/pages/my-url/revisions/2",
 		"data": {
-			"id": 1,
+			"id": 2,
 			"updated_at": "2012-08-07T11:23:58-06:00",
 			"revision_id": 2,
 			"url": "my-url"
@@ -87,7 +87,7 @@
 		"method": "GET",
 		"endpoint": "groups/1/pages/my-url/revisions/2",
 		"data": {
-			"id": 1,
+			"id": 2,
 			"revision_id": 2,
 			"url": "my-url"
 		},

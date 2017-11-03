@@ -406,3 +406,11 @@ class TestOutcomeGroup(unittest.TestCase):
         self.assertEqual(result.title, "Course Imported Subgroup Title")
         self.assertEqual(result.parent_outcome_group['id'], self.course_outcome_group.id)
         self.assertEqual(result.parent_outcome_group['title'], self.course_outcome_group.title)
+
+        result_by_obj = self.course_outcome_group.import_outcome_group(result)
+        self.assertEqual(result_by_obj.id, 4)
+        self.assertEqual(result_by_obj.title, "Course Imported Subgroup Title")
+        self.assertEqual(result_by_obj.parent_outcome_group['id'], self.course_outcome_group.id)
+        self.assertEqual(
+            result_by_obj.parent_outcome_group['title'], self.course_outcome_group.title
+        )
