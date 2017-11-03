@@ -76,16 +76,27 @@ class TestDiscussionTopic(unittest.TestCase):
     def test_list_entries(self, m):
         register_uris({'discussion_topic': ['list_entries']}, m)
 
-        entries = self.discussion_topic.list_entries([1, 2, 3])
-        entry_list = [entry for entry in entries]
-        self.assertTrue(len(entry_list), 3)
+        entries_by_id = self.discussion_topic.list_entries([1, 2, 3])
+        entry_list_by_id = [entry for entry in entries_by_id]
+        self.assertTrue(len(entry_list_by_id), 3)
 
-        entry = entry_list[-1]
-        self.assertIsInstance(entry, DiscussionEntry)
-        self.assertTrue(hasattr(entry, 'id'))
-        self.assertEqual(entry.id, 3)
-        self.assertTrue(hasattr(entry, 'message'))
-        self.assertEqual(entry.message, 'Lower level entry')
+        entry_by_id = entry_list_by_id[-1]
+        self.assertIsInstance(entry_by_id, DiscussionEntry)
+        self.assertTrue(hasattr(entry_by_id, 'id'))
+        self.assertEqual(entry_by_id.id, 3)
+        self.assertTrue(hasattr(entry_by_id, 'message'))
+        self.assertEqual(entry_by_id.message, 'Lower level entry')
+
+        entries_by_obj = self.discussion_topic.list_entries(entries_by_id)
+        entry_list_by_obj = [entry for entry in entries_by_obj]
+        self.assertTrue(len(entry_list_by_obj), 3)
+
+        entry_by_obj = entry_list_by_obj[-1]
+        self.assertIsInstance(entry_by_obj, DiscussionEntry)
+        self.assertTrue(hasattr(entry_by_obj, 'id'))
+        self.assertEqual(entry_by_obj.id, 3)
+        self.assertTrue(hasattr(entry_by_obj, 'message'))
+        self.assertEqual(entry_by_obj.message, 'Lower level entry')
 
     # mark_as_read()
     def test_mark_as_read(self, m):

@@ -1162,18 +1162,23 @@ class Course(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def list_submissions(self, assignment_id, **kwargs):
+    def list_submissions(self, assignment, **kwargs):
         """
         Get all existing submissions for an assignment.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
-        :param assignment_id: The ID of the assignment.
-        :type assignment_id: int
+        :param assignment: The object or ID of the related assignment
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+
         return PaginatedList(
             Submission,
             self._requester,
@@ -1523,7 +1528,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.update>`_
 
         :param tab_id: The ID of the tab
-        :type tab_id: int
+        :type tab_id: str
 
         :rtype: :class:`canvasapi.tab.Tab`
         """

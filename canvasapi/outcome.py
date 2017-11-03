@@ -315,7 +315,7 @@ class OutcomeGroup(CanvasObject):
 
         return OutcomeGroup(self._requester, response.json())
 
-    def import_outcome_group(self, source_outcome_group_id):
+    def import_outcome_group(self, outcome_group):
         """
         Import an outcome group as a subgroup into the current outcome group
 
@@ -326,12 +326,14 @@ class OutcomeGroup(CanvasObject):
             or `POST /api/v1/courses/:course_id/outcome_groups/:id/import \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.import>`_
 
-        :param source_outcome_group_id: The id of the Outcome Group to be imported.
-        :type source_outcome_group_id: int
+        :param outcome: The object or ID of the outcome group to import.
+        :type outcome: :class:`canvasapi.outcome.OutcomeGroup` or int
 
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
+        source_outcome_group_id = obj_or_id(outcome_group, "outcome_group", (OutcomeGroup,))
+
         response = self._requester.request(
             'POST',
             '{}/outcome_groups/{}/import'.format(self.context_ref(), self.id),
