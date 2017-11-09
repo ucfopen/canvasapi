@@ -4,6 +4,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
+from canvasapi.notification_preference import NotificationPreference
 from tests import settings
 from tests.util import register_uris
 
@@ -29,3 +30,9 @@ class TestNotificationPreference(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.notif_pref)
         self.assertIsInstance(string, str)
+
+    # update()
+    def test_update(self, m):
+        updated_pref = self.notif_pref.update(frequency='weekly')
+
+        self.assertIsInstance(updated_pref, NotificationPreference)

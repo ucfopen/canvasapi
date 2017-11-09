@@ -1,0 +1,16 @@
+{
+    "update": {
+        "method": "PUT",
+        "endpoint": "users/1/communication_channels/11/notification_preferences/new_announcement?notification_preferences[frequency]=daily",
+        "data": {
+            "notification_preferences": [
+                {
+                    "frequency": "daily",
+                    "notification": "new_announcement",
+                    "category": "announcement"
+                }
+            ]
+        },
+        "status_code": 200
+    }
+}
