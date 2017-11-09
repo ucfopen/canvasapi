@@ -18,7 +18,8 @@ class CommunicationChannel(CanvasObject):
         Fetch all preferences for the given communication channel.
 
         :calls: `GET
-            /api/v1/users/:user_id/communication_channels/:cc_id/notification_preferences \
+            /api/v1/users/:user_id/communication_channels/:communication_channel_id/ \
+                notification_preferences \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.index>`_
 
         :rtype: `list`
@@ -38,7 +39,8 @@ class CommunicationChannel(CanvasObject):
         channel.
 
         :calls: `GET
-            /api/v1/users/:u_id/communication_channels/:cc_id/notification_preference_categories \
+            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
+                notification_preference_categories \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.category_index>`_
 
         :rtype: `list`
@@ -58,7 +60,8 @@ class CommunicationChannel(CanvasObject):
         communication channel.
 
         :calls: `GET
-            /api/v1/users/:u_id/communication_channels/:co_id/notification_preferences/:notif \
+            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
+                notification_preferences/:notification \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.show>`_
 
         :param notification: The name of the notification.
@@ -81,7 +84,8 @@ class CommunicationChannel(CanvasObject):
         Update the preference for the given notification for the given communication channel.
 
         :calls: `PUT
-            /api/v1/users/:u_id/communication_channels/:co_id/notification_preferences/:notif \
+            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
+                notification_preferences/:notification \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.update>`_
 
         :param notification: The name of the notification.
