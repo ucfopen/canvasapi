@@ -4,6 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.notification_preference import NotificationPreference
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs
 
 
@@ -56,7 +57,7 @@ class CommunicationChannel(CanvasObject):
 
     def get_preference(self, notification):
         """
-        Fetch the preference for the given notification for the  given
+        Fetch the preference for the given notification for the given
         communication channel.
 
         :calls: `GET
@@ -108,3 +109,34 @@ class CommunicationChannel(CanvasObject):
         )
         data = response.json()['notification_preferences'][0]
         return NotificationPreference(self._requester, data)
+
+    def update_preferences_by_catagory(self, category, frequency, **kwargs):
+        """
+        Change preferences for multiple notifications based on the category
+        for a single communication channel.
+
+        :calls: `PUT
+            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
+                notification_preference_categories/:category \
+        <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.update_preferences_by_category>`_
+
+        :param category: The name of the category. \
+            Must be parameterized e.g. The category Course Content should be course_content
+        :type category: str
+        :param frequency: The desired frequency for this notification.
+        :type frequency: str
+            Can be 'immediately', 'daily', 'weekly', or 'never'
+
+        :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
+        """
+        kwargs['notification_preferences[frequency]'] = frequency
+        response = self._requester.request(
+            'PUT',
+            'users/%s/communication_channels/%s/notification_preference_categories/%s' % (
+                self.user_id,
+                self.id,
+                category
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return response.json()['notification_preferences']

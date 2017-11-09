@@ -70,3 +70,19 @@ class TestCommunicationChannel(unittest.TestCase):
         self.assertEqual(updated_pref.frequency, frequency)
         self.assertEqual(updated_pref.notification, notification)
         self.assertEqual(updated_pref.category, 'announcement')
+
+    # update_preferences_by_category()
+    def test_update_preferences_by_category(self, m):
+        register_uris({'communication_channel': ['update_preferences_by_category']}, m)
+        category = 'course_content'
+        frequency = 'daily'
+
+        updated_prefs = self.comm_chan.update_preferences_by_catagory(
+            category=category,
+            frequency=frequency
+        )
+
+        self.assertEqual(len(updated_prefs), 3)
+        self.assertEqual(updated_prefs[0]['frequency'], frequency)
+        self.assertEqual(updated_prefs[0]['category'], category)
+        self.assertEqual(updated_prefs[0]['notification'], 'assignment_changed')
