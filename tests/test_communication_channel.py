@@ -54,3 +54,19 @@ class TestCommunicationChannel(unittest.TestCase):
         self.assertIsInstance(preference, NotificationPreference)
         self.assertTrue(hasattr(preference, 'notification'))
         self.assertEqual(preference.notification, 'new_announcement')
+
+    # update_preference()
+    def test_update_preference(self, m):
+        register_uris({'communication_channel': ['update_preference']}, m)
+        notification = 'new_announcement'
+        frequency = 'daily'
+
+        updated_pref = self.comm_chan.update_preference(
+            notification=notification,
+            frequency=frequency
+        )
+
+        self.assertIsInstance(updated_pref, NotificationPreference)
+        self.assertEqual(updated_pref.frequency, frequency)
+        self.assertEqual(updated_pref.notification, notification)
+        self.assertEqual(updated_pref.category, 'announcement')

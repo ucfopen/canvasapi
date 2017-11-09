@@ -4,7 +4,6 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.notification_preference import NotificationPreference
 from tests import settings
 from tests.util import register_uris
 
@@ -16,11 +15,11 @@ class TestNotificationPreference(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {
-                'user': ['get_by_id', 'list_comm_channels'],
-                'communication_channel': ['get_preference']
-            }
-            register_uris(requires, m)
+            register_uris(
+                {
+                    'user': ['get_by_id', 'list_comm_channels'],
+                    'communication_channel': ['get_preference']
+                }, m)
 
             self.user = self.canvas.get_user(1)
             self.comm_chan = self.user.list_communication_channels()[0]
@@ -30,9 +29,3 @@ class TestNotificationPreference(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.notif_pref)
         self.assertIsInstance(string, str)
-
-    # update()
-    def test_update(self, m):
-        updated_pref = self.notif_pref.update(frequency='weekly')
-
-        self.assertIsInstance(updated_pref, NotificationPreference)
