@@ -77,6 +77,23 @@ class TestRequester(unittest.TestCase):
         response = self.requester.request('PUT', 'fake_put_request')
         self.assertEqual(response.status_code, 200)
 
+    def test_request_cache(self, m):
+        register_uris({'requests': ['get']}, m)
+
+        response = self.requester.request('GET', 'fake_get_request')
+        self.assertEqual(response, self.requester._cache[0])
+
+    def test_request_cache_clear_after_5(self, m):
+        register_uris({'requests': ['get', 'post']}, m)
+
+        for i in range(5):
+            self.requester.request('GET', 'fake_get_request')
+
+        response = self.requester.request('POST', 'fake_post_request')
+
+        self.assertLessEqual(self.requester._cache, 5)
+        self.assertEqual(response, self.requester._cache[0])
+
     def test_request_400(self, m):
         register_uris({'requests': ['400']}, m)
 
