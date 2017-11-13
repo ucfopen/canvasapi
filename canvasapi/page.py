@@ -3,8 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.util import combine_kwargs
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -82,6 +82,11 @@ class Page(CanvasObject):
         """
         Return the object that spawned this page.
 
+        :calls: `GET /api/v1/groups/:group_id \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
+        or :calls: `GET /api/v1/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
+
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """
         from canvasapi.group import Group
@@ -113,18 +118,21 @@ class Page(CanvasObject):
         )
         return PageRevision(self._requester, response.json())
 
-    def get_revision_by_id(self, revision_id, **kwargs):
+    def get_revision_by_id(self, revision, **kwargs):
         """
         Retrieve the contents of the revision by the id.
 
         :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions/:revision_id \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_revision>`_
 
-        :param revision_id: The id of a specified revision.
-        :type revision_id: int
+        :param revision: The object or ID of a specified revision.
+        :type revision: :class:`canvasapi.pagerevision.PageRevision` or int
+
         :returns: Contents of the page revision.
         :rtype: :class:`canvasapi.pagerevision.PageRevision`
         """
+        revision_id = obj_or_id(revision, "revision", (PageRevision,))
+
         response = self._requester.request(
             'GET',
             '{}s/{}/pages/{}/revisions/{}'.format(
@@ -161,18 +169,20 @@ class Page(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def revert_to_revision(self, revision_id):
+    def revert_to_revision(self, revision):
         """
         Revert the page back to a specified revision.
 
         :calls: `POST /api/v1/courses/:course_id/pages/:url/revisions/:revision_id \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revert>`_
 
-        :param revision_id: The id of a specified revision.
-        :type revision_id: int
+        :param revision: The object or ID of a specified revision.
+        :type revision: :class:`canvasapi.pagerevision.PageRevision` or int
+
         :returns: Contents of the page revision.
         :rtype: :class:`canvasapi.pagerevision.PageRevision`
         """
+        revision_id = obj_or_id(revision, "revision", (PageRevision,))
         response = self._requester.request(
             'POST',
             '{}s/{}/pages/{}/revisions/{}'.format(
@@ -228,6 +238,11 @@ class PageRevision(CanvasObject):
     def get_parent(self):
         """
         Return the object that spawned this page.
+
+        :calls: `GET /api/v1/groups/:group_id \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
+        or :calls: `GET /api/v1/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """

@@ -117,12 +117,19 @@ class TestCourse(unittest.TestCase):
         register_uris(requires, m)
 
         enrollment_type = 'TeacherEnrollment'
-        user = self.canvas.get_user(1)
-        enrollment = self.course.enroll_user(user, enrollment_type)
+        user_by_id = self.canvas.get_user(1)
+        enrollment_by_id = self.course.enroll_user(user_by_id, enrollment_type)
 
-        self.assertIsInstance(enrollment, Enrollment)
-        self.assertTrue(hasattr(enrollment, 'type'))
-        self.assertEqual(enrollment.type, enrollment_type)
+        self.assertIsInstance(enrollment_by_id, Enrollment)
+        self.assertTrue(hasattr(enrollment_by_id, 'type'))
+        self.assertEqual(enrollment_by_id.type, enrollment_type)
+
+        user_by_obj = self.canvas.get_user(self.user)
+        enrollment_by_obj = self.course.enroll_user(user_by_obj, enrollment_type)
+
+        self.assertIsInstance(enrollment_by_obj, Enrollment)
+        self.assertTrue(hasattr(enrollment_by_obj, 'type'))
+        self.assertEqual(enrollment_by_obj.type, enrollment_type)
 
     # get_recent_students()
     def test_get_recent_students(self, m):
@@ -714,14 +721,20 @@ class TestCourse(unittest.TestCase):
 
     # list_submissions()
     def test_list_submissions(self, m):
-        register_uris({'course': ['list_submissions']}, m)
+        register_uris({'course': ['list_submissions', 'list_submissions_2']}, m)
 
         assignment_id = 1
-        submissions = self.course.list_submissions(assignment_id)
-        submission_list = [submission for submission in submissions]
+        submissions_by_id = self.course.list_submissions(assignment_id)
+        submission_list_by_id = [submission for submission in submissions_by_id]
 
-        self.assertEqual(len(submission_list), 2)
-        self.assertIsInstance(submission_list[0], Submission)
+        self.assertEqual(len(submission_list_by_id), 2)
+        self.assertIsInstance(submission_list_by_id[0], Submission)
+
+        submissions_by_obj = self.course.list_submissions(self.assignment)
+        submission_list_by_obj = [submission for submission in submissions_by_obj]
+
+        self.assertEqual(len(submission_list_by_obj), 2)
+        self.assertIsInstance(submission_list_by_obj[0], Submission)
 
     # list_multiple_submission()
     def test_list_multiple_submissions(self, m):

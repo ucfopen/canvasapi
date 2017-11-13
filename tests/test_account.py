@@ -165,10 +165,13 @@ class TestAccount(unittest.TestCase):
         required = {'external_tool': ['get_by_id_account']}
         register_uris(required, m)
 
-        tool = self.account.get_external_tool(1)
+        tool_by_id = self.account.get_external_tool(1)
+        self.assertIsInstance(tool_by_id, ExternalTool)
+        self.assertTrue(hasattr(tool_by_id, 'name'))
 
-        self.assertIsInstance(tool, ExternalTool)
-        self.assertTrue(hasattr(tool, 'name'))
+        tool_by_obj = self.account.get_external_tool(tool_by_id)
+        self.assertIsInstance(tool_by_obj, ExternalTool)
+        self.assertTrue(hasattr(tool_by_obj, 'name'))
 
     # get_external_tools()
     def test_get_external_tools(self, m):

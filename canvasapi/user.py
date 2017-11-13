@@ -283,8 +283,6 @@ class User(CanvasObject):
         :calls: `POST /api/v1/users/:user_id/files \
         <https://canvas.instructure.com/doc/api/users.html#method.users.create_file>`_
 
-        :param path: The path of the file to upload.
-        :type path: str
         :param file: The file or path of the file to upload.
         :type file: file or str
         :returns: True if the file uploaded successfully, False otherwise, \
@@ -403,7 +401,7 @@ class User(CanvasObject):
         :param name: The name of the bookmark.
         :type name: `str`
         :param url: The url of the bookmark.
-        :type name: `str`
+        :type url: `str`
         :rtype: :class:`canvasapi.bookmarks.Bookmark`
         """
         from canvasapi.bookmark import Bookmark
@@ -583,8 +581,8 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/observees/:observee_id \
         <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.show>`_
 
-        :param unique_id: The login id for the user to observe.
-        :type observee: `dict`
+        :param observee_id: The login id for the user to observe.
+        :type observee_id: int
         :rtype: :class: `canvasapi.user.User`
         """
 
@@ -601,8 +599,8 @@ class User(CanvasObject):
         :calls: `PUT /api/v1/users/:user_id/observees/:observee_id \
         <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.update>`_
 
-        :param unique_id: The login id for the user to observe.
-        :type observee: `dict`
+        :param observee_id: The login id for the user to observe.
+        :type observee_id: int
         :rtype: :class: `canvasapi.user.User`
         """
 
@@ -619,8 +617,8 @@ class User(CanvasObject):
         :calls: `DELETE /api/v1/users/:user_id/observees/:observee_id \
         <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.destroy>`_
 
-        :param unique_id: The login id for the user to observe.
-        :type observee: `dict`
+        :param observee_id: The login id for the user to observe.
+        :type observee_id: int
         :rtype: :class: `canvasapi.user.User`
         """
 

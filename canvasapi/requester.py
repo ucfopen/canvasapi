@@ -117,7 +117,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
 
@@ -139,7 +138,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
         return self._session.delete(url, headers=headers, data=data)
@@ -150,7 +148,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
         return self._session.put(url, headers=headers, data=data)

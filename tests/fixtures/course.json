@@ -1254,6 +1254,27 @@
 		],
 		"status_code": 200
 	},
+	"list_submissions_2": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/5/submissions",
+		"data": [
+			{
+				"id": 1,
+				"assignments_id": 1,
+				"user_id": 1,
+				"html_url": "http://example.com/courses/1/assignments/5/submissions/1",
+				"submission_type": "online_upload"
+			},
+			{
+				"id": 2,
+				"assignments_id": 1,
+				"user_id": 2,
+				"html_url": "http://example.com/courses/1/assignments/5/submissions/2",
+				"submission_type": "online_upload"
+			}
+		],
+		"status_code": 200
+	},
 	"list_multiple_submissions": {
 		"method": "GET",
 		"endpoint": "courses/1/students/submissions",

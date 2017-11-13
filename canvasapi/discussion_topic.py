@@ -4,7 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -168,17 +168,21 @@ class DiscussionTopic(CanvasObject):
         of ids. Entries will be returned in id order, smallest id first.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
 
             or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entry_list \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
 
-        :param ids: A list of entry ids to retrieve.
-        :type ids: list or tuple of int
+        :param ids: A list of entry objects or IDs to retrieve.
+        :type ids: :class:`canvasapi.discussion_topic.DiscussionEntry`, or list or tuple of int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
-        kwargs.update(ids=ids)
+
+        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry, )) for item in ids]
+
+        kwargs.update(ids=entry_ids)
         return PaginatedList(
             DiscussionEntry,
             self._requester,

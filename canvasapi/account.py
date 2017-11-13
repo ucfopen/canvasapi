@@ -79,7 +79,10 @@ class Account(CanvasObject):
         Add a new sub-account to a given account.
 
         :calls: `POST /api/v1/accounts/:account_id/sub_accounts \
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
+        <https://canvas.instructure.com/doc/api/accounts.html#method.sub_accounts.create>`_
+
+        :param account: The name of the account
+        :type account: str
 
         :rtype: :class:`canvasapi.account.Account`
         """
@@ -199,14 +202,19 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_external_tool(self, tool_id):
+    def get_external_tool(self, tool):
         """
         :calls: `GET /api/v1/accounts/:account_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
 
+        :param tool: The object or ID of the tool
+        :type tool: :class:`canvasapi.external_tool.ExternalTool` or int
+
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         from canvasapi.external_tool import ExternalTool
+
+        tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
             'GET',
@@ -698,6 +706,9 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/activity \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
 
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
+
         :rtype: dict
         """
 
@@ -746,6 +757,9 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/grades \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
 
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
+
         :rtype: dict
         """
 
@@ -793,6 +807,9 @@ class Account(CanvasObject):
 
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/statistics \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
+
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
 
         :rtype: dict
         """

@@ -35,8 +35,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}'.format(self.id),
-            event="conclude",
-            var="blarg"
+            event="conclude"
         )
 
         return response.json().get('conclude')
@@ -108,12 +107,9 @@ class Course(CanvasObject):
         )
         return User(self._requester, response.json())
 
-    def get_users(self, search_term=None, **kwargs):
+    def get_users(self, **kwargs):
         """
         List all users in a course.
-
-        If a `search_term` is provided, only matching users will be included
-        in the returned list.
 
         :calls: `GET /api/v1/courses/:course_id/search_users \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.users>`_
@@ -138,15 +134,16 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/enrollments \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`_
 
-        :param user: The user to enroll in this course.
-        :type user: :class:`canvasapi.user.User`
+        :param user: The object or ID of the user to enroll in this course.
+        :type user: :class:`canvasapi.user.User` or int
         :param enrollment_type: The type of enrollment.
         :type enrollment_type: str
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
         from canvasapi.enrollment import Enrollment
+        from canvasapi.user import User
 
-        kwargs['enrollment[user_id]'] = user.id
+        kwargs['enrollment[user_id]'] = obj_or_id(user, "user", (User,))
         kwargs['enrollment[type]'] = enrollment_type
 
         response = self._requester.request(
@@ -996,6 +993,10 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/external_tools'.format(self.id),
+            name=name,
+            privacy_level=privacy_level,
+            consumer_key=consumer_key,
+            shared_secret=shared_secret,
             _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
@@ -1161,18 +1162,23 @@ class Course(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def list_submissions(self, assignment_id, **kwargs):
+    def list_submissions(self, assignment, **kwargs):
         """
         Get all existing submissions for an assignment.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions  \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
-        :param assignment_id: The ID of the assignment.
-        :type assignment_id: int
+        :param assignment: The object or ID of the related assignment
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
+        from canvasapi.assignment import Assignment
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+
         return PaginatedList(
             Submission,
             self._requester,
@@ -1383,7 +1389,7 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/external_feeds \
         <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.create>`_
 
-        :param url: The urlof the external rss or atom feed
+        :param url: The url of the external rss or atom feed
         :type url: str
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
@@ -1520,6 +1526,9 @@ class Course(CanvasObject):
 
         :calls: `PUT /api/v1/courses/:course_id/tabs/:tab_id \
         <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.update>`_
+
+        :param tab_id: The ID of the tab
+        :type tab_id: str
 
         :rtype: :class:`canvasapi.tab.Tab`
         """
