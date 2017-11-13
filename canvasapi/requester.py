@@ -93,7 +93,7 @@ class Requester(object):
 
         # Raise for status codes
         if response.status_code == 400:
-            raise BadRequest(response.json())
+            raise BadRequest(response.text)
         elif response.status_code == 401:
             if 'WWW-Authenticate' in response.headers:
                 raise InvalidAccessToken(response.json())
