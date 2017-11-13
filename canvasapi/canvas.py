@@ -164,8 +164,9 @@ class Canvas(object):
         :rtype: :class:`canvasapi.user.User`
         """
         if id_type:
-            user_id = user
-            uri = 'users/{}:{}'.format(id_type, user_id)
+            uri = 'users/{}:{}'.format(id_type, user)
+        elif user == 'self':
+            uri = 'users/self'
         else:
             user_id = obj_or_id(user, "user", (User,))
             uri = 'users/{}'.format(user_id)
