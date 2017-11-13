@@ -72,16 +72,20 @@ class TestPage(unittest.TestCase):
     def test_get_revision_by_id_course(self, m):
         register_uris({'page': ['get_latest_rev_by_id']}, m)
 
-        revision = self.page_course.get_revision_by_id(2)
+        revision_by_id = self.page_course.get_revision_by_id(2)
+        self.assertIsInstance(revision_by_id, PageRevision)
 
-        self.assertIsInstance(revision, PageRevision)
+        revision_by_obj = self.page_course.get_revision_by_id(revision_by_id)
+        self.assertIsInstance(revision_by_obj, PageRevision)
 
     def test_get_revision_by_id_group(self, m):
         register_uris({'page': ['get_latest_rev_by_id_group']}, m)
 
-        revision = self.page_group.get_revision_by_id(2)
+        revision_by_id = self.page_group.get_revision_by_id(2)
+        self.assertIsInstance(revision_by_id, PageRevision)
 
-        self.assertIsInstance(revision, PageRevision)
+        revision_by_obj = self.page_group.get_revision_by_id(revision_by_id)
+        self.assertIsInstance(revision_by_obj, PageRevision)
 
     def test_revert_to_revision_course(self, m):
         register_uris({'page': ['revert_to_revision']}, m)

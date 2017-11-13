@@ -4,8 +4,8 @@ from datetime import datetime
 import requests
 
 from canvasapi.exceptions import (
-    BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
-    Unauthorized
+    BadRequest, CanvasException, Forbidden, InvalidAccessToken,
+    ResourceDoesNotExist, Unauthorized
 )
 
 
@@ -50,17 +50,17 @@ class Requester(object):
         :type _kwargs: `list`
         :rtype: str
         """
-        full_url = _url if _url else "%s%s" % (self.base_url, endpoint)
+        full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
 
         if not headers:
             headers = {}
 
         if use_auth:
-            auth_header = {'Authorization': 'Bearer %s' % (self.access_token)}
+            auth_header = {'Authorization': 'Bearer {}'.format(self.access_token)}
             headers.update(auth_header)
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
-        _kwargs = [] if _kwargs is None else _kwargs
+        _kwargs = _kwargs or []
         _kwargs.extend(kwargs.items())
 
         # Do any final argument processing before sending to request method.
@@ -92,6 +92,8 @@ class Requester(object):
                 raise InvalidAccessToken(response.json())
             else:
                 raise Unauthorized(response.json())
+        elif response.status_code == 403:
+            raise Forbidden(response.text)
         elif response.status_code == 404:
             raise ResourceDoesNotExist('Not Found')
         elif response.status_code == 500:
@@ -115,7 +117,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
 
@@ -137,7 +138,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
         return self._session.delete(url, headers=headers, data=data)
@@ -148,7 +148,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
         return self._session.put(url, headers=headers, data=data)

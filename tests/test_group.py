@@ -1,9 +1,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import os
 import unittest
 import uuid
 
+import requests
 import requests_mock
+from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.group import Group, GroupMembership, GroupCategory
@@ -15,7 +16,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.tab import Tab
 from tests import settings
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -129,28 +130,35 @@ class TestGroup(unittest.TestCase):
 
     # remove_user()
     def test_remove_user(self, m):
-        register_uris({'group': ['remove_user']}, m)
+        register_uris(
+            {
+                'group': [
+                    'list_users',
+                    'list_users_p2',
+                    'remove_user'
+                ]
+            }, m)
 
         from canvasapi.user import User
-        response = self.group.remove_user(1)
-        self.assertIsInstance(response, User)
+        user_by_id = self.group.remove_user(1)
+        self.assertIsInstance(user_by_id, User)
+
+        users = self.group.list_users()
+        user_by_obj = self.group.remove_user(users[0])
+        self.assertIsInstance(user_by_obj, User)
 
     # upload()
     def test_upload(self, m):
         register_uris({'group': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_group_%s' % uuid.uuid4().hex
+        filename = 'testfile_group_{}'.format(uuid.uuid4().hex)
         with open(filename, 'w+') as file:
             response = self.group.upload(file)
         self.assertTrue(response[0])
         self.assertIsInstance(response[1], dict)
         self.assertIn('url', response[1])
-        # http://stackoverflow.com/a/10840586
-        # Not as stupid as it looks.
-        try:
-            os.remove(filename)
-        except OSError:
-            pass
+
+        cleanup_file(filename)
 
     # preview_processed_html()
     def test_preview_processed_html(self, m):
@@ -180,55 +188,120 @@ class TestGroup(unittest.TestCase):
 
     # get_membership()
     def test_get_membership(self, m):
-        register_uris({'group': ['get_membership']}, m)
+        register_uris(
+            {
+                'group': [
+                    'get_membership',
+                    'list_users',
+                    'list_users_p2'
+                ]
+            }, m)
 
-        response = self.group.get_membership(1, "users")
-        self.assertIsInstance(response, GroupMembership)
+        membership_by_id = self.group.get_membership(1, "users")
+        self.assertIsInstance(membership_by_id, GroupMembership)
+
+        users = self.group.list_users()
+        membership_by_obj = self.group.get_membership(users[0], "users")
+        self.assertIsInstance(membership_by_obj, GroupMembership)
 
     # create_membership()
     def test_create_membership(self, m):
-        register_uris({'group': ['create_membership']}, m)
+        register_uris(
+            {
+                'group': [
+                    'create_membership',
+                    'list_users',
+                    'list_users_p2'
+                ]
+            }, m)
 
         response = self.group.create_membership(1)
         self.assertIsInstance(response, GroupMembership)
 
+        users = self.group.list_users()
+        response = self.group.create_membership(users[0])
+        self.assertIsInstance(response, GroupMembership)
+
     # update_membership()
     def test_update_membership(self, m):
-        register_uris({'group': ['update_membership_user']}, m)
+        register_uris(
+            {
+                'group': [
+                    'list_users',
+                    'list_users_p2',
+                    'update_membership_user'
+                ]
+            }, m)
 
-        response = self.group.update_membership(1)
-        self.assertIsInstance(response, GroupMembership)
+        updated_membership_by_id = self.group.update_membership(1)
+        self.assertIsInstance(updated_membership_by_id, GroupMembership)
+
+        users = self.group.list_users()
+        updated_membership_by_obj = self.group.update_membership(users[0])
+        self.assertIsInstance(updated_membership_by_obj, GroupMembership)
 
     # get_discussion_topic()
     def test_get_discussion_topic(self, m):
-        register_uris({'group': ['get_discussion_topic']}, m)
+        register_uris(
+            {
+                'group': [
+                    'get_discussion_topic',
+                    'get_discussion_topics'
+                    ]
+            }, m)
 
         group_id = 1
-        discussion = self.group.get_discussion_topic(group_id)
-        self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertTrue(hasattr(discussion, 'group_id'))
-        self.assertEqual(group_id, discussion.id)
-        self.assertEqual(discussion.group_id, 1)
+        discussion_by_id = self.group.get_discussion_topic(group_id)
+        self.assertIsInstance(discussion_by_id, DiscussionTopic)
+        self.assertTrue(hasattr(discussion_by_id, 'group_id'))
+        self.assertEqual(group_id, discussion_by_id.id)
+        self.assertEqual(discussion_by_id.group_id, 1)
+
+        discussion_topic = self.group.get_discussion_topics()[0]
+        discussion_by_obj = self.group.get_discussion_topic(discussion_topic)
+        self.assertIsInstance(discussion_by_obj, DiscussionTopic)
+        self.assertTrue(hasattr(discussion_by_obj, 'group_id'))
+        self.assertEqual(group_id, discussion_by_obj.id)
+        self.assertEqual(discussion_by_obj.group_id, 1)
 
     # get_file()
     def test_get_file(self, m):
         register_uris({'group': ['get_file']}, m)
 
-        file = self.group.get_file(1)
-        self.assertIsInstance(file, File)
-        self.assertEqual(file.display_name, 'Group_File.docx')
-        self.assertEqual(file.size, 4096)
+        file_by_id = self.group.get_file(1)
+        self.assertIsInstance(file_by_id, File)
+        self.assertEqual(file_by_id.display_name, 'Group_File.docx')
+        self.assertEqual(file_by_id.size, 4096)
+
+        file_by_obj = self.group.get_file(file_by_id)
+        self.assertIsInstance(file_by_obj, File)
+        self.assertEqual(file_by_obj.display_name, 'Group_File.docx')
+        self.assertEqual(file_by_obj.size, 4096)
 
     # get_full_discussion_topic
     def test_get_full_discussion_topic(self, m):
-        register_uris({'group': ['get_full_discussion_topic']}, m)
+        register_uris(
+            {
+                'group': [
+                    'get_full_discussion_topic',
+                    'get_discussion_topics'
+                ]
+            }, m)
 
-        topic_id = 1
-        discussion = self.group.get_full_discussion_topic(topic_id)
-        self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertTrue(hasattr(discussion, 'view'))
-        self.assertTrue(hasattr(discussion, 'participants'))
-        self.assertEqual(discussion.group_id, 1)
+        discussion_by_id = self.group.get_full_discussion_topic(1)
+        self.assertIsInstance(discussion_by_id, dict)
+        self.assertIn('view', discussion_by_id)
+        self.assertIn('participants', discussion_by_id)
+        self.assertIn('id', discussion_by_id)
+        self.assertEqual(discussion_by_id['id'], 1)
+
+        discussion_topic = self.group.get_discussion_topics()[0]
+        discussion_by_obj = self.group.get_full_discussion_topic(discussion_topic)
+        self.assertIsInstance(discussion_by_obj, dict)
+        self.assertIn('view', discussion_by_obj)
+        self.assertIn('participants', discussion_by_obj)
+        self.assertIn('id', discussion_by_obj)
+        self.assertEqual(discussion_by_obj['id'], 1)
 
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
@@ -253,18 +326,37 @@ class TestGroup(unittest.TestCase):
 
     # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
-        register_uris({'group': ['reorder_pinned_topics']}, m)
+        # Custom matcher to test that params are set correctly
+        def custom_matcher(request):
+            match_text = '1,2,3'
+            if request.text == 'order={}'.format(quote(match_text)):
+                resp = requests.Response()
+                resp._content = b'{"reorder": true, "order": [1, 2, 3]}'
+                resp.status_code = 200
+                return resp
+
+        m.add_matcher(custom_matcher)
 
         order = [1, 2, 3]
-
         discussions = self.group.reorder_pinned_topics(order=order)
         self.assertTrue(discussions)
 
-    def test_reorder_pinned_topics_no_list(self, m):
-        register_uris({'group': ['reorder_pinned_topics_no_list']}, m)
+    def test_reorder_pinned_topics_tuple(self, m):
+        register_uris({'group': ['reorder_pinned_topics']}, m)
 
-        order = "1, 2, 3"
+        order = (1, 2, 3)
+        discussions = self.group.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
 
+    def test_reorder_pinned_topics_comma_separated_string(self, m):
+        register_uris({'group': ['reorder_pinned_topics']}, m)
+
+        order = "1,2,3"
+        discussions = self.group.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
+
+    def test_reorder_pinned_topics_invalid_input(self, m):
+        order = "invalid string"
         with self.assertRaises(ValueError):
             self.group.reorder_pinned_topics(order=order)
 
@@ -290,12 +382,17 @@ class TestGroup(unittest.TestCase):
     def test_delete_external_feed(self, m):
         register_uris({'group': ['delete_external_feed']}, m)
 
-        ef_id = 1
-        deleted_ef = self.group.delete_external_feed(ef_id)
+        deleted_ef_by_id = self.group.delete_external_feed(1)
 
-        self.assertIsInstance(deleted_ef, ExternalFeed)
-        self.assertTrue(hasattr(deleted_ef, 'url'))
-        self.assertEqual(deleted_ef.display_name, "My Blog")
+        self.assertIsInstance(deleted_ef_by_id, ExternalFeed)
+        self.assertTrue(hasattr(deleted_ef_by_id, 'url'))
+        self.assertEqual(deleted_ef_by_id.display_name, "My Blog")
+
+        deleted_ef_by_obj = self.group.delete_external_feed(deleted_ef_by_id)
+
+        self.assertIsInstance(deleted_ef_by_obj, ExternalFeed)
+        self.assertTrue(hasattr(deleted_ef_by_obj, 'url'))
+        self.assertEqual(deleted_ef_by_obj.display_name, "My Blog")
 
     # list_files()
     def test_group_files(self, m):
@@ -310,9 +407,13 @@ class TestGroup(unittest.TestCase):
     def test_get_folder(self, m):
         register_uris({'group': ['get_folder']}, m)
 
-        folder = self.group.get_folder(1)
-        self.assertEqual(folder.name, "Folder 1")
-        self.assertIsInstance(folder, Folder)
+        folder_by_id = self.group.get_folder(1)
+        self.assertEqual(folder_by_id.name, "Folder 1")
+        self.assertIsInstance(folder_by_id, Folder)
+
+        folder_by_obj = self.group.get_folder(folder_by_id)
+        self.assertEqual(folder_by_obj.name, "Folder 1")
+        self.assertIsInstance(folder_by_obj, Folder)
 
     # list_folders()
     def test_list_folders(self, m):
@@ -367,12 +468,20 @@ class TestGroupMembership(unittest.TestCase):
 
     # remove_user()
     def test_remove_user(self, m):
-        register_uris({'group': ['remove_user']}, m)
+        register_uris(
+            {
+                'group': ['remove_user'],
+                'user': ['get_by_id']
+            }, m)
 
-        response = self.membership.remove_user(1)
+        response_by_id = self.membership.remove_user(1)
+        self.assertIsInstance(response_by_id, dict)
+        self.assertEqual(len(response_by_id), 0)
 
-        self.assertIsInstance(response, dict)
-        self.assertEqual(len(response), 0)
+        user_obj = self.canvas.get_user(1)
+        response_by_obj = self.membership.remove_user(user_obj)
+        self.assertIsInstance(response_by_obj, dict)
+        self.assertEqual(len(response_by_obj), 0)
 
     # remove_self()
     def test_remove_self(self, m):

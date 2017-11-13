@@ -24,7 +24,7 @@ class AppointmentGroup(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'appointment_groups/%s' % (self.id),
+            'appointment_groups/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return AppointmentGroup(self._requester, response.json())
@@ -35,6 +35,9 @@ class AppointmentGroup(CanvasObject):
 
         :calls: `PUT /api/v1/appointment_groups/:id \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.update>`_
+
+        :param appointment_group: Dict containing an array of context codes
+        :type appointment_group: dict
 
         :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
@@ -47,7 +50,7 @@ class AppointmentGroup(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'appointment_groups/%s' % (self.id),
+            'appointment_groups/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 

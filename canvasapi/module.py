@@ -5,7 +5,7 @@ from six import python_2_unicode_compatible
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -25,7 +25,7 @@ class Module(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/modules/%s' % (self.course_id, self.id),
+            'courses/{}/modules/{}'.format(self.course_id, self.id),
             **kwargs
         )
         module_json = response.json()
@@ -44,7 +44,7 @@ class Module(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/modules/%s' % (self.course_id, self.id),
+            'courses/{}/modules/{}'.format(self.course_id, self.id),
         )
         module_json = response.json()
         module_json.update({'course_id': self.course_id})
@@ -66,7 +66,7 @@ class Module(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/modules/%s/relock' % (self.course_id, self.id),
+            'courses/{}/modules/{}/relock'.format(self.course_id, self.id),
         )
         module_json = response.json()
         module_json.update({'course_id': self.course_id})
@@ -87,23 +87,28 @@ class Module(CanvasObject):
             ModuleItem,
             self._requester,
             'GET',
-            'courses/%s/modules/%s/items' % (self.course_id, self.id),
+            'courses/{}/modules/{}/items'.format(self.course_id, self.id),
             {'course_id': self.course_id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_module_item(self, module_item_id, **kwargs):
+    def get_module_item(self, module_item, **kwargs):
         """
         Retrieve a module item by ID.
 
         :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items/:id \
         <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.show>`_
 
+        :param module_item: The object or ID of the module item.
+        :type module_item: :class:`canvasapi.module.ModuleItem` or dict
+
         :rtype: :class:`canvasapi.module.ModuleItem`
         """
+        module_item_id = obj_or_id(module_item, "module_item", (ModuleItem,))
+
         response = self._requester.request(
             'GET',
-            'courses/%s/modules/%s/items/%s' % (self.course_id, self.id, module_item_id),
+            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.id, module_item_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         module_item_json = response.json()
@@ -133,7 +138,7 @@ class Module(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'courses/%s/modules/%s/items' % (self.course_id, self.id),
+            'courses/{}/modules/{}/items'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         module_item_json = response.json()
@@ -160,7 +165,7 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/modules/%s/items/%s' % (self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.module_id, self.id),
             **kwargs
         )
         module_item_json = response.json()
@@ -179,7 +184,7 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/modules/%s/items/%s' % (self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.module_id, self.id),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -197,7 +202,7 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/modules/%s/items/%s/done' % (self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}/done'.format(self.course_id, self.module_id, self.id),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -215,7 +220,7 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/modules/%s/items/%s/done' % (self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}/done'.format(self.course_id, self.module_id, self.id),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})

@@ -248,6 +248,18 @@
         },
         "status_code": 200
     },
+	"get_folder_2": {
+        "method": "GET",
+        "endpoint": "users/1/folders/2",
+        "data": {
+            "id": 2,
+            "files_count": 10,
+            "folders_count": 2,
+            "name": "Folder 2",
+            "full_name": "Folder 1"
+        },
+        "status_code": 200
+    },
 	"get_user_assignments": {
 		"method": "GET",
 		"endpoint": "users/1/courses/1/assignments",
@@ -671,7 +683,7 @@
 		"endpoint": "users/1/logins/?page=2&per_page=2",
 		"data": [
 			{
-				"account_id": 2,
+				"account_id": 1,
 				"id": 3,
 				"sis_user_id": null,
 				"unique_id": "belieber@example.com",
