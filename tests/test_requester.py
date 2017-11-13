@@ -91,7 +91,7 @@ class TestRequester(unittest.TestCase):
 
         response = self.requester.request('POST', 'fake_post_request')
 
-        self.assertLessEqual(self.requester._cache, 5)
+        self.assertLessEqual(len(self.requester._cache), 5)
         self.assertEqual(response, self.requester._cache[0])
 
     def test_request_400(self, m):
