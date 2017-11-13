@@ -202,17 +202,19 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_external_tool(self, tool_id):
+    def get_external_tool(self, tool):
         """
         :calls: `GET /api/v1/accounts/:account_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
 
-        :param tool_id: The id of the tool
-        :type tool_id: int
+        :param tool: The object or ID of the tool
+        :type tool: :class:`canvasapi.external_tool.ExternalTool` or int
 
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         from canvasapi.external_tool import ExternalTool
+
+        tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
             'GET',
