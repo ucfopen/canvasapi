@@ -149,6 +149,14 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(user, User)
         self.assertTrue(hasattr(user, 'name'))
 
+    def test_get_user_self(self, m):
+        register_uris({'user': ['get_by_id_self']}, m)
+
+        user = self.canvas.get_user('self')
+
+        self.assertIsInstance(user, User)
+        self.assertTrue(hasattr(user, 'name'))
+
     def test_get_user_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
 
