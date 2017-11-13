@@ -24,6 +24,7 @@ class Requester(object):
         self.base_url = base_url
         self.access_token = access_token
         self._session = requests.Session()
+        self._cache = []
 
     def request(
             self, method, endpoint=None, headers=None, use_auth=True,
@@ -83,6 +84,12 @@ class Requester(object):
 
         # Call the request method
         response = req_method(full_url, headers, _kwargs)
+
+        # Add response to internal cache
+        if len(self._cache) > 4:
+            self._cache.pop()
+
+        self._cache.insert(0, response)
 
         # Raise for status codes
         if response.status_code == 400:
