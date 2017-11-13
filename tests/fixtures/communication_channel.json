@@ -45,7 +45,7 @@
     },
     "update_preference": {
         "method": "PUT",
-        "endpoint": "users/1/communication_channels/11/notification_preferences/new_announcement",
+        "endpoint": "users/self/communication_channels/11/notification_preferences/new_announcement",
         "data": {
             "notification_preferences": [
                 {
@@ -59,7 +59,7 @@
     },
     "update_preferences_by_category": {
         "method": "PUT",
-        "endpoint": "users/1/communication_channels/11/notification_preference_categories/course_content",
+        "endpoint": "users/self/communication_channels/11/notification_preference_categories/course_content",
         "data": {
             "notification_preferences": [
                 {

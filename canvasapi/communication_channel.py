@@ -4,7 +4,6 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.notification_preference import NotificationPreference
-from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs
 
 
@@ -27,7 +26,7 @@ class CommunicationChannel(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/communication_channels/%s/notification_preferences' % (
+            'users/{}/communication_channels/{}/notification_preferences'.format(
                 self.user_id,
                 self.id
             )
@@ -48,7 +47,7 @@ class CommunicationChannel(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/communication_channels/%s/notification_preference_categories' % (
+            'users/{}/communication_channels/{}/notification_preference_categories'.format(
                 self.user_id,
                 self.id
             )
@@ -71,7 +70,7 @@ class CommunicationChannel(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/communication_channels/%s/notification_preferences/%s' % (
+            'users/{}/communication_channels/{}/notification_preferences/{}'.format(
                 self.user_id,
                 self.id,
                 notification
@@ -100,8 +99,7 @@ class CommunicationChannel(CanvasObject):
         kwargs['notification_preferences[frequency]'] = frequency
         response = self._requester.request(
             'PUT',
-            'users/%s/communication_channels/%s/notification_preferences/%s' % (
-                self.user_id,
+            'users/self/communication_channels/{}/notification_preferences/{}'.format(
                 self.id,
                 notification
             ),
@@ -132,10 +130,37 @@ class CommunicationChannel(CanvasObject):
         kwargs['notification_preferences[frequency]'] = frequency
         response = self._requester.request(
             'PUT',
-            'users/%s/communication_channels/%s/notification_preference_categories/%s' % (
-                self.user_id,
+            'users/self/communication_channels/{}/notification_preference_categories/{}'.format(
                 self.id,
                 category
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return response.json()['notification_preferences']
+
+    def update_multiple_preferences(self, notification, frequency, **kwargs):
+        """
+        Change preferences for multiple notifications based on the category
+        for a single communication channel.
+
+        :calls: `PUT
+            /api/v1/users/self/communication_channels/:communication_channel_id/ \
+                notification_preferences \
+        <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.update_all>`_
+
+        :param notification: The name of the notification.
+        :type notification: str
+        :param frequency: The desired frequency for this notification.
+        :type frequency: str
+            Can be 'immediately', 'daily', 'weekly', or 'never'
+
+        :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
+        """
+        kwargs['notification_preferences[{}][frequency]'.format(notification)] = frequency
+        response = self._requester.request(
+            'PUT',
+            'users/self/communication_channels/{}/notification_preferences'.format(
+                self.id
             ),
             _kwargs=combine_kwargs(**kwargs)
         )
