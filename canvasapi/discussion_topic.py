@@ -180,7 +180,7 @@ class DiscussionTopic(CanvasObject):
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
 
-        entry_ids = [obj_or_id(item, "entry_ids", (DiscussionEntry, )) for item in ids]
+        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry, )) for item in ids]
 
         kwargs.update(ids=entry_ids)
         return PaginatedList(

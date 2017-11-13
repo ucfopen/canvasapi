@@ -143,7 +143,7 @@ class Course(CanvasObject):
         from canvasapi.enrollment import Enrollment
         from canvasapi.user import User
 
-        kwargs['enrollment[user_id]'] = obj_or_id(user, "id", (User,))
+        kwargs['enrollment[user_id]'] = obj_or_id(user, "user", (User,))
         kwargs['enrollment[type]'] = enrollment_type
 
         response = self._requester.request(
