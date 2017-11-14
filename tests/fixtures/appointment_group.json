@@ -40,6 +40,16 @@
 		},
 		"status_code": 200
 	},
+	"get_appointment_group_222": {
+		"method": "GET",
+		"endpoint": "appointment_groups/222",
+		"data": {
+			"id": 222,
+			"context_codes": ["course_765"],
+			"title": "Test Group 3"
+		},
+		"status_code": 200
+	},
 	"list_appointment_groups": {
 		"method": "GET",
 		"endpoint": "appointment_groups",

@@ -41,7 +41,7 @@ class PaginatedList(object):
                 yield element
 
     def __repr__(self):
-        return "<PaginatedList of type %s>" % (self.__content_class.__name__)
+        return "<PaginatedList of type {}>".format(self.__content_class.__name__)
 
     def _is_larger_than(self, index):
         return len(self.__elements) > index or self._has_next()
@@ -68,7 +68,7 @@ class PaginatedList(object):
         self.__next_url = None
 
         next_link = response.links.get('next')
-        regex = r'%s(.*)' % (re.escape(self.__requester.base_url))
+        regex = r'{}(.*)'.format(re.escape(self.__requester.base_url))
 
         self.__next_url = re.search(regex, next_link['url']).group(1) if next_link else None
 

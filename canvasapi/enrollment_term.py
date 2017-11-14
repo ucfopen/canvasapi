@@ -23,7 +23,7 @@ class EnrollmentTerm(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'accounts/%s/terms/%s' % (self.account_id, self.id)
+            'accounts/{}/terms/{}'.format(self.account_id, self.id)
         )
         return EnrollmentTerm(self._requester, response.json())
 
@@ -38,7 +38,7 @@ class EnrollmentTerm(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'accounts/%s/terms/%s' % (self.account_id, self.id),
+            'accounts/{}/terms/{}'.format(self.account_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 

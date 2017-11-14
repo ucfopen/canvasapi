@@ -28,14 +28,14 @@ class Enrollment(CanvasObject):
         ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
 
         if task not in ALLOWED_TASKS:
-            raise ValueError('%s is not a valid task. Please use one of the following: %s' % (
+            raise ValueError('{} is not a valid task. Please use one of the following: {}'.format(
                 task,
                 ','.join(ALLOWED_TASKS)
             ))
 
         response = self._requester.request(
             'DELETE',
-            'courses/%s/enrollments/%s' % (self.course_id, self.id),
+            'courses/{}/enrollments/{}'.format(self.course_id, self.id),
             task=task
         )
         return Enrollment(self._requester, response.json())
@@ -51,6 +51,6 @@ class Enrollment(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/enrollments/%s/reactivate' % (self.course_id, self.id)
+            'courses/{}/enrollments/{}/reactivate'.format(self.course_id, self.id)
         )
         return Enrollment(self._requester, response.json())
