@@ -138,7 +138,7 @@ class CommunicationChannel(CanvasObject):
         )
         return response.json()['notification_preferences']
 
-    def update_multiple_preferences(self, notification, frequency, **kwargs):
+    def update_multiple_preferences(self, notification_preferences, **kwargs):
         """
         Change preferences for multiple notifications based on the category
         for a single communication channel.
@@ -148,15 +148,17 @@ class CommunicationChannel(CanvasObject):
                 notification_preferences \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.update_all>`_
 
-        :param notification: The name of the notification.
-        :type notification: str
-        :param frequency: The desired frequency for this notification.
-        :type frequency: str
-            Can be 'immediately', 'daily', 'weekly', or 'never'
+        :param notification_preferences: Dict that indicates the frequency for \
+            different notification types.
+        :type notification: dict
 
         :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
         """
-        kwargs['notification_preferences[{}][frequency]'.format(notification)] = frequency
+        # assert is dict
+        # assert has value
+        # assert value is a dictionary
+        # assert that subdictionary has key "frequency"
+        kwargs['notification_preferences'] = notification_preferences
         response = self._requester.request(
             'PUT',
             'users/self/communication_channels/{}/notification_preferences'.format(

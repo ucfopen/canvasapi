@@ -80,5 +80,24 @@
             ]
         },
         "status_code": 200
+    },
+    "update_multiple_preferences": {
+        "method": "PUT",
+        "endpoint": "users/self/communication_channels/11/notification_preferences",
+        "data": {
+            "notification_preferences": [
+                {
+                    "frequency": "daily",
+                    "notification": "assignment_due_date_changed",
+                    "category": "due_date"
+                },
+                {
+                    "frequency": "daily",
+                    "notification": "assignment_changed",
+                    "category": "course_content"
+                }
+            ]
+        },
+        "status_code": 200
     }
 }
