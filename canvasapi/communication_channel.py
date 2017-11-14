@@ -154,16 +154,22 @@ class CommunicationChannel(CanvasObject):
 
         :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
         """
-        # assert is dict
-        # assert has value
-        # assert value is a dictionary
-        # assert that subdictionary has key "frequency"
-        kwargs['notification_preferences'] = notification_preferences
-        response = self._requester.request(
-            'PUT',
-            'users/self/communication_channels/{}/notification_preferences'.format(
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-        return response.json()['notification_preferences']
+
+        if isinstance(notification_preferences, dict) and bool(notification_preferences):
+
+            for key, value in notification_preferences.items():
+                if not bool(value['frequency']):
+                    return False
+
+            kwargs['notification_preferences'] = notification_preferences
+            response = self._requester.request(
+                'PUT',
+                'users/self/communication_channels/{}/notification_preferences'.format(
+                    self.id
+                ),
+                _kwargs=combine_kwargs(**kwargs)
+            )
+            return response.json()['notification_preferences']
+
+        else:
+            return False
