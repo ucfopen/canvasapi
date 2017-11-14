@@ -24,7 +24,7 @@ class Quiz(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/quizzes/%s' % (self.course_id, self.id),
+            'courses/{}/quizzes/{}'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         quiz_json = response.json()
@@ -43,7 +43,7 @@ class Quiz(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/quizzes/%s' % (self.course_id, self.id),
+            'courses/{}/quizzes/{}'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         quiz_json = response.json()

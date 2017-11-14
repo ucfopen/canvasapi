@@ -52,7 +52,7 @@ class ExternalTool(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            '%ss/%s' % (self.parent_type, self.parent_id)
+            '{}s/{}'.format(self.parent_type, self.parent_id)
         )
 
         if self.parent_type == 'account':
@@ -73,7 +73,7 @@ class ExternalTool(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            '%ss/%s/external_tools/%s' % (self.parent_type, self.parent_id, self.id)
+            '{}s/{}/external_tools/{}'.format(self.parent_type, self.parent_id, self.id)
         )
 
         return ExternalTool(self._requester, response.json())
@@ -91,7 +91,7 @@ class ExternalTool(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '%ss/%s/external_tools/%s' % (self.parent_type, self.parent_id, self.id),
+            '{}s/{}/external_tools/{}'.format(self.parent_type, self.parent_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
@@ -115,7 +115,7 @@ class ExternalTool(CanvasObject):
         kwargs['id'] = self.id
         response = self._requester.request(
             'GET',
-            '%ss/%s/external_tools/sessionless_launch' % (self.parent_type, self.parent_id),
+            '{}s/{}/external_tools/sessionless_launch'.format(self.parent_type, self.parent_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         try:

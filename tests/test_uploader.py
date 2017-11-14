@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import os
 import unittest
 import uuid
 
@@ -8,7 +7,7 @@ import requests_mock
 from canvasapi.canvas import Canvas
 from canvasapi.upload import Uploader
 from tests import settings
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -18,18 +17,13 @@ class TestUploader(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         self.requester = self.canvas._Canvas__requester
 
-        self.filename = 'testfile_uploader_%s' % uuid.uuid4().hex
+        self.filename = 'testfile_uploader_{}'.format(uuid.uuid4().hex)
         self.file = open(self.filename, 'w+')
 
     def tearDown(self):
         self.file.close()
 
-        # http://stackoverflow.com/a/10840586
-        # Not as stupid as it looks.
-        try:
-            os.remove(self.filename)
-        except OSError:
-            pass
+        cleanup_file(self.filename)
 
     # start()
     def test_start(self, m):

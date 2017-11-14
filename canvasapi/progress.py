@@ -22,7 +22,7 @@ class Progress(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'progress/%s' % (self.id)
+            'progress/{}'.format(self.id)
         )
         response_json = response.json()
 

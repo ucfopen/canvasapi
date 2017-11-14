@@ -21,10 +21,9 @@ class Login(CanvasObject):
 
         :rtype: :class:`canvasapi.login.Login`
         """
-
         response = self._requester.request(
             'DELETE',
-            'users/%s/logins/%s' % (self.id, self.unique_id)
+            'users/{}/logins/{}'.format(self.id, self.unique_id)
         )
         return Login(self._requester, response.json())
 
@@ -39,8 +38,7 @@ class Login(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'accounts/%s/logins/%s' % (self.id, self.unique_id),
+            'accounts/{}/logins/{}'.format(self.id, self.unique_id),
             _kwargs=combine_kwargs(**kwargs)
         )
-
         return Login(self._requester, response.json())

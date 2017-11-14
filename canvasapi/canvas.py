@@ -10,7 +10,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
 from canvasapi.section import Section
 from canvasapi.user import User
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 class Canvas(object):
@@ -43,15 +43,15 @@ class Canvas(object):
         )
         return Account(self.__requester, response.json())
 
-    def get_account(self, account_id, use_sis_id=False, **kwargs):
+    def get_account(self, account, use_sis_id=False, **kwargs):
         """
         Retrieve information on an individual account.
 
         :calls: `GET /api/v1/accounts/:id \
         <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.show>`_
 
-        :param account_id: The ID of the account to retrieve.
-        :type account_id: int or str
+        :param account: The object or ID of the account to retrieve.
+        :type account: int, str or :class:`canvasapi.account.Account`
         :param use_sis_id: Whether or not account_id is an sis ID.
             Defaults to `False`.
         :type use_sis_id: bool
@@ -59,8 +59,10 @@ class Canvas(object):
         :rtype: :class:`canvasapi.account.Account`
         """
         if use_sis_id:
+            account_id = account
             uri_str = 'accounts/sis_account_id:{}'
         else:
+            account_id = obj_or_id(account, "account", (Account,))
             uri_str = 'accounts/{}'
 
         response = self.__requester.request(
@@ -113,23 +115,26 @@ class Canvas(object):
             'course_accounts',
         )
 
-    def get_course(self, course_id, use_sis_id=False, **kwargs):
+    def get_course(self, course, use_sis_id=False, **kwargs):
         """
         Retrieve a course by its ID.
 
         :calls: `GET /courses/:id \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
-        :param course_id: The ID of the course to retrieve.
-        :type course_id: int or str
+        :param course: The object or ID of the course to retrieve.
+        :type course: int, str or :class:`canvasapi.course.Course`
         :param use_sis_id: Whether or not course_id is an sis ID.
             Defaults to `False`.
         :type use_sis_id: bool
+
         :rtype: :class:`canvasapi.course.Course`
         """
         if use_sis_id:
+            course_id = course
             uri_str = 'courses/sis_course_id:{}'
         else:
+            course_id = obj_or_id(course, "course", (Course,))
             uri_str = 'courses/{}'
 
         response = self.__requester.request(
@@ -139,7 +144,7 @@ class Canvas(object):
         )
         return Course(self.__requester, response.json())
 
-    def get_user(self, user_id, id_type=None):
+    def get_user(self, user, id_type=None):
         """
         Retrieve a user by their ID. `id_type` denotes which endpoint to try as there are
         several different IDs that can pull the same user record from Canvas.
@@ -151,16 +156,20 @@ class Canvas(object):
         :calls: `GET /users/:id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
 
-        :param user_id: The user's ID.
-        :type user_id: str
+        :param user: The user's object or ID.
+        :type user: :class:`canvasapi.user.User` or int
         :param id_type: The ID type.
         :type id_type: str
+
         :rtype: :class:`canvasapi.user.User`
         """
         if id_type:
-            uri = 'users/%s:%s' % (id_type, user_id)
+            uri = 'users/{}:{}'.format(id_type, user)
+        elif user == 'self':
+            uri = 'users/self'
         else:
-            uri = 'users/%s' % (user_id)
+            user_id = obj_or_id(user, "user", (User,))
+            uri = 'users/{}'.format(user_id)
 
         response = self.__requester.request(
             'GET',
@@ -251,34 +260,37 @@ class Canvas(object):
             'users/self/course_nicknames'
         )
 
-    def get_course_nickname(self, course_id):
+    def get_course_nickname(self, course):
         """
         Return the nickname for the given course.
 
         :calls: `GET /api/v1/users/self/course_nicknames/:course_id \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.show>`_
 
-        :param course_id: The ID of the course.
-        :type course_id: int
+        :param course: The object or ID of the course.
+        :type course: :class:`canvasapi.course.Course` or int
+
         :rtype: :class:`canvasapi.course.CourseNickname`
         """
         from canvasapi.course import CourseNickname
 
+        course_id = obj_or_id(course, "course", (Course,))
+
         response = self.__requester.request(
             'GET',
-            'users/self/course_nicknames/%s' % (course_id)
+            'users/self/course_nicknames/{}'.format(course_id)
         )
         return CourseNickname(self.__requester, response.json())
 
-    def get_section(self, section_id, use_sis_id=False, **kwargs):
+    def get_section(self, section, use_sis_id=False, **kwargs):
         """
         Get details about a specific section.
 
         :calls: `GET /api/v1/sections/:id \
         <https://canvas.instructure.com/doc/api/sections.html#method.sections.show>`_
 
-        :param section_id: The ID of the section to get.
-        :type section_id: int or str
+        :param section: The object or ID of the section to get.
+        :type section: :class:`canvasapi.section.Section` or int
         :param use_sis_id: Whether or not section_id is an sis ID.
             Defaults to `False`.
         :type use_sis_id: bool
@@ -286,8 +298,10 @@ class Canvas(object):
         :rtype: :class:`canvasapi.section.Section`
         """
         if use_sis_id:
+            section_id = section
             uri_str = 'sections/sis_section_id:{}'
         else:
+            section_id = obj_or_id(section, "section", (Section,))
             uri_str = 'sections/{}'
 
         response = self.__requester.request(
@@ -297,7 +311,7 @@ class Canvas(object):
         )
         return Section(self.__requester, response.json())
 
-    def set_course_nickname(self, course_id, nickname):
+    def set_course_nickname(self, course, nickname):
         """
         Set a nickname for the given course. This will replace the
         course's name in the output of subsequent API calls, as
@@ -306,17 +320,20 @@ class Canvas(object):
         :calls: `PUT /api/v1/users/self/course_nicknames/:course_id \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.update>`_
 
-        :param course_id: The ID of the course.
-        :type course_id: int
+        :param course: The ID of the course.
+        :type course: :class:`canvasapi.course.Course` or int
         :param nickname: The nickname for the course.
         :type nickname: str
+
         :rtype: :class:`canvasapi.course.CourseNickname`
         """
         from canvasapi.course import CourseNickname
 
+        course_id = obj_or_id(course, "course", (Course,))
+
         response = self.__requester.request(
             'PUT',
-            'users/self/course_nicknames/%s' % (course_id),
+            'users/self/course_nicknames/{}'.format(course_id),
             nickname=nickname
         )
         return CourseNickname(self.__requester, response.json())
@@ -370,7 +387,7 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
-    def get_group(self, group_id, use_sis_id=False, **kwargs):
+    def get_group(self, group, use_sis_id=False, **kwargs):
         """
         Return the data for a single group. If the caller does not
         have permission to view the group a 401 will be returned.
@@ -378,17 +395,21 @@ class Canvas(object):
         :calls: `GET /api/v1/groups/:group_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
 
-        :param group_id: The ID of the group to get.
-        :type group_id: int or str
+        :param group: The object or ID of the group to get.
+        :type group: :class:`canvasapi.group.Group` or int
+
         :param use_sis_id: Whether or not group_id is an sis ID.
             Defaults to `False`.
         :type use_sis_id: bool
 
         :rtype: :class:`canvasapi.group.Group`
         """
+
         if use_sis_id:
+            group_id = group
             uri_str = 'groups/sis_group_id:{}'
         else:
+            group_id = obj_or_id(group, "group", (Group,))
             uri_str = 'groups/{}'
 
         response = self.__requester.request(
@@ -398,18 +419,23 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
-    def get_group_category(self, cat_id):
+    def get_group_category(self, category):
         """
         Get a single group category.
 
         :calls: `GET /api/v1/group_categories/:group_category_id \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.show>`_
 
+        :param category: The object or ID of the category.
+        :type category: :class:`canvasapi.group.GroupCategory` or int
+
         :rtype: :class:`canvasapi.group.GroupCategory`
         """
+        category_id = obj_or_id(category, "category", (GroupCategory,))
+
         response = self.__requester.request(
             'GET',
-            'group_categories/%s' % (cat_id)
+            'group_categories/{}'.format(category_id)
         )
         return GroupCategory(self.__requester, response.json())
 
@@ -442,21 +468,25 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_conversation(self, conversation_id, **kwargs):
+    def get_conversation(self, conversation, **kwargs):
         """
         Return single Conversation
 
         :calls: `GET /api/v1/conversations/:id \
         <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.show>`_
 
-        :param conversation_id: The ID of the conversation.
-        :type conversation_id: `int`
+        :param conversation: The object or ID of the conversation.
+        :type conversation: :class:`canvasapi.conversation.Conversation` or int
+
         :rtype: :class:`canvasapi.conversation.Conversation`
         """
         from canvasapi.conversation import Conversation
+
+        conversation_id = obj_or_id(conversation, "conversation", (Conversation,))
+
         response = self.__requester.request(
             'GET',
-            'conversations/%s' % (conversation_id),
+            'conversations/{}'.format(conversation_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Conversation(self.__requester, response.json())
@@ -560,7 +590,7 @@ class Canvas(object):
         try:
             if event not in ALLOWED_EVENTS:
                 raise ValueError(
-                    '%s is not a valid action. Please use one of the following: %s' % (
+                    '{} is not a valid action. Please use one of the following: {}'.format(
                         event,
                         ','.join(ALLOWED_EVENTS)
                     )
@@ -568,7 +598,7 @@ class Canvas(object):
 
             if len(conversation_ids) > 500:
                 raise ValueError(
-                    'You have requested %s updates, which exceeds the limit of 500' % (
+                    'You have requested {} updates, which exceeds the limit of 500'.format(
                         len(conversation_ids)
                     )
                 )
@@ -633,44 +663,53 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_calendar_event(self, calendar_event_id):
+    def get_calendar_event(self, calendar_event):
         """
         Return single Calendar Event by id
 
         :calls: `GET /api/v1/calendar_events/:id \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.show>`_
 
-        :param calendar_event_id: The ID of the calendar event.
-        :type calendar_event_id: `int`
+        :param calendar_event: The object or ID of the calendar event.
+        :type calendar_event: :class:`canvasapi.calendar_event.CalendarEvent` or int
+
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
         from canvasapi.calendar_event import CalendarEvent
 
+        calendar_event_id = obj_or_id(calendar_event, "calendar_event", (CalendarEvent,))
+
         response = self.__requester.request(
             'GET',
-            'calendar_events/%s' % (calendar_event_id)
+            'calendar_events/{}'.format(calendar_event_id)
         )
         return CalendarEvent(self.__requester, response.json())
 
-    def reserve_time_slot(self, calendar_event_id, participant_id=None, **kwargs):
+    def reserve_time_slot(self, calendar_event, participant_id=None, **kwargs):
         """
         Return single Calendar Event by id
 
         :calls: `POST /api/v1/calendar_events/:id/reservations \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.reserve>`_
 
-        :param calendar_event_id: The ID of the calendar event.
-        :type calendar_event_id: `int`
+        :param calendar_event: The object or ID of the calendar event.
+        :type calendar_event: :class:`canvasapi.calendar_event.CalendarEvent` or int
+
+        :param participant_id: The ID of the participant, if given.
+        :type participant_id: str
+
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
         from canvasapi.calendar_event import CalendarEvent
 
+        calendar_event_id = obj_or_id(calendar_event, "calendar_event", (CalendarEvent,))
+
         if participant_id:
-            uri = 'calendar_events/%s/reservations/%s' % (
+            uri = 'calendar_events/{}/reservations/{}'.format(
                 calendar_event_id, participant_id
             )
         else:
-            uri = 'calendar_events/%s/reservations' % (calendar_event_id)
+            uri = 'calendar_events/{}/reservations'.format(calendar_event_id)
 
         response = self.__requester.request(
             'POST',
@@ -699,22 +738,27 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_appointment_group(self, appointment_group_id):
+    def get_appointment_group(self, appointment_group):
         """
         Return single Appointment Group by id
 
         :calls: `GET /api/v1/appointment_groups/:id \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.show>`_
 
-        :param appointment_group_id: The ID of the appointment group.
-        :type appointment_group_id: `int`
+        :param appointment_group: The ID of the appointment group.
+        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
+
         :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
         from canvasapi.appointment_group import AppointmentGroup
 
+        appointment_group_id = obj_or_id(
+            appointment_group, "appointment_group", (AppointmentGroup,)
+        )
+
         response = self.__requester.request(
             'GET',
-            'appointment_groups/%s' % (appointment_group_id)
+            'appointment_groups/{}'.format(appointment_group_id)
         )
         return AppointmentGroup(self.__requester, response.json())
 
@@ -759,59 +803,74 @@ class Canvas(object):
 
         return AppointmentGroup(self.__requester, response.json())
 
-    def list_user_participants(self, appointment_group_id, **kwargs):
+    def list_user_participants(self, appointment_group, **kwargs):
         """
         List user participants in this appointment group.
 
         :calls: `GET /api/v1/appointment_groups/:id/users \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.users>`_
 
-        :param appointment_group_id: The ID of the appointment group.
-        :type appointment_group_id: `int`
+        :param appointment_group: The object or ID of the appointment group.
+        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
         """
+        from canvasapi.appointment_group import AppointmentGroup
         from canvasapi.user import User
+
+        appointment_group_id = obj_or_id(
+            appointment_group, "appointment_group", (AppointmentGroup,)
+        )
 
         return PaginatedList(
             User,
             self.__requester,
             'GET',
-            'appointment_groups/%s/users' % (appointment_group_id),
+            'appointment_groups/{}/users'.format(appointment_group_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def list_group_participants(self, appointment_group_id, **kwargs):
+    def list_group_participants(self, appointment_group, **kwargs):
         """
         List student group participants in this appointment group.
 
         :calls: `GET /api/v1/appointment_groups/:id/groups \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.groups>`_
 
-        :param appointment_group_id: The ID of the appointment group.
-        :type appointment_group_id: `int`
+        :param appointment_group: The object or ID of the appointment group.
+        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
+        from canvasapi.appointment_group import AppointmentGroup
         from canvasapi.group import Group
+
+        appointment_group_id = obj_or_id(
+            appointment_group, "appointment_group", (AppointmentGroup,)
+        )
 
         return PaginatedList(
             Group,
             self.__requester,
             'GET',
-            'appointment_groups/%s/groups' % (appointment_group_id),
+            'appointment_groups/{}/groups'.format(appointment_group_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_file(self, file_id, **kwargs):
+    def get_file(self, file, **kwargs):
         """
         Return the standard attachment json object for a file.
 
         :calls: `GET /api/v1/files/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
 
-        :param file_id: The ID of the file to retrieve.
-        :type file_id: int
+        :param file: The object or ID of the file to retrieve.
+        :type file: :class:`canvasapi.file.File` or int
+
         :rtype: :class:`canvasapi.file.File`
         """
+        file_id = obj_or_id(file, "file", (File,))
+
         response = self.__requester.request(
             'GET',
             'files/{}'.format(file_id),
@@ -819,20 +878,23 @@ class Canvas(object):
         )
         return File(self.__requester, response.json())
 
-    def get_folder(self, folder_id):
+    def get_folder(self, folder):
         """
         Return the details for a folder
 
         :calls: `GET /api/v1/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param folder_id: The ID of the folder to retrieve.
-        :type folder_id: int
+        :param folder: The object or ID of the folder to retrieve.
+        :type folder: :class:`canvasapi.folder.Folder` or int
+
         :rtype: :class:`canvasapi.folder.Folder`
         """
+        folder_id = obj_or_id(folder, "folder", (Folder,))
+
         response = self.__requester.request(
             'GET',
-            'folders/%s' % (folder_id)
+            'folders/{}'.format(folder_id)
         )
         return Folder(self.__requester, response.json())
 
@@ -873,3 +935,67 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
+
+    def get_outcome(self, outcome):
+        """
+        Returns the details of the outcome with the given id.
+
+        :calls: `GET /api/v1/outcomes/:id \
+        <https://canvas.instructure.com/doc/api/outcomes.html#method.outcomes_api.show>`_
+
+        :param outcome: The outcome object or ID to return.
+        :type outcome: :class:`canvasapi.outcome.Outcome` or int
+
+        :returns: An Outcome object.
+        :rtype: :class:`canvasapi.outcome.Outcome`
+        """
+        from canvasapi.outcome import Outcome
+
+        outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
+        response = self.__requester.request(
+            'GET',
+            'outcomes/{}'.format(outcome_id)
+        )
+        return Outcome(self.__requester, response.json())
+
+    def get_root_outcome_group(self):
+        """
+        Redirect to root outcome group for context
+
+        :calls: `GET /api/v1/global/root_outcome_group \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>
+
+        :returns: The OutcomeGroup of the context.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        from canvasapi.outcome import OutcomeGroup
+
+        response = self.__requester.request(
+            'GET',
+            'global/root_outcome_group'
+        )
+        return OutcomeGroup(self.__requester, response.json())
+
+    def get_outcome_group(self, group):
+        """
+        Returns the details of the Outcome Group with the given id.
+
+        :calls: `GET /api/v1/global/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
+
+        :param group: The outcome group object or ID to return.
+        :type group: :class:`canvasapi.outcome.OutcomeGroup` or int
+
+        :returns: An outcome group object.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        from canvasapi.outcome import OutcomeGroup
+
+        outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
+
+        response = self.__requester.request(
+            'GET',
+            'global/outcome_groups/{}'.format(outcome_group_id)
+        )
+
+        return OutcomeGroup(self.__requester, response.json())

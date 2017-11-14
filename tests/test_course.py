@@ -1,11 +1,12 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import os
 import unittest
 import uuid
 import warnings
 
+import requests
 import requests_mock
 from six import text_type
+from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup
@@ -19,6 +20,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
+from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.quiz import Quiz
 from canvasapi.section import Section
 from canvasapi.tab import Tab
@@ -26,7 +28,7 @@ from canvasapi.user import User
 from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
 from tests import settings
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -37,7 +39,7 @@ class TestCourse(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_by_id', 'get_page'],
+                'course': ['get_assignment_by_id', 'get_by_id', 'get_page'],
                 'quiz': ['get_by_id'],
                 'user': ['get_by_id']
             }
@@ -47,6 +49,7 @@ class TestCourse(unittest.TestCase):
             self.page = self.course.get_page('my-url')
             self.quiz = self.course.get_quiz(1)
             self.user = self.canvas.get_user(1)
+            self.assignment = self.course.get_assignment('5')
 
     # __str__()
     def test__str__(self, m):
@@ -79,10 +82,13 @@ class TestCourse(unittest.TestCase):
     def test_get_user(self, m):
         register_uris({'course': ['get_user']}, m)
 
-        user = self.course.get_user(1)
+        user_by_id = self.course.get_user(1)
+        self.assertIsInstance(user_by_id, User)
+        self.assertTrue(hasattr(user_by_id, 'name'))
 
-        self.assertIsInstance(user, User)
-        self.assertTrue(hasattr(user, 'name'))
+        user_by_obj = self.course.get_user(user_by_id)
+        self.assertIsInstance(user_by_obj, User)
+        self.assertTrue(hasattr(user_by_obj, 'name'))
 
     def test_get_user_id_type(self, m):
         register_uris({'course': ['get_user_id_type']}, m)
@@ -111,12 +117,19 @@ class TestCourse(unittest.TestCase):
         register_uris(requires, m)
 
         enrollment_type = 'TeacherEnrollment'
-        user = self.canvas.get_user(1)
-        enrollment = self.course.enroll_user(user, enrollment_type)
+        user_by_id = self.canvas.get_user(1)
+        enrollment_by_id = self.course.enroll_user(user_by_id, enrollment_type)
 
-        self.assertIsInstance(enrollment, Enrollment)
-        self.assertTrue(hasattr(enrollment, 'type'))
-        self.assertEqual(enrollment.type, enrollment_type)
+        self.assertIsInstance(enrollment_by_id, Enrollment)
+        self.assertTrue(hasattr(enrollment_by_id, 'type'))
+        self.assertEqual(enrollment_by_id.type, enrollment_type)
+
+        user_by_obj = self.canvas.get_user(self.user)
+        enrollment_by_obj = self.course.enroll_user(user_by_obj, enrollment_type)
+
+        self.assertIsInstance(enrollment_by_obj, Enrollment)
+        self.assertTrue(hasattr(enrollment_by_obj, 'type'))
+        self.assertEqual(enrollment_by_obj.type, enrollment_type)
 
     # get_recent_students()
     def test_get_recent_students(self, m):
@@ -161,7 +174,7 @@ class TestCourse(unittest.TestCase):
     def test_upload(self, m):
         register_uris({'course': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_course_%s' % uuid.uuid4().hex
+        filename = 'testfile_course_{}'.format(uuid.uuid4().hex)
         with open(filename, 'w+') as file:
             response = self.course.upload(file)
 
@@ -169,12 +182,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(response[1], dict)
         self.assertIn('url', response[1])
 
-        # http://stackoverflow.com/a/10840586
-        # Not as stupid as it looks.
-        try:
-            os.remove(filename)
-        except OSError:
-            pass
+        cleanup_file(filename)
 
     # reset()
     def test_reset(self, m):
@@ -206,11 +214,17 @@ class TestCourse(unittest.TestCase):
     def test_get_quiz(self, m):
         register_uris({'course': ['get_quiz']}, m)
 
-        target_quiz = self.course.get_quiz(1)
+        target_quiz_by_id = self.course.get_quiz(1)
 
-        self.assertIsInstance(target_quiz, Quiz)
-        self.assertTrue(hasattr(target_quiz, 'course_id'))
-        self.assertEqual(target_quiz.course_id, self.course.id)
+        self.assertIsInstance(target_quiz_by_id, Quiz)
+        self.assertTrue(hasattr(target_quiz_by_id, 'course_id'))
+        self.assertEqual(target_quiz_by_id.course_id, self.course.id)
+
+        target_quiz_by_obj = self.course.get_quiz(target_quiz_by_id)
+
+        self.assertIsInstance(target_quiz_by_obj, Quiz)
+        self.assertTrue(hasattr(target_quiz_by_obj, 'course_id'))
+        self.assertEqual(target_quiz_by_obj.course_id, self.course.id)
 
     def test_get_quiz_fail(self, m):
         register_uris({'generic': ['not_found']}, m)
@@ -246,11 +260,17 @@ class TestCourse(unittest.TestCase):
     def test_get_module(self, m):
         register_uris({'course': ['get_module_by_id']}, m)
 
-        target_module = self.course.get_module(1)
+        target_module_by_id = self.course.get_module(1)
 
-        self.assertIsInstance(target_module, Module)
-        self.assertTrue(hasattr(target_module, 'course_id'))
-        self.assertEqual(target_module.course_id, self.course.id)
+        self.assertIsInstance(target_module_by_id, Module)
+        self.assertTrue(hasattr(target_module_by_id, 'course_id'))
+        self.assertEqual(target_module_by_id.course_id, self.course.id)
+
+        target_module_by_obj = self.course.get_module(target_module_by_id)
+
+        self.assertIsInstance(target_module_by_obj, Module)
+        self.assertTrue(hasattr(target_module_by_obj, 'course_id'))
+        self.assertEqual(target_module_by_obj.course_id, self.course.id)
 
     # create_module()
     def test_create_module(self, m):
@@ -282,9 +302,11 @@ class TestCourse(unittest.TestCase):
     def test_get_section(self, m):
         register_uris({'course': ['get_section']}, m)
 
-        section = self.course.get_section(1)
+        section_by_id = self.course.get_section(1)
+        self.assertIsInstance(section_by_id, Section)
 
-        self.assertIsInstance(section, Section)
+        section_by_obj = self.course.get_section(section_by_id)
+        self.assertIsInstance(section_by_obj, Section)
 
     # create_assignment()
     def test_create_assignment(self, m):
@@ -307,10 +329,13 @@ class TestCourse(unittest.TestCase):
     def test_get_assignment(self, m):
         register_uris({'course': ['get_assignment_by_id']}, m)
 
-        assignment = self.course.get_assignment('5')
+        assignment_by_id = self.course.get_assignment('5')
+        self.assertIsInstance(assignment_by_id, Assignment)
+        self.assertTrue(hasattr(assignment_by_id, 'name'))
 
-        self.assertIsInstance(assignment, Assignment)
-        self.assertTrue(hasattr(assignment, 'name'))
+        assignment_by_obj = self.course.get_assignment(self.assignment)
+        self.assertIsInstance(assignment_by_obj, Assignment)
+        self.assertTrue(hasattr(assignment_by_obj, 'name'))
 
     # get_assignments()
     def test_get_assignments(self, m):
@@ -385,10 +410,13 @@ class TestCourse(unittest.TestCase):
     def test_get_external_tool(self, m):
         register_uris({'external_tool': ['get_by_id_course']}, m)
 
-        tool = self.course.get_external_tool(1)
+        tool_by_id = self.course.get_external_tool(1)
+        self.assertIsInstance(tool_by_id, ExternalTool)
+        self.assertTrue(hasattr(tool_by_id, 'name'))
 
-        self.assertIsInstance(tool, ExternalTool)
-        self.assertTrue(hasattr(tool, 'name'))
+        tool_by_obj = self.course.get_external_tool(tool_by_id)
+        self.assertIsInstance(tool_by_obj, ExternalTool)
+        self.assertTrue(hasattr(tool_by_obj, 'name'))
 
     # get_external_tools()
     def test_get_external_tools(self, m):
@@ -448,30 +476,55 @@ class TestCourse(unittest.TestCase):
         register_uris({'course': ['get_discussion_topic']}, m)
 
         topic_id = 1
-        discussion = self.course.get_discussion_topic(topic_id)
-        self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertTrue(hasattr(discussion, 'course_id'))
-        self.assertEqual(discussion.course_id, 1)
+        discussion_by_id = self.course.get_discussion_topic(topic_id)
+        self.assertIsInstance(discussion_by_id, DiscussionTopic)
+        self.assertTrue(hasattr(discussion_by_id, 'course_id'))
+        self.assertEqual(discussion_by_id.course_id, 1)
+
+        discussion_by_obj = self.course.get_discussion_topic(discussion_by_id)
+        self.assertIsInstance(discussion_by_obj, DiscussionTopic)
+        self.assertTrue(hasattr(discussion_by_obj, 'course_id'))
+        self.assertEqual(discussion_by_obj.course_id, 1)
 
     # get_file()
     def test_get_file(self, m):
         register_uris({'course': ['get_file']}, m)
 
-        file = self.course.get_file(1)
-        self.assertIsInstance(file, File)
-        self.assertEqual(file.display_name, 'Course_File.docx')
-        self.assertEqual(file.size, 2048)
+        file_by_id = self.course.get_file(1)
+        self.assertIsInstance(file_by_id, File)
+        self.assertEqual(file_by_id.display_name, 'Course_File.docx')
+        self.assertEqual(file_by_id.size, 2048)
+
+        file_by_obj = self.course.get_file(file_by_id)
+        self.assertIsInstance(file_by_obj, File)
+        self.assertEqual(file_by_obj.display_name, 'Course_File.docx')
+        self.assertEqual(file_by_obj.size, 2048)
 
     # get_full_discussion_topic()
     def test_get_full_discussion_topic(self, m):
-        register_uris({'course': ['get_full_discussion_topic']}, m)
+        register_uris(
+            {
+                'course': [
+                    'get_discussion_topics',
+                    'get_full_discussion_topic'
+                ]
+            }, m)
 
         topic_id = 1
-        discussion = self.course.get_full_discussion_topic(topic_id)
-        self.assertIsInstance(discussion, DiscussionTopic)
-        self.assertTrue(hasattr(discussion, 'view'))
-        self.assertTrue(hasattr(discussion, 'participants'))
-        self.assertEqual(discussion.course_id, 1)
+        discussion_by_id = self.course.get_full_discussion_topic(topic_id)
+        self.assertIsInstance(discussion_by_id, dict)
+        self.assertIn('view', discussion_by_id)
+        self.assertIn('participants', discussion_by_id)
+        self.assertIn('id', discussion_by_id)
+        self.assertEqual(discussion_by_id['id'], topic_id)
+
+        discussion_topics = self.course.get_discussion_topics()
+        discussion_by_obj = self.course.get_full_discussion_topic(discussion_topics[0])
+        self.assertIsInstance(discussion_by_obj, dict)
+        self.assertIn('view', discussion_by_obj)
+        self.assertIn('participants', discussion_by_obj)
+        self.assertIn('id', discussion_by_obj)
+        self.assertEqual(discussion_by_obj['id'], topic_id)
 
     # get_discussion_topics()
     def test_get_discussion_topics(self, m):
@@ -496,18 +549,37 @@ class TestCourse(unittest.TestCase):
 
     # reorder_pinned_topics()
     def test_reorder_pinned_topics(self, m):
-        register_uris({'course': ['reorder_pinned_topics']}, m)
+        # Custom matcher to test that params are set correctly
+        def custom_matcher(request):
+            match_text = '1,2,3'
+            if request.text == 'order={}'.format(quote(match_text)):
+                resp = requests.Response()
+                resp._content = b'{"reorder": true, "order": [1, 2, 3]}'
+                resp.status_code = 200
+                return resp
+
+        m.add_matcher(custom_matcher)
 
         order = [1, 2, 3]
-
         discussions = self.course.reorder_pinned_topics(order=order)
         self.assertTrue(discussions)
 
-    def test_reorder_pinned_topics_no_list(self, m):
-        register_uris({'course': ['reorder_pinned_topics_no_list']}, m)
+    def test_reorder_pinned_topics_tuple(self, m):
+        register_uris({'course': ['reorder_pinned_topics']}, m)
 
-        order = "1, 2, 3"
+        order = (1, 2, 3)
+        discussions = self.course.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
 
+    def test_reorder_pinned_topics_comma_separated_string(self, m):
+        register_uris({'course': ['reorder_pinned_topics']}, m)
+
+        order = "1,2,3"
+        discussions = self.course.reorder_pinned_topics(order=order)
+        self.assertTrue(discussions)
+
+    def test_reorder_pinned_topics_invalid_input(self, m):
+        order = "invalid string"
         with self.assertRaises(ValueError):
             self.course.reorder_pinned_topics(order=order)
 
@@ -515,13 +587,21 @@ class TestCourse(unittest.TestCase):
     def test_get_assignment_group(self, m):
         register_uris({'assignment': ['get_assignment_group']}, m)
 
-        response = self.course.get_assignment_group(5)
+        assignment_group_by_id = self.course.get_assignment_group(5)
 
-        self.assertIsInstance(response, AssignmentGroup)
-        self.assertTrue(hasattr(response, 'id'))
-        self.assertTrue(hasattr(response, 'name'))
-        self.assertTrue(hasattr(response, 'course_id'))
-        self.assertEqual(response.course_id, 1)
+        self.assertIsInstance(assignment_group_by_id, AssignmentGroup)
+        self.assertTrue(hasattr(assignment_group_by_id, 'id'))
+        self.assertTrue(hasattr(assignment_group_by_id, 'name'))
+        self.assertTrue(hasattr(assignment_group_by_id, 'course_id'))
+        self.assertEqual(assignment_group_by_id.course_id, 1)
+
+        assignment_group_by_obj = self.course.get_assignment_group(assignment_group_by_id)
+
+        self.assertIsInstance(assignment_group_by_obj, AssignmentGroup)
+        self.assertTrue(hasattr(assignment_group_by_obj, 'id'))
+        self.assertTrue(hasattr(assignment_group_by_obj, 'name'))
+        self.assertTrue(hasattr(assignment_group_by_obj, 'course_id'))
+        self.assertEqual(assignment_group_by_obj.course_id, 1)
 
     # list_group_categories()
     def test_list_assignment_groups(self, m):
@@ -591,7 +671,9 @@ class TestCourse(unittest.TestCase):
         register_uris({'course': ['get_user_in_a_course_level_participation_data']}, m)
 
         response = self.course.get_user_in_a_course_level_participation_data(1)
+        self.assertIsInstance(response, list)
 
+        response = self.course.get_user_in_a_course_level_participation_data(self.user)
         self.assertIsInstance(response, list)
 
     # get_user_in_a_course_level_assignment_data()
@@ -599,7 +681,9 @@ class TestCourse(unittest.TestCase):
         register_uris({'course': ['get_user_in_a_course_level_assignment_data']}, m)
 
         response = self.course.get_user_in_a_course_level_assignment_data(1)
+        self.assertIsInstance(response, list)
 
+        response = self.course.get_user_in_a_course_level_assignment_data(self.user)
         self.assertIsInstance(response, list)
 
     # get_user_in_a_course_level_messaging_data()
@@ -607,21 +691,29 @@ class TestCourse(unittest.TestCase):
         register_uris({'course': ['get_user_in_a_course_level_messaging_data']}, m)
 
         response = self.course.get_user_in_a_course_level_messaging_data(1)
+        self.assertIsInstance(response, list)
 
+        response = self.course.get_user_in_a_course_level_messaging_data(self.user)
         self.assertIsInstance(response, list)
 
     # submit_assignment()
     def test_submit_assignment(self, m):
-        register_uris({'course': ['submit_assignment']}, m)
+        register_uris({'course': ['submit_assignment', 'submit_assignment_2']}, m)
 
         assignment_id = 1
         sub_type = "online_upload"
         sub_dict = {'submission_type': sub_type}
-        assignment = self.course.submit_assignment(assignment_id, sub_dict)
+        submission_by_id = self.course.submit_assignment(assignment_id, sub_dict)
 
-        self.assertIsInstance(assignment, Submission)
-        self.assertTrue(hasattr(assignment, 'submission_type'))
-        self.assertEqual(assignment.submission_type, sub_type)
+        self.assertIsInstance(submission_by_id, Submission)
+        self.assertTrue(hasattr(submission_by_id, 'submission_type'))
+        self.assertEqual(submission_by_id.submission_type, sub_type)
+
+        submission_by_obj = self.course.submit_assignment(self.assignment, sub_dict)
+
+        self.assertIsInstance(submission_by_obj, Submission)
+        self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
+        self.assertEqual(submission_by_obj.submission_type, sub_type)
 
     def test_subit_assignment_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -629,14 +721,20 @@ class TestCourse(unittest.TestCase):
 
     # list_submissions()
     def test_list_submissions(self, m):
-        register_uris({'course': ['list_submissions']}, m)
+        register_uris({'course': ['list_submissions', 'list_submissions_2']}, m)
 
         assignment_id = 1
-        submissions = self.course.list_submissions(assignment_id)
-        submission_list = [submission for submission in submissions]
+        submissions_by_id = self.course.list_submissions(assignment_id)
+        submission_list_by_id = [submission for submission in submissions_by_id]
 
-        self.assertEqual(len(submission_list), 2)
-        self.assertIsInstance(submission_list[0], Submission)
+        self.assertEqual(len(submission_list_by_id), 2)
+        self.assertIsInstance(submission_list_by_id[0], Submission)
+
+        submissions_by_obj = self.course.list_submissions(self.assignment)
+        submission_list_by_obj = [submission for submission in submissions_by_obj]
+
+        self.assertEqual(len(submission_list_by_obj), 2)
+        self.assertIsInstance(submission_list_by_obj[0], Submission)
 
     # list_multiple_submission()
     def test_list_multiple_submissions(self, m):
@@ -669,60 +767,92 @@ class TestCourse(unittest.TestCase):
 
     # get_submission()
     def test_get_submission(self, m):
-        register_uris({'course': ['get_submission']}, m)
+        register_uris({'course': ['get_assignment_by_id_2', 'get_submission']}, m)
 
-        assignment_id = 1
+        assignment_for_id = 1
         user_id = 1
-        submission = self.course.get_submission(assignment_id, user_id)
+        submission_by_id = self.course.get_submission(assignment_for_id, user_id)
+        self.assertIsInstance(submission_by_id, Submission)
+        self.assertTrue(hasattr(submission_by_id, 'submission_type'))
 
-        self.assertIsInstance(submission, Submission)
-        self.assertTrue(hasattr(submission, 'submission_type'))
+        assignment_for_obj = self.course.get_assignment(1)
+        submission_by_obj = self.course.get_submission(assignment_for_obj, self.user)
+        self.assertIsInstance(submission_by_obj, Submission)
+        self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
 
     # update_submission()
     def test_update_submission(self, m):
-        register_uris({'course': ['update_submission', 'get_submission']}, m)
+        register_uris(
+            {
+                'course': [
+                    'get_assignment_by_id_2',
+                    'update_submission',
+                    'get_submission'
+                ]
+            }, m)
 
-        assignment_id = 1
+        assignment_for_id = 1
         user_id = 1
         submission = self.course.update_submission(
-            assignment_id,
+            assignment_for_id,
             user_id,
             submission={'excuse': True}
         )
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, 'excused'))
 
+        assignment_for_obj = self.course.get_assignment(1)
+        submission = self.course.update_submission(
+            assignment_for_obj,
+            self.user,
+            submission={'excuse': True}
+        )
         self.assertIsInstance(submission, Submission)
         self.assertTrue(hasattr(submission, 'excused'))
 
     # list_gradeable_students()
     def test_list_gradeable_students(self, m):
-        register_uris({'course': ['list_gradeable_students']}, m)
+        register_uris({'course': ['get_assignment_by_id_2', 'list_gradeable_students']}, m)
 
-        assignment_id = 1
-        students = self.course.list_gradeable_students(assignment_id)
-        student_list = [student for student in students]
+        assignment_for_id = 1
+        students_by_id = self.course.list_gradeable_students(assignment_for_id)
+        student_list_by_id = [student for student in students_by_id]
 
-        self.assertEqual(len(student_list), 2)
-        self.assertIsInstance(student_list[0], UserDisplay)
+        self.assertEqual(len(student_list_by_id), 2)
+        self.assertIsInstance(student_list_by_id[0], UserDisplay)
+
+        assignment_for_obj = self.course.get_assignment(1)
+        students_by_id = self.course.list_gradeable_students(assignment_for_obj)
+        student_list_by_id = [student for student in students_by_id]
+
+        self.assertEqual(len(student_list_by_id), 2)
+        self.assertIsInstance(student_list_by_id[0], UserDisplay)
 
     # mark_submission_as_read
     def test_mark_submission_as_read(self, m):
-        register_uris({'course': ['mark_submission_as_read']}, m)
+        register_uris({'course': ['get_assignment_by_id_2', 'mark_submission_as_read']}, m)
 
-        submission_id = 1
-        user_id = 1
-        submission = self.course.mark_submission_as_read(submission_id, user_id)
+        assignment_for_id = 1
+        user_for_id = 1
+        submission_by_id = self.course.mark_submission_as_read(assignment_for_id, user_for_id)
+        self.assertTrue(submission_by_id)
 
-        self.assertTrue(submission)
+        assignment_for_obj = self.course.get_assignment(1)
+        submission_by_obj = self.course.mark_submission_as_read(assignment_for_obj, self.user)
+        self.assertTrue(submission_by_obj)
 
     # mark_submission_as_unread
     def test_mark_submission_as_unread(self, m):
-        register_uris({'course': ['mark_submission_as_unread']}, m)
+        register_uris({'course': ['get_assignment_by_id_2', 'mark_submission_as_unread']}, m)
 
-        submission_id = 1
-        user_id = 1
-        submission = self.course.mark_submission_as_unread(submission_id, user_id)
+        assignment_for_id = 1
+        user_for_id = 1
+        submission_by_id = self.course.mark_submission_as_unread(assignment_for_id, user_for_id)
+        self.assertTrue(submission_by_id)
 
-        self.assertTrue(submission)
+        assignment_for_obj = self.course.get_assignment(1)
+        submission_by_obj = self.course.mark_submission_as_unread(assignment_for_obj, self.user)
+        self.assertTrue(submission_by_obj)
 
     # list_external_feeds()
     def test_list_external_feeds(self, m):
@@ -747,11 +877,15 @@ class TestCourse(unittest.TestCase):
         register_uris({'course': ['delete_external_feed']}, m)
 
         ef_id = 1
-        deleted_ef = self.course.delete_external_feed(ef_id)
+        deleted_ef_by_id = self.course.delete_external_feed(ef_id)
+        self.assertIsInstance(deleted_ef_by_id, ExternalFeed)
+        self.assertTrue(hasattr(deleted_ef_by_id, 'url'))
+        self.assertEqual(deleted_ef_by_id.display_name, "My Blog")
 
-        self.assertIsInstance(deleted_ef, ExternalFeed)
-        self.assertTrue(hasattr(deleted_ef, 'url'))
-        self.assertEqual(deleted_ef.display_name, "My Blog")
+        deleted_ef_by_obj = self.course.delete_external_feed(deleted_ef_by_id)
+        self.assertIsInstance(deleted_ef_by_obj, ExternalFeed)
+        self.assertTrue(hasattr(deleted_ef_by_obj, 'url'))
+        self.assertEqual(deleted_ef_by_obj.display_name, "My Blog")
 
     # list_files()
     def test_course_files(self, m):
@@ -766,9 +900,13 @@ class TestCourse(unittest.TestCase):
     def test_get_folder(self, m):
         register_uris({'course': ['get_folder']}, m)
 
-        folder = self.course.get_folder(1)
-        self.assertEqual(folder.name, "Folder 1")
-        self.assertIsInstance(folder, Folder)
+        folder_by_id = self.course.get_folder(1)
+        self.assertEqual(folder_by_id.name, "Folder 1")
+        self.assertIsInstance(folder_by_id, Folder)
+
+        folder_by_obj = self.course.get_folder(folder_by_id)
+        self.assertEqual(folder_by_obj.name, "Folder 1")
+        self.assertIsInstance(folder_by_obj, Folder)
 
     # list_folders()
     def test_list_folders(self, m):
@@ -806,6 +944,68 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(tab, Tab)
         self.assertEqual(tab.position, 3)
+
+    # get_root_outcome_group()
+    def test_get_root_outcome_group(self, m):
+        register_uris({'outcome': ['course_root_outcome_group']}, m)
+
+        outcome_group = self.course.get_root_outcome_group()
+
+        self.assertIsInstance(outcome_group, OutcomeGroup)
+        self.assertEqual(outcome_group.id, 1)
+        self.assertEqual(outcome_group.title, "ROOT")
+
+    # get_outcome_group()
+    def test_get_outcome_group(self, m):
+        register_uris({'outcome': ['course_get_outcome_group']}, m)
+
+        outcome_group_by_id = self.course.get_outcome_group(1)
+        self.assertIsInstance(outcome_group_by_id, OutcomeGroup)
+        self.assertEqual(outcome_group_by_id.id, 1)
+        self.assertEqual(outcome_group_by_id.title, "Course outcome group title")
+
+        outcome_group_by_obj = self.course.get_outcome_group(outcome_group_by_id)
+        self.assertIsInstance(outcome_group_by_obj, OutcomeGroup)
+        self.assertEqual(outcome_group_by_obj.id, 1)
+        self.assertEqual(outcome_group_by_obj.title, "Course outcome group title")
+
+    # get_outcome_groups_in_context()
+    def test_get_outcome_groups_in_context(self, m):
+        register_uris({'outcome': ['course_outcome_groups_in_context']}, m)
+
+        outcome_group_list = self.course.get_outcome_groups_in_context()
+
+        self.assertIsInstance(outcome_group_list[0], OutcomeGroup)
+        self.assertEqual(outcome_group_list[0].id, 1)
+        self.assertEqual(outcome_group_list[0].title, "ROOT")
+
+    # get_all_outcome_links_in_context()
+    def test_get_outcome_links_in_context(self, m):
+        register_uris({'outcome': ['course_outcome_links_in_context']}, m)
+
+        outcome_link_list = self.course.get_all_outcome_links_in_context()
+
+        self.assertIsInstance(outcome_link_list[0], OutcomeLink)
+        self.assertEqual(outcome_link_list[0].outcome_group['id'], 2)
+        self.assertEqual(outcome_link_list[0].outcome_group['title'], "test outcome")
+
+    # get_outcome_results()
+    def test_get_outcome_results(self, m):
+        register_uris({'outcome': ['course_get_outcome_results']}, m)
+
+        result = self.course.get_outcome_results()
+
+        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result['outcome_results'], list)
+
+    # get_outcome_result_rollups()
+    def test_get_outcome_result_rollups(self, m):
+        register_uris({'outcome': ['course_get_outcome_result_rollups']}, m)
+
+        result = self.course.get_outcome_result_rollups()
+
+        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result['rollups'], list)
 
 
 @requests_mock.Mocker()
