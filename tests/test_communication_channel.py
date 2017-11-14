@@ -73,7 +73,10 @@ class TestCommunicationChannel(unittest.TestCase):
 
     # update_preferences_by_category()
     def test_update_preferences_by_category(self, m):
-        register_uris({'communication_channel': ['update_preferences_by_category']}, m)
+        register_uris(
+            {
+                'communication_channel': ['update_preferences_by_category']
+            }, m)
         category = 'course_content'
         frequency = 'daily'
 
