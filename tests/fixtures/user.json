@@ -226,6 +226,14 @@
 			"name": "John Doe"
 		}
 	},
+	"get_by_id_self": {
+		"method": "GET",
+		"endpoint": "users/self",
+		"data": {
+			"id": 1,
+			"name": "John Doe"
+		}
+	},
 	"get_file": {
 		"method": "GET",
 		"endpoint": "users/1/files/1",
