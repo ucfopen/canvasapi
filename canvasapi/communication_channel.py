@@ -155,7 +155,7 @@ class CommunicationChannel(CanvasObject):
             Can be 'immediately', 'daily', 'weekly', or 'never'
 
         :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
-        """
+        """ 
         kwargs['notification_preferences[{}][frequency]'.format(notification)] = frequency
         response = self._requester.request(
             'PUT',
