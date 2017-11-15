@@ -161,7 +161,7 @@ class CommunicationChannel(CanvasObject):
                 try:
                     if not bool(value['frequency']):
                         return False
-                except:
+                except KeyError:
                     return False
 
             kwargs['notification_preferences'] = notification_preferences
