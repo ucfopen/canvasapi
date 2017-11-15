@@ -42,5 +42,62 @@
     		]
     	},
     	"status_code": 200
+    },
+    "update_preference": {
+        "method": "PUT",
+        "endpoint": "users/self/communication_channels/11/notification_preferences/new_announcement",
+        "data": {
+            "notification_preferences": [
+                {
+                    "frequency": "daily",
+                    "notification": "new_announcement",
+                    "category": "announcement"
+                }
+            ]
+        },
+        "status_code": 200
+    },
+    "update_preferences_by_category": {
+        "method": "PUT",
+        "endpoint": "users/self/communication_channels/11/notification_preference_categories/course_content",
+        "data": {
+            "notification_preferences": [
+                {
+                    "frequency": "daily",
+                    "notification": "assignment_changed",
+                    "category": "course_content"
+                },
+                {
+                    "frequency": "daily",
+                    "notification": "new_wiki_page",
+                    "category": "course_content"
+                },
+                {
+                    "frequency": "daily",
+                    "notification": "updated_wiki_page",
+                    "category": "course_content"
+                }
+            ]
+        },
+        "status_code": 200
+    },
+    "update_multiple_preferences": {
+        "method": "PUT",
+        "endpoint": "users/self/communication_channels/11/notification_preferences",
+        "data": {
+            "notification_preferences": [
+                {
+                    "frequency": "daily",
+                    "notification": "assignment_due_date_changed",
+                    "category": "due_date"
+                },
+                {
+                    "frequency": "daily",
+                    "notification": "assignment_changed",
+                    "category": "course_content"
+                }
+            ]
+        },
+        "status_code": 200
     }
 }
