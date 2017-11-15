@@ -158,7 +158,10 @@ class CommunicationChannel(CanvasObject):
         if isinstance(notification_preferences, dict) and bool(notification_preferences):
 
             for key, value in notification_preferences.items():
-                if not bool(value['frequency']):
+                try:
+                    if not bool(value['frequency']):
+                        return False
+                except:
                     return False
 
             kwargs['notification_preferences'] = notification_preferences

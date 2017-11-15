@@ -109,3 +109,24 @@ class TestCommunicationChannel(unittest.TestCase):
 
         self.assertEqual(len(updated_prefs), 2)
         self.assertEqual(updated_prefs[0]['frequency'], "daily")
+
+        empty_notification_preferences = {}
+        self.assertFalse(
+            self.comm_chan.update_multiple_preferences(
+                notification_preferences=empty_notification_preferences
+            )
+        )
+
+        frequency_empty_notification_preferences = {"got_no_freq": {"frequency": ""}}
+        self.assertFalse(
+            self.comm_chan.update_multiple_preferences(
+                notification_preferences=frequency_empty_notification_preferences
+            )
+        )
+
+        no_frequency_notification_preferences = {"got_no_freq": {"nope": "no_way"}}
+        self.assertFalse(
+            self.comm_chan.update_multiple_preferences(
+                notification_preferences=no_frequency_notification_preferences
+            )
+        )
