@@ -154,12 +154,11 @@ class CommunicationChannel(CanvasObject):
 
         :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
         """
-
-        if isinstance(notification_preferences, dict) and bool(notification_preferences):
+        if isinstance(notification_preferences, dict) and notification_preferences:
 
             for key, value in notification_preferences.items():
                 try:
-                    if not bool(value['frequency']):
+                    if not value['frequency']:
                         return False
                 except KeyError:
                     return False
@@ -173,6 +172,4 @@ class CommunicationChannel(CanvasObject):
                 _kwargs=combine_kwargs(**kwargs)
             )
             return response.json()['notification_preferences']
-
-        else:
-            return False
+        return False
