@@ -1004,5 +1004,65 @@
 			"login_handle_name": "Username",
 			"change_password_url": "https://example.com/reset_password"
 		}
+	},
+	"add_grading_standards": {
+		"method": "POST",
+		"endpoint": "accounts/1/grading_standards",
+		"data": {
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Account",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
+		"status_code": 200
+	},
+	"get_grading_standards": {
+		"method": "GET",
+		"endpoint": "accounts/1/grading_standards",
+		"data": [
+			{
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Account",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
+		  {
+			"title": "Grading Standard 2",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Account",
+			"grading_scheme": [
+			  {"name": "D", "value": 0.6},
+			  {"name": "F", "value": 0.5}
+			]
+		  }
+		],
+		"status_code": 200
+	},
+	"get_single_grading_standard": {
+		"method": "GET",
+		"endpoint": "accounts/1/grading_standards/1",
+		"data": {
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Account",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
+		"status_code": 200
 	}
 }

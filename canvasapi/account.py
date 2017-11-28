@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -1038,6 +1039,74 @@ class Account(CanvasObject):
             'GET',
             'accounts/{}/outcome_group_links'.format(self.id)
         )
+
+    def add_grading_standards(self, title, grading_scheme_entry, **kwargs):
+        """
+        Creates a new grading standard for the account.
+
+        :calls `POST /api/v1/accounts/:account_id/grading_standards \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.create>`
+
+        :param title: The title for the Grading Standard
+        :type title: str
+        :param grading_scheme: A list of dictionaries containing keys for "name" and "value"
+        :type grading_scheme: list[dict]
+        :rtype: :class:`canvasapi.grading_standards.GradingStandard`
+        """
+        if not isinstance(grading_scheme_entry, list) or len(grading_scheme_entry) <= 0:
+            raise ValueError("Param `grading_scheme_entry` must be a non-empty list.")
+
+        for entry in grading_scheme_entry:
+            if not isinstance(entry, dict):
+                raise ValueError("grading_scheme_entry must consist of dictionaries.")
+            if "name" not in entry or "value" not in entry:
+                raise ValueError("Dictionaries with keys 'name' and 'value' are required.")
+        kwargs["grading_scheme_entry"] = grading_scheme_entry
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/grading_standards' % (self.id),
+            title=title,
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return GradingStandard(self._requester, response.json())
+
+    def get_grading_standards(self):
+        """
+        Gets a PaginatedList of the grading standards available for the account.
+
+        :calls `GET /api/v1/accounts/:account_id/grading_standards \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_index>`
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_standards.GradingStandard`
+        """
+
+        return PaginatedList(
+            GradingStandard,
+            self._requester,
+            'GET',
+            'accounts/%s/grading_standards' % (self.id)
+        )
+
+    def get_single_grading_standard(self, grading_standard_id):
+        """
+        Gets a single grading standard from the account.
+
+        :calls `/api/v1/accounts/:account_id/grading_standards/:grading_standard_id \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_show>`
+
+        :param grading_standard_id: The grading standard id
+        :type grading_standard_id: int
+        :rtype: :class:`canvasapi.grading_standards.GradingStandard`
+        """
+
+        response = self._requester.request(
+            "GET",
+            'accounts/%s/grading_standards/%d' % (self.id, grading_standard_id)
+        )
+        return GradingStandard(self._requester, response.json())
 
 
 @python_2_unicode_compatible
