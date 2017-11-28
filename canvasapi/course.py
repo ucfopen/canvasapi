@@ -1658,6 +1658,7 @@ class Course(CanvasObject):
         )
 
         return response.json()
+
     def add_grading_standards(self, title, grading_scheme_entry, **kwargs):
         """
         Creates a new grading standard for the course.

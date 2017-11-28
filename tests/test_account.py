@@ -624,7 +624,8 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(outcome_link_list[0], OutcomeLink)
         self.assertEqual(outcome_link_list[0].outcome_group['id'], 2)
         self.assertEqual(outcome_link_list[0].outcome_group['title'], "test outcome")
-        # add_grading_standards()
+
+    # add_grading_standards()
     def test_add_grading_standards(self, m):
         register_uris({'account': ['add_grading_standards']}, m)
 

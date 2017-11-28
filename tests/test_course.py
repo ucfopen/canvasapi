@@ -1007,6 +1007,7 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(result, dict)
         self.assertIsInstance(result['rollups'], list)
+
     # add_grading_standards()
     def test_add_grading_standards(self, m):
         register_uris({'course': ['add_grading_standards']}, m)
