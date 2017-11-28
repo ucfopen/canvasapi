@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from collections import Iterable
 from six import binary_type, string_types, text_type
+from urlparse import urlparse
 
 
 def is_multivalued(value):
@@ -122,3 +123,16 @@ def obj_or_id(parameter, param_name, object_types):
         obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
         message = 'Parameter {} must be of type {} or int.'.format(param_name, obj_type_list)
         raise TypeError(message)
+
+
+def get_institution_url(base_url):
+    """
+    Given an API root URL, grab the protocol (http/https) and the host
+    and then return that, discarding the rest of the string.
+
+    :param base_url: The base URL of the API.
+    :type base_url: str
+    :rtype: str
+    """
+    parsed = urlparse(base_url)
+    return parsed.scheme + '://' + parsed.netloc

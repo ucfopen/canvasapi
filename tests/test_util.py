@@ -6,7 +6,9 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.course import CourseNickname
 from canvasapi.user import User
-from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
+from canvasapi.util import (
+    combine_kwargs, get_institution_url, is_multivalued, obj_or_id
+)
 from itertools import chain
 from six import integer_types, iterkeys, itervalues, iteritems
 from six.moves import zip
@@ -408,3 +410,8 @@ class TestUtil(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             obj_or_id(nick, 'nickname_id', (CourseNickname,))
+
+    # get_institution_url()
+    def test_get_institution_url(self, m):
+        base_url = 'https://my.canvas.edu/api/v1'
+        self.assertEqual(get_institution_url(base_url), 'https://my.canvas.edu')
