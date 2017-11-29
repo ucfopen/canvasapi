@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from collections import Iterable
 from six import binary_type, string_types, text_type
-from urlparse import urlparse
+from six.moves.urllib_parse import urlparse
 
 
 def is_multivalued(value):
