@@ -1066,7 +1066,7 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(response, GradingStandard)
         self.assertTrue(hasattr(response, 'id'))
-        self.assertEqual(1, response.id)
+        self.assertEqual(4, response.id)
         self.assertTrue(hasattr(response, 'title'))
         self.assertEqual("Grading Standard 1", response.title)
         self.assertTrue(hasattr(response, "grading_scheme"))
