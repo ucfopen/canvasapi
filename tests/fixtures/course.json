@@ -1414,7 +1414,7 @@
 		"data": [
 			{
 			"title": "Grading Standard 1",
-			"id": 2,
+			"id": 1,
 			"context_id": 1,
 			"context_type": "Course",
 			"grading_scheme": [
@@ -1425,7 +1425,7 @@
 		  },
 		  {
 			"title": "Grading Standard 2",
-			"id": 3,
+			"id": 2,
 			"context_id": 1,
 			"context_type": "Course",
 			"grading_scheme": [
@@ -1441,7 +1441,7 @@
 		"endpoint": "courses/1/grading_standards/1",
 		"data": {
 			"title": "Grading Standard 1",
-			"id": 4,
+			"id": 1,
 			"context_id": 1,
 			"context_type": "Course",
 			"grading_scheme": [
