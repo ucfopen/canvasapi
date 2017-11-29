@@ -1042,7 +1042,7 @@ class Account(CanvasObject):
 
     def add_grading_standards(self, title, grading_scheme_entry, **kwargs):
         """
-        Creates a new grading standard for the account.
+        Create a new grading standard for the account.
 
         :calls `POST /api/v1/accounts/:account_id/grading_standards \
         <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.create>`
@@ -1072,9 +1072,9 @@ class Account(CanvasObject):
 
         return GradingStandard(self._requester, response.json())
 
-    def get_grading_standards(self):
+    def get_grading_standards(self, **kwargs):
         """
-        Gets a PaginatedList of the grading standards available for the account.
+        Get a PaginatedList of the grading standards available for the account.
 
         :calls `GET /api/v1/accounts/:account_id/grading_standards \
         <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_index>`
@@ -1087,12 +1087,13 @@ class Account(CanvasObject):
             GradingStandard,
             self._requester,
             'GET',
-            'accounts/%s/grading_standards' % (self.id)
+            'accounts/%s/grading_standards' % (self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_single_grading_standard(self, grading_standard_id):
+    def get_single_grading_standard(self, grading_standard_id, **kwargs):
         """
-        Gets a single grading standard from the account.
+        Get a single grading standard from the account.
 
         :calls `/api/v1/accounts/:account_id/grading_standards/:grading_standard_id \
         <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_show>`
@@ -1104,7 +1105,8 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             "GET",
-            'accounts/%s/grading_standards/%d' % (self.id, grading_standard_id)
+            'accounts/%s/grading_standards/%d' % (self.id, grading_standard_id),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return GradingStandard(self._requester, response.json())
 

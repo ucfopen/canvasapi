@@ -1033,19 +1033,16 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.course.add_grading_standards("title", [])
 
-    # add_grading_standards()
     def test_add_grading_standards_non_dict_list(self, m):
         register_uris({'course': ['add_grading_standards']}, m)
         with self.assertRaises(ValueError):
             self.course.add_grading_standards("title", [1, 2, 3])
 
-    # add_grading_standards()
     def test_add_grading_standards_missing_value_key(self, m):
         register_uris({'course': ['add_grading_standards']}, m)
         with self.assertRaises(ValueError):
             self.course.add_grading_standards("title", [{'name': "test"}])
 
-    # add_grading_standards()
     def test_add_grading_standards_missing_name_key(self, m):
         register_uris({'course': ['add_grading_standards']}, m)
         with self.assertRaises(ValueError):

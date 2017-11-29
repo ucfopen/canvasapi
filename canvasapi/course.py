@@ -1661,7 +1661,7 @@ class Course(CanvasObject):
 
     def add_grading_standards(self, title, grading_scheme_entry, **kwargs):
         """
-        Creates a new grading standard for the course.
+        Create a new grading standard for the course.
 
         :calls `POST /api/v1/courses/:course_id/grading_standards \
         <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.create>`
@@ -1690,11 +1690,11 @@ class Course(CanvasObject):
         )
         return GradingStandard(self._requester, response.json())
 
-    def get_grading_standards(self):
+    def get_grading_standards(self, **kwargs):
         """
-        Gets a PaginatedList of the grading standards available for the course
+        Get a PaginatedList of the grading standards available for the course
 
-        :calls `GET /api/v1/accounts/:account_id/grading_standards \
+        :calls `GET /api/v1/courses/:course_id/grading_standards \
         <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_index>`
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.grading_standards.GradingStandard`
@@ -1703,12 +1703,13 @@ class Course(CanvasObject):
             GradingStandard,
             self._requester,
             'GET',
-            'courses/%s/grading_standards' % (self.id)
+            'courses/%s/grading_standards' % (self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_single_grading_standard(self, grading_standard_id):
+    def get_single_grading_standard(self, grading_standard_id, **kwargs):
         """
-        Gets a single grading standard from the course.
+        Get a single grading standard from the course.
 
         :calls `/api/v1/courses/:course_id/grading_standards/:grading_standard_id \
         <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_show>`
@@ -1720,7 +1721,8 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             "GET",
-            'courses/%s/grading_standards/%d' % (self.id, grading_standard_id)
+            'courses/%s/grading_standards/%d' % (self.id, grading_standard_id),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return GradingStandard(self._requester, response.json())
 
