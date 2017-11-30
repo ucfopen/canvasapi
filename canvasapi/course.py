@@ -5,6 +5,7 @@ from six import python_2_unicode_compatible, text_type
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.quiz_group import QuizGroup
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.page import Page
@@ -1657,6 +1658,167 @@ class Course(CanvasObject):
         )
 
         return response.json()
+
+    def get_quiz_group(self, quizid, id):
+        """
+        Get details of the quiz group with the given id
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.show>`
+
+        :param quizid: The ID of the quiz the question group belongs to.
+        :type int
+        :param id: The ID of the question group.
+        :type int
+
+        :returns: QuizGroup object
+        :rtype: :class:`canvasapi.quiz_group.QuizGroup`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/{}/quizzes/{}/groups/{}'.format(self.id, quizid, id)
+        )
+        return QuizGroup(self._requester, response.json())
+
+    def create_question_group(self, quizid, quiz_groups, **kwargs):
+        """
+        Create a new question group for the given quiz id
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.create>`
+
+        :param quizid: The ID of the quiz the question group will belong to.
+        :type int
+        :param quiz_groups: The name, pick count, question points,
+        and/or assessment question bank id.
+        All of these parameters are optional, but at least one must exist
+        (even if empty) to recieve a response.
+        The request expects a list, but will only create 1 question group per request.
+        :type list[dict]
+
+        :returns: QuizGroup object
+        :rtype: :class:`canvasapi.quiz_group.QuizGroup`
+        """
+
+        if not isinstance(quiz_groups, list) or len(quiz_groups) <= 0:
+            raise ValueError("Param `quiz_groups` must be a non-empty list.")
+
+        if not isinstance(quiz_groups[0], dict):
+            raise ValueError("Param `quiz_groups must contain a dictionary")
+
+        if ("name" not in quiz_groups[0] and "pick_count" not in quiz_groups[0]
+            and "question_points" not in quiz_groups[0]
+                and "assessment_question_bank_id" not in quiz_groups[0]):
+            raise RequiredFieldMissing("quiz_groups must contain at least 1 parameter.")
+
+        kwargs["quiz_groups"] = quiz_groups
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/quizzes/{}/groups'.format(self.id, quizid),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return QuizGroup(self._requester, response.json().get('quiz_groups')[0])
+
+    def update_question_group(self, quizid, id, quiz_groups, **kwargs):
+        """
+        Update a question group given by id
+
+        :calls: `PUT /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.update>`
+
+        :param quizid: The ID of the quiz the question group belongs to.
+        :type int
+        :param id: The ID of the question group.
+        :type int
+        :param quiz_groups: The name, pick count, and/or question points.
+        All of these parameters are optional, but at least one must exist
+        (even if empty) to recieve a response.
+        The request expects a list, but will only update 1 question group per request.
+        :type list[dict]
+
+        :returns: QuizGroup object
+        :rtype: :class:`canvasapi.quiz_group.QuizGroup`
+        """
+        if not isinstance(quiz_groups, list) or len(quiz_groups) <= 0:
+            raise ValueError("Param `quiz_groups` must be a non-empty list.")
+
+        if not isinstance(quiz_groups[0], dict):
+            raise ValueError("Param `quiz_groups` must contain a dictionary")
+
+        if ("name" not in quiz_groups[0] and "pick_count" not in quiz_groups[0]
+                and "question_points" not in quiz_groups[0]):
+            raise RequiredFieldMissing("quiz_groups must contain at least 1 parameter.")
+
+        kwargs["quiz_groups"] = quiz_groups
+
+        response = self._requester.request(
+            'PUT',
+            'courses/{}/quizzes/{}/groups/{}'.format(self.id, quizid, id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return QuizGroup(self._requester, response.json().get('quiz_groups')[0])
+
+    def delete_question_group(self, quizid, id):
+        """
+        Get details of the quiz group with the given id
+
+        :calls: `DELETE /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.destroy>`
+
+        :param: quizid: The ID of the quiz the question group belongs to.
+        :type: `int`
+        :param: id: The ID of the question group.
+        :type: `int`
+
+        :returns: The response code from the server (204 if successful)
+        :rtype: `bool`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'courses/{}/quizzes/{}/groups/{}'.format(self.id, quizid, id)
+        )
+        return (response.status_code == 204)
+
+    def reorder_question_group(self, quizid, id, order, **kwargs):
+        """
+        Update the order of questions within a given group
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.reorder>`
+
+        :param quizid: The ID of the quiz the question group belongs to.
+        :type int
+        :param id: The ID of the question group.
+        :type int
+        :param order: A list of dictionaries containing the key 'id' pertaining to the
+        question to be placed at that order index.
+        :type list[dict]
+
+        :returns: QuizGroup object
+        :rtype: :class:`canvasapi.quiz_group.QuizGroup`
+        """
+
+        # Check to see if order's type is valid, just like last time.
+
+        if not isinstance(order, list) or len(order) <= 0:
+            raise ValueError("Param `order` must be a non-empty list.")
+
+        for orderDict in order:
+            if not isinstance(orderDict, dict):
+                raise ValueError("order must consist of dictionaries.")
+            if "id" not in orderDict:
+                raise ValueError("Dictionaries in order must contain an 'id' key.")
+
+        kwargs["order"] = order
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/quizzes/{}/groups/{}/reorder'.format(self.id, quizid, id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return (response.status_code == 204)
 
 
 @python_2_unicode_compatible

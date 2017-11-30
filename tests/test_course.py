@@ -12,6 +12,7 @@ from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.quiz_group import QuizGroup
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
@@ -1006,6 +1007,135 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(result, dict)
         self.assertIsInstance(result['rollups'], list)
+
+    # get_quiz_group()
+    def test_get_quiz_group(self, m):
+        register_uris({'course': ['get_quiz_group']}, m)
+
+        result = self.course.get_quiz_group(1, 1)
+        self.assertIsInstance(result, QuizGroup)
+        self.assertEqual(result.id, 1)
+        self.assertEqual(result.quiz_id, 1)
+
+    # create_question_group()
+    def test_create_question_group(self, m):
+        register_uris({'course': ['create_question_group']}, m)
+
+        quiz_group = [{'name': 'Test Group', 'pick_count': 1,
+                      'question_points': 2, 'assessment_question_bank_id': 3}]
+        result = self.course.create_question_group(1, quiz_group)
+
+        self.assertIsInstance(result, QuizGroup)
+        self.assertEqual(result.id, 1)
+        self.assertEqual(result.quiz_id, 1)
+        self.assertEqual(result.name, quiz_group[0].get('name'))
+        self.assertEqual(result.pick_count, quiz_group[0].get('pick_count'))
+        self.assertEqual(result.question_points, quiz_group[0].get('question_points'))
+        self.assertEqual(result.assessment_question_bank_id,
+                         quiz_group[0].get('assessment_question_bank_id'))
+
+    def test_create_question_group_empty_list(self, m):
+        register_uris({'course': ['create_question_group']}, m)
+
+        quiz_group = []
+
+        with self.assertRaises(ValueError):
+            self.course.create_question_group(1, quiz_group)
+
+    def test_create_question_group_incorrect_param(self, m):
+        register_uris({'course': ['create_question_group']}, m)
+
+        quiz_group = [1]
+
+        with self.assertRaises(ValueError):
+            self.course.create_question_group(1, quiz_group)
+
+    def test_create_question_group_incorrect_dict(self, m):
+        register_uris({'course': ['create_question_group']}, m)
+
+        quiz_group = [{}]
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_question_group(1, quiz_group)
+
+    # update_question_group()
+    def test_update_question_group(self, m):
+        register_uris({'course': ['update_question_group']}, m)
+
+        quiz_group = [{'name': 'Test Group', 'pick_count': 1, 'question_points': 2}]
+        result = self.course.update_question_group(1, 1, quiz_group)
+
+        self.assertIsInstance(result, QuizGroup)
+        self.assertEqual(result.id, 1)
+        self.assertEqual(result.quiz_id, 1)
+        self.assertEqual(result.name, quiz_group[0].get('name'))
+        self.assertEqual(result.pick_count, quiz_group[0].get('pick_count'))
+        self.assertEqual(result.question_points, quiz_group[0].get('question_points'))
+
+    def test_update_question_group_empty_list(self, m):
+        register_uris({'course': ['update_question_group']}, m)
+
+        quiz_group = []
+
+        with self.assertRaises(ValueError):
+            self.course.update_question_group(1, 1, quiz_group)
+
+    def test_update_question_group_incorrect_param(self, m):
+        register_uris({'course': ['update_question_group']}, m)
+
+        quiz_group = [1]
+
+        with self.assertRaises(ValueError):
+            self.course.update_question_group(1, 1, quiz_group)
+
+    def test_update_question_group_incorrect_dict(self, m):
+        register_uris({'course': ['update_question_group']}, m)
+
+        quiz_group = [{}]
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.update_question_group(1, 1, quiz_group)
+
+    # delete_question_group()
+    def test_delete_question_group(self, m):
+        register_uris({'course': ['delete_question_group']}, m)
+
+        result = self.course.delete_question_group(1, 1)
+
+        self.assertTrue(result)
+
+    # reorder_question_group()
+    def test_reorder_question_group(self, m):
+        register_uris({'course': ['reorder_question_group']}, m)
+
+        newOrdering = [{'id': 2}, {'id': 1, 'type': 'question'}]
+        result = self.course.reorder_question_group(1, 1, newOrdering)
+
+        self.assertTrue(result)
+
+    def test_reorderquestion_group_empty_list(self, m):
+        register_uris({'course': ['reorder_question_group']}, m)
+
+        order = []
+
+        with self.assertRaises(ValueError):
+            self.course.reorder_question_group(1, 1, order)
+
+    def test_reorderquestion_group_incorrect_param(self, m):
+        register_uris({'course': ['reorder_question_group']}, m)
+
+        order = [1]
+
+        with self.assertRaises(ValueError):
+            self.course.reorder_question_group(1, 1, order)
+
+    def test_reorderquestion_group_incorrect_dict(self, m):
+        register_uris({'course': ['reorder_question_group']}, m)
+
+        order = [{"something": 2}]
+
+        with self.assertRaises(ValueError):
+            self.course.reorder_question_group(1, 1, order)
 
 
 @requests_mock.Mocker()
