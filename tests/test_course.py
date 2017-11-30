@@ -12,6 +12,7 @@ from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
@@ -1008,6 +1009,71 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(result, dict)
         self.assertIsInstance(result['rollups'], list)
+
+    # add_grading_standards()
+    def test_add_grading_standards(self, m):
+        register_uris({'course': ['add_grading_standards']}, m)
+
+        title = "Grading Standard 1"
+        grading_scheme = []
+        grading_scheme.append({"name": "A", "value": 90})
+        grading_scheme.append({"name": "B", "value": 80})
+        grading_scheme.append({"name": "C", "value": 70})
+
+        response = self.course.add_grading_standards(title, grading_scheme)
+
+        self.assertIsInstance(response, GradingStandard)
+        self.assertTrue(hasattr(response, 'title'))
+        self.assertEqual(title, response.title)
+        self.assertTrue(hasattr(response, "grading_scheme"))
+        self.assertEqual(response.grading_scheme[0].get('name'), "A")
+        self.assertEqual(response.grading_scheme[0].get('value'), 0.9)
+
+    # add_grading_standards()
+    def test_add_grading_standards_empty_list(self, m):
+        register_uris({'course': ['add_grading_standards']}, m)
+        with self.assertRaises(ValueError):
+            self.course.add_grading_standards("title", [])
+
+    def test_add_grading_standards_non_dict_list(self, m):
+        register_uris({'course': ['add_grading_standards']}, m)
+        with self.assertRaises(ValueError):
+            self.course.add_grading_standards("title", [1, 2, 3])
+
+    def test_add_grading_standards_missing_value_key(self, m):
+        register_uris({'course': ['add_grading_standards']}, m)
+        with self.assertRaises(ValueError):
+            self.course.add_grading_standards("title", [{'name': "test"}])
+
+    def test_add_grading_standards_missing_name_key(self, m):
+        register_uris({'course': ['add_grading_standards']}, m)
+        with self.assertRaises(ValueError):
+            self.course.add_grading_standards("title", [{'value': 2}])
+
+    # get_grading_standards()
+    def test_get_grading_standards(self, m):
+        register_uris({'course': ['get_grading_standards']}, m)
+
+        standards = self.course.get_grading_standards()
+        standard_list = [standard for standard in standards]
+        self.assertEqual(len(standard_list), 2)
+        self.assertIsInstance(standard_list[0], GradingStandard)
+        self.assertIsInstance(standard_list[1], GradingStandard)
+
+    # get_single_grading_standards()
+    def test_get_single_grading_standard(self, m):
+        register_uris({'course': ['get_single_grading_standard']}, m)
+
+        response = self.course.get_single_grading_standard(1)
+
+        self.assertIsInstance(response, GradingStandard)
+        self.assertTrue(hasattr(response, 'id'))
+        self.assertEqual(1, response.id)
+        self.assertTrue(hasattr(response, 'title'))
+        self.assertEqual("Grading Standard 1", response.title)
+        self.assertTrue(hasattr(response, "grading_scheme"))
+        self.assertEqual(response.grading_scheme[0].get('name'), "A")
+        self.assertEqual(response.grading_scheme[0].get('value'), 0.9)
 
 
 @requests_mock.Mocker()
