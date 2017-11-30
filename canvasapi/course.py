@@ -5,11 +5,8 @@ from six import python_2_unicode_compatible, text_type
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
-<<<<<<< HEAD
 from canvasapi.quiz_group import QuizGroup
-=======
 from canvasapi.grading_standard import GradingStandard
->>>>>>> develop
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.page import Page
@@ -1671,11 +1668,11 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.show>`
 
         :param quizid: The ID of the quiz the question group belongs to.
-        :type int
+        :type: `int`
         :param id: The ID of the question group.
-        :type int
+        :type: `int`
 
-        :returns: QuizGroup object
+        :returns: `QuizGroup` object
         :rtype: :class:`canvasapi.quiz_group.QuizGroup`
         """
         response = self._requester.request(
@@ -1692,7 +1689,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.create>`
 
         :param quizid: The ID of the quiz the question group will belong to.
-        :type int
+        :type: `int`
         :param quiz_groups: The name, pick count, question points,
         and/or assessment question bank id.
         All of these parameters are optional, but at least one must exist
@@ -1700,7 +1697,7 @@ class Course(CanvasObject):
         The request expects a list, but will only create 1 question group per request.
         :type list[dict]
 
-        :returns: QuizGroup object
+        :returns: `QuizGroup` object
         :rtype: :class:`canvasapi.quiz_group.QuizGroup`
         """
 
@@ -1731,7 +1728,7 @@ class Course(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.update>`
 
-        :param quizid: The ID of the quiz the question group belongs to.
+        :param: quizid: The ID of the quiz the question group belongs to.
         :type int
         :param id: The ID of the question group.
         :type int
@@ -1775,7 +1772,7 @@ class Course(CanvasObject):
         :param: id: The ID of the question group.
         :type: `int`
 
-        :returns: The response code from the server (204 if successful)
+        :returns: True if the result was successful (Status code of 204)
         :rtype: `bool`
         """
         response = self._requester.request(
@@ -1788,19 +1785,19 @@ class Course(CanvasObject):
         """
         Update the order of questions within a given group
 
-        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id/reorder \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.reorder>`
 
-        :param quizid: The ID of the quiz the question group belongs to.
-        :type int
-        :param id: The ID of the question group.
-        :type int
-        :param order: A list of dictionaries containing the key 'id' pertaining to the
-        question to be placed at that order index.
-        :type list[dict]
+        :param: quizid: The ID of the quiz the question group belongs to.
+        :type: int
+        :param: id: The ID of the question group.
+        :type: int
+        :param: order: A list of dictionaries containing the key 'id' of the
+        question to be placed at order's index.
+        :type: list[dict]
 
-        :returns: QuizGroup object
-        :rtype: :class:`canvasapi.quiz_group.QuizGroup`
+        :returns: True if the result was successful (Status code of 204)
+        :rtype: `bool`
         """
 
         # Check to see if order's type is valid, just like last time.
