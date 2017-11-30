@@ -2,7 +2,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from collections import Iterable
 from six import binary_type, string_types, text_type
-from six.moves.urllib_parse import urlparse
 
 
 def is_multivalued(value):
@@ -127,12 +126,15 @@ def obj_or_id(parameter, param_name, object_types):
 
 def get_institution_url(base_url):
     """
-    Given an API root URL, grab the protocol (http/https) and the host
-    and then return that, discarding the rest of the string.
+    Trim '/api/v1' from a given root URL.
 
     :param base_url: The base URL of the API.
     :type base_url: str
     :rtype: str
     """
-    parsed = urlparse(base_url)
-    return parsed.scheme + '://' + parsed.netloc
+    index = base_url.find('/api/v1')
+
+    if index != -1:
+        return base_url[0:index]
+
+    return base_url
