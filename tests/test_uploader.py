@@ -22,7 +22,6 @@ class TestUploader(unittest.TestCase):
 
     def tearDown(self):
         self.file.close()
-
         cleanup_file(self.filename)
 
     # start()

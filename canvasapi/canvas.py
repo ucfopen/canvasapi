@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import warnings
+
 from canvasapi.account import Account
 from canvasapi.course import Course
 from canvasapi.exceptions import RequiredFieldMissing
@@ -10,7 +12,10 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
 from canvasapi.section import Section
 from canvasapi.user import User
-from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.util import combine_kwargs, get_institution_url, obj_or_id
+
+
+warnings.simplefilter('always', DeprecationWarning)
 
 
 class Canvas(object):
@@ -25,6 +30,16 @@ class Canvas(object):
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
         """
+        new_url = get_institution_url(base_url)
+
+        if 'api/v1' in base_url:
+            warnings.warn(
+                "`base_url` no longer requires an API version be specified. "
+                "Rewriting `base_url` to {}".format(new_url),
+                DeprecationWarning
+            )
+        base_url = new_url + '/api/v1/'
+
         self.__requester = Requester(base_url, access_token)
 
     def create_account(self, **kwargs):
