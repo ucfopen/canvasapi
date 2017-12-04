@@ -4,6 +4,7 @@ import os
 
 import requests_mock
 
+from canvasapi.util import get_institution_url
 from tests import settings
 
 
@@ -17,7 +18,6 @@ def register_uris(requirements, requests_mocker):
     :param requests_mocker: requests_mock.mocker.Mocker
     """
     for fixture, objects in requirements.items():
-
         try:
             with open('tests/fixtures/{}.json'.format(fixture)) as file:
                 data = json.loads(file.read())
@@ -40,7 +40,7 @@ def register_uris(requirements, requests_mocker):
             if obj['endpoint'] == 'ANY':
                 url = requests_mock.ANY
             else:
-                url = settings.BASE_URL + obj['endpoint']
+                url = get_institution_url(settings.BASE_URL) + '/api/v1/' + obj['endpoint']
 
             try:
                 requests_mocker.register_uri(
