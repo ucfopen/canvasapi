@@ -177,14 +177,16 @@ class TestCourse(unittest.TestCase):
         register_uris({'course': ['upload', 'upload_final']}, m)
 
         filename = 'testfile_course_{}'.format(uuid.uuid4().hex)
-        with open(filename, 'w+') as file:
-            response = self.course.upload(file)
 
-        self.assertTrue(response[0])
-        self.assertIsInstance(response[1], dict)
-        self.assertIn('url', response[1])
+        try:
+            with open(filename, 'w+') as file:
+                response = self.course.upload(file)
 
-        cleanup_file(filename)
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
 
     # reset()
     def test_reset(self, m):

@@ -122,3 +122,19 @@ def obj_or_id(parameter, param_name, object_types):
         obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
         message = 'Parameter {} must be of type {} or int.'.format(param_name, obj_type_list)
         raise TypeError(message)
+
+
+def get_institution_url(base_url):
+    """
+    Trim '/api/v1' from a given root URL.
+
+    :param base_url: The base URL of the API.
+    :type base_url: str
+    :rtype: str
+    """
+    index = base_url.find('/api/v1')
+
+    if index != -1:
+        return base_url[0:index]
+
+    return base_url

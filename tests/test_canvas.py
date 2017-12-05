@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+
 import unittest
+import warnings
 from datetime import datetime
 
 import pytz
@@ -29,6 +31,12 @@ class TestCanvas(unittest.TestCase):
 
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+    # Canvas()
+    def test_init_deprecate_url_contains_version(self, m):
+        with warnings.catch_warnings(record=True) as w:
+            Canvas(settings.BASE_URL_WITH_VERSION, settings.API_KEY)
+            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
 
     # create_account()
     def test_create_account(self, m):

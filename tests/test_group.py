@@ -152,13 +152,14 @@ class TestGroup(unittest.TestCase):
         register_uris({'group': ['upload', 'upload_final']}, m)
 
         filename = 'testfile_group_{}'.format(uuid.uuid4().hex)
-        with open(filename, 'w+') as file:
-            response = self.group.upload(file)
-        self.assertTrue(response[0])
-        self.assertIsInstance(response[1], dict)
-        self.assertIn('url', response[1])
-
-        cleanup_file(filename)
+        try:
+            with open(filename, 'w+') as file:
+                response = self.group.upload(file)
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
 
     # preview_processed_html()
     def test_preview_processed_html(self, m):
