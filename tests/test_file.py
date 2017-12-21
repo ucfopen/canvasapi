@@ -35,3 +35,8 @@ class TestFile(unittest.TestCase):
         self.assertIsInstance(deleted_file, File)
         self.assertTrue(hasattr(deleted_file, 'display_name'))
         self.assertEqual(deleted_file.display_name, "Bad File.docx")
+
+    # download()
+    def test_download_file(self, m):
+        self.assertIsInstance("", unicode)
+        self.assertIsInstance(b"", bytes)

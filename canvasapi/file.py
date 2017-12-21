@@ -25,3 +25,16 @@ class File(CanvasObject):
             'files/{}'.format(self.id)
         )
         return File(self._requester, response.json())
+
+    def download(self, raw=False):
+        """
+        Download the contents of this file.
+        If raw is set to True, will return raw bytes instead.
+
+        :rtype: str
+        """
+        response = self._requester.request(
+            'GET',
+            _url=self.url
+        )
+        return response.content if raw else response.text
