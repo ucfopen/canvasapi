@@ -58,11 +58,11 @@ class Quiz(CanvasObject):
         Get details of the quiz group with the given id
 
         :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
-        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.show>`
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.show>`_
 
 
         :param id: The ID of the question group.
-        :type: `int`
+        :type id: int
 
         :returns: `QuizGroup` object
         :rtype: :class:`canvasapi.quiz_group.QuizGroup`
@@ -83,14 +83,14 @@ class Quiz(CanvasObject):
         Create a new question group for the given quiz id
 
         :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
-        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.create>`
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.create>`_
 
         :param quiz_groups: The name, pick count, question points,
-        and/or assessment question bank id.
-        All of these parameters are optional, but at least one must exist
-        (even if empty) to recieve a response.
-        The request expects a list, but will only create 1 question group per request.
-        :type list[dict]
+            and/or assessment question bank id.
+            All of these parameters are optional, but at least one must exist
+            (even if empty) to recieve a response.
+            The request expects a list, but will only create 1 question group per request.
+        :type quiz_groups: list[dict]
 
         :returns: `QuizGroup` object
         :rtype: :class:`canvasapi.quiz_group.QuizGroup`

@@ -15,18 +15,18 @@ class QuizGroup(CanvasObject):
 
     def update(self, id, quiz_groups, **kwargs):
         """
-        Update a question group given by id
+        Update a question group given by id.
 
         :calls: `PUT /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
-        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.update>`
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.update>`_
 
         :param id: The ID of the question group.
-        :type int
+        :type id: int
         :param quiz_groups: The name, pick count, and/or question points.
-        All of these parameters are optional, but at least one must exist
-        (even if empty) to recieve a response.
-        The request expects a list, but will only update 1 question group per request.
-        :type list[dict]
+            All of these parameters are optional, but at least one must exist
+            (even if empty) to recieve a response.
+            The request expects a list, but will only update 1 question group per request.
+        :type quiz_groups: list[dict]
 
         :returns: QuizGroup object
         :rtype: :class:`canvasapi.quiz_group.QuizGroup`
@@ -52,16 +52,16 @@ class QuizGroup(CanvasObject):
 
     def delete(self, id):
         """
-        Get details of the quiz group with the given id
+        Get details of the quiz group with the given id.
 
         :calls: `DELETE /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
-        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.destroy>`
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.destroy>`_
 
-        :param: id: The ID of the question group.
-        :type: `int`
+        :param id: The ID of the question group.
+        :type id: int
 
         :returns: True if the result was successful (Status code of 204)
-        :rtype: `bool`
+        :rtype: bool
         """
         response = self._requester.request(
             'DELETE',
@@ -74,16 +74,16 @@ class QuizGroup(CanvasObject):
         Update the order of questions within a given group
 
         :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id/reorder \
-        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.reorder>`
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.reorder>`_
 
-        :param: id: The ID of the question group.
-        :type: int
-        :param: order: A list of dictionaries containing the key 'id' of the
-        question to be placed at order's index.
-        :type: list[dict]
+        :param id: The ID of the question group.
+        :type id: int
+        :param order: A list of dictionaries containing the key 'id' of
+            the question to be placed at order's index.
+        :type id: list[dict]
 
         :returns: True if the result was successful (Status code of 204)
-        :rtype: `bool`
+        :rtype: bool
         """
 
         if not isinstance(order, list) or len(order) <= 0:
