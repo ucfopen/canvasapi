@@ -53,7 +53,7 @@ class Quiz(CanvasObject):
 
         return Quiz(self._requester, quiz_json)
 
-    def get_quiz_group(self, id):
+    def get_quiz_group(self, id, **kwargs):
         """
         Get details of the quiz group with the given id
 
@@ -69,7 +69,8 @@ class Quiz(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.id, id)
+            'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.id, id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         response_json = response.json()
@@ -101,9 +102,8 @@ class Quiz(CanvasObject):
         if not isinstance(quiz_groups[0], dict):
             raise ValueError("Param `quiz_groups must contain a dictionary")
 
-        if ("name" not in quiz_groups[0] and "pick_count" not in quiz_groups[0]
-            and "question_points" not in quiz_groups[0]
-                and "assessment_question_bank_id" not in quiz_groups[0]):
+        param_list = ['name', 'pick_count', 'question_points', 'assessment_question_bank_id']
+        if not any(param in quiz_groups[0] for param in param_list):
             raise RequiredFieldMissing("quiz_groups must contain at least 1 parameter.")
 
         kwargs["quiz_groups"] = quiz_groups
