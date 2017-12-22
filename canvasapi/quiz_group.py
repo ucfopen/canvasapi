@@ -28,8 +28,8 @@ class QuizGroup(CanvasObject):
             The request expects a list, but will only update 1 question group per request.
         :type quiz_groups: list[dict]
 
-        :returns: QuizGroup object
-        :rtype: :class:`canvasapi.quiz_group.QuizGroup`
+        :returns: `True` if the QuizGroup was updated. `False` otherwise.
+        :rtype: bool
         """
         if not isinstance(quiz_groups, list) or len(quiz_groups) <= 0:
             raise ValueError("Param `quiz_groups` must be a non-empty list.")
@@ -37,8 +37,8 @@ class QuizGroup(CanvasObject):
         if not isinstance(quiz_groups[0], dict):
             raise ValueError("Param `quiz_groups` must contain a dictionary")
 
-        if ("name" not in quiz_groups[0] and "pick_count" not in quiz_groups[0]
-                and "question_points" not in quiz_groups[0]):
+        param_list = ['name', 'pick_count', 'question_points']
+        if not any(param in quiz_groups[0] for param in param_list):
             raise RequiredFieldMissing("quiz_groups must contain at least 1 parameter.")
 
         kwargs["quiz_groups"] = quiz_groups
@@ -48,7 +48,12 @@ class QuizGroup(CanvasObject):
             'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.quiz_id, id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return QuizGroup(self._requester, response.json().get('quiz_groups')[0])
+
+        successful = 'name' in response.json().get('quiz_groups')[0]
+        if successful:
+            super(QuizGroup, self).set_attributes(response.json().get('quiz_groups')[0])
+
+        return 'name' in response.json().get('quiz_groups')[0]
 
     def delete(self, id):
         """

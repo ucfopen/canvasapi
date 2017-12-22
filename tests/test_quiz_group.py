@@ -37,12 +37,14 @@ class TestQuizGroup(unittest.TestCase):
         quiz_group = [{'name': 'Test Group', 'pick_count': 1, 'question_points': 2}]
         result = self.quiz_group.update(1, quiz_group)
 
-        self.assertIsInstance(result, QuizGroup)
-        self.assertEqual(result.id, 1)
-        self.assertEqual(result.quiz_id, 1)
-        self.assertEqual(result.name, quiz_group[0].get('name'))
-        self.assertEqual(result.pick_count, quiz_group[0].get('pick_count'))
-        self.assertEqual(result.question_points, quiz_group[0].get('question_points'))
+        self.assertIsInstance(result, bool)
+        self.assertTrue(result)
+
+        self.assertEqual(self.quiz_group.id, 1)
+        self.assertEqual(self.quiz_group.quiz_id, 1)
+        self.assertEqual(self.quiz_group.name, quiz_group[0].get('name'))
+        self.assertEqual(self.quiz_group.pick_count, quiz_group[0].get('pick_count'))
+        self.assertEqual(self.quiz_group.question_points, quiz_group[0].get('question_points'))
 
     def test_update_empty_list(self, m):
         register_uris({'quiz_group': ['update']}, m)
