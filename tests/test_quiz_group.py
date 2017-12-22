@@ -6,7 +6,6 @@ import requests_mock
 from canvasapi import Canvas
 from tests import settings
 from tests.util import register_uris
-from canvasapi.quiz_group import QuizGroup
 from canvasapi.exceptions import RequiredFieldMissing
 
 
