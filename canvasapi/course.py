@@ -1556,7 +1556,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/rubrics/%s' % (self.id, rub_id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return Rubric(self._requester, response.json())
@@ -1576,7 +1576,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/rubrics' % (self.id),
-            **combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_root_outcome_group(self):
