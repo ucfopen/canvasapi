@@ -12,6 +12,8 @@
 /build/
 /coverage.xml
 /dist/
+/docs/_build/
 /env/
 /htmlcov/
 \#*#
+.vscode/settings.json

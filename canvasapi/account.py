@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -26,16 +27,17 @@ class Account(CanvasObject):
         :type user: :class:`canvasapi.user.User` or int
         :param notification: The notification object or ID to close.
         :type notification: :class:`canvasapi.account.AccountNotification` or int
+
         :rtype: :class:`canvasapi.account.AccountNotification`
         """
         from canvasapi.user import User
 
         user_id = obj_or_id(user, "user", (User,))
-        notif_id = obj_or_id(notification, "notif", (AccountNotification,))
+        notif_id = obj_or_id(notification, "notification", (AccountNotification,))
 
         response = self._requester.request(
             'DELETE',
-            'accounts/%s/users/%s/account_notifications/%s' % (self.id, user_id, notif_id)
+            'accounts/{}/users/{}/account_notifications/{}'.format(self.id, user_id, notif_id)
         )
         return AccountNotification(self._requester, response.json())
 
@@ -50,7 +52,7 @@ class Account(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'accounts/%s/root_accounts' % (self.id),
+            'accounts/{}/root_accounts'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self._requester, response.json())
@@ -67,7 +69,7 @@ class Account(CanvasObject):
         from canvasapi.course import Course
         response = self._requester.request(
             'POST',
-            'accounts/%s/courses' % (self.id),
+            'accounts/{}/courses'.format(self.id),
             account_id=self.id,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -78,7 +80,10 @@ class Account(CanvasObject):
         Add a new sub-account to a given account.
 
         :calls: `POST /api/v1/accounts/:account_id/sub_accounts \
-        <https://canvas.instructure.com/doc/api/accounts.html#method.accounts.create>`_
+        <https://canvas.instructure.com/doc/api/accounts.html#method.sub_accounts.create>`_
+
+        :param account: The name of the account
+        :type account: str
 
         :rtype: :class:`canvasapi.account.Account`
         """
@@ -89,7 +94,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/sub_accounts' % (self.id),
+            'accounts/{}/sub_accounts'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self._requester, response.json())
@@ -114,7 +119,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/users' % (self.id),
+            'accounts/{}/users'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return User(self._requester, response.json())
@@ -143,7 +148,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/account_notifications' % (self.id),
+            'accounts/{}/account_notifications'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return AccountNotification(self._requester, response.json())
@@ -165,6 +170,7 @@ class Account(CanvasObject):
 
         :param user: The user object or ID to delete.
         :type user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.user.User`
         """
         from canvasapi.user import User
@@ -173,7 +179,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'DELETE',
-            'accounts/%s/users/%s' % (self.id, user_id)
+            'accounts/{}/users/{}'.format(self.id, user_id)
         )
         return User(self._requester, response.json())
 
@@ -193,22 +199,27 @@ class Account(CanvasObject):
             Course,
             self._requester,
             'GET',
-            'accounts/%s/courses' % (self.id),
+            'accounts/{}/courses'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_external_tool(self, tool_id):
+    def get_external_tool(self, tool):
         """
         :calls: `GET /api/v1/accounts/:account_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
+
+        :param tool: The object or ID of the tool
+        :type tool: :class:`canvasapi.external_tool.ExternalTool` or int
 
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         from canvasapi.external_tool import ExternalTool
 
+        tool_id = obj_or_id(tool, "tool", (ExternalTool,))
+
         response = self._requester.request(
             'GET',
-            'accounts/%s/external_tools/%s' % (self.id, tool_id),
+            'accounts/{}/external_tools/{}'.format(self.id, tool_id),
         )
         tool_json = response.json()
         tool_json.update({'account_id': self.id})
@@ -229,7 +240,7 @@ class Account(CanvasObject):
             ExternalTool,
             self._requester,
             'GET',
-            'accounts/%s/external_tools' % (self.id),
+            'accounts/{}/external_tools'.format(self.id),
             {'account_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -250,7 +261,7 @@ class Account(CanvasObject):
             AccountReport,
             self._requester,
             'GET',
-            'accounts/%s/reports/%s' % (self.id, report_type)
+            'accounts/{}/reports/{}'.format(self.id, report_type)
         )
 
     def get_reports(self):
@@ -267,7 +278,7 @@ class Account(CanvasObject):
             AccountReport,
             self._requester,
             'GET',
-            'accounts/%s/reports' % (self.id)
+            'accounts/{}/reports'.format(self.id)
         )
 
     def get_subaccounts(self, recursive=False):
@@ -287,7 +298,7 @@ class Account(CanvasObject):
             Account,
             self._requester,
             'GET',
-            'accounts/%s/sub_accounts' % (self.id),
+            'accounts/{}/sub_accounts'.format(self.id),
             recursive=recursive
         )
 
@@ -306,7 +317,7 @@ class Account(CanvasObject):
             User,
             self._requester,
             'GET',
-            'accounts/%s/users' % (self.id),
+            'accounts/{}/users'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -321,6 +332,7 @@ class Account(CanvasObject):
 
         :param user: The user object or ID to retrieve notifications for.
         :type user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.AccountNotification`
         """
@@ -332,7 +344,7 @@ class Account(CanvasObject):
             AccountNotification,
             self._requester,
             'GET',
-            'accounts/%s/users/%s/account_notifications' % (self.id, user_id)
+            'accounts/{}/users/{}/account_notifications'.format(self.id, user_id)
         )
 
     def update(self, **kwargs):
@@ -347,7 +359,7 @@ class Account(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'accounts/%s' % (self.id),
+            'accounts/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -372,25 +384,27 @@ class Account(CanvasObject):
             Role,
             self._requester,
             'GET',
-            'accounts/%s/roles' % (self.id),
+            'accounts/{}/roles'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_role(self, role_id):
+    def get_role(self, role):
         """
         Retrieve a role by ID.
 
         :calls: `GET /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.show>`_
 
-        :param role_id: The ID of the role.
-        :type role_id: int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
+
         :rtype: :class:`canvasapi.account.Role`
         """
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/roles/%s' % (self.id, role_id)
+            'accounts/{}/roles/{}'.format(self.id, role_id)
         )
         return Role(self._requester, response.json())
 
@@ -405,88 +419,95 @@ class Account(CanvasObject):
         :type label: str
         :rtype: :class:`canvasapi.account.Role`
         """
-
         response = self._requester.request(
             'POST',
-            'accounts/%s/roles' % (self.id),
+            'accounts/{}/roles'.format(self.id),
             label=label,
             _kwargs=combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
-    def deactivate_role(self, role_id, **kwargs):
+    def deactivate_role(self, role, **kwargs):
         """
         Deactivate a custom role.
 
         :calls: `DELETE /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.remove_role>`_
 
-        :param role_id: The ID of the role.
-        :type role_id: int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
+
         :rtype: :class:`canvasapi.account.Role`
         """
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'DELETE',
-            'accounts/%s/roles/%s' % (self.id, role_id),
+            'accounts/{}/roles/{}'.format(self.id, role_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
-    def activate_role(self, role_id, **kwargs):
+    def activate_role(self, role, **kwargs):
         """
         Reactivate an inactive role.
 
         :calls: `POST /api/v1/accounts/:account_id/roles/:id/activate \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.activate_role>`_
 
-        :param role_id: The ID of the role.
-        :type role_id: int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
         :rtype: :class:`canvasapi.account.Role`
         """
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/roles/%s/activate' % (self.id, role_id),
+            'accounts/{}/roles/{}/activate'.format(self.id, role_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
-    def update_role(self, role_id, **kwargs):
+    def update_role(self, role, **kwargs):
         """
         Update permissions for an existing role.
 
         :calls: `PUT /api/v1/accounts/:account_id/roles/:id \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.update>`_
 
-        :param role_id: The ID of the role.
-        :type role_id: int
+        :param role: The object or ID of the role.
+        :type role: :class:`canvasapi.account.Role` or int
+
         :rtype: :class:`canvasapi.account.Role`
         """
+        role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
             'PUT',
-            'accounts/%s/roles/%s' % (self.id, role_id),
+            'accounts/{}/roles/{}'.format(self.id, role_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Role(self._requester, response.json())
 
-    def get_enrollment(self, enrollment_id, **kwargs):
+    def get_enrollment(self, enrollment, **kwargs):
         """
         Get an enrollment object by ID.
 
         :calls: `GET /api/v1/accounts/:account_id/enrollments/:id \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.show>`_
 
-        :param enrollment_id: The ID of the enrollment to retrieve.
-        :type enrollment_id: int
+        :param enrollment: The object or ID of the enrollment to retrieve.
+        :type enrollment: :class:`canvasapi.enrollment.Enrollment` or int
+
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
         from canvasapi.enrollment import Enrollment
 
+        enrollment_id = obj_or_id(enrollment, "enrollment", (Enrollment,))
+
         response = self._requester.request(
             'GET',
-            'accounts/%s/enrollments/%s' % (self.id, enrollment_id),
+            'accounts/{}/enrollments/{}'.format(self.id, enrollment_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Enrollment(self._requester, response.json())
@@ -505,7 +526,7 @@ class Account(CanvasObject):
             Group,
             self._requester,
             'GET',
-            'accounts/%s/groups' % (self.id),
+            'accounts/{}/groups'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -524,7 +545,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/group_categories' % (self.id),
+            'accounts/{}/group_categories'.format(self.id),
             name=name,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -546,7 +567,7 @@ class Account(CanvasObject):
             GroupCategory,
             self._requester,
             'GET',
-            'accounts/%s/group_categories' % (self.id)
+            'accounts/{}/group_categories'.format(self.id)
         )
 
     def create_external_tool(self, name, privacy_level, consumer_key, shared_secret, **kwargs):
@@ -571,7 +592,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/external_tools' % (self.id),
+            'accounts/{}/external_tools'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
@@ -592,7 +613,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/terms' % (self.id),
+            'accounts/{}/terms'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         enrollment_term_json = response.json()
@@ -616,7 +637,7 @@ class Account(CanvasObject):
             EnrollmentTerm,
             self._requester,
             'GET',
-            'accounts/%s/terms' % (self.id),
+            'accounts/{}/terms'.format(self.id),
             {'account_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -637,7 +658,7 @@ class Account(CanvasObject):
             Login,
             self._requester,
             'GET',
-            'accounts/%s/logins' % (self.id),
+            'accounts/{}/logins'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -674,7 +695,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/logins' % (self.id),
+            'accounts/{}/logins'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Login(self._requester, response.json())
@@ -686,12 +707,15 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/activity \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_participation>`_
 
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
+
         :rtype: dict
         """
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/terms/%s/activity' % (self.id, term_id)
+            'accounts/{}/analytics/terms/{}/activity'.format(self.id, term_id)
         )
         return response.json()
 
@@ -707,7 +731,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/current/activity' % (self.id)
+            'accounts/{}/analytics/current/activity'.format(self.id)
         )
         return response.json()
 
@@ -723,7 +747,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/completed/activity' % (self.id)
+            'accounts/{}/analytics/completed/activity'.format(self.id)
         )
         return response.json()
 
@@ -734,12 +758,15 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/grades \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_grades>`_
 
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
+
         :rtype: dict
         """
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/terms/%s/grades' % (self.id, term_id)
+            'accounts/{}/analytics/terms/{}/grades'.format(self.id, term_id)
         )
         return response.json()
 
@@ -755,7 +782,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/current/grades' % (self.id)
+            'accounts/{}/analytics/current/grades'.format(self.id)
         )
         return response.json()
 
@@ -771,7 +798,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/completed/grades' % (self.id)
+            'accounts/{}/analytics/completed/grades'.format(self.id)
         )
         return response.json()
 
@@ -782,12 +809,15 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/analytics/terms/:term_id/statistics \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.department_statistics>`_
 
+        :param term_id: The ID of the term, or the strings "current" or "completed"
+        :type term_id: int or str
+
         :rtype: dict
         """
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/terms/%s/statistics' % (self.id, term_id)
+            'accounts/{}/analytics/terms/{}/statistics'.format(self.id, term_id)
         )
         return response.json()
 
@@ -803,7 +833,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/current/statistics' % (self.id)
+            'accounts/{}/analytics/current/statistics'.format(self.id)
         )
         return response.json()
 
@@ -819,7 +849,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/analytics/completed/statistics' % (self.id)
+            'accounts/{}/analytics/completed/statistics'.format(self.id)
         )
         return response.json()
 
@@ -836,7 +866,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'accounts/%s/authentication_providers' % (self.id),
+            'accounts/{}/authentication_providers'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         authentication_providers_json = response.json()
@@ -860,25 +890,34 @@ class Account(CanvasObject):
             AuthenticationProvider,
             self._requester,
             'GET',
-            'accounts/%s/authentication_providers' % (self.id),
+            'accounts/{}/authentication_providers'.format(self.id),
             {'account_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_authentication_providers(self, authentication_providers_id, **kwargs):
+    def get_authentication_provider(self, authentication_provider, **kwargs):
         """
         Get the specified authentication provider
 
         :calls: `GET /api/v1/accounts/:account_id/authentication_providers/:id \
         <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.show>`_
 
+        :param authentication_provider: The object or ID of the authentication provider
+        :type authentication_provider:
+            :class:`canvasapi.authentication_provider.AuthenticationProvider` or int
+
         :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
         from canvasapi.authentication_provider import AuthenticationProvider
+        authentication_providers_id = obj_or_id(
+            authentication_provider, "authentication provider", (
+                AuthenticationProvider,
+            )
+        )
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/authentication_providers/%s' % (self.id, authentication_providers_id),
+            'accounts/{}/authentication_providers/{}'.format(self.id, authentication_providers_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -896,7 +935,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/%s/sso_settings' % (self.id),
+            'accounts/{}/sso_settings'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -914,11 +953,162 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'accounts/%s/sso_settings' % (self.id),
+            'accounts/{}/sso_settings'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
         return SSOSettings(self._requester, response.json())
+
+    def get_root_outcome_group(self):
+        """
+        Redirect to root outcome group for context
+
+        :calls: `GET /api/v1/accounts/:account_id/root_outcome_group \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>`_
+
+        :returns: The OutcomeGroup of the context.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        from canvasapi.outcome import OutcomeGroup
+
+        response = self._requester.request(
+            'GET',
+            'accounts/{}/root_outcome_group'.format(self.id)
+        )
+        return OutcomeGroup(self._requester, response.json())
+
+    def get_outcome_group(self, group):
+        """
+        Returns the details of the Outcome Group with the given id.
+
+        :calls: `GET /api/v1/accounts/:account_id/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.show>`_
+
+        :param group: The outcome group object or ID to return.
+        :type group: :class:`canvasapi.outcome.OutcomeGroup` or int
+
+        :returns: An outcome group object.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        from canvasapi.outcome import OutcomeGroup
+
+        outcome_group_id = obj_or_id(group, "outcome group", (OutcomeGroup,))
+        response = self._requester.request(
+            'GET',
+            'accounts/{}/outcome_groups/{}'.format(self.id, outcome_group_id)
+        )
+
+        return OutcomeGroup(self._requester, response.json())
+
+    def get_outcome_groups_in_context(self):
+        """
+        Get all outcome groups for context - BETA
+
+        :calls: `GET /api/v1/accounts/:account_id/outcome_groups \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.index>`_
+
+        :returns: Paginated List of OutcomesGroups in the context.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.outcome.OutcomeGroups`
+        """
+        from canvasapi.outcome import OutcomeGroup
+
+        return PaginatedList(
+            OutcomeGroup,
+            self._requester,
+            'GET',
+            'accounts/{}/outcome_groups'.format(self.id)
+        )
+
+    def get_all_outcome_links_in_context(self):
+        """
+        Get all outcome links for context - BETA
+
+        :calls: `GET /api/v1/accounts/:account_id/outcome_group_links \
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link_index>`_
+
+        :returns: Paginated List of OutcomesLinks in the context.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.outcome.OutcomeLink`
+        """
+        from canvasapi.outcome import OutcomeLink
+
+        return PaginatedList(
+            OutcomeLink,
+            self._requester,
+            'GET',
+            'accounts/{}/outcome_group_links'.format(self.id)
+        )
+
+    def add_grading_standards(self, title, grading_scheme_entry, **kwargs):
+        """
+        Create a new grading standard for the account.
+
+        :calls `POST /api/v1/accounts/:account_id/grading_standards \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.create>`
+
+        :param title: The title for the Grading Standard
+        :type title: str
+        :param grading_scheme: A list of dictionaries containing keys for "name" and "value"
+        :type grading_scheme: list[dict]
+        :rtype: :class:`canvasapi.grading_standards.GradingStandard`
+        """
+        if not isinstance(grading_scheme_entry, list) or len(grading_scheme_entry) <= 0:
+            raise ValueError("Param `grading_scheme_entry` must be a non-empty list.")
+
+        for entry in grading_scheme_entry:
+            if not isinstance(entry, dict):
+                raise ValueError("grading_scheme_entry must consist of dictionaries.")
+            if "name" not in entry or "value" not in entry:
+                raise ValueError("Dictionaries with keys 'name' and 'value' are required.")
+        kwargs["grading_scheme_entry"] = grading_scheme_entry
+
+        response = self._requester.request(
+            'POST',
+            'accounts/%s/grading_standards' % (self.id),
+            title=title,
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return GradingStandard(self._requester, response.json())
+
+    def get_grading_standards(self, **kwargs):
+        """
+        Get a PaginatedList of the grading standards available for the account.
+
+        :calls `GET /api/v1/accounts/:account_id/grading_standards \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_index>`
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_standards.GradingStandard`
+        """
+
+        return PaginatedList(
+            GradingStandard,
+            self._requester,
+            'GET',
+            'accounts/%s/grading_standards' % (self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_single_grading_standard(self, grading_standard_id, **kwargs):
+        """
+        Get a single grading standard from the account.
+
+        :calls `/api/v1/accounts/:account_id/grading_standards/:grading_standard_id \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_show>`
+
+        :param grading_standard_id: The grading standard id
+        :type grading_standard_id: int
+        :rtype: :class:`canvasapi.grading_standards.GradingStandard`
+        """
+
+        response = self._requester.request(
+            "GET",
+            'accounts/%s/grading_standards/%d' % (self.id, grading_standard_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return GradingStandard(self._requester, response.json())
 
 
 @python_2_unicode_compatible
