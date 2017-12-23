@@ -83,9 +83,9 @@ class Page(CanvasObject):
         Return the object that spawned this page.
 
         :calls: `GET /api/v1/groups/:group_id \
-        <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
-        or :calls: `GET /api/v1/courses/:course_id \
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
+            <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
+            or :calls: `GET /api/v1/courses/:course_id \
+            <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """
@@ -240,9 +240,9 @@ class PageRevision(CanvasObject):
         Return the object that spawned this page.
 
         :calls: `GET /api/v1/groups/:group_id \
-        <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
-        or :calls: `GET /api/v1/courses/:course_id \
-        <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
+            <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
+            or :calls: `GET /api/v1/courses/:course_id \
+            <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """

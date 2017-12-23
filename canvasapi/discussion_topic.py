@@ -115,7 +115,7 @@ class DiscussionTopic(CanvasObject):
             or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
         response = self._requester.request(
             'POST',

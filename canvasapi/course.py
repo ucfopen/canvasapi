@@ -1645,7 +1645,7 @@ class Course(CanvasObject):
         """
         Get all outcome result rollups for context - BETA
 
-        :calls: `GET /api/v1/courses/:course_id/outcome_results \
+        :calls: `GET /api/v1/courses/:course_id/outcome_rollups \
         <https://canvas.instructure.com/doc/api/outcome_results.html#method.outcome_results.rollups>`_
 
         :returns: List of outcome result rollups in the context.
@@ -1663,8 +1663,8 @@ class Course(CanvasObject):
         """
         Create a new grading standard for the course.
 
-        :calls `POST /api/v1/courses/:course_id/grading_standards \
-        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.create>`
+        :calls: `POST /api/v1/courses/:course_id/grading_standards \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.create>`_
 
         :param title: The title for the Grading Standard
         :type title: str
@@ -1694,8 +1694,9 @@ class Course(CanvasObject):
         """
         Get a PaginatedList of the grading standards available for the course
 
-        :calls `GET /api/v1/courses/:course_id/grading_standards \
-        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_index>`
+        :calls: `GET /api/v1/courses/:course_id/grading_standards \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_index>`_
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.grading_standards.GradingStandard`
         """
