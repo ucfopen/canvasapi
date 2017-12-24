@@ -1,0 +1,27 @@
+{
+	"update": {
+		"method": "PUT",
+		"endpoint": "courses/1/quizzes/1/groups/1",
+		"data": {"quiz_groups": [
+			{
+				"id": 1,
+				"quiz_id": 1,
+				"name": "Test Group",
+				"pick_count": 1,
+				"question_points": 2,
+				"assessment_question_bank_id": 3
+			}
+		]},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "courses/1/quizzes/1/groups/1",
+		"status_code": 204
+	},
+	"reorder_question_group": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/groups/1/reorder",
+		"status_code": 204
+	}
+}
