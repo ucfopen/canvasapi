@@ -315,7 +315,7 @@ class Group(CanvasObject):
             <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.show>`_
 
         :param user: list of user ids
-        :type user: :class:`canvasapi.user.User`or int
+        :type user: :class:`canvasapi.user.User` or int
 
         :rtype: :class:`canvasapi.group.GroupMembership`
         """
@@ -338,7 +338,7 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.create>`_
 
         :param user: The object or ID of the user.
-        :type user: :class:`canvasapi.user.User`or int
+        :type user: :class:`canvasapi.user.User` or int
 
         :rtype: :class:`canvasapi.group.GroupMembership`
         """
@@ -362,7 +362,7 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.update>`_
 
         :param user: The object or ID of the user.
-        :type user: :class:`canvasapi.user.User`or int
+        :type user: :class:`canvasapi.user.User` or int
 
         :rtype: :class:`canvasapi.group.GroupMembership`
         """
@@ -385,7 +385,7 @@ class Group(CanvasObject):
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.show>`_
 
         :param topic: The object or ID of the discussion topic.
-        :type topic: :class:`canvasapi.discussion_topic.DiscussionTopic`or int
+        :type topic: :class:`canvasapi.discussion_topic.DiscussionTopic` or int
 
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
