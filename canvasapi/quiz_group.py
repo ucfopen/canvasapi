@@ -53,7 +53,7 @@ class QuizGroup(CanvasObject):
         if successful:
             super(QuizGroup, self).set_attributes(response.json().get('quiz_groups')[0])
 
-        return 'name' in response.json().get('quiz_groups')[0]
+        return successful
 
     def delete(self, id):
         """
@@ -91,14 +91,17 @@ class QuizGroup(CanvasObject):
         :rtype: bool
         """
 
-        if not isinstance(order, list) or len(order) <= 0:
+        if not isinstance(order, list) or not order:
             raise ValueError("Param `order` must be a non-empty list.")
 
-        for orderDict in order:
-            if not isinstance(orderDict, dict):
-                raise ValueError("order must consist of dictionaries.")
-            if "id" not in orderDict:
-                raise ValueError("Dictionaries in order must contain an 'id' key.")
+        for question in order:
+            if not isinstance(question, dict):
+                raise ValueError(
+                    "`order` must consist only of dictionaries representing "
+                    "Question items."
+                )
+            if "id" not in question:
+                raise ValueError("Dictionaries in `order` must contain an `id` key.")
 
         kwargs["order"] = order
 

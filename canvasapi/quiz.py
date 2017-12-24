@@ -88,7 +88,7 @@ class Quiz(CanvasObject):
         :param quiz_groups: The name, pick count, question points,
             and/or assessment question bank id.
             All of these parameters are optional, but at least one must exist
-            (even if empty) to recieve a response.
+            (even if empty) to receive a response.
             The request expects a list, but will only create 1 question group per request.
         :type quiz_groups: list[dict]
 
@@ -96,7 +96,7 @@ class Quiz(CanvasObject):
         :rtype: :class:`canvasapi.quiz_group.QuizGroup`
         """
 
-        if not isinstance(quiz_groups, list) or len(quiz_groups) <= 0:
+        if not isinstance(quiz_groups, list) or not quiz_groups:
             raise ValueError("Param `quiz_groups` must be a non-empty list.")
 
         if not isinstance(quiz_groups[0], dict):
