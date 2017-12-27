@@ -22,6 +22,7 @@ Class Reference
     page-ref
     progress-ref
     quiz-ref
+    quiz-group-ref
     section-ref
     upload-ref
     user-ref
