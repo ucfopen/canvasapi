@@ -26,10 +26,9 @@ class File(CanvasObject):
         )
         return File(self._requester, response.json())
 
-    def download(self, raw=False):
+    def get_contents(self):
         """
         Download the contents of this file.
-        If raw is set to True, will return raw bytes instead.
 
         :rtype: str
         """
@@ -37,4 +36,18 @@ class File(CanvasObject):
             'GET',
             _url=self.url
         )
-        return response.content if raw else response.text
+        return response.text
+
+    def download(self, location):
+        """
+        Download the file to specificed location
+
+        :param location: The path to download to.
+        """
+        response = self._requester.request(
+            'GET',
+            _url=self.url
+        )
+
+        with open(location, 'wb') as file_out:
+            file_out.write(response.content)
