@@ -7,17 +7,18 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.account import Account, AccountNotification, AccountReport, Role, SSOSettings
+from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
-from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
-from canvasapi.outcome import OutcomeGroup, OutcomeLink
-from canvasapi.user import User
 from canvasapi.login import Login
-from canvasapi.authentication_provider import AuthenticationProvider
+from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.rubric import Rubric
+from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
 
@@ -689,3 +690,30 @@ class TestAccount(unittest.TestCase):
         self.assertTrue(hasattr(response, "grading_scheme"))
         self.assertEqual(response.grading_scheme[0].get('name'), "A")
         self.assertEqual(response.grading_scheme[0].get('value'), 0.9)
+
+    # get_rubric
+    def test_get_rubric(self, m):
+        register_uris({'account': ['get_rubric_single']}, m)
+
+        rubric_id = 1
+        rubric = self.account.get_rubric(rubric_id)
+
+        self.assertIsInstance(rubric, Rubric)
+        self.assertEqual(rubric.id, rubric_id)
+        self.assertEqual(rubric.title, "Account Rubric 1")
+
+    # list_rubrics
+    def test_list_rubrics(self, m):
+        register_uris({'account': ['get_rubric_multiple']}, m)
+
+        rubrics = self.account.list_rubrics()
+
+        rubric_list = [rubric for rubric in rubrics]
+        self.assertEqual(len(rubric_list), 2)
+
+        self.assertIsInstance(rubric_list[0], Rubric)
+        self.assertEqual(rubric_list[0].id, 1)
+        self.assertEqual(rubric_list[0].title, "Account Rubric 1")
+        self.assertIsInstance(rubric_list[1], Rubric)
+        self.assertEqual(rubric_list[1].id, 2)
+        self.assertEqual(rubric_list[1].title, "Account Rubric 2")
