@@ -4,11 +4,30 @@
 
 ### New Endpoint Coverage
 
+- Grading Standards (Thanks, [@JonGuilbe](https://github.com/JonGuilbe))
+- Notification Preferences (Thanks, [@a-goetz](https://github.com/a-goetz))
+    - Update a preference
+    - Update preferences by category
+    - Update multiple preferences
 - Outcomes (Thanks, [@a-goetz](https://github.com/a-goetz))
+- Quiz Question Groups (Thanks, [@JonGuilbe](https://github.com/JonGuilbe))
+- Rubric (Thanks, [@sigurdurb](https://github.com/sigurdurb))
 
 ### General
 
 - Added support for other iterables as parameter values. (Thanks, [@liblit](https://github.com/liblit))
+- For many endpoints that accept an "object id", either a CanvasAPI Object or integer ID can now be passed. (Thanks, [@a-goetz](https://github.com/a-goetz))
+- Added a requester cache that rememebers the last 5 requests to Canvas. It can be accessed as the attribute `_cache` of the `requester object`. (e.g. `course._requester._cache`)
+- Files can now be downloaded directly from the `File` object in one of two ways: (Thanks, [@DanBrink91](https://github.com/DanBrink91))
+    1. `get_contents` will directly return the contents of the file. (e.g. `file.get_contents()`)
+    2. `download` will download the file and save it to the provided path. (e.g. `file.download('example.txt')`)
+- Lots of formatting fixes and spelling corrections.
+
+### Deprecation Warning
+
+Including `/api/v1/` at the end of the API URL passed to a new `Canvas` object is now deprecated. Users should now only pass the root URL into the `Canvas` object (e.g. `"https://example.com/api/v1/"` should now be `"https://example.com"`).
+
+For now, users including `/api/v1/` will see a `DeprecationWarning`, but things will otherwise operate normally. We will remove the ability to continue using `/api/v1/` in a future release.
 
 ## [0.7.0] - 2017-10-04
 
