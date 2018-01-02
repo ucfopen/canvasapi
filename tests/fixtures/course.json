@@ -291,6 +291,51 @@
 			}
 		]
 	},
+	"get_rubric_single": {
+		"method": "GET",
+		"endpoint": "courses/1/rubrics/1",
+		"data": {
+			"id": 1,
+			"title": "Course Rubric 1",
+			"context_id": 1,
+			"context_type": "Course",
+			"points_possible": 10.0,
+			"reusable": false,
+			"read_only": true,
+			"free_form_critereon_comments": true,
+			"hide_score_total": true
+		},
+		"status_code": 200
+	},
+	"get_rubric_multiple": {
+		"method": "GET",
+		"endpoint": "courses/1/rubrics",
+		"data": [
+			{
+				"id": 1,
+				"title": "Course Rubric 1",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			},
+			{
+				"id": 2,
+				"title": "Course Rubric 2",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			}
+		],
+		"status_code": 200
+	},
 	"get_section":{
 		"method": "GET",
 		"endpoint": "courses/1/sections/1",

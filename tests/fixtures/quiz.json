@@ -25,5 +25,33 @@
 			"title": "Quizzy McQuizFace"
 		},
 		"status_code": 200
+	},
+	"get_quiz_group": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/groups/1",
+		"data": {
+			"id": 1,
+			"quiz_id": 1,
+			"name": "Test Group",
+			"pick_count": 1,
+			"question_points": 2,
+			"assessment_question_bank_id": 3
+		},
+		"status_code": 200
+	},
+	"create_question_group": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/groups",
+		"data": {"quiz_groups": [
+			{
+				"id": 1,
+				"quiz_id": 1,
+				"name": "Test Group",
+				"pick_count": 1,
+				"question_points": 2,
+				"assessment_question_bank_id": 3
+			}
+		]},
+		"status_code": 200
 	}
 }
