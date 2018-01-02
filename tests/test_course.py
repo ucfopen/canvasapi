@@ -23,10 +23,11 @@ from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.quiz import Quiz
+from canvasapi.rubric import Rubric
 from canvasapi.section import Section
+from canvasapi.submission import Submission
 from canvasapi.tab import Tab
 from canvasapi.user import User
-from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
 from tests import settings
 from tests.util import cleanup_file, register_uris
@@ -947,6 +948,33 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(tab, Tab)
         self.assertEqual(tab.position, 3)
+
+    # get_rubric
+    def test_get_rubric(self, m):
+        register_uris({'course': ['get_rubric_single']}, m)
+
+        rubric_id = 1
+        rubric = self.course.get_rubric(rubric_id)
+
+        self.assertIsInstance(rubric, Rubric)
+        self.assertEqual(rubric.id, rubric_id)
+        self.assertEqual(rubric.title, "Course Rubric 1")
+
+    # list_rubrics
+    def test_list_rubrics(self, m):
+        register_uris({'course': ['get_rubric_multiple']}, m)
+
+        rubrics = self.course.list_rubrics()
+
+        rubric_list = [rubric for rubric in rubrics]
+        self.assertEqual(len(rubric_list), 2)
+
+        self.assertIsInstance(rubric_list[0], Rubric)
+        self.assertEqual(rubric_list[0].id, 1)
+        self.assertEqual(rubric_list[0].title, "Course Rubric 1")
+        self.assertIsInstance(rubric_list[1], Rubric)
+        self.assertEqual(rubric_list[1].id, 2)
+        self.assertEqual(rubric_list[1].title, "Course Rubric 2")
 
     # get_root_outcome_group()
     def test_get_root_outcome_group(self, m):
