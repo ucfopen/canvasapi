@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+from os.path import isfile
 
 import requests_mock
 
@@ -8,7 +9,6 @@ from canvasapi.file import File
 from tests import settings
 from tests.util import cleanup_file
 from tests.util import register_uris
-from os.path import isfile
 
 
 @requests_mock.Mocker()
