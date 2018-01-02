@@ -43,6 +43,7 @@ class File(CanvasObject):
         Download the file to specified location.
 
         :param location: The path to download to.
+        :type location: str
         """
         response = self._requester.request(
             'GET',
