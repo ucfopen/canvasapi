@@ -6,6 +6,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.rubric import Rubric
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
@@ -1109,6 +1110,43 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return GradingStandard(self._requester, response.json())
+
+    def get_rubric(self, rubric_id, **kwargs):
+        """
+        Get a single rubric, based on rubric id.
+
+        :calls: `GET /api/v1/accounts/:account_id/rubrics/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.show>`_
+
+        :param rubric_id: The ID of the rubric.
+        :type rubric_id: int
+        :rtype: :class:`canvasapi.rubric.Rubric`
+        """
+        response = self._requester.request(
+            'GET',
+            'accounts/%s/rubrics/%s' % (self.id, rubric_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return Rubric(self._requester, response.json())
+
+    def list_rubrics(self, **kwargs):
+        """
+        Get the paginated list of active rubrics for the current account.
+
+        :calls: `GET /api/v1/accounts/:account_id/rubrics \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.rubric.Rubric`
+        """
+        return PaginatedList(
+            Rubric,
+            self._requester,
+            'GET',
+            'accounts/%s/rubrics' % (self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
 
 
 @python_2_unicode_compatible

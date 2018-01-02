@@ -15,6 +15,7 @@ from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
 from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
+from canvasapi.rubric import Rubric
 
 
 @python_2_unicode_compatible
@@ -1540,6 +1541,43 @@ class Course(CanvasObject):
         )
 
         return Tab(self._requester, response.json())
+
+    def get_rubric(self, rubric_id, **kwargs):
+        """
+        Get a single rubric, based on rubric id.
+
+        :calls: `GET /api/v1/courses/:course_id/rubrics/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.show>`_
+
+        :param rubric_id: The ID of the rubric.
+        :type rubric_id: int
+        :rtype: :class:`canvasapi.rubric.Rubric`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/%s/rubrics/%s' % (self.id, rubric_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return Rubric(self._requester, response.json())
+
+    def list_rubrics(self, **kwargs):
+        """
+        Get the paginated list of active rubrics for the current course.
+
+        :calls: `GET /api/v1/courses/:course_id/rubrics \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.rubric.Rubric`
+        """
+        return PaginatedList(
+            Rubric,
+            self._requester,
+            'GET',
+            'courses/%s/rubrics' % (self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
 
     def get_root_outcome_group(self):
         """
