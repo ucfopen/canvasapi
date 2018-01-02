@@ -708,12 +708,11 @@ class TestAccount(unittest.TestCase):
 
         rubrics = self.account.list_rubrics()
 
-        rubric_list = [rubric for rubric in rubrics]
-        self.assertEqual(len(rubric_list), 2)
+        self.assertEqual(len(list(rubrics)), 2)
 
-        self.assertIsInstance(rubric_list[0], Rubric)
-        self.assertEqual(rubric_list[0].id, 1)
-        self.assertEqual(rubric_list[0].title, "Account Rubric 1")
-        self.assertIsInstance(rubric_list[1], Rubric)
-        self.assertEqual(rubric_list[1].id, 2)
-        self.assertEqual(rubric_list[1].title, "Account Rubric 2")
+        self.assertIsInstance(rubrics[0], Rubric)
+        self.assertEqual(rubrics[0].id, 1)
+        self.assertEqual(rubrics[0].title, "Account Rubric 1")
+        self.assertIsInstance(rubrics[1], Rubric)
+        self.assertEqual(rubrics[1].id, 2)
+        self.assertEqual(rubrics[1].title, "Account Rubric 2")
