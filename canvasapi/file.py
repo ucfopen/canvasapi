@@ -25,3 +25,30 @@ class File(CanvasObject):
             'files/{}'.format(self.id)
         )
         return File(self._requester, response.json())
+
+    def get_contents(self):
+        """
+        Download the contents of this file.
+
+        :rtype: str
+        """
+        response = self._requester.request(
+            'GET',
+            _url=self.url
+        )
+        return response.text
+
+    def download(self, location):
+        """
+        Download the file to specified location.
+
+        :param location: The path to download to.
+        :type location: str
+        """
+        response = self._requester.request(
+            'GET',
+            _url=self.url
+        )
+
+        with open(location, 'wb') as file_out:
+            file_out.write(response.content)
