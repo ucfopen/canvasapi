@@ -41,12 +41,13 @@ class TestFile(unittest.TestCase):
     # download()
     def test_download_file(self, m):
         register_uris({'file': ['file_download']}, m)
-
-        self.file.download('canvasapi_file_download_test.txt')
-        self.assertTrue(isfile('canvasapi_file_download_test.txt'))
-        with open('canvasapi_file_download_test.txt') as downloaded_file:
-            self.assertEqual(downloaded_file.read(), '"file contents are here"')
-        cleanup_file('canvasapi_file_download_test.txt')
+        try:
+            self.file.download('canvasapi_file_download_test.txt')
+            self.assertTrue(isfile('canvasapi_file_download_test.txt'))
+            with open('canvasapi_file_download_test.txt') as downloaded_file:
+                self.assertEqual(downloaded_file.read(), '"file contents are here"')
+        finally:
+            cleanup_file('canvasapi_file_download_test.txt')
 
     # contents()
     def test_contents_file(self, m):
