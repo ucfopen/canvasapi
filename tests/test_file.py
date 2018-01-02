@@ -10,6 +10,7 @@ from tests.util import register_uris
 from tests.util import cleanup_file
 from os.path import isfile
 
+
 @requests_mock.Mocker()
 class TestFile(unittest.TestCase):
 
@@ -37,17 +38,18 @@ class TestFile(unittest.TestCase):
         self.assertTrue(hasattr(deleted_file, 'display_name'))
         self.assertEqual(deleted_file.display_name, "Bad File.docx")
 
-
     # download()
     def test_download_file(self, m):
-        register_uris({'file': ['file_download'],}, m)
-        
+        register_uris({'file': ['file_download']}, m)
+
         self.file.download('canvasapi_file_download_test.txt')
         self.assertTrue(isfile('canvasapi_file_download_test.txt'))
+        with open('canvasapi_file_download_test.txt') as downloaded_file:
+            self.assertEqual(downloaded_file.read(), '"file contents are here"')
         cleanup_file('canvasapi_file_download_test.txt')
-    
+
     # contents()
     def test_contents_file(self, m):
-        register_uris({'file': ['file_contents'],}, m)
+        register_uris({'file': ['file_contents']}, m)
         contents = self.file.get_contents()
         self.assertEqual(contents, '"Hello there"')

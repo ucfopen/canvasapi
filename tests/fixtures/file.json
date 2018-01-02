@@ -30,6 +30,7 @@
     "file_download": {
         "method": "GET",
         "endpoint": "ANY",
+        "data": "file contents are here",
         "status_code": 200
     }
 }
