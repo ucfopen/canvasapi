@@ -83,7 +83,8 @@
 			"default_storage_quota_mb": 500,
 			"default_user_storage_quota_mb": 50,
 			"default_group_storage_quota_mb": 50,
-			"default_time_zone": "America/New_York"
+			"default_time_zone": "America/New_York",
+			"workflow_state": "active"
 		},
 		"status_code": 200
 	},
@@ -94,6 +95,22 @@
 			"id": 50,
 			"unique_id": 123456,
 			"name": "New User"
+		},
+		"status_code": 200
+	},
+	"delete_subaccount": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/sub_accounts/101",
+		"data": {
+			"id": 101,
+			"name": "New Subaccount",
+			"parent_account_id": 1,
+			"root_account_id": 1,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/New_York",
+			"workflow_state": "deleted"
 		},
 		"status_code": 200
 	},

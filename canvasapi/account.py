@@ -4,7 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.grading_standard import GradingStandard
-from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -153,6 +153,29 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return AccountNotification(self._requester, response.json())
+
+    def delete(self):
+        """
+        Delete the current account
+
+        Note: Cannot delete an account with active courses or active
+        sub accounts. Cannot delete a root account.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/sub_accounts/:id \
+        <https://canvas.beta.instructure.com/doc/api/accounts.html#method.sub_accounts.destroy>`_
+
+        :returns: True if successfully deleted; False otherwise.
+        :rtype: bool
+        """
+        if not hasattr(self, 'parent_account_id') or not self.parent_account_id:
+            raise CanvasException("Cannot delete a root account.")
+
+        response = self._requester.request(
+            'DELETE',
+            'accounts/{}/sub_accounts/{}'.format(self.parent_account_id, self.id)
+        )
+
+        return response.json().get('workflow_state') == 'deleted'
 
     def delete_user(self, user):
         """

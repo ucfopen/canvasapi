@@ -12,7 +12,7 @@ from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.external_tool import ExternalTool
-from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.login import Login
@@ -132,6 +132,18 @@ class TestAccount(unittest.TestCase):
     def test_create_notification_missing_field(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.account.create_notification({})
+
+    # delete()
+    def test_delete(self, m):
+        register_uris({'account': ['create_subaccount', 'delete_subaccount']}, m)
+
+        subaccount = self.account.create_subaccount({'name': 'New Subaccount'})
+
+        self.assertTrue(subaccount.delete())
+
+    def test_delete_root_account(self, m):
+        with self.assertRaises(CanvasException):
+            self.account.delete()
 
     # delete_user()
     def test_delete_user_id(self, m):
