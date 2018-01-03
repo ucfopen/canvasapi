@@ -982,7 +982,7 @@ class Canvas(object):
         Redirect to root outcome group for context
 
         :calls: `GET /api/v1/global/root_outcome_group \
-        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>
+        <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.redirect>`_
 
         :returns: The OutcomeGroup of the context.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`

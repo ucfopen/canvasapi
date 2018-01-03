@@ -7,6 +7,8 @@ from canvasapi import Canvas
 from canvasapi.quiz import Quiz
 from tests import settings
 from tests.util import register_uris
+from canvasapi.quiz_group import QuizGroup
+from canvasapi.exceptions import RequiredFieldMissing
 
 
 @requests_mock.Mocker()
@@ -51,3 +53,53 @@ class TestQuiz(unittest.TestCase):
         self.assertEqual(deleted_quiz.title, title)
         self.assertTrue(hasattr(deleted_quiz, 'course_id'))
         self.assertEqual(deleted_quiz.course_id, self.course.id)
+
+    # get_quiz_group()
+    def test_get_quiz_group(self, m):
+        register_uris({'quiz': ['get_quiz_group']}, m)
+
+        result = self.quiz.get_quiz_group(1)
+        self.assertIsInstance(result, QuizGroup)
+        self.assertEqual(result.id, 1)
+        self.assertEqual(result.quiz_id, 1)
+
+    # create_question_group()
+    def test_create_question_group(self, m):
+        register_uris({'quiz': ['create_question_group']}, m)
+
+        quiz_group = [{'name': 'Test Group', 'pick_count': 1,
+                      'question_points': 2, 'assessment_question_bank_id': 3}]
+        result = self.quiz.create_question_group(quiz_group)
+
+        self.assertIsInstance(result, QuizGroup)
+        self.assertEqual(result.id, 1)
+        self.assertEqual(result.quiz_id, 1)
+        self.assertEqual(result.name, quiz_group[0].get('name'))
+        self.assertEqual(result.pick_count, quiz_group[0].get('pick_count'))
+        self.assertEqual(result.question_points, quiz_group[0].get('question_points'))
+        self.assertEqual(result.assessment_question_bank_id,
+                         quiz_group[0].get('assessment_question_bank_id'))
+
+    def test_create_question_group_empty_list(self, m):
+        register_uris({'quiz': ['create_question_group']}, m)
+
+        quiz_group = []
+
+        with self.assertRaises(ValueError):
+            self.quiz.create_question_group(quiz_group)
+
+    def test_create_question_group_incorrect_param(self, m):
+        register_uris({'quiz': ['create_question_group']}, m)
+
+        quiz_group = [1]
+
+        with self.assertRaises(ValueError):
+            self.quiz.create_question_group(quiz_group)
+
+    def test_create_question_group_incorrect_dict(self, m):
+        register_uris({'quiz': ['create_question_group']}, m)
+
+        quiz_group = [{}]
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.quiz.create_question_group(quiz_group)

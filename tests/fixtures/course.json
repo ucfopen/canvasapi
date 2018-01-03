@@ -291,6 +291,51 @@
 			}
 		]
 	},
+	"get_rubric_single": {
+		"method": "GET",
+		"endpoint": "courses/1/rubrics/1",
+		"data": {
+			"id": 1,
+			"title": "Course Rubric 1",
+			"context_id": 1,
+			"context_type": "Course",
+			"points_possible": 10.0,
+			"reusable": false,
+			"read_only": true,
+			"free_form_critereon_comments": true,
+			"hide_score_total": true
+		},
+		"status_code": 200
+	},
+	"get_rubric_multiple": {
+		"method": "GET",
+		"endpoint": "courses/1/rubrics",
+		"data": [
+			{
+				"id": 1,
+				"title": "Course Rubric 1",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			},
+			{
+				"id": 2,
+				"title": "Course Rubric 2",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			}
+		],
+		"status_code": 200
+	},
 	"get_section":{
 		"method": "GET",
 		"endpoint": "courses/1/sections/1",
@@ -418,12 +463,14 @@
 			{
 				"id": 1,
 				"size": 2939,
-				"display_name": "File1.txt"
+				"display_name": "File1.txt",
+				"url": "http://example.com/file_download"
 			},
 			{
 				"id": 2,
 				"size": 18380,
-				"display_name": "File_2.png"
+				"display_name": "File_2.png",
+				"url": "http://example.com/file_download2"
 			}
 		],
 		"status_code": 200,
@@ -438,12 +485,14 @@
 			{
 				"id": 3,
 				"display_name": "File 3.jpg",
-				"size": 1298
+				"size": 1298,
+				"url": "http://example.com/file_download3"
 			},
 			{
 				"id": 4,
 				"display_name": "File 4.docx",
-				"size": 88920
+				"size": 88920,
+				"url": "http://example.com/file_download4"
 			}
 		],
 		"status_code": 200

@@ -5,7 +5,8 @@
         "data": {
             "id": 1,
             "display_name": "Bad File.docx",
-            "size": 5512
+            "size": 5512,
+            "url": "file_download"
         },
         "status_code": 200
     },
@@ -15,8 +16,21 @@
         "data": {
             "id": 1,
             "display_name": "File.docx",
-            "size": 6144
+            "size": 6144,
+            "url": "file_download"
         },
+        "status_code": 200
+    },
+    "file_contents": {
+        "method": "GET",
+        "endpoint": "ANY",
+        "data": "Hello there",
+        "status_code": 200
+    },
+    "file_download": {
+        "method": "GET",
+        "endpoint": "ANY",
+        "data": "file contents are here",
         "status_code": 200
     }
 }
