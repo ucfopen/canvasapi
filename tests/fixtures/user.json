@@ -466,39 +466,6 @@
         ],
         "status_code": 200
     },
-	"list_groups": {
-		"method": "GET",
-		"endpoint": "users/self/groups",
-		"data": [
-			{
-				"id": 1,
-				"name": "Group 1"
-			},
-			{
-				"id": 2,
-				"name": "Group 2"
-			}
-		],
-		"status_code": 200,
-		"headers": {
-			"Link": "<http://example.com/api/v1/users/self/groups?page=2&per_page=2>; rel=\"next\""
-		}
-	},
-	"list_groups2": {
-		"method": "GET",
-		"endpoint": "users/self/groups?page=2&per_page=2",
-		"data": [
-			{
-				"id": 3,
-				"name": "Group 3"
-			},
-			{
-				"id": 4,
-				"name": "Group 4"
-			}
-		],
-		"status_code": 200
-	},
 	"merge": {
 		"method": "PUT",
 		"endpoint": "users/1/merge_into/2",

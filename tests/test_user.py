@@ -7,13 +7,11 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment
 from canvasapi.avatar import Avatar
-from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.course import Course
 from canvasapi.file import File
 from canvasapi.folder import Folder
-from canvasapi.group import Group
 from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
 from canvasapi.user import User
@@ -214,16 +212,6 @@ class TestUser(unittest.TestCase):
         finally:
             cleanup_file(filename)
 
-    # list_groups()
-    def test_list_groups(self, m):
-        register_uris({'user': ['list_groups', 'list_groups2']}, m)
-
-        groups = self.user.list_groups()
-        group_list = [group for group in groups]
-
-        self.assertEqual(len(group_list), 4)
-        self.assertIsInstance(group_list[0], Group)
-
     # list_calendar_events_for_user()
     def test_list_calendar_events_for_user(self, m):
         register_uris({'user': ['list_calendar_events_for_user']}, m)
@@ -241,39 +229,6 @@ class TestUser(unittest.TestCase):
         channel_list = [channel for channel in comm_channels]
         self.assertEqual(len(channel_list), 4)
         self.assertIsInstance(channel_list[0], CommunicationChannel)
-
-    # list_bookmarks()
-    def test_list_bookmarks(self, m):
-        register_uris({'bookmark': ['list_bookmarks']}, m)
-
-        bookmarks = self.user.list_bookmarks()
-        bookmark_list = [bookmark for bookmark in bookmarks]
-        self.assertEqual(len(bookmark_list), 2)
-        self.assertIsInstance(bookmark_list[0], Bookmark)
-
-    # get_bookmark()
-    def test_get_bookmark(self, m):
-        register_uris({'bookmark': ['get_bookmark']}, m)
-
-        bookmark_by_id = self.user.get_bookmark(45)
-        self.assertIsInstance(bookmark_by_id, Bookmark)
-        self.assertEqual(bookmark_by_id.name, "Test Bookmark 3")
-        bookmark_by_obj = self.user.get_bookmark(bookmark_by_id)
-        self.assertIsInstance(bookmark_by_obj, Bookmark)
-        self.assertEqual(bookmark_by_obj.name, "Test Bookmark 3")
-
-    # create_bookmark()
-    def test_create_bookmark(self, m):
-        register_uris({'bookmark': ['create_bookmark']}, m)
-
-        evnt = self.user.create_bookmark(
-            name="Test Bookmark",
-            url="https://www.google.com"
-        )
-
-        self.assertIsInstance(evnt, Bookmark)
-        self.assertEqual(evnt.name, "Test Bookmark")
-        self.assertEqual(evnt.url, "https://www.google.com")
 
     # list_files()
     def test_user_files(self, m):

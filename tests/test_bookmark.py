@@ -18,10 +18,10 @@ class TestBookmark(unittest.TestCase):
         with requests_mock.Mocker() as m:
             register_uris({
                 'bookmark': ['get_bookmark'],
-                'user': ['get_by_id']
+                'current_user': ['get_by_id']
             }, m)
 
-            self.user = self.canvas.get_user(1)
+            self.user = self.canvas.get_current_user()
             self.bookmark = self.user.get_bookmark(45)
 
     # delete()
