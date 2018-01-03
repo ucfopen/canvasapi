@@ -7,13 +7,11 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment
 from canvasapi.avatar import Avatar
-from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.course import Course
 from canvasapi.file import File
 from canvasapi.folder import Folder
-from canvasapi.group import Group
 from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
 from canvasapi.user import User
@@ -213,6 +211,15 @@ class TestUser(unittest.TestCase):
             self.assertIn('url', response[1])
         finally:
             cleanup_file(filename)
+
+    # list_calendar_events_for_user()
+    def test_list_calendar_events_for_user(self, m):
+        register_uris({'user': ['list_calendar_events_for_user']}, m)
+
+        cal_events = self.user.list_calendar_events_for_user()
+        cal_event_list = [cal_event for cal_event in cal_events]
+        self.assertEqual(len(cal_event_list), 2)
+        self.assertIsInstance(cal_event_list[0], CalendarEvent)
 
     # list_communication_channels()
     def test_list_communication_channels(self, m):

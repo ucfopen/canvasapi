@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.bookmark import Bookmark
-from canvasapi.calendar_event import CalendarEvent
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.user import User
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -40,24 +39,6 @@ class CurrentUser(User):
             self._requester,
             'GET',
             'users/self/groups',
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
-    def list_calendar_events_for_user(self, **kwargs):
-        """
-        List calendar events that the current user can view or manage.
-
-        :calls: `GET /api/v1/users/:user_id/calendar_events \
-        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.user_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.calendar_event.CalendarEvent`
-        """
-        return PaginatedList(
-            CalendarEvent,
-            self._requester,
-            'GET',
-            'users/{}/calendar_events'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 

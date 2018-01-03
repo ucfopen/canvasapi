@@ -346,6 +346,23 @@
 		],
 		"status_code": 200
 	},
+	"list_calendar_events_for_user": {
+		"method": "GET",
+		"endpoint": "users/1/calendar_events",
+		"data": [
+			{
+				"id": 123,
+				"context_code": "course_321",
+				"title": "Test Event 1"
+			},
+			{
+				"id": 456,
+				"context_code": "course_654",
+				"title": "Test Event 2"
+			}
+		],
+		"status_code": 200
+	},
 	"list_comm_channels": {
 		"method": "GET",
 		"endpoint": "users/1/communication_channels",
