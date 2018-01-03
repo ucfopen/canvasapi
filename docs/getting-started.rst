@@ -19,7 +19,7 @@ Before using CanvasAPI, you'll need to instantiate a new Canvas object:
     from canvasapi import Canvas
 
     # Canvas API URL
-    API_URL = "https://example.com/api/v1/"
+    API_URL = "https://example.com"
     # Canvas API key
     API_KEY = "p@$$w0rd"
 

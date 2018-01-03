@@ -24,6 +24,7 @@ Class Reference
     progress-ref
     quiz-ref
     quiz-group-ref
+    rubric-ref
     section-ref
     upload-ref
     user-ref
