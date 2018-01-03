@@ -95,7 +95,7 @@ class TestCourse(unittest.TestCase):
     def test_get_user_id_type(self, m):
         register_uris({'course': ['get_user_id_type']}, m)
 
-        user = self.course.get_user("SISLOGIN", "sis_login_id")
+        user = self.course.get_user("LOGINID", "login_id")
 
         self.assertIsInstance(user, User)
         self.assertTrue(hasattr(user, 'name'))

@@ -67,8 +67,8 @@ User objects
     # Retrieve a list of courses the user is enrolled in
     >>> courses = user.get_courses()
 
-    # Grab a different user by their SIS ID
-    >>> sis_user = canvas.get_user('some_user', 'sis_login_id')
+    # Grab a different user by their login ID
+    >>> login_id_user = canvas.get_user('some_user', 'login_id')
 
 Paginated Lists
 ~~~~~~~~~~~~~~~
