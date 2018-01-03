@@ -45,7 +45,7 @@ The first thing to do is instantiate a new `Canvas` object by providing your Can
 from canvasapi import Canvas
 
 # Canvas API URL
-API_URL = "https://example.com/api/v1/"
+API_URL = "https://example.com"
 # Canvas API key
 API_KEY = "p@$$w0rd"
 

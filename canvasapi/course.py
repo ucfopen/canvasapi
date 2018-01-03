@@ -1750,8 +1750,8 @@ class Course(CanvasObject):
         """
         Get a single grading standard from the course.
 
-        :calls `/api/v1/courses/:course_id/grading_standards/:grading_standard_id \
-        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_show>`
+        :calls: `GET /api/v1/courses/:course_id/grading_standards/:grading_standard_id \
+        <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.context_show>`_
 
         :param grading_standard_id: The grading standard id
         :type grading_standard_id: int
