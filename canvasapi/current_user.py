@@ -70,7 +70,7 @@ class CurrentUser(User):
         :type name: `str`
         :param url: The url of the bookmark.
         :type url: `str`
-        :rtype: :class:`canvasapi.bookmarks.Bookmark`
+        :rtype: :class:`canvasapi.bookmark.Bookmark`
         """
         from canvasapi.bookmark import Bookmark
 
