@@ -4,6 +4,7 @@ import warnings
 
 from canvasapi.account import Account
 from canvasapi.course import Course
+from canvasapi.current_user import CurrentUser
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.folder import Folder
@@ -191,6 +192,9 @@ class Canvas(object):
             uri
         )
         return User(self.__requester, response.json())
+
+    def get_current_user(self):
+        return CurrentUser(self.__requester)
 
     def get_courses(self, **kwargs):
         """
