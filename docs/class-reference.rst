@@ -13,6 +13,7 @@ Class Reference
     calendar-event-ref
     conversation-ref
     course-ref
+    current-user-ref
     discussion-topic-ref
     enrollment-term-ref
     external-tool-ref
