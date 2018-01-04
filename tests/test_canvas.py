@@ -331,14 +331,18 @@ class TestCanvas(unittest.TestCase):
     def test_create_conversation(self, m):
         register_uris({'conversation': ['create_conversation']}, m)
 
-        recipients = ['1', '2']
-        body = 'Test Conversation Body'
+        recipients = ['2']
+        body = 'Hello, World!'
 
-        conversations = self.canvas.create_conversation(recipients=recipients, body=body)
-        conversation_list = [conversation for conversation in conversations]
-
-        self.assertIsInstance(conversation_list[0], Conversation)
-        self.assertEqual(len(conversation_list), 2)
+        conversations = self.canvas.create_conversation(
+            recipients=recipients,
+            body=body
+        )
+        self.assertIsInstance(conversations, list)
+        self.assertEqual(len(conversations), 1)
+        self.assertIsInstance(conversations[0], Conversation)
+        self.assertTrue(hasattr(conversations[0], 'last_message'))
+        self.assertEqual(conversations[0].last_message, body)
 
     # get_conversation()
     def test_get_conversation(self, m):
