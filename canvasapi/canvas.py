@@ -472,20 +472,19 @@ class Canvas(object):
         :type recipients: `list` of `str`
         :param body: The body of the message being added.
         :type body: `str`
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.conversation.Conversation`
+        :rtype: list of :class:`canvasapi.conversation.Conversation`
         """
         from canvasapi.conversation import Conversation
 
-        return PaginatedList(
-            Conversation,
-            self.__requester,
+        kwargs['recipients'] = recipients
+        kwargs['body'] = body
+
+        response = self.__requester.request(
             'POST',
             'conversations',
-            recipients=recipients,
-            body=body,
             _kwargs=combine_kwargs(**kwargs)
         )
+        return [Conversation(self.__requester, convo) for convo in response.json()]
 
     def get_conversation(self, conversation, **kwargs):
         """
