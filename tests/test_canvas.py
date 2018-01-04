@@ -344,6 +344,27 @@ class TestCanvas(unittest.TestCase):
         self.assertTrue(hasattr(conversations[0], 'last_message'))
         self.assertEqual(conversations[0].last_message, body)
 
+    def test_create_conversation_multiple_people(self, m):
+        register_uris({'conversation': ['create_conversation_multiple']}, m)
+
+        recipients = ['2', '3']
+        body = 'Hey guys!'
+
+        conversations = self.canvas.create_conversation(
+            recipients=recipients,
+            body=body
+        )
+        self.assertIsInstance(conversations, list)
+        self.assertEqual(len(conversations), 2)
+
+        self.assertIsInstance(conversations[0], Conversation)
+        self.assertTrue(hasattr(conversations[0], 'last_message'))
+        self.assertEqual(conversations[0].last_message, body)
+
+        self.assertIsInstance(conversations[1], Conversation)
+        self.assertTrue(hasattr(conversations[1], 'last_message'))
+        self.assertEqual(conversations[1].last_message, body)
+
     # get_conversation()
     def test_get_conversation(self, m):
         register_uris({'conversation': ['get_by_id']}, m)
