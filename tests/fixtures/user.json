@@ -226,6 +226,14 @@
 			"name": "John Doe"
 		}
 	},
+	"get_by_id_self": {
+		"method": "GET",
+		"endpoint": "users/self",
+		"data": {
+			"id": 1,
+			"name": "John Doe"
+		}
+	},
 	"get_file": {
 		"method": "GET",
 		"endpoint": "users/1/files/1",
@@ -244,6 +252,18 @@
             "files_count": 10,
             "folders_count": 2,
             "name": "Folder 1",
+            "full_name": "Folder 1"
+        },
+        "status_code": 200
+    },
+	"get_folder_2": {
+        "method": "GET",
+        "endpoint": "users/1/folders/2",
+        "data": {
+            "id": 2,
+            "files_count": 10,
+            "folders_count": 2,
+            "name": "Folder 2",
             "full_name": "Folder 1"
         },
         "status_code": 200
@@ -446,39 +466,6 @@
         ],
         "status_code": 200
     },
-	"list_groups": {
-		"method": "GET",
-		"endpoint": "users/self/groups",
-		"data": [
-			{
-				"id": 1,
-				"name": "Group 1"
-			},
-			{
-				"id": 2,
-				"name": "Group 2"
-			}
-		],
-		"status_code": 200,
-		"headers": {
-			"Link": "<http://example.com/api/v1/users/self/groups?page=2&per_page=2>; rel=\"next\""
-		}
-	},
-	"list_groups2": {
-		"method": "GET",
-		"endpoint": "users/self/groups?page=2&per_page=2",
-		"data": [
-			{
-				"id": 3,
-				"name": "Group 3"
-			},
-			{
-				"id": 4,
-				"name": "Group 4"
-			}
-		],
-		"status_code": 200
-	},
 	"merge": {
 		"method": "PUT",
 		"endpoint": "users/1/merge_into/2",
@@ -671,7 +658,7 @@
 		"endpoint": "users/1/logins/?page=2&per_page=2",
 		"data": [
 			{
-				"account_id": 2,
+				"account_id": 1,
 				"id": 3,
 				"sis_user_id": null,
 				"unique_id": "belieber@example.com",

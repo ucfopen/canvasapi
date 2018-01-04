@@ -129,6 +129,17 @@
 		},
 		"status_code": 200
 	},
+	"get_assignment_by_id_2": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "courses/1",
@@ -280,6 +291,51 @@
 			}
 		]
 	},
+	"get_rubric_single": {
+		"method": "GET",
+		"endpoint": "courses/1/rubrics/1",
+		"data": {
+			"id": 1,
+			"title": "Course Rubric 1",
+			"context_id": 1,
+			"context_type": "Course",
+			"points_possible": 10.0,
+			"reusable": false,
+			"read_only": true,
+			"free_form_critereon_comments": true,
+			"hide_score_total": true
+		},
+		"status_code": 200
+	},
+	"get_rubric_multiple": {
+		"method": "GET",
+		"endpoint": "courses/1/rubrics",
+		"data": [
+			{
+				"id": 1,
+				"title": "Course Rubric 1",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			},
+			{
+				"id": 2,
+				"title": "Course Rubric 2",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			}
+		],
+		"status_code": 200
+	},
 	"get_section":{
 		"method": "GET",
 		"endpoint": "courses/1/sections/1",
@@ -301,11 +357,11 @@
 	},
 	"get_user_id_type": {
 		"method": "GET",
-		"endpoint": "courses/1/users/sis_login_id:SISLOGIN",
+		"endpoint": "courses/1/users/login_id:LOGINID",
 		"data": {
 			"id": 123456,
 			"name": "Abby Smith",
-			"sis_login_id": "SISLOGIN"
+			"login_id": "LOGINID"
 		},
 		"status_code": 200
 	},
@@ -407,12 +463,14 @@
 			{
 				"id": 1,
 				"size": 2939,
-				"display_name": "File1.txt"
+				"display_name": "File1.txt",
+				"url": "http://example.com/file_download"
 			},
 			{
 				"id": 2,
 				"size": 18380,
-				"display_name": "File_2.png"
+				"display_name": "File_2.png",
+				"url": "http://example.com/file_download2"
 			}
 		],
 		"status_code": 200,
@@ -427,12 +485,14 @@
 			{
 				"id": 3,
 				"display_name": "File 3.jpg",
-				"size": 1298
+				"size": 1298,
+				"url": "http://example.com/file_download3"
 			},
 			{
 				"id": 4,
 				"display_name": "File 4.docx",
-				"size": 88920
+				"size": 88920,
+				"url": "http://example.com/file_download4"
 			}
 		],
 		"status_code": 200
@@ -1210,6 +1270,18 @@
 		},
 		"status_code": 200
 	},
+	"submit_assignment_2": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/5/submissions",
+		"data": {
+			"id": 1,
+			"assignment_id": 1,
+			"user_id": 1,
+			"html_url": "http://example.com/courses/1/assignments/5/submissions/1",
+			"submission_type": "online_upload"
+		},
+		"status_code": 200
+	},
 	"list_submissions": {
 		"method": "GET",
 		"endpoint": "courses/1/assignments/1/submissions",
@@ -1226,6 +1298,27 @@
 				"assignments_id": 1,
 				"user_id": 2,
 				"html_url": "http://example.com/courses/1/assignments/1/submissions/2",
+				"submission_type": "online_upload"
+			}
+		],
+		"status_code": 200
+	},
+	"list_submissions_2": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/5/submissions",
+		"data": [
+			{
+				"id": 1,
+				"assignments_id": 1,
+				"user_id": 1,
+				"html_url": "http://example.com/courses/1/assignments/5/submissions/1",
+				"submission_type": "online_upload"
+			},
+			{
+				"id": 2,
+				"assignments_id": 1,
+				"user_id": 2,
+				"html_url": "http://example.com/courses/1/assignments/5/submissions/2",
 				"submission_type": "online_upload"
 			}
 		],
@@ -1256,10 +1349,22 @@
 		"method": "GET",
 		"endpoint": "courses/1/assignments/1/submissions/1",
 		"data": {
+			"id": 1,
+			"assignments_id": 1,
+			"user_id": 1,
+			"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+			"submission_type": "online_upload"
+		},
+		"status_code": 200
+	},
+	"get_submission_2": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/5/submissions/1",
+		"data": {
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"html_url": "http://example.com/courses/1/assignments/5/submissions/1",
 				"submission_type": "online_upload"
 		},
 		"status_code": 200
@@ -1334,6 +1439,66 @@
 				}
 			}
 		],
+		"status_code": 200
+	},
+	"add_grading_standards": {
+		"method": "POST",
+		"endpoint": "courses/1/grading_standards",
+		"data": {
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Course",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
+		"status_code": 200
+	},
+	"get_grading_standards": {
+		"method": "GET",
+		"endpoint": "courses/1/grading_standards",
+		"data": [
+			{
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Course",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
+		  {
+			"title": "Grading Standard 2",
+			"id": 2,
+			"context_id": 1,
+			"context_type": "Course",
+			"grading_scheme": [
+			  {"name": "D", "value": 0.6},
+			  {"name": "F", "value": 0.5}
+			]
+		  }
+		],
+		"status_code": 200
+	},
+	"get_single_grading_standard": {
+		"method": "GET",
+		"endpoint": "courses/1/grading_standards/1",
+		"data": {
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Course",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
 		"status_code": 200
 	}
 }

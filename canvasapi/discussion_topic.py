@@ -4,7 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -59,7 +59,7 @@ class DiscussionTopic(CanvasObject):
         elif self._parent_type == 'course':
             return Course(self._requester, response.json())
 
-    def delete(self, topic_id):
+    def delete(self):
         """
         Deletes the discussion topic. This will also delete the assignment.
 
@@ -69,8 +69,6 @@ class DiscussionTopic(CanvasObject):
             or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.destroy>`_
 
-        :param topic_id: ID of a topic.
-        :type topic_id: int
         :returns: True if the discussion topic was deleted, False otherwise.
         :rtype: bool
         """
@@ -117,7 +115,7 @@ class DiscussionTopic(CanvasObject):
             or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
         response = self._requester.request(
             'POST',
@@ -170,17 +168,21 @@ class DiscussionTopic(CanvasObject):
         of ids. Entries will be returned in id order, smallest id first.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
 
             or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entry_list \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
 
-        :param ids: A list of entry ids to retrieve.
-        :type ids: list or tuple of int
+        :param ids: A list of entry objects or IDs to retrieve.
+        :type ids: :class:`canvasapi.discussion_topic.DiscussionEntry`, or list or tuple of int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
-        kwargs.update(ids=ids)
+
+        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry, )) for item in ids]
+
+        kwargs.update(ids=entry_ids)
         return PaginatedList(
             DiscussionEntry,
             self._requester,

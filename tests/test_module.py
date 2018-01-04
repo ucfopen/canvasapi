@@ -71,11 +71,17 @@ class TestModule(unittest.TestCase):
     def test_get_module_item(self, m):
         register_uris({'module': ['get_module_item_by_id']}, m)
 
-        module_item = self.module.get_module_item(1)
+        module_item_by_id = self.module.get_module_item(1)
 
-        self.assertIsInstance(module_item, ModuleItem)
-        self.assertTrue(hasattr(module_item, 'course_id'))
-        self.assertEqual(module_item.course_id, self.course.id)
+        self.assertIsInstance(module_item_by_id, ModuleItem)
+        self.assertTrue(hasattr(module_item_by_id, 'course_id'))
+        self.assertEqual(module_item_by_id.course_id, self.course.id)
+
+        module_item_by_obj = self.module.get_module_item(module_item_by_id)
+
+        self.assertIsInstance(module_item_by_obj, ModuleItem)
+        self.assertTrue(hasattr(module_item_by_obj, 'course_id'))
+        self.assertEqual(module_item_by_obj.course_id, self.course.id)
 
     # create_module_item()
     def test_create_module_item(self, m):

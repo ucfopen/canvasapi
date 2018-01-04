@@ -1,6 +1,29 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from six import text_type
+from collections import Iterable
+from six import binary_type, string_types, text_type
+
+
+def is_multivalued(value):
+    """
+    Determine whether the given value should be treated as a sequence
+    of multiple values when used as a request parameter.
+
+    In general anything that is iterable is multivalued.  For example,
+    `list` and `tuple` instances are multivalued.  Generators are
+    multivalued, as are the iterable objects returned by `zip`,
+    `itertools.chain`, etc.  However, a simple `int` is single-valued.
+    `str` and `bytes` are special cases: although these are iterable,
+    we treat each as a single value rather than as a sequence of
+    isolated characters or bytes.
+    """
+
+    # special cases: iterable, but not multivalued
+    if isinstance(value, (string_types, binary_type)):
+        return False
+
+    # general rule: multivalued if iterable
+    return isinstance(value, Iterable)
 
 
 def combine_kwargs(**kwargs):
@@ -26,7 +49,7 @@ def combine_kwargs(**kwargs):
             for k, v in arg.items():
                 for tup in flatten_kwarg(k, v):
                     combined_kwargs.append(('{}{}'.format(kw, tup[0]), tup[1]))
-        elif isinstance(arg, (list, tuple)):
+        elif is_multivalued(arg):
             for i in arg:
                 for tup in flatten_kwarg('', i):
                     combined_kwargs.append(('{}{}'.format(kw, tup[0]), tup[1]))
@@ -62,7 +85,7 @@ def flatten_kwarg(key, obj):
                 new_list.append(('[{}]{}'.format(key, tup[0]), tup[1]))
         return new_list
 
-    elif isinstance(obj, (list, tuple)):
+    elif is_multivalued(obj):
         # Add empty brackets (i.e. "[]")
         new_list = []
         for i in obj:
@@ -97,5 +120,21 @@ def obj_or_id(parameter, param_name, object_types):
                     break
 
         obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
-        message = 'Parameter %s must be of type %s or int.' % (param_name, obj_type_list)
+        message = 'Parameter {} must be of type {} or int.'.format(param_name, obj_type_list)
         raise TypeError(message)
+
+
+def get_institution_url(base_url):
+    """
+    Trim '/api/v1' from a given root URL.
+
+    :param base_url: The base URL of the API.
+    :type base_url: str
+    :rtype: str
+    """
+    index = base_url.find('/api/v1')
+
+    if index != -1:
+        return base_url[0:index]
+
+    return base_url

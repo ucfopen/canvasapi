@@ -1,5 +1,41 @@
 # Change Log
 
+## [0.8.0] - 2018-01-04
+
+### New Endpoint Coverage
+
+- Account
+    - Delete a sub account
+- Grading Standards (Thanks, [@JonGuilbe](https://github.com/JonGuilbe))
+- Notification Preferences (Thanks, [@a-goetz](https://github.com/a-goetz))
+    - Update a preference
+    - Update preferences by category
+    - Update multiple preferences
+- Outcomes (Thanks, [@a-goetz](https://github.com/a-goetz))
+- Quiz Question Groups (Thanks, [@JonGuilbe](https://github.com/JonGuilbe))
+- Rubric (Thanks, [@sigurdurb](https://github.com/sigurdurb))
+
+### General
+
+- Added support for other iterables as parameter values. (Thanks, [@liblit](https://github.com/liblit))
+- For many endpoints that accept an "object id", either a CanvasAPI Object or integer ID can now be passed. (Thanks, [@a-goetz](https://github.com/a-goetz))
+- Added a requester cache that rememebers the last 5 requests to Canvas. It can be accessed as the attribute `_cache` of the `requester object`. (e.g. `course._requester._cache`)
+- Files can now be downloaded directly from the `File` object in one of two ways: (Thanks, [@DanBrink91](https://github.com/DanBrink91))
+    1. `get_contents` will directly return the contents of the file. (e.g. `file.get_contents()`)
+    2. `download` will download the file and save it to the provided path. (e.g. `file.download('example.txt')`)
+- Moved several methods exclusive to the API Key owner's user from the `User` class to a new class called `CurrentUser`. There is a new method in the `Canvas` class called `get_current_user` to access this object. (e.g. `canvas.get_current_user()`) (Thanks, [@DanBrink91](https://github.com/DanBrink91))
+
+### Bugfixes
+
+- Fixed a bug where creating conversations wouldn't work until the user iterated over the response.
+- Lots of formatting fixes and spelling corrections.
+
+### Deprecation Warning
+
+Including `/api/v1/` at the end of the API URL passed to a new `Canvas` object is now deprecated. Users should now only pass the root URL into the `Canvas` object (e.g. `"https://example.com/api/v1/"` should now be `"https://example.com"`).
+
+For now, users including `/api/v1/` will see a `DeprecationWarning`, but things will otherwise operate normally. The ability to continue using `/api/v1/` will be removed in a future release.
+
 ## [0.7.0] - 2017-10-04
 
 Thanks to all the contributors who helped with this release: [@stephenwoosley](https://github.com/stephenwoosley), [@jackrsteiner](https://github.com/jackrsteiner), and [@allygator](https://github.com/allygator). You guys are awesome!
@@ -147,6 +183,7 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.8.0]: https://github.com/ucfopen/canvasapi/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/ucfopen/canvasapi/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/ucfopen/canvasapi/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/ucfopen/canvasapi/compare/v0.5.0...v0.5.1

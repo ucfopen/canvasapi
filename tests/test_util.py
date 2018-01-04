@@ -6,7 +6,12 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.course import CourseNickname
 from canvasapi.user import User
-from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.util import (
+    combine_kwargs, get_institution_url, is_multivalued, obj_or_id
+)
+from itertools import chain
+from six import integer_types, iterkeys, itervalues, iteritems
+from six.moves import zip
 from tests import settings
 from tests.util import register_uris
 
@@ -16,6 +21,69 @@ class TestUtil(unittest.TestCase):
 
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+    # is_multivalued()
+    def test_is_multivalued_bool(self, m):
+        self.assertFalse(is_multivalued(False))
+
+    def test_is_multivalued_integer_types(self, m):
+        for type in integer_types:
+            self.assertFalse(is_multivalued(type(1)))
+
+    def test_is_multivalued_str(self, m):
+        self.assertFalse(is_multivalued('string'))
+
+    def test_is_multivalued_unicode(self, m):
+        self.assertFalse(is_multivalued(u'unicode'))
+
+    def test_is_multivalued_bytes(self, m):
+        self.assertFalse(is_multivalued(b'bytes'))
+
+    def test_is_multivalued_list(self, m):
+        self.assertTrue(is_multivalued(['item']))
+
+    def test_is_multivalued_list_iter(self, m):
+        self.assertTrue(is_multivalued(iter(['item'])))
+
+    def test_is_multivalued_tuple(self, m):
+        self.assertTrue(is_multivalued(('item',)))
+
+    def test_is_multivalued_tuple_iter(self, m):
+        self.assertTrue(is_multivalued(iter(('item',))))
+
+    def test_is_multivalued_set(self, m):
+        self.assertTrue(is_multivalued({'element'}))
+
+    def test_is_multivalued_set_iter(self, m):
+        self.assertTrue(is_multivalued(iter({'element'})))
+
+    def test_is_multivalued_dict(self, m):
+        self.assertTrue(is_multivalued({'key': 'value'}))
+
+    def test_is_multivalued_dict_iter(self, m):
+        self.assertTrue(is_multivalued(iter({'key': 'value'})))
+
+    def test_is_multivalued_dict_keys(self, m):
+        self.assertTrue(is_multivalued(iterkeys({'key': 'value'})))
+
+    def test_is_multivalued_dict_values(self, m):
+        self.assertTrue(is_multivalued(itervalues({'key': 'value'})))
+
+    def test_is_multivalued_dict_items(self, m):
+        self.assertTrue(is_multivalued(iteritems({'key': 'value'})))
+
+    def test_is_multivalued_generator_expr(self, m):
+        self.assertTrue(is_multivalued(item for item in ('item',)))
+
+    def test_is_multivalued_generator_call(self, m):
+        def yielder(): yield 'item'
+        self.assertTrue(is_multivalued(yielder()))
+
+    def test_is_multivalued_chain(self, m):
+        self.assertTrue(is_multivalued(chain((1,), (2,))))
+
+    def test_is_multivalued_zip(self, m):
+        self.assertTrue(is_multivalued(zip((1,), (2,))))
 
     # combine_kwargs()
     def test_combine_kwargs_empty(self, m):
@@ -49,6 +117,35 @@ class TestUtil(unittest.TestCase):
 
     def test_combine_kwargs_single_list_multiple_items(self, m):
         result = combine_kwargs(foo=['bar1', 'bar2', 'bar3', 'bar4'])
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 4)
+
+        self.assertIn(('foo[]', 'bar1'), result)
+        self.assertIn(('foo[]', 'bar2'), result)
+        self.assertIn(('foo[]', 'bar3'), result)
+        self.assertIn(('foo[]', 'bar4'), result)
+
+        # Ensure kwargs are in correct order
+        self.assertTrue(
+            result.index(('foo[]', 'bar1'))
+            < result.index(('foo[]', 'bar2'))
+            < result.index(('foo[]', 'bar3'))
+            < result.index(('foo[]', 'bar4'))
+        )
+
+    def test_combine_kwargs_single_generator_empty(self, m):
+        result = combine_kwargs(var=(value for value in ()))
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 0)
+
+    def test_combine_kwargs_single_generator_single_item(self, m):
+        result = combine_kwargs(var=(value for value in ('test',)))
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 1)
+        self.assertIn(('var[]', 'test'), result)
+
+    def test_combine_kwargs_single_generator_multiple_items(self, m):
+        result = combine_kwargs(foo=(value for value in ('bar1', 'bar2', 'bar3', 'bar4')))
         self.assertIsInstance(result, list)
         self.assertEqual(len(result), 4)
 
@@ -207,10 +304,11 @@ class TestUtil(unittest.TestCase):
                 ['1a', '1b'],
                 ['2a', '2b'],
                 ['3a', '3b']
-            ]
+            ],
+            generator=(v for v in ('g1', 'g2', 'g3')),
         )
         self.assertIsInstance(result, list)
-        self.assertEqual(len(result), 34)
+        self.assertEqual(len(result), 37)
 
         # Check that all keys were generated correctly
         self.assertIn(('foo', 'bar'), result)
@@ -247,6 +345,9 @@ class TestUtil(unittest.TestCase):
         self.assertIn(('nest_list[][]', '2b'), result)
         self.assertIn(('nest_list[][]', '3a'), result)
         self.assertIn(('nest_list[][]', '3b'), result)
+        self.assertIn(('generator[]', 'g1'), result)
+        self.assertIn(('generator[]', 'g2'), result)
+        self.assertIn(('generator[]', 'g3'), result)
 
         # Ensure list kwargs are in correct order
         self.assertTrue(
@@ -268,6 +369,11 @@ class TestUtil(unittest.TestCase):
             < result.index(('nest_list[][]', '2b'))
             < result.index(('nest_list[][]', '3a'))
             < result.index(('nest_list[][]', '3b'))
+        )
+        self.assertTrue(
+            result.index(('generator[]', 'g1'))
+            < result.index(('generator[]', 'g2'))
+            < result.index(('generator[]', 'g3'))
         )
 
     # obj_or_id()
@@ -304,3 +410,8 @@ class TestUtil(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             obj_or_id(nick, 'nickname_id', (CourseNickname,))
+
+    # get_institution_url()
+    def test_get_institution_url(self, m):
+        base_url = 'https://my.canvas.edu/api/v1'
+        self.assertEqual(get_institution_url(base_url), 'https://my.canvas.edu')

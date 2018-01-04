@@ -2,7 +2,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from six import python_2_unicode_compatible
 
-from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
@@ -29,7 +28,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/profile' % (self.id)
+            'users/{}/profile'.format(self.id)
         )
         return response.json()
 
@@ -49,7 +48,7 @@ class User(CanvasObject):
             PageView,
             self._requester,
             'GET',
-            'users/%s/page_views' % (self.id),
+            'users/{}/page_views'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -69,7 +68,7 @@ class User(CanvasObject):
             Course,
             self._requester,
             'GET',
-            'users/%s/courses' % (self.id),
+            'users/{}/courses'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -90,7 +89,7 @@ class User(CanvasObject):
             Assignment,
             self._requester,
             'GET',
-            'users/%s/missing_submissions' % (self.id)
+            'users/{}/missing_submissions'.format(self.id)
         )
 
     def update_settings(self, **kwargs):
@@ -104,7 +103,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'users/%s/settings' % (self.id),
+            'users/{}/settings'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
@@ -124,7 +123,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/colors/%s' % (self.id, asset_string)
+            'users/{}/colors/{}'.format(self.id, asset_string)
         )
         return response.json()
 
@@ -139,7 +138,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            'users/%s/colors' % (self.id)
+            'users/{}/colors'.format(self.id)
         )
         return response.json()
 
@@ -163,7 +162,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'users/%s/colors/%s' % (self.id, asset_string),
+            'users/{}/colors/{}'.format(self.id, asset_string),
             hexcode=hexcode
         )
         return response.json()
@@ -179,7 +178,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'users/%s' % (self.id),
+            'users/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         super(User, self).set_attributes(response.json())
@@ -192,15 +191,16 @@ class User(CanvasObject):
         :calls: `PUT /api/v1/users/:id/merge_into/:destination_user_id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.merge_into>`_
 
-        :param destination_user: The user to merge into.
-        :type destination_user: :class:`canvasapi.user.User`
+        :param destination_user: The object or ID of the user to merge into.
+        :type destination_user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.user.User`
         """
         dest_user_id = obj_or_id(destination_user, 'destination_user', (User, ))
 
         response = self._requester.request(
             'PUT',
-            'users/%s/merge_into/%s' % (self.id, dest_user_id),
+            'users/{}/merge_into/{}'.format(self.id, dest_user_id),
         )
         super(User, self).set_attributes(response.json())
         return self
@@ -221,10 +221,10 @@ class User(CanvasObject):
             Avatar,
             self._requester,
             'GET',
-            'users/%s/avatars' % (self.id)
+            'users/{}/avatars'.format(self.id)
         )
 
-    def get_assignments(self, course_id, **kwargs):
+    def get_assignments(self, course, **kwargs):
         """
         Return the list of assignments for this user if the current
         user (the API key owner) has rights to view. See List assignments for valid arguments.
@@ -232,16 +232,22 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/courses/:course_id/assignments \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.user_index>`_
 
+        :param course: The object or ID of the course to retrieve.
+        :type course: :class:`canvasapi.course.Course` or int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.assignment.Assignment`
         """
         from canvasapi.assignment import Assignment
+        from canvasapi.course import Course
+
+        course_id = obj_or_id(course, "course", (Course,))
 
         return PaginatedList(
             Assignment,
             self._requester,
             'GET',
-            'users/%s/courses/%s/assignments' % (self.id, course_id),
+            'users/{}/courses/{}/assignments'.format(self.id, course_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -261,7 +267,7 @@ class User(CanvasObject):
             Enrollment,
             self._requester,
             'GET',
-            'users/%s/enrollments' % (self.id),
+            'users/{}/enrollments'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -276,8 +282,6 @@ class User(CanvasObject):
         :calls: `POST /api/v1/users/:user_id/files \
         <https://canvas.instructure.com/doc/api/users.html#method.users.create_file>`_
 
-        :param path: The path of the file to upload.
-        :type path: str
         :param file: The file or path of the file to upload.
         :type file: file or str
         :returns: True if the file uploaded successfully, False otherwise, \
@@ -286,29 +290,10 @@ class User(CanvasObject):
         """
         return Uploader(
             self._requester,
-            'users/%s/files' % (self.id),
+            'users/{}/files'.format(self.id),
             file,
             **kwargs
         ).start()
-
-    def list_groups(self, **kwargs):
-        """
-        Return the list of active groups for the user.
-
-        :calls: `GET /api/v1/users/self/groups \
-        <https://canvas.instructure.com/doc/api/groups.html#method.groups.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
-        """
-        from canvasapi.group import Group
-
-        return PaginatedList(
-            Group,
-            self._requester,
-            'GET',
-            'users/self/groups',
-            _kwargs=combine_kwargs(**kwargs)
-        )
 
     def list_calendar_events_for_user(self, **kwargs):
         """
@@ -324,7 +309,7 @@ class User(CanvasObject):
             CalendarEvent,
             self._requester,
             'GET',
-            'users/%s/calendar_events' % (self.id),
+            'users/{}/calendar_events'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -343,70 +328,9 @@ class User(CanvasObject):
             CommunicationChannel,
             self._requester,
             'GET',
-            'users/%s/communication_channels' % (self.id),
+            'users/{}/communication_channels'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-
-    def list_bookmarks(self, **kwargs):
-        """
-        List bookmarks that the current user can view or manage.
-
-        :calls: `GET /api/v1/users/self/bookmarks \
-        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.bookmark.Bookmark`
-        """
-        return PaginatedList(
-            Bookmark,
-            self._requester,
-            'GET',
-            'users/self/bookmarks'
-        )
-
-    def get_bookmark(self, bookmark_id):
-        """
-        Return single Bookmark by id
-
-        :calls: `GET /api/v1/users/self/bookmarks/:id \
-        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.show>`_
-
-        :param bookmark_id: The ID of the bookmark.
-        :type bookmark_id: `int`
-        :rtype: :class:`canvasapi.bookmark.Bookmark`
-        """
-        from canvasapi.bookmark import Bookmark
-
-        response = self._requester.request(
-            'GET',
-            'users/self/bookmarks/%s' % (bookmark_id)
-        )
-        return Bookmark(self._requester, response.json())
-
-    def create_bookmark(self, name, url, **kwargs):
-        """
-        Create a new Bookmark.
-
-        :calls: `POST /api/v1/users/self/bookmarks \
-        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.create>`_
-
-        :param name: The name of the bookmark.
-        :type name: `str`
-        :param url: The url of the bookmark.
-        :type name: `str`
-        :rtype: :class:`canvasapi.bookmarks.Bookmark`
-        """
-        from canvasapi.bookmark import Bookmark
-
-        response = self._requester.request(
-            'POST',
-            'users/self/bookmarks',
-            name=name,
-            url=url,
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
-        return Bookmark(self._requester, response.json())
 
     def list_files(self, **kwargs):
         """
@@ -424,22 +348,26 @@ class User(CanvasObject):
             File,
             self._requester,
             'GET',
-            'users/%s/files' % (self.id),
+            'users/{}/files'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_file(self, file_id, **kwargs):
+    def get_file(self, file, **kwargs):
         """
         Return the standard attachment json object for a file.
 
         :calls: `GET /api/v1/users/:group_id/files/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
 
-        :param file_id: The ID of the file to retrieve.
-        :type file_id: int
+        :param file: The object or ID of the file to retrieve.
+        :type file: :class:`canvasapi.file.File` or int
+
         :rtype: :class:`canvasapi.file.File`
         """
         from canvasapi.file import File
+
+        file_id = obj_or_id(file, "file", (File,))
+
         response = self._requester.request(
             'GET',
             'users/{}/files/{}'.format(self.id, file_id),
@@ -447,20 +375,25 @@ class User(CanvasObject):
         )
         return File(self._requester, response.json())
 
-    def get_folder(self, folder_id):
+    def get_folder(self, folder):
         """
         Returns the details for a user's folder
 
         :calls: `GET /api/v1/users/:user_id/folders/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.show>`_
 
-        :param folder_id: The ID of the folder to retrieve.
-        :type folder_id: int
+        :param folder: The object or ID of the folder to retrieve.
+        :type folder: :class:`canvasapi.folder.Folder` or int
+
         :rtype: :class:`canvasapi.folder.Folder`
         """
+        from canvasapi.folder import Folder
+
+        folder_id = obj_or_id(folder, "folder", (Folder,))
+
         response = self._requester.request(
             'GET',
-            'users/%s/folders/%s' % (self.id, folder_id)
+            'users/{}/folders/{}'.format(self.id, folder_id)
         )
         return Folder(self._requester, response.json())
 
@@ -479,7 +412,7 @@ class User(CanvasObject):
             Folder,
             self._requester,
             'GET',
-            'users/%s/folders' % (self.id)
+            'users/{}/folders'.format(self.id)
         )
 
     def create_folder(self, name, **kwargs):
@@ -495,7 +428,7 @@ class User(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'users/%s/folders' % self.id,
+            'users/{}/folders'.format(self.id),
             name=name,
             _kwargs=combine_kwargs(**kwargs)
         )
@@ -517,7 +450,7 @@ class User(CanvasObject):
             Login,
             self._requester,
             'GET',
-            'users/%s/logins' % (self.id),
+            'users/{}/logins'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -536,7 +469,7 @@ class User(CanvasObject):
             User,
             self._requester,
             'GET',
-            'users/%s/observees' % (self.id),
+            'users/{}/observees'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -552,7 +485,7 @@ class User(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'users/%s/observees' % (self.id),
+            'users/{}/observees'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return User(self._requester, response.json())
@@ -564,14 +497,14 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/observees/:observee_id \
         <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.show>`_
 
-        :param unique_id: The login id for the user to observe.
-        :type observee: `dict`
+        :param observee_id: The login id for the user to observe.
+        :type observee_id: int
         :rtype: :class: `canvasapi.user.User`
         """
 
         response = self._requester.request(
             'GET',
-            'users/%s/observees/%s' % (self.id, observee_id)
+            'users/{}/observees/{}'.format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 
@@ -582,14 +515,14 @@ class User(CanvasObject):
         :calls: `PUT /api/v1/users/:user_id/observees/:observee_id \
         <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.update>`_
 
-        :param unique_id: The login id for the user to observe.
-        :type observee: `dict`
+        :param observee_id: The login id for the user to observe.
+        :type observee_id: int
         :rtype: :class: `canvasapi.user.User`
         """
 
         response = self._requester.request(
             'PUT',
-            'users/%s/observees/%s' % (self.id, observee_id)
+            'users/{}/observees/{}'.format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 
@@ -600,14 +533,14 @@ class User(CanvasObject):
         :calls: `DELETE /api/v1/users/:user_id/observees/:observee_id \
         <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.destroy>`_
 
-        :param unique_id: The login id for the user to observe.
-        :type observee: `dict`
+        :param observee_id: The login id for the user to observe.
+        :type observee_id: int
         :rtype: :class: `canvasapi.user.User`
         """
 
         response = self._requester.request(
             'DELETE',
-            'users/%s/observees/%s' % (self.id, observee_id)
+            'users/{}/observees/{}'.format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 

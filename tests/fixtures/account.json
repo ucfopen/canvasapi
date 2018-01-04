@@ -83,7 +83,8 @@
 			"default_storage_quota_mb": 500,
 			"default_user_storage_quota_mb": 50,
 			"default_group_storage_quota_mb": 50,
-			"default_time_zone": "America/New_York"
+			"default_time_zone": "America/New_York",
+			"workflow_state": "active"
 		},
 		"status_code": 200
 	},
@@ -94,6 +95,22 @@
 			"id": 50,
 			"unique_id": 123456,
 			"name": "New User"
+		},
+		"status_code": 200
+	},
+	"delete_subaccount": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/sub_accounts/101",
+		"data": {
+			"id": 101,
+			"name": "New Subaccount",
+			"parent_account_id": 1,
+			"root_account_id": 1,
+			"default_storage_quota_mb": 500,
+			"default_user_storage_quota_mb": 50,
+			"default_group_storage_quota_mb": 50,
+			"default_time_zone": "America/New_York",
+			"workflow_state": "deleted"
 		},
 		"status_code": 200
 	},
@@ -472,7 +489,7 @@
 		"method": "GET",
 		"endpoint": "accounts/1/roles/2",
 		"data": {
-			"id": 1,
+			"id": 2,
 			"role": "StudentEnrollment",
 			"label": "Student"
 		},
@@ -661,7 +678,7 @@
 		"method": "DELETE",
 		"endpoint": "accounts/1/roles/2",
 		"data": {
-			"id": 1,
+			"id": 2,
 			"role": "StudentEnrollment",
 			"label": "Student"
 		},
@@ -671,7 +688,7 @@
 		"method": "POST",
 		"endpoint": "accounts/1/roles/2/activate",
 		"data": {
-			"id": 1,
+			"id": 2,
 			"role": "StudentEnrollment",
 			"label": "Student"
 		},
@@ -681,7 +698,7 @@
 		"method": "PUT",
 		"endpoint": "accounts/1/roles/2",
 		"data": {
-			"id": 1,
+			"id": 2,
 			"role": "StudentEnrollment",
 			"label": "Student"
 		},
@@ -1004,5 +1021,110 @@
 			"login_handle_name": "Username",
 			"change_password_url": "https://example.com/reset_password"
 		}
+	},
+	"add_grading_standards": {
+		"method": "POST",
+		"endpoint": "accounts/1/grading_standards",
+		"data": {
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Account",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
+		"status_code": 200
+	},
+	"get_grading_standards": {
+		"method": "GET",
+		"endpoint": "accounts/1/grading_standards",
+		"data": [
+			{
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Account",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
+		  {
+			"title": "Grading Standard 2",
+			"id": 2,
+			"context_id": 1,
+			"context_type": "Account",
+			"grading_scheme": [
+			  {"name": "D", "value": 0.6},
+			  {"name": "F", "value": 0.5}
+			]
+		  }
+		],
+		"status_code": 200
+	},
+		"get_rubric_single": {
+		"method": "GET",
+		"endpoint": "accounts/1/rubrics/1",
+		"data": {
+			"id": 1,
+			"title": "Account Rubric 1",
+			"context_id": 1,
+			"context_type": "account",
+			"points_possible": 10.0,
+			"reusable": false,
+			"read_only": true,
+			"free_form_critereon_comments": true,
+			"hide_score_total": true
+		},
+		"status_code": 200
+	},
+	"get_rubric_multiple": {
+		"method": "GET",
+		"endpoint": "accounts/1/rubrics",
+		"data": [
+			{
+				"id": 1,
+				"title": "Account Rubric 1",
+				"context_id": 1,
+				"context_type": "account",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			},
+			{
+				"id": 2,
+				"title": "Account Rubric 2",
+				"context_id": 1,
+				"context_type": "Account",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			}
+		],
+		"status_code": 200
+	},
+	"get_single_grading_standard": {
+		"method": "GET",
+		"endpoint": "accounts/1/grading_standards/1",
+		"data": {
+			"title": "Grading Standard 1",
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Account",
+			"grading_scheme": [
+			  {"name": "A", "value": 0.9},
+			  {"name": "B", "value": 0.8},
+			  {"name": "C", "value": 0.7}
+			]
+		  },
+		"status_code": 200
 	}
 }

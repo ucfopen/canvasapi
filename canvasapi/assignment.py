@@ -23,7 +23,7 @@ class Assignment(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/assignments/%s' % (self.course_id, self.id),
+            'courses/{}/assignments/{}'.format(self.course_id, self.id),
         )
         return Assignment(self._requester, response.json())
 
@@ -38,7 +38,7 @@ class Assignment(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/assignments/%s' % (self.course_id, self.id),
+            'courses/{}/assignments/{}'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -65,7 +65,7 @@ class AssignmentGroup(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/%s/assignment_groups/%s' % (self.course_id, self.id),
+            'courses/{}/assignment_groups/{}'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -85,7 +85,7 @@ class AssignmentGroup(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/%s/assignment_groups/%s' % (self.course_id, self.id),
+            'courses/{}/assignment_groups/{}'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return AssignmentGroup(self._requester, response.json())

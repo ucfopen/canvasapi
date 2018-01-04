@@ -13,6 +13,7 @@ Class Reference
     calendar-event-ref
     conversation-ref
     course-ref
+    current-user-ref
     discussion-topic-ref
     enrollment-term-ref
     external-tool-ref
@@ -22,6 +23,8 @@ Class Reference
     page-ref
     progress-ref
     quiz-ref
+    quiz-group-ref
+    rubric-ref
     section-ref
     upload-ref
     user-ref

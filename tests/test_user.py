@@ -7,13 +7,11 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment
 from canvasapi.avatar import Avatar
-from canvasapi.bookmark import Bookmark
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.course import Course
 from canvasapi.file import File
 from canvasapi.folder import Folder
-from canvasapi.group import Group
 from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
 from canvasapi.user import User
@@ -170,13 +168,22 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(avatar_list[0], Avatar)
 
     # get_assignments()
-    def test_user_assignments(self, m):
-        register_uris({'user': ['get_user_assignments', 'get_user_assignments2']}, m)
+    def test_user_get_assignments(self, m):
+        register_uris(
+            {
+                'course': ['get_by_id'],
+                'user': ['get_user_assignments', 'get_user_assignments2']
+            }, m)
 
-        assignments = self.user.get_assignments(1)
-        assignment_list = [assignment for assignment in assignments]
+        assignments_by_id = self.user.get_assignments(1)
+        assignment_list = [assignment for assignment in assignments_by_id]
+        self.assertIsInstance(assignments_by_id[0], Assignment)
+        self.assertEqual(len(assignment_list), 4)
 
-        self.assertIsInstance(assignments[0], Assignment)
+        course_obj = self.canvas.get_course(1)
+        assignments_by_obj = self.user.get_assignments(course_obj)
+        assignment_list = [assignment for assignment in assignments_by_obj]
+        self.assertIsInstance(assignments_by_obj[0], Assignment)
         self.assertEqual(len(assignment_list), 4)
 
     # list_enrollments()
@@ -193,25 +200,17 @@ class TestUser(unittest.TestCase):
     def test_upload(self, m):
         register_uris({'user': ['upload', 'upload_final']}, m)
 
-        filename = 'testfile_user_%s' % uuid.uuid4().hex
-        with open(filename, 'w+') as file:
-            response = self.user.upload(file)
+        filename = 'testfile_user_{}'.format(uuid.uuid4().hex)
 
-        self.assertTrue(response[0])
-        self.assertIsInstance(response[1], dict)
-        self.assertIn('url', response[1])
+        try:
+            with open(filename, 'w+') as file:
+                response = self.user.upload(file)
 
-        cleanup_file(filename)
-
-    # list_groups()
-    def test_list_groups(self, m):
-        register_uris({'user': ['list_groups', 'list_groups2']}, m)
-
-        groups = self.user.list_groups()
-        group_list = [group for group in groups]
-
-        self.assertEqual(len(group_list), 4)
-        self.assertIsInstance(group_list[0], Group)
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
 
     # list_calendar_events_for_user()
     def test_list_calendar_events_for_user(self, m):
@@ -231,36 +230,6 @@ class TestUser(unittest.TestCase):
         self.assertEqual(len(channel_list), 4)
         self.assertIsInstance(channel_list[0], CommunicationChannel)
 
-    # list_bookmarks()
-    def test_list_bookmarks(self, m):
-        register_uris({'bookmark': ['list_bookmarks']}, m)
-
-        bookmarks = self.user.list_bookmarks()
-        bookmark_list = [bookmark for bookmark in bookmarks]
-        self.assertEqual(len(bookmark_list), 2)
-        self.assertIsInstance(bookmark_list[0], Bookmark)
-
-    # get_bookmark()
-    def test_get_bookmark(self, m):
-        register_uris({'bookmark': ['get_bookmark']}, m)
-
-        bookmark = self.user.get_bookmark(45)
-        self.assertIsInstance(bookmark, Bookmark)
-        self.assertEqual(bookmark.name, "Test Bookmark 3")
-
-    # create_bookmark()
-    def test_create_bookmark(self, m):
-        register_uris({'bookmark': ['create_bookmark']}, m)
-
-        evnt = self.user.create_bookmark(
-            name="Test Bookmark",
-            url="https://www.google.com"
-        )
-
-        self.assertIsInstance(evnt, Bookmark)
-        self.assertEqual(evnt.name, "Test Bookmark")
-        self.assertEqual(evnt.url, "https://www.google.com")
-
     # list_files()
     def test_user_files(self, m):
         register_uris({'user': ['get_user_files', 'get_user_files2']}, m)
@@ -274,18 +243,27 @@ class TestUser(unittest.TestCase):
     def test_get_file(self, m):
         register_uris({'user': ['get_file']}, m)
 
-        file = self.user.get_file(1)
-        self.assertIsInstance(file, File)
-        self.assertEqual(file.display_name, 'User_File.docx')
-        self.assertEqual(file.size, 1024)
+        file_by_id = self.user.get_file(1)
+        self.assertIsInstance(file_by_id, File)
+        self.assertEqual(file_by_id.display_name, 'User_File.docx')
+        self.assertEqual(file_by_id.size, 1024)
+
+        file_by_obj = self.user.get_file(file_by_id)
+        self.assertIsInstance(file_by_obj, File)
+        self.assertEqual(file_by_obj.display_name, 'User_File.docx')
+        self.assertEqual(file_by_obj.size, 1024)
 
     # get_folder()
     def test_get_folder(self, m):
         register_uris({'user': ['get_folder']}, m)
 
-        folder = self.user.get_folder(1)
-        self.assertEqual(folder.name, "Folder 1")
-        self.assertIsInstance(folder, Folder)
+        folder_by_id = self.user.get_folder(1)
+        self.assertEqual(folder_by_id.name, "Folder 1")
+        self.assertIsInstance(folder_by_id, Folder)
+
+        folder_by_obj = self.user.get_folder(folder_by_id)
+        self.assertEqual(folder_by_obj.name, "Folder 1")
+        self.assertIsInstance(folder_by_obj, Folder)
 
     # list_folders()
     def test_list_folders(self, m):

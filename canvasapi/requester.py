@@ -24,6 +24,7 @@ class Requester(object):
         self.base_url = base_url
         self.access_token = access_token
         self._session = requests.Session()
+        self._cache = []
 
     def request(
             self, method, endpoint=None, headers=None, use_auth=True,
@@ -50,13 +51,13 @@ class Requester(object):
         :type _kwargs: `list`
         :rtype: str
         """
-        full_url = _url if _url else "%s%s" % (self.base_url, endpoint)
+        full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
 
         if not headers:
             headers = {}
 
         if use_auth:
-            auth_header = {'Authorization': 'Bearer %s' % (self.access_token)}
+            auth_header = {'Authorization': 'Bearer {}'.format(self.access_token)}
             headers.update(auth_header)
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
@@ -84,9 +85,15 @@ class Requester(object):
         # Call the request method
         response = req_method(full_url, headers, _kwargs)
 
+        # Add response to internal cache
+        if len(self._cache) > 4:
+            self._cache.pop()
+
+        self._cache.insert(0, response)
+
         # Raise for status codes
         if response.status_code == 400:
-            raise BadRequest(response.json())
+            raise BadRequest(response.text)
         elif response.status_code == 401:
             if 'WWW-Authenticate' in response.headers:
                 raise InvalidAccessToken(response.json())
@@ -117,7 +124,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
 
@@ -139,7 +145,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
         return self._session.delete(url, headers=headers, data=data)
@@ -150,7 +155,6 @@ class Requester(object):
 
         :param url: str
         :pararm headers: dict
-        :param params: dict
         :param data: dict
         """
         return self._session.put(url, headers=headers, data=data)

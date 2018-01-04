@@ -36,15 +36,17 @@ class TestSubmission(unittest.TestCase):
     def test_upload_comment(self, m):
         register_uris({'submission': ['upload_comment', 'upload_comment_final']}, m)
 
-        filename = 'testfile_submission_%s' % uuid.uuid4().hex
-        with open(filename, 'w+') as file:
-            response = self.submission_course.upload_comment(file)
+        filename = 'testfile_submission_{}'.format(uuid.uuid4().hex)
 
-        self.assertTrue(response[0])
-        self.assertIsInstance(response[1], dict)
-        self.assertIn('url', response[1])
+        try:
+            with open(filename, 'w+') as file:
+                response = self.submission_course.upload_comment(file)
 
-        cleanup_file(filename)
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
 
     def test_upload_comment_section(self, m):
         # Sections do not support uploading file comments
