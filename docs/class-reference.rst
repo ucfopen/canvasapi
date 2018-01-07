@@ -20,6 +20,7 @@ Class Reference
     group-ref
     login-ref
     module-ref
+    outcome-ref
     page-ref
     progress-ref
     quiz-ref
