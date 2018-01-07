@@ -111,11 +111,11 @@ class OutcomeGroup(CanvasObject):
         Update an outcome group.
 
         :calls: `PUT /api/v1/global/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
             or `PUT /api/v1/accounts/:account_id/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
             or `PUT /api/v1/courses/:course_id/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
 
         :returns: True if updated, False otherwise.
         :rtype: bool
@@ -136,11 +136,11 @@ class OutcomeGroup(CanvasObject):
         Delete an outcome group.
 
         :calls: `DELETE /api/v1/global/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.destroy`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.destroy>`_
             or `DELETE /api/v1/accounts/:account_id/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.destroy`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.destroy>`_
             or `DELETE /api/v1/courses/:course_id/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.destroy`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.destroy>`_
 
         :returns: True if successful, false if failed.
         :rtype: bool
@@ -160,11 +160,11 @@ class OutcomeGroup(CanvasObject):
         List linked outcomes.
 
         :calls: `GET /api/v1/global/outcome_groups/:id/outcomes \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes>`_
             or `GET /api/v1/accounts/:account_id/outcome_groups/:id/outcomes \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes>`_
             or `GET /api/v1/courses/:course_id/outcome_groups/:id/outcomes \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes>`_
 
         :returns: Paginated List of Outcomes linked to the group.
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -183,11 +183,11 @@ class OutcomeGroup(CanvasObject):
         Link to an existing Outcome.
 
         :calls: `PUT /api/v1/global/outcome_groups/:id/outcomes/:outcome_id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link>`_
             or `PUT /api/v1/accounts/:account_id/outcome_groups/:id/outcomes/:outcome_id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link>`_
             or `PUT /api/v1/courses/:course_id/outcome_groups/:id/outcomes/:outcome_id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link>`_
 
         :param outcome: The object or ID of the outcome.
         :type outcome: :class:`canvasapi.outcome.Outcome` or int
@@ -213,11 +213,11 @@ class OutcomeGroup(CanvasObject):
         Create a new Outcome and link it to this OutcomeGroup
 
         :calls: `POST /api/v1/global/outcome_groups/:id/outcomes \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link>`_
             or `POST /api/v1/accounts/:account_id/outcome_groups/:id/outcomes \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link>`_
             or `POST /api/v1/courses/:course_id/outcome_groups/:id/outcomes \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.link>`_
 
         :param title: The title of the new outcome.
         :type title: str
@@ -239,11 +239,11 @@ class OutcomeGroup(CanvasObject):
         Remove an Outcome from and OutcomeLink
 
         :calls: `DELETE /api/v1/global/outcome_groups/:id/outcomes/:outcome_id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.unlink`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.unlink>`_
             or `DELETE /api/v1/accounts/:account_id/outcome_groups/:id/outcomes/:outcome_id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.unlink`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.unlink>`_
             or `DELETE /api/v1/courses/:course_id/outcome_groups/:id/outcomes/:outcome_id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.unlink`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.unlink>`_
 
         :param outcome: The object or ID of the outcome.
         :type outcome: :class:`canvasapi.outcome.Outcome` or int
@@ -272,11 +272,11 @@ class OutcomeGroup(CanvasObject):
         List subgroups.
 
         :calls: `GET /api/v1/global/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
             or `GET /api/v1/accounts/:account_id/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
             or `GET /api/v1/courses/:course_id/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups`_
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
 
         :returns: Paginated List of OutcomeGroups linked to the current group.
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
