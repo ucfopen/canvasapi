@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+import json
 import os
 
 from six import string_types
@@ -87,14 +88,17 @@ class Uploader(object):
             raise ValueError('Bad API response. No upload_params.')
 
         kwargs = response.get('upload_params')
-        kwargs['file'] = file
 
-        response_json = self._requester.request(
+        response = self._requester.request(
             'POST',
             use_auth=False,
             _url=response.get('upload_url'),
-            **kwargs
-        ).json()
+            file=file,
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        # remove `while(1);` that may appear at the top of a response
+        response_json = json.loads(response.text.lstrip('while(1);'))
 
         if 'url' in response_json:
             return (True, response_json)
