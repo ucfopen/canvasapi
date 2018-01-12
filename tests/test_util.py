@@ -413,5 +413,11 @@ class TestUtil(unittest.TestCase):
 
     # get_institution_url()
     def test_get_institution_url(self, m):
-        base_url = 'https://my.canvas.edu/api/v1'
-        self.assertEqual(get_institution_url(base_url), 'https://my.canvas.edu')
+        correct_url = 'https://my.canvas.edu'
+
+        self.assertEqual(get_institution_url('https://my.canvas.edu/'), correct_url)
+        self.assertEqual(get_institution_url('https://my.canvas.edu/api/v1'), correct_url)
+        self.assertEqual(get_institution_url('https://my.canvas.edu/api/v1/'), correct_url)
+        self.assertEqual(get_institution_url('https://my.canvas.edu/test/2/'), correct_url + '/test/2')
+        self.assertEqual(get_institution_url('https://my.canvas.edu/test/2/api/v1'), correct_url + '/test/2')
+        self.assertEqual(get_institution_url('https://my.canvas.edu/test/2/api/v1/'), correct_url + '/test/2')
