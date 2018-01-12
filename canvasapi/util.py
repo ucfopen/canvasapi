@@ -126,12 +126,13 @@ def obj_or_id(parameter, param_name, object_types):
 
 def get_institution_url(base_url):
     """
-    Trim '/api/v1' from a given root URL.
+    Clean up a given base URL.
 
     :param base_url: The base URL of the API.
     :type base_url: str
     :rtype: str
     """
+    base_url = base_url.rstrip('/')
     index = base_url.find('/api/v1')
 
     if index != -1:
