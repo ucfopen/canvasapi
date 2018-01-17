@@ -187,11 +187,8 @@ class Group(CanvasObject):
         """
         List users in a group.
 
-        :calls: `POST /api/v1/groups/:group_id/users \
+        :calls: `GET /api/v1/groups/:group_id/users \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.users>`_
-
-        :param invitees: list of user ids
-        :type invitees: integer list
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.user.User`
