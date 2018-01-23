@@ -76,7 +76,8 @@ class TestUtil(unittest.TestCase):
         self.assertTrue(is_multivalued(item for item in ('item',)))
 
     def test_is_multivalued_generator_call(self, m):
-        def yielder(): yield 'item'
+        def yielder():
+            yield 'item'
         self.assertTrue(is_multivalued(yielder()))
 
     def test_is_multivalued_chain(self, m):
@@ -306,9 +307,12 @@ class TestUtil(unittest.TestCase):
                 ['3a', '3b']
             ],
             generator=(v for v in ('g1', 'g2', 'g3')),
+            dict_list={
+                'key': ['item1', 'item2']
+            },
         )
         self.assertIsInstance(result, list)
-        self.assertEqual(len(result), 37)
+        self.assertEqual(len(result), 39)
 
         # Check that all keys were generated correctly
         self.assertIn(('foo', 'bar'), result)
@@ -348,6 +352,8 @@ class TestUtil(unittest.TestCase):
         self.assertIn(('generator[]', 'g1'), result)
         self.assertIn(('generator[]', 'g2'), result)
         self.assertIn(('generator[]', 'g3'), result)
+        self.assertIn(('dict_list[key][]', 'item1'), result)
+        self.assertIn(('dict_list[key][]', 'item2'), result)
 
         # Ensure list kwargs are in correct order
         self.assertTrue(
@@ -374,6 +380,10 @@ class TestUtil(unittest.TestCase):
             result.index(('generator[]', 'g1'))
             < result.index(('generator[]', 'g2'))
             < result.index(('generator[]', 'g3'))
+        )
+        self.assertTrue(
+            result.index(('dict_list[key][]', 'item1'))
+            < result.index(('dict_list[key][]', 'item2'))
         )
 
     # obj_or_id()
