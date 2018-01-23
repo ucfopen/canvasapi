@@ -1,5 +1,17 @@
 # Change Log
 
+## [0.8.1] - 2018-01-23
+
+### General
+
+- Fixed several incorrect and missing docstrings
+
+### Bugfixes
+
+- Fixed an issue where Canvas returning `while(1);` at the beginning of a response to uploading a file prevented uploads from completing.
+- Fixed an issue where a trailing slash in the provided BASE_URL would cause `PaginatedList` objects to fail.
+- Fixed an issue where combine_kwargs was transposing empty brackets and keys when a dictionary had a list as a value.
+
 ## [0.8.0] - 2018-01-04
 
 ### New Endpoint Coverage
@@ -183,6 +195,7 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.8.1]: https://github.com/ucfopen/canvasapi/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/ucfopen/canvasapi/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/ucfopen/canvasapi/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/ucfopen/canvasapi/compare/v0.5.1...v0.6.0

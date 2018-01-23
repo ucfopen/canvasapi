@@ -90,7 +90,7 @@ def flatten_kwarg(key, obj):
         new_list = []
         for i in obj:
             for tup in flatten_kwarg(key, i):
-                new_list.append(('[]' + tup[0], tup[1]))
+                new_list.append((tup[0] + '[]', tup[1]))
         return new_list
     else:
         # Base case. Return list with tuple containing the value
@@ -126,12 +126,13 @@ def obj_or_id(parameter, param_name, object_types):
 
 def get_institution_url(base_url):
     """
-    Trim '/api/v1' from a given root URL.
+    Clean up a given base URL.
 
     :param base_url: The base URL of the API.
     :type base_url: str
     :rtype: str
     """
+    base_url = base_url.rstrip('/')
     index = base_url.find('/api/v1')
 
     if index != -1:

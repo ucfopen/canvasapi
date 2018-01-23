@@ -21,7 +21,7 @@ class Page(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/pages/:url \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update>`_
 
-        :rtype: :class:`canvasapi.course.Course`
+        :rtype: :class:`canvasapi.page.Page`
         """
         response = self._requester.request(
             'PUT',
@@ -42,7 +42,7 @@ class Page(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/pages/:url \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.destroy>`_
 
-        :rtype: :class:`canvasapi.course.Course`
+        :rtype: :class:`canvasapi.page.Page`
         """
         response = self._requester.request(
             'DELETE',

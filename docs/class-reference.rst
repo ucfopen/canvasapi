@@ -27,5 +27,6 @@ Class Reference
     quiz-group-ref
     rubric-ref
     section-ref
+    submission-ref
     upload-ref
     user-ref
