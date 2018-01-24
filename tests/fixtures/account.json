@@ -739,15 +739,6 @@
 		],
 		"status_code": 200
 	},
-	"create_user_login": {
-		"method": "POST",
-		"endpoint": "accounts/1/logins",
-		"data": {
-			"id": 123,
-			"unique_id": 112233
-		}, 
-		"status_code": 200
-	},
 	"get_department_level_participation_data_with_given_term": {
 		"method": "GET",
 		"endpoint": "accounts/1/analytics/terms/1/activity",
