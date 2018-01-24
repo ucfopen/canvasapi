@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.8.2] - 2018-01-24
+
+### Bugfixes
+
+- Fixed an issue where editing and deleting user logins would use incorrect IDs.
+
 ## [0.8.1] - 2018-01-23
 
 ### General
