@@ -23,7 +23,7 @@ class Login(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'users/{}/logins/{}'.format(self.id, self.unique_id)
+            'users/{}/logins/{}'.format(self.user_id, self.id)
         )
         return Login(self._requester, response.json())
 
@@ -38,7 +38,7 @@ class Login(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'accounts/{}/logins/{}'.format(self.id, self.unique_id),
+            'accounts/{}/logins/{}'.format(self.account_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Login(self._requester, response.json())
