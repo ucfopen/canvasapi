@@ -17,13 +17,14 @@ class TestLogin(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             register_uris({
-                'account': ['get_by_id', 'create_user_login']
+                'account': ['get_by_id'],
+                'login': ['create_user_login']
             }, m)
 
             self.account = self.canvas.get_account(1)
             self.login = self.account.create_user_login(
-                user={"id": 123},
-                login={"unique_id": 112233}
+                user={'id': 1},
+                login={'unique_id': 'belieber@example.com'}
             )
 
     # delete()
@@ -34,16 +35,16 @@ class TestLogin(unittest.TestCase):
 
         self.assertIsInstance(deleted_user_login, Login)
         self.assertTrue(hasattr(deleted_user_login, 'unique_id'))
-        self.assertEqual(deleted_user_login.unique_id, 112233)
+        self.assertEqual(deleted_user_login.unique_id, 'belieber@example.com')
 
     # edit()
     def test_edit_user_login(self, m):
         register_uris({'login': ['edit_user_login']}, m)
 
-        unique_id = 112233
+        unique_id = 'newemail@example.com'
         edited_user_login = self.login.edit(
-            user={"id": 123},
-            login={"unique_id": unique_id},
+            user={'id': 1},
+            login={'unique_id': unique_id},
         )
 
         self.assertIsInstance(edited_user_login, Login)

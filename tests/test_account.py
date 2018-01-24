@@ -450,15 +450,20 @@ class TestAccount(unittest.TestCase):
 
     # create_user_login()
     def test_create_user_login(self, m):
-        register_uris({'account': ['create_user_login']}, m)
+        register_uris({'login': ['create_user_login']}, m)
 
-        response = self.account.create_user_login(user={'id': 123}, login={'unique_id': 112233})
+        unique_id = 'belieber@example.com'
+
+        response = self.account.create_user_login(
+            user={'id': 1},
+            login={'unique_id': unique_id}
+        )
 
         self.assertIsInstance(response, Login)
         self.assertTrue(hasattr(response, 'id'))
         self.assertTrue(hasattr(response, 'unique_id'))
-        self.assertEqual(response.id, 123)
-        self.assertEqual(response.unique_id, 112233)
+        self.assertEqual(response.id, 101)
+        self.assertEqual(response.unique_id, unique_id)
 
     def test_create_user_login_fail_on_user_id(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -466,7 +471,7 @@ class TestAccount(unittest.TestCase):
 
     def test_create_user_login_fail_on_login_unique_id(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.account.create_user_login(user={'id': 123}, login={})
+            self.account.create_user_login(user={'id': 1}, login={})
 
     # get_department_level_participation_data_with_given_term()
     def test_get_department_level_participation_data_with_given_term(self, m):
