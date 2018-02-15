@@ -73,7 +73,7 @@ class Requester(object):
                 _kwargs[i] = (kw, str(arg).lower())
 
             # Convert any datetime objects into ISO 8601 formatted strings.
-            if isinstance(arg, datetime):
+            elif isinstance(arg, datetime):
                 _kwargs[i] = (kw, arg.isoformat())
 
 
