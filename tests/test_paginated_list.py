@@ -219,7 +219,7 @@ class TestPaginatedList(unittest.TestCase):
         )
 
         with self.assertRaises(ValueError):
-            element = pag_list[0]
+            pag_list[0]
 
     def test_root_element(self, m):
         register_uris({'account': ['list_enrollment_terms']}, m)
