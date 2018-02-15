@@ -68,9 +68,14 @@ class Requester(object):
         for i, kwarg in enumerate(_kwargs):
             kw, arg = kwarg
 
+            # Convert boolean objects to a lowercase string.
+            if isinstance(arg, bool):
+                _kwargs[i] = (kw, str(arg).lower())
+
             # Convert any datetime objects into ISO 8601 formatted strings.
             if isinstance(arg, datetime):
                 _kwargs[i] = (kw, arg.isoformat())
+
 
         # Determine the appropriate request method.
         if method == 'GET':
