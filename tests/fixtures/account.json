@@ -291,7 +291,8 @@
 	"list_enrollment_terms": {
 		"method": "GET",
 		"endpoint": "accounts/1/terms",
-		"data": [
+		"data": {
+			"enrollment_terms": [
 			{
 				"id": 1,
 				"name": "Enrollment Term 1"
@@ -299,8 +300,8 @@
 			{
 				"id": 2,
 				"name": "Enrollment Term 2"
-			}
-		],
+			}]
+		},
 		"status_code": 200
 	},
 	"list_groups_context": {

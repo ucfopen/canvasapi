@@ -4,6 +4,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
+from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.user import User
 from tests import settings
@@ -205,3 +206,30 @@ class TestPaginatedList(unittest.TestCase):
             'six_objects_three_pages'
         )
         self.assertEqual(pag_list.__repr__(), '<PaginatedList of type User>')
+
+    def test_root_element_incorrect(self, m):
+        register_uris({'account': ['list_enrollment_terms']}, m)
+
+        pag_list = PaginatedList(
+            EnrollmentTerm,
+            self.requester,
+            'GET',
+            'accounts/1/terms',
+            _root='wrong'
+        )
+
+        with self.assertRaises(ValueError):
+            element = pag_list[0]
+
+    def test_root_element(self, m):
+        register_uris({'account': ['list_enrollment_terms']}, m)
+
+        pag_list = PaginatedList(
+            EnrollmentTerm,
+            self.requester,
+            'GET',
+            'accounts/1/terms',
+            _root='enrollment_terms'
+        )
+
+        self.assertIsInstance(pag_list[0], EnrollmentTerm)
