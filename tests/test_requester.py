@@ -96,8 +96,7 @@ class TestRequester(unittest.TestCase):
 
     def test_request_lowercase_boolean(self, m):
         def custom_matcher(request):
-            match_text = 'test=true&test2=false'
-            if request.text == match_text:
+            if 'test=true' in request.text and 'test2=false' in request.text:
                 resp = requests.Response()
                 resp.status_code = 200
                 return resp
