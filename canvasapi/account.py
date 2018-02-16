@@ -663,6 +663,7 @@ class Account(CanvasObject):
             'GET',
             'accounts/{}/terms'.format(self.id),
             {'account_id': self.id},
+            _root='enrollment_terms',
             _kwargs=combine_kwargs(**kwargs)
         )
 
