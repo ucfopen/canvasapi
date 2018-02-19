@@ -38,7 +38,16 @@
 		"method": "POST",
 		"endpoint": "files/upload_response_upload_url",
 		"data": {
-			"url": "great_url_success"
+			"url": "great_url_success",
+			"id": 1
 		}
+	},
+	"update_submission": {
+		"method": "ANY",
+		"endpoint": "courses/1/assignments/1/submissions/1",
+		"data": {
+			"id": 1
+		},
+		"status_code": 200
 	}
 }

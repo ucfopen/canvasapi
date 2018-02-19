@@ -34,7 +34,11 @@ class TestSubmission(unittest.TestCase):
 
     # upload_comment()
     def test_upload_comment(self, m):
-        register_uris({'submission': ['upload_comment', 'upload_comment_final']}, m)
+        register_uris({'submission': [
+            'upload_comment',
+            'upload_comment_final',
+            'update_submission',
+        ]}, m)
 
         filename = 'testfile_submission_{}'.format(uuid.uuid4().hex)
 
