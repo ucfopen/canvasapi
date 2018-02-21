@@ -302,6 +302,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(enrollment_list), 4)
         self.assertIsInstance(enrollment_list[0], Enrollment)
 
+    # get_sections()
+    def test_get_sections(self, m):
+        register_uris({'course': ['get_sections', 'get_sections_p2']}, m)
+
+        sections = self.course.get_sections()
+        section_list = [section for section in sections]
+
+        self.assertEqual(len(section_list), 4)
+        self.assertIsInstance(section_list[0], Section)
+
     # get_section
     def test_get_section(self, m):
         register_uris({'course': ['get_section']}, m)
@@ -434,13 +444,15 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(tool_list), 4)
 
     def test_list_sections(self, m):
-        register_uris({'course': ['list_sections', 'list_sections2']}, m)
+        register_uris({'course': ['get_sections', 'get_sections_p2']}, m)
 
-        sections = self.course.list_sections()
-        section_list = [sect for sect in sections]
+        with warnings.catch_warnings(record=True) as w:
+            sections = self.course.list_sections()
+            section_list = [sect for sect in sections]
 
-        self.assertIsInstance(section_list[0], Section)
-        self.assertEqual(len(section_list), 4)
+            self.assertEqual(len(section_list), 4)
+            self.assertIsInstance(section_list[0], Section)
+            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
 
     def test_create_course_section(self, m):
         register_uris({'course': ['create_section']}, m)

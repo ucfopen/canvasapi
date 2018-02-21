@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-from warnings import warn
+
+import warnings
 
 from six import python_2_unicode_compatible, text_type
 
@@ -16,6 +17,8 @@ from canvasapi.upload import Uploader
 from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 from canvasapi.rubric import Rubric
+
+warnings.simplefilter('always', DeprecationWarning)
 
 
 @python_2_unicode_compatible
@@ -541,12 +544,32 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_section(self, section):
+    def get_sections(self, **kwargs):
+        """
+        List all sections in a course.
+
+        :calls: `GET /api/v1/courses/:course_id/sections \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.section.Section`
+        """
+        from canvasapi.section import Section
+
+        return PaginatedList(
+            Section,
+            self._requester,
+            'GET',
+            'courses/{}/sections'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_section(self, section, **kwargs):
         """
         Retrieve a section.
 
         :calls: `GET /api/v1/courses/:course_id/sections/:id \
-        <https://canvas.instructure.com/doc/api/sections.html#method.sections.index>`_
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.show>`_
 
         :param section: The object or ID of the section to retrieve.
         :type section: :class:`canvasapi.section.Section` or int
@@ -559,7 +582,8 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/sections/{}'.format(self.id, section_id)
+            'courses/{}/sections/{}'.format(self.id, section_id),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return Section(self._requester, response.json())
 
@@ -680,14 +704,12 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.section.Section`
         """
-        from canvasapi.section import Section
-        return PaginatedList(
-            Section,
-            self._requester,
-            'GET',
-            'courses/{}/sections'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+        warnings.warn(
+            "`list_sections` is being deprecated and will be removed in a future version."
+            " Use `get_sections` instead",
+            DeprecationWarning
         )
+        return self.get_sections(**kwargs)
 
     def create_course_section(self, **kwargs):
         """
@@ -1202,7 +1224,7 @@ class Course(CanvasObject):
             :class:`canvasapi.submission.Submission`
         """
         if 'grouped' in kwargs:
-            warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
+            warnings.warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
             del kwargs['grouped']
 
         return PaginatedList(
