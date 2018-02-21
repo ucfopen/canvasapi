@@ -346,6 +346,43 @@
 		},
 		"status_code": 200
 	},
+	"get_sections": {
+		"method": "GET",
+		"endpoint": "courses/1/sections",
+		"data": [
+            {
+                "id": 1,
+                "name": "Section 1",
+                "course_id": 1
+            },
+            {
+                "id": 2,
+                "name": "Section 2",
+                "course_id": 1
+            }
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/courses/1/sections?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_sections_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/sections?page=2&per_page=2",
+		"data": [
+            {
+                "id": 3,
+                "name": "Section 3",
+                "course_id": 1
+            },
+            {
+                "id": 4,
+                "name": "Section 4",
+                "course_id": 1
+            }
+		],
+		"status_code": 200
+	},
 	"get_user": {
 		"method": "GET",
 		"endpoint": "courses/1/users/1",
@@ -870,39 +907,6 @@
 			"title": "Page To Be Deleted",
 			"url": "my-url"
 		},
-		"status_code": 200
-	},
-	"list_sections": {
-		"method": "GET",
-		"endpoint": "courses/1/sections",
-		"data": [
-			{
-				"id": 1,
-				"name": "Section 1"
-			},
-			{
-				"id": 2,
-				"name": "Section 2"
-			}
-		],
-		"status_code": 200,
-		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/list_sections?page=2&per_page=2>; rel=\"next\""
-		}
-	},
-	"list_sections2": {
-		"method": "GET",
-		"endpoint": "courses/1/list_sections?page=2&per_page=2",
-		"data": [
-			{
-				"id": 3,
-				"name": "Section 3"
-			},
-			{
-				"id": 4,
-				"name": "Section 4"
-			}
-		],
 		"status_code": 200
 	},
 	"create_section": {
