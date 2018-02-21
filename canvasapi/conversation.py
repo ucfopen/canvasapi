@@ -62,7 +62,7 @@ class Conversation(CanvasObject):
 
         :param recipients: A list of string format recipient ids.
             These may be user ids or course/group ids prefixed
-            with 'course\_' or 'group\_' respectively,
+            with 'course\\_' or 'group\\_' respectively,
             e.g. recipients['1', '2', 'course_3']
         :type recipients:  `list` of `str`
         :rtype: :class:`canvasapi.account.Conversation`
