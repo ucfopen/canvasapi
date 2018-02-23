@@ -23,6 +23,94 @@ All other examples assume you have already created a :code:`canvas` object like 
     canvas = Canvas(API_URL, API_KEY)
 
 
+Accounts
+--------
+
+Creating a New User
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+    
+    # Grab the account to create the user under
+    account = canvas.get_account(1)
+
+    user = account.create_user(
+        user={
+            'name': 'New User'            
+        },
+        pseudonym={
+            'password': 'secure123',
+            'sis_user_id': 'new_user'
+        }
+    )
+
+
+List Courses under an Account
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+    
+    courses = account.get_courses()
+
+    for course in courses:
+        print(course)
+
+
+Users
+-----
+
+
+Get a User by SIS ID
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    # Grab a user with the SIS ID of 'some_id'
+    user = canvas.get_user('some_id', 'sis_login_id')
+
+
+Get a user by their Canvas ID
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+    
+    # Grab user with ID of 1
+    user = canvas.get_user(1)
+
+
+Edit an Existing User
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+    
+    # Grab the user
+    user = canvas.get_user(1)
+
+    user.edit(
+        user={'name': 'New Name'}
+    )
+
+
+Get a User's Page Views
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+    page_views = user.get_page_views()
+
+
+Logins
+------
+
+List User Logins
+~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+    logins = user.get_logins()
+
+    for login in logins:
+        print(login)
+
+
 Courses
 -------
 
