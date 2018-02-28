@@ -1,10 +1,20 @@
 # Change Log
 
-## Unreleased
+## [0.9.0] - 2018-02-28
+
+### New Endpoint Coverage
+
+- Quiz Questions
+- Improved keyword argument support for `course.get_section()` (thanks [@andrew-gardener](https://github.com/andrew-gardener))
+
+### General
+
+- Updated `PaginatedList` to allow specification of the root element to build the list from when given an atypical JSON response (see [#146](https://github.com/ucfopen/canvasapi/issues/146)).
+- Added example usage for several common endpoints to our documentation.
 
 ### Deprecation Warnings
 
-- **_Dropped support for Python 3.3_**
+- :warning: **_Dropped support for Python 3.3_** :warning:
     - [Python 3.3 is end-of-life as of September 2017](https://www.python.org/dev/peps/pep-0398/#lifespan)
     - Should continue to function in 3.3, but compatibility cannot be guaranteed going forward.
 - Several methods in the `Course` and `Section` classes relating to assignments and submissions have been deprecated.
@@ -12,6 +22,11 @@
     - The deprecated methods now include a warning in the documentation with reference to the replacement. Additionally, the deprecated methods will raise a `DeprecationWarning`.
     - These methods will be removed in a future release.
 - `Course.list_sections()` has been deprecated. Use `Course.get_sections()` instead.
+
+### Bugfixes
+
+- Fixed an issue where booleans would be capitalized when sent to Canvas, causing Canvas to misinterpret them and set default values.
+- Fixed an issue where unexpected JSON responses from Canvas would cause `PaginatedList` objects to fail. 
 
 ## [0.8.2] - 2018-01-24
 
@@ -50,7 +65,7 @@
 
 - Added support for other iterables as parameter values. (Thanks, [@liblit](https://github.com/liblit))
 - For many endpoints that accept an "object id", either a CanvasAPI Object or integer ID can now be passed. (Thanks, [@a-goetz](https://github.com/a-goetz))
-- Added a requester cache that rememebers the last 5 requests to Canvas. It can be accessed as the attribute `_cache` of the `requester object`. (e.g. `course._requester._cache`)
+- Added a requester cache that remembers the last 5 requests to Canvas. It can be accessed as the attribute `_cache` of the `requester object`. (e.g. `course._requester._cache`)
 - Files can now be downloaded directly from the `File` object in one of two ways: (Thanks, [@DanBrink91](https://github.com/DanBrink91))
     1. `get_contents` will directly return the contents of the file. (e.g. `file.get_contents()`)
     2. `download` will download the file and save it to the provided path. (e.g. `file.download('example.txt')`)
