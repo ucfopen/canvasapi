@@ -12,4 +12,5 @@ Contents:
    :maxdepth: 2
 
    getting-started
+   examples
    class-reference

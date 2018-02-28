@@ -84,7 +84,7 @@ Let’s look at how we can use the :code:`PaginatedList` returned by our :code:`
     # Retrieve a list of courses the user is enrolled in
     >>> courses = user.get_courses()
 
-    >>> print courses
+    >>> print(courses)
     <PaginatedList of type Course>
 
     # Access the first element in our list.
@@ -92,12 +92,12 @@ Let’s look at how we can use the :code:`PaginatedList` returned by our :code:`
     # You'll notice the first call takes a moment, but the next N-1
     # elements (where N = the per_page argument supplied; the default is 10)
     # will be instantly accessible.
-    >>> print courses[0]
+    >>> print(courses[0])
     TST101 Test Course (1234567)
 
     # Iterate over our course list
     >>> for course in courses:
-             print course
+             print(course)
 
     TST101 Test Course 1 (1234567)
     TST102 Test Course 2 (1234568)
