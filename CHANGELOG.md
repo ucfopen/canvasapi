@@ -1,5 +1,18 @@
 # Change Log
 
+## Unreleased
+
+### Deprecation Warnings
+
+- **_Dropped support for Python 3.3_**
+    - [Python 3.3 is end-of-life as of September 2017](https://www.python.org/dev/peps/pep-0398/#lifespan)
+    - Should continue to function in 3.3, but compatibility cannot be guaranteed going forward.
+- Several methods in the `Course` and `Section` classes relating to assignments and submissions have been deprecated.
+    - Comparable methods have been implemented in the `Assignment` and `Submission` classes, as appropriate.
+    - The deprecated methods now include a warning in the documentation with reference to the replacement. Additionally, the deprecated methods will raise a `DeprecationWarning`.
+    - These methods will be removed in a future release.
+- `Course.list_sections()` has been deprecated. Use `Course.get_sections()` instead.
+
 ## [0.8.2] - 2018-01-24
 
 ### Bugfixes

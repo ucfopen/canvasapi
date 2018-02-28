@@ -4,11 +4,11 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.quiz import Quiz
+from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.quiz import Quiz, QuizQuestion
+from canvasapi.quiz_group import QuizGroup
 from tests import settings
 from tests.util import register_uris
-from canvasapi.quiz_group import QuizGroup
-from canvasapi.exceptions import RequiredFieldMissing
 
 
 @requests_mock.Mocker()
@@ -103,3 +103,100 @@ class TestQuiz(unittest.TestCase):
 
         with self.assertRaises(RequiredFieldMissing):
             self.quiz.create_question_group(quiz_group)
+
+    # create_question()
+    def test_create_question(self, m):
+        register_uris({'quiz': ['create_question']}, m)
+
+        question_dict = {
+            'question_name': 'Pick Correct Answer',
+            'question_type': 'multiple_choice_question',
+            'question_text': 'What is the right answer?',
+            'points_possible': 10,
+            'correct_comments': 'That\'s correct!',
+            'incorrect_comments': 'That\'s wrong!',
+        }
+        question = self.quiz.create_question(question=question_dict)
+
+        self.assertIsInstance(question, QuizQuestion)
+        self.assertTrue(hasattr(question, 'question_name'))
+        self.assertEqual(question.question_name, question_dict['question_name'])
+
+    # get_question()
+    def test_get_question(self, m):
+        register_uris({'quiz': ['get_question']}, m)
+
+        question_id = 1
+        question = self.quiz.get_question(question_id)
+
+        self.assertIsInstance(question, QuizQuestion)
+        self.assertTrue(hasattr(question, 'id'))
+        self.assertEqual(question.id, question_id)
+        self.assertTrue(hasattr(question, 'question_name'))
+        self.assertEqual(question.question_name, 'Pick Correct Answer')
+
+    # get_questions()
+    def test_get_questions(self, m):
+        register_uris({'quiz': ['get_questions']}, m)
+
+        questions = self.quiz.get_questions()
+        question_list = [q for q in questions]
+
+        self.assertEqual(len(question_list), 2)
+        self.assertIsInstance(question_list[0], QuizQuestion)
+        self.assertTrue(hasattr(question_list[0], 'id'))
+        self.assertEqual(question_list[0].id, 1)
+        self.assertIsInstance(question_list[1], QuizQuestion)
+        self.assertTrue(hasattr(question_list[1], 'id'))
+        self.assertEqual(question_list[1].id, 2)
+
+
+@requests_mock.Mocker()
+class TestQuizQuestion(unittest.TestCase):
+
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris({
+                'course': ['get_by_id'],
+                'quiz': ['get_by_id', 'get_question']
+            }, m)
+
+            self.course = self.canvas.get_course(1)
+            self.quiz = self.course.get_quiz(1)
+            self.question = self.quiz.get_question(1)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.question)
+        self.assertIsInstance(string, str)
+
+    # delete()
+    def test_delete(self, m):
+        register_uris({'quiz': ['delete_question']}, m)
+
+        response = self.question.delete()
+        self.assertTrue(response)
+
+    # edit()
+    def test_edit(self, m):
+        register_uris({'quiz': ['edit_question']}, m)
+
+        question_dict = {
+            'question_name': 'Updated Question',
+            'question_type': 'multiple_choice_question',
+            'question_text': 'This question has been updated.',
+            'points_possible': 100,
+            'correct_comments': 'Updated correct!',
+            'incorrect_comments': 'Updated wrong!',
+        }
+
+        self.assertEqual(self.question.question_name, 'Pick Correct Answer')
+
+        response = self.question.edit(question=question_dict)
+
+        self.assertIsInstance(response, QuizQuestion)
+        self.assertIsInstance(self.question, QuizQuestion)
+        self.assertEqual(response.question_name, question_dict['question_name'])
+        self.assertEqual(self.question.question_name, question_dict['question_name'])
