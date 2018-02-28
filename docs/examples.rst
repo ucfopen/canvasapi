@@ -95,6 +95,7 @@ Get a User's Page Views
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
+
     page_views = user.get_page_views()
 
 
@@ -105,6 +106,7 @@ List User Logins
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: python
+
     logins = user.get_logins()
 
     for login in logins:
