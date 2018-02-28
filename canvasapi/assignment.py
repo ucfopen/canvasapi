@@ -77,8 +77,6 @@ class Assignment(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.show>`_
 
-        :param assignment: The object or ID of the related assignment
-        :type assignment: :class:`canvasapi.assignment.Assignment` or int
         :param user: The object or ID of the related user
         :type user: :class:`canvasapi.user.User` or int
 

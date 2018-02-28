@@ -46,7 +46,7 @@ class Submission(CanvasObject):
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_read>`_
 
         :returns: True if successfully marked as read.
-        :rtype: `bool`
+        :rtype: bool
         """
         response = self._requester.request(
             'PUT',
@@ -67,7 +67,7 @@ class Submission(CanvasObject):
             <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.mark_submission_unread>`_
 
         :returns: True if successfully marked as unread.
-        :rtype: `bool`
+        :rtype: bool
         """
         response = self._requester.request(
             'DELETE',
