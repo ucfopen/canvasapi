@@ -5,6 +5,9 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup
+from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.submission import Submission
+from canvasapi.user import UserDisplay
 from tests import settings
 from tests.util import register_uris
 
@@ -19,7 +22,15 @@ class TestAssignment(unittest.TestCase):
             register_uris({'course': ['get_by_id', 'get_assignment_by_id']}, m)
 
             self.course = self.canvas.get_course(1)
-            self.assignment = self.course.get_assignment(5)
+            self.assignment = self.course.get_assignment(1)
+
+    # delete()
+    def test_delete_assignments(self, m):
+        register_uris({'assignment': ['delete_assignment']}, m)
+
+        deleted_assignment = self.assignment.delete()
+
+        self.assertIsInstance(deleted_assignment, Assignment)
 
     # edit()
     def test_edit_assignment(self, m):
@@ -32,13 +43,58 @@ class TestAssignment(unittest.TestCase):
         self.assertTrue(hasattr(edited_assignment, 'name'))
         self.assertEqual(edited_assignment.name, name)
 
-    # delete()
-    def test_delete_assignments(self, m):
-        register_uris({'assignment': ['delete_assignment']}, m)
+    # get_gradeable_students()
+    def test_get_gradeable_students(self, m):
+        register_uris({'course': ['list_gradeable_students']}, m)
 
-        deleted_assignment = self.assignment.delete()
+        students = self.assignment.get_gradeable_students()
+        student_list = [student for student in students]
 
-        self.assertIsInstance(deleted_assignment, Assignment)
+        self.assertEqual(len(student_list), 2)
+        self.assertIsInstance(student_list[0], UserDisplay)
+
+    # get_submission()
+    def test_get_submission(self, m):
+        register_uris({
+            'submission': ['get_by_id_course'],
+            'user': ['get_by_id']
+        }, m)
+
+        user_id = 1
+        submission_by_id = self.assignment.get_submission(user_id)
+        self.assertIsInstance(submission_by_id, Submission)
+        self.assertTrue(hasattr(submission_by_id, 'submission_type'))
+
+        user = self.canvas.get_user(user_id)
+        submission_by_obj = self.assignment.get_submission(user)
+        self.assertIsInstance(submission_by_obj, Submission)
+        self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
+
+    # get_submissions()
+    def test_get_submissions(self, m):
+        register_uris({'submission': ['list_submissions']}, m)
+
+        submissions = self.assignment.get_submissions()
+        submission_list_by_id = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list_by_id), 2)
+        self.assertIsInstance(submission_list_by_id[0], Submission)
+
+    # submit()
+    def test_submit(self, m):
+        register_uris({'assignment': ['submit']}, m)
+
+        sub_type = "online_upload"
+        sub_dict = {'submission_type': sub_type}
+        submission = self.assignment.submit(sub_dict)
+
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, 'submission_type'))
+        self.assertEqual(submission.submission_type, sub_type)
+
+    def test_submit_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.assignment.submit({})
 
     # __str__()
     def test__str__(self, m):
