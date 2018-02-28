@@ -12,10 +12,12 @@ Patches and Suggestions
 
 - Adrian Goetz [@a-goetz](https://github.com/a-goetz)
 - Alyssa Davis [@allygator](https://github.com/allygator)
+- Andrew Gardener [@andrew-gardener](https://github.com/andrew-gardener)
 - Anthony Rodriguez [@AnthonyRodriguez726](https://github.com/AnthonyRodriguez726)
 - Ben Liblit [@liblit](https://github.com/liblit)
 - Daniel Brinkman [@DanBrink91](https://github.com/DanBrink91)
 - Daniel Grobani [@dgrobani](https://github.com/dgrobani)
+- David Warden [@dfwarden](https://github.com/dfwarden)
 - Devin Singh [@devints47](https://github.com/devints47)
 - Elise Heron [@thedarkestknight](https://github.com/thedarkestknight)
 - Ian Turgeon [@iturgeon](https://github.com/iturgeon)
