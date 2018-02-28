@@ -3,9 +3,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.util import combine_kwargs
-from canvasapi.quiz_group import QuizGroup
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.paginated_list import PaginatedList
+from canvasapi.quiz_group import QuizGroup
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -118,3 +119,119 @@ class Quiz(CanvasObject):
         response_json['quiz_groups'][0].update({'course_id': self.id})
 
         return QuizGroup(self._requester, response_json.get('quiz_groups')[0])
+
+    def create_question(self, **kwargs):
+        """
+        Create a new quiz question for this quiz.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/questions \
+        <https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.create>`_
+
+        :rtype: :class:`canvasapi.quiz.QuizQuestion`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/quizzes/{}/questions'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        response_json.update({'course_id': self.course_id})
+
+        return QuizQuestion(self._requester, response_json)
+
+    def get_question(self, question, **kwargs):
+        """
+        Get as single quiz question by ID.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/questions/:id \
+        <https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.show>`_
+
+        :param question: The object or ID of the quiz question to retrieve.
+        :type question: int, str or :class:`canvasapi.quiz.QuizQuestion`
+
+        :rtype: :class:`canvasapi.quiz.QuizQuestion`
+        """
+        question_id = obj_or_id(question, "question", (QuizQuestion,))
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/quizzes/{}/questions/{}'.format(self.course_id, self.id, question_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        response_json.update({'course_id': self.course_id})
+
+        return QuizQuestion(self._requester, response_json)
+
+    def get_questions(self, **kwargs):
+        """
+        List all questions for a quiz.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/questions \
+        <https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizQuestion`
+        """
+        return PaginatedList(
+            QuizQuestion,
+            self._requester,
+            'GET',
+            'courses/{}/quizzes/{}/questions'.format(self.course_id, self.id),
+            {'course_id': self.course_id},
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+
+@python_2_unicode_compatible
+class QuizQuestion(CanvasObject):
+
+    def __str__(self):
+        return "{} ({})".format(self.question_name, self.id)
+
+    def delete(self, **kwargs):
+        """
+        Delete an existing quiz question.
+
+        :calls: `DELETE /api/v1/courses/:course_id/quizzes/:quiz_id/questions/:id \
+        <https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.destroy>`_
+
+        :returns: True if question was successfully deleted; False otherwise.
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'DELETE',
+            'courses/{}/quizzes/{}/questions/{}'.format(
+                self.course_id,
+                self.quiz_id,
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return response.status_code == 204
+
+    def edit(self, **kwargs):
+        """
+        Update an existing quiz question.
+
+        :calls: `PUT /api/v1/courses/:course_id/quizzes/:quiz_id/questions/:id \
+        <https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.update>`_
+
+        :rtype: :class:`canvasapi.quiz.QuizQuestion`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/{}/quizzes/{}/questions/{}'.format(
+                self.course_id,
+                self.quiz_id,
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        response_json.update({'course_id': self.course_id})
+
+        super(QuizQuestion, self).set_attributes(response_json)
+        return self

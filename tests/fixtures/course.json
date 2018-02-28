@@ -41,7 +41,7 @@
 		"method": "POST",
 		"endpoint": "courses/1/assignments",
 		"data": {
-			"id": 5,
+			"id": 1,
 			"course_id": 1,
 			"name": "Newly Created Assignment",
 			"description": "Do this assignment"
@@ -119,17 +119,6 @@
 		"status_code": 200
 	},
 	"get_assignment_by_id": {
-		"method": "GET",
-		"endpoint": "courses/1/assignments/5",
-		"data": {
-			"id": 5,
-			"course_id": 1,
-			"name": "Assignment 1",
-			"description": "Do this assignment"
-		},
-		"status_code": 200
-	},
-	"get_assignment_by_id_2": {
 		"method": "GET",
 		"endpoint": "courses/1/assignments/1",
 		"data": {
@@ -344,6 +333,43 @@
 			"name": "Section 1",
 			"course_id": 1
 		},
+		"status_code": 200
+	},
+	"get_sections": {
+		"method": "GET",
+		"endpoint": "courses/1/sections",
+		"data": [
+            {
+                "id": 1,
+                "name": "Section 1",
+                "course_id": 1
+            },
+            {
+                "id": 2,
+                "name": "Section 2",
+                "course_id": 1
+            }
+		],
+		"headers": {
+			"Link": "<http://example.com/api/v1/courses/1/sections?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_sections_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/sections?page=2&per_page=2",
+		"data": [
+            {
+                "id": 3,
+                "name": "Section 3",
+                "course_id": 1
+            },
+            {
+                "id": 4,
+                "name": "Section 4",
+                "course_id": 1
+            }
+		],
 		"status_code": 200
 	},
 	"get_user": {
@@ -872,39 +898,6 @@
 		},
 		"status_code": 200
 	},
-	"list_sections": {
-		"method": "GET",
-		"endpoint": "courses/1/sections",
-		"data": [
-			{
-				"id": 1,
-				"name": "Section 1"
-			},
-			{
-				"id": 2,
-				"name": "Section 2"
-			}
-		],
-		"status_code": 200,
-		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/list_sections?page=2&per_page=2>; rel=\"next\""
-		}
-	},
-	"list_sections2": {
-		"method": "GET",
-		"endpoint": "courses/1/list_sections?page=2&per_page=2",
-		"data": [
-			{
-				"id": 3,
-				"name": "Section 3"
-			},
-			{
-				"id": 4,
-				"name": "Section 4"
-			}
-		],
-		"status_code": 200
-	},
 	"create_section": {
 		"method": "POST",
 		"endpoint": "courses/1/sections",
@@ -1258,72 +1251,6 @@
 		],
 		"status_code": 200
 	},
-	"submit_assignment": {
-		"method": "POST",
-		"endpoint": "courses/1/assignments/1/submissions",
-		"data": {
-			"id": 1,
-			"assignment_id": 1,
-			"user_id": 1,
-			"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
-			"submission_type": "online_upload"
-		},
-		"status_code": 200
-	},
-	"submit_assignment_2": {
-		"method": "POST",
-		"endpoint": "courses/1/assignments/5/submissions",
-		"data": {
-			"id": 1,
-			"assignment_id": 1,
-			"user_id": 1,
-			"html_url": "http://example.com/courses/1/assignments/5/submissions/1",
-			"submission_type": "online_upload"
-		},
-		"status_code": 200
-	},
-	"list_submissions": {
-		"method": "GET",
-		"endpoint": "courses/1/assignments/1/submissions",
-		"data": [
-			{
-				"id": 1,
-				"assignments_id": 1,
-				"user_id": 1,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
-				"submission_type": "online_upload"
-			},
-			{
-				"id": 2,
-				"assignments_id": 1,
-				"user_id": 2,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/2",
-				"submission_type": "online_upload"
-			}
-		],
-		"status_code": 200
-	},
-	"list_submissions_2": {
-		"method": "GET",
-		"endpoint": "courses/1/assignments/5/submissions",
-		"data": [
-			{
-				"id": 1,
-				"assignments_id": 1,
-				"user_id": 1,
-				"html_url": "http://example.com/courses/1/assignments/5/submissions/1",
-				"submission_type": "online_upload"
-			},
-			{
-				"id": 2,
-				"assignments_id": 1,
-				"user_id": 2,
-				"html_url": "http://example.com/courses/1/assignments/5/submissions/2",
-				"submission_type": "online_upload"
-			}
-		],
-		"status_code": 200
-	},
 	"list_multiple_submissions": {
 		"method": "GET",
 		"endpoint": "courses/1/students/submissions",
@@ -1343,30 +1270,6 @@
 				"submission_type": "online_upload"
 			}
 		],
-		"status_code": 200
-	},
-	"get_submission": {
-		"method": "GET",
-		"endpoint": "courses/1/assignments/1/submissions/1",
-		"data": {
-			"id": 1,
-			"assignments_id": 1,
-			"user_id": 1,
-			"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
-			"submission_type": "online_upload"
-		},
-		"status_code": 200
-	},
-	"get_submission_2": {
-		"method": "GET",
-		"endpoint": "courses/1/assignments/5/submissions/1",
-		"data": {
-				"id": 1,
-				"assignments_id": 1,
-				"user_id": 1,
-				"html_url": "http://example.com/courses/1/assignments/5/submissions/1",
-				"submission_type": "online_upload"
-		},
 		"status_code": 200
 	},
 	"list_gradeable_students": {

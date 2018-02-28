@@ -8,12 +8,34 @@
 		},
 		"status_code": 200
 	},
-	"edit":{
+	"delete_question": {
+		"method": "DELETE",
+		"endpoint": "courses/1/quizzes/1/questions/1",
+		"status_code": 204
+	},
+	"edit": {
 		"method": "PUT",
 		"endpoint": "courses/1/quizzes/1",
 		"data": {
 			"id": 1,
 			"title": "New Title"
+		},
+		"status_code": 200
+	},
+	"edit_question": {
+		"method": "PUT",
+		"endpoint": "courses/1/quizzes/1/questions/1",
+		"data": {
+			"id": 1,
+			"quiz_id": 1,
+			"position": 1,
+			"question_name": "Updated Question",
+			"question_type": "multiple_choice_question",
+			"question_text": "This question has been updated.",
+			"points_possible": 100,
+			"correct_comments": "Updated correct!",
+			"incorrect_comments": "Updated wrong!",
+			"answers": null
 		},
 		"status_code": 200
 	},
@@ -39,19 +61,86 @@
 		},
 		"status_code": 200
 	},
+	"create_question": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/questions",
+		"data": {
+			"id": 1,
+			"quiz_id": 1,
+			"position": 1,
+			"question_name": "Pick Correct Answer",
+			"question_type": "multiple_choice_question",
+			"question_text": "What is the right answer?",
+			"points_possible": 10,
+			"correct_comments": "That's correct!",
+			"incorrect_comments": "That's wrong!",
+			"answers": null
+		},
+		"status_code": 200
+	},
 	"create_question_group": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes/1/groups",
-		"data": {"quiz_groups": [
+		"data": {
+			"quiz_groups": [
+				{
+					"id": 1,
+					"quiz_id": 1,
+					"name": "Test Group",
+					"pick_count": 1,
+					"question_points": 2,
+					"assessment_question_bank_id": 3
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_question": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/questions/1",
+		"data": {
+			"id": 1,
+			"quiz_id": 1,
+			"position": 1,
+			"question_name": "Pick Correct Answer",
+			"question_type": "multiple_choice_question",
+			"question_text": "What is the right answer?",
+			"points_possible": 10,
+			"correct_comments": "That's correct!",
+			"incorrect_comments": "That's wrong!",
+			"answers": null
+		},
+		"status_code": 200
+	},
+	"get_questions": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/questions",
+		"data": [
 			{
 				"id": 1,
 				"quiz_id": 1,
-				"name": "Test Group",
-				"pick_count": 1,
-				"question_points": 2,
-				"assessment_question_bank_id": 3
+				"position": 1,
+				"question_name": "Pick Correct Answer",
+				"question_type": "multiple_choice_question",
+				"question_text": "What is the right answer?",
+				"points_possible": 10,
+				"correct_comments": "That's correct!",
+				"incorrect_comments": "That's wrong!",
+				"answers": null
+			},
+			{
+				"id": 2,
+				"quiz_id": 1,
+				"position": 2,
+				"question_name": "Pick Incorrect Answer",
+				"question_type": "multiple_choice_question",
+				"question_text": "What is the wrong answer?",
+				"points_possible": 10,
+				"correct_comments": "That's incorrect!",
+				"incorrect_comments": "That's right!",
+				"answers": null
 			}
-		]},
+		],
 		"status_code": 200
 	}
 }
