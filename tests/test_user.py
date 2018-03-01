@@ -345,11 +345,12 @@ class TestUserDisplay(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             register_uris({
-                'course': ['get_by_id', 'list_gradeable_students']
+                'course': ['get_by_id', 'get_assignment_by_id', 'list_gradeable_students']
             }, m)
 
             self.course = self.canvas.get_course(1)
-            self.userDisplays = self.course.list_gradeable_students(1)
+            self.assignment = self.course.get_assignment(1)
+            self.userDisplays = self.assignment.get_gradeable_students()
             self.userDisplayList = [ud for ud in self.userDisplays]
             self.userDisplay = self.userDisplayList[0]
 

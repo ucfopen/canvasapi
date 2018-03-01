@@ -51,7 +51,7 @@ class TestCourse(unittest.TestCase):
             self.page = self.course.get_page('my-url')
             self.quiz = self.course.get_quiz(1)
             self.user = self.canvas.get_user(1)
-            self.assignment = self.course.get_assignment('5')
+            self.assignment = self.course.get_assignment(1)
 
     # __str__()
     def test__str__(self, m):
@@ -302,6 +302,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(enrollment_list), 4)
         self.assertIsInstance(enrollment_list[0], Enrollment)
 
+    # get_sections()
+    def test_get_sections(self, m):
+        register_uris({'course': ['get_sections', 'get_sections_p2']}, m)
+
+        sections = self.course.get_sections()
+        section_list = [section for section in sections]
+
+        self.assertEqual(len(section_list), 4)
+        self.assertIsInstance(section_list[0], Section)
+
     # get_section
     def test_get_section(self, m):
         register_uris({'course': ['get_section']}, m)
@@ -323,7 +333,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(assignment, Assignment)
         self.assertTrue(hasattr(assignment, 'name'))
         self.assertEqual(assignment.name, name)
-        self.assertEqual(assignment.id, 5)
+        self.assertEqual(assignment.id, 1)
 
     def test_create_assignment_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -333,7 +343,7 @@ class TestCourse(unittest.TestCase):
     def test_get_assignment(self, m):
         register_uris({'course': ['get_assignment_by_id']}, m)
 
-        assignment_by_id = self.course.get_assignment('5')
+        assignment_by_id = self.course.get_assignment(1)
         self.assertIsInstance(assignment_by_id, Assignment)
         self.assertTrue(hasattr(assignment_by_id, 'name'))
 
@@ -434,13 +444,17 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(tool_list), 4)
 
     def test_list_sections(self, m):
-        register_uris({'course': ['list_sections', 'list_sections2']}, m)
+        register_uris({'course': ['get_sections', 'get_sections_p2']}, m)
 
-        sections = self.course.list_sections()
-        section_list = [sect for sect in sections]
+        with warnings.catch_warnings(record=True) as warning_list:
+            sections = self.course.list_sections()
+            section_list = [sect for sect in sections]
 
-        self.assertIsInstance(section_list[0], Section)
-        self.assertEqual(len(section_list), 4)
+            self.assertEqual(len(section_list), 4)
+            self.assertIsInstance(section_list[0], Section)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     def test_create_course_section(self, m):
         register_uris({'course': ['create_section']}, m)
@@ -702,43 +716,63 @@ class TestCourse(unittest.TestCase):
 
     # submit_assignment()
     def test_submit_assignment(self, m):
-        register_uris({'course': ['submit_assignment', 'submit_assignment_2']}, m)
+        register_uris({'assignment': ['submit']}, m)
 
-        assignment_id = 1
-        sub_type = "online_upload"
-        sub_dict = {'submission_type': sub_type}
-        submission_by_id = self.course.submit_assignment(assignment_id, sub_dict)
+        with warnings.catch_warnings(record=True) as warning_list:
+            assignment_id = 1
+            sub_type = "online_upload"
+            sub_dict = {'submission_type': sub_type}
+            submission_by_id = self.course.submit_assignment(assignment_id, sub_dict)
 
-        self.assertIsInstance(submission_by_id, Submission)
-        self.assertTrue(hasattr(submission_by_id, 'submission_type'))
-        self.assertEqual(submission_by_id.submission_type, sub_type)
+            self.assertIsInstance(submission_by_id, Submission)
+            self.assertTrue(hasattr(submission_by_id, 'submission_type'))
+            self.assertEqual(submission_by_id.submission_type, sub_type)
 
-        submission_by_obj = self.course.submit_assignment(self.assignment, sub_dict)
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
-        self.assertIsInstance(submission_by_obj, Submission)
-        self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
-        self.assertEqual(submission_by_obj.submission_type, sub_type)
+        with warnings.catch_warnings(record=True) as warning_list:
+            submission_by_obj = self.course.submit_assignment(self.assignment, sub_dict)
 
-    def test_subit_assignment_fail(self, m):
-        with self.assertRaises(RequiredFieldMissing):
-            self.course.submit_assignment(1, {})
+            self.assertIsInstance(submission_by_obj, Submission)
+            self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
+            self.assertEqual(submission_by_obj.submission_type, sub_type)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    def test_submit_assignment_fail(self, m):
+        with warnings.catch_warnings(record=True) as warning_list:
+            with self.assertRaises(RequiredFieldMissing):
+                self.course.submit_assignment(1, {})
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # list_submissions()
     def test_list_submissions(self, m):
-        register_uris({'course': ['list_submissions', 'list_submissions_2']}, m)
+        register_uris({'submission': ['list_submissions']}, m)
 
-        assignment_id = 1
-        submissions_by_id = self.course.list_submissions(assignment_id)
-        submission_list_by_id = [submission for submission in submissions_by_id]
+        with warnings.catch_warnings(record=True) as warning_list:
+            assignment_id = 1
+            submissions_by_id = self.course.list_submissions(assignment_id)
+            submission_list_by_id = [submission for submission in submissions_by_id]
 
-        self.assertEqual(len(submission_list_by_id), 2)
-        self.assertIsInstance(submission_list_by_id[0], Submission)
+            self.assertEqual(len(submission_list_by_id), 2)
+            self.assertIsInstance(submission_list_by_id[0], Submission)
 
-        submissions_by_obj = self.course.list_submissions(self.assignment)
-        submission_list_by_obj = [submission for submission in submissions_by_obj]
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
-        self.assertEqual(len(submission_list_by_obj), 2)
-        self.assertIsInstance(submission_list_by_obj[0], Submission)
+        with warnings.catch_warnings(record=True) as warning_list:
+            submissions_by_obj = self.course.list_submissions(self.assignment)
+            submission_list_by_obj = [submission for submission in submissions_by_obj]
+
+            self.assertEqual(len(submission_list_by_obj), 2)
+            self.assertIsInstance(submission_list_by_obj[0], Submission)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # list_multiple_submission()
     def test_list_multiple_submissions(self, m):
@@ -771,92 +805,139 @@ class TestCourse(unittest.TestCase):
 
     # get_submission()
     def test_get_submission(self, m):
-        register_uris({'course': ['get_assignment_by_id_2', 'get_submission']}, m)
+        register_uris({
+            'course': ['get_assignment_by_id'],
+            'submission': ['get_by_id_course']
+        }, m)
 
         assignment_for_id = 1
         user_id = 1
-        submission_by_id = self.course.get_submission(assignment_for_id, user_id)
-        self.assertIsInstance(submission_by_id, Submission)
-        self.assertTrue(hasattr(submission_by_id, 'submission_type'))
 
-        assignment_for_obj = self.course.get_assignment(1)
-        submission_by_obj = self.course.get_submission(assignment_for_obj, self.user)
-        self.assertIsInstance(submission_by_obj, Submission)
-        self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
+        with warnings.catch_warnings(record=True) as warning_list:
+            submission_by_id = self.course.get_submission(assignment_for_id, user_id)
+            self.assertIsInstance(submission_by_id, Submission)
+            self.assertTrue(hasattr(submission_by_id, 'submission_type'))
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            assignment_for_obj = self.course.get_assignment(1)
+            submission_by_obj = self.course.get_submission(assignment_for_obj, self.user)
+            self.assertIsInstance(submission_by_obj, Submission)
+            self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # update_submission()
     def test_update_submission(self, m):
-        register_uris(
-            {
-                'course': [
-                    'get_assignment_by_id_2',
-                    'update_submission',
-                    'get_submission'
-                ]
-            }, m)
+        register_uris({
+            'course': ['get_assignment_by_id'],
+            'submission': ['edit', 'get_by_id_course']
+        }, m)
 
         assignment_for_id = 1
         user_id = 1
-        submission = self.course.update_submission(
-            assignment_for_id,
-            user_id,
-            submission={'excuse': True}
-        )
-        self.assertIsInstance(submission, Submission)
-        self.assertTrue(hasattr(submission, 'excused'))
+        with warnings.catch_warnings(record=True) as warning_list:
+            submission = self.course.update_submission(
+                assignment_for_id,
+                user_id,
+                submission={'excuse': True}
+            )
+            self.assertIsInstance(submission, Submission)
+            self.assertTrue(hasattr(submission, 'excused'))
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
         assignment_for_obj = self.course.get_assignment(1)
-        submission = self.course.update_submission(
-            assignment_for_obj,
-            self.user,
-            submission={'excuse': True}
-        )
-        self.assertIsInstance(submission, Submission)
-        self.assertTrue(hasattr(submission, 'excused'))
+        with warnings.catch_warnings(record=True) as warning_list:
+            submission = self.course.update_submission(
+                assignment_for_obj,
+                self.user,
+                submission={'excuse': True}
+            )
+            self.assertIsInstance(submission, Submission)
+            self.assertTrue(hasattr(submission, 'excused'))
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # list_gradeable_students()
     def test_list_gradeable_students(self, m):
-        register_uris({'course': ['get_assignment_by_id_2', 'list_gradeable_students']}, m)
+        register_uris({'course': ['get_assignment_by_id', 'list_gradeable_students']}, m)
 
         assignment_for_id = 1
-        students_by_id = self.course.list_gradeable_students(assignment_for_id)
-        student_list_by_id = [student for student in students_by_id]
+        with warnings.catch_warnings(record=True) as warning_list:
+            students_by_id = self.course.list_gradeable_students(assignment_for_id)
+            student_list_by_id = [student for student in students_by_id]
 
-        self.assertEqual(len(student_list_by_id), 2)
-        self.assertIsInstance(student_list_by_id[0], UserDisplay)
+            self.assertEqual(len(student_list_by_id), 2)
+            self.assertIsInstance(student_list_by_id[0], UserDisplay)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
         assignment_for_obj = self.course.get_assignment(1)
-        students_by_id = self.course.list_gradeable_students(assignment_for_obj)
-        student_list_by_id = [student for student in students_by_id]
+        with warnings.catch_warnings(record=True) as warning_list:
+            students_by_id = self.course.list_gradeable_students(assignment_for_obj)
+            student_list_by_id = [student for student in students_by_id]
 
-        self.assertEqual(len(student_list_by_id), 2)
-        self.assertIsInstance(student_list_by_id[0], UserDisplay)
+            self.assertEqual(len(student_list_by_id), 2)
+            self.assertIsInstance(student_list_by_id[0], UserDisplay)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # mark_submission_as_read
     def test_mark_submission_as_read(self, m):
-        register_uris({'course': ['get_assignment_by_id_2', 'mark_submission_as_read']}, m)
+        register_uris({'course': ['get_assignment_by_id', 'mark_submission_as_read']}, m)
 
         assignment_for_id = 1
         user_for_id = 1
-        submission_by_id = self.course.mark_submission_as_read(assignment_for_id, user_for_id)
-        self.assertTrue(submission_by_id)
+        with warnings.catch_warnings(record=True) as warning_list:
+            submission_by_id = self.course.mark_submission_as_read(assignment_for_id, user_for_id)
+            self.assertTrue(submission_by_id)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
         assignment_for_obj = self.course.get_assignment(1)
-        submission_by_obj = self.course.mark_submission_as_read(assignment_for_obj, self.user)
-        self.assertTrue(submission_by_obj)
+        with warnings.catch_warnings(record=True) as warning_list:
+            submission_by_obj = self.course.mark_submission_as_read(assignment_for_obj, self.user)
+            self.assertTrue(submission_by_obj)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # mark_submission_as_unread
     def test_mark_submission_as_unread(self, m):
-        register_uris({'course': ['get_assignment_by_id_2', 'mark_submission_as_unread']}, m)
+        register_uris({'course': ['get_assignment_by_id', 'mark_submission_as_unread']}, m)
 
         assignment_for_id = 1
         user_for_id = 1
-        submission_by_id = self.course.mark_submission_as_unread(assignment_for_id, user_for_id)
-        self.assertTrue(submission_by_id)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            submission_by_id = self.course.mark_submission_as_unread(
+                assignment_for_id,
+                user_for_id
+            )
+            self.assertTrue(submission_by_id)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
         assignment_for_obj = self.course.get_assignment(1)
-        submission_by_obj = self.course.mark_submission_as_unread(assignment_for_obj, self.user)
-        self.assertTrue(submission_by_obj)
+        with warnings.catch_warnings(record=True) as warning_list:
+            submission_by_obj = self.course.mark_submission_as_unread(
+                assignment_for_obj,
+                self.user
+            )
+            self.assertTrue(submission_by_obj)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # list_external_feeds()
     def test_list_external_feeds(self, m):

@@ -11,9 +11,9 @@
 	},
 	"delete_assignment": {
 		"method": "DELETE",
-		"endpoint": "courses/1/assignments/5",
+		"endpoint": "courses/1/assignments/1",
 		"data": {
-			"id": 5,
+			"id": 1,
 			"course_id": 1,
 			"name": "Assignment 1",
 			"description": "Delete this assignment"
@@ -32,9 +32,9 @@
 	},
 	"edit_assignment": {
 		"method": "PUT",
-		"endpoint": "courses/1/assignments/5",
+		"endpoint": "courses/1/assignments/1",
 		"data": {
-			"id": 5,
+			"id": 1,
 			"course_id": 1,
 			"name": "New Name",
 			"description": "Edit this assignment"
@@ -71,6 +71,18 @@
 				"name": "Assignment Group 5"
 			}
 		],
+		"status_code": 200
+	},
+	"submit": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/submissions",
+		"data": {
+			"id": 1,
+			"assignment_id": 1,
+			"user_id": 1,
+			"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+			"submission_type": "online_upload"
+		},
 		"status_code": 200
 	}
 }

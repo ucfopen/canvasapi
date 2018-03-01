@@ -94,6 +94,23 @@ class TestRequester(unittest.TestCase):
         self.assertLessEqual(len(self.requester._cache), 5)
         self.assertEqual(response, self.requester._cache[0])
 
+    def test_request_lowercase_boolean(self, m):
+        def custom_matcher(request):
+            if 'test=true' in request.text and 'test2=false' in request.text:
+                resp = requests.Response()
+                resp.status_code = 200
+                return resp
+
+        m.add_matcher(custom_matcher)
+
+        response = self.requester.request(
+            'POST',
+            'test',
+            test=True,
+            test2=False
+        )
+        self.assertEqual(response.status_code, 200)
+
     def test_request_400(self, m):
         register_uris({'requests': ['400']}, m)
 

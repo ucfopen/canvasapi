@@ -23,6 +23,27 @@
 		},
 		"status_code": 200
 	},
+	"list_submissions": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/submissions",
+		"data": [
+			{
+				"id": 1,
+				"assignments_id": 1,
+				"user_id": 1,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"submission_type": "online_upload"
+			},
+			{
+				"id": 2,
+				"assignments_id": 1,
+				"user_id": 2,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/2",
+				"submission_type": "online_upload"
+			}
+		],
+		"status_code": 200
+	},
 	"upload_comment": {
 		"method": "POST",
 		"endpoint": "courses/1/assignments/1/submissions/1/comments/files",
@@ -38,7 +59,21 @@
 		"method": "POST",
 		"endpoint": "files/upload_response_upload_url",
 		"data": {
-			"url": "great_url_success"
+			"url": "great_url_success",
+			"id": 1
 		}
+	},
+	"edit": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1/submissions/1",
+		"data": {
+				"id": 1,
+				"assignments_id": 1,
+				"user_id": 1,
+				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"submission_type": "online_upload",
+				"excused": true
+		},
+		"status_code": 200
 	}
 }
