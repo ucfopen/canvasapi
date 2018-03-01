@@ -27,7 +27,7 @@
 ### Bugfixes
 
 - Fixed an issue where booleans would be capitalized when sent to Canvas, causing Canvas to misinterpret them and set default values.
-- Fixed an issue where unexpected JSON responses from Canvas would cause `PaginatedList` objects to fail. 
+- Fixed an issue where unexpected JSON responses from Canvas would cause `PaginatedList` objects to fail.
 
 ## [0.8.2] - 2018-01-24
 
