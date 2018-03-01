@@ -5,12 +5,13 @@
 ### New Endpoint Coverage
 
 - Quiz Questions
-- Improved keyword argument support for `course.get_section()` (thanks [@andrew-gardener](https://github.com/andrew-gardener))
 
 ### General
 
-- Updated `PaginatedList` to allow specification of the root element to build the list from when given an atypical JSON response (see [#146](https://github.com/ucfopen/canvasapi/issues/146)).
 - Added example usage for several common endpoints to our documentation.
+- Updated `PaginatedList` to allow specification of the root element to build the list from when given an atypical JSON response (see [#146](https://github.com/ucfopen/canvasapi/issues/146)). (thanks [@dfwarden](https://github.com/dfwarden))
+- Improved keyword argument support for `course.get_section()` (thanks [@andrew-gardener](https://github.com/andrew-gardener))
+- When uploading a file to a submission with `Submission.upload_comment`, it will automatically attached to a new comment.
 
 ### Deprecation Warnings
 
@@ -229,6 +230,7 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.9.0]: https://github.com/ucfopen/canvasapi/compare/v0.8.2...v0.9.0
 [0.8.2]: https://github.com/ucfopen/canvasapi/compare/v0.8.1...v0.8.2
 [0.8.1]: https://github.com/ucfopen/canvasapi/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/ucfopen/canvasapi/compare/v0.7.0...v0.8.0
