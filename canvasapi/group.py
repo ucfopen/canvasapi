@@ -667,6 +667,86 @@ class Group(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def create_content_migration(self, **kwargs):
+        """
+        Create a content migration.
+
+        :calls: `POST /api/v1/groups/:group_id/content_migrations \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.create>`_
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        if not 'migration_type' in kwargs:
+            raise RequiredFieldMissing("Parameter with key 'migration_type' is required.")
+
+        response = self._requester.request(
+            'POST',
+            'groups/{}/content_migrations'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return ContentMigration(self._requester, response.json())
+
+    def get_content_migration(self, content_migration):
+        """
+        Retrive a Content Migration by its ID
+
+        :calls: `GET /api/v1/groups/:group_id/content_migrations/:id \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.show>`_
+
+        :param migration: The object or ID of the course to retrieve.
+        :type migration: int, str or :class:`canvasapi.content_migration.ContentMigration`
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+
+        response = self._requester.request(
+            'GET',
+            'groups/{}/content_migrations/{}'.format(self.id,migration_id)
+        )
+        return ContentMigration(self._requester, response.json())
+
+    def get_content_migrations(self):
+        """
+        List Content Migrations for this group
+
+        :calls: `GET /api/v1/groups/:group_id/content_migrations/ \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        return PaginatedList(
+            ContentMigration,
+            self._requester,
+            'GET',
+            'groups/{}/content_migrations'.format(self.id)
+        )
+
+    def get_migration_systems(self):
+        """
+        Return a list of Migration Systems.
+
+        :calls: `GET /api/v1/group/:group_id/content_migrations/migrators \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.available_migrators>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_migration.Migrator`
+        """
+        from canvasapi.content_migration import Migrator
+
+        return PaginatedList(
+            Migrator,
+            self._requester,
+            'GET',
+            'groups/{}/content_migrations/migrators'.format(self.id)
+        )
 
 @python_2_unicode_compatible
 class GroupMembership(CanvasObject):
@@ -729,7 +809,6 @@ class GroupMembership(CanvasObject):
             'groups/{}/memberships/self'.format(self.id),
         )
         return response.json()
-
 
 @python_2_unicode_compatible
 class GroupCategory(CanvasObject):
