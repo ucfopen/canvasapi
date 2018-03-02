@@ -627,6 +627,28 @@ class User(CanvasObject):
             'users/{}/content_migrations/migrators'.format(self.id)
         )
 
+    def update_content_migration(self, content_migration, **kwargs):
+        """
+        Update a Content Migration.
+
+        :calls: `PUT /api/v1/users/:user_id/content_migrations/:id \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
+
+        :param content_migration: The object or ID of the Content Migration.
+        :type content_migration: :class:`canvasapi.content_migration.ContentMigration` or int
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        content_migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+
+        response = self._requester.request(
+            'PUT',
+            'users/{}/content_migrations/{}'.format(self.id, content_migration_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return ContentMigration(self._requester, response.json())
 
 @python_2_unicode_compatible
 class UserDisplay(CanvasObject):
