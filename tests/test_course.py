@@ -29,6 +29,7 @@ from canvasapi.submission import Submission
 from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
+from canvasapi.content_migration import ContentMigration, Migrator
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -1182,6 +1183,62 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(response, "grading_scheme"))
         self.assertEqual(response.grading_scheme[0].get('name'), "A")
         self.assertEqual(response.grading_scheme[0].get('value'), 0.9)
+
+    # create_content_migration
+    def test_create_content_migration(self, m):
+        register_uris({'course': ['create_content_migration']}, m)
+
+        content_migration = self.course.create_content_migration(migration_type='dummy_importer')
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    # create_content_migration without type
+    def test_create_course_migration_missing_type(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_content_migration()
+
+    # get_content_migration
+    def test_get_content_migration(self, m):
+        register_uris({'course': ['get_content_migration_single']}, m)
+
+        content_migration = self.course.get_content_migration(1)
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    # get_content_migrations
+    def test_get_content_migrations(self, m):
+        register_uris({'course': ['get_content_migration_multiple']}, m)
+
+        content_migrations = self.course.get_content_migrations()
+
+        self.assertEqual(len(list(content_migrations)), 2)
+
+        self.assertIsInstance(content_migrations[0], ContentMigration)
+        self.assertEqual(content_migrations[0].id, 1)
+        self.assertEqual(content_migrations[0].migration_type, "dummy_importer")
+        self.assertIsInstance(content_migrations[1], ContentMigration)
+        self.assertEqual(content_migrations[1].id, 2)
+        self.assertEqual(content_migrations[1].migration_type, "dummy_importer")
+
+    # get_migration_systems
+    def test_get_migration_systems(self, m):
+        register_uris({'course': ['get_migration_systems_multiple']}, m)
+
+        migration_systems = self.course.get_migration_systems()
+
+        self.assertEqual(len(list(migration_systems)), 2)
+
+        self.assertIsInstance(migration_systems[0], Migrator)
+        self.assertEqual(migration_systems[0].type, "dummy_importer")
+        self.assertEqual(migration_systems[0].requires_file_upload, True)
+        self.assertEqual(migration_systems[0].name, "Dummy Importer 01")
+        self.assertIsInstance(migration_systems[1], Migrator)
+        self.assertEqual(migration_systems[1].type, "dummy_importer_02")
+        self.assertEqual(migration_systems[1].requires_file_upload, False)
+        self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
+
 
 
 @requests_mock.Mocker()
