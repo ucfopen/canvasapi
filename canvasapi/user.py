@@ -5,6 +5,7 @@ from six import python_2_unicode_compatible
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
