@@ -1848,11 +1848,15 @@ class Course(CanvasObject):
             'courses/{}/content_migrations'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return ContentMigration(self._requester, response.json())
 
-    def get_content_migration(self, content_migration):
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migration(self, content_migration, **kwargs):
         """
-        Retrive a Content Migration by its ID
+        Retrive a content migration by its ID
 
         :calls: `GET /api/v1/courses/:course_id/content_migrations/:id \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.show>`_
@@ -1868,13 +1872,18 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/content_migrations/{}'.format(self.id,migration_id)
+            'courses/{}/content_migrations/{}'.format(self.id,migration_id),
+            _kwargs=combine_kwargs(**kwargs)
         )
-        return ContentMigration(self._requester, response.json())
 
-    def get_content_migrations(self):
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migrations(self, **kwargs):
         """
-        List Content Migrations for this course
+        List content migrations that the current account can view or manage.
 
         :calls: `GET /api/v1/courses/:course_id/content_migrations/ \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.index>`_
@@ -1888,14 +1897,16 @@ class Course(CanvasObject):
             ContentMigration,
             self._requester,
             'GET',
-            'courses/{}/content_migrations'.format(self.id)
+            'courses/{}/content_migrations'.format(self.id),
+            {'course_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
         )
 
-    def list_migration_systems(self):
+    def get_migration_systems(self, **kwargs):
         """
-        Return a list of Migration Systems.
+        Return a list of migration systems.
 
-        :calls: `GET /api/v1/course/:course_id/content_migrations/migrators \
+        :calls: `GET /api/v1/courses/:course_id/content_migrations/migrators \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.available_migrators>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -1907,31 +1918,9 @@ class Course(CanvasObject):
             Migrator,
             self._requester,
             'GET',
-            'courses/{}/content_migrations/migrators'.format(self.id)
-        )
-
-    def update_content_migration(self, content_migration, **kwargs):
-        """
-        Update a Content Migration.
-
-        :calls: `PUT /api/v1/courses/:course_id/content_migrations/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
-
-        :param content_migration: The object or ID of the Content Migration.
-        :type content_migration: :class:`canvasapi.content_migration.ContentMigration` or int
-
-        :rtype: :class:`canvasapi.content_migration.ContentMigration`
-        """
-        from canvasapi.content_migration import ContentMigration
-
-        content_migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
-
-        response = self._requester.request(
-            'PUT',
-            'courses/{}/content_migrations/{}'.format(self.id, content_migration_id),
+            'courses/{}/content_migrations/migrators'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return ContentMigration(self._requester, response.json())
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):

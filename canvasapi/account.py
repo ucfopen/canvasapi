@@ -1191,11 +1191,15 @@ class Account(CanvasObject):
             'accounts/{}/content_migrations'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return ContentMigration(self._requester, response.json())
 
-    def get_content_migration(self, content_migration):
+        response_json = response.json()
+        response_json.update({'account_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migration(self, content_migration, **kwargs):
         """
-        Retrive a Content Migration by its ID
+        Retrive a content migration by its ID
 
         :calls: `GET /api/v1/accounts/:account_id/content_migrations/:id \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.show>`_
@@ -1211,34 +1215,18 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/{}/content_migrations/{}'.format(self.id,migration_id)
+            'accounts/{}/content_migrations/{}'.format(self.id,migration_id),
+            _kwargs=combine_kwargs(**kwargs)
         )
-        return ContentMigration(self._requester, response.json())
 
-    def get_migration_issue(self,content_migration,migration_issue):
+        response_json = response.json()
+        response_json.update({'account_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migrations(self, **kwargs):
         """
-        List Content Migrations that the current account can view or manage.
-
-        :calls: `GET /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
-
-        :rtype: :class:`canvasapi.content_migration.MigrationIssue`
-        """
-        from canvasapi.content_migration import ContentMigration
-        from canvasapi.content_migration import MigrationIssue
-
-        content_migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
-        migration_issue_id = obj_or_id(migration_issue, "migration_issue", (MigrationIssue,))
-
-        response = self._requester.request(
-            'GET',
-            'accounts/{}/content_migrations/{}/migration_issues/{}'.format(self.id,content_migration_id,migration_issue_id)
-        )
-        return MigrationIssue(self._requester, response.json())
-
-    def list_content_migrations(self):
-        """
-        List Content Migrations that the current account can view or manage.
+        List content migrations that the current account can view or manage.
 
         :calls: `GET /api/v1/accounts/:account_id/content_migrations/ \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.index>`_
@@ -1252,34 +1240,13 @@ class Account(CanvasObject):
             ContentMigration,
             self._requester,
             'GET',
-            'accounts/{}/content_migrations'.format(self.id)
+            'accounts/{}/content_migrations'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
-    def list_migration_issues(self,content_migration):
+    def get_migration_systems(self, **kwargs):
         """
-        List Migration Issues for a Content Migration
-
-        :calls: `GET /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.content_migration.MigrationIssue`
-        """
-        from canvasapi.content_migration import ContentMigration
-        from canvasapi.content_migration import MigrationIssue
-
-        content_migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
-
-        return PaginatedList(
-            MigrationIssue,
-            self._requester,
-            'GET',
-            'accounts/{}/content_migrations/{}/migration_issues'.format(self.id,content_migration_id)
-        )
-
-    def list_migration_systems(self):
-        """
-        Return a list of Migration Systems.
+        Return a list of migration systems.
 
         :calls: `GET /api/v1/accounts/:account_id/content_migrations/migrators \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.available_migrators>`_
@@ -1293,56 +1260,10 @@ class Account(CanvasObject):
             Migrator,
             self._requester,
             'GET',
-            'accounts/{}/content_migrations/migrators'.format(self.id)
-        )
-
-    def update_content_migration(self, content_migration, **kwargs):
-        """
-        Update a Content Migration.
-
-        :calls: `PUT /api/v1/accounts/:account_id/content_migrations/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
-
-        :param content_migration: The object or ID of the Content Migration.
-        :type content_migration: :class:`canvasapi.content_migration.ContentMigration` or int
-
-        :rtype: :class:`canvasapi.content_migration.ContentMigration`
-        """
-        from canvasapi.content_migration import Content
-
-        content_migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
-
-        response = self._requester.request(
-            'PUT',
-            'accounts/{}/content_migrations/{}'.format(self.id, content_migration_id),
+            'accounts/{}/content_migrations/migrators'.format(self.id),
+            {'account_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
-        return ContentMigration(self._requester, response.json())
-
-    def update_migration_issue(self,content_migration,migration_issue,**kwargs):
-        """
-        Update a Migration Issue within a specific content migration
-
-        :calls: `PUT /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
-
-        :rtype: :class:`canvasapi.content_migration.MigrationIssue`
-        """
-        from canvasapi.content_migration import ContentMigration
-        from canvasapi.content_migration import MigrationIssue
-
-        content_migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
-        migration_issue_id = obj_or_id(migration_issue, "migration_issue", (MigrationIssue,))
-
-        if not 'workflow_state' in kwargs:
-            raise RequiredFieldMissing("Parameter with key 'workflow_state' is required.")
-
-        response = self._requester.request(
-            'PUT',
-            'accounts/{}/content_migrations/{}/migration_issues/{}'.format(self.id,content_migration_id,migration_issue_id),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-        return MigrationIssue(self._requester, response.json())
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):
