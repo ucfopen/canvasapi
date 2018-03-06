@@ -3,10 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.grading_standard import GradingStandard
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.rubric import Rubric
 from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
