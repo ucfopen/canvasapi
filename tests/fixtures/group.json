@@ -825,7 +825,8 @@
 		"data": {
 			"id": 1,
 			"migration_type": "dummy_importer",
-			"migration_type_title": "Dummy Importer"
+			"migration_type_title": "Dummy Importer",
+			"progress_url": "https://example.com/api/v1/progress/1"
 		},
 		"status_code": 200
 	},

@@ -1239,8 +1239,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(migration_systems[1].requires_file_upload, False)
         self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
 
-
-
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
 

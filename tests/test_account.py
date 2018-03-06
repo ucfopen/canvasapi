@@ -773,6 +773,7 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(content_migrations[1].id, 2)
         self.assertEqual(content_migrations[1].migration_type, "dummy_importer")
 
+    # get_migration_systems
     def test_get_migration_systems(self, m):
         register_uris({'account': ['get_migration_systems_multiple']}, m)
 

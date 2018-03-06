@@ -1,0 +1,162 @@
+{
+	"update": {
+		"method": "PUT",
+		"endpoint": "accounts/1/content_migrations/1",
+		"data": {
+			"id": 1,
+			"migration_type": "dummy_importer",
+			"migration_type_title": "Dummy Importer"
+		},
+		"status_code": 200
+	},
+	"update_fail": {
+		"method": "PUT",
+		"endpoint": "accounts/1/content_migrations/1",
+		"data": {},
+		"status_code": 200
+	},
+	"get_parent_account": {
+		"method": "GET",
+		"endpoint": "accounts/1",
+		"data": {
+			"id": 1,
+			"name": "Dummy Parent"
+		},
+		"status_code": 200
+	},
+	"get_parent_course": {
+		"method": "GET",
+		"endpoint": "courses/1",
+		"data": {
+			"id": 1,
+			"name": "Dummy Parent"
+		},
+		"status_code": 200
+	},
+	"get_parent_group": {
+		"method": "GET",
+		"endpoint": "groups/1",
+		"data": {
+			"id": 1,
+			"name": "Dummy Parent"
+		},
+		"status_code": 200
+	},
+	"get_parent_user": {
+		"method": "GET",
+		"endpoint": "users/1",
+		"data": {
+			"id": 1,
+			"name": "Dummy Parent"
+		},
+		"status_code": 200
+	},
+	"get_migration_issue_single": {
+		"method": "GET",
+		"endpoint": "accounts/1/content_migrations/1/migration_issues/1",
+		"data": {
+			"id": 1,
+			"content_migration_url": "https://example.com/api/v1/courses/1/content_migrations/1",
+			"description": "A Dummy Error",
+			"workflow_state": "active",
+			"issue_type": "dummy",
+			"error_report_html_url": "https://example.com/error_reports/1"
+		},
+		"status_code": 200
+	},
+	"get_migration_issue_single_course": {
+		"method": "GET",
+		"endpoint": "courses/1/content_migrations/1/migration_issues/1",
+		"data": {
+			"id": 1,
+			"content_migration_url": "https://example.com/api/v1/courses/1/content_migrations/1",
+			"description": "A Dummy Error",
+			"workflow_state": "active",
+			"issue_type": "dummy",
+			"error_report_html_url": "https://example.com/error_reports/1"
+		},
+		"status_code": 200
+	},
+	"get_migration_issue_single_group": {
+		"method": "GET",
+		"endpoint": "groups/1/content_migrations/1/migration_issues/1",
+		"data": {
+			"id": 1,
+			"content_migration_url": "https://example.com/api/v1/courses/1/content_migrations/1",
+			"description": "A Dummy Error",
+			"workflow_state": "active",
+			"issue_type": "dummy",
+			"error_report_html_url": "https://example.com/error_reports/1"
+		},
+		"status_code": 200
+	},
+	"get_migration_issue_single_user": {
+		"method": "GET",
+		"endpoint": "users/1/content_migrations/1/migration_issues/1",
+		"data": {
+			"id": 1,
+			"content_migration_url": "https://example.com/api/v1/courses/1/content_migrations/1",
+			"description": "A Dummy Error",
+			"workflow_state": "active",
+			"issue_type": "dummy",
+			"error_report_html_url": "https://example.com/error_reports/1"
+		},
+		"status_code": 200
+	},
+	"get_migration_issue_multiple": {
+		"method": "GET",
+		"endpoint": "accounts/1/content_migrations/1/migration_issues/?per_page=100",
+		"data": [
+			{
+				"id": 1,
+				"content_migration_url": "https://example.com/api/v1/courses/1/content_migrations/1",
+				"description": "A Dummy Error",
+				"workflow_state": "active",
+				"issue_type": "dummy"
+			},
+			{
+				"id": 2,
+				"content_migration_url": "https://example.com/api/v1/courses/1/content_migrations/1",
+				"description": "Another Dummy Error",
+				"workflow_state": "active",
+				"issue_type": "dummy"
+			}
+		],
+		"status_code": 200
+	},
+	"get_progress": {
+		"method": "GET",
+		"endpoint": "progress/1",
+		"data": {
+			"id": 1,
+			"context_id": 1,
+			"context_type": "Content Migration",
+			"user_id": 123,
+			"tag": "assign_unassigned_members",
+			"completion": 100,
+			"workflow_state": "running",
+			"created_at": "2013-01-15T15:00:00Z",
+			"updated_at": "2013-01-15T15:04:00Z",
+			"message": "Test 123"
+		},
+		"status_code": 200
+	},
+	"update_issue": {
+		"method": "PUT",
+		"endpoint": "accounts/1/content_migrations/1/migration_issues/1",
+		"data": {
+			"id": 1,
+				"content_migration_url": "https://example.com/api/v1/courses/1/content_migrations/1",
+				"description": "A Dummy Error",
+				"workflow_state": "active",
+				"issue_type": "dummy"
+		},
+		"status_code": 200
+	},
+	"update_issue_fail": {
+		"method": "PUT",
+		"endpoint": "accounts/1/content_migrations/1/migration_issues/1",
+		"data": {},
+		"status_code": 200
+	}
+}
