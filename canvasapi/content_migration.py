@@ -3,9 +3,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
+
 
 @python_2_unicode_compatible
 class ContentMigration(CanvasObject):
@@ -15,7 +15,8 @@ class ContentMigration(CanvasObject):
     @property
     def _parent_id(self):
         """
-        Return the id of the course or group that spawned this content migration.
+        Return the id of the course or group that spawned
+        this content migration.
 
         :rtype: int
         """
@@ -28,7 +29,8 @@ class ContentMigration(CanvasObject):
         elif hasattr(self, 'user_id'):
             return self.user_id
         else:
-            raise ValueError("Content Migration does not have an account_id, course_id, group_id or user_id")
+            raise ValueError(
+                "Content Migration does not have an account_id, course_id, group_id or user_id")
 
     @property
     def _parent_type(self):
@@ -46,13 +48,15 @@ class ContentMigration(CanvasObject):
         elif hasattr(self, 'user_id'):
             return 'user'
         else:
-            raise ValueError("Content Migration does not have an account_id, course_id, group_id or user_id")
+            raise ValueError(
+                "Content Migration does not have an account_id, course_id, group_id or user_id")
 
-    def get_migration_issue(self,migration_issue, **kwargs):
+    def get_migration_issue(self, migration_issue, **kwargs):
         """
         List a single issue for this content migration
 
-        :calls: `GET /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues \
+        :calls:
+            `GET /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues \
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
             or `GET /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues \
@@ -66,28 +70,34 @@ class ContentMigration(CanvasObject):
 
         :rtype: :class:`canvasapi.content_migration.MigrationIssue`
         """
-        from canvasapi.content_migration import ContentMigration
         from canvasapi.content_migration import MigrationIssue
 
         migration_issue_id = obj_or_id(migration_issue, "migration_issue", (MigrationIssue,))
 
         response = self._requester.request(
             'GET',
-            '{}s/{}/content_migrations/{}/migration_issues/{}'.format(self._parent_type, self._parent_id,self.id,migration_issue_id),
+            '{}s/{}/content_migrations/{}/migration_issues/{}'.format(
+                self._parent_type,
+                self._parent_id,
+                self.id,
+                migration_issue_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
         response_json = response.json()
-        response_json.update({'context_type':self._parent_type, 'context_id':self._parent_id, 'content_migration_id':self.id})
+        response_json.update({
+            'context_type': self._parent_type,
+            'context_id': self._parent_id,
+            'content_migration_id': self.id})
 
         return MigrationIssue(self._requester, response_json)
-
 
     def get_migration_issues(self, **kwargs):
         """
         List issues for this content migration
 
-        :calls: `GET /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues \
+        :calls:
+            `GET /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues \
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
             or `GET /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues \
@@ -107,8 +117,12 @@ class ContentMigration(CanvasObject):
             MigrationIssue,
             self._requester,
             'GET',
-            '{}s/{}/content_migrations/{}/migration_issues/'.format(self._parent_type, self._parent_id,self.id),
-            {'context_type':self._parent_type, 'context_id':self._parent_id, 'content_migration_id':self.id},
+            '{}s/{}/content_migrations/{}/migration_issues/'.format(
+                self._parent_type,
+                self._parent_id, self.id),
+            {'context_type': self._parent_type,
+             'context_id': self._parent_id,
+             'content_migration_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -116,7 +130,10 @@ class ContentMigration(CanvasObject):
         """
         Return the object that spawned this content migration.
 
-        :rtype: :class:`canvasapi.group.Account`, :class:`canvasapi.course.Course`, :class:`canvasapi.course.Group`, or :class:`canvasapi.course.User`
+        :rtype: :class:`canvasapi.group.Account`,
+            or :class:`canvasapi.course.Course`,
+            or :class:`canvasapi.course.Group`,
+            or :class:`canvasapi.course.User`
         """
         from canvasapi.group import Group
         from canvasapi.course import Course
@@ -180,7 +197,7 @@ class ContentMigration(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '{}s/{}/content_migrations/{}'.format(self._parent_type, self._parent_id,self.id),
+            '{}s/{}/content_migrations/{}'.format(self._parent_type, self._parent_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -190,16 +207,18 @@ class ContentMigration(CanvasObject):
         else:
             return False
 
+
 @python_2_unicode_compatible
 class MigrationIssue(CanvasObject):
     def __str__(self):
-        return "{}: {}".format(self.id,self.description)
+        return "{}: {}".format(self.id, self.description)
 
-    def update(self,**kwargs):
+    def update(self, **kwargs):
         """
         Update an existing migration issue.
 
-        :calls: `PUT /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id \
+        :calls:
+        `PUT /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
 
         or `PUT /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues/:id \
@@ -216,7 +235,11 @@ class MigrationIssue(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '{}s/{}/content_migrations/{}/migration_issues/{}'.format(self.context_type, self.context_id, self.content_migration_id, self.id),
+            '{}s/{}/content_migrations/{}/migration_issues/{}'.format(
+                self.context_type,
+                self.context_id,
+                self.content_migration_id,
+                self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -225,6 +248,7 @@ class MigrationIssue(CanvasObject):
             return True
         else:
             return False
+
 
 @python_2_unicode_compatible
 class Migrator(CanvasObject):

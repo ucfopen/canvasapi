@@ -5,7 +5,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.account import Account
-from canvasapi.content_migration import ContentMigration, MigrationIssue, Migrator
+from canvasapi.content_migration import ContentMigration, MigrationIssue
 from canvasapi.course import Course
 from canvasapi.group import Group
 from canvasapi.progress import Progress
@@ -44,16 +44,16 @@ class TestContentMigration(unittest.TestCase):
         self.assertIsInstance(string, str)
 
     # _parent_type
-    def test_parent_type_acount(self, m):
+    def test_parent_type_account(self, m):
         self.assertEqual(self.content_migration._parent_type, 'account')
 
-    def test_parent_type_acount(self, m):
+    def test_parent_type_course(self, m):
         self.assertEqual(self.content_migration_course._parent_type, 'course')
 
-    def test_parent_type_acount(self, m):
+    def test_parent_type_group(self, m):
         self.assertEqual(self.content_migration_group._parent_type, 'group')
 
-    def test_parent_type_acount(self, m):
+    def test_parent_type_user(self, m):
         self.assertEqual(self.content_migration_user._parent_type, 'user')
 
     def test_parent_type_no_type(self, m):
@@ -62,16 +62,16 @@ class TestContentMigration(unittest.TestCase):
             migration._parent_type
 
     # _parent_id
-    def test_parent_id_acount(self, m):
+    def test_parent_id_account(self, m):
         self.assertEqual(self.content_migration._parent_id, 1)
 
-    def test_parent_id_acount(self, m):
+    def test_parent_id_course(self, m):
         self.assertEqual(self.content_migration_course._parent_id, 1)
 
-    def test_parent_id_acount(self, m):
+    def test_parent_id_group(self, m):
         self.assertEqual(self.content_migration_group._parent_id, 1)
 
-    def test_parent_id_acount(self, m):
+    def test_parent_id_user(self, m):
         self.assertEqual(self.content_migration_user._parent_id, 1)
 
     def test_parent_id_no_id(self, m):
@@ -94,7 +94,7 @@ class TestContentMigration(unittest.TestCase):
 
         issues = self.content_migration.get_migration_issues()
 
-        self.assertEqual(len(list(issues)),2)
+        self.assertEqual(len(list(issues)), 2)
 
         self.assertIsInstance(issues[0], MigrationIssue)
         self.assertTrue(hasattr(issues[0], 'id'))
@@ -160,6 +160,7 @@ class TestContentMigration(unittest.TestCase):
         worked = self.content_migration.update()
         self.assertFalse(worked)
 
+
 @requests_mock.Mocker()
 class TestMigrationIssue(unittest.TestCase):
 
@@ -172,7 +173,10 @@ class TestMigrationIssue(unittest.TestCase):
                 'group': ['get_by_id', 'get_content_migration_single'],
                 'account': ['get_by_id', 'get_content_migration_single'],
                 'user': ['get_by_id', 'get_content_migration_single'],
-                'content_migration': ['get_migration_issue_single', 'get_migration_issue_single_course', 'get_migration_issue_single_group', 'get_migration_issue_single_user']
+                'content_migration': ['get_migration_issue_single',
+                                      'get_migration_issue_single_course',
+                                      'get_migration_issue_single_group',
+                                      'get_migration_issue_single_user']
             }
             register_uris(requires, m)
 
@@ -211,6 +215,7 @@ class TestMigrationIssue(unittest.TestCase):
         worked = self.migration_issue.update()
         self.assertFalse(worked)
 
+
 @requests_mock.Mocker()
 class TestMigrator(unittest.TestCase):
     def setUp(self):
@@ -222,7 +227,10 @@ class TestMigrator(unittest.TestCase):
                 'group': ['get_by_id', 'get_migration_systems_multiple'],
                 'account': ['get_by_id', 'get_migration_systems_multiple'],
                 'user': ['get_by_id', 'get_migration_systems_multiple'],
-                'content_migration': ['get_migration_issue_single', 'get_migration_issue_single_course', 'get_migration_issue_single_group', 'get_migration_issue_single_user']
+                'content_migration': ['get_migration_issue_single',
+                                      'get_migration_issue_single_course',
+                                      'get_migration_issue_single_group',
+                                      'get_migration_issue_single_user']
             }
             register_uris(requires, m)
 

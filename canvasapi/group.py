@@ -678,7 +678,7 @@ class Group(CanvasObject):
         """
         from canvasapi.content_migration import ContentMigration
 
-        if not 'migration_type' in kwargs:
+        if 'migration_type' not in kwargs:
             raise RequiredFieldMissing("Parameter with key 'migration_type' is required.")
 
         response = self._requester.request(
@@ -710,7 +710,7 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'groups/{}/content_migrations/{}'.format(self.id,migration_id),
+            'groups/{}/content_migrations/{}'.format(self.id, migration_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -759,6 +759,7 @@ class Group(CanvasObject):
             'groups/{}/content_migrations/migrators'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
+
 
 @python_2_unicode_compatible
 class GroupMembership(CanvasObject):
@@ -821,6 +822,7 @@ class GroupMembership(CanvasObject):
             'groups/{}/memberships/self'.format(self.id),
         )
         return response.json()
+
 
 @python_2_unicode_compatible
 class GroupCategory(CanvasObject):

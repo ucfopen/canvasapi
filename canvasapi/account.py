@@ -1183,7 +1183,7 @@ class Account(CanvasObject):
         """
         from canvasapi.content_migration import ContentMigration
 
-        if not 'migration_type' in kwargs:
+        if 'migration_type' not in kwargs:
             raise RequiredFieldMissing("Parameter with key 'migration_type' is required.")
 
         response = self._requester.request(
@@ -1215,7 +1215,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/{}/content_migrations/{}'.format(self.id,migration_id),
+            'accounts/{}/content_migrations/{}'.format(self.id, migration_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -1265,6 +1265,7 @@ class Account(CanvasObject):
             {'account_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
+
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):

@@ -1840,7 +1840,7 @@ class Course(CanvasObject):
         """
         from canvasapi.content_migration import ContentMigration
 
-        if not 'migration_type' in kwargs:
+        if 'migration_type' not in kwargs:
             raise RequiredFieldMissing("Parameter with key 'migration_type' is required.")
 
         response = self._requester.request(
@@ -1872,7 +1872,7 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/content_migrations/{}'.format(self.id,migration_id),
+            'courses/{}/content_migrations/{}'.format(self.id, migration_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -1921,6 +1921,7 @@ class Course(CanvasObject):
             'courses/{}/content_migrations/migrators'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
+
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):

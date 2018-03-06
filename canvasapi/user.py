@@ -556,7 +556,7 @@ class User(CanvasObject):
         """
         from canvasapi.content_migration import ContentMigration
 
-        if not 'migration_type' in kwargs:
+        if 'migration_type' not in kwargs:
             raise RequiredFieldMissing("Parameter with key 'migration_type' is required.")
 
         response = self._requester.request(
@@ -588,7 +588,7 @@ class User(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'users/{}/content_migrations/{}'.format(self.id,migration_id),
+            'users/{}/content_migrations/{}'.format(self.id, migration_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -637,6 +637,7 @@ class User(CanvasObject):
             'users/{}/content_migrations/migrators'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
+
 
 @python_2_unicode_compatible
 class UserDisplay(CanvasObject):
