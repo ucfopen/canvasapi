@@ -50,32 +50,6 @@ class ContentMigration(CanvasObject):
         else:
             raise ValueError("Content Migration does not have an account_id, course_id, group_id or user_id")
 
-    def get_parent(self, **kwargs):
-        """
-        Return the object that spawned this content migration.
-
-        :rtype: :class:`canvasapi.group.Account`, :class:`canvasapi.course.Course`, :class:`canvasapi.course.Group`, or :class:`canvasapi.course.User`
-        """
-        from canvasapi.group import Group
-        from canvasapi.course import Course
-        from canvasapi.account import Account
-        from canvasapi.user import User
-
-        response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self._parent_type, self._parent_id),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
-        if self._parent_type == 'group':
-            return Group(self._requester, response.json())
-        elif self._parent_type == 'course':
-            return Course(self._requester, response.json())
-        elif self._parent_type == 'account':
-            return Account(self._requester, response.json())
-        elif self._parent_type == 'user':
-            return User(self._requester, response.json())
-
     def get_migration_issue(self,migration_issue, **kwargs):
         """
         List a single issue for this content migration
@@ -139,6 +113,53 @@ class ContentMigration(CanvasObject):
             {'context_type':self._parent_type, 'context_id':self._parent_id, 'content_migration_id':self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
+
+    def get_parent(self, **kwargs):
+        """
+        Return the object that spawned this content migration.
+
+        :rtype: :class:`canvasapi.group.Account`, :class:`canvasapi.course.Course`, :class:`canvasapi.course.Group`, or :class:`canvasapi.course.User`
+        """
+        from canvasapi.group import Group
+        from canvasapi.course import Course
+        from canvasapi.account import Account
+        from canvasapi.user import User
+
+        response = self._requester.request(
+            'GET',
+            '{}s/{}'.format(self._parent_type, self._parent_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        if self._parent_type == 'group':
+            return Group(self._requester, response.json())
+        elif self._parent_type == 'course':
+            return Course(self._requester, response.json())
+        elif self._parent_type == 'account':
+            return Account(self._requester, response.json())
+        elif self._parent_type == 'user':
+            return User(self._requester, response.json())
+
+    def get_progress(self, **kwargs):
+        """
+        Get the progress of the current content migration.
+
+        :calls: `GET /api/v1/progress/:id \
+        <https://canvas.instructure.com/doc/api/progress.html#method.progress.show>`_
+
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+
+        from canvasapi.progress import Progress
+
+        progress_id = self.progress_url.split("/")[-1]
+
+        response = self._requester.request(
+            'GET',
+            'progress/{}'.format(progress_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Progress(self._requester, response.json())
 
     def update(self, **kwargs):
         """
