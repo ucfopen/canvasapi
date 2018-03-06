@@ -1241,6 +1241,7 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/{}/content_migrations'.format(self.id),
+            {'account_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
