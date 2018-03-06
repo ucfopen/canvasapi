@@ -5,6 +5,7 @@ from six import python_2_unicode_compatible
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
@@ -544,6 +545,98 @@ class User(CanvasObject):
         )
         return User(self._requester, response.json())
 
+    def create_content_migration(self, **kwargs):
+        """
+        Create a content migration.
+
+        :calls: `POST /api/v1/users/:user_id/content_migrations \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.create>`_
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        if not 'migration_type' in kwargs:
+            raise RequiredFieldMissing("Parameter with key 'migration_type' is required.")
+
+        response = self._requester.request(
+            'POST',
+            'users/{}/content_migrations'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'user_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migration(self, content_migration, **kwargs):
+        """
+        Retrive a content migration by its ID
+
+        :calls: `GET /api/v1/users/:user_id/content_migrations/:id \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.show>`_
+
+        :param migration: The object or ID of the course to retrieve.
+        :type migration: int, str or :class:`canvasapi.content_migration.ContentMigration`
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+
+        response = self._requester.request(
+            'GET',
+            'users/{}/content_migrations/{}'.format(self.id,migration_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'user_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migrations(self, **kwargs):
+        """
+        List content migrations that the current account can view or manage.
+
+        :calls: `GET /api/v1/users/:user_id/content_migrations/ \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        return PaginatedList(
+            ContentMigration,
+            self._requester,
+            'GET',
+            'users/{}/content_migrations'.format(self.id),
+            {'user_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_migration_systems(self, **kwargs):
+        """
+        Return a list of migration systems.
+
+        :calls: `GET /api/v1/users/:user_id/content_migrations/migrators \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.available_migrators>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_migration.Migrator`
+        """
+        from canvasapi.content_migration import Migrator
+
+        return PaginatedList(
+            Migrator,
+            self._requester,
+            'GET',
+            'users/{}/content_migrations/migrators'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
 
 @python_2_unicode_compatible
 class UserDisplay(CanvasObject):
