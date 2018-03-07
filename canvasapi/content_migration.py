@@ -53,24 +53,23 @@ class ContentMigration(CanvasObject):
 
     def get_migration_issue(self, migration_issue, **kwargs):
         """
-        List a single issue for this content migration
+        List a single issue for this content migration.
 
-        :calls:
-            `GET
-            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues \
-            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
-
-            or `GET
-            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues \
-            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
+        :calls: `GET
+            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
 
             or `GET
-            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues \
-            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
+            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
 
             or `GET
-            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues \
-            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
+            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
+
+            or `GET
+            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
 
         :rtype: :class:`canvasapi.content_migration.MigrationIssue`
         """
@@ -102,19 +101,19 @@ class ContentMigration(CanvasObject):
 
         :calls:
             `GET
-            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues \
+            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
             or `GET
-            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues \
+            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues/:id
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
             or `GET
-            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues \
+            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues/:id
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
             or `GET
-            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues \
+            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues/:id
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
         :rtype: :class:`canvasapi.content_migration.MigrationIssue`
@@ -167,8 +166,8 @@ class ContentMigration(CanvasObject):
         """
         Get the progress of the current content migration.
 
-        :calls: `GET /api/v1/progress/:id \
-        <https://canvas.instructure.com/doc/api/progress.html#method.progress.show>`_
+        :calls: `GET /api/v1/progress/:id
+            <https://canvas.instructure.com/doc/api/progress.html#method.progress.show>`_
 
         :rtype: :class:`canvasapi.progress.Progress`
         """
@@ -188,17 +187,17 @@ class ContentMigration(CanvasObject):
         """
         Update an existing content migration.
 
-        :calls: `PUT /api/v1/accounts/:account_id/content_migrations/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
+        :calls: `PUT /api/v1/accounts/:account_id/content_migrations/:id
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
 
-        or `PUT /api/v1/courses/:course_id/content_migrations/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
+            or `PUT /api/v1/courses/:course_id/content_migrations/:id
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
 
-        or `PUT /api/v1/groups/:group_id/content_migrations/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
+            or `PUT /api/v1/groups/:group_id/content_migrations/:id
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
 
-        or `PUT /api/v1/users/:user_id/content_migrations/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
+            or `PUT /api/v1/users/:user_id/content_migrations/:id
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.update>`_
 
         :returns: True if the migration was updated, False otherwise.
         :rtype: bool
@@ -225,22 +224,18 @@ class MigrationIssue(CanvasObject):
         """
         Update an existing migration issue.
 
-        :calls:
-        `PUT
-        /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
-
-        or `PUT
-        /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
-
-        or `PUT
-        /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
-
-        or `PUT
-        /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues/:id \
-        <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
+        :calls: `PUT
+            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
+            or `PUT
+            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues/:id
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
+            or `PUT
+            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues/:id
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
+            or `PUT
+            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues/:id
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.update>`_
 
         :returns: True if the issue was updated, False otherwise.
         :rtype: bool

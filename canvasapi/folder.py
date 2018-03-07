@@ -108,7 +108,7 @@ class Folder(CanvasObject):
 
     def copy_file(self, file, **kwargs):
         """
-        Updates a folder.
+        Copies a file into the current folder.
 
         :calls: `POST /api/v1/folders/:dest_folder_id/copy_file \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.copy_file>`_
