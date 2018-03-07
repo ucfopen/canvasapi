@@ -620,7 +620,7 @@ class Account(CanvasObject):
         )
         return GroupCategory(self._requester, response.json())
 
-    def list_group_categories(self, kwargs):
+    def list_group_categories(self, **kwargs):
         """
         List group categories for a context
 
@@ -659,7 +659,8 @@ class Account(CanvasObject):
             GroupCategory,
             self._requester,
             'GET',
-            'accounts/{}/group_categories'.format(self.id)
+            'accounts/{}/group_categories'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_external_tool(self, name, privacy_level, consumer_key, shared_secret, **kwargs):
