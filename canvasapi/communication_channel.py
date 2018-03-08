@@ -55,7 +55,8 @@ class CommunicationChannel(CanvasObject):
             'users/{}/communication_channels/{}/notification_preferences'.format(
                 self.user_id,
                 self.id
-            )
+            ),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
         return response.json()['notification_preferences']
@@ -104,7 +105,8 @@ class CommunicationChannel(CanvasObject):
             'users/{}/communication_channels/{}/notification_preference_categories'.format(
                 self.user_id,
                 self.id
-            )
+            ),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()['categories']
 
