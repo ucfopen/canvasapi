@@ -11,6 +11,7 @@ Class Reference
     avatar-ref
     bookmark-ref
     calendar-event-ref
+    communication-channel-ref
     conversation-ref
     course-ref
     current-user-ref
