@@ -737,6 +737,28 @@ class Course(CanvasObject):
         """
         Return list of active groups for the specified course.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_groups` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.Course`
+        """
+        warnings.warn(
+            "`list_groups` is being deprecated and will be removed in a future version."
+            " Use `get_groups` instead",
+            DeprecationWarning
+        )
+
+        return self.get_groups(**kwargs)
+
+    def get_groups(self, **kwargs):
+        """
+        Return list of active groups for the specified course.
+
         :calls: `GET /api/v1/courses/:course_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
@@ -773,7 +795,29 @@ class Course(CanvasObject):
         )
         return GroupCategory(self._requester, response.json())
 
-    def list_group_categories(self):
+    def list_group_categories(self, **kwargs):
+        """
+        List group categories for a context.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_group_categories` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.GroupCategory`
+        """
+        warnings.warn(
+            "`list_group_categories` is being deprecated and will be removed in a future version."
+            " Use `get_group_categories` instead",
+            DeprecationWarning
+        )
+
+        return self.get_group_categories(**kwargs)
+
+    def get_group_categories(self, **kwargs):
         """
         List group categories for a context.
 
@@ -789,7 +833,8 @@ class Course(CanvasObject):
             GroupCategory,
             self._requester,
             'GET',
-            'courses/{}/group_categories'.format(self.id)
+            'courses/{}/group_categories'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_file(self, file, **kwargs):
@@ -905,6 +950,28 @@ class Course(CanvasObject):
         return AssignmentGroup(self._requester, response_json)
 
     def list_assignment_groups(self, **kwargs):
+        """
+        List assignment groups for the specified course.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_assignment_groups` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups \
+        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.AssignmentGroup`
+        """
+        warnings.warn(
+            "`list_assignment_groups` is being deprecated and will be removed in a future version."
+            " Use `get_assignment_groups` instead",
+            DeprecationWarning
+        )
+
+        return self.get_assignment_groups(**kwargs)
+
+    def get_assignment_groups(self, **kwargs):
         """
         List assignment groups for the specified course.
 
@@ -1228,6 +1295,30 @@ class Course(CanvasObject):
         List submissions for multiple assignments.
         Get all existing submissions for a given set of students and assignments.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_multiple_submissions` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/students/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        warnings.warn(
+            "`list_multiple_submissions`"
+            " is being deprecated and will be removed in a future version."
+            " Use `get_multiple_submissions` instead",
+            DeprecationWarning
+        )
+
+        return self.get_multiple_submissions(**kwargs)
+
+    def get_multiple_submissions(self, **kwargs):
+        """
+        List submissions for multiple assignments.
+        Get all existing submissions for a given set of students and assignments.
+
         :calls: `GET /api/v1/courses/:course_id/students/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
 
@@ -1430,7 +1521,29 @@ class Course(CanvasObject):
         })
         return submission.mark_unread(**kwargs)
 
-    def list_external_feeds(self):
+    def list_external_feeds(self, **kwargs):
+        """
+        Returns the list of External Feeds this course.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_external_feeds` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        warnings.warn(
+            "`list_external_feeds` is being deprecated and will be removed in a future version."
+            " Use `get_external_feeds` instead",
+            DeprecationWarning
+        )
+
+        return self.get_external_feeds(**kwargs)
+
+    def get_external_feeds(self, **kwargs):
         """
         Returns the list of External Feeds this course.
 
@@ -1445,7 +1558,8 @@ class Course(CanvasObject):
             ExternalFeed,
             self._requester,
             'GET',
-            'courses/{}/external_feeds'.format(self.id)
+            'courses/{}/external_feeds'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_external_feed(self, url, **kwargs):
@@ -1494,6 +1608,28 @@ class Course(CanvasObject):
         """
         Returns the paginated list of files for the course.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_files` instead.
+
+        :calls: `GET api/v1/courses/:course_id/files \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.file.File`
+        """
+        warnings.warn(
+            "`list_files` is being deprecated and will be removed in a future version."
+            " Use `get_files` instead",
+            DeprecationWarning
+        )
+
+        return self.get_files(**kwargs)
+
+    def get_files(self, **kwargs):
+        """
+        Returns the paginated list of files for the course.
+
         :calls: `GET api/v1/courses/:course_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
@@ -1530,7 +1666,30 @@ class Course(CanvasObject):
         )
         return Folder(self._requester, response.json())
 
-    def list_folders(self):
+    def list_folders(self, **kwargs):
+        """
+        Returns the paginated list of all folders for the given course. This will be returned as a
+        flat list containing all subfolders as well.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_folders` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+        warnings.warn(
+            "`list_folders` is being deprecated and will be removed in a future version."
+            " Use `get_folders` instead",
+            DeprecationWarning
+        )
+
+        return self.get_folders(**kwargs)
+
+    def get_folders(self, **kwargs):
         """
         Returns the paginated list of all folders for the given course. This will be returned as a
         flat list containing all subfolders as well.
@@ -1545,7 +1704,8 @@ class Course(CanvasObject):
             Folder,
             self._requester,
             'GET',
-            'courses/{}/folders'.format(self.id)
+            'courses/{}/folders'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_folder(self, name, **kwargs):
@@ -1568,6 +1728,29 @@ class Course(CanvasObject):
         return Folder(self._requester, response.json())
 
     def list_tabs(self, **kwargs):
+        """
+        List available tabs for a course.
+        Returns a list of navigation tabs available in the current context.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_tabs` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/tabs \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.tab.Tab`
+        """
+        warnings.warn(
+            "`list_tabs` is being deprecated and will be removed in a future version."
+            " Use `get_tabs` instead",
+            DeprecationWarning
+        )
+
+        return self.get_tabs(**kwargs)
+
+    def get_tabs(self, **kwargs):
         """
         List available tabs for a course.
         Returns a list of navigation tabs available in the current context.
@@ -1626,6 +1809,28 @@ class Course(CanvasObject):
         return Rubric(self._requester, response.json())
 
     def list_rubrics(self, **kwargs):
+        """
+        Get the paginated list of active rubrics for the current course.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_rubrics` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/rubrics \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.rubric.Rubric`
+        """
+        warnings.warn(
+            "`list_rubrics` is being deprecated and will be removed in a future version."
+            " Use `get_rubrics` instead",
+            DeprecationWarning
+        )
+
+        return self.get_rubrics(**kwargs)
+
+    def get_rubrics(self, **kwargs):
         """
         Get the paginated list of active rubrics for the current course.
 
