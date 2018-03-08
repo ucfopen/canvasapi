@@ -1188,15 +1188,26 @@ class TestCourse(unittest.TestCase):
     def test_create_content_migration(self, m):
         register_uris({'course': ['create_content_migration']}, m)
 
-        content_migration = self.course.create_content_migration(migration_type='dummy_importer')
+        content_migration = self.course.create_content_migration('dummy_importer')
 
         self.assertIsInstance(content_migration, ContentMigration)
         self.assertTrue(hasattr(content_migration, 'migration_type'))
 
-    # create_content_migration without type
-    def test_create_course_migration_missing_type(self, m):
-        with self.assertRaises(RequiredFieldMissing):
-            self.course.create_content_migration()
+    def test_create_content_migration_migrator(self, m):
+        register_uris({'course': ['create_content_migration',
+                                  'get_migration_systems_multiple']}, m)
+
+        migrators = self.course.get_migration_systems()
+        content_migration = self.course.create_content_migration(migrators[0])
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    def test_create_content_migration_bad_migration_type(self, m):
+        register_uris({'course': ['create_content_migration']}, m)
+
+        with self.assertRaises(TypeError):
+            self.course.create_content_migration(1)
 
     # get_content_migration
     def test_get_content_migration(self, m):

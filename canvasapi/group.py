@@ -667,19 +667,26 @@ class Group(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def create_content_migration(self, **kwargs):
+    def create_content_migration(self, migration_type, **kwargs):
         """
         Create a content migration.
 
         :calls: `POST /api/v1/groups/:group_id/content_migrations \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.create>`_
 
+        :param migration_type: The migrator type to use in this migration
+        :type migration_type: str or :class:`canvasapi.content_migration.Migrator`
+
         :rtype: :class:`canvasapi.content_migration.ContentMigration`
         """
-        from canvasapi.content_migration import ContentMigration
+        from canvasapi.content_migration import ContentMigration, Migrator
 
-        if 'migration_type' not in kwargs:
-            raise RequiredFieldMissing("Parameter with key 'migration_type' is required.")
+        if isinstance(migration_type, Migrator):
+            kwargs['migration_type'] = migration_type.type
+        elif isinstance(migration_type, str):
+            kwargs['migration_type'] = migration_type
+        else:
+            raise TypeError('Parameter migration_type must be of type Migrator or str')
 
         response = self._requester.request(
             'POST',
