@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 
 import requests_mock
+import warnings
 
 from canvasapi import Canvas
 from canvasapi.course import Course
@@ -62,7 +63,25 @@ class TestDiscussionTopic(unittest.TestCase):
     def test_list_topic_entries(self, m):
         register_uris({'discussion_topic': ['list_topic_entries']}, m)
 
-        entries = self.discussion_topic.list_topic_entries()
+        with warnings.catch_warnings(record=True) as warning_list:
+            entries = self.discussion_topic.list_topic_entries()
+            entry_list = [entry for entry in entries]
+            self.assertEqual(len(entry_list), 2)
+
+            self.assertIsInstance(entry_list[0], DiscussionEntry)
+            self.assertTrue(hasattr(entry_list[0], 'id'))
+            self.assertEqual(entry_list[0].id, 1)
+            self.assertTrue(hasattr(entry_list[0], 'user_id'))
+            self.assertEqual(entry_list[0].user_id, 1)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_topic_entries()
+    def test_get_topic_entries(self, m):
+        register_uris({'discussion_topic': ['list_topic_entries']}, m)
+
+        entries = self.discussion_topic.get_topic_entries()
         entry_list = [entry for entry in entries]
         self.assertEqual(len(entry_list), 2)
 
@@ -76,7 +95,37 @@ class TestDiscussionTopic(unittest.TestCase):
     def test_list_entries(self, m):
         register_uris({'discussion_topic': ['list_entries']}, m)
 
-        entries_by_id = self.discussion_topic.list_entries([1, 2, 3])
+        with warnings.catch_warnings(record=True) as warning_list:
+            entries_by_id = self.discussion_topic.list_entries([1, 2, 3])
+            entry_list_by_id = [entry for entry in entries_by_id]
+            self.assertTrue(len(entry_list_by_id), 3)
+
+            entry_by_id = entry_list_by_id[-1]
+            self.assertIsInstance(entry_by_id, DiscussionEntry)
+            self.assertTrue(hasattr(entry_by_id, 'id'))
+            self.assertEqual(entry_by_id.id, 3)
+            self.assertTrue(hasattr(entry_by_id, 'message'))
+            self.assertEqual(entry_by_id.message, 'Lower level entry')
+
+            entries_by_obj = self.discussion_topic.list_entries(entries_by_id)
+            entry_list_by_obj = [entry for entry in entries_by_obj]
+            self.assertTrue(len(entry_list_by_obj), 3)
+
+            entry_by_obj = entry_list_by_obj[-1]
+            self.assertIsInstance(entry_by_obj, DiscussionEntry)
+            self.assertTrue(hasattr(entry_by_obj, 'id'))
+            self.assertEqual(entry_by_obj.id, 3)
+            self.assertTrue(hasattr(entry_by_obj, 'message'))
+            self.assertEqual(entry_by_obj.message, 'Lower level entry')
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_entries()
+    def test_get_entries(self, m):
+        register_uris({'discussion_topic': ['list_entries']}, m)
+
+        entries_by_id = self.discussion_topic.get_entries([1, 2, 3])
         entry_list_by_id = [entry for entry in entries_by_id]
         self.assertTrue(len(entry_list_by_id), 3)
 
@@ -87,7 +136,7 @@ class TestDiscussionTopic(unittest.TestCase):
         self.assertTrue(hasattr(entry_by_id, 'message'))
         self.assertEqual(entry_by_id.message, 'Lower level entry')
 
-        entries_by_obj = self.discussion_topic.list_entries(entries_by_id)
+        entries_by_obj = self.discussion_topic.get_entries(entries_by_id)
         entry_list_by_obj = [entry for entry in entries_by_obj]
         self.assertTrue(len(entry_list_by_obj), 3)
 
@@ -236,8 +285,8 @@ class TestDiscussionEntry(unittest.TestCase):
             self.group = self.canvas.get_group(1)
             self.discussion_topic = self.course.get_discussion_topic(1)
             self.discussion_topic_group = self.group.get_discussion_topic(1)
-            self.discussion_entry = self.discussion_topic.list_entries([1])[0]
-            self.discussion_entry_group = self.discussion_topic_group.list_entries([1])[0]
+            self.discussion_entry = self.discussion_topic.get_entries([1])[0]
+            self.discussion_entry_group = self.discussion_topic_group.get_entries([1])[0]
 
     # __str__()
     def test__str__(self, m):
@@ -301,7 +350,26 @@ class TestDiscussionEntry(unittest.TestCase):
     def test_list_replies(self, m):
         register_uris({'discussion_topic': ['list_entry_replies']}, m)
 
-        replies = self.discussion_entry.list_replies()
+        with warnings.catch_warnings(record=True) as warning_list:
+            replies = self.discussion_entry.list_replies()
+            reply_list = [reply for reply in replies]
+            self.assertTrue(len(reply_list), 5)
+
+            reply = reply_list[0]
+            self.assertIsInstance(reply, DiscussionEntry)
+            self.assertTrue(hasattr(reply, 'id'))
+            self.assertEqual(reply.id, 5)
+            self.assertTrue(hasattr(reply, 'message'))
+            self.assertEqual(reply.message, 'Reply message 1')
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_replies()
+    def test_get_replies(self, m):
+        register_uris({'discussion_topic': ['list_entry_replies']}, m)
+
+        replies = self.discussion_entry.get_replies()
         reply_list = [reply for reply in replies]
         self.assertTrue(len(reply_list), 5)
 

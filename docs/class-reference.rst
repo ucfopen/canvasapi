@@ -15,6 +15,7 @@ Class Reference
     conversation-ref
     course-ref
     current-user-ref
+    discussion-entry-ref
     discussion-topic-ref
     enrollment-term-ref
     external-tool-ref
