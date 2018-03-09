@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 
 import requests_mock
+import warnings
 
 from canvasapi import Canvas
 from canvasapi.file import File
@@ -27,10 +28,23 @@ class TestFolder(unittest.TestCase):
         self.assertIsInstance(string, str)
 
     # list_files()
-    def test_folder_files(self, m):
+    def test_list_files(self, m):
         register_uris({'folder': ['list_folder_files', 'list_folder_files2']}, m)
 
-        files = self.folder.list_files()
+        with warnings.catch_warnings(record=True) as warning_list:
+            files = self.folder.list_files()
+            file_list = [file for file in files]
+            self.assertEqual(len(file_list), 4)
+            self.assertIsInstance(file_list[0], File)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_files()
+    def test_get_files(self, m):
+        register_uris({'folder': ['list_folder_files', 'list_folder_files2']}, m)
+
+        files = self.folder.get_files()
         file_list = [file for file in files]
         self.assertEqual(len(file_list), 4)
         self.assertIsInstance(file_list[0], File)
@@ -49,7 +63,20 @@ class TestFolder(unittest.TestCase):
     def test_list_folders(self, m):
         register_uris({'folder': ['list_folders']}, m)
 
-        folders = self.folder.list_folders()
+        with warnings.catch_warnings(record=True) as warning_list:
+            folders = self.folder.list_folders()
+            folder_list = [folder for folder in folders]
+            self.assertEqual(len(folder_list), 2)
+            self.assertIsInstance(folder_list[0], Folder)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_folders()
+    def test_get_folders(self, m):
+        register_uris({'folder': ['list_folders']}, m)
+
+        folders = self.folder.get_folders()
         folder_list = [folder for folder in folders]
         self.assertEqual(len(folder_list), 2)
         self.assertIsInstance(folder_list[0], Folder)
