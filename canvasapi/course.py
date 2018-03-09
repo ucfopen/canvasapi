@@ -1868,7 +1868,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/content_migrations/:id \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.show>`_
 
-        :param content_migration: The object or ID of the course to retrieve.
+        :param content_migration: The object or ID of the content migration to retrieve.
         :type content_migration: int, str or :class:`canvasapi.content_migration.ContentMigration`
 
         :rtype: :class:`canvasapi.content_migration.ContentMigration`
