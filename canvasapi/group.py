@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from six import python_2_unicode_compatible, text_type
+from six import python_2_unicode_compatible, text_type, string_types
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -683,7 +683,7 @@ class Group(CanvasObject):
 
         if isinstance(migration_type, Migrator):
             kwargs['migration_type'] = migration_type.type
-        elif isinstance(migration_type, str):
+        elif isinstance(migration_type, string_types):
             kwargs['migration_type'] = migration_type
         else:
             raise TypeError('Parameter migration_type must be of type Migrator or str')
