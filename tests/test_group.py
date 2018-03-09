@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 import uuid
+import warnings
 
 import requests
 import requests_mock
@@ -54,7 +55,7 @@ class TestGroup(unittest.TestCase):
         self.assertTrue(hasattr(new_front_page, 'url'))
         self.assertTrue(hasattr(new_front_page, 'title'))
 
-    # list_pages()
+    # get_pages()
     def test_get_pages(self, m):
         register_uris({'group': ['get_pages', 'get_pages2']}, m)
 
@@ -122,8 +123,22 @@ class TestGroup(unittest.TestCase):
     def test_list_users(self, m):
         register_uris({'group': ['list_users', 'list_users_p2']}, m)
 
+        with warnings.catch_warnings(record=True) as warning_list:
+            from canvasapi.user import User
+            users = self.group.list_users()
+            user_list = [user for user in users]
+            self.assertIsInstance(user_list[0], User)
+            self.assertEqual(len(user_list), 4)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_users()
+    def test_get_users(self, m):
+        register_uris({'group': ['list_users', 'list_users_p2']}, m)
+
         from canvasapi.user import User
-        users = self.group.list_users()
+        users = self.group.get_users()
         user_list = [user for user in users]
         self.assertIsInstance(user_list[0], User)
         self.assertEqual(len(user_list), 4)
@@ -143,7 +158,7 @@ class TestGroup(unittest.TestCase):
         user_by_id = self.group.remove_user(1)
         self.assertIsInstance(user_by_id, User)
 
-        users = self.group.list_users()
+        users = self.group.get_users()
         user_by_obj = self.group.remove_user(users[0])
         self.assertIsInstance(user_by_obj, User)
 
@@ -181,7 +196,21 @@ class TestGroup(unittest.TestCase):
     def test_list_memberships(self, m):
         register_uris({'group': ['list_memberships', 'list_memberships_p2']}, m)
 
-        response = self.group.list_memberships()
+        with warnings.catch_warnings(record=True) as warning_list:
+            response = self.group.list_memberships()
+            membership_list = [membership for membership in response]
+            self.assertEqual(len(membership_list), 4)
+            self.assertIsInstance(membership_list[0], GroupMembership)
+            self.assertTrue(hasattr(membership_list[0], 'id'))
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_memberships()
+    def test_get_memberships(self, m):
+        register_uris({'group': ['list_memberships', 'list_memberships_p2']}, m)
+
+        response = self.group.get_memberships()
         membership_list = [membership for membership in response]
         self.assertEqual(len(membership_list), 4)
         self.assertIsInstance(membership_list[0], GroupMembership)
@@ -201,7 +230,7 @@ class TestGroup(unittest.TestCase):
         membership_by_id = self.group.get_membership(1, "users")
         self.assertIsInstance(membership_by_id, GroupMembership)
 
-        users = self.group.list_users()
+        users = self.group.get_users()
         membership_by_obj = self.group.get_membership(users[0], "users")
         self.assertIsInstance(membership_by_obj, GroupMembership)
 
@@ -219,7 +248,7 @@ class TestGroup(unittest.TestCase):
         response = self.group.create_membership(1)
         self.assertIsInstance(response, GroupMembership)
 
-        users = self.group.list_users()
+        users = self.group.get_users()
         response = self.group.create_membership(users[0])
         self.assertIsInstance(response, GroupMembership)
 
@@ -237,7 +266,7 @@ class TestGroup(unittest.TestCase):
         updated_membership_by_id = self.group.update_membership(1)
         self.assertIsInstance(updated_membership_by_id, GroupMembership)
 
-        users = self.group.list_users()
+        users = self.group.get_users()
         updated_membership_by_obj = self.group.update_membership(users[0])
         self.assertIsInstance(updated_membership_by_obj, GroupMembership)
 
@@ -365,7 +394,21 @@ class TestGroup(unittest.TestCase):
     def test_list_external_feeds(self, m):
         register_uris({'group': ['list_external_feeds']}, m)
 
-        feeds = self.group.list_external_feeds()
+        with warnings.catch_warnings(record=True) as warning_list:
+            feeds = self.group.list_external_feeds()
+            feed_list = [feed for feed in feeds]
+            self.assertEqual(len(feed_list), 2)
+            self.assertTrue(hasattr(feed_list[0], 'url'))
+            self.assertIsInstance(feed_list[0], ExternalFeed)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_external_feeds()
+    def test_get_external_feeds(self, m):
+        register_uris({'group': ['list_external_feeds']}, m)
+
+        feeds = self.group.get_external_feeds()
         feed_list = [feed for feed in feeds]
         self.assertEqual(len(feed_list), 2)
         self.assertTrue(hasattr(feed_list[0], 'url'))
@@ -396,10 +439,23 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(deleted_ef_by_obj.display_name, "My Blog")
 
     # list_files()
-    def test_group_files(self, m):
+    def test_list_files(self, m):
         register_uris({'group': ['list_group_files', 'list_group_files2']}, m)
 
-        files = self.group.list_files()
+        with warnings.catch_warnings(record=True) as warning_list:
+            files = self.group.list_files()
+            file_list = [file for file in files]
+            self.assertEqual(len(file_list), 4)
+            self.assertIsInstance(file_list[0], File)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_files()
+    def test_get_files(self, m):
+        register_uris({'group': ['list_group_files', 'list_group_files2']}, m)
+
+        files = self.group.get_files()
         file_list = [file for file in files]
         self.assertEqual(len(file_list), 4)
         self.assertIsInstance(file_list[0], File)
@@ -420,7 +476,20 @@ class TestGroup(unittest.TestCase):
     def test_list_folders(self, m):
         register_uris({'group': ['list_folders']}, m)
 
-        folders = self.group.list_folders()
+        with warnings.catch_warnings(record=True) as warning_list:
+            folders = self.group.list_folders()
+            folder_list = [folder for folder in folders]
+            self.assertEqual(len(folder_list), 2)
+            self.assertIsInstance(folder_list[0], Folder)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_folders()
+    def test_get_folders(self, m):
+        register_uris({'group': ['list_folders']}, m)
+
+        folders = self.group.get_folders()
         folder_list = [folder for folder in folders]
         self.assertEqual(len(folder_list), 2)
         self.assertIsInstance(folder_list[0], Folder)
@@ -437,7 +506,20 @@ class TestGroup(unittest.TestCase):
     def test_list_tabs(self, m):
         register_uris({'group': ['list_tabs']}, m)
 
-        tabs = self.group.list_tabs()
+        with warnings.catch_warnings(record=True) as warning_list:
+            tabs = self.group.list_tabs()
+            tab_list = [tab for tab in tabs]
+            self.assertEqual(len(tab_list), 2)
+            self.assertIsInstance(tab_list[0], Tab)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_tabs()
+    def test_get_tabs(self, m):
+        register_uris({'group': ['list_tabs']}, m)
+
+        tabs = self.group.get_tabs()
         tab_list = [tab for tab in tabs]
         self.assertEqual(len(tab_list), 2)
         self.assertIsInstance(tab_list[0], Tab)
@@ -541,7 +623,21 @@ class TestGroupCategory(unittest.TestCase):
     def test_list_groups(self, m):
         register_uris({'group': ['category_list_groups']}, m)
 
-        response = self.group_category.list_groups()
+        with warnings.catch_warnings(record=True) as warning_list:
+            response = self.group_category.list_groups()
+            group_list = [group for group in response]
+            self.assertEqual(len(group_list), 2)
+            self.assertIsInstance(group_list[0], Group)
+            self.assertTrue(hasattr(group_list[0], 'id'))
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_groups()
+    def test_get_groups(self, m):
+        register_uris({'group': ['category_list_groups']}, m)
+
+        response = self.group_category.get_groups()
         group_list = [group for group in response]
         self.assertEqual(len(group_list), 2)
         self.assertIsInstance(group_list[0], Group)
@@ -553,7 +649,23 @@ class TestGroupCategory(unittest.TestCase):
 
         register_uris({'group': ['category_list_users']}, m)
 
-        response = self.group_category.list_users()
+        with warnings.catch_warnings(record=True) as warning_list:
+            response = self.group_category.list_users()
+            user_list = [user for user in response]
+            self.assertEqual(len(user_list), 4)
+            self.assertIsInstance(user_list[0], User)
+            self.assertTrue(hasattr(user_list[0], 'user_id'))
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_users()
+    def test_get_users(self, m):
+        from canvasapi.user import User
+
+        register_uris({'group': ['category_list_users']}, m)
+
+        response = self.group_category.get_users()
         user_list = [user for user in response]
         self.assertEqual(len(user_list), 4)
         self.assertIsInstance(user_list[0], User)

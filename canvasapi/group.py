@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from six import python_2_unicode_compatible, text_type
 
+import warnings
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.folder import Folder
@@ -187,6 +189,28 @@ class Group(CanvasObject):
         """
         List users in a group.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.group.Group.get_users` instead.
+
+        :calls: `GET /api/v1/groups/:group_id/users \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.users>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+        warnings.warn(
+            "`list_users` is being deprecated and will be removed in a future version."
+            " Use `get_users` instead",
+            DeprecationWarning
+        )
+
+        return self.get_users(**kwargs)
+
+    def get_users(self, **kwargs):
+        """
+        List users in a group.
+
         :calls: `GET /api/v1/groups/:group_id/users \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.users>`_
 
@@ -284,6 +308,28 @@ class Group(CanvasObject):
         return response.json()
 
     def list_memberships(self, **kwargs):
+        """
+        List users in a group.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.group.Group.get_memberships` instead.
+
+        :calls: `GET /api/v1/groups/:group_id/memberships \
+        <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.GroupMembership`
+        """
+        warnings.warn(
+            "`list_memberships` is being deprecated and will be removed in a future version."
+            " Use `get_memberships` instead",
+            DeprecationWarning
+        )
+
+        return self.get_memberships(**kwargs)
+
+    def get_memberships(self, **kwargs):
         """
         List users in a group.
 
@@ -511,7 +557,29 @@ class Group(CanvasObject):
 
         return response.json().get('reorder')
 
-    def list_external_feeds(self):
+    def list_external_feeds(self, **kwargs):
+        """
+        Returns the list of External Feeds this group.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.group.Group.get_external_feeds` instead.
+
+        :calls: `GET /api/v1/groups/:group_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        warnings.warn(
+            "`list_external_feeds` is being deprecated and will be removed in a future version."
+            " Use `get_external_feeds` instead",
+            DeprecationWarning
+        )
+
+        return self.get_external_feeds(**kwargs)
+
+    def get_external_feeds(self, **kwargs):
         """
         Returns the list of External Feeds this group.
 
@@ -575,6 +643,28 @@ class Group(CanvasObject):
         """
         Returns the paginated list of files for the group.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.group.Group.get_files` instead.
+
+        :calls: `GET api/v1/groups/:group_id/files \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.file.File`
+        """
+        warnings.warn(
+            "`list_files` is being deprecated and will be removed in a future version."
+            " Use `get_files` instead",
+            DeprecationWarning
+        )
+
+        return self.get_files(**kwargs)
+
+    def get_files(self, **kwargs):
+        """
+        Returns the paginated list of files for the group.
+
         :calls: `GET api/v1/groups/:group_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
@@ -611,7 +701,30 @@ class Group(CanvasObject):
         )
         return Folder(self._requester, response.json())
 
-    def list_folders(self):
+    def list_folders(self, **kwargs):
+        """
+        Returns the paginated list of all folders for the given group. This will be returned as a
+        flat list containing all subfolders as well.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.group.Group.get_folders` instead.
+
+        :calls: `GET /api/v1/groups/:group_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+        warnings.warn(
+            "`list_folders` is being deprecated and will be removed in a future version."
+            " Use `get_folders` instead",
+            DeprecationWarning
+        )
+
+        return self.get_folders(**kwargs)
+
+    def get_folders(self, **kwargs):
         """
         Returns the paginated list of all folders for the given group. This will be returned as a
         flat list containing all subfolders as well.
@@ -649,6 +762,29 @@ class Group(CanvasObject):
         return Folder(self._requester, response.json())
 
     def list_tabs(self, **kwargs):
+        """
+        List available tabs for a group.
+        Returns a list of navigation tabs available in the current context.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.group.Group.get_tabs` instead.
+
+        :calls: `GET /api/v1/groups/:group_id/tabs \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.tab.Tab`
+        """
+        warnings.warn(
+            "`list_tabs` is being deprecated and will be removed in a future version."
+            " Use `get_tabs` instead",
+            DeprecationWarning
+        )
+
+        return self.get_tabs(**kwargs)
+
+    def get_tabs(self, **kwargs):
         """
         List available tabs for a group.
         Returns a list of navigation tabs available in the current context.
@@ -784,7 +920,29 @@ class GroupCategory(CanvasObject):
         )
         return response.json()
 
-    def list_groups(self):
+    def list_groups(self, **kwargs):
+        """
+        List groups in group category.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.group.GroupCategory.get_groups` instead.
+
+        :calls: `GET /api/v1/group_categories/:group_category_id/groups \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.groups>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.Group`
+        """
+        warnings.warn(
+            "`list_groups` is being deprecated and will be removed in a future version."
+            " Use `get_groups` instead",
+            DeprecationWarning
+        )
+
+        return self.get_groups(**kwargs)
+
+    def get_groups(self, **kwargs):
         """
         List groups in group category.
 
@@ -802,6 +960,28 @@ class GroupCategory(CanvasObject):
         )
 
     def list_users(self, **kwargs):
+        """
+        List users in group category.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.group.GroupCategory.get_users` instead.
+
+        :calls: `GET /api/v1/group_categories/:group_category_id/users \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.users>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+        warnings.warn(
+            "`list_users` is being deprecated and will be removed in a future version."
+            " Use `get_users` instead",
+            DeprecationWarning
+        )
+
+        return self.get_users(**kwargs)
+
+    def get_users(self, **kwargs):
         """
         List users in group category.
 
