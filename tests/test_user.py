@@ -16,7 +16,6 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
 from canvasapi.user import User
 from canvasapi.login import Login
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.content_migration import ContentMigration, Migrator
 from tests import settings
 from tests.util import cleanup_file, register_uris
