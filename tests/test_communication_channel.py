@@ -20,7 +20,7 @@ class TestCommunicationChannel(unittest.TestCase):
             register_uris({'user': ['get_by_id', 'list_comm_channels']}, m)
 
             self.user = self.canvas.get_user(1)
-            self.comm_chan = self.user.list_communication_channels()[0]
+            self.comm_chan = self.user.get_communication_channels()[0]
 
     # __str__()
     def test__str__(self, m):
