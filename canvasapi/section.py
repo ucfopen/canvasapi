@@ -181,6 +181,30 @@ class Section(CanvasObject):
         List submissions for multiple assignments.
         Get all existing submissions for a given set of students and assignments.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.section.Section.get_multiple_submissions` instead.
+
+        :calls: `GET /api/v1/sections/:section_id/students/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        warnings.warn(
+            "`list_multiple_submissions`"
+            " is being deprecated and will be removed in a future version."
+            " Use `get_multiple_submissions` instead",
+            DeprecationWarning
+        )
+
+        return self.get_multiple_submissions(**kwargs)
+
+    def get_multiple_submissions(self, **kwargs):
+        """
+        List submissions for multiple assignments.
+        Get all existing submissions for a given set of students and assignments.
+
         :calls: `GET /api/v1/sections/:section_id/students/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
 
