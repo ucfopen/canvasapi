@@ -141,7 +141,7 @@ class DiscussionTopic(CanvasObject):
 
         .. warning::
             .. deprecated:: 0.10.0
-                Use :func:`canvasapi.dicussion_topic.DiscussionTopic.get_topic_entries` instead.
+                Use :func:`canvasapi.discussion_topic.DiscussionTopic.get_topic_entries` instead.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
@@ -196,7 +196,7 @@ class DiscussionTopic(CanvasObject):
 
         .. warning::
             .. deprecated:: 0.10.0
-                Use :func:`canvasapi. dicussion_topic.DiscussionTopic.get_entries` instead.
+                Use :func:`canvasapi. discussion_topic.DiscussionTopic.get_entries` instead.
 
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
@@ -531,7 +531,7 @@ class DiscussionEntry(CanvasObject):
 
         .. warning::
             .. deprecated:: 0.10.0
-                Use :func:`canvasapi. dicussion_topic.DiscussionEntry.get_replies` instead.
+                Use :func:`canvasapi. discussion_topic.DiscussionEntry.get_replies` instead.
 
         :calls: `GET
             /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
