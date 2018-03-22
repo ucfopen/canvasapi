@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import warnings
 
-from six import python_2_unicode_compatible, text_type
+from six import python_2_unicode_compatible, text_type, string_types
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -1829,19 +1829,26 @@ class Course(CanvasObject):
         )
         return GradingStandard(self._requester, response.json())
 
-    def create_content_migration(self, **kwargs):
+    def create_content_migration(self, migration_type, **kwargs):
         """
         Create a content migration.
 
         :calls: `POST /api/v1/courses/:course_id/content_migrations \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.create>`_
 
+        :param migration_type: The migrator type to use in this migration
+        :type migration_type: str or :class:`canvasapi.content_migration.Migrator`
+
         :rtype: :class:`canvasapi.content_migration.ContentMigration`
         """
-        from canvasapi.content_migration import ContentMigration
+        from canvasapi.content_migration import ContentMigration, Migrator
 
-        if 'migration_type' not in kwargs:
-            raise RequiredFieldMissing("Parameter with key 'migration_type' is required.")
+        if isinstance(migration_type, Migrator):
+            kwargs['migration_type'] = migration_type.type
+        elif isinstance(migration_type, string_types):
+            kwargs['migration_type'] = migration_type
+        else:
+            raise TypeError('Parameter migration_type must be of type Migrator or str')
 
         response = self._requester.request(
             'POST',
@@ -1861,8 +1868,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/content_migrations/:id \
         <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.show>`_
 
-        :param migration: The object or ID of the course to retrieve.
-        :type migration: int, str or :class:`canvasapi.content_migration.ContentMigration`
+        :param content_migration: The object or ID of the content migration to retrieve.
+        :type content_migration: int, str or :class:`canvasapi.content_migration.ContentMigration`
 
         :rtype: :class:`canvasapi.content_migration.ContentMigration`
         """

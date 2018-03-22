@@ -15,7 +15,7 @@ class ContentMigration(CanvasObject):
     @property
     def _parent_id(self):
         """
-        Return the id of the course or group that spawned
+        Return the id of the account, course, group, or user that spawned
         this content migration.
 
         :rtype: int
@@ -70,6 +70,9 @@ class ContentMigration(CanvasObject):
             or `GET
             /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
+
+        :param migration_issue: The object or ID of the issue to retrieve.
+        :type migration_issue: int, str or :class:`canvasapi.content_migration.ContentMigration`
 
         :rtype: :class:`canvasapi.content_migration.MigrationIssue`
         """
