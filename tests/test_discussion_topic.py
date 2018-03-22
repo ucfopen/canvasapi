@@ -107,6 +107,10 @@ class TestDiscussionTopic(unittest.TestCase):
             self.assertTrue(hasattr(entry_by_id, 'message'))
             self.assertEqual(entry_by_id.message, 'Lower level entry')
 
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
             entries_by_obj = self.discussion_topic.list_entries(entries_by_id)
             entry_list_by_obj = [entry for entry in entries_by_obj]
             self.assertTrue(len(entry_list_by_obj), 3)

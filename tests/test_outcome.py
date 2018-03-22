@@ -210,11 +210,19 @@ class TestOutcomeGroup(unittest.TestCase):
             self.assertEqual(result[0].outcome_group['id'], 2)
             self.assertEqual(result[0].outcome_group['title'], "Account Test Outcome Group")
 
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
             result = self.canvas_outcome_group.list_linked_outcomes()
             self.assertIsInstance(result[0], OutcomeLink)
             self.assertEqual(result[0].outcome_group['id'], 2)
             self.assertEqual(result[0].outcome_group['title'], "Global Test Outcome Group")
 
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
             result = self.course_outcome_group.list_linked_outcomes()
             self.assertIsInstance(result[0], OutcomeLink)
             self.assertEqual(result[0].outcome_group['id'], 2)
@@ -366,6 +374,10 @@ class TestOutcomeGroup(unittest.TestCase):
             self.assertEqual(result[1].id, 3)
             self.assertEqual(result[1].title, "Global Listed Subgroup Title 2")
 
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
             result = self.account_outcome_group.list_subgroups()
             self.assertIsInstance(result[0], OutcomeGroup)
             self.assertEqual(result[0].id, 2)
@@ -374,6 +386,10 @@ class TestOutcomeGroup(unittest.TestCase):
             self.assertEqual(result[1].id, 3)
             self.assertEqual(result[1].title, "Account Listed Subgroup Title 2")
 
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
             result = self.course_outcome_group.list_subgroups()
             self.assertIsInstance(result[0], OutcomeGroup)
             self.assertEqual(result[0].id, 2)

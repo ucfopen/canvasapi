@@ -584,6 +584,10 @@ class TestCanvas(unittest.TestCase):
             users_list_by_id = [user for user in users_by_id]
             self.assertEqual(len(users_list_by_id), 2)
 
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
             appointment_group_for_obj = self.canvas.get_appointment_group(222)
             users_by_id = self.canvas.list_user_participants(appointment_group_for_obj)
             users_list_by_id = [user for user in users_by_id]
@@ -626,6 +630,10 @@ class TestCanvas(unittest.TestCase):
             groups_list_by_id = [group for group in groups_by_id]
             self.assertEqual(len(groups_list_by_id), 2)
 
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
             appointment_group_for_obj = self.canvas.get_appointment_group(222)
             groups_by_obj = self.canvas.list_group_participants(appointment_group_for_obj)
             groups_list_by_obj = [group for group in groups_by_obj]
