@@ -18,6 +18,8 @@ Class Reference
     discussion-topic-ref
     enrollment-term-ref
     external-tool-ref
+    file-ref
+    folder-ref
     group-ref
     login-ref
     module-ref

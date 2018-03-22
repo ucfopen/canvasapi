@@ -1,8 +1,8 @@
 *.pyc
 *~
+.coverage
 .DS_Store
 /*.egg-info
-/.coverage
 /.project
 /.pyproject
 /_build/
