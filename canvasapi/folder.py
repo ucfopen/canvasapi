@@ -106,18 +106,21 @@ class Folder(CanvasObject):
 
         return Folder(self._requester, response.json())
 
-    def copy_file(self, file, **kwargs):
+    def copy_file(self, source_file, **kwargs):
         """
         Copies a file into the current folder.
 
         :calls: `POST /api/v1/folders/:dest_folder_id/copy_file \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.copy_file>`_
 
+        :param source_file: The object or id of the source file.
+        :type source_file: int or :class:`canvasapi.file.File`
+
         :rtype: :class:`canvasapi.folder.Folder`
         """
         from canvasapi.file import File
 
-        file_id = obj_or_id(file, "file", (File,))
+        file_id = obj_or_id(source_file, "source_file", (File,))
         kwargs['source_file_id'] = file_id
 
         response = self._requester.request(

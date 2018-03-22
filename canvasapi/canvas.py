@@ -467,7 +467,7 @@ class Canvas(object):
 
         :param recipients: An array of recipient ids.
             These may be user ids or course/group ids prefixed
-            with 'course\_' or 'group\_' respectively,
+            with 'course\\_' or 'group\\_' respectively,
             e.g. recipients=['1', '2', 'course_3']
         :type recipients: `list` of `str`
         :param body: The body of the message being added.
