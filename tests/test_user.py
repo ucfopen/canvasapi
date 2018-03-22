@@ -17,6 +17,7 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.page_view import PageView
 from canvasapi.user import User
 from canvasapi.login import Login
+from canvasapi.content_migration import ContentMigration, Migrator
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -418,6 +419,72 @@ class TestUser(unittest.TestCase):
         response = self.user.remove_observee(8)
 
         self.assertIsInstance(response, User)
+
+    # create_content_migration
+    def test_create_content_migration(self, m):
+        register_uris({'user': ['create_content_migration']}, m)
+
+        content_migration = self.user.create_content_migration('dummy_importer')
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    def test_create_content_migration_migrator(self, m):
+        register_uris({'user': ['create_content_migration',
+                                'get_migration_systems_multiple']}, m)
+
+        migrators = self.user.get_migration_systems()
+        content_migration = self.user.create_content_migration(migrators[0])
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    def test_create_content_migration_bad_migration_type(self, m):
+        register_uris({'user': ['create_content_migration']}, m)
+
+        with self.assertRaises(TypeError):
+            self.user.create_content_migration(1)
+
+    # get_content_migration
+    def test_get_content_migration(self, m):
+        register_uris({'user': ['get_content_migration_single']}, m)
+
+        content_migration = self.user.get_content_migration(1)
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    # get_content_migrations
+    def test_get_content_migrations(self, m):
+        register_uris({'user': ['get_content_migration_multiple']}, m)
+
+        content_migrations = self.user.get_content_migrations()
+
+        self.assertEqual(len(list(content_migrations)), 2)
+
+        self.assertIsInstance(content_migrations[0], ContentMigration)
+        self.assertEqual(content_migrations[0].id, 1)
+        self.assertEqual(content_migrations[0].migration_type, "dummy_importer")
+        self.assertIsInstance(content_migrations[1], ContentMigration)
+        self.assertEqual(content_migrations[1].id, 2)
+        self.assertEqual(content_migrations[1].migration_type, "dummy_importer")
+
+    # get_migration_systems
+    def test_get_migration_systems(self, m):
+        register_uris({'user': ['get_migration_systems_multiple']}, m)
+
+        migration_systems = self.user.get_migration_systems()
+
+        self.assertEqual(len(list(migration_systems)), 2)
+
+        self.assertIsInstance(migration_systems[0], Migrator)
+        self.assertEqual(migration_systems[0].type, "dummy_importer")
+        self.assertEqual(migration_systems[0].requires_file_upload, True)
+        self.assertEqual(migration_systems[0].name, "Dummy Importer 01")
+        self.assertIsInstance(migration_systems[1], Migrator)
+        self.assertEqual(migration_systems[1].type, "dummy_importer_02")
+        self.assertEqual(migration_systems[1].requires_file_upload, False)
+        self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
 
 
 @requests_mock.Mocker()

@@ -719,3 +719,12 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(outcome_group_by_obj, OutcomeGroup)
         self.assertEqual(outcome_group_by_obj.id, 1)
         self.assertEqual(outcome_group_by_obj.title, "Canvas outcome group title")
+
+    # get_progress()
+    def test_get_progress(self, m):
+        register_uris({'content_migration': ['get_progress']}, m)
+
+        progress = self.canvas.get_progress(1)
+        self.assertIsInstance(progress, Progress)
+        self.assertTrue(hasattr(progress, 'id'))
+        self.assertEqual(progress.id, 1)

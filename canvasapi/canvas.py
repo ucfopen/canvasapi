@@ -467,7 +467,7 @@ class Canvas(object):
 
         :param recipients: An array of recipient ids.
             These may be user ids or course/group ids prefixed
-            with 'course\_' or 'group\_' respectively,
+            with 'course\\_' or 'group\\_' respectively,
             e.g. recipients=['1', '2', 'course_3']
         :type recipients: `list` of `str`
         :param body: The body of the message being added.
@@ -1111,3 +1111,27 @@ class Canvas(object):
         )
 
         return OutcomeGroup(self.__requester, response.json())
+
+    def get_progress(self, progress, **kwargs):
+        """
+        Get a specific progress.
+
+        :calls: `GET /api/v1/progress/:id
+            <https://canvas.instructure.com/doc/api/progress.html#method.progress.show>`_
+
+        :param progress: The object or ID of the progress to retrieve.
+        :type progress: int, str or :class:`canvasapi.progress.Progress`
+
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+
+        from canvasapi.progress import Progress
+
+        progress_id = obj_or_id(progress, "progress", (Progress,))
+
+        response = self.__requester.request(
+            'GET',
+            'progress/{}'.format(progress_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Progress(self.__requester, response.json())

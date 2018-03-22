@@ -6,7 +6,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -151,3 +151,28 @@ class Folder(CanvasObject):
             super(Folder, self).set_attributes(response.json())
 
         return Folder(self._requester, response.json())
+
+    def copy_file(self, source_file, **kwargs):
+        """
+        Copies a file into the current folder.
+
+        :calls: `POST /api/v1/folders/:dest_folder_id/copy_file \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.copy_file>`_
+
+        :param source_file: The object or id of the source file.
+        :type source_file: int or :class:`canvasapi.file.File`
+
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        from canvasapi.file import File
+
+        file_id = obj_or_id(source_file, "source_file", (File,))
+        kwargs['source_file_id'] = file_id
+
+        response = self._requester.request(
+            'POST',
+            'folders/{}/copy_file'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return File(self._requester, response.json())

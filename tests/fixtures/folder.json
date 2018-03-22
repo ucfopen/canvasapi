@@ -103,5 +103,15 @@
             "full_name": "course_files/New Name"
         },
         "status_code": 200
+    },
+    "copy_file": {
+        "method": "POST",
+        "endpoint": "folders/1/copy_file",
+        "data": {
+            "id": 1,
+            "display_name": "Dummy File-1",
+            "size": 1298
+        },
+        "status_code": 200
     }
 }

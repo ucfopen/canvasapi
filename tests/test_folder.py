@@ -97,3 +97,12 @@ class TestFolder(unittest.TestCase):
         response = self.folder.update(name=new_name)
         self.assertIsInstance(response, Folder)
         self.assertEqual(self.folder.name, new_name)
+
+    # copy_file()
+    def test_copy_file(self, m):
+        register_uris({'folder': ['copy_file']}, m)
+
+        new_file = self.folder.copy_file(1)
+        self.assertIsInstance(new_file, File)
+        self.assertEqual(new_file.display_name, 'Dummy File-1')
+        self.assertEqual(new_file.id, 1)
