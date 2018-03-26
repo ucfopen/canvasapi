@@ -664,6 +664,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/{}/tabs'.format(self.id),
+            {'group_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 

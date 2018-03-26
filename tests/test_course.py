@@ -1026,10 +1026,15 @@ class TestCourse(unittest.TestCase):
 
         tab_id = "pages"
         new_position = 3
-        tab = self.course.update_tab(tab_id, position=new_position)
 
-        self.assertIsInstance(tab, Tab)
-        self.assertEqual(tab.position, 3)
+        with warnings.catch_warnings(record=True) as warning_list:
+            tab = self.course.update_tab(tab_id, position=new_position)
+
+            self.assertIsInstance(tab, Tab)
+            self.assertEqual(tab.position, 3)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_rubric
     def test_get_rubric(self, m):

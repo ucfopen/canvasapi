@@ -29,5 +29,6 @@ Class Reference
     rubric-ref
     section-ref
     submission-ref
+    tab-ref
     upload-ref
     user-ref
