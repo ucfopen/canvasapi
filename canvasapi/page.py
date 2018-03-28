@@ -167,8 +167,8 @@ class Page(CanvasObject):
             :class:`canvasapi.pagerevision.PageRevision`
         """
         warnings.warn(
-            "`list_revisions` is being deprecated and will be removed in a future version."
-            " Use `get_revisions` instead",
+            "`list_revisions` is being deprecated and will be removed in a "
+            "future version. Use `get_revisions` instead.",
             DeprecationWarning
         )
 

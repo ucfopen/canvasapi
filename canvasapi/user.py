@@ -395,8 +395,8 @@ class User(CanvasObject):
             :class:`canvasapi.file.File`
         """
         warnings.warn(
-            "`list_files` is being deprecated and will be removed in a future version."
-            " Use `get_files` instead",
+            "`list_files` is being deprecated and will be removed in a future "
+            "version. Use `get_files` instead",
             DeprecationWarning
         )
 
@@ -483,8 +483,8 @@ class User(CanvasObject):
             :class:`canvasapi.folder.Folder`
         """
         warnings.warn(
-            "`list_folders` is being deprecated and will be removed in a future version."
-            " Use `get_folders` instead",
+            "`list_folders` is being deprecated and will be removed in a "
+            "future version. Use `get_folders` instead.",
             DeprecationWarning
         )
 
@@ -505,7 +505,8 @@ class User(CanvasObject):
             Folder,
             self._requester,
             'GET',
-            'users/{}/folders'.format(self.id)
+            'users/{}/folders'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_folder(self, name, **kwargs):
@@ -584,8 +585,8 @@ class User(CanvasObject):
             :class:`canvasapi.user.User`
         """
         warnings.warn(
-            "`list_observees` is being deprecated and will be removed in a future version."
-            " Use `get_observees` instead",
+            "`list_observees` is being deprecated and will be removed in a "
+            "future version. Use `get_observees` instead",
             DeprecationWarning
         )
 

@@ -153,8 +153,8 @@ class DiscussionTopic(CanvasObject):
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
         warnings.warn(
-            "`list_topic_entries` is being deprecated and will be removed in a future version."
-            " Use `get_topic_entries` instead",
+            "`list_topic_entries` is being deprecated and will be removed in "
+            "a future version. Use `get_topic_entries` instead",
             DeprecationWarning
         )
 
@@ -211,8 +211,8 @@ class DiscussionTopic(CanvasObject):
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
         warnings.warn(
-            "`list_entries` is being deprecated and will be removed in a future version."
-            " Use `get_entries` instead",
+            "`list_entries` is being deprecated and will be removed in a "
+            "future version. Use `get_entries` instead",
             DeprecationWarning
         )
 
@@ -545,8 +545,8 @@ class DiscussionEntry(CanvasObject):
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
         warnings.warn(
-            "`list_replies` is being deprecated and will be removed in a future version."
-            " Use `get_replies` instead",
+            "`list_replies` is being deprecated and will be removed in a "
+            "future version. Use `get_replies` instead.",
             DeprecationWarning
         )
 

@@ -39,8 +39,8 @@ class CurrentUser(User):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
         warnings.warn(
-            "`list_groups` is being deprecated and will be removed in a future version."
-            " Use `get_groups` instead",
+            "`list_groups` is being deprecated and will be removed in a "
+            "future version. Use `get_groups` instead",
             DeprecationWarning
         )
 
@@ -80,8 +80,8 @@ class CurrentUser(User):
             :class:`canvasapi.bookmark.Bookmark`
         """
         warnings.warn(
-            "`list_bookmarks` is being deprecated and will be removed in a future version."
-            " Use `get_bookmarks` instead",
+            "`list_bookmarks` is being deprecated and will be removed in a "
+            "future version. Use `get_bookmarks` instead",
             DeprecationWarning
         )
 

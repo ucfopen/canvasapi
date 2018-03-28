@@ -964,8 +964,8 @@ class Course(CanvasObject):
             :class:`canvasapi.assignment.AssignmentGroup`
         """
         warnings.warn(
-            "`list_assignment_groups` is being deprecated and will be removed in a future version."
-            " Use `get_assignment_groups` instead",
+            "`list_assignment_groups` is being deprecated and will be removed "
+            "in a future version. Use `get_assignment_groups` instead",
             DeprecationWarning
         )
 
@@ -1536,8 +1536,8 @@ class Course(CanvasObject):
             :class:`canvasapi.external_feed.ExternalFeed`
         """
         warnings.warn(
-            "`list_external_feeds` is being deprecated and will be removed in a future version."
-            " Use `get_external_feeds` instead",
+            "`list_external_feeds` is being deprecated and will be removed in "
+            "a future version. Use `get_external_feeds` instead",
             DeprecationWarning
         )
 
@@ -1619,8 +1619,8 @@ class Course(CanvasObject):
             :class:`canvasapi.file.File`
         """
         warnings.warn(
-            "`list_files` is being deprecated and will be removed in a future version."
-            " Use `get_files` instead",
+            "`list_files` is being deprecated and will be removed in a future "
+            "version. Use `get_files` instead",
             DeprecationWarning
         )
 
@@ -1682,8 +1682,8 @@ class Course(CanvasObject):
             :class:`canvasapi.folder.Folder`
         """
         warnings.warn(
-            "`list_folders` is being deprecated and will be removed in a future version."
-            " Use `get_folders` instead",
+            "`list_folders` is being deprecated and will be removed in a "
+            "future version. Use `get_folders` instead",
             DeprecationWarning
         )
 
@@ -1743,8 +1743,8 @@ class Course(CanvasObject):
             :class:`canvasapi.tab.Tab`
         """
         warnings.warn(
-            "`list_tabs` is being deprecated and will be removed in a future version."
-            " Use `get_tabs` instead",
+            "`list_tabs` is being deprecated and will be removed in a future "
+            "version. Use `get_tabs` instead",
             DeprecationWarning
         )
 
@@ -1823,8 +1823,8 @@ class Course(CanvasObject):
             :class:`canvasapi.rubric.Rubric`
         """
         warnings.warn(
-            "`list_rubrics` is being deprecated and will be removed in a future version."
-            " Use `get_rubrics` instead",
+            "`list_rubrics` is being deprecated and will be removed in a "
+            "future version. Use `get_rubrics` instead",
             DeprecationWarning
         )
 

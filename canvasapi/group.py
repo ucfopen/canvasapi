@@ -200,8 +200,8 @@ class Group(CanvasObject):
             :class:`canvasapi.user.User`
         """
         warnings.warn(
-            "`list_users` is being deprecated and will be removed in a future version."
-            " Use `get_users` instead",
+            "`list_users` is being deprecated and will be removed in a future "
+            "version. Use `get_users` instead",
             DeprecationWarning
         )
 
@@ -322,8 +322,8 @@ class Group(CanvasObject):
             :class:`canvasapi.group.GroupMembership`
         """
         warnings.warn(
-            "`list_memberships` is being deprecated and will be removed in a future version."
-            " Use `get_memberships` instead",
+            "`list_memberships` is being deprecated and will be removed in a "
+            "future version. Use `get_memberships` instead.",
             DeprecationWarning
         )
 
@@ -572,8 +572,8 @@ class Group(CanvasObject):
             :class:`canvasapi.external_feed.ExternalFeed`
         """
         warnings.warn(
-            "`list_external_feeds` is being deprecated and will be removed in a future version."
-            " Use `get_external_feeds` instead",
+            "`list_external_feeds` is being deprecated and will be removed in "
+            "a future version. Use `get_external_feeds` instead",
             DeprecationWarning
         )
 
@@ -654,8 +654,8 @@ class Group(CanvasObject):
             :class:`canvasapi.file.File`
         """
         warnings.warn(
-            "`list_files` is being deprecated and will be removed in a future version."
-            " Use `get_files` instead",
+            "`list_files` is being deprecated and will be removed in a future "
+            "version. Use `get_files` instead.",
             DeprecationWarning
         )
 
@@ -717,8 +717,8 @@ class Group(CanvasObject):
             :class:`canvasapi.folder.Folder`
         """
         warnings.warn(
-            "`list_folders` is being deprecated and will be removed in a future version."
-            " Use `get_folders` instead",
+            "`list_folders` is being deprecated and will be removed in a "
+            "future version. Use `get_folders` instead.",
             DeprecationWarning
         )
 
@@ -777,8 +777,8 @@ class Group(CanvasObject):
             :class:`canvasapi.tab.Tab`
         """
         warnings.warn(
-            "`list_tabs` is being deprecated and will be removed in a future version."
-            " Use `get_tabs` instead",
+            "`list_tabs` is being deprecated and will be removed in a future "
+            "version. Use `get_tabs` instead.",
             DeprecationWarning
         )
 
@@ -1035,8 +1035,8 @@ class GroupCategory(CanvasObject):
             :class:`canvasapi.group.Group`
         """
         warnings.warn(
-            "`list_groups` is being deprecated and will be removed in a future version."
-            " Use `get_groups` instead",
+            "`list_groups` is being deprecated and will be removed in a "
+            "future version. Use `get_groups` instead.",
             DeprecationWarning
         )
 

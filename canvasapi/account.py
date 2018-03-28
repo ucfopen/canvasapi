@@ -622,7 +622,7 @@ class Account(CanvasObject):
 
     def list_group_categories(self, **kwargs):
         """
-        List group categories for a context
+        List group categories for a context.
 
         .. warning::
             .. deprecated:: 0.10.0
@@ -634,10 +634,9 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.group.GroupCategory`
         """
-
         warnings.warn(
-            "`list_group_categories` is being deprecated and will be removed in a future version."
-            " Use `get_group_categories` instead",
+            "`list_group_categories` is being deprecated and will be removed "
+            "in a future version. Use `get_group_categories` instead",
             DeprecationWarning
         )
 
@@ -645,7 +644,7 @@ class Account(CanvasObject):
 
     def get_group_categories(self, **kwargs):
         """
-        List group categories for a context
+        List group categories for a context.
 
         :calls: `GET /api/v1/accounts/:account_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
@@ -716,7 +715,7 @@ class Account(CanvasObject):
 
     def list_enrollment_terms(self, **kwargs):
         """
-        List enrollment terms for a context
+        List enrollment terms for a context.
 
         .. warning::
             .. deprecated:: 0.10.0
@@ -729,8 +728,8 @@ class Account(CanvasObject):
             :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
         warnings.warn(
-            "`list_enrollment_terms` is being deprecated and will be removed in a future version."
-            " Use `get_enrollment_terms` instead",
+            "`list_enrollment_terms` is being deprecated and will be removed "
+            "in a future version. Use `get_enrollment_terms` instead",
             DeprecationWarning
         )
 
@@ -738,7 +737,7 @@ class Account(CanvasObject):
 
     def get_enrollment_terms(self, **kwargs):
         """
-        List enrollment terms for a context
+        List enrollment terms for a context.
 
         :calls: `GET /api/v1/accounts/:account_id/terms \
         <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.index>`_
@@ -773,8 +772,8 @@ class Account(CanvasObject):
             :class:`canvasapi.login.Login`
         """
         warnings.warn(
-            "`list_user_logins` is being deprecated and will be removed in a future version."
-            " Use `get_user_logins` instead",
+            "`list_user_logins` is being deprecated and will be removed in a "
+            "future version. Use `get_user_logins` instead",
             DeprecationWarning
         )
 
@@ -1027,9 +1026,9 @@ class Account(CanvasObject):
             :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
         warnings.warn(
-            "`list_authentication_providers`"
-            " is being deprecated and will be removed in a future version."
-            " Use `get_authentication_providers` instead",
+            "`list_authentication_providers` is being deprecated and will be "
+            "removed in a future version. Use `get_authentication_providers` "
+            "instead.",
             DeprecationWarning
         )
 
@@ -1305,8 +1304,8 @@ class Account(CanvasObject):
             :class:`canvasapi.rubric.Rubric`
         """
         warnings.warn(
-            "`list_rubrics` is being deprecated and will be removed in a future version."
-            " Use `get_rubrics` instead",
+            "`list_rubrics` is being deprecated and will be removed in a "
+            "future version. Use `get_rubrics` instead.",
             DeprecationWarning
         )
 

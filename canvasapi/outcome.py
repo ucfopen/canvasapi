@@ -176,8 +176,8 @@ class OutcomeGroup(CanvasObject):
             :class:`canvasapi.outcome.OutcomeLink`
         """
         warnings.warn(
-            "`list_linked_outcomes` is being deprecated and will be removed in a future version."
-            " Use `get_linked_outcomes` instead",
+            "`list_linked_outcomes` is being deprecated and will be removed "
+            "in a future version. Use `get_linked_outcomes` instead.",
             DeprecationWarning
         )
 
@@ -315,8 +315,8 @@ class OutcomeGroup(CanvasObject):
             :class:`canvasapi.outcome.OutcomeGroup`
         """
         warnings.warn(
-            "`list_subgroups` is being deprecated and will be removed in a future version."
-            " Use `get_subgroups` instead - ",
+            "`list_subgroups` is being deprecated and will be removed in a "
+            "future version. Use `get_subgroups` instead.",
             DeprecationWarning
         )
 
@@ -341,7 +341,8 @@ class OutcomeGroup(CanvasObject):
             OutcomeGroup,
             self._requester,
             'GET',
-            '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id)
+            '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_subgroup(self, title, **kwargs):

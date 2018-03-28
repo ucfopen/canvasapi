@@ -30,8 +30,8 @@ class Folder(CanvasObject):
             :class:`canvasapi.file.File`
         """
         warnings.warn(
-            "`list_files` is being deprecated and will be removed in a future version."
-            " Use `get_files` instead",
+            "`list_files` is being deprecated and will be removed in a future "
+            "version. Use `get_files` instead",
             DeprecationWarning
         )
 
@@ -89,8 +89,8 @@ class Folder(CanvasObject):
             :class:`canvasapi.folder.Folder`
         """
         warnings.warn(
-            "`list_folders` is being deprecated and will be removed in a future version."
-            " Use `get_folders` instead",
+            "`list_folders` is being deprecated and will be removed in a "
+            "future version. Use `get_folders` instead",
             DeprecationWarning
         )
 

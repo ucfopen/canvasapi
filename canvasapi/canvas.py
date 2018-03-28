@@ -676,8 +676,8 @@ class Canvas(object):
             :class:`canvasapi.calendar_event.CalendarEvent`
         """
         warnings.warn(
-            "`list_calendar_events` is being deprecated and will be removed in a future version."
-            " Use `get_calendar_events` instead",
+            "`list_calendar_events` is being deprecated and will be removed "
+            "in a future version. Use `get_calendar_events` instead",
             DeprecationWarning
         )
 
@@ -773,9 +773,8 @@ class Canvas(object):
             :class:`canvasapi.appointment_group.AppointmentGroup`
         """
         warnings.warn(
-            "`list_appointment_groups`"
-            " is being deprecated and will be removed in a future version."
-            " Use `get_appointment_groups` instead",
+            "`list_appointment_groups` is being deprecated and will be removed"
+            " in a future version. Use `get_appointment_groups` instead.",
             DeprecationWarning
         )
 
@@ -934,9 +933,8 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
         warnings.warn(
-            "`list_group_participants`"
-            " is being deprecated and will be removed in a future version."
-            " Use `get_group_participants` instead",
+            "`list_group_participants` is being deprecated and will be removed "
+            "in a future version. Use `get_group_participants` instead",
             DeprecationWarning
         )
 

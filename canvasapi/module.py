@@ -89,8 +89,8 @@ class Module(CanvasObject):
             :class:`canvasapi.module.ModuleItem`
         """
         warnings.warn(
-            "`list_module_items` is being deprecated and will be removed in a future version."
-            " Use `get_module_items` instead",
+            "`list_module_items` is being deprecated and will be removed in a "
+            "future version. Use `get_module_items` instead.",
             DeprecationWarning
         )
 
