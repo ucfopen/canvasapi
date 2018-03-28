@@ -21,7 +21,7 @@ class TestTab(unittest.TestCase):
 
             self.course = self.canvas.get_course(1)
 
-            tabs = self.course.list_tabs()
+            tabs = self.course.get_tabs()
             tab_list = [tab for tab in tabs]
 
             self.tab = tab_list[0]

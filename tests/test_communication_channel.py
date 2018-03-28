@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 
 import requests_mock
+import warnings
 
 from canvasapi import Canvas
 from canvasapi.notification_preference import NotificationPreference
@@ -19,7 +20,7 @@ class TestCommunicationChannel(unittest.TestCase):
             register_uris({'user': ['get_by_id', 'list_comm_channels']}, m)
 
             self.user = self.canvas.get_user(1)
-            self.comm_chan = self.user.list_communication_channels()[0]
+            self.comm_chan = self.user.get_communication_channels()[0]
 
     # __str__()
     def test__str__(self, m):
@@ -30,7 +31,21 @@ class TestCommunicationChannel(unittest.TestCase):
     def test_list_preferences(self, m):
         register_uris({'communication_channel': ['list_preferences']}, m)
 
-        preferences = self.comm_chan.list_preferences()
+        with warnings.catch_warnings(record=True) as warning_list:
+            preferences = self.comm_chan.list_preferences()
+            preference_list = [preference for preference in preferences]
+
+            self.assertEqual(len(preference_list), 2)
+            self.assertEqual(preference_list[0]['notification'], 'new_announcement')
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_preferences()
+    def test_get_preferences(self, m):
+        register_uris({'communication_channel': ['list_preferences']}, m)
+
+        preferences = self.comm_chan.get_preferences()
         preference_list = [preference for preference in preferences]
 
         self.assertEqual(len(preference_list), 2)
@@ -40,7 +55,21 @@ class TestCommunicationChannel(unittest.TestCase):
     def test_list_preference_categories(self, m):
         register_uris({'communication_channel': ['list_preference_categories']}, m)
 
-        categories = self.comm_chan.list_preference_categories()
+        with warnings.catch_warnings(record=True) as warning_list:
+            categories = self.comm_chan.list_preference_categories()
+
+            self.assertEqual(len(categories), 2)
+            self.assertIsInstance(categories, list)
+            self.assertEqual(categories[0], 'announcement')
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_preference_categories()
+    def test_get_preference_categories(self, m):
+        register_uris({'communication_channel': ['list_preference_categories']}, m)
+
+        categories = self.comm_chan.get_preference_categories()
 
         self.assertEqual(len(categories), 2)
         self.assertIsInstance(categories, list)

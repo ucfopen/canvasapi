@@ -208,7 +208,7 @@ class TestPaginatedList(unittest.TestCase):
         self.assertEqual(pag_list.__repr__(), '<PaginatedList of type User>')
 
     def test_root_element_incorrect(self, m):
-        register_uris({'account': ['list_enrollment_terms']}, m)
+        register_uris({'account': ['get_enrollment_terms']}, m)
 
         pag_list = PaginatedList(
             EnrollmentTerm,
@@ -222,7 +222,7 @@ class TestPaginatedList(unittest.TestCase):
             pag_list[0]
 
     def test_root_element(self, m):
-        register_uris({'account': ['list_enrollment_terms']}, m)
+        register_uris({'account': ['get_enrollment_terms']}, m)
 
         pag_list = PaginatedList(
             EnrollmentTerm,

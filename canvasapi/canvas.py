@@ -665,6 +665,28 @@ class Canvas(object):
         """
         List calendar events.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.canvas.Canvas.get_calendar_events` instead.
+
+        :calls: `GET /api/v1/calendar_events \
+        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.calendar_event.CalendarEvent`
+        """
+        warnings.warn(
+            "`list_calendar_events` is being deprecated and will be removed "
+            "in a future version. Use `get_calendar_events` instead",
+            DeprecationWarning
+        )
+
+        return self.get_calendar_events(**kwargs)
+
+    def get_calendar_events(self, **kwargs):
+        """
+        List calendar events.
+
         :calls: `GET /api/v1/calendar_events \
         <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_
 
@@ -737,6 +759,28 @@ class Canvas(object):
         return CalendarEvent(self.__requester, response.json())
 
     def list_appointment_groups(self, **kwargs):
+        """
+        List appointment groups.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.canvas.Canvas.get_appointment_groups` instead.
+
+        :calls: `GET /api/v1/appointment_groups \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.appointment_group.AppointmentGroup`
+        """
+        warnings.warn(
+            "`list_appointment_groups` is being deprecated and will be removed"
+            " in a future version. Use `get_appointment_groups` instead.",
+            DeprecationWarning
+        )
+
+        return self.get_appointment_groups(**kwargs)
+
+    def get_appointment_groups(self, **kwargs):
         """
         List appointment groups.
 
@@ -825,6 +869,30 @@ class Canvas(object):
         """
         List user participants in this appointment group.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi. canvas.Canvas.get_user_participants` instead.
+
+        :calls: `GET /api/v1/appointment_groups/:id/users \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.users>`_
+
+        :param appointment_group: The object or ID of the appointment group.
+        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
+        """
+        warnings.warn(
+            "`list_user_participants` is being deprecated and will be removed in a future version."
+            " Use `get_user_participants` instead",
+            DeprecationWarning
+        )
+
+        return self.get_user_participants(appointment_group, **kwargs)
+
+    def get_user_participants(self, appointment_group, **kwargs):
+        """
+        List user participants in this appointment group.
+
         :calls: `GET /api/v1/appointment_groups/:id/users \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.users>`_
 
@@ -849,6 +917,30 @@ class Canvas(object):
         )
 
     def list_group_participants(self, appointment_group, **kwargs):
+        """
+        List student group participants in this appointment group.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi. canvas.Canvas.get_group_participants` instead.
+
+        :calls: `GET /api/v1/appointment_groups/:id/groups \
+        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.groups>`_
+
+        :param appointment_group: The object or ID of the appointment group.
+        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
+        """
+        warnings.warn(
+            "`list_group_participants` is being deprecated and will be removed "
+            "in a future version. Use `get_group_participants` instead",
+            DeprecationWarning
+        )
+
+        return self.get_group_participants(appointment_group, **kwargs)
+
+    def get_group_participants(self, appointment_group, **kwargs):
         """
         List student group participants in this appointment group.
 

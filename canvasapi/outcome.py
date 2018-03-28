@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from six import python_2_unicode_compatible
+import warnings
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
@@ -159,6 +160,33 @@ class OutcomeGroup(CanvasObject):
         """
         List linked outcomes.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.outcome.Outcome.get_linked_outcomes` instead.
+
+        :calls: `GET /api/v1/global/outcome_groups/:id/outcomes \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes>`_
+            or `GET /api/v1/accounts/:account_id/outcome_groups/:id/outcomes \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes>`_
+            or `GET /api/v1/courses/:course_id/outcome_groups/:id/outcomes \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes>`_
+
+        :returns: Paginated List of Outcomes linked to the group.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.outcome.OutcomeLink`
+        """
+        warnings.warn(
+            "`list_linked_outcomes` is being deprecated and will be removed "
+            "in a future version. Use `get_linked_outcomes` instead.",
+            DeprecationWarning
+        )
+
+        return self.get_linked_outcomes(**kwargs)
+
+    def get_linked_outcomes(self, **kwargs):
+        """
+        List linked outcomes.
+
         :calls: `GET /api/v1/global/outcome_groups/:id/outcomes \
             <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.outcomes>`_
             or `GET /api/v1/accounts/:account_id/outcome_groups/:id/outcomes \
@@ -267,7 +295,34 @@ class OutcomeGroup(CanvasObject):
 
         return 'context_id' in response.json()
 
-    def list_subgroups(self):
+    def list_subgroups(self, **kwargs):
+        """
+        List subgroups.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.outcome.Outcome.get_subgroups` instead.
+
+        :calls: `GET /api/v1/global/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
+            or `GET /api/v1/accounts/:account_id/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
+            or `GET /api/v1/courses/:course_id/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
+
+        :returns: Paginated List of OutcomeGroups linked to the current group.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        warnings.warn(
+            "`list_subgroups` is being deprecated and will be removed in a "
+            "future version. Use `get_subgroups` instead.",
+            DeprecationWarning
+        )
+
+        return self.get_subgroups(**kwargs)
+
+    def get_subgroups(self, **kwargs):
         """
         List subgroups.
 
@@ -286,7 +341,8 @@ class OutcomeGroup(CanvasObject):
             OutcomeGroup,
             self._requester,
             'GET',
-            '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id)
+            '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_subgroup(self, title, **kwargs):

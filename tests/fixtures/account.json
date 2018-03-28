@@ -288,7 +288,7 @@
 		],
 		"status_code": 200
 	},
-	"list_enrollment_terms": {
+	"get_enrollment_terms": {
 		"method": "GET",
 		"endpoint": "accounts/1/terms",
 		"data": {
@@ -304,7 +304,7 @@
 		},
 		"status_code": 200
 	},
-	"list_groups_context": {
+	"get_groups_context": {
 		"method": "GET",
 		"endpoint": "accounts/1/groups",
 		"data": [
@@ -322,7 +322,7 @@
 			"Link": "<http://example.com/api/v1/accounts/1/groups?page=2&per_page=2>; rel=\"next\""
 		}
 	},
-	"list_groups_context2": {
+	"get_groups_context2": {
 		"method": "GET",
 		"endpoint": "accounts/1/groups?page=2&per_page=2",
 		"data": [
@@ -599,7 +599,7 @@
 		},
 		"status_code": 200
 	},
-	"list_group_categories": {
+	"get_group_categories": {
 		"method": "GET",
 		"endpoint": "accounts/1/group_categories",
 		"data": [
@@ -628,7 +628,7 @@
 		],
 		"status_code": 200
 	},
-	"list_roles": {
+	"get_roles": {
 		"method": "GET",
 		"endpoint": "accounts/1/roles",
 		"data": [
@@ -648,7 +648,7 @@
 		},
 		"status_code": 200
 	},
-	"list_roles_2": {
+	"get_roles_2": {
 		"method": "GET",
 		"endpoint": "accounts/1/roles/?page=2&per_page=2",
 		"data": [
@@ -705,7 +705,7 @@
 		},
 		"status_code": 200
 	},
-	"list_user_logins": {
+	"get_user_logins": {
 		"method": "GET",
 		"endpoint": "accounts/1/logins",
 		"data": [
@@ -724,7 +724,7 @@
 		},
 		"status_code": 200
 	},
-	"list_user_logins_2": {
+	"get_user_logins_2": {
 		"method": "GET",
 		"endpoint": "accounts/1/logins/?page=2&per_page=2",
 		"data": [
