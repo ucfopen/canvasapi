@@ -11,13 +11,17 @@ Class Reference
     avatar-ref
     bookmark-ref
     calendar-event-ref
+    communication-channel-ref
     content-migration-ref
     conversation-ref
     course-ref
     current-user-ref
+    discussion-entry-ref
     discussion-topic-ref
     enrollment-term-ref
     external-tool-ref
+    file-ref
+    folder-ref
     group-ref
     login-ref
     module-ref

@@ -22,11 +22,12 @@ class TestTab(unittest.TestCase):
             }, m)
 
             self.course = self.canvas.get_course(1)
-            tabs = self.course.list_tabs()
+
+            tabs = self.course.get_tabs()
             self.tab = tabs[1]
 
             self.group = self.canvas.get_group(1)
-            group_tabs = self.group.list_tabs()
+            group_tabs = self.group.get_tabs()
             self.tab_group = group_tabs[1]
 
     # __str__()

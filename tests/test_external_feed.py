@@ -18,7 +18,7 @@ class TestExternalFeed(unittest.TestCase):
             register_uris({'course': ['get_by_id', 'list_external_feeds']}, m)
 
             self.course = self.canvas.get_course(1)
-            self.external_feed = self.course.list_external_feeds()[0]
+            self.external_feed = self.course.get_external_feeds()[0]
 
     # __str__()
     def test__str__(self, m):
