@@ -18,6 +18,7 @@ Class Reference
     current-user-ref
     discussion-entry-ref
     discussion-topic-ref
+    enrollment-ref
     enrollment-term-ref
     external-tool-ref
     file-ref
