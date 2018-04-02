@@ -1766,12 +1766,17 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/tabs'.format(self.id),
+            {'course_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
     def update_tab(self, tab_id, **kwargs):
         """
         Update a tab for a course.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.tab.Tab.update` instead.
 
         :calls: `PUT /api/v1/courses/:course_id/tabs/:tab_id \
         <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.update>`_
@@ -1781,13 +1786,17 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.tab.Tab`
         """
-        response = self._requester.request(
-            'PUT',
-            'courses/{}/tabs/{}'.format(self.id, tab_id),
-            _kwargs=combine_kwargs(**kwargs)
+        warnings.warn(
+            "`Course.update_tab()` is being deprecated and will be removed in "
+            "a future version. Use `Tab.update()` instead",
+            DeprecationWarning
         )
 
-        return Tab(self._requester, response.json())
+        tab = Tab(self._requester, {
+            'course_id': self.id,
+            'id': tab_id
+        })
+        return tab.update(**kwargs)
 
     def get_rubric(self, rubric_id, **kwargs):
         """
