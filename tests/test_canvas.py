@@ -741,7 +741,7 @@ class TestCanvas(unittest.TestCase):
 
     # get_announcements()
     def test_get_announcements(self, m):
-        register_uris({'announcements': ['list_announcements']},m)
+        register_uris({'announcements': ['list_announcements']}, m)
         announcements = self.canvas.get_announcements()
         announcement_list = [announcement for announcement in announcements]
         self.assertIsInstance(announcements, PaginatedList)
