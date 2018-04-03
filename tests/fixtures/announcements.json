@@ -1,0 +1,28 @@
+{
+  "list_announcements": {
+    "method": "GET",
+    "endpoint": "announcements",
+    "data": [{
+        "id": 1,
+        "title": "Announcment #1",
+        "author": {
+          "id": 1,
+          "display_name": "John Doe"
+        },
+        "message": "Announcement Message #1",
+        "subscription_hold": "topic_is_announcement"
+      },
+      {
+        "id": 2,
+        "title": "Announcement #2",
+        "author": {
+          "id": 2,
+          "display_name": "John Smith"
+        },
+        "message": "Announcement Message #2",
+        "subscription_hold": "topic_is_announcement"
+      }
+    ],
+    "status_code": 200
+  }
+}
