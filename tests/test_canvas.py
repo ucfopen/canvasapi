@@ -14,16 +14,16 @@ from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
+from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
 from canvasapi.exceptions import ResourceDoesNotExist
 from canvasapi.outcome import Outcome, OutcomeGroup
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.user import User
-from canvasapi.paginated_list import PaginatedList
-from canvasapi.discussion_topic import DiscussionTopic
 from tests import settings
 from tests.util import register_uris
 
