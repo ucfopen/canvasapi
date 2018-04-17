@@ -14,11 +14,13 @@ from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
+from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
 from canvasapi.exceptions import ResourceDoesNotExist
 from canvasapi.outcome import Outcome, OutcomeGroup
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.user import User
@@ -736,3 +738,12 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(progress, Progress)
         self.assertTrue(hasattr(progress, 'id'))
         self.assertEqual(progress.id, 1)
+
+    # get_announcements()
+    def test_get_announcements(self, m):
+        register_uris({'announcements': ['list_announcements']}, m)
+        announcements = self.canvas.get_announcements()
+        announcement_list = [announcement for announcement in announcements]
+        self.assertIsInstance(announcements, PaginatedList)
+        self.assertIsInstance(announcement_list[0], DiscussionTopic)
+        self.assertEqual(len(announcement_list), 2)
