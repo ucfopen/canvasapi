@@ -5,8 +5,7 @@ from canvasapi.canvas_object import CanvasObject
 from tests.test_endpoint_docstrings import test_methods
 
 class TestTestEndpointDocstrings(unittest.TestCase):
-    @requests_mock.Mocker()
-    def test_test_methods(self, m):
+    def test_test_methods(self):
         assert not test_methods(ExampleMethods.example_method_should_fail_online_documentation)
         assert not test_methods(ExampleMethods.example_method_should_fail_implementation_verb)
         assert not test_methods(ExampleMethods.example_method_should_fail_implementation_URL)
