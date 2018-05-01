@@ -128,7 +128,7 @@ class Assignment(CanvasObject):
         :rtype: :class:`canvasapi.submission.Submission`
         """
         if isinstance(submission, dict) and 'submission_type' in submission:
-            kwargs['submision'] = submission
+            kwargs['submission'] = submission
         else:
             raise RequiredFieldMissing(
                 "Dictionary with key 'submission_type' is required."
