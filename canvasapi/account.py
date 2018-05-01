@@ -1,6 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from six import python_2_unicode_compatible
+from six import python_2_unicode_compatible, string_types
+
+import warnings
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.grading_standard import GradingStandard
@@ -397,6 +399,28 @@ class Account(CanvasObject):
         """
         List the roles available to an account.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.account.Account.get_roles` instead.
+
+        :calls: `GET /api/v1/accounts/:account_id/roles \
+        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.account.Role`
+        """
+        warnings.warn(
+            "`list_roles` is being deprecated and will be removed in a future version."
+            " Use `get_roles` instead",
+            DeprecationWarning
+        )
+
+        return self.get_roles(**kwargs)
+
+    def get_roles(self, **kwargs):
+        """
+        List the roles available to an account.
+
         :calls: `GET /api/v1/accounts/:account_id/roles \
         <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
 
@@ -540,6 +564,27 @@ class Account(CanvasObject):
         """
         Return a list of active groups for the specified account.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.account.Account.get_groups` instead.
+
+        :calls: `GET /api/v1/accounts/:account_id/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
+        """
+        warnings.warn(
+            "`list_groups` is being deprecated and will be removed in a future version."
+            " Use `get_groups` instead",
+            DeprecationWarning
+        )
+
+        return self.get_groups(**kwargs)
+
+    def get_groups(self, **kwargs):
+        """
+        Return a list of active groups for the specified account.
+
         :calls: `GET /api/v1/accounts/:account_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
@@ -575,9 +620,31 @@ class Account(CanvasObject):
         )
         return GroupCategory(self._requester, response.json())
 
-    def list_group_categories(self):
+    def list_group_categories(self, **kwargs):
         """
-        List group categories for a context
+        List group categories for a context.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.account.Account.get_group_categories` instead.
+
+        :calls: `GET /api/v1/accounts/:account_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.GroupCategory`
+        """
+        warnings.warn(
+            "`list_group_categories` is being deprecated and will be removed "
+            "in a future version. Use `get_group_categories` instead",
+            DeprecationWarning
+        )
+
+        return self.get_group_categories(**kwargs)
+
+    def get_group_categories(self, **kwargs):
+        """
+        List group categories for a context.
 
         :calls: `GET /api/v1/accounts/:account_id/group_categories \
         <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
@@ -591,7 +658,8 @@ class Account(CanvasObject):
             GroupCategory,
             self._requester,
             'GET',
-            'accounts/{}/group_categories'.format(self.id)
+            'accounts/{}/group_categories'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_external_tool(self, name, privacy_level, consumer_key, shared_secret, **kwargs):
@@ -647,7 +715,29 @@ class Account(CanvasObject):
 
     def list_enrollment_terms(self, **kwargs):
         """
-        List enrollment terms for a context
+        List enrollment terms for a context.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.account.Account.get_enrollment_terms` instead.
+
+        :calls: `GET /api/v1/accounts/:account_id/terms \
+        <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.enrollment_term.EnrollmentTerm`
+        """
+        warnings.warn(
+            "`list_enrollment_terms` is being deprecated and will be removed "
+            "in a future version. Use `get_enrollment_terms` instead",
+            DeprecationWarning
+        )
+
+        return self.get_enrollment_terms(**kwargs)
+
+    def get_enrollment_terms(self, **kwargs):
+        """
+        List enrollment terms for a context.
 
         :calls: `GET /api/v1/accounts/:account_id/terms \
         <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.index>`_
@@ -668,6 +758,28 @@ class Account(CanvasObject):
         )
 
     def list_user_logins(self, **kwargs):
+        """
+        Given a user ID, return that user's logins for the given account.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.account.Account.get_user_logins` instead.
+
+        :calls: `GET /api/v1/accounts/:account_id/logins \
+        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.login.Login`
+        """
+        warnings.warn(
+            "`list_user_logins` is being deprecated and will be removed in a "
+            "future version. Use `get_user_logins` instead",
+            DeprecationWarning
+        )
+
+        return self.get_user_logins(**kwargs)
+
+    def get_user_logins(self, **kwargs):
         """
         Given a user ID, return that user's logins for the given account.
 
@@ -900,6 +1012,29 @@ class Account(CanvasObject):
         return AuthenticationProvider(self._requester, authentication_providers_json)
 
     def list_authentication_providers(self, **kwargs):
+        """
+        Return the list of authentication providers
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.account.Account.get_authentication_providers` instead.
+
+        :calls: `GET /api/v1/accounts/:account_id/authentication_providers \
+        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.authentication_provider.AuthenticationProvider`
+        """
+        warnings.warn(
+            "`list_authentication_providers` is being deprecated and will be "
+            "removed in a future version. Use `get_authentication_providers` "
+            "instead.",
+            DeprecationWarning
+        )
+
+        return self.get_authentication_providers(**kwargs)
+
+    def get_authentication_providers(self, **kwargs):
         """
         Return the list of authentication providers
 
@@ -1158,6 +1293,28 @@ class Account(CanvasObject):
         """
         Get the paginated list of active rubrics for the current account.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.account.Account.get_rubrics` instead.
+
+        :calls: `GET /api/v1/accounts/:account_id/rubrics \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.rubric.Rubric`
+        """
+        warnings.warn(
+            "`list_rubrics` is being deprecated and will be removed in a "
+            "future version. Use `get_rubrics` instead.",
+            DeprecationWarning
+        )
+
+        return self.get_rubrics(**kwargs)
+
+    def get_rubrics(self, **kwargs):
+        """
+        Get the paginated list of active rubrics for the current account.
+
         :calls: `GET /api/v1/accounts/:account_id/rubrics \
         <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
 
@@ -1169,6 +1326,107 @@ class Account(CanvasObject):
             self._requester,
             'GET',
             'accounts/%s/rubrics' % (self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def create_content_migration(self, migration_type, **kwargs):
+        """
+        Create a content migration.
+
+        :calls: `POST /api/v1/accounts/:account_id/content_migrations \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.create>`_
+
+        :param migration_type: The migrator type to use in this migration
+        :type migration_type: str or :class:`canvasapi.content_migration.Migrator`
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration, Migrator
+
+        if isinstance(migration_type, Migrator):
+            kwargs['migration_type'] = migration_type.type
+        elif isinstance(migration_type, string_types):
+            kwargs['migration_type'] = migration_type
+        else:
+            raise TypeError('Parameter migration_type must be of type Migrator or str')
+
+        response = self._requester.request(
+            'POST',
+            'accounts/{}/content_migrations'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'account_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migration(self, content_migration, **kwargs):
+        """
+        Retrive a content migration by its ID
+
+        :calls: `GET /api/v1/accounts/:account_id/content_migrations/:id \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.show>`_
+
+        :param content_migration: The object or ID of the content migration to retrieve.
+        :type contnet_migration: int, str or :class:`canvasapi.content_migration.ContentMigration`
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+
+        response = self._requester.request(
+            'GET',
+            'accounts/{}/content_migrations/{}'.format(self.id, migration_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'account_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migrations(self, **kwargs):
+        """
+        List content migrations that the current account can view or manage.
+
+        :calls: `GET /api/v1/accounts/:account_id/content_migrations/ \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        return PaginatedList(
+            ContentMigration,
+            self._requester,
+            'GET',
+            'accounts/{}/content_migrations'.format(self.id),
+            {'account_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_migration_systems(self, **kwargs):
+        """
+        Return a list of migration systems.
+
+        :calls: `GET /api/v1/accounts/:account_id/content_migrations/migrators \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.available_migrators>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_migration.Migrator`
+        """
+        from canvasapi.content_migration import Migrator
+
+        return PaginatedList(
+            Migrator,
+            self._requester,
+            'GET',
+            'accounts/{}/content_migrations/migrators'.format(self.id),
+            {'account_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 

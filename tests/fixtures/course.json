@@ -1060,7 +1060,7 @@
 		"method": "GET",
 		"endpoint": "courses/1/analytics/activity",
 		"data": [
-			{ 
+			{
 				"date": "2012-01-24",
 				"participations": 3,
 				"views": 10
@@ -1402,6 +1402,61 @@
 			  {"name": "C", "value": 0.7}
 			]
 		  },
+		"status_code": 200
+	},
+	"create_content_migration": {
+		"method": "POST",
+		"endpoint": "courses/1/content_migrations",
+		"data": {
+			"id": 1,
+			"migration_type": "dummy_importer",
+			"migration_type_title": "Dummy Importer"
+		},
+		"status_code": 200
+	},
+	"get_content_migration_single": {
+		"method": "GET",
+		"endpoint": "courses/1/content_migrations/1",
+		"data": {
+			"id": 1,
+			"migration_type": "dummy_importer",
+			"migration_type_title": "Dummy Importer",
+			"progress_url": "https://example.com/api/v1/progress/1"
+		},
+		"status_code": 200
+	},
+	"get_content_migration_multiple": {
+		"method": "GET",
+		"endpoint": "courses/1/content_migrations",
+		"data": [
+			{
+				"id": 1,
+				"migration_type": "dummy_importer",
+				"migration_type_title": "Dummy Importer"
+			},
+			{
+				"id": 2,
+				"migration_type": "dummy_importer",
+				"migration_type_title": "Dummy Importer"
+			}
+		],
+		"status_code": 200
+	},
+	"get_migration_systems_multiple": {
+		"method": "GET",
+		"endpoint": "courses/1/content_migrations/migrators",
+		"data": [
+			{
+				"type": "dummy_importer",
+				"requires_file_upload": true,
+				"name": "Dummy Importer 01"
+			},
+			{
+				"type": "dummy_importer_02",
+				"requires_file_upload": false,
+				"name": "Dummy Importer 02"
+			}
+		],
 		"status_code": 200
 	}
 }

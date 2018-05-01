@@ -21,7 +21,7 @@ class TestFile(unittest.TestCase):
             register_uris({'course': ['get_by_id', 'list_course_files', 'list_course_files2']}, m)
 
             self.course = self.canvas.get_course(1)
-            self.file = self.course.list_files()[0]
+            self.file = self.course.get_files()[0]
 
     # __str__()
     def test__str__(self, m):

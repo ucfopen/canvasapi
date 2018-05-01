@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 
 import requests_mock
+import warnings
 
 from canvasapi import Canvas
 from canvasapi.outcome import Outcome, OutcomeGroup, OutcomeLink
@@ -203,17 +204,55 @@ class TestOutcomeGroup(unittest.TestCase):
                 ]
             }, m)
 
-        result = self.account_outcome_group.list_linked_outcomes()
+        with warnings.catch_warnings(record=True) as warning_list:
+            result = self.account_outcome_group.list_linked_outcomes()
+            self.assertIsInstance(result[0], OutcomeLink)
+            self.assertEqual(result[0].outcome_group['id'], 2)
+            self.assertEqual(result[0].outcome_group['title'], "Account Test Outcome Group")
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            result = self.canvas_outcome_group.list_linked_outcomes()
+            self.assertIsInstance(result[0], OutcomeLink)
+            self.assertEqual(result[0].outcome_group['id'], 2)
+            self.assertEqual(result[0].outcome_group['title'], "Global Test Outcome Group")
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            result = self.course_outcome_group.list_linked_outcomes()
+            self.assertIsInstance(result[0], OutcomeLink)
+            self.assertEqual(result[0].outcome_group['id'], 2)
+            self.assertEqual(result[0].outcome_group['title'], "Course Test Outcome Group")
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_linked_outcomes()
+    def test_get_linked_outcomes(self, m):
+        register_uris(
+            {
+                'outcome': [
+                    'outcome_group_list_linked_outcomes_account',
+                    'outcome_group_list_linked_outcomes_global',
+                    'outcome_group_list_linked_outcomes_courses'
+                ]
+            }, m)
+
+        result = self.account_outcome_group.get_linked_outcomes()
         self.assertIsInstance(result[0], OutcomeLink)
         self.assertEqual(result[0].outcome_group['id'], 2)
         self.assertEqual(result[0].outcome_group['title'], "Account Test Outcome Group")
 
-        result = self.canvas_outcome_group.list_linked_outcomes()
+        result = self.canvas_outcome_group.get_linked_outcomes()
         self.assertIsInstance(result[0], OutcomeLink)
         self.assertEqual(result[0].outcome_group['id'], 2)
         self.assertEqual(result[0].outcome_group['title'], "Global Test Outcome Group")
 
-        result = self.course_outcome_group.list_linked_outcomes()
+        result = self.course_outcome_group.get_linked_outcomes()
         self.assertIsInstance(result[0], OutcomeLink)
         self.assertEqual(result[0].outcome_group['id'], 2)
         self.assertEqual(result[0].outcome_group['title'], "Course Test Outcome Group")
@@ -326,7 +365,54 @@ class TestOutcomeGroup(unittest.TestCase):
                 ]
             }, m)
 
-        result = self.canvas_outcome_group.list_subgroups()
+        with warnings.catch_warnings(record=True) as warning_list:
+            result = self.canvas_outcome_group.list_subgroups()
+            self.assertIsInstance(result[0], OutcomeGroup)
+            self.assertEqual(result[0].id, 2)
+            self.assertEqual(result[0].title, "Global Listed Subgroup Title 1")
+            self.assertIsInstance(result[1], OutcomeGroup)
+            self.assertEqual(result[1].id, 3)
+            self.assertEqual(result[1].title, "Global Listed Subgroup Title 2")
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            result = self.account_outcome_group.list_subgroups()
+            self.assertIsInstance(result[0], OutcomeGroup)
+            self.assertEqual(result[0].id, 2)
+            self.assertEqual(result[0].title, "Account Listed Subgroup Title 1")
+            self.assertIsInstance(result[1], OutcomeGroup)
+            self.assertEqual(result[1].id, 3)
+            self.assertEqual(result[1].title, "Account Listed Subgroup Title 2")
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            result = self.course_outcome_group.list_subgroups()
+            self.assertIsInstance(result[0], OutcomeGroup)
+            self.assertEqual(result[0].id, 2)
+            self.assertEqual(result[0].title, "Course Listed Subgroup Title 1")
+            self.assertIsInstance(result[1], OutcomeGroup)
+            self.assertEqual(result[1].id, 3)
+            self.assertEqual(result[1].title, "Course Listed Subgroup Title 2")
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_subgroups()
+    def test_get_subgroups(self, m):
+        register_uris(
+            {
+                'outcome': [
+                    'outcome_group_list_subgroups_global',
+                    'outcome_group_list_subgroups_account',
+                    'outcome_group_list_subgroups_course'
+                ]
+            }, m)
+
+        result = self.canvas_outcome_group.get_subgroups()
         self.assertIsInstance(result[0], OutcomeGroup)
         self.assertEqual(result[0].id, 2)
         self.assertEqual(result[0].title, "Global Listed Subgroup Title 1")
@@ -334,7 +420,7 @@ class TestOutcomeGroup(unittest.TestCase):
         self.assertEqual(result[1].id, 3)
         self.assertEqual(result[1].title, "Global Listed Subgroup Title 2")
 
-        result = self.account_outcome_group.list_subgroups()
+        result = self.account_outcome_group.get_subgroups()
         self.assertIsInstance(result[0], OutcomeGroup)
         self.assertEqual(result[0].id, 2)
         self.assertEqual(result[0].title, "Account Listed Subgroup Title 1")
@@ -342,7 +428,7 @@ class TestOutcomeGroup(unittest.TestCase):
         self.assertEqual(result[1].id, 3)
         self.assertEqual(result[1].title, "Account Listed Subgroup Title 2")
 
-        result = self.course_outcome_group.list_subgroups()
+        result = self.course_outcome_group.get_subgroups()
         self.assertIsInstance(result[0], OutcomeGroup)
         self.assertEqual(result[0].id, 2)
         self.assertEqual(result[0].title, "Course Listed Subgroup Title 1")

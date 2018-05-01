@@ -29,6 +29,7 @@ from canvasapi.submission import Submission
 from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
+from canvasapi.content_migration import ContentMigration, Migrator
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -463,11 +464,27 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(section, Section)
 
+    # list_groups()
     def test_list_groups(self, m):
         requires = {'course': ['list_groups_context', 'list_groups_context2']}
         register_uris(requires, m)
 
-        groups = self.course.list_groups()
+        with warnings.catch_warnings(record=True) as warning_list:
+            groups = self.course.list_groups()
+            group_list = [group for group in groups]
+
+            self.assertIsInstance(group_list[0], Group)
+            self.assertEqual(len(group_list), 4)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_groups()
+    def test_get_groups(self, m):
+        requires = {'course': ['list_groups_context', 'list_groups_context2']}
+        register_uris(requires, m)
+
+        groups = self.course.get_groups()
         group_list = [group for group in groups]
 
         self.assertIsInstance(group_list[0], Group)
@@ -485,7 +502,19 @@ class TestCourse(unittest.TestCase):
     def test_list_group_categories(self, m):
         register_uris({'course': ['list_group_categories']}, m)
 
-        response = self.course.list_group_categories()
+        with warnings.catch_warnings(record=True) as warning_list:
+            response = self.course.list_group_categories()
+            category_list = [category for category in response]
+            self.assertIsInstance(category_list[0], GroupCategory)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_group_categories()
+    def test_get_group_categories(self, m):
+        register_uris({'course': ['list_group_categories']}, m)
+
+        response = self.course.get_group_categories()
         category_list = [category for category in response]
         self.assertIsInstance(category_list[0], GroupCategory)
 
@@ -621,13 +650,31 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(assignment_group_by_obj, 'course_id'))
         self.assertEqual(assignment_group_by_obj.course_id, 1)
 
-    # list_group_categories()
+    # list_assignment_groups()
     def test_list_assignment_groups(self, m):
         register_uris({
             'assignment': ['list_assignment_groups', 'get_assignment_group']
         }, m)
 
-        response = self.course.list_assignment_groups()
+        with warnings.catch_warnings(record=True) as warning_list:
+            response = self.course.list_assignment_groups()
+            asnt_group_list = [assignment_group for assignment_group in response]
+            self.assertIsInstance(asnt_group_list[0], AssignmentGroup)
+            self.assertTrue(hasattr(asnt_group_list[0], 'id'))
+            self.assertTrue(hasattr(asnt_group_list[0], 'name'))
+            self.assertTrue(hasattr(asnt_group_list[0], 'course_id'))
+            self.assertEqual(asnt_group_list[0].course_id, 1)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_assignment_groups()
+    def test_get_assignment_groups(self, m):
+        register_uris({
+            'assignment': ['list_assignment_groups', 'get_assignment_group']
+        }, m)
+
+        response = self.course.get_assignment_groups()
         asnt_group_list = [assignment_group for assignment_group in response]
         self.assertIsInstance(asnt_group_list[0], AssignmentGroup)
         self.assertTrue(hasattr(asnt_group_list[0], 'id'))
@@ -778,18 +825,32 @@ class TestCourse(unittest.TestCase):
     def test_list_multiple_submissions(self, m):
         register_uris({'course': ['list_multiple_submissions']}, m)
 
-        submissions = self.course.list_multiple_submissions()
+        with warnings.catch_warnings(record=True) as warning_list:
+            submissions = self.course.list_multiple_submissions()
+            submission_list = [submission for submission in submissions]
+
+            self.assertEqual(len(submission_list), 2)
+            self.assertIsInstance(submission_list[0], Submission)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_multiple_submission()
+    def test_get_multiple_submissions(self, m):
+        register_uris({'course': ['list_multiple_submissions']}, m)
+
+        submissions = self.course.get_multiple_submissions()
         submission_list = [submission for submission in submissions]
 
         self.assertEqual(len(submission_list), 2)
         self.assertIsInstance(submission_list[0], Submission)
 
-    def test_list_multiple_submissions_grouped_param(self, m):
+    def test_get_multiple_submissions_grouped_param(self, m):
         register_uris({'course': ['list_multiple_submissions']}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             warnings.simplefilter('always')
-            submissions = self.course.list_multiple_submissions(grouped=True)
+            submissions = self.course.get_multiple_submissions(grouped=True)
             submission_list = [submission for submission in submissions]
 
             # Ensure using the `grouped` param raises a warning
@@ -943,7 +1004,21 @@ class TestCourse(unittest.TestCase):
     def test_list_external_feeds(self, m):
         register_uris({'course': ['list_external_feeds']}, m)
 
-        feeds = self.course.list_external_feeds()
+        with warnings.catch_warnings(record=True) as warning_list:
+            feeds = self.course.list_external_feeds()
+            feed_list = [feed for feed in feeds]
+            self.assertEqual(len(feed_list), 2)
+            self.assertTrue(hasattr(feed_list[0], 'url'))
+            self.assertIsInstance(feed_list[0], ExternalFeed)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_external_feeds()
+    def test_get_external_feeds(self, m):
+        register_uris({'course': ['list_external_feeds']}, m)
+
+        feeds = self.course.get_external_feeds()
         feed_list = [feed for feed in feeds]
         self.assertEqual(len(feed_list), 2)
         self.assertTrue(hasattr(feed_list[0], 'url'))
@@ -973,10 +1048,23 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(deleted_ef_by_obj.display_name, "My Blog")
 
     # list_files()
-    def test_course_files(self, m):
+    def test_list_files(self, m):
         register_uris({'course': ['list_course_files', 'list_course_files2']}, m)
 
-        files = self.course.list_files()
+        with warnings.catch_warnings(record=True) as warning_list:
+            files = self.course.list_files()
+            file_list = [file for file in files]
+            self.assertEqual(len(file_list), 4)
+            self.assertIsInstance(file_list[0], File)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_files()
+    def test_get_files(self, m):
+        register_uris({'course': ['list_course_files', 'list_course_files2']}, m)
+
+        files = self.course.get_files()
         file_list = [file for file in files]
         self.assertEqual(len(file_list), 4)
         self.assertIsInstance(file_list[0], File)
@@ -997,7 +1085,20 @@ class TestCourse(unittest.TestCase):
     def test_list_folders(self, m):
         register_uris({'course': ['list_folders']}, m)
 
-        folders = self.course.list_folders()
+        with warnings.catch_warnings(record=True) as warning_list:
+            folders = self.course.list_folders()
+            folder_list = [folder for folder in folders]
+            self.assertEqual(len(folder_list), 2)
+            self.assertIsInstance(folder_list[0], Folder)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_folders()
+    def test_get_folders(self, m):
+        register_uris({'course': ['list_folders']}, m)
+
+        folders = self.course.get_folders()
         folder_list = [folder for folder in folders]
         self.assertEqual(len(folder_list), 2)
         self.assertIsInstance(folder_list[0], Folder)
@@ -1014,7 +1115,20 @@ class TestCourse(unittest.TestCase):
     def test_list_tabs(self, m):
         register_uris({'course': ['list_tabs']}, m)
 
-        tabs = self.course.list_tabs()
+        with warnings.catch_warnings(record=True) as warning_list:
+            tabs = self.course.list_tabs()
+            tab_list = [tab for tab in tabs]
+            self.assertEqual(len(tab_list), 2)
+            self.assertIsInstance(tab_list[0], Tab)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_tabs()
+    def test_get_tabs(self, m):
+        register_uris({'course': ['list_tabs']}, m)
+
+        tabs = self.course.get_tabs()
         tab_list = [tab for tab in tabs]
         self.assertEqual(len(tab_list), 2)
         self.assertIsInstance(tab_list[0], Tab)
@@ -1025,10 +1139,15 @@ class TestCourse(unittest.TestCase):
 
         tab_id = "pages"
         new_position = 3
-        tab = self.course.update_tab(tab_id, position=new_position)
 
-        self.assertIsInstance(tab, Tab)
-        self.assertEqual(tab.position, 3)
+        with warnings.catch_warnings(record=True) as warning_list:
+            tab = self.course.update_tab(tab_id, position=new_position)
+
+            self.assertIsInstance(tab, Tab)
+            self.assertEqual(tab.position, 3)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_rubric
     def test_get_rubric(self, m):
@@ -1045,7 +1164,26 @@ class TestCourse(unittest.TestCase):
     def test_list_rubrics(self, m):
         register_uris({'course': ['get_rubric_multiple']}, m)
 
-        rubrics = self.course.list_rubrics()
+        with warnings.catch_warnings(record=True) as warning_list:
+            rubrics = self.course.list_rubrics()
+
+            self.assertEqual(len(list(rubrics)), 2)
+
+            self.assertIsInstance(rubrics[0], Rubric)
+            self.assertEqual(rubrics[0].id, 1)
+            self.assertEqual(rubrics[0].title, "Course Rubric 1")
+            self.assertIsInstance(rubrics[1], Rubric)
+            self.assertEqual(rubrics[1].id, 2)
+            self.assertEqual(rubrics[1].title, "Course Rubric 2")
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_rubrics
+    def test_get_rubrics(self, m):
+        register_uris({'course': ['get_rubric_multiple']}, m)
+
+        rubrics = self.course.get_rubrics()
 
         self.assertEqual(len(list(rubrics)), 2)
 
@@ -1182,6 +1320,72 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(response, "grading_scheme"))
         self.assertEqual(response.grading_scheme[0].get('name'), "A")
         self.assertEqual(response.grading_scheme[0].get('value'), 0.9)
+
+    # create_content_migration
+    def test_create_content_migration(self, m):
+        register_uris({'course': ['create_content_migration']}, m)
+
+        content_migration = self.course.create_content_migration('dummy_importer')
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    def test_create_content_migration_migrator(self, m):
+        register_uris({'course': ['create_content_migration',
+                                  'get_migration_systems_multiple']}, m)
+
+        migrators = self.course.get_migration_systems()
+        content_migration = self.course.create_content_migration(migrators[0])
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    def test_create_content_migration_bad_migration_type(self, m):
+        register_uris({'course': ['create_content_migration']}, m)
+
+        with self.assertRaises(TypeError):
+            self.course.create_content_migration(1)
+
+    # get_content_migration
+    def test_get_content_migration(self, m):
+        register_uris({'course': ['get_content_migration_single']}, m)
+
+        content_migration = self.course.get_content_migration(1)
+
+        self.assertIsInstance(content_migration, ContentMigration)
+        self.assertTrue(hasattr(content_migration, 'migration_type'))
+
+    # get_content_migrations
+    def test_get_content_migrations(self, m):
+        register_uris({'course': ['get_content_migration_multiple']}, m)
+
+        content_migrations = self.course.get_content_migrations()
+
+        self.assertEqual(len(list(content_migrations)), 2)
+
+        self.assertIsInstance(content_migrations[0], ContentMigration)
+        self.assertEqual(content_migrations[0].id, 1)
+        self.assertEqual(content_migrations[0].migration_type, "dummy_importer")
+        self.assertIsInstance(content_migrations[1], ContentMigration)
+        self.assertEqual(content_migrations[1].id, 2)
+        self.assertEqual(content_migrations[1].migration_type, "dummy_importer")
+
+    # get_migration_systems
+    def test_get_migration_systems(self, m):
+        register_uris({'course': ['get_migration_systems_multiple']}, m)
+
+        migration_systems = self.course.get_migration_systems()
+
+        self.assertEqual(len(list(migration_systems)), 2)
+
+        self.assertIsInstance(migration_systems[0], Migrator)
+        self.assertEqual(migration_systems[0].type, "dummy_importer")
+        self.assertEqual(migration_systems[0].requires_file_upload, True)
+        self.assertEqual(migration_systems[0].name, "Dummy Importer 01")
+        self.assertIsInstance(migration_systems[1], Migrator)
+        self.assertEqual(migration_systems[1].type, "dummy_importer_02")
+        self.assertEqual(migration_systems[1].requires_file_upload, False)
+        self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
 
 
 @requests_mock.Mocker()

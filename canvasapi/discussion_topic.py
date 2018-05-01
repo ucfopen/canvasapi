@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import warnings
+
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
@@ -137,6 +139,31 @@ class DiscussionTopic(CanvasObject):
         """
         Retreive the top-level entries in a discussion topic.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.discussion_topic.DiscussionTopic.get_topic_entries` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+
+            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.discussion_topic.DiscussionEntry`
+        """
+        warnings.warn(
+            "`list_topic_entries` is being deprecated and will be removed in "
+            "a future version. Use `get_topic_entries` instead",
+            DeprecationWarning
+        )
+
+        return self.get_topic_entries(**kwargs)
+
+    def get_topic_entries(self, **kwargs):
+        """
+        Retreive the top-level entries in a discussion topic.
+
         :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
             <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
 
@@ -163,6 +190,35 @@ class DiscussionTopic(CanvasObject):
         )
 
     def list_entries(self, ids, **kwargs):
+        """
+        Retrieve a paginated list of discussion entries, given a list
+        of ids. Entries will be returned in id order, smallest id first.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi. discussion_topic.DiscussionTopic.get_entries` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
+
+            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entry_list \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
+
+        :param ids: A list of entry objects or IDs to retrieve.
+        :type ids: :class:`canvasapi.discussion_topic.DiscussionEntry`, or list or tuple of int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.discussion_topic.DiscussionEntry`
+        """
+        warnings.warn(
+            "`list_entries` is being deprecated and will be removed in a "
+            "future version. Use `get_entries` instead",
+            DeprecationWarning
+        )
+
+        return self.get_entries(ids, **kwargs)
+
+    def get_entries(self, ids, **kwargs):
         """
         Retrieve a paginated list of discussion entries, given a list
         of ids. Entries will be returned in id order, smallest id first.
@@ -470,6 +526,33 @@ class DiscussionEntry(CanvasObject):
         return DiscussionEntry(self._requester, response_json)
 
     def list_replies(self, **kwargs):
+        """
+        Retrieves the replies to a top-level entry in a discussion topic.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi. discussion_topic.DiscussionEntry.get_replies` instead.
+
+        :calls: `GET
+            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
+
+            or `GET
+            /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.discussion_topic.DiscussionEntry`
+        """
+        warnings.warn(
+            "`list_replies` is being deprecated and will be removed in a "
+            "future version. Use `get_replies` instead.",
+            DeprecationWarning
+        )
+
+        return self.get_replies(**kwargs)
+
+    def get_replies(self, **kwargs):
         """
         Retrieves the replies to a top-level entry in a discussion topic.
 
