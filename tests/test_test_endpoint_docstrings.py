@@ -3,7 +3,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.folder import Folder
 from canvasapi.util import combine_kwargs, obj_or_id
 from tests.test_endpoint_docstrings import test_method
-from tests.test_endpoint_docstrings import test_methods
+# from tests.test_endpoint_docstrings import test_methods
 
 
 # test_endpoint_docstrings
@@ -16,7 +16,7 @@ class TestTestEndpointDocstrings(unittest.TestCase):
         assert test_method(ExampleMethods.passes_multiple_endpoints, True)
         assert test_method(ExampleMethods.passes_multiline_URL, True)
         assert test_method(ExampleMethods.passes_calls_but_not_api, True)
-        test_methods()
+        # test_methods()
 
 
 class ExampleMethods(CanvasObject):
