@@ -37,18 +37,18 @@ def test_docString(method_string, call_line, quiet):
     html_doc_response = requests.get(docfile_URL)
     if html_doc_response.status_code != requests.codes.ok:
         if not quiet:
-            print "%s Docstring URL request returned %d" % (method_string, html_doc_response.status_code)
+            print "%s docstring URL request returned %d" % (method_string, html_doc_response.status_code)
         return False
 
     endpoint_h2 = re.search("name=[\'\"]%s[\'\"]" % endpointName, html_doc_response.text)
     if not endpointName:
         if not quiet:
-            print "%s Docstring URL does not contain an endpoint name in link to API documentation" \
+            print "%s docstring URL does not contain an endpoint name in link to API documentation" \
             % method_string
         return False
     if not endpoint_h2:
         if not quiet:
-            print "%s Docstring refers to %s in %s, not found" % (method_string, endpointName, docfile_URL)
+            print "%s docstring refers to %s in %s, not found" % (method_string, endpointName, docfile_URL)
         return False
 
     endpoint_element_re = re.compile('<h3 class=[\"\']endpoint[\"\']>[^<]*<\/h3>')
@@ -79,7 +79,7 @@ def test_docString(method_string, call_line, quiet):
             continue
         return True
     if not quiet:
-        print "%s Docstring %s not found in %s (found %s)" \
+        print "%s docstring %s not found in %s (found %s)" \
             % (method_string, docstring_verb + " " + api_URL, docfile_URL, str(docfile_lines))
     return False
 
