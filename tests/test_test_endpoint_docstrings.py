@@ -1,8 +1,12 @@
 import unittest
 from canvasapi.canvas_object import CanvasObject
-from tests.test_endpoint_docstrings import test_method, test_methods
+from canvasapi.folder import Folder
+from canvasapi.util import combine_kwargs, obj_or_id
+from tests.test_endpoint_docstrings import test_method
+# from tests.test_endpoint_docstrings import test_methods
 
-#test_endpoint_docstrings
+
+# test_endpoint_docstrings
 class TestTestEndpointDocstrings(unittest.TestCase):
     def test_test_method(self):
         assert not test_method(ExampleMethods.fails_wrong_docstring_verb, True)
@@ -11,7 +15,8 @@ class TestTestEndpointDocstrings(unittest.TestCase):
         assert test_method(ExampleMethods.passes_good_docstring, True)
         assert test_method(ExampleMethods.passes_multiple_endpoints, True)
         assert test_method(ExampleMethods.passes_multiline_URL, True)
-        #test_methods()
+        # test_methods()
+
 
 class ExampleMethods(CanvasObject):
     def fails_wrong_docstring_verb(self):
@@ -48,7 +53,7 @@ class ExampleMethods(CanvasObject):
         )
         return ExampleMethods(self._requester, response.json())
 
-    def passes_multiple_endpoints(self):
+    def passes_multiple_endpoints(self, folder):
         """
         Return the details for a folder
 
@@ -83,7 +88,7 @@ class ExampleMethods(CanvasObject):
         )
         return ExampleMethods(self._requester, response.json())
 
-    def passes_multiline_URL(self):
+    def passes_multiline_URL(self, **kwargs):
         """
         Fetch all preferences for the given communication channel.
 
