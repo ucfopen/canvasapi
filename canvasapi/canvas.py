@@ -135,7 +135,7 @@ class Canvas(object):
         """
         Retrieve a course by its ID.
 
-        :calls: `GET /courses/:id \
+        :calls: `GET /api/v1/courses/:id \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
         :param course: The object or ID of the course to retrieve.
@@ -169,7 +169,7 @@ class Canvas(object):
         `User <https://canvas.instructure.com/doc/api/users.html#User>`_
         example to see the ID types a user can be retrieved with.
 
-        :calls: `GET /users/:id \
+        :calls: `GET /api/v1/users/:id \
         <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
 
         :param user: The user's object or ID.
@@ -362,7 +362,7 @@ class Canvas(object):
         Remove all stored course nicknames.
 
         :calls: `DELETE /api/v1/users/self/course_nicknames \
-        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.clear>`_
 
         :returns: True if the nicknames were cleared, False otherwise.
 

@@ -282,10 +282,10 @@ class DiscussionTopic(CanvasObject):
         Mark the initial text of the discussion topic as unread.
 
         :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/read \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_topic_read>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_topic_unread>`_
 
             or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/read \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_topic_read>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_topic_unread>`_
 
         :rtype: bool
         """
@@ -324,13 +324,13 @@ class DiscussionTopic(CanvasObject):
 
     def mark_entries_as_unread(self, **kwargs):
         """
-        Mark the discussion topic and all its entries as read.
+        Mark the discussion topic and all its entries as unread.
 
         :calls: `DELETE /api/v1/courses/:course_id/discussion_topics/:topic_id/read_all \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_all_read>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_all_unread>`_
 
             or `DELETE /api/v1/groups/:group_id/discussion_topics/:topic_id/read_all \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_all_read>`_
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.mark_all_unread>`_
 
         :rtype: bool
         """

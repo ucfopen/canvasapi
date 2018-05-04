@@ -230,7 +230,7 @@ class Group(CanvasObject):
         """
         Leave a group if allowed.
 
-        :calls: `DELETE /api/v1/groups/:group_id/:type/:id \
+        :calls: `DELETE /api/v1/groups/:group_id/users/:user_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.destroy>`_
 
         :param user: The user object or ID to remove from the group.
@@ -297,7 +297,7 @@ class Group(CanvasObject):
         Return a summary of the current user's global activity stream.
 
         :calls: `GET /api/v1/groups/:group_id/activity_stream/summary \
-        <https://canvas.instructure.com/doc/api/users.html#method.groups.activity_stream_summary>`_
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.activity_stream_summary>`_
 
         :rtype: dict
         """
@@ -647,7 +647,7 @@ class Group(CanvasObject):
             .. deprecated:: 0.10.0
                 Use :func:`canvasapi.group.Group.get_files` instead.
 
-        :calls: `GET api/v1/groups/:group_id/files \
+        :calls: `GET /api/v1/groups/:group_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -665,7 +665,7 @@ class Group(CanvasObject):
         """
         Returns the paginated list of files for the group.
 
-        :calls: `GET api/v1/groups/:group_id/files \
+        :calls: `GET /api/v1/groups/:group_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -932,7 +932,7 @@ class GroupMembership(CanvasObject):
         """
         Remove user from membership.
 
-        :calls: `DELETE /api/v1/groups/:group_id/:type/:id \
+        :calls: `DELETE /api/v1/groups/:group_id/users/:user_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.destroy>`_
 
         :param user: The user object or ID to remove from the group.
@@ -955,7 +955,7 @@ class GroupMembership(CanvasObject):
         """
         Leave a group if allowed.
 
-        :calls: `DELETE /api/v1/groups/:group_id/:type/:id \
+        :calls: `DELETE /api/v1/groups/:group_id/memberships/:membership_id \
         <https://canvas.instructure.com/doc/api/groups.html#method.group_memberships.destroy>`_
 
         :returns: An empty dictionary
