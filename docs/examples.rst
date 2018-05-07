@@ -107,7 +107,7 @@ List User Logins
 
 .. code-block:: python
 
-    logins = user.get_logins()
+    logins = user.list_user_logins()
 
     for login in logins:
         print(login)
