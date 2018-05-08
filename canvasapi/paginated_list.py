@@ -103,7 +103,7 @@ class PaginatedList(object):
             while not self._finished(index):
                 if self._list._is_larger_than(index):
                     yield self._list[index]
-                    index += self._step
+                index += self._step
 
         def _finished(self, index):
             return self._stop is not None and index >= self._stop
