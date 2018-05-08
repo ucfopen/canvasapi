@@ -1,22 +1,20 @@
-import unittest
-from canvasapi.canvas_object import CanvasObject
-from canvasapi.folder import Folder
-from canvasapi.util import combine_kwargs, obj_or_id
-from tests.test_endpoint_docstrings import test_method
-# from tests.test_endpoint_docstrings import test_methods
+import sys
+sys.path.append('../')
+from canvasapi.canvas_object import CanvasObject # noqa
+from canvasapi.folder import Folder # noqa
+from canvasapi.util import combine_kwargs, obj_or_id # noqa
+from test_endpoint_docstrings import test_method # noqa
 
 
 # test_endpoint_docstrings
-class TestTestEndpointDocstrings(unittest.TestCase):
-    def test_test_method(self):
-        assert not test_method(ExampleMethods.fails_wrong_docstring_verb, True)
-        assert not test_method(ExampleMethods.fails_invalid_docstring_verb, True)
-        assert test_method(ExampleMethods.passes_no_api_call, True)
-        assert test_method(ExampleMethods.passes_good_docstring, True)
-        assert test_method(ExampleMethods.passes_multiple_endpoints, True)
-        assert test_method(ExampleMethods.passes_multiline_URL, True)
-        assert test_method(ExampleMethods.passes_calls_but_not_api, True)
-        # test_methods()
+def test_test_method():
+    assert not test_method(ExampleMethods.fails_wrong_docstring_verb, True)
+    assert not test_method(ExampleMethods.fails_invalid_docstring_verb, True)
+    assert test_method(ExampleMethods.passes_no_api_call, True)
+    assert test_method(ExampleMethods.passes_good_docstring, True)
+    assert test_method(ExampleMethods.passes_multiple_endpoints, True)
+    assert test_method(ExampleMethods.passes_multiline_URL, True)
+    assert test_method(ExampleMethods.passes_calls_but_not_api, True)
 
 
 class ExampleMethods(CanvasObject):
@@ -122,3 +120,6 @@ class ExampleMethods(CanvasObject):
         :rtype: tuple
         """
         pass
+
+
+test_test_method()

@@ -1,8 +1,11 @@
 import inspect
 import re
 import requests
+import sys
 
-import canvasapi
+sys.path.append('../')
+
+import canvasapi # noqa
 
 
 def test_method(themethod, quiet=False):
@@ -100,7 +103,7 @@ def test_docstring(method_string, call_line, quiet):
         return True
     if not quiet:
         print "%s docstring %s not found in %s (found %s)" \
-                % (method_string, docstring_verb + " " + api_URL, docfile_URL,
+                % (method_string, docstring_verb + " " + api_URL, doc_URL,
                    str(docfile_lines))
     return False
 
@@ -113,3 +116,6 @@ def test_methods():
                 methods.add(method)
     for method_to_test in methods:
         test_method(method_to_test)
+
+
+test_methods()
