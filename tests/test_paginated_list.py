@@ -192,6 +192,38 @@ class TestPaginatedList(unittest.TestCase):
         self.assertTrue(hasattr(item_list[0], 'id'))
         self.assertEqual(item_list[0].id, '5')
 
+    def test_slice_oversize(self, m):
+        requires = {
+            'paginated_list': ['4_2_pages_p1', '4_2_pages_p2']
+        }
+        register_uris(requires, m)
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            'GET',
+            'four_objects_two_pages'
+        )
+        oversized_slice = pag_list[0:10]
+        item_list = [item for item in oversized_slice]
+        self.assertEqual(len(item_list), 4)
+
+    def test_slice_out_of_bounds(self, m):
+        requires = {
+            'paginated_list': ['4_2_pages_p1', '4_2_pages_p2']
+        }
+        register_uris(requires, m)
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            'GET',
+            'four_objects_two_pages'
+        )
+        out_of_bounds = pag_list[4:5]
+        item_list = [item for item in out_of_bounds]
+        self.assertEqual(len(item_list), 0)
+
     # __repr__()
     def test_repr(self, m):
         requires = {
