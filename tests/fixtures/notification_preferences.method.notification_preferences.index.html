@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="Content-Type" content="text/html;charset=UTF-8">
+<meta charset="UTF-8">
+<title>Notification Preferences - Canvas LMS REST API Documentation</title>
+<link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
+<link href="css/prettify.css" rel="stylesheet" type="text/css" media="screen" />
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/prettify.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+  // set up pretty-printing in static docs generated from .md files
+  $('pre.code.bash').addClass('prettyprint language-bash');
+  $('pre.code.html').addClass('prettyprint language-html');
+  $('pre.code.xml').addClass('prettyprint language-xml');
+  $('pre.code.json').addClass('prettyprint language-js');
+  $('pre.code.javascript').addClass('prettyprint language-js');
+  prettyPrint();
+});
+</script>
+
+  </head>
+  <body>
+  <div class="method_details first">
+  <h2 class='api_method_name' name='method.notification_preferences.index' data-subtopic='Notification Preferences'>
+    <a name='method.notification_preferences.index' href='#method.notification_preferences.index'>
+      List preferences
+    </a>
+
+      <span class='defined-in'><a href="https://github.com/instructure/canvas-lms/blob/master/app/controllers/notification_preferences_controller.rb">NotificationPreferencesController#index</a></span>
+
+  </h2>
+
+
+
+  <h3 class='endpoint'>
+    GET /api/v1/users/:user_id/communication_channels/:communication_channel_id/notification_preferences
+  </h3>
+
+
+  <h3 class='endpoint'>
+    GET /api/v1/users/:user_id/communication_channels/:type/:address/notification_preferences
+  </h3>
+
+
+<p>Fetch all preferences for the given communication channel</p>
+
+
+
+
+  Returns a list of
+
+<a href='notification_preferences.html#NotificationPreference'>NotificationPreferences</a>
+
+</div>
+
+
+  </body>
+</html>

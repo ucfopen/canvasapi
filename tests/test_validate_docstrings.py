@@ -1,5 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import re
+import io
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.folder import Folder
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -11,29 +14,47 @@ import requests_mock
 # test_endpoint_docstrings
 @requests_mock.Mocker()
 class TestValidateDocstrings(unittest.TestCase):
-    def test_validate_method_verd_mismatch(self, m):
+    def test_validate_method_verb_mismatch(self, m):
+        url = 'https://canvas.instructure.com/doc/api/files.html#method.files.destroy>'
+        register_html_uri(url, m)
         self.assertFalse(validate_method(ExampleMethods.verb_mismatch, True))
 
     def test_validate_method_invalid_verb(self, m):
+        url = 'https://canvas.instructure.com/doc/api/files.html#method.files.destroy'
+        register_html_uri(url, m)
         self.assertFalse(validate_method(ExampleMethods.invalid_verb, True))
 
     def test_validate_method_no_api_call(self, m):
         self.assertTrue(validate_method(ExampleMethods.no_api_call, True))
 
     def test_validate_method_good_docstring(self, m):
+        url = 'https://canvas.instructure.com/doc/api/files.html#method.files.destroy'
+        register_html_uri(url, m)
         self.assertTrue(validate_method(ExampleMethods.good_docstring, True))
 
     def test_validate_method_multiple_endpoints(self, m):
-        self.assertTrue(validate_method(ExampleMethods.multiple_endpoints,
-            True
-        ))
+        url = 'https://canvas.instructure.com/doc/api/files.html#method.folders.show'
+        register_html_uri(url, m)
+        self.assertTrue(validate_method(ExampleMethods.multiple_endpoints, True))
 
     def test_validate_method_multiline_URL(self, m):
+        url = 'https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.index'
+        register_html_uri(url, m)
         self.assertTrue(validate_method(ExampleMethods.multiline_URL, True))
 
-    def test_validate_method_multiline_URL(self, m):
-        self.assertTrue(validate_method(ExampleMethods.non_api_call, True))
 
+def register_html_uri(url, m):
+    url_groups = re.search('(.*\/)([^\/]*)\.html#([^>]*)', url)
+    file_name = url_groups.group(2)
+    method_name = url_groups.group(3)
+
+    file = io.open('tests/fixtures/{}.{}.html'.format(file_name, method_name),
+        mode='r',
+        encoding='utf-8'
+    )
+    data = file.read()
+
+    m.register_uri('GET', url_groups.group(1) + url_groups.group(2) + '.html', text=data)
 
 class ExampleMethods(CanvasObject):
     def verb_mismatch(self):
