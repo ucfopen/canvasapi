@@ -40,7 +40,7 @@ def validate_docstring(method_string, call_line, quiet):
     api_URL = ''.join(api_URL.split())
     if api_URL[-1] == '/':
         api_URL = api_URL[0:-1]
-    docfile_URL, endpoint_name = re.search('([^#]*)#(.*)', doc_URL).groups()
+    docfile_URL, endpoint_name = re.search('([^#]*)#?(.*)', doc_URL).groups()
     html_doc_response = requests.get(docfile_URL)
     if html_doc_response.status_code != requests.codes.ok:
         if not quiet:
@@ -57,7 +57,7 @@ def validate_docstring(method_string, call_line, quiet):
         if not quiet:
             print((
                 '{} docstring URL does not contain an endpoint name in link'
-                'to API documentation'
+                ' to API documentation'
             ).format(method_string))
         return False
     if not endpoint_h2:
@@ -70,11 +70,20 @@ def validate_docstring(method_string, call_line, quiet):
     endpoint_element_re = re.compile(
         r'<h3 class=[\"\']endpoint[\"\']>[^<]*<\/h3>'
     )
-    endpoint_search_start_pos = endpoint_element_re.search(
+
+    endpoint_search_start_match=endpoint_element_re.search(
         html_doc_response.text,
         endpoint_h2.end()
-    ).start()
+    )
+    if not endpoint_search_start_match:
+        if not quiet:
+            print('Found no endpoint after {} in {}'.format(
+                endpoint_name,
+                docfile_URL
+            ))
+        return False
 
+    endpoint_search_start_pos = endpoint_search_start_match.start()
     after_endpoint_re = re.compile(r'<[^h\/]')
     endpoint_search_end = after_endpoint_re.search(html_doc_response.text,
                                                    endpoint_search_start_pos)
@@ -97,7 +106,7 @@ def validate_docstring(method_string, call_line, quiet):
 
     if not endpoint_element_list:
         if not quiet:
-            print('Found no endpoint after %s in %s'.format(
+            print('Found no endpoint after {} in {}'.format(
                 endpoint_name,
                 docfile_URL
             ))
@@ -133,5 +142,5 @@ def test_methods():
     for method_to_test in methods:
         validate_method(method_to_test)
 
-
-# test_methods()
+if __name__ == '__main__':
+    test_methods()

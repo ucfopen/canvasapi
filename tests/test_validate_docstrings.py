@@ -16,12 +16,12 @@ import requests_mock
 class TestValidateDocstrings(unittest.TestCase):
     def test_validate_method_verb_mismatch(self, m):
         url = 'https://canvas.instructure.com/doc/api/files.html#method.files.destroy>'
-        register_html_uri(url, m)
+        register_doc_uri(url, m)
         self.assertFalse(validate_method(ExampleMethods.verb_mismatch, True))
 
     def test_validate_method_invalid_verb(self, m):
         url = 'https://canvas.instructure.com/doc/api/files.html#method.files.destroy'
-        register_html_uri(url, m)
+        register_doc_uri(url, m)
         self.assertFalse(validate_method(ExampleMethods.invalid_verb, True))
 
     def test_validate_method_no_api_call(self, m):
@@ -29,22 +29,43 @@ class TestValidateDocstrings(unittest.TestCase):
 
     def test_validate_method_good_docstring(self, m):
         url = 'https://canvas.instructure.com/doc/api/files.html#method.files.destroy'
-        register_html_uri(url, m)
+        register_doc_uri(url, m)
         self.assertTrue(validate_method(ExampleMethods.good_docstring, True))
 
     def test_validate_method_multiple_endpoints(self, m):
         url = 'https://canvas.instructure.com/doc/api/files.html#method.folders.show'
-        register_html_uri(url, m)
+        register_doc_uri(url, m)
         self.assertTrue(validate_method(ExampleMethods.multiple_endpoints, True))
 
     def test_validate_method_multiline_URL(self, m):
         url = 'https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.index'
-        register_html_uri(url, m)
+        register_doc_uri(url, m)
         self.assertTrue(validate_method(ExampleMethods.multiline_URL, True))
 
+    def test_validate_method_invalid_URL(self, m):
+        url = 'https://canvas.instructure.com/doc/api/404.html'
+        register_doc_uri(url, m, code=404)
+        self.assertFalse(validate_method(ExampleMethods.invalid_URL, True))
 
-def register_html_uri(url, m):
-    url_groups = re.search('(.*\/)([^\/]*)\.html#([^>]*)', url)
+    def test_validate_method_missing_endpoint_URL(self, m):
+        url = 'https://canvas.instructure.com/doc/api/files.html'
+        register_doc_uri(url, m)
+        self.assertFalse(validate_method(ExampleMethods.missing_endpoint_URL, True))
+
+    def test_validate_method_endpoint_URL_invalid(self, m):
+        url = 'https://canvas.instructure.com/doc/api/files.html#invalid'
+        register_doc_uri(url ,m)
+        self.assertFalse(validate_method(ExampleMethods.endpoint_invalid, True))
+
+    def test_validate_method_not_an_endpoint(self,m):
+        url = 'https://canvas.instructure.com/doc/api/notification_preferences.html#NotificationPreference'
+        register_doc_uri(url, m)
+        self.assertFalse(validate_method(ExampleMethods.not_an_endpoint, True))
+
+def register_doc_uri(url, m, code=200):
+    url_groups = re.search(r'(.*\/)([^\/]*)\.html#?([^>]*)', url)
+    if not url_groups:
+        return
     file_name = url_groups.group(2)
     method_name = url_groups.group(3)
 
@@ -54,7 +75,7 @@ def register_html_uri(url, m):
     )
     data = file.read()
 
-    m.register_uri('GET', url_groups.group(1) + url_groups.group(2) + '.html', text=data)
+    m.register_uri('GET', url_groups.group(1) + url_groups.group(2) + '.html', text=data, status_code=code)
 
 class ExampleMethods(CanvasObject):
     def verb_mismatch(self):
@@ -160,3 +181,80 @@ class ExampleMethods(CanvasObject):
         :rtype: tuple
         """
         pass
+
+    def invalid_URL(self):
+        """
+        Delete this file.
+
+        :calls: `DELETE /api/v1/files/:id  \
+        <https://canvas.instructure.com/doc/api/404.html>`_
+
+        :rtype: :class:`canvasapi.file.File`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'files/{}'.format(self.id)
+        )
+        return ExampleMethods(self._requester, response.json())
+
+    def missing_endpoint_URL(self, folder):
+        """
+        Return the details for a folder
+
+        :calls: `GET /api/v1/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html>`_
+
+        :param folder: The object or ID of the folder to retrieve.
+        :type folder: :class:`canvasapi.folder.Folder` or int
+
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        folder_id = obj_or_id(folder, "folder", (Folder,))
+
+        response = self.__requester.request(
+            'GET',
+            'folders/{}'.format(folder_id)
+        )
+        return Folder(self.__requester, response.json())
+
+    def endpoint_invalid(self, folder):
+        """
+        Return the details for a folder
+
+        :calls: `GET /api/v1/folders/:id \
+        <https://canvas.instructure.com/doc/api/files.html#invalid>`_
+
+        :param folder: The object or ID of the folder to retrieve.
+        :type folder: :class:`canvasapi.folder.Folder` or int
+
+        :rtype: :class:`canvasapi.folder.Folder`
+        """
+        folder_id = obj_or_id(folder, "folder", (Folder,))
+
+        response = self.__requester.request(
+            'GET',
+            'folders/{}'.format(folder_id)
+        )
+        return Folder(self.__requester, response.json())
+
+    def not_an_endpoint(self, **kwargs):
+        """
+        Fetch all preferences for the given communication channel.
+
+        :calls: `GET
+            /api/v1/users/:user_id/communication_channels/:communication_channel_id/ \
+                notification_preferences \
+        <https://canvas.instructure.com/doc/api/notification_preferences.html#NotificationPreference>`_
+
+        :rtype: `list`
+        """
+        response = self._requester.request(
+            'GET',
+            'users/{}/communication_channels/{}/notification_preferences'.format(
+                self.user_id,
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return response.json()['notification_preferences']
