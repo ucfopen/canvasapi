@@ -71,7 +71,7 @@ def validate_docstring(method_string, call_line, quiet):
         r'<h3 class=[\"\']endpoint[\"\']>[^<]*<\/h3>'
     )
 
-    endpoint_search_start_match=endpoint_element_re.search(
+    endpoint_search_start_match = endpoint_element_re.search(
         html_doc_response.text,
         endpoint_h2.end()
     )
@@ -141,6 +141,7 @@ def test_methods():
                 methods.add(method)
     for method_to_test in methods:
         validate_method(method_to_test)
+
 
 if __name__ == '__main__':
     test_methods()

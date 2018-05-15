@@ -11,6 +11,8 @@ from scripts.validate_docstrings import validate_method
 import unittest
 
 import requests_mock
+
+
 # test_endpoint_docstrings
 @requests_mock.Mocker()
 class TestValidateDocstrings(unittest.TestCase):
@@ -62,6 +64,7 @@ class TestValidateDocstrings(unittest.TestCase):
         register_doc_uri(url, m)
         self.assertFalse(validate_method(ExampleMethods.not_an_endpoint, True))
 
+
 def register_doc_uri(url, m, code=200):
     url_groups = re.search(r'(.*\/)([^\/]*)\.html#?([^>]*)', url)
     if not url_groups:
@@ -76,6 +79,7 @@ def register_doc_uri(url, m, code=200):
     data = file.read()
 
     m.register_uri('GET', url_groups.group(1) + url_groups.group(2) + '.html', text=data, status_code=code)
+
 
 class ExampleMethods(CanvasObject):
     def verb_mismatch(self):
@@ -146,7 +150,6 @@ class ExampleMethods(CanvasObject):
             'folders/{}'.format(folder_id)
         )
         return Folder(self.__requester, response.json())
-
 
     def multiline_URL(self, **kwargs):
         """
