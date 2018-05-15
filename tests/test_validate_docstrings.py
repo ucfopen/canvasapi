@@ -72,14 +72,13 @@ class TestValidateDocstrings(unittest.TestCase):
 
 
 def register_doc_uri(url, m, code=200):
-    url_groups = re.search(r'(.*\/)([^\/]*)\.html#?([^>]*)', url)
+    url_groups = re.search(r'(.*\/)([^\/]*)\.html', url)
     if not url_groups:
         return
     file_name = url_groups.group(2)
-    method_name = url_groups.group(3)
 
     file = io.open(
-        'tests/fixtures/{}.{}.html'.format(file_name, method_name),
+        'tests/fixtures/{}.html'.format(file_name),
         mode='r',
         encoding='utf-8'
     )

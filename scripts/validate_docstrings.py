@@ -51,7 +51,7 @@ def validate_docstring(method_string, call_line, quiet):
         return False
 
     endpoint_h2 = re.search(
-        r'name=[\'\"]{}[\'\"]'.format(endpoint_name),
+        r'<h2[^>]*name=[\'\"]{}[\'\"]'.format(endpoint_name),
         html_doc_response.text
     )
     if not endpoint_name:
