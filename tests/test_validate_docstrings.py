@@ -40,7 +40,10 @@ class TestValidateDocstrings(unittest.TestCase):
         self.assertTrue(validate_method(ExampleMethods.multiple_endpoints, True))
 
     def test_validate_method_multiline_URL(self, m):
-        url = 'https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.index'
+        url = (
+            'https://canvas.instructure.com/doc/api/notification_preferences.html'
+            '#method.notification_preferences.index'
+        )
         register_doc_uri(url, m)
         self.assertTrue(validate_method(ExampleMethods.multiline_URL, True))
 
@@ -56,11 +59,14 @@ class TestValidateDocstrings(unittest.TestCase):
 
     def test_validate_method_endpoint_URL_invalid(self, m):
         url = 'https://canvas.instructure.com/doc/api/files.html#invalid'
-        register_doc_uri(url ,m)
+        register_doc_uri(url, m)
         self.assertFalse(validate_method(ExampleMethods.endpoint_invalid, True))
 
-    def test_validate_method_not_an_endpoint(self,m):
-        url = 'https://canvas.instructure.com/doc/api/notification_preferences.html#NotificationPreference'
+    def test_validate_method_not_an_endpoint(self, m):
+        url = (
+            'https://canvas.instructure.com/doc/api/notification_preferences.html'
+            '#NotificationPreference'
+        )
         register_doc_uri(url, m)
         self.assertFalse(validate_method(ExampleMethods.not_an_endpoint, True))
 
@@ -72,13 +78,19 @@ def register_doc_uri(url, m, code=200):
     file_name = url_groups.group(2)
     method_name = url_groups.group(3)
 
-    file = io.open('tests/fixtures/{}.{}.html'.format(file_name, method_name),
+    file = io.open(
+        'tests/fixtures/{}.{}.html'.format(file_name, method_name),
         mode='r',
         encoding='utf-8'
     )
     data = file.read()
 
-    m.register_uri('GET', url_groups.group(1) + url_groups.group(2) + '.html', text=data, status_code=code)
+    m.register_uri(
+        'GET',
+        url_groups.group(1) + url_groups.group(2) + '.html',
+        text=data,
+        status_code=code
+    )
 
 
 class ExampleMethods(CanvasObject):

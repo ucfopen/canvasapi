@@ -50,7 +50,8 @@ def validate_docstring(method_string, call_line, quiet):
             ))
         return False
 
-    endpoint_h2 = re.search(r'name=[\'\"]{}[\'\"]'.format(endpoint_name),
+    endpoint_h2 = re.search(
+        r'name=[\'\"]{}[\'\"]'.format(endpoint_name),
         html_doc_response.text
     )
     if not endpoint_name:
@@ -91,7 +92,8 @@ def validate_docstring(method_string, call_line, quiet):
         endpoint_search_stop_pos = len(html_doc_response.text)
     else:
         endpoint_search_stop_pos = endpoint_search_end.start()
-    endpoint_element_match = endpoint_element_re.search(html_doc_response.text,
+    endpoint_element_match = endpoint_element_re.search(
+        html_doc_response.text,
         endpoint_search_start_pos,
         endpoint_search_stop_pos
     )
@@ -113,7 +115,8 @@ def validate_docstring(method_string, call_line, quiet):
         return False
     docfile_lines = []
     for endpoint_element_str in endpoint_element_list:
-        docfile_match = re.search('(POST|GET|PUT|PATCH|DELETE) (.*)',
+        docfile_match = re.search(
+            '(POST|GET|PUT|PATCH|DELETE) (.*)',
             endpoint_element_str
         )
         docfile_lines.append(docfile_match.group())
