@@ -5,6 +5,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.util import combine_kwargs, obj_or_id
 
@@ -373,3 +374,24 @@ class Section(CanvasObject):
             'user_id': user_id
         })
         return submission.mark_unread(**kwargs)
+
+    def submissions_bulk_update(self, **kwargs):
+        """
+        Update the grading and comments on multiple student's assignment
+        submissions in an asynchronous job.
+
+        :calls: POST /api/v1/courses/:course_id/submissions/update_grades \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+        response = self._requester.request(
+            'POST',
+            'sections/{}/submissions/update_grades'.format(
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        progress = Progress(self._requester, response_json)
+        return progress
