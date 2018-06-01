@@ -61,7 +61,7 @@ Once you've found an issue you're interested in tackling, take a look at our [fi
 Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have pip, virtualenv, and git installed and are using a terminal. If not, please set those up before continuing.
 
 1. Clone our repository by executing `git clone git@github.com:ucfopen/canvasapi.git`
-2. Pull the latest commit from the **develop** branch: `git pull origin develop`
+2. Checkout (`git checkout develop`) and then pull the latest commit from the develop branch: `git pull origin develop`
 3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git checkout -b issue/1-test-issue-for-documentation`
 4. Set up a new virtual environment ( `virtualenv env` ) and activate it (`source env/bin/activate`)
 5. Install the required dependencies with `pip install -r dev_requirements.txt`
