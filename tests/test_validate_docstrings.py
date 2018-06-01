@@ -77,12 +77,8 @@ def register_doc_uri(url, m, code=200):
         return
     file_name = url_groups.group(2)
 
-    file = io.open(
-        'tests/fixtures/{}.html'.format(file_name),
-        mode='r',
-        encoding='utf-8'
-    )
-    data = file.read()
+    with io.open('tests/fixtures/{}.html'.format(file_name), 'r', encoding='utf-8') as file:
+        data = file.read()
 
     m.register_uri(
         'GET',
