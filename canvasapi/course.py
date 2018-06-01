@@ -2161,9 +2161,7 @@ class Course(CanvasObject):
             ),
             _kwargs=combine_kwargs(**kwargs)
         )
-        response_json = response.json()
-        progress = Progress(self._requester, response_json)
-        return progress
+        return Progress(self._requester, response.json())
 
 
 @python_2_unicode_compatible

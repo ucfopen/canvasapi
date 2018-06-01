@@ -380,7 +380,7 @@ class Section(CanvasObject):
         Update the grading and comments on multiple student's assignment
         submissions in an asynchronous job.
 
-        :calls: POST /api/v1/courses/:course_id/submissions/update_grades \
+        :calls: POST /api/v1/sections/:section_id/submissions/update_grades \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
 
         :rtype: :class:`canvasapi.progress.Progress`
@@ -392,6 +392,4 @@ class Section(CanvasObject):
             ),
             _kwargs=combine_kwargs(**kwargs)
         )
-        response_json = response.json()
-        progress = Progress(self._requester, response_json)
-        return progress
+        return Progress(self._requester, response.json())
