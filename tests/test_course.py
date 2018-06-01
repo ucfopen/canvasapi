@@ -22,6 +22,7 @@ from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz
 from canvasapi.rubric import Rubric
 from canvasapi.section import Section
@@ -1386,6 +1387,25 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(migration_systems[1].type, "dummy_importer_02")
         self.assertEqual(migration_systems[1].requires_file_upload, False)
         self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
+
+    # submissions_bulk_update()
+    def test_submissions_bulk_update(self, m):
+        register_uris({'course': ['update_submissions']}, m)
+        register_uris({'progress': ['course_progress']}, m)
+        progress = self.course.submissions_bulk_update(grade_data={
+            '1': {
+                '1': {
+                    'posted_grade': 97
+                },
+                '2': {
+                    'posted_grade': 98
+                }
+            }
+        })
+        self.assertIsInstance(progress, Progress)
+        self.assertTrue(progress.context_type == "Course")
+        progress = progress.query()
+        self.assertTrue(progress.context_type == "Course")
 
 
 @requests_mock.Mocker()

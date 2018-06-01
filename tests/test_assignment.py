@@ -6,6 +6,7 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
 from tests import settings
@@ -100,6 +101,23 @@ class TestAssignment(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.assignment)
         self.assertIsInstance(string, str)
+
+    # submissions_bulk_update()
+    def test_submissions_bulk_update(self, m):
+        register_uris({'assignment': ['update_submissions']}, m)
+        register_uris({'progress': ['course_progress']}, m)
+        progress = self.assignment.submissions_bulk_update(grade_data={
+            '1': {
+                'posted_grade': 97
+             },
+            '2': {
+                'posted_grade': 98
+            }
+        })
+        self.assertIsInstance(progress, Progress)
+        self.assertTrue(progress.context_type == "Course")
+        progress = progress.query()
+        self.assertTrue(progress.context_type == "Course")
 
 
 @requests_mock.Mocker()

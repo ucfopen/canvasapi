@@ -8,6 +8,7 @@ from six import text_type
 from canvasapi import Canvas
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.submission import Submission
 from tests import settings
@@ -319,3 +320,21 @@ class TestSection(unittest.TestCase):
 
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    def test_submissions_bulk_update(self, m):
+        register_uris({'section': ['update_submissions']}, m)
+        register_uris({'progress': ['course_progress']}, m)
+        progress = self.section.submissions_bulk_update(grade_data={
+            '1': {
+                '1': {
+                    'posted_grade': 97
+                },
+                '2': {
+                    'posted_grade': 98
+                }
+            }
+        })
+        self.assertIsInstance(progress, Progress)
+        self.assertTrue(progress.context_type == "Course")
+        progress = progress.query()
+        self.assertTrue(progress.context_type == "Course")
