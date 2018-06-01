@@ -11,12 +11,18 @@ Class Reference
     avatar-ref
     bookmark-ref
     calendar-event-ref
+    communication-channel-ref
+    content-migration-ref
     conversation-ref
     course-ref
     current-user-ref
+    discussion-entry-ref
     discussion-topic-ref
+    enrollment-ref
     enrollment-term-ref
     external-tool-ref
+    file-ref
+    folder-ref
     group-ref
     login-ref
     module-ref
@@ -28,5 +34,6 @@ Class Reference
     rubric-ref
     section-ref
     submission-ref
+    tab-ref
     upload-ref
     user-ref

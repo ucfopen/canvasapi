@@ -83,7 +83,7 @@ class Quiz(CanvasObject):
         """
         Create a new question group for the given quiz id
 
-        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.create>`_
 
         :param quiz_groups: The name, pick count, question points,
@@ -182,6 +182,65 @@ class Quiz(CanvasObject):
             {'course_id': self.course_id},
             _kwargs=combine_kwargs(**kwargs)
         )
+
+    def set_extensions(self, quiz_extensions, **kwargs):
+        """
+        Set extensions for student quiz submissions.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/extensions
+            <https://canvas.instructure.com/doc/api/quiz_extensions.html#method.quizzes/quiz_extensions.create>`_
+
+        :param quiz_extensions: List of dictionaries representing extensions.
+        :type quiz_extensions: list
+
+        :rtype: list of :class:`canvasapi.quiz.QuizExtension`
+
+        Example Usage:
+
+        >>> quiz.set_extensions([
+        ...     {
+        ...         'user_id': 1,
+        ...         'extra_time': 60,
+        ...         'extra_attempts': 1
+        ...     },
+        ...     {
+        ...         'user_id': 2,
+        ...         'extra_attempts': 3
+        ...     },
+        ...     {
+        ...         'user_id': 3,
+        ...         'extra_time': 20
+        ...     }
+        ... ])
+        """
+
+        if not isinstance(quiz_extensions, list) or not quiz_extensions:
+            raise ValueError('Param `quiz_extensions` must be a non-empty list.')
+
+        if any(not isinstance(extension, dict) for extension in quiz_extensions):
+            raise ValueError('Param `quiz_extensions` must only contain dictionaries')
+
+        if any('user_id' not in extension for extension in quiz_extensions):
+            raise RequiredFieldMissing(
+                'Dictionaries in `quiz_extensions` must contain key `user_id`'
+            )
+
+        kwargs['quiz_extensions'] = quiz_extensions
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/quizzes/{}/extensions'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        extension_list = response.json()['quiz_extensions']
+        return [QuizExtension(self._requester, extension) for extension in extension_list]
+
+
+@python_2_unicode_compatible
+class QuizExtension(CanvasObject):
+
+    def __str__(self):
+        return "{}-{}".format(self.quiz_id, self.user_id)
 
 
 @python_2_unicode_compatible

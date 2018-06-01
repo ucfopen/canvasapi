@@ -8,6 +8,7 @@ from six import text_type
 from canvasapi import Canvas
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.submission import Submission
 from tests import settings
@@ -30,7 +31,7 @@ class TestSection(unittest.TestCase):
         string = str(self.section)
         self.assertIsInstance(string, str)
 
-    # list_enrollments()
+    # get_enrollments()
     def test_get_enrollments(self, m):
         register_uris({'section': ['list_enrollments', 'list_enrollments_2']}, m)
 
@@ -153,18 +154,32 @@ class TestSection(unittest.TestCase):
     def test_list_multiple_submissions(self, m):
         register_uris({'section': ['list_multiple_submissions']}, m)
 
-        submissions = self.section.list_multiple_submissions()
+        with warnings.catch_warnings(record=True) as warning_list:
+            submissions = self.section.list_multiple_submissions()
+            submission_list = [submission for submission in submissions]
+
+            self.assertEqual(len(submission_list), 2)
+            self.assertIsInstance(submission_list[0], Submission)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_multiple_submission()
+    def test_get_multiple_submissions(self, m):
+        register_uris({'section': ['list_multiple_submissions']}, m)
+
+        submissions = self.section.get_multiple_submissions()
         submission_list = [submission for submission in submissions]
 
         self.assertEqual(len(submission_list), 2)
         self.assertIsInstance(submission_list[0], Submission)
 
-    def test_list_multiple_submissions_grouped_param(self, m):
+    def test_get_multiple_submissions_grouped_param(self, m):
         register_uris({'section': ['list_multiple_submissions']}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             warnings.simplefilter('always')
-            submissions = self.section.list_multiple_submissions(grouped=True)
+            submissions = self.section.get_multiple_submissions(grouped=True)
             submission_list = [submission for submission in submissions]
 
             # Ensure using the `grouped` param raises a warning
@@ -305,3 +320,21 @@ class TestSection(unittest.TestCase):
 
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    def test_submissions_bulk_update(self, m):
+        register_uris({'section': ['update_submissions']}, m)
+        register_uris({'progress': ['course_progress']}, m)
+        progress = self.section.submissions_bulk_update(grade_data={
+            '1': {
+                '1': {
+                    'posted_grade': 97
+                },
+                '2': {
+                    'posted_grade': 98
+                }
+            }
+        })
+        self.assertIsInstance(progress, Progress)
+        self.assertTrue(progress.context_type == "Course")
+        progress = progress.query()
+        self.assertTrue(progress.context_type == "Course")

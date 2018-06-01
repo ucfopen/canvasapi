@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from six import python_2_unicode_compatible
+import warnings
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
@@ -84,7 +85,7 @@ class Page(CanvasObject):
 
         :calls: `GET /api/v1/groups/:group_id \
             <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
-            or :calls: `GET /api/v1/courses/:course_id \
+            or :calls: `GET /api/v1/courses/:id \
             <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
@@ -152,6 +153,28 @@ class Page(CanvasObject):
         return PageRevision(self._requester, pagerev_json)
 
     def list_revisions(self, **kwargs):
+        """
+        List the revisions of a page.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.page.Page.get_revisions` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.pagerevision.PageRevision`
+        """
+        warnings.warn(
+            "`list_revisions` is being deprecated and will be removed in a "
+            "future version. Use `get_revisions` instead.",
+            DeprecationWarning
+        )
+
+        return self.get_revisions(**kwargs)
+
+    def get_revisions(self, **kwargs):
         """
         List the revisions of a page.
 
@@ -241,7 +264,7 @@ class PageRevision(CanvasObject):
 
         :calls: `GET /api/v1/groups/:group_id \
             <https://canvas.instructure.com/doc/api/groups.html#method.groups.show>`_
-            or :calls: `GET /api/v1/courses/:course_id \
+            or :calls: `GET /api/v1/courses/:id \
             <https://canvas.instructure.com/doc/api/courses.html#method.courses.show>`_
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`

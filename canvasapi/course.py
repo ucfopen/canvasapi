@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import warnings
 
-from six import python_2_unicode_compatible, text_type
+from six import python_2_unicode_compatible, text_type, string_types
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -11,6 +11,8 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.progress import Progress
+from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
@@ -88,7 +90,7 @@ class Course(CanvasObject):
         several different ids that can pull the same user record from Canvas.
 
         :calls: `GET /api/v1/courses/:course_id/users/:id \
-        <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.user>`_
 
         :param user: The object or ID of the user to retrieve.
         :type user: :class:`canvasapi.user.User` or int
@@ -737,6 +739,28 @@ class Course(CanvasObject):
         """
         Return list of active groups for the specified course.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_groups` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.Course`
+        """
+        warnings.warn(
+            "`list_groups` is being deprecated and will be removed in a future version."
+            " Use `get_groups` instead",
+            DeprecationWarning
+        )
+
+        return self.get_groups(**kwargs)
+
+    def get_groups(self, **kwargs):
+        """
+        Return list of active groups for the specified course.
+
         :calls: `GET /api/v1/courses/:course_id/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
 
@@ -773,7 +797,29 @@ class Course(CanvasObject):
         )
         return GroupCategory(self._requester, response.json())
 
-    def list_group_categories(self):
+    def list_group_categories(self, **kwargs):
+        """
+        List group categories for a context.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_group_categories` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/group_categories \
+        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.group.GroupCategory`
+        """
+        warnings.warn(
+            "`list_group_categories` is being deprecated and will be removed in a future version."
+            " Use `get_group_categories` instead",
+            DeprecationWarning
+        )
+
+        return self.get_group_categories(**kwargs)
+
+    def get_group_categories(self, **kwargs):
         """
         List group categories for a context.
 
@@ -789,7 +835,8 @@ class Course(CanvasObject):
             GroupCategory,
             self._requester,
             'GET',
-            'courses/{}/group_categories'.format(self.id)
+            'courses/{}/group_categories'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_file(self, file, **kwargs):
@@ -905,6 +952,28 @@ class Course(CanvasObject):
         return AssignmentGroup(self._requester, response_json)
 
     def list_assignment_groups(self, **kwargs):
+        """
+        List assignment groups for the specified course.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_assignment_groups` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups \
+        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.AssignmentGroup`
+        """
+        warnings.warn(
+            "`list_assignment_groups` is being deprecated and will be removed "
+            "in a future version. Use `get_assignment_groups` instead",
+            DeprecationWarning
+        )
+
+        return self.get_assignment_groups(**kwargs)
+
+    def get_assignment_groups(self, **kwargs):
         """
         List assignment groups for the specified course.
 
@@ -1228,6 +1297,30 @@ class Course(CanvasObject):
         List submissions for multiple assignments.
         Get all existing submissions for a given set of students and assignments.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_multiple_submissions` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/students/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        warnings.warn(
+            "`list_multiple_submissions`"
+            " is being deprecated and will be removed in a future version."
+            " Use `get_multiple_submissions` instead",
+            DeprecationWarning
+        )
+
+        return self.get_multiple_submissions(**kwargs)
+
+    def get_multiple_submissions(self, **kwargs):
+        """
+        List submissions for multiple assignments.
+        Get all existing submissions for a given set of students and assignments.
+
         :calls: `GET /api/v1/courses/:course_id/students/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
 
@@ -1430,7 +1523,29 @@ class Course(CanvasObject):
         })
         return submission.mark_unread(**kwargs)
 
-    def list_external_feeds(self):
+    def list_external_feeds(self, **kwargs):
+        """
+        Returns the list of External Feeds this course.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_external_feeds` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/external_feeds \
+        <https://canvas.instructure.com/doc/api/announcement_external_feeds.html#method.external_feeds.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.external_feed.ExternalFeed`
+        """
+        warnings.warn(
+            "`list_external_feeds` is being deprecated and will be removed in "
+            "a future version. Use `get_external_feeds` instead",
+            DeprecationWarning
+        )
+
+        return self.get_external_feeds(**kwargs)
+
+    def get_external_feeds(self, **kwargs):
         """
         Returns the list of External Feeds this course.
 
@@ -1445,7 +1560,8 @@ class Course(CanvasObject):
             ExternalFeed,
             self._requester,
             'GET',
-            'courses/{}/external_feeds'.format(self.id)
+            'courses/{}/external_feeds'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_external_feed(self, url, **kwargs):
@@ -1494,7 +1610,29 @@ class Course(CanvasObject):
         """
         Returns the paginated list of files for the course.
 
-        :calls: `GET api/v1/courses/:course_id/files \
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_files` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/files \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.file.File`
+        """
+        warnings.warn(
+            "`list_files` is being deprecated and will be removed in a future "
+            "version. Use `get_files` instead",
+            DeprecationWarning
+        )
+
+        return self.get_files(**kwargs)
+
+    def get_files(self, **kwargs):
+        """
+        Returns the paginated list of files for the course.
+
+        :calls: `GET /api/v1/courses/:course_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -1530,7 +1668,30 @@ class Course(CanvasObject):
         )
         return Folder(self._requester, response.json())
 
-    def list_folders(self):
+    def list_folders(self, **kwargs):
+        """
+        Returns the paginated list of all folders for the given course. This will be returned as a
+        flat list containing all subfolders as well.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_folders` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/folders \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+        warnings.warn(
+            "`list_folders` is being deprecated and will be removed in a "
+            "future version. Use `get_folders` instead",
+            DeprecationWarning
+        )
+
+        return self.get_folders(**kwargs)
+
+    def get_folders(self, **kwargs):
         """
         Returns the paginated list of all folders for the given course. This will be returned as a
         flat list containing all subfolders as well.
@@ -1545,7 +1706,8 @@ class Course(CanvasObject):
             Folder,
             self._requester,
             'GET',
-            'courses/{}/folders'.format(self.id)
+            'courses/{}/folders'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
     def create_folder(self, name, **kwargs):
@@ -1572,6 +1734,29 @@ class Course(CanvasObject):
         List available tabs for a course.
         Returns a list of navigation tabs available in the current context.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_tabs` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/tabs \
+        <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.tab.Tab`
+        """
+        warnings.warn(
+            "`list_tabs` is being deprecated and will be removed in a future "
+            "version. Use `get_tabs` instead",
+            DeprecationWarning
+        )
+
+        return self.get_tabs(**kwargs)
+
+    def get_tabs(self, **kwargs):
+        """
+        List available tabs for a course.
+        Returns a list of navigation tabs available in the current context.
+
         :calls: `GET /api/v1/courses/:course_id/tabs \
         <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.index>`_
 
@@ -1583,12 +1768,17 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/tabs'.format(self.id),
+            {'course_id': self.id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
     def update_tab(self, tab_id, **kwargs):
         """
         Update a tab for a course.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.tab.Tab.update` instead.
 
         :calls: `PUT /api/v1/courses/:course_id/tabs/:tab_id \
         <https://canvas.instructure.com/doc/api/tabs.html#method.tabs.update>`_
@@ -1598,13 +1788,17 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.tab.Tab`
         """
-        response = self._requester.request(
-            'PUT',
-            'courses/{}/tabs/{}'.format(self.id, tab_id),
-            _kwargs=combine_kwargs(**kwargs)
+        warnings.warn(
+            "`Course.update_tab()` is being deprecated and will be removed in "
+            "a future version. Use `Tab.update()` instead",
+            DeprecationWarning
         )
 
-        return Tab(self._requester, response.json())
+        tab = Tab(self._requester, {
+            'course_id': self.id,
+            'id': tab_id
+        })
+        return tab.update(**kwargs)
 
     def get_rubric(self, rubric_id, **kwargs):
         """
@@ -1626,6 +1820,28 @@ class Course(CanvasObject):
         return Rubric(self._requester, response.json())
 
     def list_rubrics(self, **kwargs):
+        """
+        Get the paginated list of active rubrics for the current course.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.course.Course.get_rubrics` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/rubrics \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.rubric.Rubric`
+        """
+        warnings.warn(
+            "`list_rubrics` is being deprecated and will be removed in a "
+            "future version. Use `get_rubrics` instead",
+            DeprecationWarning
+        )
+
+        return self.get_rubrics(**kwargs)
+
+    def get_rubrics(self, **kwargs):
         """
         Get the paginated list of active rubrics for the current course.
 
@@ -1828,6 +2044,177 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return GradingStandard(self._requester, response.json())
+
+    def create_content_migration(self, migration_type, **kwargs):
+        """
+        Create a content migration.
+
+        :calls: `POST /api/v1/courses/:course_id/content_migrations \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.create>`_
+
+        :param migration_type: The migrator type to use in this migration
+        :type migration_type: str or :class:`canvasapi.content_migration.Migrator`
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration, Migrator
+
+        if isinstance(migration_type, Migrator):
+            kwargs['migration_type'] = migration_type.type
+        elif isinstance(migration_type, string_types):
+            kwargs['migration_type'] = migration_type
+        else:
+            raise TypeError('Parameter migration_type must be of type Migrator or str')
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/content_migrations'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migration(self, content_migration, **kwargs):
+        """
+        Retrive a content migration by its ID
+
+        :calls: `GET /api/v1/courses/:course_id/content_migrations/:id \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.show>`_
+
+        :param content_migration: The object or ID of the content migration to retrieve.
+        :type content_migration: int, str or :class:`canvasapi.content_migration.ContentMigration`
+
+        :rtype: :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/content_migrations/{}'.format(self.id, migration_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return ContentMigration(self._requester, response_json)
+
+    def get_content_migrations(self, **kwargs):
+        """
+        List content migrations that the current account can view or manage.
+
+        :calls: `GET /api/v1/courses/:course_id/content_migrations/ \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_migration.ContentMigration`
+        """
+        from canvasapi.content_migration import ContentMigration
+
+        return PaginatedList(
+            ContentMigration,
+            self._requester,
+            'GET',
+            'courses/{}/content_migrations'.format(self.id),
+            {'course_id': self.id},
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_migration_systems(self, **kwargs):
+        """
+        Return a list of migration systems.
+
+        :calls: `GET /api/v1/courses/:course_id/content_migrations/migrators \
+        <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.available_migrators>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_migration.Migrator`
+        """
+        from canvasapi.content_migration import Migrator
+
+        return PaginatedList(
+            Migrator,
+            self._requester,
+            'GET',
+            'courses/{}/content_migrations/migrators'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def set_quiz_extensions(self, quiz_extensions, **kwargs):
+        """
+        Set extensions for student all quiz submissions in a course.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/extensions
+            <https://canvas.instructure.com/doc/api/quiz_extensions.html#method.quizzes/quiz_extensions.create>`_
+
+        :param quiz_extensions: List of dictionaries representing extensions.
+        :type quiz_extensions: list
+
+        :rtype: list of :class:`canvasapi.quiz.QuizExtension`
+
+        Example Usage:
+
+        >>> course.set_quiz_extensions([
+        ...     {
+        ...         'user_id': 1,
+        ...         'extra_time': 60,
+        ...         'extra_attempts': 1
+        ...     },
+        ...     {
+        ...         'user_id': 2,
+        ...         'extra_attempts': 3
+        ...     },
+        ...     {
+        ...         'user_id': 3,
+        ...         'extra_time': 20
+        ...     }
+        ... ])
+        """
+
+        if not isinstance(quiz_extensions, list) or not quiz_extensions:
+            raise ValueError('Param `quiz_extensions` must be a non-empty list.')
+
+        if any(not isinstance(extension, dict) for extension in quiz_extensions):
+            raise ValueError('Param `quiz_extensions` must only contain dictionaries')
+
+        if any('user_id' not in extension for extension in quiz_extensions):
+            raise RequiredFieldMissing(
+                'Dictionaries in `quiz_extensions` must contain key `user_id`'
+            )
+
+        kwargs['quiz_extensions'] = quiz_extensions
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/quiz_extensions'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        extension_list = response.json()['quiz_extensions']
+        return [QuizExtension(self._requester, extension) for extension in extension_list]
+
+    def submissions_bulk_update(self, **kwargs):
+        """
+        Update the grading and comments on multiple student's assignment
+        submissions in an asynchronous job.
+
+        :calls: `POST /api/v1/courses/:course_id/submissions/update_grades \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/{}/submissions/update_grades'.format(
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Progress(self._requester, response.json())
 
 
 @python_2_unicode_compatible

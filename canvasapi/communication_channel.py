@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import warnings
+
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
@@ -13,7 +15,31 @@ class CommunicationChannel(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.address, self.id)
 
-    def list_preferences(self):
+    def list_preferences(self, **kwargs):
+        """
+        Fetch all preferences for the given communication channel.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.communication_channel.CommunicationChannel.get_preferences`
+                instead.
+
+        :calls: `GET
+            /api/v1/users/:user_id/communication_channels/:communication_channel_id/ \
+                notification_preferences \
+        <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.index>`_
+
+        :rtype: `list`
+        """
+        warnings.warn(
+            "`list_preferences` is being deprecated and will be removed in a future version."
+            " Use `get_preferences` instead",
+            DeprecationWarning
+        )
+
+        return self.get_preferences(**kwargs)
+
+    def get_preferences(self, **kwargs):
         """
         Fetch all preferences for the given communication channel.
 
@@ -29,18 +55,47 @@ class CommunicationChannel(CanvasObject):
             'users/{}/communication_channels/{}/notification_preferences'.format(
                 self.user_id,
                 self.id
-            )
+            ),
+            _kwargs=combine_kwargs(**kwargs)
         )
+
         return response.json()['notification_preferences']
 
-    def list_preference_categories(self):
+    def list_preference_categories(self, **kwargs):
+        """
+        Fetch all notification preference categories for the given communication
+        channel.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use
+                :func:`canvasapi.communication_channel.CommunicationChannel.get_preference_categories`
+                instead.
+
+        :calls: `GET
+            /api/v1/users/:user_id/communication_channels/ \
+                :communication_channel_id/notification_preference_categories \
+        <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.category_index>`_
+
+        :rtype: `list`
+        """
+        warnings.warn(
+            "`list_preference_categories`"
+            " is being deprecated and will be removed in a future version."
+            " Use `get_preference_categories` instead",
+            DeprecationWarning
+        )
+
+        return self.get_preference_categories(**kwargs)
+
+    def get_preference_categories(self, **kwargs):
         """
         Fetch all notification preference categories for the given communication
         channel.
 
         :calls: `GET
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
-                notification_preference_categories \
+            /api/v1/users/:user_id/communication_channels/ \
+                :communication_channel_id/notification_preference_categories \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.category_index>`_
 
         :rtype: `list`
@@ -50,7 +105,8 @@ class CommunicationChannel(CanvasObject):
             'users/{}/communication_channels/{}/notification_preference_categories'.format(
                 self.user_id,
                 self.id
-            )
+            ),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()['categories']
 
@@ -60,8 +116,8 @@ class CommunicationChannel(CanvasObject):
         communication channel.
 
         :calls: `GET
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
-                notification_preferences/:notification \
+            /api/v1/users/:user_id/communication_channels/ \
+                :communication_channel_id/notification_preferences/:notification \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.show>`_
 
         :param notification: The name of the notification.
@@ -84,7 +140,7 @@ class CommunicationChannel(CanvasObject):
         Update the preference for the given notification for the given communication channel.
 
         :calls: `PUT
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
+            /api/v1/users/self/communication_channels/:communication_channel_id/ \
                 notification_preferences/:notification \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.update>`_
 
@@ -114,7 +170,7 @@ class CommunicationChannel(CanvasObject):
         for a single communication channel.
 
         :calls: `PUT
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
+            /api/v1/users/self/communication_channels/:communication_channel_id/ \
                 notification_preference_categories/:category \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.update_preferences_by_category>`_
 

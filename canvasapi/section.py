@@ -5,6 +5,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.util import combine_kwargs, obj_or_id
 
@@ -181,6 +182,30 @@ class Section(CanvasObject):
         List submissions for multiple assignments.
         Get all existing submissions for a given set of students and assignments.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.section.Section.get_multiple_submissions` instead.
+
+        :calls: `GET /api/v1/sections/:section_id/students/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        warnings.warn(
+            "`list_multiple_submissions`"
+            " is being deprecated and will be removed in a future version."
+            " Use `get_multiple_submissions` instead",
+            DeprecationWarning
+        )
+
+        return self.get_multiple_submissions(**kwargs)
+
+    def get_multiple_submissions(self, **kwargs):
+        """
+        List submissions for multiple assignments.
+        Get all existing submissions for a given set of students and assignments.
+
         :calls: `GET /api/v1/sections/:section_id/students/submissions \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
 
@@ -349,3 +374,22 @@ class Section(CanvasObject):
             'user_id': user_id
         })
         return submission.mark_unread(**kwargs)
+
+    def submissions_bulk_update(self, **kwargs):
+        """
+        Update the grading and comments on multiple student's assignment
+        submissions in an asynchronous job.
+
+        :calls: `POST /api/v1/sections/:section_id/submissions/update_grades \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+        response = self._requester.request(
+            'POST',
+            'sections/{}/submissions/update_grades'.format(
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Progress(self._requester, response.json())

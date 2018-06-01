@@ -102,8 +102,13 @@ class PaginatedList(object):
             index = self._start
             while not self._finished(index):
                 if self._list._is_larger_than(index):
-                    yield self._list[index]
+                    try:
+                        yield self._list[index]
+                    except IndexError:
+                        return
                     index += self._step
+                else:
+                    return
 
         def _finished(self, index):
             return self._stop is not None and index >= self._stop

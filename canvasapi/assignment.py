@@ -5,6 +5,7 @@ from six import python_2_unicode_compatible
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -128,7 +129,7 @@ class Assignment(CanvasObject):
         :rtype: :class:`canvasapi.submission.Submission`
         """
         if isinstance(submission, dict) and 'submission_type' in submission:
-            kwargs['submision'] = submission
+            kwargs['submission'] = submission
         else:
             raise RequiredFieldMissing(
                 "Dictionary with key 'submission_type' is required."
@@ -143,6 +144,27 @@ class Assignment(CanvasObject):
         response_json.update(course_id=self.course_id)
 
         return Submission(self._requester, response_json)
+
+    def submissions_bulk_update(self, **kwargs):
+        """
+        Update the grading and comments on multiple student's assignment
+        submissions in an asynchronous job.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/update_grades \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/{}/assignments/{}/submissions/update_grades'.format(
+                self.course_id,
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Progress(self._requester, response.json())
 
 
 @python_2_unicode_compatible

@@ -14,11 +14,13 @@ from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
+from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
 from canvasapi.exceptions import ResourceDoesNotExist
 from canvasapi.outcome import Outcome, OutcomeGroup
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.user import User
@@ -464,7 +466,19 @@ class TestCanvas(unittest.TestCase):
     def test_list_calendar_events(self, m):
         register_uris({'calendar_event': ['list_calendar_events']}, m)
 
-        cal_events = self.canvas.list_calendar_events()
+        with warnings.catch_warnings(record=True) as warning_list:
+            cal_events = self.canvas.list_calendar_events()
+            cal_event_list = [cal_event for cal_event in cal_events]
+            self.assertEqual(len(cal_event_list), 2)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_calendar_events()
+    def test_get_calendar_events(self, m):
+        register_uris({'calendar_event': ['list_calendar_events']}, m)
+
+        cal_events = self.canvas.get_calendar_events()
         cal_event_list = [cal_event for cal_event in cal_events]
         self.assertEqual(len(cal_event_list), 2)
 
@@ -506,7 +520,19 @@ class TestCanvas(unittest.TestCase):
     def test_list_appointment_groups(self, m):
         register_uris({'appointment_group': ['list_appointment_groups']}, m)
 
-        appt_groups = self.canvas.list_appointment_groups()
+        with warnings.catch_warnings(record=True) as warning_list:
+            appt_groups = self.canvas.list_appointment_groups()
+            appt_groups_list = [appt_group for appt_group in appt_groups]
+            self.assertEqual(len(appt_groups_list), 2)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_appointment_groups()
+    def test_get_appointment_groups(self, m):
+        register_uris({'appointment_group': ['list_appointment_groups']}, m)
+
+        appt_groups = self.canvas.get_appointment_groups()
         appt_groups_list = [appt_group for appt_group in appt_groups]
         self.assertEqual(len(appt_groups_list), 2)
 
@@ -555,14 +581,41 @@ class TestCanvas(unittest.TestCase):
                 ]
             }, m)
 
-        users_by_id = self.canvas.list_user_participants(222)
-        users_list_by_id = [user for user in users_by_id]
-        self.assertEqual(len(users_list_by_id), 2)
+        with warnings.catch_warnings(record=True) as warning_list:
+            users_by_id = self.canvas.list_user_participants(222)
+            users_list_by_id = [user for user in users_by_id]
+            self.assertEqual(len(users_list_by_id), 2)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            appointment_group_for_obj = self.canvas.get_appointment_group(222)
+            users_by_id = self.canvas.list_user_participants(appointment_group_for_obj)
+            users_list_by_id = [user for user in users_by_id]
+            self.assertEqual(len(users_list_by_id), 2)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_user_participants()
+    def test_get_user_participants(self, m):
+        register_uris(
+            {
+                'appointment_group': [
+                    'get_appointment_group_222',
+                    'list_user_participants'
+                ]
+            }, m)
+
+        users_by_id = self.canvas.get_user_participants(222)
+        users_get_by_id = [user for user in users_by_id]
+        self.assertEqual(len(users_get_by_id), 2)
 
         appointment_group_for_obj = self.canvas.get_appointment_group(222)
-        users_by_id = self.canvas.list_user_participants(appointment_group_for_obj)
-        users_list_by_id = [user for user in users_by_id]
-        self.assertEqual(len(users_list_by_id), 2)
+        users_by_id = self.canvas.get_user_participants(appointment_group_for_obj)
+        users_get_by_id = [user for user in users_by_id]
+        self.assertEqual(len(users_get_by_id), 2)
 
     # list_group_participants()
     def test_list_group_participants(self, m):
@@ -574,14 +627,41 @@ class TestCanvas(unittest.TestCase):
                 ]
             }, m)
 
-        groups_by_id = self.canvas.list_group_participants(222)
-        groups_list_by_id = [group for group in groups_by_id]
-        self.assertEqual(len(groups_list_by_id), 2)
+        with warnings.catch_warnings(record=True) as warning_list:
+            groups_by_id = self.canvas.list_group_participants(222)
+            groups_list_by_id = [group for group in groups_by_id]
+            self.assertEqual(len(groups_list_by_id), 2)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            appointment_group_for_obj = self.canvas.get_appointment_group(222)
+            groups_by_obj = self.canvas.list_group_participants(appointment_group_for_obj)
+            groups_list_by_obj = [group for group in groups_by_obj]
+            self.assertEqual(len(groups_list_by_obj), 2)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_group_participants()
+    def test_get_group_participants(self, m):
+        register_uris(
+            {
+                'appointment_group': [
+                    'get_appointment_group_222',
+                    'list_group_participants'
+                ]
+            }, m)
+
+        groups_by_id = self.canvas.get_group_participants(222)
+        groups_get_by_id = [group for group in groups_by_id]
+        self.assertEqual(len(groups_get_by_id), 2)
 
         appointment_group_for_obj = self.canvas.get_appointment_group(222)
-        groups_by_obj = self.canvas.list_group_participants(appointment_group_for_obj)
-        groups_list_by_obj = [group for group in groups_by_obj]
-        self.assertEqual(len(groups_list_by_obj), 2)
+        groups_by_obj = self.canvas.get_group_participants(appointment_group_for_obj)
+        groups_get_by_obj = [group for group in groups_by_obj]
+        self.assertEqual(len(groups_get_by_obj), 2)
 
     # get_file()
     def test_get_file(self, m):
@@ -649,3 +729,21 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(outcome_group_by_obj, OutcomeGroup)
         self.assertEqual(outcome_group_by_obj.id, 1)
         self.assertEqual(outcome_group_by_obj.title, "Canvas outcome group title")
+
+    # get_progress()
+    def test_get_progress(self, m):
+        register_uris({'content_migration': ['get_progress']}, m)
+
+        progress = self.canvas.get_progress(1)
+        self.assertIsInstance(progress, Progress)
+        self.assertTrue(hasattr(progress, 'id'))
+        self.assertEqual(progress.id, 1)
+
+    # get_announcements()
+    def test_get_announcements(self, m):
+        register_uris({'announcements': ['list_announcements']}, m)
+        announcements = self.canvas.get_announcements()
+        announcement_list = [announcement for announcement in announcements]
+        self.assertIsInstance(announcements, PaginatedList)
+        self.assertIsInstance(announcement_list[0], DiscussionTopic)
+        self.assertEqual(len(announcement_list), 2)

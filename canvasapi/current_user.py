@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import warnings
+
 from six import python_2_unicode_compatible
 
 from canvasapi.bookmark import Bookmark
@@ -27,6 +29,27 @@ class CurrentUser(User):
         """
         Return the list of active groups for the user.
 
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.current_user.CurrentUser.get_groups` instead.
+
+        :calls: `GET /api/v1/users/self/groups \
+        <https://canvas.instructure.com/doc/api/groups.html#method.groups.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
+        """
+        warnings.warn(
+            "`list_groups` is being deprecated and will be removed in a "
+            "future version. Use `get_groups` instead",
+            DeprecationWarning
+        )
+
+        return self.get_groups(**kwargs)
+
+    def get_groups(self, **kwargs):
+        """
+        Return the list of active groups for the user.
+
         :calls: `GET /api/v1/users/self/groups \
         <https://canvas.instructure.com/doc/api/groups.html#method.groups.index>`_
 
@@ -43,6 +66,28 @@ class CurrentUser(User):
         )
 
     def list_bookmarks(self, **kwargs):
+        """
+        List bookmarks that the current user can view or manage.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.current_user.CurrentUser.get_bookmarks` instead.
+
+        :calls: `GET /api/v1/users/self/bookmarks \
+        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.bookmark.Bookmark`
+        """
+        warnings.warn(
+            "`list_bookmarks` is being deprecated and will be removed in a "
+            "future version. Use `get_bookmarks` instead",
+            DeprecationWarning
+        )
+
+        return self.get_bookmarks(**kwargs)
+
+    def get_bookmarks(self, **kwargs):
         """
         List bookmarks that the current user can view or manage.
 
