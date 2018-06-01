@@ -17,7 +17,7 @@
 
 ### Deprecation Warnings
 
-- All methods starting with `list_` have been deprecated. Each has been replaced with a corresponding method starting with `list_`. For example, `Course.list_groups()` is now `Course.get_groups()`. The `list_` methods will be removed in a future release. (Thanks [@qwertynerd97](https://github.com/qwertynerd97) for doing the bulk of the grunt work.)
+- All methods starting with `list_` have been deprecated. Each has been replaced with a corresponding method starting with `get_`. For example, `Course.list_groups()` is now `Course.get_groups()`. The `list_` methods will be removed in a future release. (Thanks [@qwertynerd97](https://github.com/qwertynerd97) for doing the bulk of the grunt work.)
 - `Course.update_tab()` is now deprecated. Use `Tab.update()` instead.
 
 ### Bugfixes
