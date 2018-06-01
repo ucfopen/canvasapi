@@ -22,6 +22,7 @@ from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizExtension
 from canvasapi.rubric import Rubric
 from canvasapi.section import Section
@@ -1430,6 +1431,25 @@ class TestCourse(unittest.TestCase):
     def test_set_extensions_missing_key(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.course.set_quiz_extensions([{'extra_time': 60, 'extra_attempts': 3}])
+
+    # submissions_bulk_update()
+    def test_submissions_bulk_update(self, m):
+        register_uris({'course': ['update_submissions']}, m)
+        register_uris({'progress': ['course_progress']}, m)
+        progress = self.course.submissions_bulk_update(grade_data={
+            '1': {
+                '1': {
+                    'posted_grade': 97
+                },
+                '2': {
+                    'posted_grade': 98
+                }
+            }
+        })
+        self.assertIsInstance(progress, Progress)
+        self.assertTrue(progress.context_type == "Course")
+        progress = progress.query()
+        self.assertTrue(progress.context_type == "Course")
 
 
 @requests_mock.Mocker()

@@ -16,5 +16,21 @@
 			"url": "https://canvas.example.edu/api/v1/progress/1"
 		},
 		"status_code": 200
+	},
+	"course_progress": {
+		"method": "GET",
+		"endpoint": "progress/3",
+		"data":{
+			"id": 3,
+			"context_id": 1,
+			"context_type": "Course",
+			"user_id": null,
+			"tag": "submissions_update",
+			"completion": 100,
+			"workflow_state": "completed",
+			"updated_at": "2013-01-15T15:04:00Z",
+			"message": null,
+			"url": "https://canvas.example.edu/api/v1/progress/3"
+		}
 	}
 }

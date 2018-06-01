@@ -11,6 +11,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
 from canvasapi.submission import Submission
@@ -2195,6 +2196,25 @@ class Course(CanvasObject):
         )
         extension_list = response.json()['quiz_extensions']
         return [QuizExtension(self._requester, extension) for extension in extension_list]
+
+    def submissions_bulk_update(self, **kwargs):
+        """
+        Update the grading and comments on multiple student's assignment
+        submissions in an asynchronous job.
+
+        :calls: `POST /api/v1/courses/:course_id/submissions/update_grades \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/{}/submissions/update_grades'.format(
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Progress(self._requester, response.json())
 
 
 @python_2_unicode_compatible
