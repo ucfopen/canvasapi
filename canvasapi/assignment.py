@@ -150,7 +150,7 @@ class Assignment(CanvasObject):
         Update the grading and comments on multiple student's assignment
         submissions in an asynchronous job.
 
-        :calls: POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
             submissions/update_grades \
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
 
