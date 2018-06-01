@@ -73,8 +73,8 @@ class CommunicationChannel(CanvasObject):
                 instead.
 
         :calls: `GET
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
-                notification_preference_categories \
+            /api/v1/users/:user_id/communication_channels/ \
+                :communication_channel_id/notification_preference_categories \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.category_index>`_
 
         :rtype: `list`
@@ -94,8 +94,8 @@ class CommunicationChannel(CanvasObject):
         channel.
 
         :calls: `GET
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
-                notification_preference_categories \
+            /api/v1/users/:user_id/communication_channels/ \
+                :communication_channel_id/notification_preference_categories \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.category_index>`_
 
         :rtype: `list`
@@ -116,8 +116,8 @@ class CommunicationChannel(CanvasObject):
         communication channel.
 
         :calls: `GET
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
-                notification_preferences/:notification \
+            /api/v1/users/:user_id/communication_channels/ \
+                :communication_channel_id/notification_preferences/:notification \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.show>`_
 
         :param notification: The name of the notification.
@@ -140,7 +140,7 @@ class CommunicationChannel(CanvasObject):
         Update the preference for the given notification for the given communication channel.
 
         :calls: `PUT
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
+            /api/v1/users/self/communication_channels/:communication_channel_id/ \
                 notification_preferences/:notification \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.update>`_
 
@@ -170,7 +170,7 @@ class CommunicationChannel(CanvasObject):
         for a single communication channel.
 
         :calls: `PUT
-            /api/v1/users/:u_id/communication_channels/:communication_channel_id/ \
+            /api/v1/users/self/communication_channels/:communication_channel_id/ \
                 notification_preference_categories/:category \
         <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.update_preferences_by_category>`_
 
