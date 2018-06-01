@@ -23,7 +23,7 @@ class Folder(CanvasObject):
             .. deprecated:: 0.10.0
                 Use :func:`canvasapi.folder.Folder.get_files` instead.
 
-        :calls: `GET api/v1/folders/:id/files \
+        :calls: `GET /api/v1/folders/:id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -41,7 +41,7 @@ class Folder(CanvasObject):
         """
         Returns the paginated list of files for the folder.
 
-        :calls: `GET api/v1/folders/:id/files \
+        :calls: `GET /api/v1/folders/:id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of

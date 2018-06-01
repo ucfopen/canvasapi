@@ -83,7 +83,7 @@ class Quiz(CanvasObject):
         """
         Create a new question group for the given quiz id
 
-        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.create>`_
 
         :param quiz_groups: The name, pick count, question points,

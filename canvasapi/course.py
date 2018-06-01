@@ -89,7 +89,7 @@ class Course(CanvasObject):
         several different ids that can pull the same user record from Canvas.
 
         :calls: `GET /api/v1/courses/:course_id/users/:id \
-        <https://canvas.instructure.com/doc/api/users.html#method.users.api_show>`_
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.user>`_
 
         :param user: The object or ID of the user to retrieve.
         :type user: :class:`canvasapi.user.User` or int
@@ -1613,7 +1613,7 @@ class Course(CanvasObject):
             .. deprecated:: 0.10.0
                 Use :func:`canvasapi.course.Course.get_files` instead.
 
-        :calls: `GET api/v1/courses/:course_id/files \
+        :calls: `GET /api/v1/courses/:course_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -1631,7 +1631,7 @@ class Course(CanvasObject):
         """
         Returns the paginated list of files for the course.
 
-        :calls: `GET api/v1/courses/:course_id/files \
+        :calls: `GET /api/v1/courses/:course_id/files \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
