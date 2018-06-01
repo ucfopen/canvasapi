@@ -1,5 +1,27 @@
 # Change Log
 
+## [Unreleased]
+
+### New Endpoint Coverage
+
+- Content Migrations (Thanks, [@qwertynerd97](https://github.com/qwertynerd97))
+- Copy a File (Thanks, [@qwertynerd97](https://github.com/qwertynerd97))
+- List Announcements
+
+### General
+
+- Lots of docstring fixes. (Thanks, [@rmanbaird](https://github.com/rmanbaird))
+
+### Deprecation Warnings
+
+- All methods starting with `list_` have been deprecated. Each has been replaced with a corresponding method starting with `list_`. For example, `Course.list_groups()` is now `Course.get_groups()`. The `list_` methods will be removed in a future release. (Thanks [@qwertynerd97](https://github.com/qwertynerd97) for doing the bulk of the grunt work.)
+- `Course.update_tab()` is now deprecated. Use `Tab.update()` instead.
+
+### Bugfixes
+
+- Fixed a bug where taking a slice of a `PaginatedList` where the `start` was larger than the list caused an infinite loop.
+- Fixed a typo that prevented `Assignment.submit()` from working properly. (Thanks, [@Tobiaqs](https://github.com/Tobiaqs))
+
 ## [0.9.0] - 2018-03-01
 
 ### New Endpoint Coverage
@@ -11,7 +33,7 @@
 - Added example usage for several common endpoints to our documentation.
 - Updated `PaginatedList` to allow specification of the root element to build the list from when given an atypical JSON response (see [#146](https://github.com/ucfopen/canvasapi/issues/146)). (thanks [@dfwarden](https://github.com/dfwarden))
 - Improved keyword argument support for `course.get_section()` (thanks [@andrew-gardener](https://github.com/andrew-gardener))
-- When uploading a file to a submission with `Submission.upload_comment`, it will automatically attached to a new comment.
+- When uploading a file to a submission with `Submission.upload_comment()`, it will automatically attached to a new comment.
 
 ### Deprecation Warnings
 

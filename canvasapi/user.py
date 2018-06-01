@@ -22,7 +22,7 @@ class User(CanvasObject):
         """
         Retrieve this user's profile.
 
-        :calls: `GET /api/v1/user/:id \
+        :calls: `GET /api/v1/users/:user_id/profile \
         <https://canvas.instructure.com/doc/api/users.html#method.profile.settings>`_
 
         :rtype: dict
@@ -388,7 +388,7 @@ class User(CanvasObject):
             .. deprecated:: 0.10.0
                 Use :func:`canvasapi.user.User.get_files` instead.
 
-        :calls: `GET api/v1/courses/:user_id/files \
+        :calls: `GET /api/v1/users/:user_id/files \
             <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -406,7 +406,7 @@ class User(CanvasObject):
         """
         Returns the paginated list of files for the user.
 
-        :calls: `GET api/v1/courses/:user_id/files \
+        :calls: `GET /api/v1/users/:user_id/files \
             <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -426,7 +426,7 @@ class User(CanvasObject):
         """
         Return the standard attachment json object for a file.
 
-        :calls: `GET /api/v1/users/:group_id/files/:id \
+        :calls: `GET /api/v1/users/:user_id/files/:id \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_show>`_
 
         :param file: The object or ID of the file to retrieve.
