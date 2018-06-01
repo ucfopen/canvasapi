@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## [0.10.0] - 2018-06-01
 
 ### New Endpoint Coverage
 
