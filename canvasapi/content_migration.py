@@ -56,19 +56,19 @@ class ContentMigration(CanvasObject):
         List a single issue for this content migration.
 
         :calls: `GET
-            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues
+            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
 
             or `GET
-            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues
+            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues/:id
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
 
             or `GET
-            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues
+            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues/:id
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
 
             or `GET
-            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues
+            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues/:id
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.show>`_
 
         :param migration_issue: The object or ID of the issue to retrieve.
@@ -104,19 +104,19 @@ class ContentMigration(CanvasObject):
 
         :calls:
             `GET
-            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues/:id
+            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/migration_issues
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
             or `GET
-            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues/:id
+            /api/v1/courses/:course_id/content_migrations/:content_migration_id/migration_issues
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
             or `GET
-            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues/:id
+            /api/v1/groups/:group_id/content_migrations/:content_migration_id/migration_issues
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
             or `GET
-            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues/:id
+            /api/v1/users/:user_id/content_migrations/:content_migration_id/migration_issues
             <https://canvas.instructure.com/doc/api/content_migrations.html#method.migration_issues.index>`_
 
         :rtype: :class:`canvasapi.content_migration.MigrationIssue`
