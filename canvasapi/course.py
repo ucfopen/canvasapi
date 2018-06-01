@@ -12,6 +12,7 @@ from canvasapi.folder import Folder
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
+from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
@@ -2143,6 +2144,58 @@ class Course(CanvasObject):
             'courses/{}/content_migrations/migrators'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
+
+    def set_quiz_extensions(self, quiz_extensions, **kwargs):
+        """
+        Set extensions for student all quiz submissions in a course.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/extensions
+            <https://canvas.instructure.com/doc/api/quiz_extensions.html#method.quizzes/quiz_extensions.create>`_
+
+        :param quiz_extensions: List of dictionaries representing extensions.
+        :type quiz_extensions: list
+
+        :rtype: list of :class:`canvasapi.quiz.QuizExtension`
+
+        Example Usage:
+
+        >>> course.set_quiz_extensions([
+        ...     {
+        ...         'user_id': 1,
+        ...         'extra_time': 60,
+        ...         'extra_attempts': 1
+        ...     },
+        ...     {
+        ...         'user_id': 2,
+        ...         'extra_attempts': 3
+        ...     },
+        ...     {
+        ...         'user_id': 3,
+        ...         'extra_time': 20
+        ...     }
+        ... ])
+        """
+
+        if not isinstance(quiz_extensions, list) or not quiz_extensions:
+            raise ValueError('Param `quiz_extensions` must be a non-empty list.')
+
+        if any(not isinstance(extension, dict) for extension in quiz_extensions):
+            raise ValueError('Param `quiz_extensions` must only contain dictionaries')
+
+        if any('user_id' not in extension for extension in quiz_extensions):
+            raise RequiredFieldMissing(
+                'Dictionaries in `quiz_extensions` must contain key `user_id`'
+            )
+
+        kwargs['quiz_extensions'] = quiz_extensions
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/quiz_extensions'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        extension_list = response.json()['quiz_extensions']
+        return [QuizExtension(self._requester, extension) for extension in extension_list]
 
     def submissions_bulk_update(self, **kwargs):
         """

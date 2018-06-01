@@ -23,7 +23,7 @@ from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.progress import Progress
-from canvasapi.quiz import Quiz
+from canvasapi.quiz import Quiz, QuizExtension
 from canvasapi.rubric import Rubric
 from canvasapi.section import Section
 from canvasapi.submission import Submission
@@ -1387,6 +1387,50 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(migration_systems[1].type, "dummy_importer_02")
         self.assertEqual(migration_systems[1].requires_file_upload, False)
         self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
+
+    # set_quiz_extensions
+    def test_set_quiz_extensions(self, m):
+        register_uris({'course': ['set_quiz_extensions']}, m)
+
+        extension = self.course.set_quiz_extensions([
+            {
+                'user_id': 1,
+                'extra_time': 60
+            },
+            {
+                'user_id': 2,
+                'extra_attempts': 3
+            }
+        ])
+
+        self.assertIsInstance(extension, list)
+        self.assertEqual(len(extension), 2)
+
+        self.assertIsInstance(extension[0], QuizExtension)
+        self.assertEqual(extension[0].user_id, "1")
+        self.assertTrue(hasattr(extension[0], 'extra_time'))
+        self.assertEqual(extension[0].extra_time, 60)
+
+        self.assertIsInstance(extension[1], QuizExtension)
+        self.assertEqual(extension[1].user_id, "2")
+        self.assertTrue(hasattr(extension[1], 'extra_attempts'))
+        self.assertEqual(extension[1].extra_attempts, 3)
+
+    def test_set_extensions_not_list(self, m):
+        with self.assertRaises(ValueError):
+            self.course.set_quiz_extensions({'user_id': 1, 'extra_time': 60})
+
+    def test_set_extensions_empty_list(self, m):
+        with self.assertRaises(ValueError):
+            self.course.set_quiz_extensions([])
+
+    def test_set_extensions_non_dicts(self, m):
+        with self.assertRaises(ValueError):
+            self.course.set_quiz_extensions([('user_id', 1), ('extra_time', 60)])
+
+    def test_set_extensions_missing_key(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.set_quiz_extensions([{'extra_time': 60, 'extra_attempts': 3}])
 
     # submissions_bulk_update()
     def test_submissions_bulk_update(self, m):

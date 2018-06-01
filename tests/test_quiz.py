@@ -5,7 +5,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
-from canvasapi.quiz import Quiz, QuizQuestion
+from canvasapi.quiz import Quiz, QuizQuestion, QuizExtension
 from canvasapi.quiz_group import QuizGroup
 from tests import settings
 from tests.util import register_uris
@@ -149,6 +149,70 @@ class TestQuiz(unittest.TestCase):
         self.assertIsInstance(question_list[1], QuizQuestion)
         self.assertTrue(hasattr(question_list[1], 'id'))
         self.assertEqual(question_list[1].id, 2)
+
+    # set_extensions()
+    def test_set_extensions(self, m):
+        register_uris({'quiz': ['set_extensions']}, m)
+
+        extension = self.quiz.set_extensions([
+            {
+                'user_id': 1,
+                'extra_time': 60
+            },
+            {
+                'user_id': 2,
+                'extra_attempts': 3
+            }
+        ])
+
+        self.assertIsInstance(extension, list)
+        self.assertEqual(len(extension), 2)
+
+        self.assertIsInstance(extension[0], QuizExtension)
+        self.assertEqual(extension[0].user_id, "1")
+        self.assertTrue(hasattr(extension[0], 'extra_time'))
+        self.assertEqual(extension[0].extra_time, 60)
+
+        self.assertIsInstance(extension[1], QuizExtension)
+        self.assertEqual(extension[1].user_id, "2")
+        self.assertTrue(hasattr(extension[1], 'extra_attempts'))
+        self.assertEqual(extension[1].extra_attempts, 3)
+
+    def test_set_extensions_not_list(self, m):
+        with self.assertRaises(ValueError):
+            self.quiz.set_extensions({'user_id': 1, 'extra_time': 60})
+
+    def test_set_extensions_empty_list(self, m):
+        with self.assertRaises(ValueError):
+            self.quiz.set_extensions([])
+
+    def test_set_extensions_non_dicts(self, m):
+        with self.assertRaises(ValueError):
+            self.quiz.set_extensions([('user_id', 1), ('extra_time', 60)])
+
+    def test_set_extensions_missing_key(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.quiz.set_extensions([{'extra_time': 60, 'extra_attempts': 3}])
+
+
+@requests_mock.Mocker()
+class TestQuizExtension(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.extension = QuizExtension(self.canvas._Canvas__requester, {
+            'user_id': 1,
+            'quiz_id': 1,
+            'extra_time': 60,
+            'extra_attempts': 3,
+            'manually_unlocked': None,
+            'end_at': None
+        })
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.extension)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()

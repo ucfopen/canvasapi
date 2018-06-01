@@ -6,8 +6,10 @@
 
 - Content Migrations (Thanks, [@qwertynerd97](https://github.com/qwertynerd97))
 - Copy a File (Thanks, [@qwertynerd97](https://github.com/qwertynerd97))
+- Course Quiz Extensions
+- List Announcements (Thanks, [@rmanbaird](https://github.com/rmanbaird))
 - Grade/Comment on Multiple Submissions (Thanks, [@rmanbaird](https://github.com/rmanbaird))
-- List Announcements
+- Quiz Extensions
 
 ### General
 

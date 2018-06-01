@@ -142,5 +142,29 @@
 			}
 		],
 		"status_code": 200
+	},
+	"set_extensions": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/extensions",
+		"data": {
+			"quiz_extensions": [
+				{
+					"user_id": "1",
+					"quiz_id": "1",
+					"extra_attempts": null,
+					"extra_time": 60,
+					"manually_unlocked": null,
+					"end_at": null
+				},
+				{
+					"user_id": "2",
+					"quiz_id": "1",
+					"extra_attempts": 3,
+					"extra_time": null,
+					"manually_unlocked": null,
+					"end_at": null
+				}
+			]
+		}
 	}
 }
