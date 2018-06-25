@@ -40,6 +40,12 @@ class TestCanvas(unittest.TestCase):
             Canvas(settings.BASE_URL_WITH_VERSION, settings.API_KEY)
             self.assertTrue(issubclass(w[0].category, DeprecationWarning))
 
+    # Canvas()
+    def test_init_warns_when_url_is_http(self, m):
+        with warnings.catch_warnings(record=True) as w:
+            Canvas(settings.BASE_URL_AS_HTTP, settings.API_KEY)
+            self.assertTrue(issubclass(w[0].category, UserWarning))
+
     # create_account()
     def test_create_account(self, m):
         register_uris({'account': ['create']}, m)

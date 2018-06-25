@@ -1029,7 +1029,7 @@ class TestCourse(unittest.TestCase):
     def test_create_external_feed(self, m):
         register_uris({'course': ['create_external_feed']}, m)
 
-        url_str = "http://example.com/myblog.rss"
+        url_str = "https://example.com/myblog.rss"
         response = self.course.create_external_feed(url=url_str)
         self.assertIsInstance(response, ExternalFeed)
 
