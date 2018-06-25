@@ -108,7 +108,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/groups/1/get_pages?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/groups/1/get_pages?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_pages2": {
@@ -185,7 +185,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/groups/1/users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/groups/1/users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -208,7 +208,7 @@
 		"method": "POST",
 		"endpoint": "groups/1/files",
 		"data": {
-			"upload_url": "http://example.com/api/v1/files/upload_response_upload_url",
+			"upload_url": "https://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
 			    "some_param": "param123",
 			    "a_different_param": "param456"
@@ -271,7 +271,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/groups/1/memberships?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/groups/1/memberships?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -685,7 +685,7 @@
 		"data": {
 			"id": 1,
 			"display_name": "My Blog",
-			"url": "http://example.com/myblog.rss"
+			"url": "https://example.com/myblog.rss"
 		},
 		"status_code": 200
 	},
@@ -696,12 +696,12 @@
 			{
 				"id": 1,
 				"display_name": "My Blog",
-				"url": "http://example.com/myblog.rss"
+				"url": "https://example.com/myblog.rss"
 			},
 			{
 				"id": 2,
 				"display_name": "My Blog 2",
-				"url": "http://example.com/myblog2.rss"
+				"url": "https://example.com/myblog2.rss"
 			}
 		],
         "status_code": 200
@@ -712,7 +712,7 @@
 		"data": {
 			"id": 1,
 			"display_name": "My Blog",
-			"url": "http://example.com/myblog.rss"
+			"url": "https://example.com/myblog.rss"
 		},
 		"status_code": 200
 	},
@@ -733,7 +733,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/groups/1/files?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/groups/1/files?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_group_files2": {

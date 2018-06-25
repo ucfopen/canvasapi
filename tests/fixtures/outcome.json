@@ -69,7 +69,7 @@
             }
         ],
         "headers": {
-            "Link": "<http://example.com/api/v1/accounts/1/outcome_groups?page=2&per_page=2>; rel=\"next\""
+            "Link": "<https://example.com/api/v1/accounts/1/outcome_groups?page=2&per_page=2>; rel=\"next\""
         },
         "status_code": 200
     },
@@ -259,7 +259,7 @@
             }
         ],
         "headers": {
-            "Link": "<http://example.com/api/v1/courses/1/outcome_groups?page=2&per_page=2>; rel=\"next\""
+            "Link": "<https://example.com/api/v1/courses/1/outcome_groups?page=2&per_page=2>; rel=\"next\""
         },
         "status_code": 200
     },

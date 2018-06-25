@@ -6,7 +6,7 @@
 			"id": 1,
 			"assignment_id": 1,
 			"user_id": 1,
-			"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+			"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
 			"submission_type": "online_upload"
 		},
 		"status_code": 200
@@ -18,7 +18,7 @@
 				"id": 1,
 				"assignment_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/sections/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/sections/1/assignments/1/submissions/1",
 				"submission_type": "online_upload"
 		},
 		"status_code": 200
@@ -31,14 +31,14 @@
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
 				"submission_type": "online_upload"
 			},
 			{
 				"id": 2,
 				"assignments_id": 1,
 				"user_id": 2,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/2",
+				"html_url": "https://example.com/courses/1/assignments/1/submissions/2",
 				"submission_type": "online_upload"
 			}
 		],
@@ -48,7 +48,7 @@
 		"method": "POST",
 		"endpoint": "courses/1/assignments/1/submissions/1/comments/files",
 		"data": {
-			"upload_url": "http://example.com/api/v1/files/upload_response_upload_url",
+			"upload_url": "https://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
 				"some_param": "param123",
 				"a_different_param": "param456"
@@ -70,7 +70,7 @@
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
 				"submission_type": "online_upload",
 				"excused": true
 		},
