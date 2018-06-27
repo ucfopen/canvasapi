@@ -133,7 +133,6 @@ class Folder(CanvasObject):
         )
         return Folder(self._requester, response.json())
 
-
     def upload(self, file, **kwargs):
         """
         Upload a file to this folder.
@@ -153,8 +152,7 @@ class Folder(CanvasObject):
             my_path,
             file,
             **kwargs
-        ).start() 
-
+        ).start()
 
     def update(self, **kwargs):
         """
