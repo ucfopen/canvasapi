@@ -37,7 +37,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-            "Link": "<http://example.com/api/v1/sections/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+            "Link": "<https://example.com/api/v1/sections/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
         }
 	},
 	"list_enrollments_2": {
@@ -101,7 +101,7 @@
 			"id": 1,
 			"assignment_id": 1,
 			"user_id": 1,
-			"html_url": "http://example.com/sections/1/assignments/1/submissions/1",
+			"html_url": "https://example.com/sections/1/assignments/1/submissions/1",
 			"submission_type": "online_upload"
 		},
 		"status_code": 200
@@ -114,14 +114,14 @@
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/sections/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/sections/1/assignments/1/submissions/1",
 				"submission_type": "online_upload"
 			},
 			{
 				"id": 2,
 				"assignments_id": 1,
 				"user_id": 2,
-				"html_url": "http://example.com/sections/1/assignments/1/submissions/2",
+				"html_url": "https://example.com/sections/1/assignments/1/submissions/2",
 				"submission_type": "online_upload"
 			}
 		],
@@ -135,14 +135,14 @@
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/sections/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/sections/1/assignments/1/submissions/1",
 				"submission_type": "online_upload"
 			},
 			{
 				"id": 2,
 				"assignments_id": 1,
 				"user_id": 2,
-				"html_url": "http://example.com/sections/1/assignments/1/submissions/2",
+				"html_url": "https://example.com/sections/1/assignments/1/submissions/2",
 				"submission_type": "online_upload"
 			}
 		],
@@ -155,7 +155,7 @@
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/sections/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/sections/1/assignments/1/submissions/1",
 				"submission_type": "online_upload"
 		},
 		"status_code": 200
@@ -167,7 +167,7 @@
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/sections/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/sections/1/assignments/1/submissions/1",
 				"submission_type": "online_upload",
 				"excused": true
 		},

@@ -3,7 +3,7 @@
         "method": "POST",
         "endpoint": "upload_response",
         "data": {
-            "upload_url": "http://example.com/api/v1/upload_response_upload_url",
+            "upload_url": "https://example.com/api/v1/upload_response_upload_url",
             "upload_params": {
                 "some_param": "param123",
                 "a_different_param": "param456"
@@ -35,7 +35,7 @@
         "method": "POST",
         "endpoint": "upload_response_fail",
         "data": {
-            "upload_url": "http://example.com/api/v1/upload_fail",
+            "upload_url": "https://example.com/api/v1/upload_fail",
             "upload_params": {
                 "some_param": "param123",
                 "a_different_param": "param456"

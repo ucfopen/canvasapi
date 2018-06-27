@@ -95,7 +95,7 @@
 		"data": {
 			"id": "1",
 			"name": "External Tool #1 (Course)",
-			"url": "http://example.com/courses/1/external_tools/sessionless_launch/?verifier=1337"
+			"url": "https://example.com/courses/1/external_tools/sessionless_launch/?verifier=1337"
 		},
 		"status_code": 200
 	},
