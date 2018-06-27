@@ -23,7 +23,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/users/self/groups?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/users/self/groups?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_groups2": {
