@@ -4,7 +4,7 @@ from canvasapi import Canvas
 # Canvas API URL
 API_URL = "https://auburn.instructure.com"
 # Canvas API key
-API_KEY = open("/Users/kreitzem/iCloud/code/organize/api-keys/canvas.txt").read().strip()
+API_KEY = open(".canvas.txt").read().strip()
 
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
