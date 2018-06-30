@@ -7,6 +7,8 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
+from canvasapi.upload import Uploader
+from canvasapi.user import User
 from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
 
@@ -83,8 +85,6 @@ class Assignment(CanvasObject):
 
         :rtype: :class:`canvasapi.submission.Submission`
         """
-        from canvasapi.user import User
-
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
@@ -165,6 +165,35 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Progress(self._requester, response.json())
+
+    def upload(self, file, user='self', **kwargs):
+        """
+        Upload a file to a submission.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/files \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.create_file>`_
+
+        :param file: The file or path of the file to upload.
+        :type file: file or str
+        :param user: The object or ID of the related user, or 'self' for the current user
+        :type user: :class:`canvasapi.user.User`, int, or str
+
+        :returns: True if the file uploaded successfully, False otherwise, \
+                    and the JSON response from the API.
+        :rtype: tuple
+        """
+        user_id = 'self' if user is 'self' else obj_or_id(user, "user", (User,))
+
+        return Uploader(
+            self._requester,
+            'courses/{}/assignments/{}/submissions/{}/files'.format(
+                self.course_id,
+                self.id,
+                user_id
+            ),
+            file,
+            **kwargs
+        ).start()
 
 
 @python_2_unicode_compatible

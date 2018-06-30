@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+import uuid
 
 import requests_mock
 
@@ -10,7 +11,7 @@ from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
 from tests import settings
-from tests.util import register_uris
+from tests.util import register_uris, cleanup_file
 
 
 @requests_mock.Mocker()
@@ -118,6 +119,41 @@ class TestAssignment(unittest.TestCase):
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()
         self.assertTrue(progress.context_type == "Course")
+
+    # upload()
+    def test_upload(self, m):
+        register_uris({'assignment': ['upload', 'upload_final']}, m)
+
+        filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
+
+        try:
+            with open(filename, 'w+') as file:
+                response = self.assignment.upload(file)
+
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
+
+            # upload()
+
+    def test_upload_user(self, m):
+        register_uris({'assignment': ['upload_by_id', 'upload_final']}, m)
+
+        filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
+
+        user_id = 1
+
+        try:
+            with open(filename, 'w+') as file:
+                response = self.assignment.upload(file, user_id)
+
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
 
 
 @requests_mock.Mocker()

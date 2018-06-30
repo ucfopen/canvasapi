@@ -101,5 +101,34 @@
 			"url": "https://canvas.example.edu/api/v1/progress/3"
 		},
 		"status_code": 200
+	},
+	"upload": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/submissions/self/files",
+		"data": {
+			"upload_url": "https://example.com/api/v1/files/upload_response_upload_url",
+			"upload_params": {
+				"some_param": "param123",
+				"a_different_param": "param456"
+			}
+		}
+	},
+	"upload_by_id": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/submissions/1/files",
+		"data": {
+			"upload_url": "https://example.com/api/v1/files/upload_response_upload_url",
+			"upload_params": {
+				"some_param": "param123",
+				"a_different_param": "param456"
+			}
+		}
+	},
+	"upload_final": {
+		"method": "POST",
+		"endpoint": "files/upload_response_upload_url",
+		"data": {
+			"url": "great_url_success"
+		}
 	}
 }
