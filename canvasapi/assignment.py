@@ -183,7 +183,7 @@ class Assignment(CanvasObject):
                     and the JSON response from the API.
         :rtype: tuple
         """
-        user_id = 'self' if user is 'self' else obj_or_id(user, "user", (User,))
+        user_id = 'self' if user == 'self' else obj_or_id(user, "user", (User,))
 
         return Uploader(
             self._requester,
