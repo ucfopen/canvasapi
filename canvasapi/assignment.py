@@ -170,7 +170,8 @@ class Assignment(CanvasObject):
         """
         Upload a file to a submission.
 
-        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions/:user_id/files \
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/:user_id/files \
         <https://canvas.instructure.com/doc/api/users.html#method.users.create_file>`_
 
         :param file: The file or path of the file to upload.
