@@ -218,7 +218,9 @@ class TestQuizSubmission(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
-        self.submission = QuizSubmission(self.canvas._Canvas__requester, {
+        self.submission = QuizSubmission(
+            self.canvas._Canvas__requester,
+            {
                 'id': 1,
                 'quiz_id': 1,
                 'user_id': 1,
@@ -226,7 +228,8 @@ class TestQuizSubmission(unittest.TestCase):
                 'attempt': 3,
                 'manually_unlocked': None,
                 'score': 7
-            })
+            }
+        )
 
     # __str__()
     def test__str__(self, m):
