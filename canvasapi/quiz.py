@@ -235,6 +235,31 @@ class Quiz(CanvasObject):
         extension_list = response.json()['quiz_extensions']
         return [QuizExtension(self._requester, extension) for extension in extension_list]
 
+    def get_all_quiz_submissions(self, **kwargs):
+        """
+        Get a list of all submissions for this quiz.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`
+
+        :rtype: list of :class:`canvasapi.quiz.QuizSubmission`
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/{}/quizzes/{}/submissions'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        submission_list = response.json()['quiz_submissions']
+
+        return [QuizSubmission(self._requester, submission) for submission in submission_list]
+
+
+@python_2_unicode_compatible
+class QuizSubmission(CanvasObject):
+
+    def __str__(self):
+        return "{}-{}".format(self.quiz_id, self.user_id)
+
 
 @python_2_unicode_compatible
 class QuizExtension(CanvasObject):
