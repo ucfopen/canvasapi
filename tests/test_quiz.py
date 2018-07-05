@@ -5,7 +5,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
-from canvasapi.quiz import Quiz, QuizQuestion, QuizExtension
+from canvasapi.quiz import Quiz, QuizSubmission, QuizQuestion, QuizExtension
 from canvasapi.quiz_group import QuizGroup
 from tests import settings
 from tests.util import register_uris
@@ -193,6 +193,48 @@ class TestQuiz(unittest.TestCase):
     def test_set_extensions_missing_key(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.quiz.set_extensions([{'extra_time': 60, 'extra_attempts': 3}])
+
+    # get_all_quiz_submissions()
+    def test_get_all_quiz_submissions(self, m):
+        register_uris({'quiz': ['get_all_quiz_submissions']}, m)
+        submission = self.quiz.get_all_quiz_submissions()
+
+        self.assertIsInstance(submission, list)
+        self.assertEqual(len(submission), 2)
+
+        self.assertIsInstance(submission[0], QuizSubmission)
+        self.assertEqual(submission[0].id, 1)
+        self.assertTrue(hasattr(submission[0], 'attempt'))
+        self.assertEqual(submission[0].attempt, 3)
+
+        self.assertIsInstance(submission[1], QuizSubmission)
+        self.assertEqual(submission[1].id, 2)
+        self.assertTrue(hasattr(submission[1], 'score'))
+        self.assertEqual(submission[1].score, 5)
+
+
+@requests_mock.Mocker()
+class TestQuizSubmission(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.submission = QuizSubmission(
+            self.canvas._Canvas__requester,
+            {
+                'id': 1,
+                'quiz_id': 1,
+                'user_id': 1,
+                'submission_id': 1,
+                'attempt': 3,
+                'manually_unlocked': None,
+                'score': 7
+            }
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.submission)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()
