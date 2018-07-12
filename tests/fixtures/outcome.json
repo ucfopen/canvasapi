@@ -160,7 +160,7 @@
             "id": 1,
             "url": "/api/v1/global/outcome_groups/1",
             "parent_outcome_group": null,
-            "context_id": 1,
+            "context_id": null,
             "context_type": null,
             "title": "ROOT",
             "description": null,
