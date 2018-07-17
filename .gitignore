@@ -17,3 +17,6 @@
 /htmlcov/
 \#*#
 .vscode/settings.json
+.idea
+examples/.canvas.txt
+examples/dl
