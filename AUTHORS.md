@@ -28,6 +28,7 @@ Patches and Suggestions
 - John Raible [@rebelaide](https://github.com/rebelaide)
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
 - Nathan Dabu [@nathaned](https://github.com/nathaned)
+- Petar Nikolovski [@petarGitNik](https://github.com/petarGitNik)
 - Philip Carter [@phillyc](https://github.com/phillyc)
 - Ralph Baird [@rmanbaird](https://github.com/rmanbaird)
 - Sigurður Baldursson [@sigurdurb](https://github.com/sigurdurb)
