@@ -120,15 +120,15 @@ class TestAssignment(unittest.TestCase):
         progress = progress.query()
         self.assertTrue(progress.context_type == "Course")
 
-    # upload()
-    def test_upload(self, m):
+    # upload_to_submission()
+    def test_upload_to_submission_self(self, m):
         register_uris({'assignment': ['upload', 'upload_final']}, m)
 
         filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
 
         try:
             with open(filename, 'w+') as file:
-                response = self.assignment.upload(file)
+                response = self.assignment.upload_to_submission(file)
 
             self.assertTrue(response[0])
             self.assertIsInstance(response[1], dict)
@@ -136,9 +136,7 @@ class TestAssignment(unittest.TestCase):
         finally:
             cleanup_file(filename)
 
-            # upload()
-
-    def test_upload_user(self, m):
+    def test_upload_to_submission_user(self, m):
         register_uris({'assignment': ['upload_by_id', 'upload_final']}, m)
 
         filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
@@ -147,7 +145,7 @@ class TestAssignment(unittest.TestCase):
 
         try:
             with open(filename, 'w+') as file:
-                response = self.assignment.upload(file, user_id)
+                response = self.assignment.upload_to_submission(file, user_id)
 
             self.assertTrue(response[0])
             self.assertIsInstance(response[1], dict)

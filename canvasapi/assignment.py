@@ -166,17 +166,18 @@ class Assignment(CanvasObject):
         )
         return Progress(self._requester, response.json())
 
-    def upload(self, file, user='self', **kwargs):
+    def upload_to_submission(self, file, user='self', **kwargs):
         """
         Upload a file to a submission.
 
         :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
             submissions/:user_id/files \
-        <https://canvas.instructure.com/doc/api/users.html#method.users.create_file>`_
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.create_file>`_
 
         :param file: The file or path of the file to upload.
         :type file: file or str
-        :param user: The object or ID of the related user, or 'self' for the current user
+        :param user: The object or ID of the related user, or 'self' for the
+            current user. Defaults to 'self'.
         :type user: :class:`canvasapi.user.User`, int, or str
 
         :returns: True if the file uploaded successfully, False otherwise, \

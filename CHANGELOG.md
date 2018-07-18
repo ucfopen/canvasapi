@@ -5,6 +5,7 @@
 ### New Endpoint Coverage
 
 - Get all quiz submissions (Thanks, [@petarGitNik](https://github.com/petarGitNik))
+- Upload a file to a submission (Thanks, [@MarkLalor](https://github.com/MarkLalor))
 
 ### General
 
