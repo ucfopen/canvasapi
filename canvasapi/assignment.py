@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
@@ -116,7 +116,7 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def submit(self, submission, **kwargs):
+    def submit(self, submission, file=None, **kwargs):
         """
         Makes a submission for an assignment.
 
@@ -125,6 +125,9 @@ class Assignment(CanvasObject):
 
         :param submission: The attributes of the submission.
         :type submission: dict
+        :param file: A file to upload with the submission. (Optional,
+            defaults to `None`. Submission type must be `online_upload`)
+        :type file: file or str
 
         :rtype: :class:`canvasapi.submission.Submission`
         """
@@ -134,6 +137,22 @@ class Assignment(CanvasObject):
             raise RequiredFieldMissing(
                 "Dictionary with key 'submission_type' is required."
             )
+
+        if file:
+            if submission.get('submission_type') != 'online_upload':
+                raise ValueError(
+                    'To upload a file, `submission[\'submission_type\']` must be `online_upload`.'
+                )
+
+            upload_response = self.upload_to_submission(file, **kwargs)
+            if upload_response[0]:
+                kwargs['submission']['file_ids'] = [upload_response[1]['id']]
+            else:
+                raise CanvasException(
+                    'File upload failed; Not submitting.\n Response: {}'.format(
+                        upload_response[1]
+                    )
+                )
 
         response = self._requester.request(
             'POST',

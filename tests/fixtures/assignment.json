@@ -128,7 +128,15 @@
 		"method": "POST",
 		"endpoint": "files/upload_response_upload_url",
 		"data": {
-			"url": "great_url_success"
+			"url": "great_url_success",
+			"id": 1
+		}
+	},
+	"upload_fail": {
+		"method": "POST",
+		"endpoint": "files/upload_response_upload_url",
+		"data": {
+			"no_url": "bad_url_failure"
 		}
 	}
 }
