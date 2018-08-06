@@ -10,7 +10,7 @@ from canvasapi.util import (
     combine_kwargs, get_institution_url, is_multivalued, obj_or_id
 )
 from itertools import chain
-from six import integer_types, iterkeys, itervalues, iteritems
+from six import integer_types, iterkeys, itervalues, iteritems, text_type
 from six.moves import zip
 from tests import settings
 from tests.util import register_uris
@@ -434,7 +434,7 @@ class TestUtil(unittest.TestCase):
     def test_obj_or_id_user_self(self, m):
         user_id = obj_or_id('self', 'user_id', (User,))
 
-        self.assertIsInstance(user_id, str)
+        self.assertIsInstance(user_id, text_type)
         self.assertEqual(user_id, 'self')
 
     def test_obj_or_id_nonuser_self(self, m):
