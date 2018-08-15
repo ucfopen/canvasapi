@@ -115,7 +115,7 @@ Deep Nested Parameters
 List of Nested Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:func:`canvasapi.account.Account.add_grading_standards` has the parameters :code:`grading_scheme_entry[][name]` and `grading_scheme_entry[][value]`, as shown in the `Canvas Docs for Create a New Grading Standard <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.create>`_. Any parameter that takes the form of :code:`foo[][bar]` can be represented by a list of dictionaries.
+:func:`canvasapi.account.Account.add_grading_standards` has the parameters :code:`grading_scheme_entry[][name]` and :code:`grading_scheme_entry[][value]`, as shown in the `Canvas Docs for Create a New Grading Standard <https://canvas.instructure.com/doc/api/grading_standards.html#method.grading_standards_api.create>`_. Any parameter that takes the form of :code:`foo[][bar]` can be represented by a list of dictionaries.
 
 .. code:: python
 
