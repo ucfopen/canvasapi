@@ -122,3 +122,5 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
 
     # Fetch 50 objects per page when making calls that return a PaginatedList
     >>> courses = user.get_courses(per_page=50)
+
+For a more detailed description of how CanvasAPI handles complex keyword arguments, check out the `Keyword Argument Documentation <keyword-args.html>`_.
