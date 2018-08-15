@@ -49,14 +49,14 @@ Nested Parameters
 
 Some endpoints have parameters that look like :code:`foo[bar]`. Typically, there will be multiple parameters with the same prefix in the same endpoint.
 
-For example, :func:`canvasapi.account.Account.create_course` has several parameters that look like :code:`course[foo]`, as shown in the `Canvas Docs for Create a New Course <https://canvas.instructure.com/doc/api/courses.html#method.courses.create>`_. However, square brackets are not a valid character for python variables, so the following would **NOT** work:
+For example, :func:`canvasapi.account.Account.create_course` has several parameters that look like :code:`course[foo]`, as shown in the `Canvas Docs for Create a New Course <https://canvas.instructure.com/doc/api/courses.html#method.courses.create>`_. However, square brackets are not valid characters for Python variables, so the following would **NOT** work:
 
 .. code:: python
 
     # This is not valid, and will not work.
     account.create_course(course[name]='Example Course')
 
-What Canvas is effectively doing with the bracket format is grouping things into objects. To get a similar effect in Python, CanvasAPI is set up to use dictionaries.
+What Canvas is effectively doing with the bracket format is grouping things into objects. To achieve a similar effect in Python, CanvasAPI uses dictionaries.
 
 Given an existing :class:`canvasapi.account.Account` object, :code:`account`, the parameter :code:`course[name]` can be passed like this:
 
@@ -66,7 +66,7 @@ Given an existing :class:`canvasapi.account.Account` object, :code:`account`, th
 
 In the background, CanvasAPI will combine the keys of the dictionary with the keyword of the argument, and ultimately send the correct variable to Canvas.
 
-The benefit of this setup is that multiple parameters with the same prefix can be sent to the same keyword argument. So to pass the :code:`course[name]`, :code:`course[course_code]`, and :code:`course[is_public]` arguments, it would look like this:
+The benefit of this pattern is that multiple parameters with the same prefix can be sent to the same keyword argument. So to pass the :code:`course[name]`, :code:`course[course_code]`, and :code:`course[is_public]` arguments, it would look like this:
 
 .. code:: python
 
@@ -95,12 +95,12 @@ Nested parameters work easily alongside basic (and list) parameters. For example
 Complex Parameters
 ------------------
 
-The three main types of parameters (Basic, List, and Nested) from above cover most types of parameters Canvas expects. However, there are some types that look deceptively more complex than they actually are. Below are some examples of how to handle these in CanvasAPI.
+The three main types of parameters (basic, list, and nested) from above cover most types of parameters Canvas expects. However, there are some types that look deceptively more complex than they actually are. Below are some examples of how to handle these in CanvasAPI.
 
 Deep Nested Parameters
 ~~~~~~~~~~~~~~~~~~~~~~
 
-:func:`canvasapi.user.User.edit` has the parameter :code:`user[avatar][url]`, as shown in the `Canvas Docs for Edit a User <https://canvas.instructure.com/doc/api/users.html#method.users.update>`_. Any parameter that takes the form of :code:`foo[bar1][bar2]` with multiple bracketed sub-parameters follows the same rules as normal nested parameters, but additional level(s) deeper.
+:func:`canvasapi.user.User.edit` has the parameter :code:`user[avatar][url]`, as shown in the `Canvas Docs for Edit a User <https://canvas.instructure.com/doc/api/users.html#method.users.update>`_. Any parameter that takes the form of :code:`foo[bar1][bar2]` with multiple bracketed sub-parameters follows the same rules as normal nested parameters, but with deeper nesting.
 
 .. code:: python
     
