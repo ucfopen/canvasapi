@@ -27,7 +27,7 @@ class Module(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/modules/{}'.format(self.course_id, self.id),
-            **kwargs
+            _kwargs=combine_kwargs(**kwargs)
         )
         module_json = response.json()
         module_json.update({'course_id': self.course_id})
@@ -189,7 +189,7 @@ class ModuleItem(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/modules/{}/items/{}'.format(self.course_id, self.module_id, self.id),
-            **kwargs
+            _kwargs=combine_kwargs(**kwargs)
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
