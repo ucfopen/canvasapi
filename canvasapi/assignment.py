@@ -141,7 +141,7 @@ class Assignment(CanvasObject):
         if file:
             if submission.get('submission_type') != 'online_upload':
                 raise ValueError(
-                    'To upload a file, `submission[\'submission_type\']` must be `online_upload`.'
+                    "To upload a file, `submission['submission_type']` must be `online_upload`."
                 )
 
             upload_response = self.upload_to_submission(file, **kwargs)
@@ -149,9 +149,7 @@ class Assignment(CanvasObject):
                 kwargs['submission']['file_ids'] = [upload_response[1]['id']]
             else:
                 raise CanvasException(
-                    'File upload failed; Not submitting.\n Response: {}'.format(
-                        upload_response[1]
-                    )
+                    'File upload failed. Not submitting.'.format()
                 )
 
         response = self._requester.request(
