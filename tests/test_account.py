@@ -7,7 +7,7 @@ import warnings
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.account import Account, AccountNotification, AccountReport, Role, SSOSettings
+from canvasapi.account import Account, AccountNotification, AccountReport, Admin, Role, SSOSettings
 from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
@@ -915,3 +915,24 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(migration_systems[1].type, "dummy_importer_02")
         self.assertEqual(migration_systems[1].requires_file_upload, False)
         self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
+
+    # get_admins()
+    def test_get_admins(self, m):
+        register_uris({'account': ['get_admins', 'get_admins_page_2']}, m)
+
+        admins = self.account.get_admins()
+        admin_list = [admin for admin in admins]
+
+        self.assertEqual(len(list(admins)), 4)
+
+        self.assertIsInstance(admin_list[0], Admin)
+        self.assertIsInstance(admin_list[1], Admin)
+
+        self.assertTrue(hasattr(admin_list[0], 'id'))
+        self.assertTrue(hasattr(admin_list[1], 'role'))
+        self.assertTrue(hasattr(admin_list[0], 'role_id'))
+        self.assertTrue(hasattr(admin_list[1], 'workflow_state'))
+
+        self.assertEqual(admin_list[1].user['login_id'], 'jdoe')
+        self.assertEqual(admin_list[1].role, 'AccountAdmin')
+        self.assertEqual(admin_list[0].role_id, 2)
