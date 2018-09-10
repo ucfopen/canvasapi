@@ -148,9 +148,7 @@ class Assignment(CanvasObject):
             if upload_response[0]:
                 kwargs['submission']['file_ids'] = [upload_response[1]['id']]
             else:
-                raise CanvasException(
-                    'File upload failed. Not submitting.'.format()
-                )
+                raise CanvasException('File upload failed. Not submitting.')
 
         response = self._requester.request(
             'POST',
