@@ -13,4 +13,5 @@ Contents:
 
    getting-started
    examples
+   keyword-args
    class-reference
