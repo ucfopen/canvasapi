@@ -109,9 +109,15 @@ def obj_or_id(parameter, param_name, object_types):
     :param object_types: tuple
     :rtype: int
     """
+    from canvasapi.user import User
+
     try:
         return int(parameter)
     except (ValueError, TypeError):
+        # Special case where 'self' is a valid ID of a User object
+        if User in object_types and parameter == 'self':
+            return parameter
+
         for obj_type in object_types:
             if isinstance(parameter, obj_type):
                 try:

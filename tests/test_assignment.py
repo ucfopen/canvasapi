@@ -1,16 +1,17 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+import uuid
 
 import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup
-from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
 from tests import settings
-from tests.util import register_uris
+from tests.util import register_uris, cleanup_file
 
 
 @requests_mock.Mocker()
@@ -97,6 +98,46 @@ class TestAssignment(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.assignment.submit({})
 
+    def test_submit_file(self, m):
+        register_uris({'assignment': ['submit', 'upload', 'upload_final']}, m)
+
+        filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
+
+        try:
+            with open(filename, 'w+') as file:
+                sub_type = "online_upload"
+                sub_dict = {'submission_type': sub_type}
+                submission = self.assignment.submit(sub_dict, file)
+
+            self.assertIsInstance(submission, Submission)
+            self.assertTrue(hasattr(submission, 'submission_type'))
+            self.assertEqual(submission.submission_type, sub_type)
+
+        finally:
+            cleanup_file(filename)
+
+    def test_submit_file_wrong_type(self, m):
+        filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
+        sub_type = "online_text_entry"
+        sub_dict = {'submission_type': sub_type}
+
+        with self.assertRaises(ValueError):
+            self.assignment.submit(sub_dict, filename)
+
+    def test_submit_file_upload_failure(self, m):
+        register_uris({'assignment': ['submit', 'upload', 'upload_fail']}, m)
+
+        filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
+
+        try:
+            with open(filename, 'w+') as file:
+                sub_type = "online_upload"
+                sub_dict = {'submission_type': sub_type}
+                with self.assertRaises(CanvasException):
+                    self.assignment.submit(sub_dict, file)
+        finally:
+            cleanup_file(filename)
+
     # __str__()
     def test__str__(self, m):
         string = str(self.assignment)
@@ -118,6 +159,39 @@ class TestAssignment(unittest.TestCase):
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()
         self.assertTrue(progress.context_type == "Course")
+
+    # upload_to_submission()
+    def test_upload_to_submission_self(self, m):
+        register_uris({'assignment': ['upload', 'upload_final']}, m)
+
+        filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
+
+        try:
+            with open(filename, 'w+') as file:
+                response = self.assignment.upload_to_submission(file)
+
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
+
+    def test_upload_to_submission_user(self, m):
+        register_uris({'assignment': ['upload_by_id', 'upload_final']}, m)
+
+        filename = 'testfile_assignment_{}'.format(uuid.uuid4().hex)
+
+        user_id = 1
+
+        try:
+            with open(filename, 'w+') as file:
+                response = self.assignment.upload_to_submission(file, user_id)
+
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
 
 
 @requests_mock.Mocker()

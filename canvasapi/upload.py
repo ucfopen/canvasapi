@@ -100,7 +100,4 @@ class Uploader(object):
         # remove `while(1);` that may appear at the top of a response
         response_json = json.loads(response.text.lstrip('while(1);'))
 
-        if 'url' in response_json:
-            return (True, response_json)
-
-        return (False, response_json)
+        return ('url' in response_json, response_json)
