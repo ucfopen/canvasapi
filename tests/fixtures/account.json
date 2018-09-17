@@ -204,7 +204,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/courses?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -259,7 +259,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/external_tools?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -319,7 +319,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/groups?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/groups?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_groups_context2": {
@@ -403,7 +403,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/reports?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -434,7 +434,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/reports/sis_export_csv?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -467,7 +467,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/sub_accounts?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -510,7 +510,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -543,7 +543,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/users/1/account_notifications?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -644,7 +644,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/roles/?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -720,7 +720,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/logins/?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/logins/?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -957,7 +957,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/accounts/1/authentication_providers/?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/accounts/1/authentication_providers/?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -1173,5 +1173,88 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_admins": {
+		"method": "GET",
+		"endpoint": "accounts/1/admins",
+		"data": [
+			{
+				"id": 7,
+				"role": "SISAdmin",
+				"role_id": 2,
+				"user": {
+					"id": 8,
+					"name": "SIS Import Admin",
+					"sortable_name": "Admin, SIS Import",
+					"short_name": "SIS Import Admin",
+					"sis_user_id": "sisimporter",
+					"integration_id": null,
+					"sis_import_id": null,
+					"login_id": "sisimporter"
+				},
+				"workflow_state": "active"
+			},
+			{
+				"id": 12,
+				"role": "AccountAdmin",
+				"role_id": 1,
+				"user": {
+					"id": 89,
+					"name": "John Doe",
+					"sortable_name": "John Doe",
+					"short_name": "J Doe",
+					"sis_user_id": null,
+					"integration_id": null,
+					"sis_import_id": null,
+					"login_id": "jdoe"
+				},
+				"workflow_state": "active"
+			}
+		],
+		"headers": {
+			"Link": "<https://example.com/api/v1/accounts/1/admins?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_admins_page_2": {
+		"method": "GET",
+		"endpoint": "accounts/1/admins?page=2&per_page=2",
+		"data": [
+			{
+				"id": 13,
+				"role": "LTIAdmin",
+				"role_id": 3,
+				"user": {
+					"id": 23,
+					"name": "LTI Admin",
+					"sortable_name": "Admin, LTI",
+					"short_name": "LTI Admin",
+					"sis_user_id": "ltiadmin",
+					"integration_id": null,
+					"sis_import_id": null,
+					"login_id": "ltiadmin"
+				},
+				"workflow_state": "active"
+			},
+			{
+				"id": 14,
+				"role": "AccountAdmin",
+				"role_id": 1,
+				"user": {
+					"id": 90,
+					"name": "Jane Doe",
+					"sortable_name": "Jane Doe",
+					"short_name": "Jane D",
+					"sis_user_id": null,
+					"integration_id": null,
+					"sis_import_id": null,
+					"login_id": "janedoe"
+				},
+				"workflow_state": "active"
+			}
+		],
+		"status_code": 200
 	}
+
+
 }

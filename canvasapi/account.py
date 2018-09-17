@@ -1430,6 +1430,25 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_admins(self, **kwargs):
+        """
+        Get the paginated list of admins for the current account.
+
+        :calls: `GET /api/v1/accounts/:account_id/admins \
+        <https://canvas.instructure.com/doc/api/admins.html#method.admins.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.account.Admin`
+
+        """
+
+        return PaginatedList(
+            Admin,
+            self._requester,
+            'GET',
+            'accounts/{}/admins'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):
@@ -1457,3 +1476,10 @@ class SSOSettings(CanvasObject):
 
     def __str__(self):  # pragma: no cover
         return"{} ({})".format(self.login_handle_name, self.change_password_url)
+
+
+@python_2_unicode_compatible
+class Admin(CanvasObject):
+
+    def __str__(self):  # pragma: no cover
+        return "{}".format(self.user['login_id'])

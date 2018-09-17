@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+import uuid
 
 import requests_mock
 import warnings
@@ -8,7 +9,7 @@ from canvasapi import Canvas
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from tests import settings
-from tests.util import register_uris
+from tests.util import register_uris, cleanup_file
 
 
 @requests_mock.Mocker()
@@ -88,6 +89,21 @@ class TestFolder(unittest.TestCase):
         name_str = "Test String"
         response = self.folder.create_folder(name=name_str)
         self.assertIsInstance(response, Folder)
+
+    # upload()
+    def test_upload(self, m):
+        register_uris({'folder': ['upload', 'upload_final']}, m)
+
+        filename = 'testfile_course_{}'.format(uuid.uuid4().hex)
+
+        try:
+            with open(filename, 'w+') as file:
+                response = self.folder.upload(file)
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn('url', response[1])
+        finally:
+            cleanup_file(filename)
 
     # update()
     def test_update(self, m):

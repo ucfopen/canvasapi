@@ -342,6 +342,7 @@ class OutcomeGroup(CanvasObject):
             self._requester,
             'GET',
             '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id),
+            {'context_type': self.context_type, 'context_id': self.context_id},
             _kwargs=combine_kwargs(**kwargs)
         )
 

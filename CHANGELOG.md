@@ -1,5 +1,25 @@
 # Change Log
 
+## [0.11.0] - 2018-09-17
+
+### New Endpoint Coverage
+
+- Get all quiz submissions (Thanks, [@petarGitNik](https://github.com/petarGitNik))
+- Upload a file to a submission (Thanks, [@MarkLalor](https://github.com/MarkLalor))
+- Upload a file to a folder (Thanks, [@elec3647](https://github.com/elec3647))
+- Get Admins in an account (Thanks, [@kensler](https://github.com/kensler))
+
+### General
+
+- Added support for Python 3.7
+- Added a warning when using HTTP for the base url instead of HTTPS. This should help prevent some confusing behavior that Canvas exhibits when making HTTP requests to an HTTPS-enabled instance.
+- Added more detailed [documentation for passing complex parameters as keyword arguments](https://canvasapi.readthedocs.io/en/latest/keyword-args.html).
+
+### Bugfixes
+
+- Fixed an issue where `Outcome.get_subgroups()` didn't have sufficient context to call other methods.
+- Fixed improper passing of keyword arguments when editing a Module (Thanks, [@phaustin](https://github.com/phaustin))
+
 ## [0.10.0] - 2018-06-01
 
 ### New Endpoint Coverage
@@ -17,7 +37,7 @@
 
 ### Deprecation Warnings
 
-- All methods starting with `list_` have been deprecated. Each has been replaced with a corresponding method starting with `list_`. For example, `Course.list_groups()` is now `Course.get_groups()`. The `list_` methods will be removed in a future release. (Thanks [@qwertynerd97](https://github.com/qwertynerd97) for doing the bulk of the grunt work.)
+- All methods starting with `list_` have been deprecated. Each has been replaced with a corresponding method starting with `get_`. For example, `Course.list_groups()` is now `Course.get_groups()`. The `list_` methods will be removed in a future release. (Thanks [@qwertynerd97](https://github.com/qwertynerd97) for doing the bulk of the grunt work.)
 - `Course.update_tab()` is now deprecated. Use `Tab.update()` instead.
 
 ### Bugfixes
@@ -255,6 +275,7 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.11.0]: https://github.com/ucfopen/canvasapi/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/ucfopen/canvasapi/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/ucfopen/canvasapi/compare/v0.8.2...v0.9.0
 [0.8.2]: https://github.com/ucfopen/canvasapi/compare/v0.8.1...v0.8.2

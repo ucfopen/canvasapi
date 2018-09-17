@@ -39,6 +39,13 @@ class Canvas(object):
                 "Rewriting `base_url` to {}".format(new_url),
                 DeprecationWarning
             )
+
+        if 'http://' in base_url:
+            warnings.warn(
+                "Canvas may respond unexpectedly when making requests to HTTP "
+                "URLs. If possible, please use HTTPS.",
+                UserWarning
+            )
         base_url = new_url + '/api/v1/'
 
         self.__requester = Requester(base_url, access_token)

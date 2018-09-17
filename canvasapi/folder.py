@@ -7,6 +7,7 @@ from six import python_2_unicode_compatible
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.upload import Uploader
 
 
 @python_2_unicode_compatible
@@ -131,6 +132,27 @@ class Folder(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
+
+    def upload(self, file, **kwargs):
+        """
+        Upload a file to this folder.
+
+        :calls: `POST /api/v1/folders/:folder_id/files \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.create_file>`_
+
+        :param file: The file or path of the file to upload.
+        :type file: file or str
+        :returns: True if the file uploaded successfully, False otherwise, \
+                    and the JSON response from the API.
+        :rtype: tuple
+        """
+        my_path = 'folders/{}/files'.format(self.id)
+        return Uploader(
+            self._requester,
+            my_path,
+            file,
+            **kwargs
+        ).start()
 
     def update(self, **kwargs):
         """

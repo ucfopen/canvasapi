@@ -31,7 +31,7 @@ Create a merge request from `develop` to `master`, and merge.
 
 Tag the merge commit with the version number: `git tag -s v0.0.0  -m "Release version 0.0.0" abc1234`
 
-Push the tag: `git push origin v0.0.0`
+Push the tag: `git push upstream v0.0.0`
 
 Run `twine upload dist/canvasapi-0.0.0.tar.gz` to upload to PyPI.
 

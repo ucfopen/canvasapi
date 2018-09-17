@@ -13,7 +13,7 @@
 		"data": {
 			"id": 1,
 			"display_name": "My Blog",
-			"url": "http://example.com/myblog.rss"
+			"url": "https://example.com/myblog.rss"
 		},
 		"status_code": 200
 	},
@@ -62,7 +62,7 @@
 		"data": {
 			"id": 1,
 			"display_name": "My Blog",
-			"url": "http://example.com/myblog.rss"
+			"url": "https://example.com/myblog.rss"
 		},
 		"status_code": 200
 	},
@@ -96,7 +96,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_all_assignments2": {
@@ -199,7 +199,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/external_tools?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/external_tools?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -262,7 +262,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -351,7 +351,7 @@
             }
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/sections?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/sections?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -405,7 +405,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/search_users?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -443,7 +443,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/list_enrollments?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_enrollments_2": {
@@ -472,12 +472,12 @@
 			{
 				"id": 1,
 				"display_name": "My Blog",
-				"url": "http://example.com/myblog.rss"
+				"url": "https://example.com/myblog.rss"
 			},
 			{
 				"id": 2,
 				"display_name": "My Blog 2",
-				"url": "http://example.com/myblog2.rss"
+				"url": "https://example.com/myblog2.rss"
 			}
 		],
 		"status_code": 200
@@ -490,18 +490,18 @@
 				"id": 1,
 				"size": 2939,
 				"display_name": "File1.txt",
-				"url": "http://example.com/file_download"
+				"url": "https://example.com/file_download"
 			},
 			{
 				"id": 2,
 				"size": 18380,
 				"display_name": "File_2.png",
-				"url": "http://example.com/file_download2"
+				"url": "https://example.com/file_download2"
 			}
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/files?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/files?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_course_files2": {
@@ -512,13 +512,13 @@
 				"id": 3,
 				"display_name": "File 3.jpg",
 				"size": 1298,
-				"url": "http://example.com/file_download3"
+				"url": "https://example.com/file_download3"
 			},
 			{
 				"id": 4,
 				"display_name": "File 4.docx",
 				"size": 88920,
-				"url": "http://example.com/file_download4"
+				"url": "https://example.com/file_download4"
 			}
 		],
 		"status_code": 200
@@ -559,7 +559,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/list_quizzes?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_quizzes2": {
@@ -603,7 +603,7 @@
 			}
 		],
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/?page=2&per_page=2>; rel=\"next\""
 		},
 		"status_code": 200
 	},
@@ -741,17 +741,17 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/list_modules?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"upload": {
 		"method": "POST",
 		"endpoint": "courses/1/files",
 		"data": {
-			"upload_url": "http://example.com/api/v1/files/upload_response_upload_url",
+			"upload_url": "https://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
-				"some_param": "param123",
-				"a_different_param": "param456"
+				"some_path": "param123",
+				"some_file": "param456"
 			}
 		}
 	},
@@ -838,7 +838,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/get_pages?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/get_pages?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"get_pages2": {
@@ -922,7 +922,7 @@
 		],
 		"status_code": 200,
 		"headers": {
-			"Link": "<http://example.com/api/v1/courses/1/groups?page=2&per_page=2>; rel=\"next\""
+			"Link": "<https://example.com/api/v1/courses/1/groups?page=2&per_page=2>; rel=\"next\""
 		}
 	},
 	"list_groups_context2": {
@@ -1259,14 +1259,14 @@
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
 				"submission_type": "online_upload"
 			},
 			{
 				"id": 2,
 				"assignments_id": 1,
 				"user_id": 2,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/2",
+				"html_url": "https://example.com/courses/1/assignments/1/submissions/2",
 				"submission_type": "online_upload"
 			}
 		],
@@ -1307,7 +1307,7 @@
 				"id": 1,
 				"assignments_id": 1,
 				"user_id": 1,
-				"html_url": "http://example.com/courses/1/assignments/1/submissions/1",
+				"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
 				"submission_type": "online_upload",
 				"excused": true
 		},

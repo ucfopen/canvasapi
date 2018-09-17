@@ -69,7 +69,7 @@
             }
         ],
         "headers": {
-            "Link": "<http://example.com/api/v1/accounts/1/outcome_groups?page=2&per_page=2>; rel=\"next\""
+            "Link": "<https://example.com/api/v1/accounts/1/outcome_groups?page=2&per_page=2>; rel=\"next\""
         },
         "status_code": 200
     },
@@ -160,7 +160,7 @@
             "id": 1,
             "url": "/api/v1/global/outcome_groups/1",
             "parent_outcome_group": null,
-            "context_id": 1,
+            "context_id": null,
             "context_type": null,
             "title": "ROOT",
             "description": null,
@@ -259,7 +259,7 @@
             }
         ],
         "headers": {
-            "Link": "<http://example.com/api/v1/courses/1/outcome_groups?page=2&per_page=2>; rel=\"next\""
+            "Link": "<https://example.com/api/v1/courses/1/outcome_groups?page=2&per_page=2>; rel=\"next\""
         },
         "status_code": 200
     },

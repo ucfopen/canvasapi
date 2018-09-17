@@ -10,7 +10,7 @@ from canvasapi.util import (
     combine_kwargs, get_institution_url, is_multivalued, obj_or_id
 )
 from itertools import chain
-from six import integer_types, iterkeys, itervalues, iteritems
+from six import integer_types, iterkeys, itervalues, iteritems, text_type
 from six.moves import zip
 from tests import settings
 from tests.util import register_uris
@@ -420,6 +420,26 @@ class TestUtil(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             obj_or_id(nick, 'nickname_id', (CourseNickname,))
+
+    def test_obj_or_id_multiple_objs(self, m):
+        register_uris({'user': ['get_by_id']}, m)
+
+        user = self.canvas.get_user(1)
+
+        user_id = obj_or_id(user, 'user_id', (CourseNickname, User))
+
+        self.assertIsInstance(user_id, int)
+        self.assertEqual(user_id, 1)
+
+    def test_obj_or_id_user_self(self, m):
+        user_id = obj_or_id('self', 'user_id', (User,))
+
+        self.assertIsInstance(user_id, text_type)
+        self.assertEqual(user_id, 'self')
+
+    def test_obj_or_id_nonuser_self(self, m):
+        with self.assertRaises(TypeError):
+            obj_or_id('self', 'user_id', (CourseNickname,))
 
     # get_institution_url()
     def test_get_institution_url(self, m):
