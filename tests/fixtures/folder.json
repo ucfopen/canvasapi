@@ -1,117 +1,135 @@
 {
-    "create_folder": {
-        "method": "POST",
-        "endpoint": "folders/1/folders",
-        "data": {
-            "id": 2,
-            "name": "Test String",
-            "locked": false,
-            "hidden": false
-        },
-        "status_code": 200
+  "create_folder": {
+    "method": "POST",
+    "endpoint": "folders/1/folders",
+    "data": {
+      "id": 2,
+      "name": "Test String",
+      "locked": false,
+      "hidden": false
     },
-    "get_by_id": {
-        "method": "GET",
-        "endpoint": "folders/1",
-        "data": {
-            "id": 1,
-            "files_count": 10,
-            "folders_count": 2,
-            "name": "Folder 1",
-            "full_name": "course_files/Folder 1"
-        },
-        "status_code": 200
-    },
-    "list_folder_files": {
-        "method": "GET",
-        "endpoint": "folders/1/files",
-        "data": [
-            {
-                "id": 1,
-                "size": 2939,
-                "display_name": "File1.txt"
-            },
-            {
-                "id": 2,
-                "size": 18380,
-                "display_name": "File_2.png"
-            }
-        ],
-        "status_code": 200,
-        "headers": {
-            "Link": "<https://example.com/api/v1/folders/1/files?page=2&per_page=2>; rel=\"next\""
-        }
-    },
-    "list_folder_files2": {
-        "method": "GET",
-        "endpoint": "folders/1/files?page=2&per_page=2",
-        "data": [
-            {
-                "id": 3,
-                "display_name": "File 3.jpg",
-                "size": 1298
-            },
-            {
-                "id": 4,
-                "display_name": "File 4.docx",
-                "size": 88920
-            }
-        ],
-        "status_code": 200
-    },
-    "delete_folder": {
-        "method": "DELETE",
-        "endpoint": "folders/1",
-        "data": {
-            "id": 1,
-            "files_count": 0,
-            "folders_count": 0,
-            "name": "Folder 1",
-            "full_name": "course_files/Folder 1"
-        },
-        "status_code": 200
-    },
-    "list_folders": {
-        "method": "GET",
-        "endpoint": "folders/1/folders",
-        "data": [
-            {
-                "id": 2,
-                "files_count": 0,
-                "folders_count": 0,
-                "name": "Folder 2",
-                "full_name": "course_files/Folder 2"
-            },
-            {
-                "id": 3,
-                "files_count": 0,
-                "folders_count": 0,
-                "name": "Folder 3",
-                "full_name": "course_files/Folder 3"
-            }
-        ],
-        "status_code": 200
-    },
-    "update": {
-        "method": "PUT",
-        "endpoint": "folders/1",
-        "data": {
-            "id": 1,
-            "files_count": 0,
-            "folders_count": 0,
-            "name": "New Name",
-            "full_name": "course_files/New Name"
-        },
-        "status_code": 200
-    },
-    "copy_file": {
-        "method": "POST",
-        "endpoint": "folders/1/copy_file",
-        "data": {
-            "id": 1,
-            "display_name": "Dummy File-1",
-            "size": 1298
-        },
-        "status_code": 200
+    "status_code": 200
+  },
+  "upload": {
+    "method": "POST",
+    "endpoint": "folders/1/files",
+    "data": {
+      "upload_url": "https://example.com/api/v1/files/upload_response_upload_url",
+      "upload_params": {
+        "some_param": "param123",
+        "a_different_param": "param456"
+      }
     }
+  },
+  "upload_final": {
+    "method": "POST",
+    "endpoint": "files/upload_response_upload_url",
+    "data": {
+      "url": "great_url_success"
+    }
+  },
+  "get_by_id": {
+    "method": "GET",
+    "endpoint": "folders/1",
+    "data": {
+      "id": 1,
+      "files_count": 10,
+      "folders_count": 2,
+      "name": "Folder 1",
+      "full_name": "course_files/Folder 1"
+    },
+    "status_code": 200
+  },
+  "list_folder_files": {
+    "method": "GET",
+    "endpoint": "folders/1/files",
+    "data": [
+      {
+        "id": 1,
+        "size": 2939,
+        "display_name": "File1.txt"
+      },
+      {
+        "id": 2,
+        "size": 18380,
+        "display_name": "File_2.png"
+      }
+    ],
+    "status_code": 200,
+    "headers": {
+      "Link": "<https://example.com/api/v1/folders/1/files?page=2&per_page=2>; rel=\"next\""
+    }
+  },
+  "list_folder_files2": {
+    "method": "GET",
+    "endpoint": "folders/1/files?page=2&per_page=2",
+    "data": [
+      {
+        "id": 3,
+        "display_name": "File 3.jpg",
+        "size": 1298
+      },
+      {
+        "id": 4,
+        "display_name": "File 4.docx",
+        "size": 88920
+      }
+    ],
+    "status_code": 200
+  },
+  "delete_folder": {
+    "method": "DELETE",
+    "endpoint": "folders/1",
+    "data": {
+      "id": 1,
+      "files_count": 0,
+      "folders_count": 0,
+      "name": "Folder 1",
+      "full_name": "course_files/Folder 1"
+    },
+    "status_code": 200
+  },
+  "list_folders": {
+    "method": "GET",
+    "endpoint": "folders/1/folders",
+    "data": [
+      {
+        "id": 2,
+        "files_count": 0,
+        "folders_count": 0,
+        "name": "Folder 2",
+        "full_name": "course_files/Folder 2"
+      },
+      {
+        "id": 3,
+        "files_count": 0,
+        "folders_count": 0,
+        "name": "Folder 3",
+        "full_name": "course_files/Folder 3"
+      }
+    ],
+    "status_code": 200
+  },
+  "update": {
+    "method": "PUT",
+    "endpoint": "folders/1",
+    "data": {
+      "id": 1,
+      "files_count": 0,
+      "folders_count": 0,
+      "name": "New Name",
+      "full_name": "course_files/New Name"
+    },
+    "status_code": 200
+  },
+  "copy_file": {
+    "method": "POST",
+    "endpoint": "folders/1/copy_file",
+    "data": {
+      "id": 1,
+      "display_name": "Dummy File-1",
+      "size": 1298
+    },
+    "status_code": 200
+  }
 }

@@ -750,8 +750,8 @@
 		"data": {
 			"upload_url": "https://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
-				"some_param": "param123",
-				"a_different_param": "param456"
+				"some_path": "param123",
+				"some_file": "param456"
 			}
 		}
 	},
