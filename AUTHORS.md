@@ -27,6 +27,7 @@ Patches and Suggestions
 - Jonathan Guilbe [@JonGuilbe](https://github.com/JonGuilbe)
 - John Raible [@rebelaide](https://github.com/rebelaide)
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
+- Markus [@elec3647](https://github.com/elec3647)
 - Nathan Dabu [@nathaned](https://github.com/nathaned)
 - Petar Nikolovski [@petarGitNik](https://github.com/petarGitNik)
 - Philip Carter [@phillyc](https://github.com/phillyc)
