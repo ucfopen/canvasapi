@@ -7,6 +7,7 @@
 - Get all quiz submissions (Thanks, [@petarGitNik](https://github.com/petarGitNik))
 - Upload a file to a submission (Thanks, [@MarkLalor](https://github.com/MarkLalor))
 - Upload a file to a folder (Thanks, [@elec3647](https://github.com/elec3647))
+- Get Admins in an account (Thanks, [@kensler](https://github.com/kensler))
 
 ### General
 
@@ -17,6 +18,7 @@
 ### Bugfixes
 
 - Fixed an issue where `Outcome.get_subgroups()` didn't have sufficient context to call other methods.
+- Fixed improper passing of keyword arguments when editing a Module (Thanks, [@phaustin](https://github.com/phaustin))
 
 ## [0.10.0] - 2018-06-01
 
