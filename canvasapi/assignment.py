@@ -3,10 +3,12 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
+from canvasapi.upload import Uploader
+from canvasapi.user import User
 from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
 
@@ -83,8 +85,6 @@ class Assignment(CanvasObject):
 
         :rtype: :class:`canvasapi.submission.Submission`
         """
-        from canvasapi.user import User
-
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
@@ -116,7 +116,7 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def submit(self, submission, **kwargs):
+    def submit(self, submission, file=None, **kwargs):
         """
         Makes a submission for an assignment.
 
@@ -125,6 +125,9 @@ class Assignment(CanvasObject):
 
         :param submission: The attributes of the submission.
         :type submission: dict
+        :param file: A file to upload with the submission. (Optional,
+            defaults to `None`. Submission type must be `online_upload`)
+        :type file: file or str
 
         :rtype: :class:`canvasapi.submission.Submission`
         """
@@ -134,6 +137,18 @@ class Assignment(CanvasObject):
             raise RequiredFieldMissing(
                 "Dictionary with key 'submission_type' is required."
             )
+
+        if file:
+            if submission.get('submission_type') != 'online_upload':
+                raise ValueError(
+                    "To upload a file, `submission['submission_type']` must be `online_upload`."
+                )
+
+            upload_response = self.upload_to_submission(file, **kwargs)
+            if upload_response[0]:
+                kwargs['submission']['file_ids'] = [upload_response[1]['id']]
+            else:
+                raise CanvasException('File upload failed. Not submitting.')
 
         response = self._requester.request(
             'POST',
@@ -165,6 +180,37 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Progress(self._requester, response.json())
+
+    def upload_to_submission(self, file, user='self', **kwargs):
+        """
+        Upload a file to a submission.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/:user_id/files \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.create_file>`_
+
+        :param file: The file or path of the file to upload.
+        :type file: file or str
+        :param user: The object or ID of the related user, or 'self' for the
+            current user. Defaults to 'self'.
+        :type user: :class:`canvasapi.user.User`, int, or str
+
+        :returns: True if the file uploaded successfully, False otherwise, \
+                    and the JSON response from the API.
+        :rtype: tuple
+        """
+        user_id = obj_or_id(user, "user", (User,))
+
+        return Uploader(
+            self._requester,
+            'courses/{}/assignments/{}/submissions/{}/files'.format(
+                self.course_id,
+                self.id,
+                user_id
+            ),
+            file,
+            **kwargs
+        ).start()
 
 
 @python_2_unicode_compatible

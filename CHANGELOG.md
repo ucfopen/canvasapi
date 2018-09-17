@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Get all quiz submissions (Thanks, [@petarGitNik](https://github.com/petarGitNik))
+- Upload a file to a submission (Thanks, [@MarkLalor](https://github.com/MarkLalor))
+
 ### General
 
 - Added a warning when using HTTP for the base url instead of HTTPS. This should help prevent some confusing behavior that Canvas exhibits when making HTTP requests to an HTTPS-enabled instance.
