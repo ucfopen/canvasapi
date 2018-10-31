@@ -73,6 +73,50 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_override(self, override, **kwargs):
+        """
+        Get the single override with the given override id.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.show>`_
+
+        :param override: The obejct or ID of the override to get
+        :type override: :class:`canvasapi.assignment.AssignmentOverride` or int
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        override_id = obj_or_id(override, "override", (AssignmentOverride,))
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/assignments/{}/overrides/{}'.format(
+                self.course_id,
+                self.id,
+                override_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return AssignmentOverride(self._requester, response.json())
+
+    def get_overrides(self, **kwargs):
+        """
+        Get a paginated list of overrides for this assignment that target
+            sections/groups/students visible to the current user.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        return PaginatedList(
+            AssignmentOverride,
+            self._requester,
+            'GET',
+            'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
     def get_submission(self, user, **kwargs):
         """
         Get a single submission, based on user id.
@@ -254,3 +298,10 @@ class AssignmentGroup(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return AssignmentGroup(self._requester, response.json())
+
+
+@python_2_unicode_compatible
+class AssignmentOverride(CanvasObject):
+
+    def __str__(self):
+        return "{} ({})".format(self.name, self.id)

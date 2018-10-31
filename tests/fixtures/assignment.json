@@ -73,6 +73,19 @@
 		],
 		"status_code": 200
 	},
+	"get_assignment_override": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/overrides/1",
+		"data": {
+			"id": 1,
+			"assignment_id": 1,
+			"student_ids": [1],
+			"group_id": 1,
+			"course_section_id": 1,
+			"title": "Assignment Override 1",
+		},
+		"status_code": 200
+	},
 	"submit": {
 		"method": "POST",
 		"endpoint": "courses/1/assignments/1/submissions",

@@ -236,3 +236,25 @@ class TestAssignmentGroup(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.assignment_group)
         self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestAssignmentOverride(unittest.TestCase):
+
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris({
+                'course': ['get_by_id', 'get_assignment_by_id'],
+                'assignment': ['get_assignment_override'],
+            }, m)
+
+            self.course = self.canvas.get_course(1)
+            self.assignment = self.course.get_assignment(1)
+            self.assignment_override = self.assignment.get_override(1)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.assignment_override)
+        self.assertIsInstance(string, str)
