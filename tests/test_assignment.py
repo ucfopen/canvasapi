@@ -295,3 +295,17 @@ class TestAssignmentOverride(unittest.TestCase):
         string = str(self.assignment_override)
         self.assertIsInstance(string, str)
         self.assertEqual(string, 'Assignment Override 1 (1)')
+
+    # edit()
+    def test_edit(self, m):
+        register_uris({
+            'assignment': ['edit_override'],
+        }, m)
+        edited = self.assignment_override.edit(assignment_override={
+            'title': 'New Title',
+            'student_ids': self.assignment_override.student_ids
+        })
+
+        self.assertEqual(edited, self.assignment_override)
+        self.assertIsInstance(self.assignment_override, AssignmentOverride)
+        self.assertEqual(edited.title, 'New Title')

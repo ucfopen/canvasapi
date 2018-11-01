@@ -33,7 +33,9 @@ class Assignment(CanvasObject):
             'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return AssignmentOverride(self._requester, response.json())
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+        return AssignmentOverride(self._requester, response_json)
 
     def delete(self, **kwargs):
         """
@@ -86,6 +88,7 @@ class Assignment(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/assignments/{}/gradeable_students'.format(self.course_id, self.id),
+            {'course_id': self.course_id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -112,7 +115,9 @@ class Assignment(CanvasObject):
             ),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return AssignmentOverride(self._requester, response.json())
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+        return AssignmentOverride(self._requester, response_json)
 
     def get_overrides(self, **kwargs):
         """
@@ -130,6 +135,7 @@ class Assignment(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
+            {'course_id': self.course_id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -321,3 +327,30 @@ class AssignmentOverride(CanvasObject):
 
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
+
+    def edit(self, **kwargs):
+        """
+        Update this assignment override.
+
+        Note: All current overridden values must be supplied if they are to be retained.
+
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.update>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/{}/assignments/{}/overrides/{}'.format(
+                self.course_id,
+                self.assignment_id,
+                self.id
+            )
+        )
+
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+        if 'title' in response_json:
+            super(AssignmentOverride, self).set_attributes(response_json)
+
+        return self
