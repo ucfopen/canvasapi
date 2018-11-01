@@ -328,6 +328,30 @@ class AssignmentOverride(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
+    def delete(self, **kwargs):
+        """
+        Delete this assignment override.
+
+        :calls: `DELETE /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.destroy>`_
+
+        :returns: The previous content of the now-deleted assignment override.
+        :rtype: :class:`canvasapi.assignment.AssignmentGroup`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'courses/{}/assignments/{}/overrides/{}'.format(
+                self.course_id,
+                self.assignment_id,
+                self.id
+            )
+        )
+
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+
+        return AssignmentOverride(self._requester, response_json)
+
     def edit(self, **kwargs):
         """
         Update this assignment override.

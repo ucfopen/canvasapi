@@ -41,6 +41,19 @@
 		},
 		"status_code": 200
 	},
+	"delete_override": {
+		"method": "DELETE",
+		"endpoint": "courses/1/assignments/1/overrides/1",
+		"data": {
+			"id": 1,
+			"assignment_id": 1,
+			"student_ids": [1],
+			"group_id": 1,
+			"course_section_id": 1,
+			"title": "Assignment Override 1"
+		},
+		"status_code": 200
+	},
 	"edit_assignment": {
 		"method": "PUT",
 		"endpoint": "courses/1/assignments/1",

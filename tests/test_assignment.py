@@ -296,11 +296,18 @@ class TestAssignmentOverride(unittest.TestCase):
         self.assertIsInstance(string, str)
         self.assertEqual(string, 'Assignment Override 1 (1)')
 
+    # delete()
+    def test_delete(self, m):
+        register_uris({'assignment': ['delete_override']}, m)
+
+        deleted = self.assignment_override.delete()
+        self.assertIsInstance(deleted, AssignmentOverride)
+        self.assertEqual(deleted.id, self.assignment_override.id)
+
     # edit()
     def test_edit(self, m):
-        register_uris({
-            'assignment': ['edit_override'],
-        }, m)
+        register_uris({'assignment': ['edit_override']}, m)
+
         edited = self.assignment_override.edit(assignment_override={
             'title': 'New Title',
             'student_ids': self.assignment_override.student_ids
