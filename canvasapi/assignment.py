@@ -19,6 +19,22 @@ class Assignment(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
+    def create_override(self, **kwargs):
+        """
+        Create an override for this assignment.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/overrides
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.create>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return AssignmentOverride(self._requester, response.json())
+
     def delete(self, **kwargs):
         """
         Delete this assignment.

@@ -9,6 +9,17 @@
 		},
 		"status_code": 200
 	},
+	"create_override": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/overrides",
+		"data": {
+			"id": 10,
+			"assignment_id": 1,
+			"student_ids": [1, 2, 3],
+			"title": "New Assignment Override"
+		},
+		"status_code": 200
+	},
 	"delete_assignment": {
 		"method": "DELETE",
 		"endpoint": "courses/1/assignments/1",

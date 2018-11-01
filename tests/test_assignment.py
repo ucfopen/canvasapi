@@ -26,6 +26,20 @@ class TestAssignment(unittest.TestCase):
             self.course = self.canvas.get_course(1)
             self.assignment = self.course.get_assignment(1)
 
+    # create_override()
+    def test_create_override(self, m):
+        register_uris({'assignment': ['create_override']}, m)
+
+        override = self.assignment.create_override(
+            assignment_override={
+                'student_ids': [1, 2, 3],
+                'title': 'New Assignment Override'
+            }
+        )
+
+        self.assertIsInstance(override, AssignmentOverride)
+        self.assertEqual(override.title, 'New Assignment Override')
+
     # delete()
     def test_delete_assignments(self, m):
         register_uris({'assignment': ['delete_assignment']}, m)
