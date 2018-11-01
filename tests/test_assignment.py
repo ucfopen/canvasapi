@@ -5,7 +5,7 @@ import uuid
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.assignment import Assignment, AssignmentGroup
+from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
@@ -54,6 +54,28 @@ class TestAssignment(unittest.TestCase):
 
         self.assertEqual(len(student_list), 2)
         self.assertIsInstance(student_list[0], UserDisplay)
+
+    # get_override()
+    def test_get_override(self, m):
+        register_uris({'assignment': ['get_assignment_override']}, m)
+
+        override = self.assignment.get_override(1)
+
+        self.assertIsInstance(override, AssignmentOverride)
+
+    # get_overrides()
+    def test_get_overrides(self, m):
+        register_uris({'assignment': [
+            'list_assignment_overrides',
+            'list_assignment_overrides_p2'
+        ]}, m)
+
+        overrides = self.assignment.get_overrides()
+        override_list = [override for override in overrides]
+
+        self.assertEqual(len(override_list), 4)
+        self.assertIsInstance(override_list[0], AssignmentOverride)
+        self.assertIsInstance(override_list[3], AssignmentOverride)
 
     # get_submission()
     def test_get_submission(self, m):
@@ -258,3 +280,4 @@ class TestAssignmentOverride(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.assignment_override)
         self.assertIsInstance(string, str)
+        self.assertEqual(string, 'Assignment Override 1 (1)')

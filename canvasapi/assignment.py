@@ -304,4 +304,4 @@ class AssignmentGroup(CanvasObject):
 class AssignmentOverride(CanvasObject):
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.id)
+        return "{} ({})".format(self.title, self.id)

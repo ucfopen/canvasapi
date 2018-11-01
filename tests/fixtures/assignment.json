@@ -73,6 +73,55 @@
 		],
 		"status_code": 200
 	},
+	"list_assignment_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/overrides",
+		"data": [
+			{
+				"id": 1,
+				"assignment_id": 1,
+				"student_ids": [1],
+				"group_id": 1,
+				"course_section_id": 1,
+				"title": "Assignment Override 1"
+			},
+			{
+				"id": 2,
+				"assignment_id": 1,
+				"student_ids": [2, 3],
+				"group_id": 1,
+				"course_section_id": 1,
+				"title": "Assignment Override 2"
+			}
+		],
+		"headers": {
+			"Link": "<https://example.com/api/v1/courses/1/assignments/1/overrides?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_assignment_overrides_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/overrides?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"assignment_id": 1,
+				"student_ids": [4, 5, 6],
+				"group_id": 1,
+				"course_section_id": 1,
+				"title": "Assignment Override 3"
+			},
+			{
+				"id": 2,
+				"assignment_id": 1,
+				"student_ids": [7],
+				"group_id": 1,
+				"course_section_id": 1,
+				"title": "Assignment Override 4"
+			}
+		],
+		"status_code": 200
+	},
 	"get_assignment_override": {
 		"method": "GET",
 		"endpoint": "courses/1/assignments/1/overrides/1",
@@ -82,7 +131,7 @@
 			"student_ids": [1],
 			"group_id": 1,
 			"course_section_id": 1,
-			"title": "Assignment Override 1",
+			"title": "Assignment Override 1"
 		},
 		"status_code": 200
 	},
