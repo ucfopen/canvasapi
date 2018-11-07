@@ -1,4 +1,71 @@
 {
+	"batch_create_assignment_overrides": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/overrides",
+		"data": [
+			{
+				"id": 10,
+				"assignment_id": 1,
+				"student_ids": [1, 2, 3],
+				"title": "New Assignment Override"
+			},
+			{
+				"id": 11,
+				"assignment_id": 2,
+				"student_ids": [1, 2, 3],
+				"title": "New Assignment Override 2"
+			}
+		],
+		"status_code": 200
+	},
+	"batch_get_assignment_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/overrides",
+		"data": [{
+			"id": 1,
+			"assignment_id": 1,
+			"student_ids": [1],
+			"group_id": 1,
+			"course_section_id": 1,
+			"title": "Assignment Override 1"
+		}],
+		"headers": {
+			"Link": "<https://example.com/api/v1/courses/1/assignments/overrides?page=2&per_page=1>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"batch_get_assignment_overrides_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/overrides?page=2&per_page=1",
+		"data": [{
+			"id": 20,
+			"assignment_id": 2,
+			"student_ids": [1],
+			"group_id": 1,
+			"course_section_id": 1,
+			"title": "Assignment Override 1"
+		}],
+		"status_code": 200
+	},
+	"batch_update_assignment_overrides": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/overrides",
+		"data": [
+			{
+				"id": 10,
+				"assignment_id": 1,
+				"student_ids": [4, 5, 6],
+				"title": "Updated Assignment Override"
+			},
+			{
+				"id": 11,
+				"assignment_id": 2,
+				"student_ids": [6, 7],
+				"title": "Updated Assignment Override 2"
+			}
+		],
+		"status_code": 200
+	},
 	"create_assignment_group": {
 		"method": "POST",
 		"endpoint": "courses/1/assignment_groups",
