@@ -8,6 +8,7 @@ import requests_mock
 from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
+from canvasapi.assignment import AssignmentOverride
 from canvasapi.group import Group, GroupMembership, GroupCategory
 from canvasapi.course import Page
 from canvasapi.discussion_topic import DiscussionTopic
@@ -590,6 +591,15 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(migration_systems[1].type, "dummy_importer_02")
         self.assertEqual(migration_systems[1].requires_file_upload, False)
         self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
+
+    # get_assignment_override
+    def test_get_assignment_override(self, m):
+        register_uris({'assignment': ['override_group_alias']}, m)
+
+        override = self.group.get_assignment_override(1)
+
+        self.assertIsInstance(override, AssignmentOverride)
+        self.assertEqual(override.group_id, self.group.id)
 
 
 @requests_mock.Mocker()

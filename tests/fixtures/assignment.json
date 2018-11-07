@@ -236,6 +236,16 @@
 		},
 		"status_code": 200
 	},
+	"override_group_alias": {
+		"method": "GET",
+		"endpoint": "groups/1/assignments/1/override",
+		"data": {
+			"id": 30,
+			"assignment_id": 1,
+			"group_id": 1,
+			"title": "Group Assignment Override"
+		}
+	},
 	"submit": {
 		"method": "POST",
 		"endpoint": "courses/1/assignments/1/submissions",

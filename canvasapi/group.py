@@ -904,6 +904,31 @@ class Group(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_assignment_override(self, assignment, **kwargs):
+        """
+        Return override for the specified assignment for this group.
+
+        :param assignment: The assignment to get an override for
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+
+        :calls: `GET /api/v1/groups/:group_id/assignments/:assignment_id/override
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.group_alias>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        from canvasapi.assignment import Assignment, AssignmentOverride
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+
+        response = self._requester.request(
+            'GET',
+            'groups/{}/assignments/{}/override'.format(self.id, assignment_id)
+        )
+        response_json = response.json()
+        response_json.update({'course_id': self.course_id})
+
+        return AssignmentOverride(self._requester, response_json)
+
 
 @python_2_unicode_compatible
 class GroupMembership(CanvasObject):
