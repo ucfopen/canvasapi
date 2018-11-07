@@ -246,6 +246,16 @@
 			"title": "Group Assignment Override"
 		}
 	},
+	"override_section_alias": {
+		"method": "GET",
+		"endpoint": "sections/1/assignments/1/override",
+		"data": {
+			"id": 31,
+			"assignment_id": 1,
+			"course_section_id": 1,
+			"title": "Section Assignment Override"
+		}
+	},
 	"submit": {
 		"method": "POST",
 		"endpoint": "courses/1/assignments/1/submissions",
