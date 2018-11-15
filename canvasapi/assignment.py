@@ -94,12 +94,12 @@ class Assignment(CanvasObject):
 
     def get_override(self, override, **kwargs):
         """
-        Get the single override with the given override id.
+        Get a single assignment override with the given override id.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.show>`_
 
-        :param override: The obejct or ID of the override to get
+        :param override: The object or ID of the override to get
         :type override: :class:`canvasapi.assignment.AssignmentOverride` or int
 
         :rtype: :class:`canvasapi.assignment.AssignmentOverride`
