@@ -1,5 +1,11 @@
 # Change Log
 
+## [Unreleased]
+
+### New Endpoint Coverage
+
+- Assignment Overrides
+
 ## [0.11.0] - 2018-09-17
 
 ### New Endpoint Coverage
