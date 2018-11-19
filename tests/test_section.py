@@ -6,6 +6,7 @@ import requests_mock
 from six import text_type
 
 from canvasapi import Canvas
+from canvasapi.assignment import AssignmentOverride
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.progress import Progress
@@ -30,6 +31,15 @@ class TestSection(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.section)
         self.assertIsInstance(string, str)
+
+    # get_assignment_override
+    def test_get_assignment_override(self, m):
+        register_uris({'assignment': ['override_section_alias']}, m)
+
+        override = self.section.get_assignment_override(1)
+
+        self.assertIsInstance(override, AssignmentOverride)
+        self.assertEqual(override.course_section_id, self.section.id)
 
     # get_enrollments()
     def test_get_enrollments(self, m):
