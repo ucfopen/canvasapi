@@ -329,8 +329,6 @@ class TestQuizSubmission(unittest.TestCase):
             ]
         )
 
-        # import pdb; pdb.set_trace()
-
         self.assertIsInstance(submission, QuizSubmission)
         self.assertTrue(hasattr(submission, 'id'))
         self.assertTrue(hasattr(submission, 'attempt'))
