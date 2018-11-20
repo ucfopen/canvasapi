@@ -352,6 +352,29 @@ class QuizSubmission(CanvasObject):
         response_json = response.json()["quiz_submissions"][0]
         return QuizSubmission(self._requester, response_json)
 
+    def get_times(self, **kwargs):
+        """
+        Get the current timing data for the quiz attempt, both the end_at timestamp and the
+        time_left parameter.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/time \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.time>`_
+
+        :rtype: dict
+        """
+        response = self._requester.request(
+            'GET',
+            'courses/{}/quizzes/{}/submissions/{}/time'.format(
+                self.course_id,
+                self.quiz_id,
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        return response_json
+
 
 @python_2_unicode_compatible
 class QuizExtension(CanvasObject):

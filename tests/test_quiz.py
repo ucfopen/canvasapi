@@ -283,6 +283,18 @@ class TestQuizSubmission(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.submission.complete(validation_token='should not pass validation token here')
 
+    # get_times
+    def test_get_times(self, m):
+        register_uris({'submission': ['get_times']}, m)
+
+        submission = self.submission.get_times()
+
+        self.assertIsInstance(submission, dict)
+        self.assertTrue('end_at' in submission)
+        self.assertTrue('time_left' in submission)
+        self.assertTrue(type(submission['time_left']) == int)
+        self.assertTrue(type(submission['end_at']) == str)
+
 
 @requests_mock.Mocker()
 class TestQuizExtension(unittest.TestCase):

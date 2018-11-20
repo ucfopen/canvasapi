@@ -11,7 +11,7 @@
 					"user_id": 1,
 					"attempt": 1,
 					"validation_token": "this is a validation token",
-					"score": 10
+					"score": 1
 				}
 			]
 		},
@@ -38,6 +38,15 @@
 				"user_id": 1,
 				"html_url": "https://example.com/sections/1/assignments/1/submissions/1",
 				"submission_type": "online_upload"
+		},
+		"status_code": 200
+	},
+	"get_times": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/submissions/1/time",
+		"data": {
+		    "end_at": "9999-99-99T59:59:59Z",
+		    "time_left": 0
 		},
 		"status_code": 200
 	},
