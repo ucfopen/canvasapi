@@ -212,6 +212,33 @@ class TestQuiz(unittest.TestCase):
         self.assertTrue(hasattr(submission[1], 'score'))
         self.assertEqual(submission[1].score, 5)
 
+    # get_quiz_submission
+    def test_get_quiz_submission(self, m):
+        register_uris({'quiz': ['get_quiz_submission']}, m)
+
+        quiz_id = 1
+        submission = self.quiz.get_quiz_submission(quiz_id)
+
+        self.assertIsInstance(submission, QuizSubmission)
+        self.assertTrue(hasattr(submission, 'id'))
+        self.assertEqual(submission.quiz_id, quiz_id)
+        self.assertTrue(hasattr(submission, 'quiz_version'))
+        self.assertEqual(submission.quiz_version, 1)
+        self.assertTrue(hasattr(submission, 'user_id'))
+        self.assertEqual(submission.user_id, 1)
+        self.assertTrue(hasattr(submission, 'validation_token'))
+        self.assertEqual(submission.validation_token, 'this is a validation token')
+        self.assertTrue(hasattr(submission, 'score'))
+        self.assertEqual(submission.score, 0)
+
+    # create_submission
+    def test_create_submission(self, m):
+        register_uris({'quiz': ['create_submission']}, m)
+
+        submission = self.quiz.create_submission()
+
+        self.assertIsInstance(submission, QuizSubmission)
+
 
 @requests_mock.Mocker()
 class TestQuizSubmission(unittest.TestCase):
@@ -224,8 +251,10 @@ class TestQuizSubmission(unittest.TestCase):
                 'id': 1,
                 'quiz_id': 1,
                 'user_id': 1,
+                'course_id': 1,
                 'submission_id': 1,
                 'attempt': 3,
+                'validation_token': 'this is a validation token',
                 'manually_unlocked': None,
                 'score': 7
             }
@@ -235,6 +264,24 @@ class TestQuizSubmission(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.submission)
         self.assertIsInstance(string, str)
+
+    # complete
+    def test_complete(self, m):
+        register_uris({'submission': ['complete']}, m)
+
+        submission = self.submission.complete()
+
+        self.assertIsInstance(submission, QuizSubmission)
+        self.assertTrue(hasattr(submission, 'id'))
+        self.assertTrue(hasattr(submission, 'quiz_id'))
+        self.assertTrue(hasattr(submission, 'attempt'))
+        self.assertTrue(hasattr(submission, 'validation_token'))
+
+        with self.assertRaises(ValueError):
+            self.submission.complete(attempt=1)
+
+        with self.assertRaises(ValueError):
+            self.submission.complete(validation_token='should not pass validation token here')
 
 
 @requests_mock.Mocker()

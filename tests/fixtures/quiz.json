@@ -95,6 +95,49 @@
 		},
 		"status_code": 200
 	},
+	"create_submission": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/submissions",
+		"data": {
+			"quiz_submissions": [
+				{
+					"id": 1,
+					"quiz_id": 1,
+					"quiz_version": 1,
+					"user_id": 1,
+					"validation_token": "this is a validation token",
+					"score": 0
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_all_quiz_submissions": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/submissions",
+		"data": {
+			"quiz_submissions": [
+				{
+						"id": 1,
+						"quiz_id": 1,
+						"user_id": 1,
+						"submission_id": 1,
+						"attempt": 3,
+						"manually_unlocked": null,
+						"score": 7
+				},
+				{
+						"id": 2,
+						"quiz_id": 1,
+						"user_id": 1,
+						"submission_id": 2,
+						"attempt": 3,
+						"manually_unlocked": null,
+						"score": 5
+				}
+			]
+		}
+	},
 	"get_question": {
 		"method": "GET",
 		"endpoint": "courses/1/quizzes/1/questions/1",
@@ -143,6 +186,23 @@
 		],
 		"status_code": 200
 	},
+	"get_quiz_submission": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/submissions/1",
+		"data": {
+			"quiz_submissions": [
+				{
+					"id": 1,
+					"quiz_id": 1,
+					"quiz_version": 1,
+					"user_id": 1,
+					"validation_token": "this is a validation token",
+					"score": 0
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"set_extensions": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes/1/extensions",
@@ -163,32 +223,6 @@
 					"extra_time": null,
 					"manually_unlocked": null,
 					"end_at": null
-				}
-			]
-		}
-	},
-	"get_all_quiz_submissions": {
-		"method": "GET",
-		"endpoint": "courses/1/quizzes/1/submissions",
-		"data": {
-			"quiz_submissions": [
-				{
-						"id": 1,
-						"quiz_id": 1,
-						"user_id": 1,
-						"submission_id": 1,
-						"attempt": 3,
-						"manually_unlocked": null,
-						"score": 7
-				},
-				{
-						"id": 2,
-						"quiz_id": 1,
-						"user_id": 1,
-						"submission_id": 2,
-						"attempt": 3,
-						"manually_unlocked": null,
-						"score": 5
 				}
 			]
 		}
