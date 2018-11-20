@@ -71,6 +71,24 @@
 		],
 		"status_code": 200
 	},
+	"update_score_and_comments": {
+		"method": "PUT",
+		"endpoint": "courses/1/quizzes/1/submissions/1",
+		"data": {
+			"quiz_submissions": [
+				{
+					"id": 1,
+					"quiz_id": 1,
+					"quiz_version": 1,
+					"user_id": 1,
+					"attempt": 1,
+					"validation_token": "this is a validation token",
+					"score": 7
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"upload_comment": {
 		"method": "POST",
 		"endpoint": "courses/1/assignments/1/submissions/1/comments/files",

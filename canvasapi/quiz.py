@@ -362,6 +362,9 @@ class QuizSubmission(CanvasObject):
 
         :rtype: dict
         """
+        if 'attempt' in kwargs:
+            raise ValueError("Key `attempt` provided by Canvas, should not be set.")
+
         response = self._requester.request(
             'GET',
             'courses/{}/quizzes/{}/submissions/{}/time'.format(
@@ -374,6 +377,31 @@ class QuizSubmission(CanvasObject):
 
         response_json = response.json()
         return response_json
+
+    def update_score_and_comments(self, **kwargs):
+        """
+        Update the amount of points a student has scored for questions they've answered, provide
+        comments for the student about their answer(s), or simply fudge the total score by a
+        specific amount of points.
+
+        :calls: `PUT /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.update>`_
+
+        :returns: The updated quiz.
+        :rtype: :class:`canvasapi.quiz.QuizSubmission`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/{}/quizzes/{}/submissions/{}'.format(
+                self.course_id,
+                self.quiz_id,
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()["quiz_submissions"][0]
+
+        return QuizSubmission(self._requester, response_json)
 
 
 @python_2_unicode_compatible
