@@ -296,8 +296,8 @@ class TestQuizSubmission(unittest.TestCase):
         self.assertIsInstance(submission, dict)
         self.assertIn('end_at', submission)
         self.assertIn('time_left', submission)
-        self.assertTrue(type(submission['time_left']) == int)
-        self.assertTrue(type(submission['end_at']) == text_type)
+        self.assertIsInstance(submission['time_left'], int)
+        self.assertIsInstance(submission['end_at'], text_type)
 
     # update_score_and_comments
     def test_update_score_and_comments(self, m):
