@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 
 import requests_mock
+from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
@@ -293,10 +294,10 @@ class TestQuizSubmission(unittest.TestCase):
             self.submission.get_times(attempt=1)
 
         self.assertIsInstance(submission, dict)
-        self.assertTrue('end_at' in submission)
-        self.assertTrue('time_left' in submission)
+        self.assertIn('end_at', submission)
+        self.assertIn('time_left', submission)
         self.assertTrue(type(submission['time_left']) == int)
-        self.assertTrue(type(submission['end_at']) == str)
+        self.assertTrue(type(submission['end_at']) == text_type)
 
     # update_score_and_comments
     def test_update_score_and_comments(self, m):
