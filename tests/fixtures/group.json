@@ -5,7 +5,8 @@
 		"data": {
 			"id": 1,
 			"name": "group0",
-			"description": "first group ever"
+			"description": "first group ever",
+			"course_id": 1
 		},
 		"status_code": 200
 	},
@@ -15,7 +16,8 @@
 		"data": {
 			"id": 1,
 			"name": "group1",
-			"description": "best group ever"
+			"description": "best group ever",
+			"course_id": 1
 		},
 		"status_code": 200
 	},
@@ -26,7 +28,8 @@
 			"id": 10,
 			"sis_group_id": "test-sis-id",
 			"name": "SIS Group",
-			"description": "best SIS group ever"
+			"description": "best SIS group ever",
+			"course_id": 1
 		},
 		"status_code": 200
 	},
@@ -134,7 +137,8 @@
 		"data": {
 			"id": 1,
 			"name": "group-none",
-			"description": "New Group"
+			"description": "New Group",
+			"course_id": 1
 		},
 		"status_code": 200
 	},
@@ -144,7 +148,8 @@
 		"data": {
 			"id": 1,
 			"name": "group-none",
-			"description": "most deleted group ever"
+			"description": "most deleted group ever",
+			"course_id": 1
 		},
 		"status_code": 200
 	},

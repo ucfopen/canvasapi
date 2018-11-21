@@ -19,6 +19,24 @@ class Assignment(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
+    def create_override(self, **kwargs):
+        """
+        Create an override for this assignment.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/overrides
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.create>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        response = self._requester.request(
+            'POST',
+            'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+        return AssignmentOverride(self._requester, response_json)
+
     def delete(self, **kwargs):
         """
         Delete this assignment.
@@ -70,6 +88,54 @@ class Assignment(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/assignments/{}/gradeable_students'.format(self.course_id, self.id),
+            {'course_id': self.course_id},
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_override(self, override, **kwargs):
+        """
+        Get a single assignment override with the given override id.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.show>`_
+
+        :param override: The object or ID of the override to get
+        :type override: :class:`canvasapi.assignment.AssignmentOverride` or int
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        override_id = obj_or_id(override, "override", (AssignmentOverride,))
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/assignments/{}/overrides/{}'.format(
+                self.course_id,
+                self.id,
+                override_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+        return AssignmentOverride(self._requester, response_json)
+
+    def get_overrides(self, **kwargs):
+        """
+        Get a paginated list of overrides for this assignment that target
+            sections/groups/students visible to the current user.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        return PaginatedList(
+            AssignmentOverride,
+            self._requester,
+            'GET',
+            'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
+            {'course_id': self.course_id},
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -254,3 +320,61 @@ class AssignmentGroup(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return AssignmentGroup(self._requester, response.json())
+
+
+@python_2_unicode_compatible
+class AssignmentOverride(CanvasObject):
+
+    def __str__(self):
+        return "{} ({})".format(self.title, self.id)
+
+    def delete(self, **kwargs):
+        """
+        Delete this assignment override.
+
+        :calls: `DELETE /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.destroy>`_
+
+        :returns: The previous content of the now-deleted assignment override.
+        :rtype: :class:`canvasapi.assignment.AssignmentGroup`
+        """
+        response = self._requester.request(
+            'DELETE',
+            'courses/{}/assignments/{}/overrides/{}'.format(
+                self.course_id,
+                self.assignment_id,
+                self.id
+            )
+        )
+
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+
+        return AssignmentOverride(self._requester, response_json)
+
+    def edit(self, **kwargs):
+        """
+        Update this assignment override.
+
+        Note: All current overridden values must be supplied if they are to be retained.
+
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.update>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        response = self._requester.request(
+            'PUT',
+            'courses/{}/assignments/{}/overrides/{}'.format(
+                self.course_id,
+                self.assignment_id,
+                self.id
+            )
+        )
+
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+        if 'title' in response_json:
+            super(AssignmentOverride, self).set_attributes(response_json)
+
+        return self
