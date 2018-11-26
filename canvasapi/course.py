@@ -50,7 +50,7 @@ class Course(CanvasObject):
         """
         Create the specified overrides for each assignment.
 
-        :calls: `POST /api/v1/courses/:course_id/assignments/overrides
+        :calls: `POST /api/v1/courses/:course_id/assignments/overrides \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.batch_create>`_
 
         :param assignment_overrides: Attributes for the new assignment overrides.
@@ -116,7 +116,7 @@ class Course(CanvasObject):
 
         Note: All current overridden values must be supplied if they are to be retained.
 
-        :calls: `PUT /api/v1/courses/:course_id/assignments/overrides
+        :calls: `PUT /api/v1/courses/:course_id/assignments/overrides \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.batch_update>`_
 
         :param assignment_overrides: Attributes for the updated assignment overrides.
@@ -366,7 +366,7 @@ class Course(CanvasObject):
         List the specified overrides in this course, providing they target
             sections/groups/students visible to the current user.
 
-        :calls: `GET /api/v1/courses/:course_id/assignments/overrides
+        :calls: `GET /api/v1/courses/:course_id/assignments/overrides \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.batch_retrieve>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of

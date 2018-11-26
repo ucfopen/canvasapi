@@ -23,7 +23,7 @@ class Assignment(CanvasObject):
         """
         Create an override for this assignment.
 
-        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/overrides
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/overrides \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.create>`_
 
         :rtype: :class:`canvasapi.assignment.AssignmentOverride`
@@ -96,7 +96,7 @@ class Assignment(CanvasObject):
         """
         Get a single assignment override with the given override id.
 
-        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.show>`_
 
         :param override: The object or ID of the override to get
@@ -124,7 +124,7 @@ class Assignment(CanvasObject):
         Get a paginated list of overrides for this assignment that target
             sections/groups/students visible to the current user.
 
-        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of

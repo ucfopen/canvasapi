@@ -29,7 +29,7 @@ class Section(CanvasObject):
         :param assignment: The assignment to get an override for
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
 
-        :calls: `GET /api/v1/sections/:course_section_id/assignments/:assignment_id/override
+        :calls: `GET /api/v1/sections/:course_section_id/assignments/:assignment_id/override \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.section_alias>`_
 
         :rtype: :class:`canvasapi.assignment.AssignmentOverride`
