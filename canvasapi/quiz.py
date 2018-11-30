@@ -294,7 +294,7 @@ class Quiz(CanvasObject):
         Start taking a Quiz by creating a QuizSubmission can be used to answer
         questions and submit answers.
 
-        :calls: `POST /api/v1/courses/:course_id/quizzes/:quizzes/:quiz_id/submissions \
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
         <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.create>`_
 
         :rtype: :class:`canvasapi.quiz.QuizSubmission`
