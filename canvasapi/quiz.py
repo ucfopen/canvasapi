@@ -375,8 +375,7 @@ class QuizSubmission(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-        response_json = response.json()
-        return response_json
+        return response.json()
 
     def update_score_and_comments(self, **kwargs):
         """
