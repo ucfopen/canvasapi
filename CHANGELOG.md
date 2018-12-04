@@ -5,6 +5,11 @@
 ### New Endpoint Coverage
 
 - Assignment Overrides
+- Quiz Submissions (Thanks, [@wallacetyler](https://github.com/wallacetyler))
+
+### General
+
+- Added support for HTTP response 409 (Thanks, [@wallacetyler](https://github.com/wallacetyler))
 
 ## [0.11.0] - 2018-09-17
 

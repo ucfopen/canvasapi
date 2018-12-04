@@ -26,6 +26,12 @@
 		"data": {},
 		"status_code": 404
 	},
+	"409": {
+		"method": "ANY",
+		"endpoint": "409",
+		"data": {},
+		"status_code": 409
+	},
 	"500": {
 		"method": "ANY",
 		"endpoint": "500",

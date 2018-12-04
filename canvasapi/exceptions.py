@@ -50,5 +50,10 @@ class RequiredFieldMissing(CanvasException):
 
 
 class Forbidden(CanvasException):
-    """Canvas has denied access to the resource for this user"""
+    """Canvas has denied access to the resource for this user."""
+    pass
+
+
+class Conflict(CanvasException):
+    """Canvas had a conflict with an existing resource."""
     pass

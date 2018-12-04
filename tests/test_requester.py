@@ -8,7 +8,7 @@ from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.exceptions import (
-    BadRequest, CanvasException, InvalidAccessToken, ResourceDoesNotExist,
+    BadRequest, CanvasException, Conflict, InvalidAccessToken, ResourceDoesNotExist,
     Unauthorized
 )
 from tests import settings
@@ -134,6 +134,12 @@ class TestRequester(unittest.TestCase):
 
         with self.assertRaises(ResourceDoesNotExist):
             self.requester.request('GET', '404')
+
+    def test_request_409(self, m):
+        register_uris({'requests': ['409']}, m)
+
+        with self.assertRaises(Conflict):
+            self.requester.request('GET', '409')
 
     def test_request_500(self, m):
         register_uris({'requests': ['500']}, m)
