@@ -11,6 +11,10 @@
 
 - Added support for HTTP response 409 (Thanks, [@wallacetyler](https://github.com/wallacetyler))
 
+### Bugfixes
+
+- Fixed an issue where `Section.edit()` didn't accept keyword arguments (Thanks, [@wjw27](https://github.com/wjw27))
+
 ## [0.11.0] - 2018-09-17
 
 ### New Endpoint Coverage

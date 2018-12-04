@@ -104,7 +104,7 @@ class Section(CanvasObject):
         )
         return Section(self._requester, response.json())
 
-    def edit(self):
+    def edit(self, **kwargs):
         """
         Edit contents of a target section.
 
@@ -115,9 +115,14 @@ class Section(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'sections/{}'.format(self.id)
+            'sections/{}'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
-        return Section(self._requester, response.json())
+
+        if 'name' in response.json():
+            super(Section, self).set_attributes(response.json())
+
+        return self
 
     def delete(self):
         """
