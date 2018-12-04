@@ -4,7 +4,7 @@ from datetime import datetime
 import requests
 
 from canvasapi.exceptions import (
-    BadRequest, CanvasException, Forbidden, InvalidAccessToken,
+    BadRequest, CanvasException, Conflict, Forbidden, InvalidAccessToken,
     ResourceDoesNotExist, Unauthorized
 )
 
@@ -107,6 +107,8 @@ class Requester(object):
             raise Forbidden(response.text)
         elif response.status_code == 404:
             raise ResourceDoesNotExist('Not Found')
+        elif response.status_code == 409:
+            raise Conflict(response.text)
         elif response.status_code == 500:
             raise CanvasException("API encountered an error processing your request")
 
