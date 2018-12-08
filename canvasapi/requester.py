@@ -133,15 +133,18 @@ class Requester(object):
         :param data: dict
         """
 
-        # Grab file from data.
+        # Grab file/files from data.
         file = None
         for tup in data:
             if tup[0] == 'file':
                 file = {'file': tup[1]}
                 break
+            elif tup[0] == 'files':
+                file = tup[1]
+                break
 
-        # Remove file entry from data.
-        data[:] = [tup for tup in data if tup[0] != 'file']
+        # Remove file/files entry from data.
+        data[:] = [tup for tup in data if tup[0] not in ['file', 'files']]
 
         return self._session.post(url, headers=headers, data=data, files=file)
 

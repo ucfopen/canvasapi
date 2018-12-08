@@ -1,0 +1,46 @@
+{
+    "get_by_id": {
+        "method": "GET",
+        "endpoint": "accounts/1/sis_imports/2",
+        "data": {
+            "id": 2,
+            "progress": 20,
+            "workflow_state": "importing",
+            "data": {
+                "import_type": "instructure_csv"
+            },
+            "account_id": 1
+        },
+        "status_code": 200
+    },
+    "abort_sis_import": {
+        "method": "PUT",
+        "endpoint": "accounts/1/sis_imports/2/abort",
+        "data": {
+            "id": 2,
+            "progress": 20,
+            "workflow_state": "aborted",
+            "data": {
+                "import_type": "instructure_csv"
+            },
+            "account_id": 1
+        },
+        "status_code": 200
+    },
+    "restore_sis_import_states": {
+        "method": "PUT",
+        "endpoint": "accounts/1/sis_imports/2/restore_states",
+        "data":{
+            "id": 4,
+            "context_id": 2,
+            "context_type": "SisBatch",
+            "user_id": null,
+            "tag": "sis_batch_state_restore",
+            "completion": 0,
+            "workflow_state": "queued",
+            "updated_at": "2018-01-15T15:04:00Z",
+            "message": null,
+            "url": "https://canvas.example.edu/api/v1/progress/4"
+        }
+    }
+}
