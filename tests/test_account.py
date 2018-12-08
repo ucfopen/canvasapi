@@ -7,8 +7,7 @@ import warnings
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.account import Account, AccountNotification, AccountReport, Admin, Role, \
-    SSOSettings
+from canvasapi.account import Account, AccountNotification, AccountReport, Admin, Role, SSOSettings
 from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
