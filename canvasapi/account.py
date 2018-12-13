@@ -1558,8 +1558,8 @@ class Account(CanvasObject):
         Aborts all pending (created, but not processed or processing)
         SIS imports for the current account.
 
-        :calls: `GET /api/v1/accounts/:account_id/sis_imports/importing \
-        <https://canvas.instructure.com/doc/api/sis_imports.html#method.sis_imports_api.importing>`_
+        :calls: `PUT /api/v1/accounts/:account_id/sis_imports/abort_all_pending \
+        <https://canvas.instructure.com/doc/api/sis_imports.html#method.sis_imports_api.abort_all_pending>`_
 
         :returns: True if the API responds with aborted=True, False otherwise.
         :rtype: bool
