@@ -18,6 +18,7 @@ from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 from canvasapi.rubric import Rubric
+from canvasapi.blueprint import BlueprintTemplate
 
 warnings.simplefilter('always', DeprecationWarning)
 
@@ -2293,6 +2294,26 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Progress(self._requester, response.json())
+
+    def get_blueprint(self, template, **kwargs):
+        """
+        Return the blueprint of a given ID.
+
+        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id \
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.show>`_
+
+        :param template_id: The ID of the blueprint template.
+        :type template_id: int
+
+        :rtype: :class:`canvasapi.blueprint.BlueprintTemplate`
+        """
+        template_id = obj_or_id(template, "template", (BlueprintTemplate,))
+        response = self._requester.request(
+            'GET',
+            'courses/{}/blueprint_templates/{}'.format(self.id, template_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return BlueprintTemplate(self._requester, response.json())
 
 
 @python_2_unicode_compatible

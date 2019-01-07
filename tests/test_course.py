@@ -10,6 +10,7 @@ from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
+from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
@@ -1514,6 +1515,13 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()
         self.assertTrue(progress.context_type == "Course")
+
+    # get_blueprint()
+    def test_get_blueprint(self, m):
+        register_uris({'course': ['get_blueprint']}, m)
+        blueprint = self.course.get_blueprint(1)
+        self.assertIsInstance(blueprint, BlueprintTemplate)
+        self.assertEqual(blueprint.course_id, 1)
 
 
 @requests_mock.Mocker()
