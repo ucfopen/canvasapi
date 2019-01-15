@@ -18,7 +18,6 @@ from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 from canvasapi.rubric import Rubric
-from canvasapi.blueprint import BlueprintTemplate
 
 warnings.simplefilter('always', DeprecationWarning)
 
@@ -2295,7 +2294,8 @@ class Course(CanvasObject):
         )
         return Progress(self._requester, response.json())
 
-    def get_blueprint(self, template, **kwargs):
+# TODO: make obj or id work even if i pass default
+    def get_blueprint(self, template='default', **kwargs):
         """
         Return the blueprint of a given ID.
 
@@ -2307,7 +2307,9 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.blueprint.BlueprintTemplate`
         """
-        template_id = obj_or_id(template, "template", (BlueprintTemplate,))
+        from canvasapi.blueprint import BlueprintTemplate
+
+        template_id = obj_or_id(template, 'template', (BlueprintTemplate,))
         response = self._requester.request(
             'GET',
             'courses/{}/blueprint_templates/{}'.format(self.id, template_id),
