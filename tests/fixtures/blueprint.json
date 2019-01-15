@@ -1,0 +1,45 @@
+{
+    "get_associated_courses": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_templates/1/associated_courses",
+        "data": [
+            {
+                "id": 1,
+                "name": "Test 1"
+            },
+            {
+                "id": 2,
+                "name": "Test 2"
+            }
+        ],
+        "headers": {
+            "Link": "<https://example.com/api/v1/courses/1/blueprint_templates/1/asspciated_courses?page=2&per_page=2>; rel=\"next\""
+        }
+    },
+    "update_associated_courses": {
+        "method": "PUT",
+        "endpoint": "courses/1/blueprint_templates/1/update_associations",
+        "data": {
+            "success": true
+        },
+        "status_code": 200
+    },
+    "associated_course_migration": {
+        "method": "POST",
+        "endpoint": "courses/1/blueprint_templates/1/migrations",
+        "data": {
+            "id": 1,
+            "comment": "test1",
+            "template_id": "1"
+        },
+        "status_code": 200
+    },
+    "change_blueprint_restrictions": {
+        "method": "PUT",
+        "endpoint": "courses/1/blueprint_templates/1/restrict_item",
+        "data": {
+            "success": true
+        },
+        "status_code": 200
+    }
+}
