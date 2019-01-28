@@ -436,6 +436,33 @@
 		],
 		"status_code": 200
 	},
+    "list_blueprint_imports": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_subscriptions/55/migrations",
+        "data": [
+            {
+                "id": 1,
+                "user_id": 10,
+                "subscription_id": 55
+            }
+        ]
+    },
+    "list_blueprint_subscriptions": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_subscriptions",
+        "data": [
+            {
+                "id": 10,
+                "template_id": 2,
+                "blueprint_course": {
+                    "id": 1,
+                    "name": "Test Course",
+                    "course_code": "TES1337",
+                    "term_name": "Summer 2018"
+                }
+            }
+        ]
+    },
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "courses/1/enrollments",
