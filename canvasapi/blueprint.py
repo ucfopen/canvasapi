@@ -4,7 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -41,7 +41,9 @@ class BlueprintTemplate(CanvasObject):
         """
         Add or remove new associations for the blueprint template.
 
-        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/update_associations \ <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.update_associations>`_
+        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id
+        /update_associations \ <https://canvas.instructure.com/doc/api
+        /blueprint_courses.html#method.master_courses/master_templates.update_associations>`_
 
         :returns: True if the course was added or removed, False otherwise.
         :rtype bool
@@ -73,20 +75,32 @@ class BlueprintTemplate(CanvasObject):
             ),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return BlueprintTemplate(self._requester, response.json())
+        return BlueprintMigration(self._requester, response.json())
 
-# must use content_type, content_id, and restricted param for the function call to work
-# there must be an instance of the content_type in the course
-    def change_blueprint_restrictions(self, **kwargs):
+    def change_blueprint_restrictions(self, content_type, content_id, restricted, **kwargs):
         """
         Set or remove restrictions on a blueprint course object.
+        Must have all three parameters for this function call to work.
 
         :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/restrict_item \
         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.restrict_item>`_
 
+        :param content_type: type of object
+        :type content_type: str
+
+        :param content_id: id of the objedct
+        :type content_id: int
+
+        :param restricted: whether it's restricted or not
+        :type restricted: bool
+
         :returns: True if the restriction was succesfully applied.
         :rtype bool
         """
+        kwargs["content_type"] = content_type
+        kwargs["content_id"] = content_id
+        kwargs["restricted"] = restricted
+
         response = self._requester.request(
             'PUT',
             'courses/{}/blueprint_templates/{}/restrict_item'.format(
@@ -96,3 +110,127 @@ class BlueprintTemplate(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return response.json().get("success", False)
+
+    # check why returning a change record doesnt work
+    def get_unsynced_changes(self, **kwargs):
+        """
+        Return changes made to associated courses of a blueprint course.
+
+        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id/unsynced_changes \
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.unsynced_changes>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+        :class:`canvasapi.blueprint.ChangeRecord`
+        """
+
+        return PaginatedList(
+            ChangeRecord,
+            self._requester,
+            'GET',
+            'courses/{}/blueprint_templates/{}/unsynced_changes'.format(
+                self.course_id,
+                self.id
+            ),
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    def list_blueprint_migrations(self, **kwargs):
+        """
+        Return a paginated list of migrations for the template.
+
+        :calls: `GET api/v1/courses/:course_id/blueprint_templates/:template_id/migrations \
+         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.migrations_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+        :class:`canvasapi.blueprint.BlueprintMigration`
+        """
+
+        return PaginatedList(
+            BlueprintMigration,
+            self._requester,
+            'GET',
+            'courses/{}/blueprint_templates/{}/migrations'.format(
+                self.course_id,
+                self.id
+            ),
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    # put into blueprint migration class
+    def show_blueprint_migration(self, migration, **kwargs):
+        """
+        Return the status of a blueprint migration.
+
+        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id/migrations/:id
+        \ <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/
+        master_templates.migrations_show>`_
+
+        :rtype: :class:`canvasapi.blueprint.BlueprintMigration`
+        """
+
+        migration_id = obj_or_id(migration, 'migration', (BlueprintMigration,))
+        response = self._requester.request(
+            'GET',
+            'courses/{}/blueprint_templates/{}/migrations/{}'.format(
+                self.course_id,
+                self.id,
+                migration_id
+            ),
+            kwargs=combine_kwargs(**kwargs)
+        )
+        return BlueprintMigration(self._requester, response.json())
+
+    # put into blueprint migration class
+    def get_migration_details(self, **kwargs):
+        """
+        Return the changes that were made in a blueprint migration.
+
+        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id
+        /migrations/:id/details \ <https://canvas.instructure.com/doc/api
+        /blueprint_courses.html#method.master_courses/master_templates.migration_details>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+        :class:`canvasapi.blueprint.ChangeRecord`
+        """
+
+        return PaginatedList(
+            ChangeRecord,
+            self._requester,
+            'GET',
+            'courses/{}/blueprint_templates/{}/migrations/{}/details'.format(
+                self.course_id,
+                self.id,
+                self.id
+            ),
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+
+@python_2_unicode_compatible
+class BlueprintMigration(CanvasObject):
+
+    def __str__(self):
+        return "{} {}".format(
+            self.id,
+            self.template_id
+        )
+
+
+@python_2_unicode_compatible
+class ChangeRecord(CanvasObject):
+
+    def __str__(self):
+        return "{} {}".format(
+            self.id,
+            self.template_id
+        )
+
+
+@python_2_unicode_compatible
+class BlueprintSubscription(CanvasObject):
+
+    def __str__(self):
+        return "{} {}".format(
+            self.id,
+            self.template_id
+        )
