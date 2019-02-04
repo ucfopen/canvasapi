@@ -436,17 +436,6 @@
 		],
 		"status_code": 200
 	},
-    "list_blueprint_imports": {
-        "method": "GET",
-        "endpoint": "courses/1/blueprint_subscriptions/55/migrations",
-        "data": [
-            {
-                "id": 1,
-                "user_id": 10,
-                "subscription_id": 55
-            }
-        ]
-    },
     "list_blueprint_subscriptions": {
         "method": "GET",
         "endpoint": "courses/1/blueprint_subscriptions",
@@ -461,7 +450,8 @@
                     "term_name": "Summer 2018"
                 }
             }
-        ]
+        ],
+        "status_code": 200
     },
 	"list_enrollments": {
 		"method": "GET",
