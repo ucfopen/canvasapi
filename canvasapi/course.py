@@ -4,7 +4,6 @@ import warnings
 
 from six import python_2_unicode_compatible, text_type, string_types
 
-from canvasapi.blueprint import BlueprintMigration
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
@@ -2296,7 +2295,6 @@ class Course(CanvasObject):
         )
         return Progress(self._requester, response.json())
 
-# TODO: make obj or id work even if i pass default
     def get_blueprint(self, template='default', **kwargs):
         """
         Return the blueprint of a given ID.
@@ -2311,7 +2309,11 @@ class Course(CanvasObject):
         """
         from canvasapi.blueprint import BlueprintTemplate
 
-        template_id = obj_or_id(template, 'template', (BlueprintTemplate,))
+        if template == 'default':
+            template_id = template
+        else:
+            template_id = obj_or_id(template, 'template', (BlueprintTemplate,))
+
         response = self._requester.request(
             'GET',
             'courses/{}/blueprint_templates/{}'.format(
@@ -2326,8 +2328,9 @@ class Course(CanvasObject):
         """
         Return a list of blueprint subscriptions for the given course.
 
-        :calls: `GET /api/v1/courses/:course_id/blueprint_subscriptions \ <https://
-        canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.subscriptions_index>`_
+        :calls: `GET /api/v1/courses/:course_id/blueprint_subscriptions\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        master_courses/master_templates.subscriptions_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
         :class:`canvasapi.blueprint.BlueprintSubscription`
@@ -2340,31 +2343,7 @@ class Course(CanvasObject):
             'courses/{}/blueprint_subscriptions'.format(
                 self.id
             ),
-            kwargs=combine_kwargs(**kwargs)
-        )
-
-    def list_blueprint_imports(self, subscription, **kwargs):
-        """
-        Return a list of migrations imported into a course associated with a blueprint.
-
-        :calls: `GET /api/v1/courses/:course_id/blueprint_subscriptions/:subscription_id/
-        migrations \ <https://canvas.instructure.com/doc/api/
-        blueprint_courses.html#method.master_courses/master_templates.imports_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-        :class:`canvasapi.blueprint.BlueprintMigration`
-        """
-
-        subscription_id = obj_or_id(subscription, 'subscription', BlueprintSubscription)
-
-        return PaginatedList(
-            BlueprintMigration,
-            self._requester,
-            'GET',
-            'courses/{}/blueprint_subscriptions/{}/migrations'.format(
-                self.id,
-                subscription_id
-            ),
+            {'course_id': self.id},
             kwargs=combine_kwargs(**kwargs)
         )
 
@@ -2380,8 +2359,9 @@ class CourseNickname(CanvasObject):
         Remove the nickname for the given course. Subsequent course API
         calls will return the actual name for the course.
 
-        :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id \
-        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
+        :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id\
+        <https://canvas.instructure.com/doc/api/users.html#method.\
+        course_nicknames.delete>`_
 
         :rtype: :class:`canvasapi.course.CourseNickname`
         """
