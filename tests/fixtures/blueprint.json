@@ -78,7 +78,7 @@
             },
             "status_code": 200
     },
-    "get_migration_details": {
+    "get_details": {
         "method": "GET",
         "endpoint": "courses/1/blueprint_templates/1/migrations/1/details",
         "data": [
@@ -98,5 +98,16 @@
             }
         ],
             "status_code": 200
+    },
+    "list_blueprint_imports": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_subscriptions/10/migrations",
+        "data": [
+            {
+                "id": 1,
+                "user_id": 10,
+                "subscription_id": 55
+            }
+        ]
     }
 }
