@@ -41,9 +41,10 @@ class BlueprintTemplate(CanvasObject):
         """
         Add or remove new associations for the blueprint template.
 
-        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id
-        /update_associations \ <https://canvas.instructure.com/doc/api
-        /blueprint_courses.html#method.master_courses/master_templates.update_associations>`_
+        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/\
+        update_associations \
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        master_courses/master_templates.update_associations>`_
 
         :returns: True if the course was added or removed, False otherwise.
         :rtype bool
@@ -62,8 +63,9 @@ class BlueprintTemplate(CanvasObject):
         """
         Start a migration to update content in all associated courses.
 
-        :calls: `POST /api/v1/courses/:course_id/blueprint_templates/:template_id/migrations \
-        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.queue_migration>`_
+        :calls: `POST /api/v1/courses/:course_id/blueprint_templates/:template_id/migrations\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        master_courses/master_templates.queue_migration>`_
 
         :rtype: :class:`canvasapi.blueprint.BlueprintMigration`
         """
@@ -75,6 +77,8 @@ class BlueprintTemplate(CanvasObject):
             ),
             _kwargs=combine_kwargs(**kwargs)
         )
+        response_json = response.json()
+        response_json.update({'course_id': self.course_id})
         return BlueprintMigration(self._requester, response.json())
 
     def change_blueprint_restrictions(self, content_type, content_id, restricted, **kwargs):
@@ -82,8 +86,9 @@ class BlueprintTemplate(CanvasObject):
         Set or remove restrictions on a blueprint course object.
         Must have all three parameters for this function call to work.
 
-        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/restrict_item \
-        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.restrict_item>`_
+        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/restrict_item\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method\
+        .master_courses/master_templates.restrict_item>`_
 
         :param content_type: type of object
         :type content_type: str
@@ -117,7 +122,8 @@ class BlueprintTemplate(CanvasObject):
         Return changes made to associated courses of a blueprint course.
 
         :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id/unsynced_changes \
-        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.unsynced_changes>`_
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses\
+        /master_templates.unsynced_changes>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
         :class:`canvasapi.blueprint.ChangeRecord`
@@ -139,7 +145,8 @@ class BlueprintTemplate(CanvasObject):
         Return a paginated list of migrations for the template.
 
         :calls: `GET api/v1/courses/:course_id/blueprint_templates/:template_id/migrations \
-         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.migrations_index>`_
+         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+         master_courses/master_templates.migrations_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
         :class:`canvasapi.blueprint.BlueprintMigration`
@@ -153,17 +160,21 @@ class BlueprintTemplate(CanvasObject):
                 self.course_id,
                 self.id
             ),
+            {'course_id': self.course_id},
             kwargs=combine_kwargs(**kwargs)
         )
 
-    # put into blueprint migration class
     def show_blueprint_migration(self, migration, **kwargs):
         """
         Return the status of a blueprint migration.
 
-        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id/migrations/:id
-        \ <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/
+        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id\
+        /migrations/:id\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/\
         master_templates.migrations_show>`_
+
+        :param migration: migration id
+        :type migration: int
 
         :rtype: :class:`canvasapi.blueprint.BlueprintMigration`
         """
@@ -178,16 +189,28 @@ class BlueprintTemplate(CanvasObject):
             ),
             kwargs=combine_kwargs(**kwargs)
         )
-        return BlueprintMigration(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({'course_id': self.course_id})
+        return BlueprintMigration(self._requester, response_json)
 
-    # put into blueprint migration class
-    def get_migration_details(self, **kwargs):
+
+@python_2_unicode_compatible
+class BlueprintMigration(CanvasObject):
+
+    def __str__(self):
+        return "{} {}".format(
+            self.id,
+            self.template_id
+        )
+
+    def get_details(self, **kwargs):
         """
         Return the changes that were made in a blueprint migration.
 
-        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id
-        /migrations/:id/details \ <https://canvas.instructure.com/doc/api
-        /blueprint_courses.html#method.master_courses/master_templates.migration_details>`_
+        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id\
+        /migrations/:id/details\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        master_courses/master_templates.migration_details>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
         :class:`canvasapi.blueprint.ChangeRecord`
@@ -199,20 +222,35 @@ class BlueprintTemplate(CanvasObject):
             'GET',
             'courses/{}/blueprint_templates/{}/migrations/{}/details'.format(
                 self.course_id,
-                self.id,
+                self.template_id,
                 self.id
             ),
             kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_import_details(self, **kwargs):
+        """
+        Return changes that were made to a course with a blueprint.
 
-@python_2_unicode_compatible
-class BlueprintMigration(CanvasObject):
+        :calls: `GET /api/v1/courses/:course_id/blueprint_subscriptions/\
+        :subscription_id/migrations/:id/details\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        master_courses/master_templates.import_details>`_
 
-    def __str__(self):
-        return "{} {}".format(
-            self.id,
-            self.template_id
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+        :class:`canvasapi.blueprint.ChangeRecord`
+        """
+
+        return PaginatedList(
+            ChangeRecord,
+            self._requester,
+            'GET',
+            'courses/{}/blueprint_subscriptions/{}/migrations/{}/details'.format(
+                self.course_id,
+                self.subscription_id,
+                self.id
+            ),
+            kwargs=combine_kwargs(**kwargs)
         )
 
 
@@ -234,3 +272,54 @@ class BlueprintSubscription(CanvasObject):
             self.id,
             self.template_id
         )
+
+    def list_blueprint_imports(self, **kwargs):
+        """
+        Return a list of migrations imported into a course associated with a blueprint.
+
+        :calls: `GET /api/v1/courses/:course_id/blueprint_subscriptions/:subscription_id/\
+        migrations\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        master_courses/master_templates.imports_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+        :class:`canvasapi.blueprint.BlueprintMigration`
+        """
+
+        return PaginatedList(
+            BlueprintMigration,
+            self._requester,
+            'GET',
+            'courses/{}/blueprint_subscriptions/{}/migrations'.format(
+                self.course_id,
+                self.id
+            ),
+            {'course_id': self.id},
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    def show_blueprint_import(self, migration, **kwargs):
+        """
+        Return the status of an import into a course associated with a blueprint.
+
+        :calls: `GET /api/v1/courses/:course_id/blueprint_subscriptions/:subscription_id/\
+        migrations/:id\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        master_courses/master_templates.imports_show>`_
+
+        :rtype: :class: `canvasapi.blueprint.BlueprintMigration`
+        """
+
+        migration_id = obj_or_id(migration, 'migration', (BlueprintMigration,))
+        response = self._requester.request(
+            'GET',
+            'courses/{}/blueprint_subscriptions/{}/migrations/{}'.format(
+                self.course_id,
+                self.id,
+                migration_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        response_json.update({'course_id': self.course_id})
+        return BlueprintMigration(self._requester, response_json)
