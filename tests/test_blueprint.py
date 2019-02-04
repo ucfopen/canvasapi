@@ -91,7 +91,75 @@ class TestBlueprint(unittest.TestCase):
         self.assertEqual(blueprint_migration.workflow_state, "completed")
         self.assertEqual(blueprint_migration.template_id, 1)
 
-        # get_details()
+
+@requests_mock.Mocker()
+class TestBlueprintSubscription(unittest.TestCase):
+
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {
+                'course': ['get_blueprint', 'get_by_id', 'list_blueprint_subscriptions'],
+                'blueprint': ['show_blueprint_migration']
+            }
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.blueprint = self.course.get_blueprint(1)
+            self.blueprint_migration = self.blueprint.show_blueprint_migration(1)
+            self.blueprint_subscription = self.course.list_blueprint_subscriptions()[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.blueprint_subscription)
+        self.assertIsInstance(string, str)
+
+        # list_blueprint_imports()
+    def test_list_blueprint_imports(self, m):
+        register_uris({'blueprint': ['list_blueprint_imports']}, m)
+        blueprint_imports = self.blueprint_subscription.list_blueprint_imports()
+        self.assertIsInstance(blueprint_imports, PaginatedList)
+        self.assertIsInstance(blueprint_imports[0], BlueprintMigration)
+        self.assertEqual(blueprint_imports[0].id, 3)
+        self.assertEqual(blueprint_imports[0].subscription_id, 10)
+
+        # show_blueprint_import
+    def test_show_blueprint_import(self, m):
+        register_uris({'blueprint': ['show_blueprint_import']}, m)
+        blueprint_import = self.blueprint_subscription.show_blueprint_import(3)
+        self.assertIsInstance(blueprint_import, BlueprintMigration)
+
+
+@requests_mock.Mocker()
+class TestBlueprintMigration(unittest.TestCase):
+
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {
+                'course': ['get_blueprint', 'get_by_id', 'list_blueprint_subscriptions'],
+                'blueprint': [
+                    'show_blueprint_migration', 'list_blueprint_imports',
+                    'show_blueprint_import'
+                ]
+            }
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.blueprint = self.course.get_blueprint(1)
+            self.blueprint_migration = self.blueprint.show_blueprint_migration(1)
+            self.blueprint_subscription = self.course.list_blueprint_subscriptions()[0]
+            self.blueprint_imports = self.blueprint_subscription.list_blueprint_imports()[0]
+            self.b_import = self.blueprint_subscription.show_blueprint_import(3)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.blueprint_migration)
+        self.assertIsInstance(string, str)
+
+    # get_details()
     def test_get_details(self, m):
         register_uris({'blueprint': ['get_details']}, m)
         migration_details = self.blueprint_migration.get_details()
@@ -106,11 +174,9 @@ class TestBlueprint(unittest.TestCase):
         self.assertEqual(migration_details[1].asset_name, "Test Quiz")
         self.assertEqual(migration_details[1].locked, False)
 
-        # list_blueprint_imports()
-    def test_list_blueprint_imports(self, m):
-        register_uris({'blueprint': ['list_blueprint_imports']}, m)
-        blueprint_import = self.blueprint_subscription.list_blueprint_imports()
-        self.assertIsInstance(blueprint_import, PaginatedList)
-        self.assertIsInstance(blueprint_import[0], BlueprintMigration)
-        self.assertEqual(blueprint_import[0].id, 1)
-        self.assertEqual(blueprint_import[0].subscription_id, 55)
+    # get_import_details()
+    def test_get_import_details(self, m):
+        register_uris({'blueprint': ['get_import_details']}, m)
+        import_details = self.b_import.get_import_details()
+        self.assertIsInstance(import_details, PaginatedList)
+        self.assertIsInstance(import_details[0], ChangeRecord)
