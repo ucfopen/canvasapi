@@ -1525,6 +1525,12 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(blueprint, BlueprintTemplate)
         self.assertEqual(blueprint.course_id, 1)
 
+    def test_get_blueprint_default(self, m):
+        register_uris({'course': ['get_blueprint_default']}, m)
+        blueprint_default = self.course.get_blueprint()
+        self.assertIsInstance(blueprint_default, BlueprintTemplate)
+        self.assertEqual(blueprint_default.course_id, 1)
+
     # list_blueprint_subscriptions()
     def test_list_blueprint_subscriptions(self, m):
         register_uris({'course': ['list_blueprint_subscriptions']}, m)
