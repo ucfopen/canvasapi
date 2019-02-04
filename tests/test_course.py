@@ -10,7 +10,6 @@ from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
-from canvasapi.blueprint import BlueprintMigration
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
@@ -1535,14 +1534,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].id, 10)
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
-
-    def test_list_blueprint_imports(self, m):
-        register_uris({'course': ['list_blueprint_imports']}, m)
-        blueprint_import = self.course.list_blueprint_imports(55)
-        self.assertIsInstance(blueprint_import, PaginatedList)
-        self.assertIsInstance(blueprint_import[0], BlueprintMigration)
-        self.assertEqual(blueprint_import[0].id, 1)
-        self.assertEqual(blueprint_import[0].subscription_id, 55)
 
 
 @requests_mock.Mocker()
