@@ -135,12 +135,22 @@
 		"data": {
 			"id": 1,
 			"course_id": 1,
-			"last_export_completed_at": "2013-08-28T23:59:00-06:00",
 			"associated_course_count": 3,
             "latest_migration": null
 		},
 		"status_code": 200
 	},
+    "get_blueprint_default": {
+        "method": "GET",
+		"endpoint": "courses/1/blueprint_templates/default",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"associated_course_count": 3,
+            "latest_migration": null
+		},
+		"status_code": 200
+    },
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "courses/1",
