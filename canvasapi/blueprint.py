@@ -116,7 +116,6 @@ class BlueprintTemplate(CanvasObject):
         )
         return response.json().get("success", False)
 
-    # check why returning a change record doesnt work
     def get_unsynced_changes(self, **kwargs):
         """
         Return changes made to associated courses of a blueprint course.
@@ -257,7 +256,7 @@ class BlueprintMigration(CanvasObject):
 @python_2_unicode_compatible
 class ChangeRecord(CanvasObject):
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "{} {}".format(
             self.id,
             self.template_id
