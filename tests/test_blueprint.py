@@ -19,12 +19,15 @@ class TestBlueprint(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_blueprint', 'get_by_id']
+                'course': ['get_blueprint', 'get_by_id', 'list_blueprint_subscriptions'],
+                'blueprint': ['show_blueprint_migration']
             }
             register_uris(requires, m)
 
             self.course = self.canvas.get_course(1)
             self.blueprint = self.course.get_blueprint(1)
+            self.blueprint_migration = self.blueprint.show_blueprint_migration(1)
+            self.blueprint_subscription = self.course.list_blueprint_subscriptions()[0]
 
     # __str__()
     def test__str__(self, m):
@@ -88,9 +91,10 @@ class TestBlueprint(unittest.TestCase):
         self.assertEqual(blueprint_migration.workflow_state, "completed")
         self.assertEqual(blueprint_migration.template_id, 1)
 
-    def test_get_migration_details(self, m):
-        register_uris({'blueprint': ['get_migration_details']}, m)
-        migration_details = self.blueprint.get_migration_details()
+        # get_details()
+    def test_get_details(self, m):
+        register_uris({'blueprint': ['get_details']}, m)
+        migration_details = self.blueprint_migration.get_details()
         self.assertIsInstance(migration_details, PaginatedList)
         self.assertIsInstance(migration_details[0], ChangeRecord)
         self.assertEqual(migration_details[0].asset_id, 1)
@@ -101,3 +105,12 @@ class TestBlueprint(unittest.TestCase):
         self.assertEqual(migration_details[1].asset_type, "quiz")
         self.assertEqual(migration_details[1].asset_name, "Test Quiz")
         self.assertEqual(migration_details[1].locked, False)
+
+        # list_blueprint_imports()
+    def test_list_blueprint_imports(self, m):
+        register_uris({'blueprint': ['list_blueprint_imports']}, m)
+        blueprint_import = self.blueprint_subscription.list_blueprint_imports()
+        self.assertIsInstance(blueprint_import, PaginatedList)
+        self.assertIsInstance(blueprint_import[0], BlueprintMigration)
+        self.assertEqual(blueprint_import[0].id, 1)
+        self.assertEqual(blueprint_import[0].subscription_id, 55)
