@@ -13,7 +13,7 @@
             }
         ],
         "headers": {
-            "Link": "<https://example.com/api/v1/courses/1/blueprint_templates/1/asspciated_courses?page=2&per_page=2>; rel=\"next\""
+            "Link": "<https://example.com/api/v1/courses/1/blueprint_templates/1/associated_courses?page=2&per_page=2>; rel=\"next\""
         }
     },
     "update_associated_courses": {
