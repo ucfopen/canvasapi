@@ -93,7 +93,7 @@ class BlueprintTemplate(CanvasObject):
         :param content_type: type of object
         :type content_type: str
 
-        :param content_id: id of the objedct
+        :param content_id: id of the object
         :type content_id: int
 
         :param restricted: whether it's restricted or not
