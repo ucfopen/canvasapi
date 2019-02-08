@@ -79,7 +79,7 @@ class BlueprintTemplate(CanvasObject):
         )
         response_json = response.json()
         response_json.update({'course_id': self.course_id})
-        return BlueprintMigration(self._requester, response.json())
+        return BlueprintMigration(self._requester, response_json)
 
     def change_blueprint_restrictions(self, content_type, content_id, restricted, **kwargs):
         """
