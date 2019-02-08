@@ -2302,8 +2302,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id \
         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.show>`_
 
-        :param template_id: The ID of the blueprint template.
-        :type template_id: int
+        :param template: The ID of the blueprint template.
+        :type template: int
 
         :rtype: :class:`canvasapi.blueprint.BlueprintTemplate`
         """
@@ -2333,7 +2333,7 @@ class Course(CanvasObject):
         master_courses/master_templates.subscriptions_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-        :class:`canvasapi.blueprint.BlueprintSubscription`
+            :class:`canvasapi.blueprint.BlueprintSubscription`
         """
 
         return PaginatedList(
