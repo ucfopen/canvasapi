@@ -9,6 +9,7 @@ Class Reference
     assignment-ref
     authentication-provider-ref
     avatar-ref
+    blueprint-ref
     bookmark-ref
     calendar-event-ref
     communication-channel-ref
