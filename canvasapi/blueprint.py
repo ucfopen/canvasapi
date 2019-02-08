@@ -17,7 +17,7 @@ class BlueprintTemplate(CanvasObject):
         """
         Return a list of courses associated with the given blueprint.
 
-        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id/
+        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id/ \
         associated_courses \
         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.associated_courses>`_
 
@@ -41,13 +41,13 @@ class BlueprintTemplate(CanvasObject):
         """
         Add or remove new associations for the blueprint template.
 
-        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/\
+        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/ \
         update_associations \
-        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method. \
         master_courses/master_templates.update_associations>`_
 
         :returns: True if the course was added or removed, False otherwise.
-        :rtype bool
+        :rtype: bool
         """
         response = self._requester.request(
             'PUT',
@@ -100,7 +100,7 @@ class BlueprintTemplate(CanvasObject):
         :type restricted: bool
 
         :returns: True if the restriction was succesfully applied.
-        :rtype bool
+        :rtype: bool
         """
         kwargs["content_type"] = content_type
         kwargs["content_id"] = content_id
@@ -125,7 +125,7 @@ class BlueprintTemplate(CanvasObject):
         /master_templates.unsynced_changes>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-        :class:`canvasapi.blueprint.ChangeRecord`
+            :class:`canvasapi.blueprint.ChangeRecord`
         """
 
         return PaginatedList(
@@ -148,7 +148,7 @@ class BlueprintTemplate(CanvasObject):
          master_courses/master_templates.migrations_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-        :class:`canvasapi.blueprint.BlueprintMigration`
+            :class:`canvasapi.blueprint.BlueprintMigration`
         """
 
         return PaginatedList(
@@ -172,8 +172,8 @@ class BlueprintTemplate(CanvasObject):
         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/\
         master_templates.migrations_show>`_
 
-        :param migration: migration id
-        :type migration: int
+        :param migration: migration id or object
+        :type migration: int or :class:`canvasapi.blueprint.BlueprintMigration`
 
         :rtype: :class:`canvasapi.blueprint.BlueprintMigration`
         """
@@ -212,7 +212,7 @@ class BlueprintMigration(CanvasObject):
         master_courses/master_templates.migration_details>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-        :class:`canvasapi.blueprint.ChangeRecord`
+            :class:`canvasapi.blueprint.ChangeRecord`
         """
 
         return PaginatedList(
@@ -237,7 +237,7 @@ class BlueprintMigration(CanvasObject):
         master_courses/master_templates.import_details>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-        :class:`canvasapi.blueprint.ChangeRecord`
+            :class:`canvasapi.blueprint.ChangeRecord`
         """
 
         return PaginatedList(
@@ -282,7 +282,7 @@ class BlueprintSubscription(CanvasObject):
         master_courses/master_templates.imports_index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-        :class:`canvasapi.blueprint.BlueprintMigration`
+            :class:`canvasapi.blueprint.BlueprintMigration`
         """
 
         return PaginatedList(
