@@ -5,16 +5,15 @@
         "data": [
             {
                 "id": 1,
-                "name": "Test 1"
+                "name": "Test 1",
+                "course_code": "TST1234"
             },
             {
                 "id": 2,
-                "name": "Test 2"
+                "name": "Test 2",
+                "course_code": "TST5678"
             }
-        ],
-        "headers": {
-            "Link": "<https://example.com/api/v1/courses/1/blueprint_templates/1/associated_courses?page=2&per_page=2>; rel=\"next\""
-        }
+        ]
     },
     "update_associated_courses": {
         "method": "PUT",

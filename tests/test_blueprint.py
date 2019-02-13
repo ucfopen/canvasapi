@@ -27,7 +27,6 @@ class TestBlueprint(unittest.TestCase):
             self.course = self.canvas.get_course(1)
             self.blueprint = self.course.get_blueprint(1)
             self.blueprint_migration = self.blueprint.show_blueprint_migration(1)
-            self.blueprint_subscription = self.course.list_blueprint_subscriptions()[0]
 
     # __str__()
     def test__str__(self, m):
@@ -38,6 +37,7 @@ class TestBlueprint(unittest.TestCase):
     def test_get_associated_courses(self, m):
         register_uris({'blueprint': ['get_associated_courses']}, m)
         associated_courses = self.blueprint.get_associated_courses()
+        self.assertIsInstance(associated_courses, PaginatedList)
         self.assertEqual(associated_courses[0].id, 1)
         self.assertIsInstance(associated_courses[0], Course)
 

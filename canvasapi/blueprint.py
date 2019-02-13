@@ -306,6 +306,9 @@ class BlueprintSubscription(CanvasObject):
         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
         master_courses/master_templates.imports_show>`_
 
+        :param migration: migration id
+        :type migration: int or :class:`canvasapi.blueprint.BlueprintMigration`
+
         :rtype: :class: `canvasapi.blueprint.BlueprintMigration`
         """
 

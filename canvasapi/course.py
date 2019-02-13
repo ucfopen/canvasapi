@@ -2360,8 +2360,7 @@ class CourseNickname(CanvasObject):
         calls will return the actual name for the course.
 
         :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id\
-        <https://canvas.instructure.com/doc/api/users.html#method.\
-        course_nicknames.delete>`_
+        <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
 
         :rtype: :class:`canvasapi.course.CourseNickname`
         """
