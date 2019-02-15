@@ -6,6 +6,7 @@
 
 - Assignment Overrides
 - Quiz Submissions (Thanks, [@wallacetyler](https://github.com/wallacetyler))
+- Blueprints (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
 
 ### General
 

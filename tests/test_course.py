@@ -10,6 +10,8 @@ from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
+from canvasapi.blueprint import BlueprintSubscription
+from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
@@ -22,6 +24,7 @@ from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizExtension
 from canvasapi.rubric import Rubric
@@ -1514,6 +1517,29 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()
         self.assertTrue(progress.context_type == "Course")
+
+    # get_blueprint()
+    def test_get_blueprint(self, m):
+        register_uris({'course': ['get_blueprint']}, m)
+        blueprint = self.course.get_blueprint(1)
+        self.assertIsInstance(blueprint, BlueprintTemplate)
+        self.assertEqual(blueprint.course_id, 1)
+
+    def test_get_blueprint_default(self, m):
+        register_uris({'course': ['get_blueprint_default']}, m)
+        blueprint_default = self.course.get_blueprint()
+        self.assertIsInstance(blueprint_default, BlueprintTemplate)
+        self.assertEqual(blueprint_default.course_id, 1)
+
+    # list_blueprint_subscriptions()
+    def test_list_blueprint_subscriptions(self, m):
+        register_uris({'course': ['list_blueprint_subscriptions']}, m)
+        blueprint_subscriptions = self.course.list_blueprint_subscriptions()
+        self.assertIsInstance(blueprint_subscriptions, PaginatedList)
+        self.assertIsInstance(blueprint_subscriptions[0], BlueprintSubscription)
+        self.assertEqual(blueprint_subscriptions[0].id, 10)
+        self.assertEqual(blueprint_subscriptions[0].template_id, 2)
+        self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
 
 
 @requests_mock.Mocker()

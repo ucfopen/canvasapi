@@ -129,6 +129,28 @@
 		},
 		"status_code": 200
 	},
+	"get_blueprint": {
+		"method": "GET",
+		"endpoint": "courses/1/blueprint_templates/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"associated_course_count": 3,
+            "latest_migration": null
+		},
+		"status_code": 200
+	},
+    "get_blueprint_default": {
+        "method": "GET",
+		"endpoint": "courses/1/blueprint_templates/default",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"associated_course_count": 3,
+            "latest_migration": null
+		},
+		"status_code": 200
+    },
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "courses/1",
@@ -424,6 +446,23 @@
 		],
 		"status_code": 200
 	},
+    "list_blueprint_subscriptions": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_subscriptions",
+        "data": [
+            {
+                "id": 10,
+                "template_id": 2,
+                "blueprint_course": {
+                    "id": 1,
+                    "name": "Test Course",
+                    "course_code": "TES1337",
+                    "term_name": "Summer 2018"
+                }
+            }
+        ],
+        "status_code": 200
+    },
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "courses/1/enrollments",
