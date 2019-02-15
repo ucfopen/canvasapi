@@ -44,27 +44,23 @@
     "get_unsynced_changes": {
         "method": "GET",
         "endpoint": "courses/1/blueprint_templates/1/unsynced_changes",
-        "data": [
-            {
-                "asset_id": 1,
-                "asset_type": "quiz",
-                "asset_name": "test quiz",
-                "change_type": "updated"
-            }
-    ],
+        "data": [{
+            "asset_id": 1,
+            "asset_type": "quiz",
+            "asset_name": "test quiz",
+            "change_type": "updated"
+        }],
         "status_code": 200
     },
     "list_blueprint_migrations": {
         "method": "GET",
         "endpoint": "courses/1/blueprint_templates/1/migrations",
-        "data": [
-            {
-                "id": 1,
-                "user_id": 1,
-                "template_id": 1
-            }
-        ],
-            "status_code": 200
+        "data": [{
+            "id": 1,
+            "user_id": 1,
+            "template_id": 1
+        }],
+        "status_code": 200
     },
     "show_blueprint_migration": {
         "method": "GET",
@@ -74,8 +70,8 @@
             "user_id": 1,
             "workflow_state": "completed",
             "template_id": 1
-            },
-            "status_code": 200
+        },
+        "status_code": 200
     },
     "get_details": {
         "method": "GET",
@@ -96,20 +92,18 @@
                 "locked": false
             }
         ],
-            "status_code": 200
+        "status_code": 200
     },
     "list_blueprint_imports": {
         "method": "GET",
         "endpoint": "courses/1/blueprint_subscriptions/10/migrations",
-        "data": [
-            {
-                "course_id": 1,
-                "id": 3,
-                "template_id": 3,
-                "subscription_id": 10
-            }
-        ],
-            "status_code": 200
+        "data": [{
+            "course_id": 1,
+            "id": 3,
+            "template_id": 3,
+            "subscription_id": 10
+        }],
+        "status_code": 200
     },
     "show_blueprint_import": {
         "method": "GET",
@@ -119,7 +113,7 @@
             "template_id": 3,
             "subscription_id": 10
         },
-            "status_code": 200
+        "status_code": 200
     },
     "get_import_details": {
         "method": "GET",
@@ -140,6 +134,6 @@
                 "locked": true
             }
         ],
-            "status_code": 200
+        "status_code": 200
     }
 }

@@ -41,10 +41,9 @@ class BlueprintTemplate(CanvasObject):
         """
         Add or remove new associations for the blueprint template.
 
-        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/ \
-        update_associations \
-        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method. \
-        master_courses/master_templates.update_associations>`_
+        :calls: `PUT \
+        /api/v1/courses/:course_id/blueprint_templates/:template_id/update_associations \
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.update_associations>`_
 
         :returns: True if the course was added or removed, False otherwise.
         :rtype: bool
@@ -86,16 +85,13 @@ class BlueprintTemplate(CanvasObject):
         Set or remove restrictions on a blueprint course object.
         Must have all three parameters for this function call to work.
 
-        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/restrict_item\
-        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method\
-        .master_courses/master_templates.restrict_item>`_
+        :calls: `PUT /api/v1/courses/:course_id/blueprint_templates/:template_id/restrict_item \
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.restrict_item>`_
 
         :param content_type: type of object
         :type content_type: str
-
         :param content_id: id of the object
         :type content_id: int
-
         :param restricted: whether it's restricted or not
         :type restricted: bool
 
@@ -306,10 +302,10 @@ class BlueprintSubscription(CanvasObject):
         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
         master_courses/master_templates.imports_show>`_
 
-        :param migration: migration id
+        :param migration: migration id or object
         :type migration: int or :class:`canvasapi.blueprint.BlueprintMigration`
 
-        :rtype: :class: `canvasapi.blueprint.BlueprintMigration`
+        :rtype: :class:`canvasapi.blueprint.BlueprintMigration`
         """
 
         migration_id = obj_or_id(migration, 'migration', (BlueprintMigration,))

@@ -2302,8 +2302,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id \
         <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.show>`_
 
-        :param template: The ID of the blueprint template.
-        :type template: int
+        :param template: The object or ID of the blueprint template to get.
+        :type template: int or :class:`canvasapi.blueprint.BlueprintTemplate`
 
         :rtype: :class:`canvasapi.blueprint.BlueprintTemplate`
         """
@@ -2359,7 +2359,7 @@ class CourseNickname(CanvasObject):
         Remove the nickname for the given course. Subsequent course API
         calls will return the actual name for the course.
 
-        :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id\
+        :calls: `DELETE /api/v1/users/self/course_nicknames/:course_id \
         <https://canvas.instructure.com/doc/api/users.html#method.course_nicknames.delete>`_
 
         :rtype: :class:`canvasapi.course.CourseNickname`

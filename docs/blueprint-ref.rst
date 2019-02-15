@@ -1,10 +1,3 @@
-============
-ChangeRecord
-============
-
-.. autoclass:: canvasapi.blueprint.ChangeRecord
-    :members:
-
 ==================
 BlueprintMigration
 ==================
@@ -24,4 +17,11 @@ BlueprintTemplate
 =================
 
 .. autoclass:: canvasapi.blueprint.BlueprintTemplate
+    :members:
+
+============
+ChangeRecord
+============
+
+.. autoclass:: canvasapi.blueprint.ChangeRecord
     :members:
