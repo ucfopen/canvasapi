@@ -22,6 +22,7 @@ Patches and Suggestions
 - Devin Singh [@devints47](https://github.com/devints47)
 - Elise Heron [@thedarkestknight](https://github.com/thedarkestknight)
 - Elli Howard [@qwertynerd97](https://github.com/qwertynerd97)
+- Gabriela Dijkhoffz [@gdijkhoffz](https://github.com/gdijkhoffz)
 - Henry Acevedo [@Colombiangmr](https://github.com/Colombiangmr)
 - Ian Turgeon [@iturgeon](https://github.com/iturgeon)
 - [@jackrsteiner](https://github.com/jackrsteiner)
