@@ -1605,4 +1605,4 @@ class SSOSettings(CanvasObject):
 class Admin(CanvasObject):
 
     def __str__(self):  # pragma: no cover
-        return "{}".format(self.user['id'])
+        return "{} {} ({})".format(self.user['name'], self.user['id'], self.id)
