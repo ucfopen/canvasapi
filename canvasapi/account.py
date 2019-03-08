@@ -1449,6 +1449,23 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def create_admin(self, **kwargs):
+        """
+        Create an admin.
+
+        :calls: `POST /api/v1/accounts/:account_id/admins \
+        <https://canvas.instructure.com/doc/api/admins.html#method.admins.create>`_
+
+        :rtype: :class:`canvasapi.account.Admin`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'accounts/{}/admins'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Admin(self._requester, response.json())
+
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):
