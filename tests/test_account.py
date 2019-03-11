@@ -951,4 +951,3 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(admin.user['login_id'], 'jdoe')
         self.assertEqual(admin.role, 'AccountAdmin')
         self.assertEqual(admin.role_id, 1)
-
