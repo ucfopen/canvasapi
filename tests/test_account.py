@@ -942,7 +942,7 @@ class TestAccount(unittest.TestCase):
         register_uris({'account': ['create_admin']}, m)
 
         user_id = 123
-        admin = self.account.create_admin(user_id=user_id)
+        admin = self.account.create_admin(user=user_id)
         self.assertIsInstance(admin, Admin)
         self.assertTrue(hasattr(admin, 'id'))
         self.assertTrue(hasattr(admin, 'role'))

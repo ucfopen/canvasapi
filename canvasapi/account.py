@@ -1449,15 +1449,22 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def create_admin(self, **kwargs):
+    def create_admin(self, user, **kwargs):
         """
-        Create an admin.
+        Flag an existing user as an admin of the current account.
 
         :calls: `POST /api/v1/accounts/:account_id/admins \
         <https://canvas.instructure.com/doc/api/admins.html#method.admins.create>`_
 
+        :param user: The user object or ID to promote to admin.
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: :class:`canvasapi.account.Admin`
         """
+        from canvasapi.user import User
+
+        user_id = obj_or_id(user, "user", (User,))
+        kwargs['user_id'] = user_id
 
         response = self._requester.request(
             'POST',

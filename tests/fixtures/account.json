@@ -1259,22 +1259,20 @@
 		"method": "POST",
 		"endpoint": "accounts/1/admins",
 		"data": {
-				"id": 100,
-				"role": "AccountAdmin",
-				"role_id": 1,
-				"user": {
-					"id": 123,
-					"name": "John Doe",
-					"sortable_name": "John Doe",
-					"short_name": "J Doe",
-					"sis_user_id": null,
-					"integration_id": null,
-					"sis_import_id": null,
-					"login_id": "jdoe"
-				},
-				"workflow_state": "active"
+			"id": 100,
+			"role": "AccountAdmin",
+			"role_id": 1,
+			"user": {
+				"id": 123,
+				"name": "John Doe",
+				"sortable_name": "John Doe",
+				"short_name": "J Doe",
+				"sis_user_id": null,
+				"integration_id": null,
+				"sis_import_id": null,
+				"login_id": "jdoe"
+			},
+			"workflow_state": "active"
 		}
 	}
-
-
 }
