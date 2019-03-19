@@ -252,6 +252,25 @@ class TestUtil(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertIn(('big_dict[a][b][c][d][e]', 'We need to go deeper'), result)
 
+    def test_combine_kwargs_dict_list_dict(self, m):
+        result = combine_kwargs(
+            dict_list_dict={
+                'key1': [
+                    {'subkey1a': 'value1a'},
+                    {'subkey1b': 'value1b'}
+                ],
+                'key2': [
+                    {'subkey2a': ['value2a1', 'value2a2']}
+                ]
+            }
+        )
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 4)
+        self.assertIn(('dict_list_dict[key1][][subkey1a]', 'value1a'), result)
+        self.assertIn(('dict_list_dict[key1][][subkey1b]', 'value1b'), result)
+        self.assertIn(('dict_list_dict[key2][][subkey2a][]', 'value2a1'), result)
+        self.assertIn(('dict_list_dict[key2][][subkey2a][]', 'value2a2'), result)
+
     def test_combine_kwargs_the_gauntlet(self, m):
         result = combine_kwargs(
             foo='bar',
@@ -310,9 +329,19 @@ class TestUtil(unittest.TestCase):
             dict_list={
                 'key': ['item1', 'item2']
             },
+            dict_list_dict={
+                'key1': [
+                    {'subkey1a': 'value1a'},
+                    {'subkey1b': 'value1b'}
+                ],
+                'key2': [
+                    {'subkey2a': 'value2a'},
+                    {'subkey2b': 'value2b'}
+                ]
+            }
         )
         self.assertIsInstance(result, list)
-        self.assertEqual(len(result), 39)
+        self.assertEqual(len(result), 43)
 
         # Check that all keys were generated correctly
         self.assertIn(('foo', 'bar'), result)
@@ -354,6 +383,10 @@ class TestUtil(unittest.TestCase):
         self.assertIn(('generator[]', 'g3'), result)
         self.assertIn(('dict_list[key][]', 'item1'), result)
         self.assertIn(('dict_list[key][]', 'item2'), result)
+        self.assertIn(('dict_list_dict[key1][][subkey1a]', 'value1a'), result)
+        self.assertIn(('dict_list_dict[key1][][subkey1b]', 'value1b'), result)
+        self.assertIn(('dict_list_dict[key2][][subkey2a]', 'value2a'), result)
+        self.assertIn(('dict_list_dict[key2][][subkey2b]', 'value2b'), result)
 
         # Ensure list kwargs are in correct order
         self.assertTrue(

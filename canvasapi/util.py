@@ -89,8 +89,8 @@ def flatten_kwarg(key, obj):
         # Add empty brackets (i.e. "[]")
         new_list = []
         for i in obj:
-            for tup in flatten_kwarg(key, i):
-                new_list.append((tup[0] + '[]', tup[1]))
+            for tup in flatten_kwarg(key + '][', i):
+                new_list.append((tup[0], tup[1]))
         return new_list
     else:
         # Base case. Return list with tuple containing the value
