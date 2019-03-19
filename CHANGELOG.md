@@ -7,6 +7,7 @@
 - Assignment Overrides
 - Quiz Submissions (Thanks, [@wallacetyler](https://github.com/wallacetyler))
 - Blueprints (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
+- Create an Admin (Thanks, [@altgilbers](https://github.com/altgilbers))
 
 ### General
 
