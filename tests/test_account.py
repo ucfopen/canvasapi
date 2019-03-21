@@ -1038,3 +1038,18 @@ class TestAccount(unittest.TestCase):
         aborted = self.account.abort_sis_imports_pending()
 
         self.assertFalse(aborted)
+
+    # create_admins()
+    def test_create_admin(self, m):
+        register_uris({'account': ['create_admin']}, m)
+
+        user_id = 123
+        admin = self.account.create_admin(user=user_id)
+        self.assertIsInstance(admin, Admin)
+        self.assertTrue(hasattr(admin, 'id'))
+        self.assertTrue(hasattr(admin, 'role'))
+        self.assertTrue(hasattr(admin, 'role_id'))
+        self.assertTrue(hasattr(admin, 'workflow_state'))
+        self.assertEqual(admin.user['login_id'], 'jdoe')
+        self.assertEqual(admin.role, 'AccountAdmin')
+        self.assertEqual(admin.role_id, 1)

@@ -24,6 +24,7 @@ Patches and Suggestions
 - Elli Howard [@qwertynerd97](https://github.com/qwertynerd97)
 - Gabriela Dijkhoffz [@gdijkhoffz](https://github.com/gdijkhoffz)
 - Henry Acevedo [@Colombiangmr](https://github.com/Colombiangmr)
+- Ian Altgilbers [@altgilbers](https://github.com/altgilbers)
 - Ian Turgeon [@iturgeon](https://github.com/iturgeon)
 - [@jackrsteiner](https://github.com/jackrsteiner)
 - Jonathan Guilbe [@JonGuilbe](https://github.com/JonGuilbe)
