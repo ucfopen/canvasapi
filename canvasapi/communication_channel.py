@@ -247,4 +247,3 @@ class CommunicationChannel(CanvasObject):
         )
 
         return response.json().get('workflow_state') == 'deleted'
-

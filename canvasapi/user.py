@@ -397,7 +397,6 @@ class User(CanvasObject):
 
         return CommunicationChannel(self._requester, response.json())
 
-
     def list_files(self, **kwargs):
         """
         Returns the paginated list of files for the user.
