@@ -412,6 +412,19 @@
 		],
 		"status_code": 200
 	},
+	"create_comm_channel": {
+		"method": "POST",
+		"endpoint": "users/1/communication_channels",
+		"data": {
+			"id": 1,
+			"address": "username@example.org",
+			"type": "email",
+			"position": 1,
+			"user_id": 1,
+			"workflow_state": "active"
+		},
+		"status_code": 200
+	},
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "users/1/enrollments",

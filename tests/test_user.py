@@ -258,6 +258,18 @@ class TestUser(unittest.TestCase):
         self.assertEqual(len(channel_list), 4)
         self.assertIsInstance(channel_list[0], CommunicationChannel)
 
+    # create_communication_channel()
+    def test_create_communication_channels(self, m):
+        register_uris({'user': ['create_comm_channel']}, m)
+
+        channel = {
+                "type":"email",
+                "address": "username@example.org"
+                }
+        new_channel = self.user.create_communication_channel(communication_channel=channel)
+
+        self.assertIsInstance(new_channel, CommunicationChannel)
+
     # list_files()
     def test_list_files(self, m):
         register_uris({'user': ['get_user_files', 'get_user_files2']}, m)

@@ -159,3 +159,15 @@ class TestCommunicationChannel(unittest.TestCase):
                 notification_preferences=no_frequency_notification_preferences
             )
         )
+
+    # delete()
+    def test_delete(self, m):
+        register_uris({'communication_channel': ['create_comm_channel', 
+                       'delete_comm_channel']}, m)
+
+        channel = {
+                "type":"email",
+                "address": "username@example.org"
+                }
+        new_channel = self.user.create_communication_channel(communication_channel=channel)
+        self.assertTrue(new_channel.delete())
