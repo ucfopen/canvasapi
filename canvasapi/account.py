@@ -11,7 +11,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
-from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.util import combine_kwargs, file_or_path, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -1450,41 +1450,36 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def create_sis_import(self, file, **kwargs):
+    def create_sis_import(self, attachment, **kwargs):
         """
         Create a new SIS import for the current account.
 
         :calls: `POST /api/v1/accounts/:account_id/sis_imports \
         <https://canvas.instructure.com/doc/api/sis_imports.html#method.sis_imports_api.create>`_
 
-        :param file: A file handler or path of the file to import.
-        :type file: file or str
+        :param attachment: A file handler or path of the file to import.
+        :type attachment: file or str
 
         :rtype: :class:`canvasapi.sis_import.SisImport`
         """
 
-        if isinstance(file, string_types):
-            if not os.path.exists(file):
-                raise IOError('File ' + file + ' does not exist.')
-            with open(file, 'rb') as f:
-                response = self._requester.request(
-                    'POST',
-                    'accounts/{}/sis_imports'.format(self.id),
-                    files={'attachment': f},
-                    _kwargs=combine_kwargs(**kwargs)
-                )
-        else:
+        attachment, is_path = file_or_path(attachment)
+
+        try:
             response = self._requester.request(
                 'POST',
                 'accounts/{}/sis_imports'.format(self.id),
-                files={'attachment': file},
+                file={'attachment': attachment},
                 _kwargs=combine_kwargs(**kwargs)
             )
 
-        response_json = response.json()
-        response_json.update({'account_id': self.id})
+            response_json = response.json()
+            response_json.update({'account_id': self.id})
 
-        return SisImport(self._requester, response_json)
+            return SisImport(self._requester, response_json)
+        finally:
+            if is_path:
+                attachment.close()
 
     def get_sis_import(self, sis_import, **kwargs):
         """

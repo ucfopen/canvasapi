@@ -133,20 +133,20 @@ class Requester(object):
         :param data: dict
         """
 
-        # Grab file/files from data.
-        file = None
-        for tup in data:
-            if tup[0] == 'file':
-                file = {'file': tup[1]}
-                break
-            elif tup[0] == 'files':
-                file = tup[1]
+        # Grab file from data.
+        files = None
+        for field, value in data:
+            if field == 'file':
+                if isinstance(value, dict):
+                    files = value
+                else:
+                    files = {'file': value}
                 break
 
-        # Remove file/files entry from data.
-        data[:] = [tup for tup in data if tup[0] not in ['file', 'files']]
+        # Remove file entry from data.
+        data[:] = [tup for tup in data if tup[0] != 'file']
 
-        return self._session.post(url, headers=headers, data=data, files=file)
+        return self._session.post(url, headers=headers, data=data, files=files)
 
     def _delete_request(self, url, headers, data=None):
         """
