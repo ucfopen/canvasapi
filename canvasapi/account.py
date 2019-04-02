@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import os
 import warnings
 
 from six import python_2_unicode_compatible, string_types
