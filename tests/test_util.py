@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+import uuid
 
 import requests_mock
 
@@ -7,13 +8,13 @@ from canvasapi import Canvas
 from canvasapi.course import CourseNickname
 from canvasapi.user import User
 from canvasapi.util import (
-    combine_kwargs, get_institution_url, is_multivalued, obj_or_id
+    combine_kwargs, get_institution_url, is_multivalued, obj_or_id, file_or_path
 )
 from itertools import chain
 from six import integer_types, iterkeys, itervalues, iteritems, text_type
 from six.moves import zip
 from tests import settings
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -499,3 +500,39 @@ class TestUtil(unittest.TestCase):
             get_institution_url('https://my.canvas.edu/test/2/api/v1/'),
             correct_url + '/test/2'
         )
+
+    # file_or_path()
+    def test_file_or_path_file(self, m):
+        filename = 'testfile_file_or_path_file_{}'.format(uuid.uuid4().hex)
+
+        try:
+            # create file and pass it in directly
+            with open(filename, 'w+') as file:
+                handler, is_path = file_or_path(file)
+
+                self.assertFalse(is_path)
+        finally:
+            cleanup_file(filename)
+
+    def test_file_or_path_valid_path(self, m):
+        filename = 'testfile_file_or_path_valid_path_{}'.format(uuid.uuid4().hex)
+
+        try:
+            # create file and immediately close it
+            open(filename, 'w+').close()
+
+            handler, is_path = file_or_path(filename)
+            self.assertTrue(is_path)
+
+            # close re-opened file
+            handler.close()
+        finally:
+            cleanup_file(filename)
+
+    def test_file_or_path_invalid_path(self, m):
+        filename = 'testfile_file_or_path_invalid_path_{}'.format(uuid.uuid4().hex)
+
+        # intentionally do not create file
+
+        with self.assertRaises(IOError):
+            handler, is_path = file_or_path(filename)
