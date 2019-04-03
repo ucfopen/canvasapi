@@ -1255,6 +1255,181 @@
 		],
 		"status_code": 200
 	},
+	"create_sis_import": {
+		"method": "POST",
+		"endpoint": "accounts/1/sis_imports",
+		"data": {
+			"id": 2,
+			"progress": 100,
+			"workflow_state": "created",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"batch_mode": null,
+			"batch_mode_term_id": null,
+			"multi_term_batch_mode": null,
+			"override_sis_stickiness": null,
+			"add_sis_stickiness": null,
+			"clear_sis_stickiness": null,
+			"diffing_data_set_identifier": null,
+			"diffed_against_import_id": null,
+			"diffing_drop_status": null,
+			"skip_deletes": null,
+			"change_threshold": null,
+			"user": {
+				"id": 1,
+				"name": "SIS Import Admin",
+				"sortable_name": "Admin, SIS Import",
+				"short_name": "SIS Import Admin",
+				"sis_user_id": "sisimporter",
+				"integration_id": null,
+				"sis_import_id": null,
+				"login_id": "sisimporter"
+			},
+			"account_id": 1
+		},
+		"status_code": 200
+	},
+	"get_sis_import": {
+		"method": "GET",
+		"endpoint": "accounts/1/sis_imports/2",
+		"data": {
+			"id": 2,
+			"progress": 100,
+			"workflow_state": "imported",
+			"data": {
+				"import_type": "instructure_csv",
+				"supplied_batches": [
+					"enrollments"
+				],
+				"counts": {
+					"change_sis_ids": 0,
+					"accounts": 0,
+					"terms": 0,
+					"abstract_courses": 0,
+					"courses": 0,
+					"sections": 0,
+					"xlists": 0,
+					"users": 0,
+					"enrollments": 1,
+					"groups": 0,
+					"group_memberships": 0,
+					"grade_publishing_results": 0,
+					"user_observers": 0
+				}
+			},
+			"user": {
+				"id": 1,
+				"name": "SIS Import Admin",
+				"sortable_name": "Admin, SIS Import",
+				"short_name": "SIS Import Admin",
+				"sis_user_id": "sisimporter",
+				"integration_id": null,
+				"sis_import_id": null,
+				"login_id": "sisimporter"
+			},
+			"account_id": 1
+		},
+		"status_code": 200
+	},
+	"get_sis_imports": {
+		"method": "GET",
+		"endpoint": "accounts/1/sis_imports",
+		"data": {
+			"sis_imports": [
+				{
+					"id": 2,
+					"progress": 10,
+					"workflow_state": "importing",
+					"data": {
+						"import_type": "instructure_csv"
+					},
+					"user": {
+						"id": 1,
+						"name": "SIS Import Admin",
+						"sortable_name": "Admin, SIS Import",
+						"short_name": "SIS Import Admin",
+						"sis_user_id": "sisimporter",
+						"integration_id": null,
+						"sis_import_id": null,
+						"login_id": "sisimporter"
+					},
+					"account_id": 1
+				},
+				{
+					"id": 3,
+					"progress": 100,
+					"workflow_state": "imported",
+					"data": {
+						"import_type": "instructure_csv"
+					},
+					"user": {
+						"id": 8,
+						"name": "SIS Import Admin",
+						"sortable_name": "Admin, SIS Import",
+						"short_name": "SIS Import Admin",
+						"sis_user_id": "sisimporter",
+						"integration_id": null,
+						"sis_import_id": null,
+						"login_id": "sisimporter"
+					},
+					"account_id": 8
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_sis_imports_running": {
+		"method": "GET",
+		"endpoint": "accounts/1/sis_imports/importing",
+		"data": {
+			"sis_imports": [
+				{
+					"id": 2,
+					"progress": 10,
+					"workflow_state": "importing",
+					"data": {
+						"import_type": "instructure_csv"
+					},
+					"user": {
+						"id": 1,
+						"name": "SIS Import Admin",
+						"sortable_name": "Admin, SIS Import",
+						"short_name": "SIS Import Admin",
+						"sis_user_id": "sisimporter",
+						"integration_id": null,
+						"sis_import_id": null,
+						"login_id": "sisimporter"
+					},
+					"account_id": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"abort_sis_imports_pending": {
+		"method": "PUT",
+		"endpoint": "accounts/1/sis_imports/abort_all_pending",
+		"data": {
+			"aborted": true
+		},
+		"status_code": 200
+	},
+	"abort_sis_imports_pending_false": {
+		"method": "PUT",
+		"endpoint": "accounts/1/sis_imports/abort_all_pending",
+		"data": {
+			"aborted": false
+		},
+		"status_code": 200
+	},
+	"abort_sis_imports_pending_blank": {
+		"method": "PUT",
+		"endpoint": "accounts/1/sis_imports/abort_all_pending",
+		"data": {
+		},
+		"status_code": 200
+	},
 	"create_admin": {
 		"method": "POST",
 		"endpoint": "accounts/1/admins",

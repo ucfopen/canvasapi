@@ -32,6 +32,7 @@ Patches and Suggestions
 - [@kensler](https://github.com/kensler)
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
 - Markus [@elec3647](https://github.com/elec3647)
+- Michael Phelps [@nottheswimmer](https://github.com/nottheswimmer)
 - Nathan Dabu [@nathaned](https://github.com/nathaned)
 - Petar Nikolovski [@petarGitNik](https://github.com/petarGitNik)
 - Philip Austin [@phaustin](https://github.com/phaustin)
