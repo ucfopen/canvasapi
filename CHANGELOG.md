@@ -9,6 +9,7 @@
 - Blueprints (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
 - Create an Admin (Thanks, [@altgilbers](https://github.com/altgilbers))
 - SIS Imports (Thanks, [@nottheswimmer](https://github.com/nottheswimmer))
+- Create and Delete Communication Channels (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
 
 ### General
 
