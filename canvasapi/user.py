@@ -382,7 +382,7 @@ class User(CanvasObject):
 
     def create_communication_channel(self, **kwargs):
         """
-        Create a communication channel forthis user
+        Create a communication channel for this user
 
         :calls: `POST /api/v1/users/:user_id/communication_channels \
         <https://canvas.instructure.com/doc/api/communication_channels.html#method.communication_channels.create>`_

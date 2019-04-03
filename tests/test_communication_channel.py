@@ -102,10 +102,9 @@ class TestCommunicationChannel(unittest.TestCase):
 
     # update_preferences_by_category()
     def test_update_preferences_by_category(self, m):
-        register_uris(
-            {
-                'communication_channel': ['update_preferences_by_category']
-            }, m)
+        register_uris({
+            'communication_channel': ['update_preferences_by_category']
+        }, m)
         category = 'course_content'
         frequency = 'daily'
 
@@ -162,8 +161,9 @@ class TestCommunicationChannel(unittest.TestCase):
 
     # delete()
     def test_delete(self, m):
-        register_uris({'communication_channel': ['create_comm_channel',
-                       'delete_comm_channel']}, m)
+        register_uris({
+            'communication_channel': ['create_comm_channel', 'delete_comm_channel']
+        }, m)
 
         channel = {
             "type": "email",
