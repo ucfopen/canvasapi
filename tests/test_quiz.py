@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 
 import requests_mock
+from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
@@ -212,6 +213,33 @@ class TestQuiz(unittest.TestCase):
         self.assertTrue(hasattr(submission[1], 'score'))
         self.assertEqual(submission[1].score, 5)
 
+    # get_quiz_submission
+    def test_get_quiz_submission(self, m):
+        register_uris({'quiz': ['get_quiz_submission']}, m)
+
+        quiz_id = 1
+        submission = self.quiz.get_quiz_submission(quiz_id)
+
+        self.assertIsInstance(submission, QuizSubmission)
+        self.assertTrue(hasattr(submission, 'id'))
+        self.assertEqual(submission.quiz_id, quiz_id)
+        self.assertTrue(hasattr(submission, 'quiz_version'))
+        self.assertEqual(submission.quiz_version, 1)
+        self.assertTrue(hasattr(submission, 'user_id'))
+        self.assertEqual(submission.user_id, 1)
+        self.assertTrue(hasattr(submission, 'validation_token'))
+        self.assertEqual(submission.validation_token, 'this is a validation token')
+        self.assertTrue(hasattr(submission, 'score'))
+        self.assertEqual(submission.score, 0)
+
+    # create_submission
+    def test_create_submission(self, m):
+        register_uris({'quiz': ['create_submission']}, m)
+
+        submission = self.quiz.create_submission()
+
+        self.assertIsInstance(submission, QuizSubmission)
+
 
 @requests_mock.Mocker()
 class TestQuizSubmission(unittest.TestCase):
@@ -224,8 +252,10 @@ class TestQuizSubmission(unittest.TestCase):
                 'id': 1,
                 'quiz_id': 1,
                 'user_id': 1,
+                'course_id': 1,
                 'submission_id': 1,
                 'attempt': 3,
+                'validation_token': 'this is a validation token',
                 'manually_unlocked': None,
                 'score': 7
             }
@@ -235,6 +265,77 @@ class TestQuizSubmission(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.submission)
         self.assertIsInstance(string, str)
+
+    # complete
+    def test_complete(self, m):
+        register_uris({'submission': ['complete']}, m)
+
+        submission = self.submission.complete()
+
+        with self.assertRaises(ValueError):
+            self.submission.complete(attempt=1)
+
+        with self.assertRaises(ValueError):
+            self.submission.complete(validation_token='should not pass validation token here')
+
+        self.assertIsInstance(submission, QuizSubmission)
+        self.assertTrue(hasattr(submission, 'id'))
+        self.assertTrue(hasattr(submission, 'quiz_id'))
+        self.assertTrue(hasattr(submission, 'attempt'))
+        self.assertTrue(hasattr(submission, 'validation_token'))
+
+    # get_times
+    def test_get_times(self, m):
+        register_uris({'submission': ['get_times']}, m)
+
+        submission = self.submission.get_times()
+
+        with self.assertRaises(ValueError):
+            self.submission.get_times(attempt=1)
+
+        self.assertIsInstance(submission, dict)
+        self.assertIn('end_at', submission)
+        self.assertIn('time_left', submission)
+        self.assertIsInstance(submission['time_left'], int)
+        self.assertIsInstance(submission['end_at'], text_type)
+
+    # update_score_and_comments
+    def test_update_score_and_comments(self, m):
+        register_uris({'submission': ['update_score_and_comments']}, m)
+
+        submission = self.submission.update_score_and_comments(
+            quiz_submissions=[
+                {
+                    "attempt": 1,
+                    "fudge_points": 1,
+                    "questions":
+                        {
+                            "question id 1":
+                            {
+                                "score": 1,
+                                "comment": "question 1 comment"
+                            },
+                            "question id 2":
+                            {
+                                "score": 2,
+                                "comment": "question 2 comment"
+                            },
+                            "question id 3":
+                            {
+                                "score": 3,
+                                "comment": "question 3 comment"
+                            }
+                        }
+                }
+            ]
+        )
+
+        self.assertIsInstance(submission, QuizSubmission)
+        self.assertTrue(hasattr(submission, 'id'))
+        self.assertTrue(hasattr(submission, 'attempt'))
+        self.assertTrue(hasattr(submission, 'quiz_id'))
+        self.assertTrue(hasattr(submission, 'validation_token'))
+        self.assertEqual(submission.score, 7)
 
 
 @requests_mock.Mocker()

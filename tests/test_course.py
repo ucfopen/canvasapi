@@ -9,7 +9,9 @@ from six import text_type
 from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
-from canvasapi.assignment import Assignment, AssignmentGroup
+from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
+from canvasapi.blueprint import BlueprintSubscription
+from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
@@ -22,6 +24,7 @@ from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizExtension
 from canvasapi.rubric import Rubric
@@ -67,6 +70,29 @@ class TestCourse(unittest.TestCase):
         success = self.course.conclude()
         self.assertTrue(success)
 
+    # create_assignment_overrides()
+    def test_create_assignment_overrides(self, m):
+        register_uris({'assignment': ['batch_create_assignment_overrides']}, m)
+
+        override_list = [
+            {
+                'student_ids': [1, 2, 3],
+                'title': 'New Assignment Override',
+                'assignment_id': 1
+            },
+            {
+                'assignment_id': 2,
+                'student_ids': [1, 2, 3],
+                'title': 'New Assignment Override 2'
+            }
+        ]
+        created_overrides = self.course.create_assignment_overrides(override_list)
+        created_list = [created for created in created_overrides]
+
+        self.assertEqual(len(created_list), 2)
+        self.assertIsInstance(created_list[0], AssignmentOverride)
+        self.assertIsInstance(created_list[1], AssignmentOverride)
+
     # delete()
     def test_delete(self, m):
         register_uris({'course': ['delete']}, m)
@@ -81,6 +107,29 @@ class TestCourse(unittest.TestCase):
         new_name = 'New Name'
         self.course.update(course={'name': new_name})
         self.assertEqual(self.course.name, new_name)
+
+    # update_assignment_overrides()
+    def test_update_assignment_overrides(self, m):
+        register_uris({'assignment': ['batch_update_assignment_overrides']}, m)
+
+        override_list = [
+            {
+                'student_ids': [4, 5, 6],
+                'title': 'Updated Assignment Override',
+                'assignment_id': 1
+            },
+            {
+                'assignment_id': 2,
+                'student_ids': [6, 7],
+                'title': 'Updated Assignment Override 2'
+            }
+        ]
+        updated_overrides = self.course.update_assignment_overrides(override_list)
+        updated_list = [updated for updated in updated_overrides]
+
+        self.assertEqual(len(updated_list), 2)
+        self.assertIsInstance(updated_list[0], AssignmentOverride)
+        self.assertIsInstance(updated_list[1], AssignmentOverride)
 
     # get_user()
     def test_get_user(self, m):
@@ -352,6 +401,24 @@ class TestCourse(unittest.TestCase):
         assignment_by_obj = self.course.get_assignment(self.assignment)
         self.assertIsInstance(assignment_by_obj, Assignment)
         self.assertTrue(hasattr(assignment_by_obj, 'name'))
+
+    # get_assignment_overrides()
+    def test_get_assignment_overrides(self, m):
+        register_uris({'assignment': [
+            'batch_get_assignment_overrides',
+            'batch_get_assignment_overrides_p2'
+        ]}, m)
+
+        bulk_select = [
+            {'id': 1, 'assignment_id': 1},
+            {'id': 20, 'assignment_id': 2}
+        ]
+        overrides = self.course.get_assignment_overrides(bulk_select)
+
+        override_list = [override for override in overrides]
+
+        self.assertEqual(len(override_list), 2)
+        self.assertIsInstance(override_list[0], AssignmentOverride)
 
     # get_assignments()
     def test_get_assignments(self, m):
@@ -1450,6 +1517,29 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()
         self.assertTrue(progress.context_type == "Course")
+
+    # get_blueprint()
+    def test_get_blueprint(self, m):
+        register_uris({'course': ['get_blueprint']}, m)
+        blueprint = self.course.get_blueprint(1)
+        self.assertIsInstance(blueprint, BlueprintTemplate)
+        self.assertEqual(blueprint.course_id, 1)
+
+    def test_get_blueprint_default(self, m):
+        register_uris({'course': ['get_blueprint_default']}, m)
+        blueprint_default = self.course.get_blueprint()
+        self.assertIsInstance(blueprint_default, BlueprintTemplate)
+        self.assertEqual(blueprint_default.course_id, 1)
+
+    # list_blueprint_subscriptions()
+    def test_list_blueprint_subscriptions(self, m):
+        register_uris({'course': ['list_blueprint_subscriptions']}, m)
+        blueprint_subscriptions = self.course.list_blueprint_subscriptions()
+        self.assertIsInstance(blueprint_subscriptions, PaginatedList)
+        self.assertIsInstance(blueprint_subscriptions[0], BlueprintSubscription)
+        self.assertEqual(blueprint_subscriptions[0].id, 10)
+        self.assertEqual(blueprint_subscriptions[0].template_id, 2)
+        self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
 
 
 @requests_mock.Mocker()

@@ -22,6 +22,31 @@ class Section(CanvasObject):
             self.id,
         )
 
+    def get_assignment_override(self, assignment, **kwargs):
+        """
+        Return override for the specified assignment for this section.
+
+        :param assignment: The assignment to get an override for
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+
+        :calls: `GET /api/v1/sections/:course_section_id/assignments/:assignment_id/override \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.section_alias>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        from canvasapi.assignment import Assignment, AssignmentOverride
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+
+        response = self._requester.request(
+            'GET',
+            'sections/{}/assignments/{}/override'.format(self.id, assignment_id)
+        )
+        response_json = response.json()
+        response_json.update({'course_id': self.course_id})
+
+        return AssignmentOverride(self._requester, response_json)
+
     def get_enrollments(self, **kwargs):
         """
         List all of the enrollments for the current user.
@@ -79,7 +104,7 @@ class Section(CanvasObject):
         )
         return Section(self._requester, response.json())
 
-    def edit(self):
+    def edit(self, **kwargs):
         """
         Edit contents of a target section.
 
@@ -90,9 +115,14 @@ class Section(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'sections/{}'.format(self.id)
+            'sections/{}'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
-        return Section(self._requester, response.json())
+
+        if 'name' in response.json():
+            super(Section, self).set_attributes(response.json())
+
+        return self
 
     def delete(self):
         """

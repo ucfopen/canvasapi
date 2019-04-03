@@ -1,5 +1,24 @@
 # Change Log
 
+## [0.12.0] - 2019-04-03
+
+### New Endpoint Coverage
+
+- Assignment Overrides
+- Quiz Submissions (Thanks, [@wallacetyler](https://github.com/wallacetyler))
+- Blueprints (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
+- Create an Admin (Thanks, [@altgilbers](https://github.com/altgilbers))
+- SIS Imports (Thanks, [@nottheswimmer](https://github.com/nottheswimmer))
+- Create and Delete Communication Channels (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+
+### General
+
+- Added support for HTTP response 409 (Thanks, [@wallacetyler](https://github.com/wallacetyler))
+
+### Bugfixes
+
+- Fixed an issue where `Section.edit()` didn't accept keyword arguments (Thanks, [@wjw27](https://github.com/wjw27))
+
 ## [0.11.0] - 2018-09-17
 
 ### New Endpoint Coverage
@@ -275,6 +294,7 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[0.12.0]: https://github.com/ucfopen/canvasapi/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/ucfopen/canvasapi/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/ucfopen/canvasapi/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/ucfopen/canvasapi/compare/v0.8.2...v0.9.0

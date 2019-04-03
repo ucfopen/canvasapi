@@ -5,7 +5,7 @@ import uuid
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.assignment import Assignment, AssignmentGroup
+from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
@@ -25,6 +25,20 @@ class TestAssignment(unittest.TestCase):
 
             self.course = self.canvas.get_course(1)
             self.assignment = self.course.get_assignment(1)
+
+    # create_override()
+    def test_create_override(self, m):
+        register_uris({'assignment': ['create_override']}, m)
+
+        override = self.assignment.create_override(
+            assignment_override={
+                'student_ids': [1, 2, 3],
+                'title': 'New Assignment Override'
+            }
+        )
+
+        self.assertIsInstance(override, AssignmentOverride)
+        self.assertEqual(override.title, 'New Assignment Override')
 
     # delete()
     def test_delete_assignments(self, m):
@@ -54,6 +68,28 @@ class TestAssignment(unittest.TestCase):
 
         self.assertEqual(len(student_list), 2)
         self.assertIsInstance(student_list[0], UserDisplay)
+
+    # get_override()
+    def test_get_override(self, m):
+        register_uris({'assignment': ['get_assignment_override']}, m)
+
+        override = self.assignment.get_override(1)
+
+        self.assertIsInstance(override, AssignmentOverride)
+
+    # get_overrides()
+    def test_get_overrides(self, m):
+        register_uris({'assignment': [
+            'list_assignment_overrides',
+            'list_assignment_overrides_p2'
+        ]}, m)
+
+        overrides = self.assignment.get_overrides()
+        override_list = [override for override in overrides]
+
+        self.assertEqual(len(override_list), 4)
+        self.assertIsInstance(override_list[0], AssignmentOverride)
+        self.assertIsInstance(override_list[3], AssignmentOverride)
 
     # get_submission()
     def test_get_submission(self, m):
@@ -236,3 +272,47 @@ class TestAssignmentGroup(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.assignment_group)
         self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestAssignmentOverride(unittest.TestCase):
+
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris({
+                'course': ['get_by_id', 'get_assignment_by_id'],
+                'assignment': ['get_assignment_override'],
+            }, m)
+
+            self.course = self.canvas.get_course(1)
+            self.assignment = self.course.get_assignment(1)
+            self.assignment_override = self.assignment.get_override(1)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.assignment_override)
+        self.assertIsInstance(string, str)
+        self.assertEqual(string, 'Assignment Override 1 (1)')
+
+    # delete()
+    def test_delete(self, m):
+        register_uris({'assignment': ['delete_override']}, m)
+
+        deleted = self.assignment_override.delete()
+        self.assertIsInstance(deleted, AssignmentOverride)
+        self.assertEqual(deleted.id, self.assignment_override.id)
+
+    # edit()
+    def test_edit(self, m):
+        register_uris({'assignment': ['edit_override']}, m)
+
+        edited = self.assignment_override.edit(assignment_override={
+            'title': 'New Title',
+            'student_ids': self.assignment_override.student_ids
+        })
+
+        self.assertEqual(edited, self.assignment_override)
+        self.assertIsInstance(self.assignment_override, AssignmentOverride)
+        self.assertEqual(edited.title, 'New Title')

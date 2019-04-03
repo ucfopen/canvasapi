@@ -1,6 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import os
 from collections import Iterable
+
 from six import binary_type, string_types, text_type
 
 
@@ -89,8 +91,8 @@ def flatten_kwarg(key, obj):
         # Add empty brackets (i.e. "[]")
         new_list = []
         for i in obj:
-            for tup in flatten_kwarg(key, i):
-                new_list.append((tup[0] + '[]', tup[1]))
+            for tup in flatten_kwarg(key + '][', i):
+                new_list.append((tup[0], tup[1]))
         return new_list
     else:
         # Base case. Return list with tuple containing the value
@@ -145,3 +147,24 @@ def get_institution_url(base_url):
         return base_url[0:index]
 
     return base_url
+
+
+def file_or_path(file):
+    """
+    Open a file and return the handler if a path is given.
+    If a file handler is given, return it directly.
+
+    :param file: A file handler or path to a file.
+
+    :returns: A tuple with the open file handler and whether it was a path.
+    :rtype: (file, bool)
+    """
+
+    is_path = False
+    if isinstance(file, string_types):
+        if not os.path.exists(file):
+            raise IOError('File at path ' + file + ' does not exist.')
+        file = open(file, 'rb')
+        is_path = True
+
+    return file, is_path

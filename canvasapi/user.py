@@ -380,6 +380,23 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def create_communication_channel(self, **kwargs):
+        """
+        Create a communication channel for this user
+
+        :calls: `POST /api/v1/users/:user_id/communication_channels \
+        <https://canvas.instructure.com/doc/api/communication_channels.html#method.communication_channels.create>`_
+
+        :rtype: :class:`canvasapi.communication_channel.CommunicationChannel`
+        """
+        response = self._requester.request(
+            'POST',
+            'users/{}/communication_channels'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return CommunicationChannel(self._requester, response.json())
+
     def list_files(self, **kwargs):
         """
         Returns the paginated list of files for the user.

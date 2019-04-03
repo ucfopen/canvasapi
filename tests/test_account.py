@@ -19,6 +19,7 @@ from canvasapi.group import Group, GroupCategory
 from canvasapi.login import Login
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.rubric import Rubric
+from canvasapi.sis_import import SisImport
 from canvasapi.user import User
 from canvasapi.content_migration import ContentMigration, Migrator
 from tests import settings
@@ -936,3 +937,119 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(admin_list[1].user['login_id'], 'jdoe')
         self.assertEqual(admin_list[1].role, 'AccountAdmin')
         self.assertEqual(admin_list[0].role_id, 2)
+
+    # create_sis_import()
+    def test_create_sis_import(self, m):
+        import os
+
+        register_uris({'account': ['create_sis_import']}, m)
+
+        filepath = os.path.join('tests', 'fixtures',
+                                'test_create_sis_import.csv')
+
+        sis_import = self.account.create_sis_import(filepath)
+
+        self.assertTrue(isinstance(sis_import, SisImport))
+        self.assertTrue(hasattr(sis_import, 'account_id'))
+        self.assertTrue(hasattr(sis_import, 'user'))
+
+        self.assertEqual(sis_import.account_id, sis_import.user['id'])
+
+    def test_create_sis_import_binary(self, m):
+        import os
+
+        register_uris({'account': ['create_sis_import']}, m)
+
+        filepath = os.path.join('tests', 'fixtures',
+                                'test_create_sis_import.csv')
+
+        with open(filepath, 'rb') as f:
+            sis_import = self.account.create_sis_import(f)
+
+        self.assertIsInstance(sis_import, SisImport)
+
+        self.assertTrue(hasattr(sis_import, 'account_id'))
+        self.assertTrue(hasattr(sis_import, 'user'))
+
+        self.assertEqual(sis_import.account_id, sis_import.user['id'])
+
+    def test_create_sis_import_ioerror(self, m):
+        f = '!@#$%^&*()_+QWERTYUIOP{}|'
+
+        with self.assertRaises(IOError):
+            self.account.create_sis_import(f)
+
+    # get_sis_import()
+    def test_get_sis_import(self, m):
+        register_uris({'account': ['get_sis_import']}, m)
+
+        sis_import_id = 2
+        sis_import = self.account.get_sis_import(sis_import_id)
+
+        self.assertIsInstance(sis_import, SisImport)
+        self.assertTrue(hasattr(sis_import, 'account_id'))
+
+        self.assertEqual(sis_import_id, sis_import.id)
+
+    # get_sis_imports()
+    def test_get_sis_imports(self, m):
+        register_uris({'account': ['get_sis_imports']}, m)
+
+        sis_imports = self.account.get_sis_imports()
+
+        self.assertIsInstance(sis_imports[0], SisImport)
+        self.assertIsInstance(sis_imports[1], SisImport)
+
+        self.assertTrue(hasattr(sis_imports[0], 'account_id'))
+
+        self.assertNotEqual(sis_imports[0].id, sis_imports[1].id)
+
+    # get_sis_imports_running()
+    def test_get_sis_imports_running(self, m):
+        register_uris({'account': ['get_sis_imports_running']}, m)
+
+        sis_imports = self.account.get_sis_imports_running()
+
+        self.assertIsInstance(sis_imports[0], SisImport)
+
+        self.assertTrue(hasattr(sis_imports[0], 'account_id'))
+
+        for sis_import in sis_imports:
+            self.assertEqual(sis_import.workflow_state, "importing")
+
+    # abort_sis_imports_pending()
+    def test_abort_sis_imports_pending(self, m):
+        register_uris({'account': ['abort_sis_imports_pending']}, m)
+
+        aborted = self.account.abort_sis_imports_pending()
+
+        self.assertTrue(aborted)
+
+    def test_abort_sis_imports_pending_false(self, m):
+        register_uris({'account': ['abort_sis_imports_pending_false']}, m)
+
+        aborted = self.account.abort_sis_imports_pending()
+
+        self.assertFalse(aborted)
+
+    def test_abort_sis_imports_pending_blank(self, m):
+        register_uris({'account': ['abort_sis_imports_pending_blank']}, m)
+
+        aborted = self.account.abort_sis_imports_pending()
+
+        self.assertFalse(aborted)
+
+    # create_admins()
+    def test_create_admin(self, m):
+        register_uris({'account': ['create_admin']}, m)
+
+        user_id = 123
+        admin = self.account.create_admin(user=user_id)
+        self.assertIsInstance(admin, Admin)
+        self.assertTrue(hasattr(admin, 'id'))
+        self.assertTrue(hasattr(admin, 'role'))
+        self.assertTrue(hasattr(admin, 'role_id'))
+        self.assertTrue(hasattr(admin, 'workflow_state'))
+        self.assertEqual(admin.user['login_id'], 'jdoe')
+        self.assertEqual(admin.role, 'AccountAdmin')
+        self.assertEqual(admin.role_id, 1)

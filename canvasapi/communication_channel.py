@@ -229,3 +229,21 @@ class CommunicationChannel(CanvasObject):
             )
             return response.json()['notification_preferences']
         return False
+
+    def delete(self):
+        """
+        Delete the current communication_channel
+
+        :calls: `DELETE /api/v1/users/:user_id/communication_channels/:id \
+        <https://canvas.instructure.com/doc/api/communication_channels.html#method.communication_channels.destroy>`_
+
+        :returns: True if successfully deleted; False otherwise.
+        :rtype: bool
+        """
+
+        response = self._requester.request(
+            'DELETE',
+            'users/{}/communication_channels/{}'.format(self.user_id, self.id)
+        )
+
+        return response.json().get('workflow_state') == 'deleted'

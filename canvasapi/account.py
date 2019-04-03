@@ -1,15 +1,16 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from six import python_2_unicode_compatible, string_types
-
 import warnings
 
+from six import python_2_unicode_compatible, string_types
+
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.grading_standard import GradingStandard
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
-from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.sis_import import SisImport
+from canvasapi.util import combine_kwargs, file_or_path, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -1438,7 +1439,6 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/admins.html#method.admins.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.account.Admin`
-
         """
 
         return PaginatedList(
@@ -1448,6 +1448,147 @@ class Account(CanvasObject):
             'accounts/{}/admins'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
+
+    def create_sis_import(self, attachment, **kwargs):
+        """
+        Create a new SIS import for the current account.
+
+        :calls: `POST /api/v1/accounts/:account_id/sis_imports \
+        <https://canvas.instructure.com/doc/api/sis_imports.html#method.sis_imports_api.create>`_
+
+        :param attachment: A file handler or path of the file to import.
+        :type attachment: file or str
+
+        :rtype: :class:`canvasapi.sis_import.SisImport`
+        """
+
+        attachment, is_path = file_or_path(attachment)
+
+        try:
+            response = self._requester.request(
+                'POST',
+                'accounts/{}/sis_imports'.format(self.id),
+                file={'attachment': attachment},
+                _kwargs=combine_kwargs(**kwargs)
+            )
+
+            response_json = response.json()
+            response_json.update({'account_id': self.id})
+
+            return SisImport(self._requester, response_json)
+        finally:
+            if is_path:
+                attachment.close()
+
+    def get_sis_import(self, sis_import, **kwargs):
+        """
+        Retrieve information on an individual SIS import from this account.
+
+        :calls: `GET /api/v1/accounts/:account_id/sis_imports/:id \
+        <https://canvas.instructure.com/doc/api/sis_imports.html#method.sis_imports_api.show>`_
+
+        :param sis_import: The object or ID of the sis_import to retrieve.
+        :type sis_import: int, str or :class:`canvasapi.sis_import.SisImport`
+
+        :rtype: :class:`canvasapi.sis_import.SisImport`
+        """
+        sis_import_id = obj_or_id(sis_import, "sis_import", (SisImport,))
+
+        response = self._requester.request(
+            'GET',
+            'accounts/{}/sis_imports/{}'.format(self.id, sis_import_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'account_id': self.id})
+
+        return SisImport(self._requester, response_json)
+
+    def get_sis_imports(self, **kwargs):
+        """
+        Get the paginated list of SIS imports for the current account.
+
+        :calls: `GET /api/v1/accounts/:account_id/sis_imports \
+        <https://canvas.instructure.com/doc/api/sis_imports.html#method.sis_imports_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.sis_import.SisImport`
+        """
+
+        return PaginatedList(
+            SisImport,
+            self._requester,
+            'GET',
+            'accounts/{}/sis_imports'.format(self.id),
+            {'account_id': self.id},
+            _root='sis_imports',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_sis_imports_running(self, **kwargs):
+        """
+        Get the paginated list of running SIS imports for the current account.
+
+        :calls: `GET /api/v1/accounts/:account_id/sis_imports/importing \
+        <https://canvas.instructure.com/doc/api/sis_imports.html#method.sis_imports_api.importing>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList`
+            of :class:`canvasapi.sis_import.SisImport`
+        """
+
+        return PaginatedList(
+            SisImport,
+            self._requester,
+            'GET',
+            'accounts/{}/sis_imports/importing'.format(self.id),
+            {'account_id': self.id},
+            _root='sis_imports',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def abort_sis_imports_pending(self, **kwargs):
+        """
+        Aborts all pending (created, but not processed or processing)
+        SIS imports for the current account.
+
+        :calls: `PUT /api/v1/accounts/:account_id/sis_imports/abort_all_pending \
+        <https://canvas.instructure.com/doc/api/sis_imports.html#method.sis_imports_api.abort_all_pending>`_
+
+        :returns: True if the API responds with aborted=True, False otherwise.
+        :rtype: bool
+        """
+        response = self._requester.request(
+            'PUT',
+            'accounts/{}/sis_imports/abort_all_pending'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return response.json().get('aborted', False)
+
+    def create_admin(self, user, **kwargs):
+        """
+        Flag an existing user as an admin of the current account.
+
+        :calls: `POST /api/v1/accounts/:account_id/admins \
+        <https://canvas.instructure.com/doc/api/admins.html#method.admins.create>`_
+
+        :param user: The user object or ID to promote to admin.
+        :type user: :class:`canvasapi.user.User` or int
+
+        :rtype: :class:`canvasapi.account.Admin`
+        """
+        from canvasapi.user import User
+
+        user_id = obj_or_id(user, "user", (User,))
+        kwargs['user_id'] = user_id
+
+        response = self._requester.request(
+            'POST',
+            'accounts/{}/admins'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Admin(self._requester, response.json())
 
 
 @python_2_unicode_compatible
@@ -1482,4 +1623,4 @@ class SSOSettings(CanvasObject):
 class Admin(CanvasObject):
 
     def __str__(self):  # pragma: no cover
-        return "{}".format(self.user['login_id'])
+        return "{} {} ({})".format(self.user['name'], self.user['id'], self.id)
