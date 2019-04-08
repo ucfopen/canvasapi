@@ -1,6 +1,6 @@
 ---
-name: Endpoint Coverage Request
-about: Request new endpoint coverage or feature
+name: Request Endpoint Coverage
+about: Request new endpoint coverage
 title: ''
 labels: api-coverage
 assignees: ''
