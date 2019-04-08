@@ -265,3 +265,62 @@ class TestPaginatedList(unittest.TestCase):
         )
 
         self.assertIsInstance(pag_list[0], EnrollmentTerm)
+
+    # paginated_list length
+    def test_len_empty(self, m):
+        register_uris({'paginated_list': ['empty']}, m)
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            'GET',
+            'empty_list'
+        )
+        self.assertEqual(len(pag_list), 0)
+
+    def test_len_single(self, m):
+        register_uris({'paginated_list': ['single']}, m)
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            'GET',
+            'single_item'
+        )
+        self.assertEqual(len(pag_list), 1)
+
+    def test_len_two_one_page(self, m):
+        register_uris({'paginated_list': ['2_1_page']}, m)
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            'GET',
+            'two_objects_one_page'
+        )
+        self.assertEqual(len(pag_list), 2)
+
+    def test_len_four_two_pages(self, m):
+        register_uris({'paginated_list': ['4_2_pages_p1', '4_2_pages_p2']}, m)
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            'GET',
+            'four_objects_two_pages'
+        )
+        self.assertEqual(len(pag_list), 4)
+
+    def test_len_six_three_pages(self, m):
+        requires = {
+            'paginated_list': ['6_3_pages_p1', '6_3_pages_p2', '6_3_pages_p3']
+        }
+        register_uris(requires, m)
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            'GET',
+            'six_objects_three_pages'
+        )
+        self.assertEqual(len(pag_list), 6)

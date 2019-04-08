@@ -41,6 +41,16 @@ class PaginatedList(object):
             for element in new_elements:
                 yield element
 
+    def __len__(self):
+        length = 0
+        for element in self._elements:
+            length += 1
+        while self._has_next():
+            new_elements = self._grow()
+            for element in new_elements:
+                length += 1
+        return length
+
     def __repr__(self):
         return "<PaginatedList of type {}>".format(self._content_class.__name__)
 
