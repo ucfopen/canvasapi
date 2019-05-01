@@ -42,7 +42,7 @@ class TestCanvas(unittest.TestCase):
 
     # Canvas()
     def test_init_warns_when_url_is_http(self, m):
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             Canvas(settings.BASE_URL_AS_HTTP, settings.API_KEY)
             self.assertRaises(
                 UserWarning,
@@ -52,7 +52,7 @@ class TestCanvas(unittest.TestCase):
 
     # Canvas()
     def test_init_warns_when_url_is_blank(self, m):
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             Canvas(settings.BASE_URL_AS_BLANK, settings.API_KEY)
             self.assertRaises(
                 UserWarning,
@@ -61,7 +61,7 @@ class TestCanvas(unittest.TestCase):
 
     # Canvas()
     def test_init_warns_when_url_is_invalid(self, m):
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             Canvas(settings.BASE_URL_AS_INVALID, settings.API_KEY)
             self.assertRaises(
                 UserWarning,
