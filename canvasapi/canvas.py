@@ -47,16 +47,16 @@ class Canvas(object):
                 UserWarning
             )
 
-        if base_url == '':
+        if not base_url.strip():
             warnings.warn(
-                "Canvas needs a valid URL, but a blank `base_url` was provided.",
+                "Canvas needs a valid URL, please provide a non-blank `base_url`.",
                 UserWarning
             )
 
         if 'https://' not in base_url:
             warnings.warn(
                 "An invalid `base_url` for the Canvas API Instance was used. "
-                "Canvas may react unexpectedly without a valid URL.",
+                "Please provide a valid HTTP or HTTPS URL if possible.",
                 UserWarning
             )
 
