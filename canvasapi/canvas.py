@@ -53,7 +53,7 @@ class Canvas(object):
                 UserWarning
             )
 
-        if 'https://' not in base_url:
+        if '://' not in base_url:
             warnings.warn(
                 "An invalid `base_url` for the Canvas API Instance was used. "
                 "Please provide a valid HTTP or HTTPS URL if possible.",
