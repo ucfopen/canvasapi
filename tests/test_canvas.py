@@ -44,7 +44,11 @@ class TestCanvas(unittest.TestCase):
     def test_init_warns_when_url_is_http(self, m):
         with warnings.catch_warnings(record=True) as w:
             Canvas(settings.BASE_URL_AS_HTTP, settings.API_KEY)
-            self.assertTrue(issubclass(w[0].category, UserWarning))
+            self.assertRaises(
+                UserWarning,
+                msg='Canvas may respond unexpectedly when making requests to HTTP'
+                'URLs. If possible, please use HTTPS.'
+            )
 
     # Canvas()
     def test_init_warns_when_url_is_blank(self, m):
