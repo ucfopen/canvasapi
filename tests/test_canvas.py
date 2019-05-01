@@ -52,7 +52,7 @@ class TestCanvas(unittest.TestCase):
             Canvas(settings.BASE_URL_AS_BLANK, settings.API_KEY)
             self.assertRaises(
                 UserWarning,
-                msg='Canvas needs a valid URL, but a blank `base_url` was provided.'
+                msg='Canvas needs a valid URL, please provide a non-blank `base_url`.'
             )
 
     # Canvas()
@@ -62,7 +62,7 @@ class TestCanvas(unittest.TestCase):
             self.assertRaises(
                 UserWarning,
                 msg='An invalid `base_url` for the Canvas API Instance was used.'
-                'Canvas may react unexpectedly without a valid URL.'
+                'Please provide a valid HTTP or HTTPS URL if possible.'
             )
 
     # create_account()
