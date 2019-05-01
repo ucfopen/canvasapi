@@ -46,6 +46,20 @@ class Canvas(object):
                 "URLs. If possible, please use HTTPS.",
                 UserWarning
             )
+
+        if base_url == '':
+            warnings.warn(
+                "Canvas needs a valid URL, but a blank `base_url` was provided.",
+                UserWarning
+            )
+
+        if 'https://' not in base_url:
+            warnings.warn(
+                "An invalid `base_url` for the Canvas API Instance was used. "
+                "Canvas may react unexpectedly without a valid URL.",
+                UserWarning
+            )
+
         base_url = new_url + '/api/v1/'
 
         self.__requester = Requester(base_url, access_token)

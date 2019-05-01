@@ -46,6 +46,25 @@ class TestCanvas(unittest.TestCase):
             Canvas(settings.BASE_URL_AS_HTTP, settings.API_KEY)
             self.assertTrue(issubclass(w[0].category, UserWarning))
 
+    # Canvas()
+    def test_init_warns_when_url_is_blank(self, m):
+        with warnings.catch_warnings(record=True) as w:
+            Canvas(settings.BASE_URL_AS_BLANK, settings.API_KEY)
+            self.assertRaises(
+                UserWarning,
+                msg='Canvas needs a valid URL, but a blank `base_url` was provided.'
+            )
+
+    # Canvas()
+    def test_init_warns_when_url_is_invalid(self, m):
+        with warnings.catch_warnings(record=True) as w:
+            Canvas(settings.BASE_URL_AS_INVALID, settings.API_KEY)
+            self.assertRaises(
+                UserWarning,
+                msg='An invalid `base_url` for the Canvas API Instance was used.'
+                'Canvas may react unexpectedly without a valid URL.'
+            )
+
     # create_account()
     def test_create_account(self, m):
         register_uris({'account': ['create']}, m)
