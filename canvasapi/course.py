@@ -4,6 +4,7 @@ import warnings
 
 from six import python_2_unicode_compatible, text_type, string_types
 
+from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
@@ -2293,6 +2294,58 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Progress(self._requester, response.json())
+
+    def get_blueprint(self, template='default', **kwargs):
+        """
+        Return the blueprint of a given ID.
+
+        :calls: `GET /api/v1/courses/:course_id/blueprint_templates/:template_id \
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.master_courses/master_templates.show>`_
+
+        :param template: The object or ID of the blueprint template to get.
+        :type template: int or :class:`canvasapi.blueprint.BlueprintTemplate`
+
+        :rtype: :class:`canvasapi.blueprint.BlueprintTemplate`
+        """
+        from canvasapi.blueprint import BlueprintTemplate
+
+        if template == 'default':
+            template_id = template
+        else:
+            template_id = obj_or_id(template, 'template', (BlueprintTemplate,))
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/blueprint_templates/{}'.format(
+                self.id,
+                template_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return BlueprintTemplate(self._requester, response.json())
+
+    def list_blueprint_subscriptions(self, **kwargs):
+        """
+        Return a list of blueprint subscriptions for the given course.
+
+        :calls: `GET /api/v1/courses/:course_id/blueprint_subscriptions\
+        <https://canvas.instructure.com/doc/api/blueprint_courses.html#method.\
+        master_courses/master_templates.subscriptions_index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.blueprint.BlueprintSubscription`
+        """
+
+        return PaginatedList(
+            BlueprintSubscription,
+            self._requester,
+            'GET',
+            'courses/{}/blueprint_subscriptions'.format(
+                self.id
+            ),
+            {'course_id': self.id},
+            kwargs=combine_kwargs(**kwargs)
+        )
 
 
 @python_2_unicode_compatible

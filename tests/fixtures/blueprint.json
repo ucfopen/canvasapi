@@ -1,0 +1,139 @@
+{
+    "get_associated_courses": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_templates/1/associated_courses",
+        "data": [
+            {
+                "id": 1,
+                "name": "Test 1",
+                "course_code": "TST1234"
+            },
+            {
+                "id": 2,
+                "name": "Test 2",
+                "course_code": "TST5678"
+            }
+        ]
+    },
+    "update_associated_courses": {
+        "method": "PUT",
+        "endpoint": "courses/1/blueprint_templates/1/update_associations",
+        "data": {
+            "success": true
+        },
+        "status_code": 200
+    },
+    "associated_course_migration": {
+        "method": "POST",
+        "endpoint": "courses/1/blueprint_templates/1/migrations",
+        "data": {
+            "id": 1,
+            "comment": "test1",
+            "template_id": "1"
+        },
+        "status_code": 200
+    },
+    "change_blueprint_restrictions": {
+        "method": "PUT",
+        "endpoint": "courses/1/blueprint_templates/1/restrict_item",
+        "data": {
+            "success": true
+        },
+        "status_code": 200
+    },
+    "get_unsynced_changes": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_templates/1/unsynced_changes",
+        "data": [{
+            "asset_id": 1,
+            "asset_type": "quiz",
+            "asset_name": "test quiz",
+            "change_type": "updated"
+        }],
+        "status_code": 200
+    },
+    "list_blueprint_migrations": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_templates/1/migrations",
+        "data": [{
+            "id": 1,
+            "user_id": 1,
+            "template_id": 1
+        }],
+        "status_code": 200
+    },
+    "show_blueprint_migration": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_templates/1/migrations/1",
+        "data": {
+            "id": 1,
+            "user_id": 1,
+            "workflow_state": "completed",
+            "template_id": 1
+        },
+        "status_code": 200
+    },
+    "get_details": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_templates/1/migrations/1/details",
+        "data": [
+            {
+                "asset_id": 1,
+                "asset_type": "assignment",
+                "asset_name": "Test Assignment",
+                "change_type": "updated",
+                "locked": true
+            },
+            {
+                "asset_id": 2,
+                "asset_type": "quiz",
+                "asset_name": "Test Quiz",
+                "change_type": "updated",
+                "locked": false
+            }
+        ],
+        "status_code": 200
+    },
+    "list_blueprint_imports": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_subscriptions/10/migrations",
+        "data": [{
+            "course_id": 1,
+            "id": 3,
+            "template_id": 3,
+            "subscription_id": 10
+        }],
+        "status_code": 200
+    },
+    "show_blueprint_import": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_subscriptions/10/migrations/3",
+        "data": {
+            "id": 3,
+            "template_id": 3,
+            "subscription_id": 10
+        },
+        "status_code": 200
+    },
+    "get_import_details": {
+        "method": "GET",
+        "endpoint": "courses/1/blueprint_subscriptions/10/migrations/3/details",
+        "data": [
+            {
+                "asset_id": 1,
+                "asset_type": "assignment",
+                "asset_name": "Test Assignment",
+                "change_type": "updated",
+                "locked": false
+            },
+            {
+                "asset_id": 2,
+                "asset_type": "quiz",
+                "asset_name": "Test Quiz",
+                "change_type": "updated",
+                "locked": true
+            }
+        ],
+        "status_code": 200
+    }
+}
