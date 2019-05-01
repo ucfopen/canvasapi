@@ -40,11 +40,31 @@ class TestCanvas(unittest.TestCase):
             Canvas(settings.BASE_URL_WITH_VERSION, settings.API_KEY)
             self.assertTrue(issubclass(w[0].category, DeprecationWarning))
 
-    # Canvas()
     def test_init_warns_when_url_is_http(self, m):
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             Canvas(settings.BASE_URL_AS_HTTP, settings.API_KEY)
-            self.assertTrue(issubclass(w[0].category, UserWarning))
+            self.assertRaises(
+                UserWarning,
+                msg=('Canvas may respond unexpectedly when making requests to HTTP'
+                     'URLs. If possible, please use HTTPS.')
+            )
+
+    def test_init_warns_when_url_is_blank(self, m):
+        with warnings.catch_warnings(record=True):
+            Canvas(settings.BASE_URL_AS_BLANK, settings.API_KEY)
+            self.assertRaises(
+                UserWarning,
+                msg='Canvas needs a valid URL, please provide a non-blank `base_url`.'
+            )
+
+    def test_init_warns_when_url_is_invalid(self, m):
+        with warnings.catch_warnings(record=True):
+            Canvas(settings.BASE_URL_AS_INVALID, settings.API_KEY)
+            self.assertRaises(
+                UserWarning,
+                msg=('An invalid `base_url` for the Canvas API Instance was used.'
+                     'Please provide a valid HTTP or HTTPS URL if possible.')
+            )
 
     # create_account()
     def test_create_account(self, m):
