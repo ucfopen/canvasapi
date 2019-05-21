@@ -7,6 +7,7 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
@@ -90,6 +91,16 @@ class TestAssignment(unittest.TestCase):
         self.assertEqual(len(override_list), 4)
         self.assertIsInstance(override_list[0], AssignmentOverride)
         self.assertIsInstance(override_list[3], AssignmentOverride)
+
+    # get_peer_reviews()
+    def test_get_peer_reviews(self, m):
+        register_uris({'assignment': ['list_peer_reviews']}, m)
+
+        peer_reviews = self.assignment.get_peer_reviews()
+        peer_review_list = [peer_review for peer_review in peer_reviews]
+
+        self.assertEqual(len(peer_review_list), 2)
+        self.assertIsInstance(peer_review_list[0], PeerReview)
 
     # get_submission()
     def test_get_submission(self, m):
