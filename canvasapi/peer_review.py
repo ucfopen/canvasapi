@@ -4,6 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 
+
 @python_2_unicode_compatible
 class PeerReview(CanvasObject):
 

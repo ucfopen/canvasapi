@@ -140,6 +140,24 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_peer_reviews(self, **kwargs):
+        """
+        Get a list of all Peer Reviews for this assignment.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/peer_reviews \
+        <https://canvas.instructure.com/doc/api/peer_reviews.html#method.peer_reviews_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.peer_review.PeerReview`
+        """
+        return PaginatedList(
+            PeerReview,
+            self._requester,
+            'GET',
+            'courses/{}/assignments/{}/peer_reviews'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
     def get_submission(self, user, **kwargs):
         """
         Get a single submission, based on user id.
@@ -278,24 +296,6 @@ class Assignment(CanvasObject):
             file,
             **kwargs
         ).start()
-
-    def get_peer_reviews(self, **kwargs):
-        """
-        Get a list of all Peer Reviews for this assignment.
-
-        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/peer_reviews \
-        <https://canvas.instructure.com/doc/api/peer_reviews.html#method.peer_reviews_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.peer_review.PeerReview`
-        """
-        return PaginatedList(
-            PeerReview,
-            self._requester,
-            'GET',
-            'courses/{}/assignments/{}/peer_reviews'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
-        )
 
 
 @python_2_unicode_compatible
