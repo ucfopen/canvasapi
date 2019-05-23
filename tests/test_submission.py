@@ -6,6 +6,7 @@ import warnings
 import requests_mock
 
 from canvasapi import Canvas
+from canvasapi.peer_review import PeerReview
 from canvasapi.submission import Submission
 from tests import settings
 from tests.util import cleanup_file, register_uris
@@ -40,6 +41,28 @@ class TestSubmission(unittest.TestCase):
         string = str(self.submission_course)
         self.assertIsInstance(string, str)
 
+    # create_submission_peer_review()
+    def test_create_submission_peer_review(self, m):
+        register_uris({'submission': [
+            'create_submission_peer_review',
+        ]}, m)
+
+        created_peer_review = self.submission_course.create_submission_peer_review(1)
+
+        self.assertIsInstance(created_peer_review, PeerReview)
+        self.assertEqual(created_peer_review.user_id, 7)
+
+    # delete_submission_peer_review()
+    def test_delete_submission_peer_review(self, m):
+        register_uris({'submission': [
+            'delete_submission_peer_review',
+        ]}, m)
+
+        deleted_peer_review = self.submission_course.delete_submission_peer_review(1)
+
+        self.assertIsInstance(deleted_peer_review, PeerReview)
+        self.assertEqual(deleted_peer_review.user_id, 7)
+
     # edit()
     def test_edit(self, m):
         register_uris({
@@ -53,6 +76,18 @@ class TestSubmission(unittest.TestCase):
         self.assertIsInstance(self.submission_course, Submission)
         self.assertTrue(hasattr(self.submission_course, 'excused'))
         self.assertTrue(self.submission_course.excused)
+
+    # get_submission_peer_reviews()
+    def test_get_submission_peer_reviews(self, m):
+        register_uris({'submission': [
+            'list_submission_peer_reviews',
+        ]}, m)
+
+        submission_peer_reviews = self.submission_course.get_submission_peer_reviews()
+        submission_peer_review_list = [peer_review for peer_review in submission_peer_reviews]
+
+        self.assertEqual(len(submission_peer_review_list), 2)
+        self.assertIsInstance(submission_peer_review_list[0], PeerReview)
 
     # upload_comment()
     def test_upload_comment(self, m):
