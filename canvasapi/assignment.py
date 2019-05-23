@@ -5,6 +5,7 @@ from six import python_2_unicode_compatible
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
@@ -136,6 +137,24 @@ class Assignment(CanvasObject):
             'GET',
             'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
             {'course_id': self.course_id},
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_peer_reviews(self, **kwargs):
+        """
+        Get a list of all Peer Reviews for this assignment.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/peer_reviews \
+        <https://canvas.instructure.com/doc/api/peer_reviews.html#method.peer_reviews_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.peer_review.PeerReview`
+        """
+        return PaginatedList(
+            PeerReview,
+            self._requester,
+            'GET',
+            'courses/{}/assignments/{}/peer_reviews'.format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
 
