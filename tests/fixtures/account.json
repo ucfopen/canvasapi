@@ -304,6 +304,23 @@
 		},
 		"status_code": 200
 	},
+	"get_grading_periods": {
+        "method": "GET",
+        "endpoint": "accounts/1/grading_periods",
+        "data": {
+            "grading_periods": [
+                {
+                    "title": "Grading period 1",
+                    "id": "1"
+                },
+                {
+                    "title": "Grading period 2",
+                    "id": "2"
+                }
+            ]
+        },
+        "status_code": 200
+    },
 	"get_groups_context": {
 		"method": "GET",
 		"endpoint": "accounts/1/groups",
