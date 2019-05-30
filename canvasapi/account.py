@@ -7,6 +7,7 @@ from six import python_2_unicode_compatible, string_types
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.grading_standard import GradingStandard
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
@@ -1589,6 +1590,29 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Admin(self._requester, response.json())
+
+    def get_grading_periods(self, **kwargs):
+        """
+        Return a list of grading periods for the associated account.
+
+        :calls: `GET|/api/v1/accounts/:account_id/grading_periods
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_period.GradingPeriod`
+        """
+
+        return PaginatedList(
+            GradingPeriod,
+            self._requester,
+            'GET',
+            'accounts/{}/grading_periods'.format(
+                self.id
+            ),
+            {'account_id': self.id},
+            _root="grading_periods",
+            kwargs=combine_kwargs(**kwargs)
+        )
 
 
 @python_2_unicode_compatible
