@@ -8,6 +8,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.page import Page
@@ -19,6 +20,7 @@ from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 from canvasapi.rubric import Rubric
+
 
 warnings.simplefilter('always', DeprecationWarning)
 
@@ -2357,6 +2359,18 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.grading_period.GradingPeriod`
         """
+
+        return PaginatedList(
+            GradingPeriod,
+            self._requester,
+            'GET',
+            'courses/{}/grading_periods'.format(
+                self.id
+            ),
+            {'course_id': self.id},
+            kwargs=combine_kwargs(**kwargs)
+        )
+
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
