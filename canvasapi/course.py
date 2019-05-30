@@ -2368,6 +2368,7 @@ class Course(CanvasObject):
                 self.id
             ),
             {'course_id': self.id},
+            _root="grading_periods",
             kwargs=combine_kwargs(**kwargs)
         )
 

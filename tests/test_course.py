@@ -21,6 +21,7 @@ from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
@@ -1540,6 +1541,20 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].id, 10)
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
+
+    # get_grading_periods()
+    def test_get_grading_periods(self, m):
+        register_uris({'course': ['get_grading_periods']}, m)
+
+        response = self.course.get_grading_periods()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertIsInstance(response[0], GradingPeriod)
+        self.assertIsInstance(response[1], GradingPeriod)
+        self.assertEqual(response[0].id, "1")
+        self.assertEqual(response[1].id, "2")
+        self.assertEqual(response[0].title, "Grading period 1")
+        self.assertEqual(response[1].title, "Grading period 2")
 
 
 @requests_mock.Mocker()
