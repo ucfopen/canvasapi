@@ -2347,6 +2347,16 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_grading_periods(self, **kwargs):
+        """
+        Return a list of grading periods for the associated course.
+
+        :calls: `GET /api/v1/courses/:course_id/grading_periods
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_period.GradingPeriod`
+        """
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
