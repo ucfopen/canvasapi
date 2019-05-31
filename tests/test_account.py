@@ -19,6 +19,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.login import Login
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
 from canvasapi.user import User
@@ -1054,3 +1055,17 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(admin.user['login_id'], 'jdoe')
         self.assertEqual(admin.role, 'AccountAdmin')
         self.assertEqual(admin.role_id, 1)
+
+    # get_grading_periods()
+    def test_get_grading_periods(self, m):
+        register_uris({'account': ['get_grading_periods']}, m)
+
+        response = self.account.get_grading_periods()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertIsInstance(response[0], GradingPeriod)
+        self.assertIsInstance(response[1], GradingPeriod)
+        self.assertEqual(response[0].id, "1")
+        self.assertEqual(response[1].id, "2")
+        self.assertEqual(response[0].title, "Grading period 1")
+        self.assertEqual(response[1].title, "Grading period 2")
