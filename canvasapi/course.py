@@ -2376,10 +2376,10 @@ class Course(CanvasObject):
         """
         Return a single grading period for the associated course and id.
 
-        :calls: `GET /api/v1/courses/:course_id/grading_periods
+        :calls: `GET /api/v1/courses/:course_id/grading_periods/:id
         <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
         :param grading_period_id: The ID of the rubric.
-        :type grading_period_id: int
+        :type grading_period_id: string
 
         :rtype: :class:`canvasapi.grading_period.GradingPeriod`
         """
@@ -2392,7 +2392,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-        return GradingPeriod(self._requester, response.json())
+        return GradingPeriod(self._requester, response.json()['grading_periods'][0])
 
 
 @python_2_unicode_compatible

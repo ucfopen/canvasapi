@@ -1416,6 +1416,19 @@
         },
         "status_code": 200
     },
+    "get_grading_period": {
+        "method": "GET",
+        "endpoint": "courses/1/grading_periods/1",
+        "data": {
+            "grading_periods": [
+                {
+                    "title": "Grading period 1",
+                    "id": "1"
+                }
+            ]
+        },
+        "status_code": 200
+    },
     "get_grading_standards": {
         "method": "GET",
         "endpoint": "courses/1/grading_standards",
