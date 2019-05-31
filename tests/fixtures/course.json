@@ -1406,11 +1406,11 @@
             "grading_periods": [
                 {
                     "title": "Grading period 1",
-                    "id": 1
+                    "id": "1"
                 },
                 {
                     "title": "Grading period 2",
-                    "id": 2
+                    "id": "2"
                 }
             ]
         },

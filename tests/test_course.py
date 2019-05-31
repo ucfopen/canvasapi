@@ -1551,8 +1551,8 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(response, PaginatedList)
         self.assertIsInstance(response[0], GradingPeriod)
         self.assertIsInstance(response[1], GradingPeriod)
-        self.assertEqual(response[0].id, 1)
-        self.assertEqual(response[1].id, 2)
+        self.assertEqual(response[0].id, "1")
+        self.assertEqual(response[1].id, "2")
         self.assertEqual(response[0].title, "Grading period 1")
         self.assertEqual(response[1].title, "Grading period 2")
 
