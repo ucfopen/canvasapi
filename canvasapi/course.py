@@ -2372,6 +2372,16 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_grading_period(self, grading_period_id, **kwargs):
+        """
+        Return a single grading period for the associated course and id.
+
+        :calls: `GET /api/v1/courses/:course_id/grading_periods
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+
+        :rtype: :class:`canvasapi.grading_period.GradingPeriod`
+        """
+
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
