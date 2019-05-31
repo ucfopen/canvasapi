@@ -2378,9 +2378,21 @@ class Course(CanvasObject):
 
         :calls: `GET /api/v1/courses/:course_id/grading_periods
         <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+        :param grading_period_id: The ID of the rubric.
+        :type grading_period_id: int
 
         :rtype: :class:`canvasapi.grading_period.GradingPeriod`
         """
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/grading_periods/{}'.format(
+                self.id, grading_period_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return GradingPeriod(self._requester, response.json())
 
 
 @python_2_unicode_compatible
