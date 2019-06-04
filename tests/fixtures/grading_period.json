@@ -1,0 +1,18 @@
+{
+	"update": {
+		"method": "PUT",
+		"endpoint": "courses/1/grading_periods/1",
+		"data": {
+			"grading_periods": [
+                {
+                    "title": "Grading period 1",
+                    "id": "1",
+                    "start_date" : "",
+                    "end_date" : "",
+                    "weight" : 1
+                }
+            ]
+		},
+		"status_code": 200
+	}
+}
