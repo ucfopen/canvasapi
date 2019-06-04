@@ -5,6 +5,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.grading_period import GradingPeriod
+from tests.util import register_uris
 from tests import settings
 
 
@@ -28,11 +29,14 @@ class TestGradingPeriod(unittest.TestCase):
     def test_update(self, m):
         register_uris({'grading_period': ['update']}, m)
 
-        title = 'New title'
-        edited_grading_period = self.grading_period.update(grading_period={'title': title})
+        edited_grading_period = self.grading_period.update(
+            grading_period=[
+                {'start_date': '2019-06-10', 'end_date': '2019-06-15'}])
 
         self.assertIsInstance(edited_grading_period, GradingPeriod)
         self.assertTrue(hasattr(edited_grading_period, 'title'))
-        self.assertEqual(edited_grading_period.title, title)
-        self.assertTrue(hasattr(edited_grading_period, course_id))
-        self.assertEqual(edited_grading_period.course_id, self.course_id)
+        self.assertEqual(edited_grading_period.title, 'Grading period 1')
+        self.assertTrue(hasattr(edited_grading_period, 'start_date'))
+        self.assertTrue(hasattr(edited_grading_period, 'end_date'))
+        self.assertEqual(edited_grading_period.start_date, '2019-06-10')
+        self.assertEqual(edited_grading_period.end_date, '2019-06-15')
