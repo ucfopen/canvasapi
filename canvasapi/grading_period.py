@@ -11,7 +11,7 @@ class GradingPeriod(CanvasObject):
     def __str__(self):
         return '{} ({})'.format(self.title, self.id)
 
-    def update(self, **kwargs):
+    def update(self, grading_period, **kwargs):
         """
         Update a grading period for a course.
 
@@ -20,3 +20,20 @@ class GradingPeriod(CanvasObject):
 
         :rtype: :class:`canvasapi.grading_period.GradingPeriod`
         """
+        if not hasattr(self, 'course_id'):
+            raise ValueError('Can only update grading periods from a Course.')
+
+        if isinstance(grading_period, list):
+            kwargs['grading_period'] = grading_period
+        else:
+            raise RequiredFieldMissing("List is required")
+
+        response = self._requester.request(
+            'PUT',
+            'courses/{}/grading_periods/{}'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return GradingPeriod(self._requester, response_json)

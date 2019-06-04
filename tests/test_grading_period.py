@@ -23,3 +23,16 @@ class TestGradingPeriod(unittest.TestCase):
 
         test_str = str(self.grading_period)
         self.assertIsInstance(test_str, str)
+
+    # update()
+    def test_update(self, m):
+        register_uris({'grading_period': ['update']}, m)
+
+        title = 'New title'
+        edited_grading_period = self.grading_period.update(grading_period={'title': title})
+
+        self.assertIsInstance(edited_grading_period, GradingPeriod)
+        self.assertTrue(hasattr(edited_grading_period, 'title'))
+        self.assertEqual(edited_grading_period.title, title)
+        self.assertTrue(hasattr(edited_grading_period, course_id))
+        self.assertEqual(edited_grading_period.course_id, self.course_id)
