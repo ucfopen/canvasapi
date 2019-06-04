@@ -30,8 +30,7 @@ class TestGradingPeriod(unittest.TestCase):
         register_uris({'grading_period': ['update']}, m)
 
         edited_grading_period = self.grading_period.update(
-            grading_period=[
-                {'start_date': '2019-06-10', 'end_date': '2019-06-15'}])
+            grading_period=[{'start_date': '2019-06-10', 'end_date': '2019-06-15'}])
 
         self.assertIsInstance(edited_grading_period, GradingPeriod)
         self.assertTrue(hasattr(edited_grading_period, 'title'))
