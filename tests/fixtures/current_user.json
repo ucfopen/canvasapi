@@ -40,5 +40,17 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_favorite_courses": {
+		"method": "GET",
+		"endpoint": "users/self/favorites/courses",
+		"data": [
+			{
+				"id": 1,
+				"name": "Best Course Ever",
+				"course_code": "DND-4848"
+			}
+		],
+		"status_code": 200
 	}
 }

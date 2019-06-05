@@ -6,6 +6,7 @@ import warnings
 
 from canvasapi import Canvas
 from canvasapi.bookmark import Bookmark
+from canvasapi.course import Course
 from canvasapi.group import Group
 from tests import settings
 from tests.util import register_uris
@@ -92,7 +93,18 @@ class TestCurrentUser(unittest.TestCase):
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
 
-    # get_favorite_courses
+    # get_favorite_courses()
     def test_get_favorite_courses(self, m):
-        register_uris({'current_user'}, m)
+        register_uris({'current_user': ['get_favorite_courses']}, m)
+
+        fav_courses = self.user.get_favorite_courses()
+        fav_course_list = [course for course in fav_courses]
+        self.assertIsInstance(fav_courses[0], Course)
+        self.assertEqual(len(fav_course_list),1)
+        self.assertEqual(fav_course_list[0].name, "Best Course Ever")
+        self.assertEqual(fav_course_list[0].id, 1)
+        self.assertEqual(fav_course_list[0].course_code, "DND-4848")
+
+
+
 
