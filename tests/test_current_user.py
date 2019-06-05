@@ -91,3 +91,8 @@ class TestCurrentUser(unittest.TestCase):
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
         self.assertEqual(evnt.url, "https://www.google.com")
+
+    # get_favorite_courses
+    def test_get_favorite_courses(self, m):
+        register_uris({'current_user'}, m)
+
