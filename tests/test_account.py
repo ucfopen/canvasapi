@@ -1069,3 +1069,14 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(response[1].id, "2")
         self.assertEqual(response[0].title, "Grading period 1")
         self.assertEqual(response[1].title, "Grading period 2")
+
+    # get_grading_periods()
+    def test_delete_grading_periods(self, m):
+        register_uris({'account': ['delete_grading_period']}, m)
+
+        self.grading_period = GradingPeriod(
+            self.canvas._Canvas__requester,
+            {"title": "grading period 1", "id": "1", "course_id": 1}
+        )
+        self.assertTrue(self.account.delete_grading_period(1))
+        self.assertTrue(self.account.delete_grading_period(self.grading_period))

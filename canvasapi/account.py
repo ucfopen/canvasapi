@@ -1614,6 +1614,31 @@ class Account(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
+    def delete_grading_period(self, grading_period):
+        """
+        Delete a grading period for an account.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/grading_periods/:id \
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.destroy>`_
+
+        :param grading_period: The GradingPeriod object or ID to delete.
+        :type GradingPeriod: :class:`canvasapi.grading_period.GradingPeriod` or int
+
+        :returns: True if the grading period was deleted, False otherwise.
+        :rtype: bool
+        """
+
+        grading_period_id = obj_or_id(grading_period, "grading_period", (GradingPeriod,))
+
+        response = self._requester.request(
+            'DELETE',
+            'accounts/{}/grading_periods/{}'.format(self.id, grading_period_id),
+        )
+
+        response_json = response.json()
+
+        return response.json().get('delete')
+
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):

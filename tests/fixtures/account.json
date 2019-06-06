@@ -1075,6 +1075,14 @@
 		],
 		"status_code": 200
 	},
+	"delete_grading_period": {
+        "method": "DELETE",
+        "endpoint": "accounts/1/grading_periods/1",
+        "data": {
+            "delete": true
+        },
+        "status_code": 200
+    },
 		"get_rubric_single": {
 		"method": "GET",
 		"endpoint": "accounts/1/rubrics/1",
