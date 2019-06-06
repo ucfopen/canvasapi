@@ -19,7 +19,8 @@ class GradingPeriod(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/grading_periods/:id \
         <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.update>`_
 
-        :param grading_period: List of keys
+        :param grading_period: List of Nester paramameters which requires the
+        start_date and end_date parameters.
 
         :rtype: :class:`canvasapi.grading_period.GradingPeriod`
         """
@@ -40,3 +41,28 @@ class GradingPeriod(CanvasObject):
         response_json.update({'course_id': self.course_id})
 
         return GradingPeriod(self._requester, response_json['grading_periods'][0])
+
+    def delete(self, **kwargs):
+        """
+        Delete a grading period for a course.
+
+        :calls: `DELETE /api/v1/courses/:course_id/grading_periods/:id \
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.update>`_
+
+        :returns: True if the grading period was deleted, False otherwise.
+        :rtype: bool
+        """
+
+        if not hasattr(self, 'course_id'):
+            raise ValueError('Need a course id to delete a grading period from a course')
+
+        response = self._requester.request(
+            'DELETE',
+            'courses/{}/grading_periods/{}'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+
+        print(response_json)
+        return true
