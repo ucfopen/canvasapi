@@ -100,10 +100,14 @@ class TestCurrentUser(unittest.TestCase):
         fav_courses = self.user.get_favorite_courses()
         fav_course_list = [course for course in fav_courses]
         self.assertIsInstance(fav_courses[0], Course)
-        self.assertEqual(len(fav_course_list),1)
-        self.assertEqual(fav_course_list[0].name, "Best Course Ever")
+        self.assertIsInstance(fav_courses[1], Course)
+        self.assertEqual(len(fav_course_list),2)
+        self.assertEqual(fav_course_list[0].name, "Fave Course 1")
         self.assertEqual(fav_course_list[0].id, 1)
         self.assertEqual(fav_course_list[0].course_code, "DND-4848")
+        self.assertEqual(fav_course_list[1].name, "Fave Course 2")
+
+
 
 
 
