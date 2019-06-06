@@ -50,11 +50,25 @@
 				"name": "Fave Course 1",
 				"course_code": "DND-4848"
 			},
-
 			{
 				"id": 2,
 				"name": "Fave Course 2",
 				"course_code": "WBW-8757"
+			}
+		],
+		"status_code": 200
+	},
+	"get_favorite_groups": {
+		"method": "GET",
+		"endpoint": "users/self/favorites/groups",
+		"data": [
+			{
+				"id": 1,
+				"name": "Group 1"
+			},
+			{
+				"id": 2,
+				"name": "Group 2"
 			}
 		],
 		"status_code": 200

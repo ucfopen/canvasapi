@@ -101,14 +101,20 @@ class TestCurrentUser(unittest.TestCase):
         fav_course_list = [course for course in fav_courses]
         self.assertIsInstance(fav_courses[0], Course)
         self.assertIsInstance(fav_courses[1], Course)
-        self.assertEqual(len(fav_course_list),2)
-        self.assertEqual(fav_course_list[0].name, "Fave Course 1")
-        self.assertEqual(fav_course_list[0].id, 1)
-        self.assertEqual(fav_course_list[0].course_code, "DND-4848")
-        self.assertEqual(fav_course_list[1].name, "Fave Course 2")
+        self.assertEqual(len(fav_course_list), 2)
+        self.assertEqual(fav_courses[0].name, "Fave Course 1")
+        self.assertEqual(fav_courses[0].id, 1)
+        self.assertEqual(fav_courses[0].course_code, "DND-4848")
+        self.assertEqual(fav_courses[1].name, "Fave Course 2")
 
+    # get_favorite_groups()
+    def test_get_favorite_groups(self, m):
+        register_uris({'current_user': ['get_favorite_groups']}, m)
 
-
-
-
-
+        fav_groups = self.user.get_favorite_groups()
+        fav_groups_list = [group for group in fav_groups]
+        self.assertEqual(len(fav_groups_list), 2)
+        self.assertIsInstance(fav_groups[0], Group)
+        self.assertIsInstance(fav_groups[1], Group)
+        self.assertEqual(fav_groups[0].name, "Group 1")
+        self.assertEqual(fav_groups[0].id, 1)

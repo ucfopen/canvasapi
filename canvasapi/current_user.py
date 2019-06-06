@@ -6,10 +6,10 @@ from six import python_2_unicode_compatible
 
 from canvasapi.bookmark import Bookmark
 from canvasapi.course import Course
+from canvasapi.group import Group
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.user import User
 from canvasapi.util import combine_kwargs, obj_or_id
-
 
 
 @python_2_unicode_compatible
@@ -159,7 +159,7 @@ class CurrentUser(User):
         If the user has not chosen any favorites,
         then a selection of currently enrolled courses will be returned.
 
-        :calls 'GET /api/v1/users/self/favorites/courses \
+        :calls: 'GET /api/v1/users/self/favorites/courses \
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.list_favorite_courses>'_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.course.Course`
@@ -173,9 +173,22 @@ class CurrentUser(User):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_favorite_groups(self, **kwargs):
+        """
+        Retrieve the paginated list of favorite groups for the current user.
+        If the user has not chosen any favorites, then a selection of groups
+        that the user is a member of will be returned.
 
+        :calls: 'GET /api/v1/users/self/favorites/courses \
+        <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.list_favorite_groups>'_
 
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
+        """
 
-
-
-
+        return PaginatedList(
+            Group,
+            self._requester,
+            'GET',
+            'users/self/favorites/groups',
+            _kwargs=combine_kwargs(**kwargs)
+        )
