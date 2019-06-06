@@ -64,5 +64,4 @@ class GradingPeriod(CanvasObject):
 
         response_json = response.json()
 
-        print(response_json)
-        return true
+        return response.json().get('delete')

@@ -37,5 +37,10 @@ class TestGradingPeriod(unittest.TestCase):
         self.assertEqual(edited_grading_period.title, 'Grading period 1')
         self.assertTrue(hasattr(edited_grading_period, 'start_date'))
         self.assertTrue(hasattr(edited_grading_period, 'end_date'))
-        self.assertEqual(edited_grading_period.start_date, '2019-06-T06:00:00Z')
-        self.assertEqual(edited_grading_period.end_date, '2019-06-T05:59:00Z')
+        self.assertEqual(edited_grading_period.start_date, '2019-05-23T06:00:00Z')
+        self.assertEqual(edited_grading_period.end_date, '2019-08-23T06:00:00Z')
+
+    # delete()
+    def test_delete(self, m):
+        register_uris({'grading_period': ['delete']}, m)
+        self.assertTrue(self.grading_period.delete())
