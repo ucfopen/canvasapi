@@ -37,5 +37,5 @@ class TestGradingPeriod(unittest.TestCase):
         self.assertEqual(edited_grading_period.title, 'Grading period 1')
         self.assertTrue(hasattr(edited_grading_period, 'start_date'))
         self.assertTrue(hasattr(edited_grading_period, 'end_date'))
-        self.assertEqual(edited_grading_period.start_date, '2019-06-10')
-        self.assertEqual(edited_grading_period.end_date, '2019-06-15')
+        self.assertEqual(edited_grading_period.start_date, '2019-06-T06:00:00Z')
+        self.assertEqual(edited_grading_period.end_date, '2019-06-T05:59:00Z')
