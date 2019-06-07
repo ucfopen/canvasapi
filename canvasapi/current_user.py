@@ -6,6 +6,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.bookmark import Bookmark
 from canvasapi.course import Course
+from canvasapi.favorite import Favorite
 from canvasapi.group import Group
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.user import User
@@ -162,7 +163,8 @@ class CurrentUser(User):
         :calls: 'GET /api/v1/users/self/favorites/courses \
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.list_favorite_courses>'_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.course.Course`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList`
+        of :class:`canvasapi.course.Course`
         """
 
         return PaginatedList(
@@ -182,7 +184,8 @@ class CurrentUser(User):
         :calls: 'GET /api/v1/users/self/favorites/courses \
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.list_favorite_groups>'_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList`
+        of :class:`canvasapi.group.Group`
         """
 
         return PaginatedList(
@@ -201,8 +204,50 @@ class CurrentUser(User):
         :calls: 'POST /api/v1/users/self/favorites/courses/:id \
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.add_favorite_course>'_
 
-        :param course: The object or ID of the course.
-        :type course: :class:`canvasapi.course.Course` or int
+        :param ID: The ID or SIS ID of the course.
+        :type ID: `int`
 
         :rtype: :class:`canvasapi.favorite.Favorite`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'users/self/favorites/courses/{}'.format(id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Favorite(self._requester, response.json())
+
+    def add_favorite_group(self, id, **kwargs):
+        """
+        Add a group to the current user's favorites. If the group is already
+        in the user's favorites, nothing happens.
+
+        :calls: 'POST /api/v1/users/self/favorites/groups/:id \
+        <https://canvas.instructure.com/doc/api/
+        favorites.html#method.favorites.add_favorite_groups>'_
+
+        :param ID: The ID or SIS ID of the group.
+        :type ID: `int`
+
+        :rtype: :class:`canvasapi.favorite.Favorite`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'users/self/favorites/groups/{}'.format(id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Favorite(self._requester, response.json())
+
+    def remove_favorite_course(self, id, **kwargs):
+        """
+        Remove a course from the current user's favorites.
+
+        :calls: 'DELETE /api/v1/users/self/favorites/courses/:id \
+        <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.remove_favorite_course>'_
+
+        :param ID: The ID or SIS ID of the course.
+        :type ID: 'int'
+
+        :rtype: :class:'canvasapi.favorite.Favorite'
         """
