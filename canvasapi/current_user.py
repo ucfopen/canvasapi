@@ -196,7 +196,7 @@ class CurrentUser(User):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def add_favorite_course(self, id, **kwargs):
+    def add_favorite_course(self, course, **kwargs):
         """
         Add a course to the current user's favorites. If the course is already
         in the user's favorites, nothing happens.
@@ -210,14 +210,16 @@ class CurrentUser(User):
         :rtype: :class:`canvasapi.favorite.Favorite`
         """
 
+        course_id = obj_or_id(course, "course", (Course,))
+
         response = self._requester.request(
             'POST',
-            'users/self/favorites/courses/{}'.format(id),
+            'users/self/favorites/courses/{}'.format(course_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Favorite(self._requester, response.json())
 
-    def add_favorite_group(self, id, **kwargs):
+    def add_favorite_group(self, group, **kwargs):
         """
         Add a group to the current user's favorites. If the group is already
         in the user's favorites, nothing happens.
@@ -232,14 +234,16 @@ class CurrentUser(User):
         :rtype: :class:`canvasapi.favorite.Favorite`
         """
 
+        group_id = obj_or_id(group, "group", (Group,))
+
         response = self._requester.request(
             'POST',
-            'users/self/favorites/groups/{}'.format(id),
+            'users/self/favorites/groups/{}'.format(group_id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return Favorite(self._requester, response.json())
 
-    def remove_favorite_course(self, id, **kwargs):
+    def remove_favorite_course(self, course, **kwargs):
         """
         Remove a course from the current user's favorites.
 
@@ -251,3 +255,11 @@ class CurrentUser(User):
 
         :rtype: :class:'canvasapi.favorite.Favorite'
         """
+
+        course_id = obj_or_id(course, "course", (Course,))
+
+        response = self._requester.request(
+            ''
+        )
+
+        return Favorite(self._requester, response.json())
