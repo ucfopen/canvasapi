@@ -118,3 +118,11 @@ class TestCurrentUser(unittest.TestCase):
         self.assertIsInstance(fav_groups[1], Group)
         self.assertEqual(fav_groups[0].name, "Group 1")
         self.assertEqual(fav_groups[0].id, 1)
+
+    # add_favorite_course()
+    def test_add_favorite_course(self, m):
+        pass
+
+    # add_favorite_group()
+    def test_add_favorite_group(self, m):
+        pass
