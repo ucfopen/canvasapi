@@ -1258,4 +1258,4 @@ class Canvas(object):
             'DELETE',
             'polls/{}'.format(poll_id)
         )
-        return response.json().get('status') == 204
+        return response.json().get('status_code') == 204
