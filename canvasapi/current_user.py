@@ -192,3 +192,17 @@ class CurrentUser(User):
             'users/self/favorites/groups',
             _kwargs=combine_kwargs(**kwargs)
         )
+
+    def add_favorite_course(self, id, **kwargs):
+        """
+        Add a course to the current user's favorites. If the course is already
+        in the user's favorites, nothing happens.
+
+        :calls: 'POST /api/v1/users/self/favorites/courses/:id \
+        <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.add_favorite_course>'_
+
+        :param course: The object or ID of the course.
+        :type course: :class:`canvasapi.course.Course` or int
+
+        :rtype: :class:`canvasapi.favorite.Favorite`
+        """
