@@ -1211,7 +1211,7 @@ class Canvas(object):
 
         poll_id = obj_or_id(poll, "poll", (Poll,))
 
-        response = self._requester.request(
+        response = self.__requester.request(
             'GET',
             'polls/{}'.format(poll_id),
             _kwargs=combine_kwargs(**kwargs)
@@ -1258,4 +1258,4 @@ class Canvas(object):
             'DELETE',
             'polls/{}'.format(poll_id)
         )
-        return response.json().get('status_code') == 204
+        return response.status_code == 204

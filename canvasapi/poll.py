@@ -30,4 +30,4 @@ class Poll(CanvasObject):
             'polls/{}'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return response.json().get('question')
+        return Poll(self._requester, response.json())
