@@ -1205,7 +1205,7 @@ class Canvas(object):
 
         :param rubric_id: The ID of the poll.
         :type rubric_id: int
-        :rtype: :class: `canvasapi.poll.Poll`
+        :rtype: :class:`canvasapi.poll.Poll`
         """
         from canvasapi.poll import Poll
 
@@ -1225,7 +1225,7 @@ class Canvas(object):
         :calls: `POST /api/v1/polls \
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.create>`_
 
-        :rtype: :class: `canvas.poll.Poll`
+        :rtype: :class:`canvasapi.poll.Poll`
         """
         from canvasapi.poll import Poll
 
