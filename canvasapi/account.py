@@ -1635,8 +1635,6 @@ class Account(CanvasObject):
             'accounts/{}/grading_periods/{}'.format(self.id, grading_period_id),
         )
 
-        response_json = response.json()
-
         return response.json().get('delete')
 
 

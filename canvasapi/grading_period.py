@@ -6,6 +6,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.util import combine_kwargs
 
+
 @python_2_unicode_compatible
 class GradingPeriod(CanvasObject):
 
@@ -22,7 +23,7 @@ class GradingPeriod(CanvasObject):
         :param course_id: Id for course of grading period which is to be changed.
         :type course_id: int
 
-        :param grading_period: List of nested paramameters which requires the start_date and end_date parameters.
+        :param grading_period: List of nested paramameters.
         :type grading_period: list[dict]
 
         :rtype: :class:`canvasapi.grading_period.GradingPeriod`
@@ -61,7 +62,5 @@ class GradingPeriod(CanvasObject):
             'courses/{}/grading_periods/{}'.format(course_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-
-        response_json = response.json()
 
         return response.json().get('delete')
