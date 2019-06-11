@@ -28,10 +28,8 @@ class TestPoll(unittest.TestCase):
     def test_get_polls(self, m):
         register_uris({'poll': ['get_polls']}, m)
 
-        polls = self.canvas.get_polls()
-        polls_list = [poll for poll in polls]
+        polls_list = self.canvas.get_polls()
 
-        self.assertEqual(len(polls_list), 2)
         self.assertIsInstance(polls_list[0], Poll)
         self.assertIsInstance(polls_list[1], Poll)
 
@@ -55,28 +53,34 @@ class TestPoll(unittest.TestCase):
     def test_create_poll(self, m):
         register_uris({'poll': ['create_poll']}, m)
 
-        new_poll = self.canvas.create_poll('Is this a question?', 'This is a test.')
+        new_poll_q = self.canvas.create_poll([{'question': 'Is this a question?'}])
+        self.assertIsInstance(new_poll_q, Poll)
+        self.assertTrue(hasattr(new_poll_q, 'question'))
 
-        self.assertIsInstance(new_poll, Poll)
-        self.assertTrue(hasattr(new_poll, 'question'))
-        self.assertTrue(hasattr(new_poll, 'description'))
+        new_poll_q_d = self.canvas.create_poll([{'question': 'Is this a question?'}, {'description': 'This is a test.'}])
+        self.assertIsInstance(new_poll_q_d, Poll)
+        self.assertTrue(hasattr(new_poll_q_d, 'question'))
+        self.assertTrue(hasattr(new_poll_q_d, 'description'))
 
     # update()
     def test_update(self, m):
         register_uris({'poll': ['update']}, m)
 
-        updated_poll = self.poll.update('Is this not a question?', 'This is a drill.')
+        updated_poll_q = self.poll.update([{'question': 'Is this not a question?'}])
+        self.assertIsInstance(updated_poll_q, Poll)
+        self.assertEqual(updated_poll_q.question, 'Is this not a question?')
 
-        self.assertIsInstance(updated_poll, Poll)
-        self.assertEqual(updated_poll.question, 'Is this not a question?')
-        self.assertEqual(updated_poll.description, 'This is a drill.')
+        updated_poll_q_and_d = self.poll.update([
+                {'question': 'Is this not a question?'},
+                {'description': 'This is not a test.'}
+            ])
+        self.assertIsInstance(updated_poll_q_and_d, Poll)
+        self.assertEqual(updated_poll_q_and_d.question, 'Is this not a question?')
+        self.assertEqual(updated_poll_q_and_d.description, 'This is not a test.')
 
     # delete_poll()
-    def test_delete_poll(self, m):
-        register_uris({'poll': ['delete_poll']}, m)
+    def test_delete(self, m):
+        register_uris({'poll': ['delete']}, m)
 
-        delete_by_id = self.canvas.delete_poll(1)
-        self.assertTrue(delete_by_id)
-
-        delete_by_obj = self.canvas.delete_poll(self.poll)
-        self.assertTrue(delete_by_obj)
+        result = self.poll.delete()
+        self.assertTrue(result)
