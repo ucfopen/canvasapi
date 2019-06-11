@@ -7,6 +7,7 @@ from six import python_2_unicode_compatible, text_type, string_types
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.epub_exports import EpubExport
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
@@ -2347,7 +2348,7 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_epub_export(self, **kwargs):
+    def get_epub_export(self, epub_id, **kwargs):
         """
         Get information about a single epub export.
 
@@ -2356,6 +2357,15 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.epub_export.EpubExport`
         """
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/epub_exports/{}'.format(
+                self.id, epub_id),
+            _kwargs=combine_kwargs(**kwargs)
+            )
+
+        return EpubExport(self._requester, response.json())
 
 
 @python_2_unicode_compatible
