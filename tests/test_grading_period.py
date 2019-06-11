@@ -44,3 +44,10 @@ class TestGradingPeriod(unittest.TestCase):
     def test_delete(self, m):
         register_uris({'grading_period': ['delete']}, m)
         self.assertTrue(self.grading_period.delete(1))
+
+    def test_update_with_no_list(self, m):
+        register_uris({'grading_period': ['update']}, m)
+
+        with self.assertRaises(ValueError):
+            self.grading_period.update(1, grading_period={
+                'start_date': '2019-06-10T06:00:00Z', 'end_date': '2019-06-15T06:00:00Z'})
