@@ -2347,6 +2347,16 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_epub_export(self, **kwargs):
+        """
+        Get information about a single epub export.
+
+        :calls: `GET /api/v1/courses/:course_id/epub_exports/:id
+        <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.show>`_
+
+        :rtype: :class:`canvasapi.epub_export.EpubExport`
+        """
+
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
