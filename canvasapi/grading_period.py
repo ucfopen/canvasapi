@@ -20,10 +20,9 @@ class GradingPeriod(CanvasObject):
         <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.update>`_
 
         :param course_id: Id for course of grading period which is to be changed.
-        :type: int
+        :type course_id: int
 
-        :param grading_period: List of Nester paramameters which requires the
-        start_date and end_date parameters.
+        :param grading_period: List of nested paramameters which requires the start_date and end_date parameters.
         :type grading_period: list[dict]
 
         :rtype: :class:`canvasapi.grading_period.GradingPeriod`

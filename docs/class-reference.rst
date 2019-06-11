@@ -24,6 +24,7 @@ Class Reference
     external-tool-ref
     file-ref
     folder-ref
+    grading-period-ref
     group-ref
     login-ref
     module-ref

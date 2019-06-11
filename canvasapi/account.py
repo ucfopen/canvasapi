@@ -1595,7 +1595,7 @@ class Account(CanvasObject):
         """
         Return a list of grading periods for the associated account.
 
-        :calls: `GET|/api/v1/accounts/:account_id/grading_periods
+        :calls: `GET|/api/v1/accounts/:account_id/grading_periods \
         <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -1622,7 +1622,7 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.destroy>`_
 
         :param grading_period: The GradingPeriod object or ID to delete.
-        :type GradingPeriod: :class:`canvasapi.grading_period.GradingPeriod` or int
+        :type grading_period: :class:`canvasapi.grading_period.GradingPeriod` or int
 
         :returns: True if the grading period was deleted, False otherwise.
         :rtype: bool
