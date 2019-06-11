@@ -1551,8 +1551,8 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(response, PaginatedList)
         self.assertIsInstance(response[0], GradingPeriod)
         self.assertIsInstance(response[1], GradingPeriod)
-        self.assertEqual(response[0].id, "1")
-        self.assertEqual(response[1].id, "2")
+        self.assertEqual(response[0].id, 1)
+        self.assertEqual(response[1].id, 2)
         self.assertEqual(response[0].title, "Grading period 1")
         self.assertEqual(response[1].title, "Grading period 2")
 
@@ -1560,7 +1560,7 @@ class TestCourse(unittest.TestCase):
     def test_get_grading_period(self, m):
         register_uris({'course': ['get_grading_period']}, m)
 
-        grading_period_id = "1"
+        grading_period_id = 1
         response = self.course.get_grading_period(grading_period_id)
 
         self.assertIsInstance(response, GradingPeriod)

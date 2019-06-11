@@ -17,7 +17,7 @@ class TestGradingPeriod(unittest.TestCase):
 
         self.grading_period = GradingPeriod(
             self.canvas._Canvas__requester,
-            {"title": "grading period 1", "id": "1"}
+            {"title": "grading period 1", "id": 1}
         )
 
     def test_str(self, m):

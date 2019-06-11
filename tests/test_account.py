@@ -1065,8 +1065,8 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(response, PaginatedList)
         self.assertIsInstance(response[0], GradingPeriod)
         self.assertIsInstance(response[1], GradingPeriod)
-        self.assertEqual(response[0].id, "1")
-        self.assertEqual(response[1].id, "2")
+        self.assertEqual(response[0].id, 1)
+        self.assertEqual(response[1].id, 2)
         self.assertEqual(response[0].title, "Grading period 1")
         self.assertEqual(response[1].title, "Grading period 2")
 
@@ -1076,7 +1076,7 @@ class TestAccount(unittest.TestCase):
 
         self.grading_period = GradingPeriod(
             self.canvas._Canvas__requester,
-            {"title": "grading period 1", "id": "1", "course_id": 1}
+            {"title": "grading period 1", "id": 1, "course_id": 1}
         )
         self.assertTrue(self.account.delete_grading_period(1))
         self.assertTrue(self.account.delete_grading_period(self.grading_period))
