@@ -24,8 +24,7 @@ class Poll(CanvasObject):
 
         :param poll: List of arguments. 'Question' is required and 'Description' is optional
         :type poll:
-        :returns: True is the poll was updated, False otherwise.
-        :rtype: bool
+        :rtype: :class:`canvasapi.poll.Poll
         """
         if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
             kwargs['poll'] = poll
@@ -48,13 +47,14 @@ class Poll(CanvasObject):
         :calls: `DELETE /api/v1/polls/:id \
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.destroy>`_
 
-        :returns: True if the deletion was successfull, false otherwise.
+        :returns: True if the deletion was successful, false otherwise.
 
         :rtype: bool
         """
         response = self._requester.request(
             'DELETE',
-            'polls/{}'.format(self.id)
+            'polls/{}'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.status_code == 204
 
@@ -73,6 +73,7 @@ class Poll(CanvasObject):
             self.__requester,
             'GET',
             'polls/{}/poll_choices'.format(self.id),
+            _root='poll_choices',
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -92,4 +93,30 @@ class Poll(CanvasObject):
             'polls/{}/poll_choices/{}'.format(self.id, poll_choice_id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return PollChoice(self._requester, response.json())
+        return PollChoice(self._requester, response.json()['polls'][0])
+
+    def create_choice(self, poll_choice, **kwargs):
+        """
+        Create a new choice for the current poll.
+
+        :calls: `POST /api/v1/polls/:poll_id/poll_choices \
+        <https://canvas.instructure.com/doc/api/poll_choices.html#method.polling/poll_choices.create>`_
+
+        :param choice: 'Text' of the poll is required, 'is_correct' and 'position' are optional.
+        :type choice:
+        :rtype: :class:`canvasapi.poll_choice.PollChoice`
+        """
+        if (isinstance(poll_choice, list) and isinstance(poll_choice[0], dict)
+                and 'text' in poll_choice[0]):
+            kwargs['poll_choice'] = poll_choice
+        else:
+            raise RequiredFieldMissing(
+                    "Dictionary with key 'text' is required."
+                )
+
+        response = self._requester.request(
+            'POST',
+            'polls/{}/poll_choices'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return PollChoice(self._requester, response.json()['poll_choices'][0])
