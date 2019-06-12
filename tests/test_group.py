@@ -18,6 +18,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.tab import Tab
 from canvasapi.content_migration import ContentMigration, Migrator
+from canvasapi.content_export import ContentExport
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -600,6 +601,36 @@ class TestGroup(unittest.TestCase):
 
         self.assertIsInstance(override, AssignmentOverride)
         self.assertEqual(override.group_id, self.group.id)
+
+        # list_content_exports()
+    def test_list_content_exports(self, m):
+        register_uris({'group': ['multiple_content_exports']}, m)
+
+        content_exports = self.group.list_content_exports()
+        content_export_list = [content_export for content_export in content_exports]
+
+        self.assertEqual(len(content_export_list), 2)
+        self.assertEqual(content_export_list[0].id, 69)
+        self.assertEqual(content_export_list[1].export_type, "OwO what's this")
+        self.assertIsInstance(content_export_list[0], ContentExport)
+
+    # show_content_export()
+    def test_show_content_export(self, m):
+        register_uris({'group': ['single_content_export']}, m)
+
+        content_export = self.group.show_content_export(11)
+
+        self.assertTrue(hasattr(content_export, 'export_type'))
+        self.assertIsInstance(content_export, ContentExport)
+
+    # export_content()
+    def test_export_content(self, m):
+        register_uris({'group': ['export_content']}, m)
+
+        content_export = self.group.export_content('cereal soup')
+
+        self.assertIsInstance(content_export, ContentExport)
+        self.assertTrue(hasattr(content_export, 'export_type'))
 
 
 @requests_mock.Mocker()

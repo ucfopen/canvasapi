@@ -136,21 +136,21 @@
 			"id": 1,
 			"course_id": 1,
 			"associated_course_count": 3,
-            "latest_migration": null
+			"latest_migration": null
 		},
 		"status_code": 200
 	},
-    "get_blueprint_default": {
-        "method": "GET",
+	"get_blueprint_default": {
+		"method": "GET",
 		"endpoint": "courses/1/blueprint_templates/default",
 		"data": {
 			"id": 1,
 			"course_id": 1,
 			"associated_course_count": 3,
-            "latest_migration": null
+			"latest_migration": null
 		},
 		"status_code": 200
-    },
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "courses/1",
@@ -347,7 +347,7 @@
 		],
 		"status_code": 200
 	},
-	"get_section":{
+	"get_section": {
 		"method": "GET",
 		"endpoint": "courses/1/sections/1",
 		"data": {
@@ -361,16 +361,16 @@
 		"method": "GET",
 		"endpoint": "courses/1/sections",
 		"data": [
-            {
-                "id": 1,
-                "name": "Section 1",
-                "course_id": 1
-            },
-            {
-                "id": 2,
-                "name": "Section 2",
-                "course_id": 1
-            }
+			{
+				"id": 1,
+				"name": "Section 1",
+				"course_id": 1
+			},
+			{
+				"id": 2,
+				"name": "Section 2",
+				"course_id": 1
+			}
 		],
 		"headers": {
 			"Link": "<https://example.com/api/v1/courses/1/sections?page=2&per_page=2>; rel=\"next\""
@@ -381,16 +381,16 @@
 		"method": "GET",
 		"endpoint": "courses/1/sections?page=2&per_page=2",
 		"data": [
-            {
-                "id": 3,
-                "name": "Section 3",
-                "course_id": 1
-            },
-            {
-                "id": 4,
-                "name": "Section 4",
-                "course_id": 1
-            }
+			{
+				"id": 3,
+				"name": "Section 3",
+				"course_id": 1
+			},
+			{
+				"id": 4,
+				"name": "Section 4",
+				"course_id": 1
+			}
 		],
 		"status_code": 200
 	},
@@ -446,23 +446,23 @@
 		],
 		"status_code": 200
 	},
-    "list_blueprint_subscriptions": {
-        "method": "GET",
-        "endpoint": "courses/1/blueprint_subscriptions",
-        "data": [
-            {
-                "id": 10,
-                "template_id": 2,
-                "blueprint_course": {
-                    "id": 1,
-                    "name": "Test Course",
-                    "course_code": "TES1337",
-                    "term_name": "Summer 2018"
-                }
-            }
-        ],
-        "status_code": 200
-    },
+	"list_blueprint_subscriptions": {
+		"method": "GET",
+		"endpoint": "courses/1/blueprint_subscriptions",
+		"data": [
+			{
+				"id": 10,
+				"template_id": 2,
+				"blueprint_course": {
+					"id": 1,
+					"name": "Test Course",
+					"course_code": "TES1337",
+					"term_name": "Summer 2018"
+				}
+			}
+		],
+		"status_code": 200
+	},
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "courses/1/enrollments",
@@ -843,7 +843,7 @@
 	"show_front_page": {
 		"method": "GET",
 		"endpoint": "courses/1/front_page",
-		"data":{
+		"data": {
 			"id": 1,
 			"url": "front-page",
 			"title": "Front Page"
@@ -1027,11 +1027,10 @@
 	"get_discussion_topic": {
 		"method": "GET",
 		"endpoint": "courses/1/discussion_topics/1",
-		"data":
-			{
-				"id": 1,
-				"title": "Topic 1"
-			},
+		"data": {
+			"id": 1,
+			"title": "Topic 1"
+		},
 		"status_code": 200
 	},
 	"get_file": {
@@ -1091,7 +1090,11 @@
 		"endpoint": "courses/1/discussion_topics/reorder",
 		"data": {
 			"reorder": true,
-			"order": [1, 2, 3]
+			"order": [
+				1,
+				2,
+				3
+			]
 		},
 		"status_code": 200
 	},
@@ -1192,7 +1195,7 @@
 					"2012-01-24T13:00:00-00:00": 19,
 					"2012-01-24T14:00:00-00:00": 13,
 					"2012-01-27T09:00:00-00:00": 23
-			},
+				},
 				"participations": [
 					{
 						"created_at": "2012-01-21T22:00:00-06:00",
@@ -1257,12 +1260,12 @@
 		"endpoint": "courses/1/analytics/users/1/communication",
 		"data": [
 			{
-				"2012-01-24":{
-					"instructorMessages":1,
-					"studentMessages":2
+				"2012-01-24": {
+					"instructorMessages": 1,
+					"studentMessages": 2
 				},
-				"2012-01-27":{
-					"studentMessages":1
+				"2012-01-27": {
+					"studentMessages": 1
 				}
 			}
 		]
@@ -1343,12 +1346,12 @@
 		"method": "PUT",
 		"endpoint": "courses/1/assignments/1/submissions/1",
 		"data": {
-				"id": 1,
-				"assignments_id": 1,
-				"user_id": 1,
-				"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
-				"submission_type": "online_upload",
-				"excused": true
+			"id": 1,
+			"assignments_id": 1,
+			"user_id": 1,
+			"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
+			"submission_type": "online_upload",
+			"excused": true
 		},
 		"status_code": 200
 	},
@@ -1367,15 +1370,13 @@
 		"endpoint": "search/all_courses",
 		"data": [
 			{
-				"course":
-				{
+				"course": {
 					"id": 1,
 					"name": "Course 1"
 				}
 			},
 			{
-				"course":
-				{
+				"course": {
 					"id": 2,
 					"name": "Course 2"
 				}
@@ -1392,11 +1393,20 @@
 			"context_id": 1,
 			"context_type": "Course",
 			"grading_scheme": [
-			  {"name": "A", "value": 0.9},
-			  {"name": "B", "value": 0.8},
-			  {"name": "C", "value": 0.7}
+				{
+					"name": "A",
+					"value": 0.9
+				},
+				{
+					"name": "B",
+					"value": 0.8
+				},
+				{
+					"name": "C",
+					"value": 0.7
+				}
 			]
-		  },
+		},
 		"status_code": 200
 	},
 	"get_grading_standards": {
@@ -1404,26 +1414,41 @@
 		"endpoint": "courses/1/grading_standards",
 		"data": [
 			{
-			"title": "Grading Standard 1",
-			"id": 1,
-			"context_id": 1,
-			"context_type": "Course",
-			"grading_scheme": [
-			  {"name": "A", "value": 0.9},
-			  {"name": "B", "value": 0.8},
-			  {"name": "C", "value": 0.7}
-			]
-		  },
-		  {
-			"title": "Grading Standard 2",
-			"id": 2,
-			"context_id": 1,
-			"context_type": "Course",
-			"grading_scheme": [
-			  {"name": "D", "value": 0.6},
-			  {"name": "F", "value": 0.5}
-			]
-		  }
+				"title": "Grading Standard 1",
+				"id": 1,
+				"context_id": 1,
+				"context_type": "Course",
+				"grading_scheme": [
+					{
+						"name": "A",
+						"value": 0.9
+					},
+					{
+						"name": "B",
+						"value": 0.8
+					},
+					{
+						"name": "C",
+						"value": 0.7
+					}
+				]
+			},
+			{
+				"title": "Grading Standard 2",
+				"id": 2,
+				"context_id": 1,
+				"context_type": "Course",
+				"grading_scheme": [
+					{
+						"name": "D",
+						"value": 0.6
+					},
+					{
+						"name": "F",
+						"value": 0.5
+					}
+				]
+			}
 		],
 		"status_code": 200
 	},
@@ -1436,11 +1461,20 @@
 			"context_id": 1,
 			"context_type": "Course",
 			"grading_scheme": [
-			  {"name": "A", "value": 0.9},
-			  {"name": "B", "value": 0.8},
-			  {"name": "C", "value": 0.7}
+				{
+					"name": "A",
+					"value": 0.9
+				},
+				{
+					"name": "B",
+					"value": 0.8
+				},
+				{
+					"name": "C",
+					"value": 0.7
+				}
 			]
-		  },
+		},
 		"status_code": 200
 	},
 	"create_content_migration": {
@@ -1536,6 +1570,43 @@
 			"updated_at": "2013-01-15T15:04:00Z",
 			"message": null,
 			"url": "https://canvas.example.edu/api/v1/progress/3"
+		},
+		"status_code": 200
+	},
+	"multiple_content_exports": {
+		"method": "GET",
+		"endpoint": "courses/1/content_exports",
+		"data": [
+			{
+				"user_id": 1,
+				"id": 69,
+				"export_type": "unimportant"
+			},
+			{
+				"user_id": 1,
+				"id": 420,
+				"export_type": "OwO what's this"
+			}
+		],
+		"status_code": 200
+	},
+	"single_content_export": {
+		"method": "GET",
+		"endpoint": "courses/1/content_exports/11",
+		"data": {
+			"user_id": 1,
+			"id": 11,
+			"export_type": "lul"
+		},
+		"status_code": 200
+	},
+	"export_content": {
+		"method": "POST",
+		"endpoint": "courses/1/content_exports",
+		"data": {
+			"user_id": 1,
+			"id": 111,
+			"export_type": "cereal is soup"
 		},
 		"status_code": 200
 	}
