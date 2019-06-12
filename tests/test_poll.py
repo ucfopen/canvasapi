@@ -57,7 +57,8 @@ class TestPoll(unittest.TestCase):
         self.assertIsInstance(new_poll_q, Poll)
         self.assertTrue(hasattr(new_poll_q, 'question'))
 
-        new_poll_q_d = self.canvas.create_poll([{'question': 'Is this a question?'}, {'description': 'This is a test.'}])
+        new_poll_q_d = self.canvas.create_poll([{'question': 'Is this a question?'},
+                                                {'description': 'This is a test.'}])
         self.assertIsInstance(new_poll_q_d, Poll)
         self.assertTrue(hasattr(new_poll_q_d, 'question'))
         self.assertTrue(hasattr(new_poll_q_d, 'description'))
