@@ -24,7 +24,7 @@ class Poll(CanvasObject):
 
         :param poll: List of arguments. 'Question' is required and 'Description' is optional
         :type poll:
-        :rtype: :class:`canvasapi.poll.Poll
+        :rtype: :class:`canvasapi.poll.Poll`
         """
         if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
             kwargs['poll'] = poll
@@ -103,7 +103,7 @@ class Poll(CanvasObject):
         <https://canvas.instructure.com/doc/api/poll_choices.html#method.polling/poll_choices.create>`_
 
         :param choice: 'Text' of the poll is required, 'is_correct' and 'position' are optional.
-        :type choice:
+        :type choice: list
         :rtype: :class:`canvasapi.poll_choice.PollChoice`
         """
         if (isinstance(poll_choice, list) and isinstance(poll_choice[0], dict)

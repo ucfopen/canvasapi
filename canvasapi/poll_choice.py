@@ -20,9 +20,9 @@ class PollChoice(CanvasObject):
         :calls: `PUT /api/v1/polls/:poll_id/poll_choices/:id \
         <https://canvas.instructure.com/doc/api/poll_choices.html#method.polling/poll_choices.update>`_
 
-        :param poll_choice: List of arguments. 'text' is required and 'is_correct' and 'position'
+        :param poll_choice: List of arguments. 'text' is required and 'is_correct' and 'position' \
         are optional.
-        :type poll_choice:
+        :type poll_choice: list
         :rtype: :class:`canvasapi.poll_choice.PollChoice`
         """
         if (isinstance(poll_choice, list) and isinstance(poll_choice[0], dict)

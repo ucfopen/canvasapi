@@ -3,6 +3,7 @@ import unittest
 
 import requests_mock
 
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi import Canvas
 from canvasapi.poll import Poll
 from canvasapi.poll_choice import PollChoice
@@ -77,6 +78,11 @@ class TestPollChoice(unittest.TestCase):
         self.assertTrue(hasattr(new_choice_t_ic_p, 'is_correct'))
         self.assertTrue(hasattr(new_choice_t_ic_p, 'position'))
 
+    # create_choice()
+    def test_create_choice_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.poll.create_choice(poll_choice={})
+
     # update()
     def test_update(self, m):
         register_uris({'poll_choice': ['update']}, m)
@@ -104,9 +110,14 @@ class TestPollChoice(unittest.TestCase):
         self.assertTrue(updated_choice_t_ic.is_correct)
         self.assertEqual(updated_choice_t_p.p, 2)
 
+    # update_choice()
+    def test_update_choice_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.poll_choice.update(poll_choice={})
+
     # delete()
     def test_delete(self, m):
         register_uris({'poll_choice': ['delete']}, m)
 
-        result = self.poll.delete()
+        result = self.poll_choice.delete()
         self.assertTrue(result)
