@@ -4,13 +4,9 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.content_export import ContentExport
-from canvasapi.course import Course
-from canvasapi.group import Group
-from canvasapi.progress import Progress
-from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
+
 
 @requests_mock.Mocker()
 class TestContentExport(unittest.TestCase):
