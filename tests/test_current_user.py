@@ -155,3 +155,15 @@ class TestCurrentUser(unittest.TestCase):
         self.assertIsInstance(evnt, Favorite)
         self.assertEqual(evnt.context_type, "group")
         self.assertEqual(evnt.context_id, 1)
+
+    # reset_favorite_courses()
+    def test_reset_favorite_courses(self, m):
+        register_uris({'current_user': ['reset_favorite_courses']}, m)
+
+        evnt = self.user.reset_favorite_courses()
+
+    # reset_favorite_groups()
+    def test_reset_favorite_groups(self, m):
+        register_uris({'current_user': ['reset_favorite_groups']}, m)
+
+        evnt = self.user.reset_favorite_groups()

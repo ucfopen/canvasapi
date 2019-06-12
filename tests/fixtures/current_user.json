@@ -112,5 +112,15 @@
 			"context_type": "group"
 		},
 		"status_code": 200
+	},
+	"reset_favorite_courses": {
+		"method": "DELETE",
+		"endpoint": "users/self/favorites/courses",
+		"status_code": 200
+	},
+	"reset_favorite_groups": {
+		"method": "DELETE",
+		"endpoint": "users/self/favorites/groups",
+		"status_code": 200
 	}
 }

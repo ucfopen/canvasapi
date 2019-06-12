@@ -286,3 +286,33 @@ class CurrentUser(User):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Favorite(self._requester, response.json())
+
+    def reset_favorite_courses(self, **kwargs):
+        """
+        Reset the current user's course favorites to the default
+        automatically generated list of enrolled courses
+
+        :calls: 'DELETE /api/v1/users/self/favorites/courses \
+        <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.reset_course_favorites>'_
+        """
+
+        self._requester.request(
+            'DELETE',
+            'users/self/favorites/courses',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def reset_favorite_groups(self, **kwargs):
+        """
+        Reset the current user's group favorites to the default
+        automatically generated list of enrolled groups
+
+        :calls: 'DELETE /api/v1/users/self/favorites/groups \
+        <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.reset_groups_favorites>'_
+        """
+
+        self._requester.request(
+            'DELETE',
+            'users/self/favorites/groups',
+            _kwargs=combine_kwargs(**kwargs)
+        )
