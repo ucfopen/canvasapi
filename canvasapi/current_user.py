@@ -204,8 +204,8 @@ class CurrentUser(User):
         :calls: 'POST /api/v1/users/self/favorites/courses/:id \
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.add_favorite_course>'_
 
-        :param ID: The ID or SIS ID of the course.
-        :type ID: `int`
+        :param course: The course or ID/SIS ID of the course.
+        :type course: :class:`canvasapi.course.Course` or int
 
         :rtype: :class:`canvasapi.favorite.Favorite`
         """
@@ -228,8 +228,8 @@ class CurrentUser(User):
         <https://canvas.instructure.com/doc/api/
         favorites.html#method.favorites.add_favorite_groups>'_
 
-        :param ID: The ID or SIS ID of the group.
-        :type ID: `int`
+        :param group: The ID or SIS ID of the group.
+        :type group: :class:`canvasapi.group.Group` or int
 
         :rtype: :class:`canvasapi.favorite.Favorite`
         """
@@ -250,8 +250,8 @@ class CurrentUser(User):
         :calls: 'DELETE /api/v1/users/self/favorites/courses/:id \
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.remove_favorite_course>'_
 
-        :param ID: The ID or SIS ID of the course.
-        :type ID: 'int'
+        :param course: The course or ID/SIS ID of the course.
+        :type course: :class:`canvasapi.course.Course` or int
 
         :rtype: :class:'canvasapi.favorite.Favorite'
         """
@@ -259,7 +259,30 @@ class CurrentUser(User):
         course_id = obj_or_id(course, "course", (Course,))
 
         response = self._requester.request(
-            ''
+            'DELETE',
+            'users/self/favorites/courses/{}'.format(course_id),
+            _kwargs=combine_kwargs(**kwargs)
         )
+        return Favorite(self._requester, response.json())
 
+    def remove_favorite_group(self, group, **kwargs):
+        """
+        Remove a group from the current user's favorites.
+
+        :calls: 'DELETE /api/v1/users/self/favorites/groups/:id \
+        <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.remove_favorite_groups>'_
+
+        :param group: The ID or SIS ID of the group.
+        :type group: :class:`canvasapi.group.Group` or int
+
+        :rtype: :class:'canvasapi.favorite.Favorite'
+        """
+
+        group_id = obj_or_id(group, "group", (Group,))
+
+        response = self._requester.request(
+            'DELETE',
+            'users/self/favorites/groups/{}'.format(group_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
         return Favorite(self._requester, response.json())

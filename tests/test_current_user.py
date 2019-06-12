@@ -7,6 +7,7 @@ import warnings
 from canvasapi import Canvas
 from canvasapi.bookmark import Bookmark
 from canvasapi.course import Course
+from canvasapi.favorite import Favorite
 from canvasapi.group import Group
 from tests import settings
 from tests.util import register_uris
@@ -121,8 +122,36 @@ class TestCurrentUser(unittest.TestCase):
 
     # add_favorite_course()
     def test_add_favorite_course(self, m):
-        pass
+        register_uris({'current_user': ['add_favorite_course']}, m)
+
+        evnt = self.user.add_favorite_course(1)
+        self.assertIsInstance(evnt, Favorite)
+        self.assertEqual(evnt.context_type, "course")
+        self.assertEqual(evnt.context_id, 1)
 
     # add_favorite_group()
     def test_add_favorite_group(self, m):
-        pass
+        register_uris({'current_user': ['add_favorite_group']}, m)
+
+        evnt = self.user.add_favorite_group(1)
+        self.assertIsInstance(evnt, Favorite)
+        self.assertEqual(evnt.context_type, "group")
+        self.assertEqual(evnt.context_id, 1)
+
+    # remove_favorite_course()
+    def test_remove_favorite_course(self, m):
+        register_uris({'current_user': ['remove_favorite_course']}, m)
+
+        evnt = self.user.remove_favorite_course(1)
+        self.assertIsInstance(evnt, Favorite)
+        self.assertEqual(evnt.context_type, "course")
+        self.assertEqual(evnt.context_id, 1)
+
+    # remove_favorite_group()
+    def test_remove_favorite_group(self, m):
+        register_uris({'current_user': ['remove_favorite_group']}, m)
+
+        evnt = self.user.remove_favorite_group(1)
+        self.assertIsInstance(evnt, Favorite)
+        self.assertEqual(evnt.context_type, "group")
+        self.assertEqual(evnt.context_id, 1)
