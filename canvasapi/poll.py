@@ -21,7 +21,7 @@ class Poll(CanvasObject):
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.update>`_
 
         :param poll: List of arguments. 'Question' is required and 'Description' is optional
-        :type poll:
+        :type poll: list
         :returns: True is the poll was updated, False otherwise.
         :rtype: bool
         """
