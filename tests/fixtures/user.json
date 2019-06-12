@@ -820,5 +820,38 @@
 			}
 		],
 		"status_code": 200
+	},
+	"multiple_content_exports": {
+		"method": "GET",
+		"endpoint": "users/1/content_exports",
+		"data": [
+			{
+				"id": 69,
+				"export_type": "unimportant"
+			},
+			{
+				"id": 420,
+				"export_type": "OwO what's this"
+			}
+		],
+		"status_code": 200
+	},
+	"single_content_export": {
+		"method": "GET",
+		"endpoint": "users/1/content_exports/11",
+		"data":
+			{
+				"export_type": "unimportant"
+			},
+		"status_code": 200
+	},
+	"export_content": {
+		"method": "POST",
+		"endpoint": "users/1/content_exports",
+		"data": {
+			"id": 111,
+			"export_type": "cereal soup"
+		},
+		"status_code": 200
 	}
 }
