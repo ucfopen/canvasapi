@@ -116,11 +116,17 @@
 	"reset_favorite_courses": {
 		"method": "DELETE",
 		"endpoint": "users/self/favorites/courses",
+		"data": {
+			"message": "OK"
+		},
 		"status_code": 200
 	},
 	"reset_favorite_groups": {
 		"method": "DELETE",
 		"endpoint": "users/self/favorites/groups",
+		"data": {
+			"message": "OK"
+		},
 		"status_code": 200
 	}
 }

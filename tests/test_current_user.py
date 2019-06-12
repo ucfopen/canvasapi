@@ -160,10 +160,12 @@ class TestCurrentUser(unittest.TestCase):
     def test_reset_favorite_courses(self, m):
         register_uris({'current_user': ['reset_favorite_courses']}, m)
 
-        evnt = self.user.reset_favorite_courses()
+        response = self.user.reset_favorite_courses()
+        self.assertTrue(response)
 
     # reset_favorite_groups()
     def test_reset_favorite_groups(self, m):
         register_uris({'current_user': ['reset_favorite_groups']}, m)
 
-        evnt = self.user.reset_favorite_groups()
+        response = self.user.reset_favorite_groups()
+        self.assertTrue(response)

@@ -296,11 +296,12 @@ class CurrentUser(User):
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.reset_course_favorites>'_
         """
 
-        self._requester.request(
+        response = self._requester.request(
             'DELETE',
             'users/self/favorites/courses',
             _kwargs=combine_kwargs(**kwargs)
         )
+        return response.json().get('message') == 'OK'
 
     def reset_favorite_groups(self, **kwargs):
         """
@@ -311,8 +312,9 @@ class CurrentUser(User):
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.reset_groups_favorites>'_
         """
 
-        self._requester.request(
+        response = self._requester.request(
             'DELETE',
             'users/self/favorites/groups',
             _kwargs=combine_kwargs(**kwargs)
         )
+        return response.json().get('message') == 'OK'
