@@ -3,6 +3,7 @@ import unittest
 
 import requests_mock
 
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi import Canvas
 from canvasapi.poll import Poll
 from tests import settings
@@ -63,6 +64,11 @@ class TestPoll(unittest.TestCase):
         self.assertTrue(hasattr(new_poll_q_d, 'question'))
         self.assertTrue(hasattr(new_poll_q_d, 'description'))
 
+    # create_poll()
+    def test_create_poll_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_poll(poll={})
+
     # update()
     def test_update(self, m):
         register_uris({'poll': ['update']}, m)
@@ -78,6 +84,11 @@ class TestPoll(unittest.TestCase):
         self.assertIsInstance(updated_poll_q_and_d, Poll)
         self.assertEqual(updated_poll_q_and_d.question, 'Is this not a question?')
         self.assertEqual(updated_poll_q_and_d.description, 'This is not a test.')
+
+    # update
+    def test_update_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.poll.update(poll={})
 
     # delete_poll()
     def test_delete(self, m):
