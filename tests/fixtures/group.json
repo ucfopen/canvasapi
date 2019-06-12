@@ -44,16 +44,16 @@
 		"status_code": 200
 	},
 	"create_folder": {
-        "method": "POST",
-        "endpoint": "groups/1/folders",
-        "data": {
-            "id": 2,
-            "name": "Test String",
-            "locked": false,
-            "hidden": false
-        },
-        "status_code": 200
-    },
+		"method": "POST",
+		"endpoint": "groups/1/folders",
+		"data": {
+			"id": 2,
+			"name": "Test String",
+			"locked": false,
+			"hidden": false
+		},
+		"status_code": 200
+	},
 	"create_page": {
 		"method": "POST",
 		"endpoint": "groups/1/pages",
@@ -77,7 +77,7 @@
 	"show_front_page": {
 		"method": "GET",
 		"endpoint": "groups/1/front_page",
-		"data":{
+		"data": {
 			"id": 1,
 			"url": "front-page",
 			"title": "Front Page"
@@ -215,8 +215,8 @@
 		"data": {
 			"upload_url": "https://example.com/api/v1/files/upload_response_upload_url",
 			"upload_params": {
-			    "some_param": "param123",
-			    "a_different_param": "param456"
+				"some_param": "param123",
+				"a_different_param": "param456"
 			}
 		}
 	},
@@ -392,7 +392,10 @@
 			"sis_group_id": "group4a",
 			"sis_import_id": 14,
 			"storage_quota_mb": 50,
-			"permissions": {"create_discussion_topic":true,"create_announcement":true}
+			"permissions": {
+				"create_discussion_topic": true,
+				"create_announcement": true
+			}
 		},
 		"status_code": 200
 	},
@@ -431,9 +434,7 @@
 	"category_delete_category": {
 		"method": "DELETE",
 		"endpoint": "group_categories/1",
-		"data": {
-
-		},
+		"data": {},
 		"status_code": 200
 	},
 	"category_list_groups": {
@@ -457,8 +458,8 @@
 				"sis_import_id": 14,
 				"storage_quota_mb": 50,
 				"permissions": {
-					"create_discussion_topic":true,
-					"create_announcement":true
+					"create_discussion_topic": true,
+					"create_announcement": true
 				}
 			},
 			{
@@ -478,8 +479,8 @@
 				"sis_import_id": 14,
 				"storage_quota_mb": 50,
 				"permissions": {
-					"create_discussion_topic":true,
-					"create_announcement":true
+					"create_discussion_topic": true,
+					"create_announcement": true
 				}
 			}
 		],
@@ -601,17 +602,17 @@
 		"method": "POST",
 		"endpoint": "group_categories/1/assign_unassigned_members",
 		"data": {
-		    "completion": 0,
-		    "context_id": 20,
-		    "context_type": "GroupCategory",
-		    "created_at": "2013-07-05T10:57:48-06:00",
-		    "id": 2,
-		    "message": null,
-		    "tag": "assign_unassigned_members",
-		    "updated_at": "2013-07-05T10:57:48-06:00",
-		    "user_id": null,
-		    "workflow_state": "running",
-		    "url": "http://localhost:3000/api/v1/progress/2"
+			"completion": 0,
+			"context_id": 20,
+			"context_type": "GroupCategory",
+			"created_at": "2013-07-05T10:57:48-06:00",
+			"id": 2,
+			"message": null,
+			"tag": "assign_unassigned_members",
+			"updated_at": "2013-07-05T10:57:48-06:00",
+			"user_id": null,
+			"workflow_state": "running",
+			"url": "http://localhost:3000/api/v1/progress/2"
 		},
 		"status_code": 200
 	},
@@ -619,9 +620,9 @@
 		"method": "GET",
 		"endpoint": "groups/1/discussion_topics/1",
 		"data": {
-				"id": 1,
-				"title": "Topic 1"
-			},
+			"id": 1,
+			"title": "Topic 1"
+		},
 		"status_code": 200
 	},
 	"get_file": {
@@ -680,7 +681,11 @@
 		"endpoint": "groups/1/discussion_topics/reorder",
 		"data": {
 			"reorder": true,
-			"order": [1, 2, 3]
+			"order": [
+				1,
+				2,
+				3
+			]
 		},
 		"status_code": 200
 	},
@@ -709,7 +714,7 @@
 				"url": "https://example.com/myblog2.rss"
 			}
 		],
-        "status_code": 200
+		"status_code": 200
 	},
 	"create_external_feed": {
 		"method": "POST",
@@ -759,57 +764,57 @@
 		"status_code": 200
 	},
 	"get_folder": {
-        "method": "GET",
-        "endpoint": "groups/1/folders/1",
-        "data": {
-            "id": 1,
-            "files_count": 10,
-            "folders_count": 2,
-            "name": "Folder 1",
-            "full_name": "Folder 1"
-        },
-        "status_code": 200
-  },
-  "list_folders": {
-    "method": "GET",
-    "endpoint": "groups/1/folders",
-    "data": [
-      {
-        "id": 2,
-        "files_count": 0,
-        "folders_count": 0,
-        "name": "Folder 2",
-        "full_name": "group_files/Folder 2"
-      },
-      {
-        "id": 3,
-        "files_count": 0,
-        "folders_count": 0,
-        "name": "Folder 3",
-        "full_name": "group_files/Folder 3"
-      }
-    ],
-    "status_code": 200
-  },
-  "list_tabs": {
+		"method": "GET",
+		"endpoint": "groups/1/folders/1",
+		"data": {
+			"id": 1,
+			"files_count": 10,
+			"folders_count": 2,
+			"name": "Folder 1",
+			"full_name": "Folder 1"
+		},
+		"status_code": 200
+	},
+	"list_folders": {
+		"method": "GET",
+		"endpoint": "groups/1/folders",
+		"data": [
+			{
+				"id": 2,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder 2",
+				"full_name": "group_files/Folder 2"
+			},
+			{
+				"id": 3,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder 3",
+				"full_name": "group_files/Folder 3"
+			}
+		],
+		"status_code": 200
+	},
+	"list_tabs": {
 		"method": "GET",
 		"endpoint": "groups/1/tabs",
 		"data": [
 			{
-			    "id": "home",
-			    "html_url": "/groups/1",
-			    "position": 1,
-			    "visibility": "public",
-			    "label": "Home",
-			    "type": "internal"
-		  	},
+				"id": "home",
+				"html_url": "/groups/1",
+				"position": 1,
+				"visibility": "public",
+				"label": "Home",
+				"type": "internal"
+			},
 			{
-			    "id": "pages",
-			    "html_url": "/groups/1/wiki",
-			    "position": 2,
-			    "visibility": "public",
-			    "label": "Pages",
-			    "type": "internal"
+				"id": "pages",
+				"html_url": "/groups/1/wiki",
+				"position": 2,
+				"visibility": "public",
+				"label": "Pages",
+				"type": "internal"
 			}
 		],
 		"status_code": 200
@@ -874,10 +879,12 @@
 		"endpoint": "groups/1/content_exports",
 		"data": [
 			{
+				"user_id": 1,
 				"id": 69,
 				"export_type": "unimportant"
 			},
 			{
+				"user_id": 1,
 				"id": 420,
 				"export_type": "OwO what's this"
 			}
@@ -887,16 +894,18 @@
 	"single_content_export": {
 		"method": "GET",
 		"endpoint": "groups/1/content_exports/11",
-		"data":
-			{
-				"export_type": "unimportant"
-			},
+		"data": {
+			"user_id": 1,
+			"id": 11,
+			"export_type": "lul"
+		},
 		"status_code": 200
 	},
 	"export_content": {
 		"method": "POST",
 		"endpoint": "groups/1/content_exports",
 		"data": {
+			"user_id": 1,
 			"id": 111,
 			"export_type": "cereal soup"
 		},

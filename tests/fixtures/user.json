@@ -183,16 +183,16 @@
 		"status_code": 200
 	},
 	"create_folder": {
-        "method": "POST",
-        "endpoint": "users/1/folders",
-        "data": {
-            "id": 2,
-            "name": "Test String",
-            "locked": false,
-            "hidden": false
-        },
-        "status_code": 200
-    },
+		"method": "POST",
+		"endpoint": "users/1/folders",
+		"data": {
+			"id": 2,
+			"name": "Test String",
+			"locked": false,
+			"hidden": false
+		},
+		"status_code": 200
+	},
 	"edit": {
 		"method": "PUT",
 		"endpoint": "users/1",
@@ -245,29 +245,29 @@
 		"status_code": 200
 	},
 	"get_folder": {
-        "method": "GET",
-        "endpoint": "users/1/folders/1",
-        "data": {
-            "id": 1,
-            "files_count": 10,
-            "folders_count": 2,
-            "name": "Folder 1",
-            "full_name": "Folder 1"
-        },
-        "status_code": 200
-    },
+		"method": "GET",
+		"endpoint": "users/1/folders/1",
+		"data": {
+			"id": 1,
+			"files_count": 10,
+			"folders_count": 2,
+			"name": "Folder 1",
+			"full_name": "Folder 1"
+		},
+		"status_code": 200
+	},
 	"get_folder_2": {
-        "method": "GET",
-        "endpoint": "users/1/folders/2",
-        "data": {
-            "id": 2,
-            "files_count": 10,
-            "folders_count": 2,
-            "name": "Folder 2",
-            "full_name": "Folder 1"
-        },
-        "status_code": 200
-    },
+		"method": "GET",
+		"endpoint": "users/1/folders/2",
+		"data": {
+			"id": 2,
+			"files_count": 10,
+			"folders_count": 2,
+			"name": "Folder 2",
+			"full_name": "Folder 1"
+		},
+		"status_code": 200
+	},
 	"get_user_assignments": {
 		"method": "GET",
 		"endpoint": "users/1/courses/1/assignments",
@@ -459,26 +459,26 @@
 		"status_code": 200
 	},
 	"list_folders": {
-        "method": "GET",
-        "endpoint": "users/1/folders",
-        "data": [
-            {
-                "id": 2,
-                "files_count": 0,
-                "folders_count": 0,
-                "name": "Folder 2",
-                "full_name": "user_files/Folder 2"
-            },
-            {
-                "id": 3,
-                "files_count": 0,
-                "folders_count": 0,
-                "name": "Folder 3",
-                "full_name": "user_files/Folder 3"
-            }
-        ],
-        "status_code": 200
-    },
+		"method": "GET",
+		"endpoint": "users/1/folders",
+		"data": [
+			{
+				"id": 2,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder 2",
+				"full_name": "user_files/Folder 2"
+			},
+			{
+				"id": 3,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder 3",
+				"full_name": "user_files/Folder 3"
+			}
+		],
+		"status_code": 200
+	},
 	"merge": {
 		"method": "PUT",
 		"endpoint": "users/1/merge_into/2",
@@ -751,18 +751,22 @@
 		"method": "GET",
 		"endpoint": "search/recipients",
 		"data": [
-  			{
-  				"id": "group_1",
-  				"name": "the group",
-  				"type": "context",
-  				"user_count": 3
-  			},
-  			{
-  				"id": 2,
-  				"name": "greg",
-  				"common_courses": {},
-  				"common_groups": {"1": ["Member"]}
-  			}
+			{
+				"id": "group_1",
+				"name": "the group",
+				"type": "context",
+				"user_count": 3
+			},
+			{
+				"id": 2,
+				"name": "greg",
+				"common_courses": {},
+				"common_groups": {
+					"1": [
+						"Member"
+					]
+				}
+			}
 		],
 		"status_code": 200
 	},
@@ -826,10 +830,12 @@
 		"endpoint": "users/1/content_exports",
 		"data": [
 			{
+				"user_id": 1,
 				"id": 69,
 				"export_type": "unimportant"
 			},
 			{
+				"user_id": 1,
 				"id": 420,
 				"export_type": "OwO what's this"
 			}
@@ -839,16 +845,18 @@
 	"single_content_export": {
 		"method": "GET",
 		"endpoint": "users/1/content_exports/11",
-		"data":
-			{
-				"export_type": "unimportant"
-			},
+		"data": {
+			"user_id": 1,
+			"id": 11,
+			"export_type": "lul"
+		},
 		"status_code": 200
 	},
 	"export_content": {
 		"method": "POST",
 		"endpoint": "users/1/content_exports",
 		"data": {
+			"user_id": 1,
 			"id": 111,
 			"export_type": "cereal soup"
 		},
