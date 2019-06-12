@@ -1193,6 +1193,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'polls',
+            _root='polls',
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -1203,9 +1204,9 @@ class Canvas(object):
         :calls: `GET /api/v1/polls/:id \
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.show>`_
 
-        :param rubric_id: The ID of the poll.
-        :type rubric_id: int
-        :rtype: :class: `canvasapi.poll.Poll`
+        :param poll: The ID of the poll or the poll to change.
+        :type poll: int
+        :rtype: :class:`canvasapi.poll.Poll`
         """
         from canvasapi.poll import Poll
 
@@ -1216,46 +1217,31 @@ class Canvas(object):
             'polls/{}'.format(poll_id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return Poll(self.__requester, response.json())
+        return Poll(self.__requester, response.json()['polls'][0])
 
-    def create_poll(self, question, description, **kwargs):
+    def create_poll(self, poll, **kwargs):
         """
         Create a new poll for the current user.
 
         :calls: `POST /api/v1/polls \
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.create>`_
 
-        :rtype: :class: `canvas.poll.Poll`
+        :param poll: 'Question' is required and 'Description' is optional
+        :type poll:
+        :rtype: :class:`canvasapi.poll.Poll`
         """
         from canvasapi.poll import Poll
 
-        kwargs['question'] = question
-        kwargs['description'] = description
+        if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
+            kwargs['poll'] = poll
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'question' and is required."
+            )
 
         response = self.__requester.request(
             'POST',
             'polls',
             _kwargs=combine_kwargs(**kwargs)
         )
-        return Poll(self.__requester, response.json())
-
-    def delete_poll(self, poll, **kwargs):
-        """
-        Delete a single poll, based on the poll id.
-
-        :calls: `DELETE /api/v1/polls/:id \
-        <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.destroy>`_
-
-        :returns: True if the deletion was successfull, false otherwise.
-
-        :rtype: bool
-        """
-        from canvasapi.poll import Poll
-
-        poll_id = obj_or_id(poll, "poll", (Poll,))
-
-        response = self.__requester.request(
-            'DELETE',
-            'polls/{}'.format(poll_id)
-        )
-        return response.status_code == 204
+        return Poll(self.__requester, response.json()['polls'][0])
