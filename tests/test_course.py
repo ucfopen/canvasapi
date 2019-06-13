@@ -1542,6 +1542,13 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
 
+    # get_outcome_import_status()
+    def test_get_outcome_import_status(self, m):
+        register_uris({'course': ['get_outcome_import_status']}, m)
+        outcome_import = self.course.get_outcome_import_status(1)
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
