@@ -42,6 +42,12 @@ class GradingPeriod(CanvasObject):
         response_json = response.json()
         response_json.update({'course_id': course_id})
 
+        if 'start_date' not in kwargs['grading_periods'][0]:
+            raise RequiredFieldMissing("start_date is missing")
+
+        if 'end_date' not in kwargs['grading_periods'][0]:
+            raise RequiredFieldMissing("end_date is missing")
+
         return GradingPeriod(self._requester, response_json['grading_periods'][0])
 
     def delete(self, course_id, **kwargs):

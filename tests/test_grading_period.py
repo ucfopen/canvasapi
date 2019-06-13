@@ -46,10 +46,26 @@ class TestGradingPeriod(unittest.TestCase):
         register_uris({'grading_period': ['delete']}, m)
         self.assertTrue(self.grading_period.delete(1))
 
-    #Check that the appropriate exception is raised when no list is given.
-    def test_update_with_no_list(self, m):
+    # Check that the appropriate exception is raised when no list is given.
+    def test_update_without_list(self, m):
         register_uris({'grading_period': ['update']}, m)
 
         with self.assertRaises(RequiredFieldMissing):
             self.grading_period.update(1, grading_period={
                 'start_date': '2019-06-10T06:00:00Z', 'end_date': '2019-06-15T06:00:00Z'})
+
+    # Check that the grading_period that is passed has a start date
+    def test_update_without_start_date(self, m):
+        register_uris({'grading_period': ['update']}, m)
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.grading_period.update(1, grading_period=[{
+                 'end_date': '2019-06-15T06:00:00Z'}])
+
+    # Check that the appropriate exception is raised when no list is given.
+    def test_update_without_end_date(self, m):
+        register_uris({'grading_period': ['update']}, m)
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.grading_period.update(1, grading_period=[{
+                'start_date': '2019-06-10T06:00:00Z'}])
