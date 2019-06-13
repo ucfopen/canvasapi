@@ -1226,8 +1226,8 @@ class Canvas(object):
         :calls: `POST /api/v1/polls \
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.create>`_
 
-        :param poll: 'Question' is required and 'Description' is optional
-        :type poll: list
+        :param poll: List of polls to create. `'question'` key is required.
+        :type poll: list of dict
         :rtype: :class:`canvasapi.poll.Poll`
         """
         from canvasapi.poll import Poll

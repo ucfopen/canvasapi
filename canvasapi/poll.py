@@ -22,7 +22,7 @@ class Poll(CanvasObject):
 
         :param poll: List of arguments. 'Question' is required and 'Description' is optional
         :type poll: list
-        :returns: True is the poll was updated, False otherwise.
+        :returns: True if the poll was updated, False otherwise.
         :rtype: bool
         """
         if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
