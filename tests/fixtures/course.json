@@ -273,7 +273,7 @@
 			"workflow_state": "succeeded",
 			"data": null,
 			"progress": "100",
-			"user": null,
+			"user": null
 		},
 		"status_code": 200
 	},
