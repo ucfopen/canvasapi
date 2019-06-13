@@ -1548,6 +1548,9 @@ class TestCourse(unittest.TestCase):
         outcome_import = self.course.get_outcome_import_status(1)
 
         self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
 
 
 @requests_mock.Mocker()
