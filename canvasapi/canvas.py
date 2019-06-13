@@ -1175,3 +1175,73 @@ class Canvas(object):
             'announcements',
             _kwargs=combine_kwargs(**kwargs)
         )
+
+    def get_polls(self, **kwargs):
+        """
+        Returns a paginated list of polls for the current user
+
+        :calls: `GET /api/1/polls \
+        <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.poll.Poll`
+        """
+        from canvasapi.poll import Poll
+
+        return PaginatedList(
+            Poll,
+            self.__requester,
+            'GET',
+            'polls',
+            _root='polls',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_poll(self, poll, **kwargs):
+        """
+        Get a single poll, based on the poll id.
+
+        :calls: `GET /api/v1/polls/:id \
+        <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.show>`_
+
+        :param poll: The ID of the poll or the poll to change.
+        :type poll: int
+        :rtype: :class:`canvasapi.poll.Poll`
+        """
+        from canvasapi.poll import Poll
+
+        poll_id = obj_or_id(poll, "poll", (Poll,))
+
+        response = self.__requester.request(
+            'GET',
+            'polls/{}'.format(poll_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Poll(self.__requester, response.json()['polls'][0])
+
+    def create_poll(self, poll, **kwargs):
+        """
+        Create a new poll for the current user.
+
+        :calls: `POST /api/v1/polls \
+        <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.create>`_
+
+        :param poll: List of polls to create. `'question'` key is required.
+        :type poll: list of dict
+        :rtype: :class:`canvasapi.poll.Poll`
+        """
+        from canvasapi.poll import Poll
+
+        if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
+            kwargs['poll'] = poll
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'question' and is required."
+            )
+
+        response = self.__requester.request(
+            'POST',
+            'polls',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Poll(self.__requester, response.json()['polls'][0])
