@@ -123,7 +123,7 @@ class Assignment(CanvasObject):
     def get_overrides(self, **kwargs):
         """
         Get a paginated list of overrides for this assignment that target
-            sections/groups/students visible to the current user.
+        sections/groups/students visible to the current user.
 
         :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/overrides \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.index>`_
