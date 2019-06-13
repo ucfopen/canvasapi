@@ -2347,6 +2347,17 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_outcome_import_status(self, **kwargs):
+        """
+        Get the status of an already created Outcome import.
+        Pass 'latest' for the outcome import id for the latest import..
+
+        :calls: `GET /api/v1/courses/:course_id/outcome_imports/:id
+        <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.show>`_
+
+        :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
+        """
+
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
