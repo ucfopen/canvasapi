@@ -1610,7 +1610,7 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'accounts/{}/outcome_imports/{}'.format(self.id, sis_import_id),
+            'accounts/{}/outcome_imports/{}'.format(self.id, outcome_import_id),
             _kwargs=combine_kwargs(**kwargs)
         )
 

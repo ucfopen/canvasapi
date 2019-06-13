@@ -2347,7 +2347,7 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_outcome_import_status(self, **kwargs):
+    def get_outcome_import_status(self, outcome_import, **kwargs):
         """
         Get the status of an already created Outcome import.
         Pass 'latest' for the outcome import id for the latest import..
@@ -2357,7 +2357,18 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
+        outcome_import_id = obj_or_id(outcome_import, "outcome_import", (OutcomeImport,))
 
+        response = self._requester.request(
+            'GET',
+            'courses/{}/outcome_imports/{}'.format(self.id, outcome_import_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'course_id': self.id})
+
+        return OutcomeImport(self._requester, response_json)
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
