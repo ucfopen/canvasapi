@@ -18,6 +18,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.login import Login
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.outcome_import import OutcomeImport
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
 from canvasapi.user import User
@@ -1053,3 +1054,13 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(admin.user['login_id'], 'jdoe')
         self.assertEqual(admin.role, 'AccountAdmin')
         self.assertEqual(admin.role_id, 1)
+
+    # get_outcome_import_status()
+    def test_get_outcome_import_status(self, m):
+        register_uris({'account': ['get_outcome_import_status']}, m)
+        outcome_import = self.account.get_outcome_import_status(1)
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
