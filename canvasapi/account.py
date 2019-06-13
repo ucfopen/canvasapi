@@ -7,6 +7,7 @@ from six import python_2_unicode_compatible, string_types
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.grading_standard import GradingStandard
+from canvasapi.outcome_import import outcome_import
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
@@ -1594,7 +1595,7 @@ class Account(CanvasObject):
         )
         return Admin(self._requester, response.json())
 
-    def get_outcome_import_status(self, **kwargs):
+    def get_outcome_import_status(self, outcome_import, **kwargs):
         """
         Get the status of an already created Outcome import.
         Pass 'latest' for the outcome import id for the latest import..
@@ -1604,6 +1605,19 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
+
+        outcome_import_id = obj_or_id(outcome_import, "outcome_import", (OutcomeImport,))
+
+        response = self._requester.request(
+            'GET',
+            'accounts/{}/outcome_imports/{}'.format(self.id, sis_import_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_json = response.json()
+        response_json.update({'account_id': self.id})
+
+        return OutcomeImport(self._requester, response_json)
 
 
 @python_2_unicode_compatible
