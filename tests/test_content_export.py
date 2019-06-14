@@ -4,9 +4,9 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.content_export import ContentExport
 from tests import settings
 from tests.util import register_uris
+
 
 @requests_mock.Mocker()
 class TestContentExport(unittest.TestCase):
