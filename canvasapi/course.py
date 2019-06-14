@@ -2353,7 +2353,7 @@ class Course(CanvasObject):
         Get the status of an already created Outcome import.
         Pass 'latest' for the outcome import id for the latest import..
 
-        :calls: `POST /api/v1/courses/:course_id/outcome_imports/:id
+        :calls: `POST /api/v1/courses/:course_id/outcome_imports
         <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.create>`_
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
