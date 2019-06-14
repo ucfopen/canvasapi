@@ -10,9 +10,8 @@ from canvasapi.util import combine_kwargs
 @python_2_unicode_compatible
 class PollSession(CanvasObject):
 
-    # SEE IF THIS IS RIGHT
     def __str__(self):
-        return "({})".format(self.id)
+        return "{} ({})".format(self.poll_id, self.id)
 
     def update(self, poll_session, **kwargs):
         """
@@ -61,7 +60,6 @@ class PollSession(CanvasObject):
         )
         return response.status_code == 204
 
-    # unsure if correct return type
     def open(self, **kwargs):
         """
         Open a poll session to answers based on the poll id.
@@ -78,7 +76,6 @@ class PollSession(CanvasObject):
         )
         return PollSession(self._requester, response.json()['poll_sessions'][0])
 
-    # unsure if correct return type
     def close(self, **kwargs):
         """
         Close a poll session to answers based on the poll id.
