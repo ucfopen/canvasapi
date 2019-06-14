@@ -70,7 +70,7 @@ class Poll(CanvasObject):
         """
         return PaginatedList(
             PollChoice,
-            self.__requester,
+            self._requester,
             'GET',
             'polls/{}/poll_choices'.format(self.id),
             _root='poll_choices',
@@ -93,7 +93,7 @@ class Poll(CanvasObject):
             'polls/{}/poll_choices/{}'.format(self.id, poll_choice_id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return PollChoice(self._requester, response.json()['polls'][0])
+        return PollChoice(self._requester, response.json()['poll_choices'][0])
 
     def create_choice(self, poll_choice, **kwargs):
         """

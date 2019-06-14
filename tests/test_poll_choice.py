@@ -5,7 +5,6 @@ import requests_mock
 
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi import Canvas
-from canvasapi.poll import Poll
 from canvasapi.poll_choice import PollChoice
 from tests import settings
 from tests.util import register_uris
@@ -18,12 +17,14 @@ class TestPollChoice(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({'poll_choice': ['get_choice']}, m)
-            self.poll_choice = self.poll.get_choice(1)
+            requires = {'poll_choice': ['get_choice'], 'poll': ['get_poll']}
+            register_uris(requires, m)
+            self.poll = self.canvas.get_poll(1)
+            self.poll.poll_choice = self.poll.get_choice(1)
 
     # __str__()
     def test__str__(self, m):
-        string = str(self.poll)
+        string = str(self.poll.poll_choice)
         self.assertIsInstance(string, str)
 
     # get_choices()
@@ -32,8 +33,8 @@ class TestPollChoice(unittest.TestCase):
 
         choices_list = self.poll.get_choices()
 
-        self.assertIsInstance(choices_list[0], Poll)
-        self.assertIsInstance(choices_list[1], Poll)
+        self.assertIsInstance(choices_list[0], PollChoice)
+        self.assertIsInstance(choices_list[1], PollChoice)
 
     # get_choice()
     def test_get_choice(self, m):
@@ -87,37 +88,38 @@ class TestPollChoice(unittest.TestCase):
     def test_update(self, m):
         register_uris({'poll_choice': ['update']}, m)
 
-        updated_choice_t = self.poll.update([{'text': 'Changed example'}])
+        updated_choice_t = self.poll.poll_choice.update([{'text': 'Changed example'}])
         self.assertIsInstance(updated_choice_t, PollChoice)
-        self.assertEqual(updated_choice_t, 'Changed example')
+        self.assertEqual(updated_choice_t.text, 'Changed example')
 
-        updated_choice_t_ic = self.poll.update([{'text': 'Changed example'},
-                                                {'is_correct': False}])
+        updated_choice_t_ic = self.poll.poll_choice.update([{'text': 'Changed example'},
+                                                            {'is_correct': False}])
         self.assertIsInstance(updated_choice_t_ic, PollChoice)
         self.assertEqual(updated_choice_t_ic.text, 'Changed example')
-        self.assertTrue(updated_choice_t_ic.is_correct)
+        self.assertFalse(updated_choice_t_ic.is_correct)
 
-        updated_choice_t_p = self.poll.update([{'text': 'Changed example'}, {'position': 2}])
+        updated_choice_t_p = self.poll.poll_choice.update([{'text': 'Changed example'},
+                                                           {'position': 2}])
         self.assertIsInstance(updated_choice_t_p, PollChoice)
         self.assertEqual(updated_choice_t_p.text, 'Changed example')
-        self.assertEqual(updated_choice_t_p.p, 2)
+        self.assertEqual(updated_choice_t_p.position, 2)
 
-        updated_choice_t_ic_p = self.poll.update([{'text': 'Changed example'},
-                                                  {'is_correct': False},
-                                                  {'position': 2}])
+        updated_choice_t_ic_p = self.poll.poll_choice.update([{'text': 'Changed example'},
+                                                              {'is_correct': False},
+                                                              {'position': 2}])
         self.assertIsInstance(updated_choice_t_ic_p, PollChoice)
         self.assertEqual(updated_choice_t_ic_p.text, 'Changed example')
-        self.assertTrue(updated_choice_t_ic.is_correct)
-        self.assertEqual(updated_choice_t_p.p, 2)
+        self.assertFalse(updated_choice_t_ic.is_correct)
+        self.assertEqual(updated_choice_t_p.position, 2)
 
     # update_choice()
     def test_update_choice_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.poll_choice.update(poll_choice={})
+            self.poll.poll_choice.update(poll_choice={})
 
     # delete()
     def test_delete(self, m):
         register_uris({'poll_choice': ['delete']}, m)
 
-        result = self.poll_choice.delete()
+        result = self.poll.poll_choice.delete()
         self.assertTrue(result)
