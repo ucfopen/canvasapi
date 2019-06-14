@@ -400,7 +400,9 @@
 			"ended_at": "2013-12-02T00:03:21-06:00",
 			"updated_at": "2013-12-02T00:03:21-06:00",
 			"workflow_state": "succeeded",
-			"data": null,
+			"data": {
+				"import_type": "instructure_csv"
+			},
 			"progress": "100",
 			"user": null
 		},
