@@ -1538,5 +1538,42 @@
 			"url": "https://canvas.example.edu/api/v1/progress/3"
 		},
 		"status_code": 200
+	},
+	"multiple_content_exports": {
+		"method": "GET",
+		"endpoint": "courses/1/content_exports",
+		"data": [
+			{
+				"user_id": 1,
+				"id": 69,
+				"export_type": "unimportant"
+			},
+			{
+				"user_id": 1,
+				"id": 420,
+				"export_type": "OwO what's this"
+			}
+		],
+		"status_code": 200
+	},
+	"single_content_export": {
+		"method": "GET",
+		"endpoint": "courses/1/content_exports/11",
+		"data": {
+			"user_id": 1,
+			"id": 11,
+			"export_type": "lul"
+		},
+		"status_code": 200
+	},
+	"export_content": {
+		"method": "POST",
+		"endpoint": "courses/1/content_exports",
+		"data": {
+			"user_id": 1,
+			"id": 111,
+			"export_type": "cereal is soup"
+		},
+		"status_code": 200
 	}
 }

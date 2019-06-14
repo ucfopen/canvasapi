@@ -929,6 +929,80 @@ class Group(CanvasObject):
 
         return AssignmentOverride(self._requester, response_json)
 
+    def list_content_exports(self, **kwargs):
+        """
+        Return a paginated list of the past and pending content export jobs for a group.
+
+        :calls: `GET /api/v1/groups/:group_id/content_exports\
+        <https://canvas.instructure.com/doc/api/content_exports.html#method.content_exports_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_export.ContentExport`
+        """
+        from canvasapi.content_export import ContentExport
+
+        return PaginatedList(
+            ContentExport,
+            self._requester,
+            'GET',
+            'groups/{}/content_exports'.format(
+                self.id
+            ),
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    def show_content_export(self, content_export, **kwargs):
+        """
+        Return information about a single content export.
+
+        :calls: `GET /api/v1/groups/:group_id/content_exports/:id\
+        <https://canvas.instructure.com/doc/api/content_exports.html#method.content_exports_api.show>`_
+
+        :param content_export: The object or ID of the content export to show.
+        :type content_export: int or :class:`canvasapi.content_export.ContentExport`
+
+        :rtype: :class:`canvasapi.content_export.ContentExport`
+        """
+        from canvasapi.content_export import ContentExport
+
+        export_id = obj_or_id(content_export, "content_export", (content_export,))
+
+        response = self._requester.request(
+            'GET',
+            'groups/{}/content_exports/{}'.format(
+                self.id,
+                export_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return ContentExport(self._requester, response.json())
+
+    def export_content(self, export_type, **kwargs):
+        """
+        Begin a content export job for a group.
+
+        :calls: `POST /api/v1/groups/:group_id/content_exports\
+        <https://canvas.instructure.com/doc/api/content_exports.html#method.content_exports_api.create>`_
+
+        :param export_type: The type of content to export.
+        :type export_type: str
+
+        :rtype: :class:`canvasapi.content_export.ContentExport`
+        """
+        from canvasapi.content_export import ContentExport
+
+        kwargs['export_type'] = export_type
+
+        response = self._requester.request(
+            'POST',
+            'groups/{}/content_exports'.format(
+                self.id,
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return ContentExport(self._requester, response.json())
+
 
 @python_2_unicode_compatible
 class GroupMembership(CanvasObject):
