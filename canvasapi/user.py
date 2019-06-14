@@ -799,6 +799,46 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
+    def get_open_poll_sessions(self, **kwargs):
+        """
+        Returns a paginated list of all opened poll sessions available to the current user.
+
+        :calls: `GET /api/v1/poll_sessions/opened \
+        <https://canvas.instructure.com/doc/api/poll_sessions.html#method.polling/poll_sessions.opened>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.poll_session.PollSession`
+        """
+        from canvasapi.poll_session import PollSession
+
+        return PaginatedList(
+            PollSession,
+            self._requester,
+            'GET',
+            'poll_sessions/opened',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_closed_poll_sessions(self, **kwargs):
+        """
+        Returns a paginated list of all closed poll sessions available to the current user.
+
+        :calls: `GET /api/v1/poll_sessions/closed \
+        <https://canvas.instructure.com/doc/api/poll_sessions.html#method.polling/poll_sessions.closed>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.poll_session.PollSession`
+        """
+        from canvasapi.poll_session import PollSession
+
+        return PaginatedList(
+            PollSession,
+            self._requester,
+            'GET',
+            'poll_sessions/closed',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
 
 @python_2_unicode_compatible
 class UserDisplay(CanvasObject):
