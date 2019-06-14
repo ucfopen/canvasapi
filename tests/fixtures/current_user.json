@@ -1,4 +1,24 @@
 {
+	"add_favorite_course": {
+		"method": "POST",
+		"endpoint": "users/self/favorites/courses/1",
+		"data":
+			{
+				"context_id": 1,
+				"context_type": "course"
+			},
+		"status_code": 200
+	},
+	"add_favorite_group": {
+		"method": "POST",
+		"endpoint": "users/self/favorites/groups/1",
+		"data":
+			{
+				"context_id": 1,
+				"context_type": "group"
+			},
+		"status_code": 200
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "users/self",
@@ -6,39 +26,6 @@
 			"id": 1,
 			"name": "John Doe"
 		},
-		"status_code": 200
-	},
-	"list_groups": {
-		"method": "GET",
-		"endpoint": "users/self/groups",
-		"data": [
-			{
-				"id": 1,
-				"name": "Group 1"
-			},
-			{
-				"id": 2,
-				"name": "Group 2"
-			}
-		],
-		"status_code": 200,
-		"headers": {
-			"Link": "<https://example.com/api/v1/users/self/groups?page=2&per_page=2>; rel=\"next\""
-		}
-	},
-	"list_groups2": {
-		"method": "GET",
-		"endpoint": "users/self/groups?page=2&per_page=2",
-		"data": [
-			{
-				"id": 3,
-				"name": "Group 3"
-			},
-			{
-				"id": 4,
-				"name": "Group 4"
-			}
-		],
 		"status_code": 200
 	},
 	"get_favorite_courses": {
@@ -73,24 +60,37 @@
 		],
 		"status_code": 200
 	},
-	"add_favorite_course": {
-		"method": "POST",
-		"endpoint": "users/self/favorites/courses/1",
-		"data":
+	"list_groups": {
+		"method": "GET",
+		"endpoint": "users/self/groups",
+		"data": [
 			{
-				"context_id": 1,
-				"context_type": "course"
+				"id": 1,
+				"name": "Group 1"
 			},
-		"status_code": 200
+			{
+				"id": 2,
+				"name": "Group 2"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<https://example.com/api/v1/users/self/groups?page=2&per_page=2>; rel=\"next\""
+		}
 	},
-	"add_favorite_group": {
-		"method": "POST",
-		"endpoint": "users/self/favorites/groups/1",
-		"data":
+	"list_groups2": {
+		"method": "GET",
+		"endpoint": "users/self/groups?page=2&per_page=2",
+		"data": [
 			{
-				"context_id": 1,
-				"context_type": "group"
+				"id": 3,
+				"name": "Group 3"
 			},
+			{
+				"id": 4,
+				"name": "Group 4"
+			}
+		],
 		"status_code": 200
 	},
 	"remove_favorite_course": {
