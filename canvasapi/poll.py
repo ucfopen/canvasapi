@@ -23,8 +23,14 @@ class Poll(CanvasObject):
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.update>`_
 
         :param poll: List of arguments. 'Question' is required and 'Description' is optional
+<<<<<<< HEAD
         :type poll:
         :rtype: :class:`canvasapi.poll.Poll`
+=======
+        :type poll: list
+        :returns: True if the poll was updated, False otherwise.
+        :rtype: bool
+>>>>>>> 661ca4c5da93f5d9da76a3957da11ae9cc42a02c
         """
         if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
             kwargs['poll'] = poll
