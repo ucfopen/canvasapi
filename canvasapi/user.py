@@ -816,6 +816,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'poll_sessions/opened',
+            _root='poll_sessions',
             _kwargs=combine_kwargs(**kwargs)
         )
 
@@ -836,6 +837,7 @@ class User(CanvasObject):
             self._requester,
             'GET',
             'poll_sessions/closed',
+            _root='poll_sessions',
             _kwargs=combine_kwargs(**kwargs)
         )
 

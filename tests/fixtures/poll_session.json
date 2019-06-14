@@ -1,0 +1,244 @@
+{
+	"close": {
+		"method": "GET",
+		"endpoint": "polls/1/poll_sessions/1/close",
+		"data": {
+			"poll_sessions": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": false,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:18Z",
+					"results": {
+						"1": 1,
+						"2": 2,
+						"3": 3
+					},
+					"poll_submissions": null
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"create_session": {
+		"method": "POST",
+		"endpoint": "polls/1/poll_sessions",
+		"data": {
+			"poll_sessions": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": false,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:18Z",
+					"results": {
+						"1": 0,
+						"2": 0,
+						"3": 0
+					},
+					"poll_submissions": null
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "polls/1/poll_sessions/1",
+		"status_code": 204
+	},
+	"get_closed_poll_sessions": {
+		"method": "GET",
+		"endpoint": "poll_sessions/closed",
+		"data": {
+			"poll_sessions": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": false,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:18Z",
+					"results": {
+						"1": 1,
+						"2": 2,
+						"3": 3
+					},
+					"poll_submissions": null
+				},
+				{
+					"id": 2,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": false,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:19Z",
+					"results": {
+						"1": 4,
+						"2": 5,
+						"3": 6
+					},
+					"poll_submissions": null
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_open_poll_sessions": {
+		"method": "GET",
+		"endpoint": "poll_sessions/opened",
+		"data": {
+			"poll_sessions": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": true,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:18Z",
+					"results": {
+						"1": 1,
+						"2": 2,
+						"3": 3
+					},
+					"poll_submissions": null
+				},
+				{
+					"id": 2,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": true,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:19Z",
+					"results": {
+						"1": 4,
+						"2": 5,
+						"3": 6
+					},
+					"poll_submissions": null
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_session": {
+		"method": "GET",
+		"endpoint": "polls/1/poll_sessions/1",
+		"data": {
+			"poll_sessions": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": true,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:18Z",
+					"results": {
+						"1": 1,
+						"2": 2,
+						"3": 3
+					},
+					"poll_submissions": null
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_sessions": {
+		"method": "GET",
+		"endpoint": "polls/1/poll_sessions",
+		"data": {
+			"poll_sessions": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": true,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:18Z",
+					"results": {
+						"1": 1,
+						"2": 2,
+						"3": 3
+					},
+					"poll_submissions": null
+				},
+				{
+					"id": 2,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": false,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:19Z",
+					"results": {
+						"1": 4,
+						"2": 5,
+						"3": 6
+					},
+					"poll_submissions": null
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"open": {
+		"method": "GET",
+		"endpoint": "polls/1/poll_sessions/1/open",
+		"data": {
+			"poll_sessions": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"course_id": 1,
+					"course_section_id": 1,
+					"is_published": true,
+					"has_public_results": false,
+					"created_at": "2014-01-07T15:16:18Z",
+					"results": {
+						"1": 0,
+						"2": 0,
+						"3": 0
+					},
+					"poll_submissions": null
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"update": {
+		"method": "PUT",
+		"endpoint": "polls/1/poll_sessions/1",
+		"data": {
+			"poll_sessions": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"course_id": 2,
+					"course_section_id": 2,
+					"is_published": false,
+					"has_public_results": true,
+					"created_at": "2014-01-07T15:16:18Z",
+					"results": {
+						"1": 1,
+						"2": 2,
+						"3": 3
+					},
+					"poll_submissions": ["1", "2", "2", "3", "3", "3"]
+				}
+			]
+		},
+		"status_code": 200
+	}
+}

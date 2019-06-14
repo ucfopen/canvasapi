@@ -4,8 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.util import combine_kwargs, obj_or_id
-from canvasapi.paginated_list import PaginatedList
+from canvasapi.util import combine_kwargs
 
 
 @python_2_unicode_compatible
@@ -39,10 +38,10 @@ class PollSession(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'polls/{}/poll_session/{}'.format(self.poll_id, self.id),
+            'polls/{}/poll_sessions/{}'.format(self.poll_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return PollSession(self._requester, response.json()['poll_session'][0])
+        return PollSession(self._requester, response.json()['poll_sessions'][0])
 
     def delete(self, **kwargs):
         """
@@ -57,7 +56,7 @@ class PollSession(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'polls/{}/poll_session/{}'.format(self.poll_id, self.id),
+            'polls/{}/poll_sessions/{}'.format(self.poll_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
         return response.status_code == 204
@@ -77,7 +76,7 @@ class PollSession(CanvasObject):
             'polls/{}/poll_sessions/{}/open'.format(self.poll_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return PollSession(self._requester, response.json()['poll_session'][0])
+        return PollSession(self._requester, response.json()['poll_sessions'][0])
 
     # unsure if correct return type
     def close(self, **kwargs):
@@ -94,4 +93,4 @@ class PollSession(CanvasObject):
             'polls/{}/poll_sessions/{}/close'.format(self.poll_id, self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        return PollSession(self._requester, response.json()['poll_session'][0])
+        return PollSession(self._requester, response.json()['poll_sessions'][0])
