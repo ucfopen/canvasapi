@@ -1595,6 +1595,35 @@ class Account(CanvasObject):
         )
         return Admin(self._requester, response.json())
 
+    def import_outcomes(self, attachment, **kwargs):
+        """
+        Get the status of an already created Outcome import.
+        Pass 'latest' for the outcome import id for the latest import..
+
+        :calls: `POST /api/v1/accounts/:account_id/outcome_imports/:id
+        <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.create>`_
+
+        :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
+        """
+
+        attachment, is_path = file_or_path(attachment)
+
+        try:
+            response = self._requester.request(
+                'POST',
+                'accounts/{}/outcome_imports'.format(self.id),
+                file={'attachment': attachment},
+                _kwargs=combine_kwargs(**kwargs)
+            )
+
+            response_json = response.json()
+            response_json.update({'account_id': self.id})
+
+            return OutcomeImport(self._requester, response_json)
+        finally:
+            if is_path:
+                attachment.close()
+
     def get_outcome_import_status(self, outcome_import, **kwargs):
         """
         Get the status of an already created Outcome import.
