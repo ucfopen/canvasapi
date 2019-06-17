@@ -1,0 +1,78 @@
+{
+	"create_poll": {
+		"method": "POST",
+		"endpoint": "polls",
+		"data": {
+			"polls": [
+				{
+					"id": 4,
+					"question": "Is this a question?",
+					"description": "This is a test.",
+					"created_at": "2015-01-07T15:16:18Z",
+					"user_id": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "polls/1",
+		"status_code": 204
+	},
+	"get_poll": {
+		"method": "GET",
+		"endpoint": "polls/1",
+		"data": {
+			"polls": [
+				{
+					"id": 1,
+					"question": "Is this a question?",
+					"description": "This is a test.",
+					"created_at": "2014-01-07T13:10:19Z",
+					"user_id": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_polls": {
+		"method": "GET",
+		"endpoint": "polls",
+		"data": {
+			"polls": [
+				{
+					"id": 2,
+					"question": "Is this a question?",
+					"description": "This is a test.",
+					"created_at": "2014-01-07T15:16:18Z",
+					"user_id": 1
+				},
+				{
+					"id": 3,
+					"question": "Is this a question?",
+					"description": "This is a test.",
+					"created_at": "2014-01-07T15:18:12Z",
+					"user_id": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"update": {
+		"method": "PUT",
+		"endpoint": "polls/1",
+		"data": {
+			"polls": [
+				{
+					"id": 2,
+					"question": "Is this not a question?",
+					"description": "This is not a test.",
+					"created_at": "2014-01-07T15:16:18Z",
+					"user_id": 1
+				}
+			]
+		},
+		"status_code": 200
+	}
+}
