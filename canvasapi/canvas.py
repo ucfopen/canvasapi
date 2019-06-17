@@ -1386,15 +1386,15 @@ class Canvas(object):
         :rtype: :class:`canvasapi.planner.PlannerOverride`
         """
         from canvasapi.planner import PlannerOverride
+        from six import text_type, integer_types
 
-        if isinstance(plannable_type, str):
+        if isinstance(plannable_type, text_type):
             kwargs['plannable_type'] = plannable_type
         else:
             raise RequiredFieldMissing(
                 "plannable_type is required as a str."
             )
-
-        if isinstance(plannable_id, int):
+        if isinstance(plannable_id, integer_types):
             kwargs['plannable_id'] = plannable_id
         else:
             raise RequiredFieldMissing(
