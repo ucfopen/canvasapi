@@ -19,6 +19,7 @@ Patches and Suggestions
 - Daniel Brinkman [@DanBrink91](https://github.com/DanBrink91)
 - Daniel Grobani [@dgrobani](https://github.com/dgrobani)
 - David Warden [@dfwarden](https://github.com/dfwarden)
+- Davis Goff [@Goff-Davis](https://github.com/Goff-Davis)
 - Devin Singh [@devints47](https://github.com/devints47)
 - Elise Heron [@thedarkestknight](https://github.com/thedarkestknight)
 - Elli Howard [@qwertynerd97](https://github.com/qwertynerd97)

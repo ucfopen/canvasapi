@@ -30,6 +30,7 @@ Class Reference
     module-ref
     outcome-ref
     page-ref
+    poll-ref
     progress-ref
     quiz-ref
     quiz-group-ref
