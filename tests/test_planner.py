@@ -152,8 +152,7 @@ class TestPlannerOverride(unittest.TestCase):
         register_uris({'planner': ['create_planner_override']}, m)
 
         override_create = self.canvas.create_planner_override(
-            plannable_type='assignment',
-            plannable_id=69
+            plannable_type='assignment', plannable_id=69
         )
         self.assertIsInstance(override_create, PlannerOverride)
         self.assertTrue(hasattr(override_create, 'plannable_id'))

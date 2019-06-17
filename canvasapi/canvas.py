@@ -1393,6 +1393,7 @@ class Canvas(object):
             raise RequiredFieldMissing(
                 "plannable_type is required as a str."
             )
+
         if isinstance(plannable_id, int):
             kwargs['plannable_id'] = plannable_id
         else:
