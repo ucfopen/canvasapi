@@ -122,39 +122,51 @@ class TestCurrentUser(unittest.TestCase):
 
     # add_favorite_course()
     def test_add_favorite_course(self, m):
-        register_uris({'current_user': ['add_favorite_course']}, m)
+        register_uris({'current_user': ['add_favorite_course'], 'course': ['get_by_id']}, m)
 
-        evnt = self.user.add_favorite_course(1)
-        self.assertIsInstance(evnt, Favorite)
-        self.assertEqual(evnt.context_type, "course")
-        self.assertEqual(evnt.context_id, 1)
+        fav_by_id = self.user.add_favorite_course(1)
+        self.assertIsInstance(fav_by_id, Favorite)
+        self.assertEqual(fav_by_id.context_type, "course")
+        self.assertEqual(fav_by_id.context_id, 1)
+
+        obj = self.canvas.get_course(1)
+        fav_by_obj = self.user.add_favorite_course(obj)
+        self.assertIsInstance(fav_by_obj, Favorite)
+        self.assertEqual(fav_by_obj.context_type, "course")
+        self.assertEqual(fav_by_obj.context_id, 1)
+
+    def test_add_favorite_course_sis_id(self, m):
+        register_uris({'current_user': ['add_favorite_course_by_sis_id']}, m)
+
+        fav_by_sis = self.user.add_favorite_course('test-sis-id', use_sis_id=True)
+
+        self.assertIsInstance(fav_by_sis, Favorite)
+        self.assertEqual(fav_by_sis.context_id, 1)
+        self.assertEqual(fav_by_sis.context_type, "course")
 
     # add_favorite_group()
     def test_add_favorite_group(self, m):
-        register_uris({'current_user': ['add_favorite_group']}, m)
+        register_uris({'current_user': ['add_favorite_group'], 'group': ['get_by_id']}, m)
 
-        evnt = self.user.add_favorite_group(1)
-        self.assertIsInstance(evnt, Favorite)
-        self.assertEqual(evnt.context_type, "group")
-        self.assertEqual(evnt.context_id, 1)
+        fav_by_id = self.user.add_favorite_group(1)
+        self.assertIsInstance(fav_by_id, Favorite)
+        self.assertEqual(fav_by_id.context_type, "group")
+        self.assertEqual(fav_by_id.context_id, 1)
 
-    # remove_favorite_course()
-    def test_remove_favorite_course(self, m):
-        register_uris({'current_user': ['remove_favorite_course']}, m)
+        obj = self.canvas.get_group(1)
+        fav_by_obj = self.user.add_favorite_group(obj)
+        self.assertIsInstance(fav_by_obj, Favorite)
+        self.assertEqual(fav_by_obj.context_type, "group")
+        self.assertEqual(fav_by_obj.context_id, 1)
 
-        evnt = self.user.remove_favorite_course(1)
-        self.assertIsInstance(evnt, Favorite)
-        self.assertEqual(evnt.context_type, "course")
-        self.assertEqual(evnt.context_id, 1)
+    def test_add_favorite_group_sis_id(self, m):
+        register_uris({'current_user': ['add_favorite_group_by_sis_id']}, m)
 
-    # remove_favorite_group()
-    def test_remove_favorite_group(self, m):
-        register_uris({'current_user': ['remove_favorite_group']}, m)
+        fav_by_sis = self.user.add_favorite_group('test-sis-id', use_sis_id=True)
 
-        evnt = self.user.remove_favorite_group(1)
-        self.assertIsInstance(evnt, Favorite)
-        self.assertEqual(evnt.context_type, "group")
-        self.assertEqual(evnt.context_id, 1)
+        self.assertIsInstance(fav_by_sis, Favorite)
+        self.assertEqual(fav_by_sis.context_id, 1)
+        self.assertEqual(fav_by_sis.context_type, "group")
 
     # reset_favorite_courses()
     def test_reset_favorite_courses(self, m):
