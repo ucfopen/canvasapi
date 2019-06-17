@@ -1,5 +1,11 @@
 # Change Log
 
+## [Unreleased]
+
+### New Endpoint Coverage
+
+- Polls (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
+
 ## [0.12.0] - 2019-04-03
 
 ### New Endpoint Coverage
@@ -294,6 +300,7 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.12.0...develop
 [0.12.0]: https://github.com/ucfopen/canvasapi/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/ucfopen/canvasapi/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/ucfopen/canvasapi/compare/v0.9.0...v0.10.0
