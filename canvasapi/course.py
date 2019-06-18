@@ -2400,6 +2400,7 @@ class Course(CanvasObject):
 
         return OutcomeImport(self._requester, response_json)
 
+
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
 
