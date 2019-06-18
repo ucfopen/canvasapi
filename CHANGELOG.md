@@ -4,6 +4,7 @@
 
 ### New Endpoint Coverage
 
+- Favorites (Thanks, [@atarisafari](https://github.com/atarisafari))
 - Polls (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
 
 ## [0.12.0] - 2019-04-03
