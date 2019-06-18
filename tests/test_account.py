@@ -1079,3 +1079,9 @@ class TestAccount(unittest.TestCase):
         self.assertTrue(isinstance(import_outcome, OutcomeImport))
         self.assertTrue(hasattr(import_outcome, 'account_id'))
         self.assertTrue(hasattr(import_outcome, 'data'))
+
+    def test_import_outcomes_ioerror(self, m):
+        f = '!@#$%^&*()_+QWERTYUIOP{}|'
+
+        with self.assertRaises(IOError):
+            self.account.import_outcomes(f)
