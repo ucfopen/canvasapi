@@ -1074,11 +1074,13 @@ class TestAccount(unittest.TestCase):
         filepath = os.path.join('tests', 'fixtures',
                                 'test_import_outcomes.csv')
 
-        import_outcome = self.account.import_outcomes(filepath)
+        outcome_import = self.account.import_outcomes(filepath)
 
-        self.assertTrue(isinstance(import_outcome, OutcomeImport))
-        self.assertTrue(hasattr(import_outcome, 'account_id'))
-        self.assertTrue(hasattr(import_outcome, 'data'))
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, 'account_id'))
+        self.assertTrue(hasattr(outcome_import, 'data'))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
 
     def test_import_outcomes_ioerror(self, m):
         f = '!@#$%^&*()_+QWERTYUIOP{}|'
