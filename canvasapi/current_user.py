@@ -207,7 +207,7 @@ class CurrentUser(User):
         :param course: The course or ID/SIS ID of the course.
         :type course: :class:`canvasapi.course.Course` or int
 
-        :param use_sis_id: Whether or not group_id is an sis ID.
+        :param use_sis_id: Whether or not `course` is an sis ID.
             Defaults to `False`.
         :type use_sis_id: bool
 
@@ -238,7 +238,7 @@ class CurrentUser(User):
         :param group: The ID or SIS ID of the group.
         :type group: :class:`canvasapi.group.Group` or int
 
-        :param use_sis_id: Whether or not group_id is an sis ID.
+        :param use_sis_id: Whether or not `group` is an sis ID.
             Defaults to `False`.
         :type use_sis_id: bool
 
@@ -265,6 +265,9 @@ class CurrentUser(User):
 
         :calls: `DELETE /api/v1/users/self/favorites/courses \
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.reset_course_favorites>`_
+
+        :returns: `True` if reset correctly, `False` otherwise.
+        :rtype: bool
         """
 
         response = self._requester.request(
@@ -281,6 +284,9 @@ class CurrentUser(User):
 
         :calls: `DELETE /api/v1/users/self/favorites/groups \
         <https://canvas.instructure.com/doc/api/favorites.html#method.favorites.reset_groups_favorites>`_
+
+        :returns: `True` if reset correctly, `False` otherwise.
+        :rtype: bool
         """
 
         response = self._requester.request(
