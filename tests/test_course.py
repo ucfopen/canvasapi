@@ -1552,6 +1552,29 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.workflow_state, "succeeded")
         self.assertEqual(outcome_import.progress, "100")
 
+    # import_outcomes()
+    def test_import_outcomes(self, m):
+        import os
+
+        register_uris({'course': ['import_outcomes']}, m)
+
+        filepath = os.path.join('tests', 'fixtures',
+                                'test_import_outcomes.csv')
+
+        outcome_import = self.course.import_outcomes(filepath)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, 'course_id'))
+        self.assertTrue(hasattr(outcome_import, 'data'))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
+
+    def test_import_outcomes_ioerror(self, m):
+        f = '!@#$%^&*()_+QWERTYUIOP{}|'
+
+        with self.assertRaises(IOError):
+            self.course.import_outcomes(f)
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

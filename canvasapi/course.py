@@ -18,7 +18,7 @@ from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
-from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
+from canvasapi.util import combine_kwargs, is_multivalued, file_or_path, obj_or_id
 from canvasapi.rubric import Rubric
 
 warnings.simplefilter('always', DeprecationWarning)
@@ -2350,7 +2350,7 @@ class Course(CanvasObject):
 
     def import_outcomes(self, attachment, **kwargs):
         """
-        Get the status of an already created Outcome import.
+        Import outcomes into canvas.
         Pass 'latest' for the outcome import id for the latest import..
 
         :calls: `POST /api/v1/courses/:course_id/outcome_imports
