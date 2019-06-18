@@ -22,6 +22,7 @@ Class Reference
     enrollment-ref
     enrollment-term-ref
     external-tool-ref
+    favorite-ref
     file-ref
     folder-ref
     grading-period-ref
