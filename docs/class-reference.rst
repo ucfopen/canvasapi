@@ -31,6 +31,7 @@ Class Reference
     outcome-ref
     page-ref
     poll-ref
+    poll-choice-ref
     progress-ref
     quiz-ref
     quiz-group-ref
