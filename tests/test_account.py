@@ -1064,3 +1064,18 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(outcome_import.id, 1)
         self.assertEqual(outcome_import.workflow_state, "succeeded")
         self.assertEqual(outcome_import.progress, "100")
+
+    # import_outcomes()
+    def test_import_outcomes(self, m):
+        import os
+
+        register_uris({'account': ['import_outcomes']}, m)
+
+        filepath = os.path.join('tests', 'fixtures',
+                                'test_import_outcomes.csv')
+
+        import_outcome = self.account.import_outcomes(filepath)
+
+        self.assertTrue(isinstance(import_outcome, OutcomeImport))
+        self.assertTrue(hasattr(import_outcome, 'account_id'))
+        self.assertTrue(hasattr(import_outcome, 'data'))
