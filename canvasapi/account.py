@@ -1599,7 +1599,7 @@ class Account(CanvasObject):
         """
         Return a list of grading periods for the associated account.
 
-        :calls: `GET|/api/v1/accounts/:account_id/grading_periods \
+        :calls: `GET /api/v1/accounts/:account_id/grading_periods \
         <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of

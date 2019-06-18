@@ -1542,7 +1542,7 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
 
-    # get_grading_periods()
+    # list_grading_periods()
     def test_get_grading_periods(self, m):
         register_uris({'course': ['get_grading_periods']}, m)
 

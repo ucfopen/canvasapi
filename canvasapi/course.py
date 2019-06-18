@@ -2372,7 +2372,7 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_grading_period(self, grading_period_id, **kwargs):
+    def get_grading_period(self, grading_period, **kwargs):
         """
         Return a single grading period for the associated course and id.
 
@@ -2387,12 +2387,15 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/grading_periods/{}'.format(
-                self.id, grading_period_id
+                self.id, grading_period
             ),
             _kwargs=combine_kwargs(**kwargs)
         )
 
-        return GradingPeriod(self._requester, response.json()['grading_periods'][0])
+        response_grading_period = response.json()['grading_periods'][0]
+        response_grading_period.update({'course_id': self.course_id})
+
+        return GradingPeriod(self._requester, response_grading_period)
 
 
 @python_2_unicode_compatible

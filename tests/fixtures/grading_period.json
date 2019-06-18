@@ -15,12 +15,9 @@
 		},
 		"status_code": 200
 	},
-		"delete": {
+	"delete": {
 		"method": "DELETE",
 		"endpoint": "courses/1/grading_periods/1",
-		"data": {
-			"delete": true
-		},
 		"status_code": 204
 	}
 }
