@@ -1,0 +1,78 @@
+{
+	"create_choice": {
+		"method": "POST",
+		"endpoint": "polls/1/poll_choices",
+		"data": {
+			"poll_choices": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"is_correct": true,
+					"text": "Example choice",
+					"position": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "polls/1/poll_choices/1",
+		"status_code": 204
+	},
+	"get_choice": {
+		"method": "GET",
+		"endpoint": "polls/1/poll_choices/1",
+		"data": {
+			"poll_choices": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"is_correct": true,
+					"text": "Example choice",
+					"position": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_choices": {
+		"method": "GET",
+		"endpoint": "polls/1/poll_choices",
+		"data": {
+			"poll_choices": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"is_correct": true,
+					"text": "Example choice",
+					"position": 1
+				},
+				{
+					"id": 2,
+					"poll_id": 1,
+					"is_correct": false,
+					"text": "Another example",
+					"position": 2
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"update": {
+		"method": "PUT",
+		"endpoint": "polls/1/poll_choices/1",
+		"data": {
+			"poll_choices": [
+				{
+					"id": 1,
+					"poll_id": 1,
+					"is_correct": false,
+					"text": "Changed example",
+					"position": 2
+				}
+			]
+		},
+		"status_code": 200
+	}
+}
