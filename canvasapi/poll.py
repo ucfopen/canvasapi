@@ -4,9 +4,9 @@ from six import python_2_unicode_compatible
 
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.util import combine_kwargs, obj_or_id
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.poll_choice import PollChoice
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -23,7 +23,7 @@ class Poll(CanvasObject):
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.update>`_
 
         :param poll: List of arguments. 'Question' is required and 'Description' is optional
-        :type poll:
+        :type poll: list
         :rtype: :class:`canvasapi.poll.Poll`
         """
         if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
@@ -106,7 +106,8 @@ class Poll(CanvasObject):
         :type choice: list
         :rtype: :class:`canvasapi.poll_choice.PollChoice`
         """
-        if (isinstance(poll_choice, list) and isinstance(poll_choice[0], dict)
+        if (isinstance(poll_choice, list)
+                and isinstance(poll_choice[0], dict)
                 and 'text' in poll_choice[0]):
             kwargs['poll_choice'] = poll_choice
         else:
