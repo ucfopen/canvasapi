@@ -133,6 +133,23 @@
 			}
 		]
 	},
+	"import_outcomes": {
+		"method": "POST",
+		"endpoint": "accounts/1/outcome_imports",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+			"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "accounts/1",

@@ -1597,7 +1597,7 @@ class Account(CanvasObject):
 
     def import_outcomes(self, attachment, **kwargs):
         """
-        Get the status of an already created Outcome import.
+        Import outcomes into canvas.
         Pass 'latest' for the outcome import id for the latest import..
 
         :calls: `POST /api/v1/accounts/:account_id/outcome_imports
