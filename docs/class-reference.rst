@@ -29,6 +29,7 @@ Class Reference
     module-ref
     outcome-ref
     page-ref
+    planner-ref
     poll-ref
     progress-ref
     quiz-ref

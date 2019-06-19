@@ -60,7 +60,7 @@
     "endpoint": "planner/overrides/1",
     "data": {
       "id": 1,
-      "plannable_id": 69,
+      "plannable_id": 11,
       "marked_complete": true
     },
     "status_code": 200
@@ -70,7 +70,7 @@
     "endpoint": "planner/overrides/1",
     "data": {
       "id": 1,
-      "plannable_id": 69,
+      "plannable_id": 11,
       "marked_complete": true
     },
 		"status_code": 204
@@ -81,12 +81,12 @@
 		"data": [
       {
         "id": 2,
-        "plannable_id": 9001,
+        "plannable_id": 22,
         "marked_complete": false
       },
       {
         "id": 3,
-        "plannable_id": 420,
+        "plannable_id": 33,
         "marked_complete": true
       }
     ],
@@ -97,7 +97,7 @@
 		"endpoint": "planner/overrides/1",
 		"data": {
       "id": 1,
-      "plannable_id": 69,
+      "plannable_id": 11,
       "marked_complete": false
     },
 		"status_code": 200
@@ -106,7 +106,7 @@
 		"method": "POST",
 		"endpoint": "planner/overrides",
 		"data": {
-      "plannable_id": 69,
+      "plannable_id": 11,
       "marked_complete": false
     },
 		"status_code": 200

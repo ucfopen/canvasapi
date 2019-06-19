@@ -122,7 +122,7 @@ class TestPlannerOverride(unittest.TestCase):
         overrides = self.canvas.list_planner_override()
 
         self.assertEqual(len(list(overrides)), 2)
-        self.assertEqual(overrides[0].plannable_id, 9001)
+        self.assertEqual(overrides[0].plannable_id, 22)
         self.assertIsInstance(overrides[0], PlannerOverride)
         self.assertTrue(hasattr(overrides[1], 'marked_complete'))
 
@@ -133,13 +133,13 @@ class TestPlannerOverride(unittest.TestCase):
         override_by_id = self.canvas.get_planner_override(1)
         self.assertIsInstance(override_by_id, PlannerOverride)
         self.assertEqual(override_by_id.id, 1)
-        self.assertEqual(override_by_id.plannable_id, 69)
+        self.assertEqual(override_by_id.plannable_id, 11)
         self.assertFalse(override_by_id.marked_complete)
 
         override_by_obj = self.canvas.get_planner_override(override_by_id)
         self.assertIsInstance(override_by_obj, PlannerOverride)
         self.assertEqual(override_by_obj.id, 1)
-        self.assertEqual(override_by_obj.plannable_id, 69)
+        self.assertEqual(override_by_obj.plannable_id, 11)
         self.assertFalse(override_by_obj.marked_complete)
 
     # get_planner_override()
@@ -161,7 +161,7 @@ class TestPlannerOverride(unittest.TestCase):
     # create_planner_override()
     def test_create_planner_override_fail_1(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.canvas.create_planner_override(plannable_type=None, plannable_id=69)
+            self.canvas.create_planner_override(plannable_type=None, plannable_id=11)
 
     # create_planner_override()
     def test_create_planner_override_fail_2(self, m):
@@ -183,5 +183,5 @@ class TestPlannerOverride(unittest.TestCase):
         override_delete = self.override.delete()
         self.assertIsInstance(override_delete, PlannerOverride)
         self.assertEqual(override_delete.id, 1)
-        self.assertEqual(override_delete.plannable_id, 69)
+        self.assertEqual(override_delete.plannable_id, 11)
         self.assertTrue(override_delete.marked_complete)
