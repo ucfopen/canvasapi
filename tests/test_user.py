@@ -499,23 +499,23 @@ class TestUser(unittest.TestCase):
         self.assertEqual(migration_systems[1].requires_file_upload, False)
         self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
 
-    # list_content_exports()
+    # get_content_exports()
     def test_list_content_exports(self, m):
         register_uris({'user': ['multiple_content_exports']}, m)
 
-        content_exports = self.user.list_content_exports()
+        content_exports = self.user.get_content_exports()
         content_export_list = [content_export for content_export in content_exports]
 
         self.assertEqual(len(content_export_list), 2)
-        self.assertEqual(content_export_list[0].id, 69)
-        self.assertEqual(content_export_list[1].export_type, "OwO what's this")
+        self.assertEqual(content_export_list[0].id, 2)
+        self.assertEqual(content_export_list[1].export_type, "b")
         self.assertIsInstance(content_export_list[0], ContentExport)
 
-    # show_content_export()
+    # get_content_export()
     def test_show_content_export(self, m):
         register_uris({'user': ['single_content_export']}, m)
 
-        content_export = self.user.show_content_export(11)
+        content_export = self.user.get_content_export(11)
 
         self.assertTrue(hasattr(content_export, 'export_type'))
         self.assertIsInstance(content_export, ContentExport)
@@ -524,7 +524,7 @@ class TestUser(unittest.TestCase):
     def test_export_content(self, m):
         register_uris({'user': ['export_content']}, m)
 
-        content_export = self.user.export_content('cereal is soup')
+        content_export = self.user.export_content('d')
 
         self.assertIsInstance(content_export, ContentExport)
         self.assertTrue(hasattr(content_export, 'export_type'))

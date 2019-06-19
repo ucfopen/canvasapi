@@ -929,7 +929,7 @@ class Group(CanvasObject):
 
         return AssignmentOverride(self._requester, response_json)
 
-    def list_content_exports(self, **kwargs):
+    def get_content_exports(self, **kwargs):
         """
         Return a paginated list of the past and pending content export jobs for a group.
 
@@ -951,7 +951,7 @@ class Group(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
-    def show_content_export(self, content_export, **kwargs):
+    def get_content_export(self, content_export, **kwargs):
         """
         Return information about a single content export.
 
@@ -965,7 +965,7 @@ class Group(CanvasObject):
         """
         from canvasapi.content_export import ContentExport
 
-        export_id = obj_or_id(content_export, "content_export", (content_export,))
+        export_id = obj_or_id(content_export, "content_export", (ContentExport,))
 
         response = self._requester.request(
             'GET',

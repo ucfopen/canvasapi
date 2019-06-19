@@ -799,7 +799,7 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-    def list_content_exports(self, **kwargs):
+    def get_content_exports(self, **kwargs):
         """
         Return a paginated list of the past and pending content export jobs for a user.
 
@@ -821,7 +821,7 @@ class User(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
-    def show_content_export(self, content_export, **kwargs):
+    def get_content_export(self, content_export, **kwargs):
         """
         Return information about a single content export.
 

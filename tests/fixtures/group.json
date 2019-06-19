@@ -875,13 +875,13 @@
 		"data": [
 			{
 				"user_id": 1,
-				"id": 69,
-				"export_type": "unimportant"
+				"id": 2,
+				"export_type": "a"
 			},
 			{
 				"user_id": 1,
-				"id": 420,
-				"export_type": "OwO what's this"
+				"id": 22,
+				"export_type": "b"
 			}
 		],
 		"status_code": 200
@@ -892,7 +892,7 @@
 		"data": {
 			"user_id": 1,
 			"id": 11,
-			"export_type": "lul"
+			"export_type": "c"
 		},
 		"status_code": 200
 	},
@@ -902,7 +902,7 @@
 		"data": {
 			"user_id": 1,
 			"id": 111,
-			"export_type": "cereal is soup"
+			"export_type": "d"
 		},
 		"status_code": 200
 	}
