@@ -23,6 +23,7 @@ Patches and Suggestions
 - Devin Singh [@devints47](https://github.com/devints47)
 - Elise Heron [@thedarkestknight](https://github.com/thedarkestknight)
 - Elli Howard [@qwertynerd97](https://github.com/qwertynerd97)
+- Ethan Finlay [@atarisafari](https://github.com/atarisafari)
 - Gabriela Dijkhoffz [@gdijkhoffz](https://github.com/gdijkhoffz)
 - Henry Acevedo [@Colombiangmr](https://github.com/Colombiangmr)
 - Ian Altgilbers [@altgilbers](https://github.com/altgilbers)
