@@ -23,6 +23,7 @@ Class Reference
     enrollment-ref
     enrollment-term-ref
     external-tool-ref
+    favorite-ref
     file-ref
     folder-ref
     group-ref
@@ -31,6 +32,7 @@ Class Reference
     outcome-ref
     page-ref
     poll-ref
+    poll-choice-ref
     progress-ref
     quiz-ref
     quiz-group-ref
