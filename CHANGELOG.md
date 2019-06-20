@@ -24,6 +24,10 @@
 - Added [Code of Conduct](https://github.com/ucfopen/canvasapi/blob/develop/CODE_OF_CONDUCT.md)
 - Added CODEOWNERS file
 
+### Deprecation Warnings
+
+- `Quiz.get_all_quiz_submissions` is now deprecated. Use `Quiz.get_submissions` instead.
+
 ### Bugfixes
 
 - Fixed an issue where creating an external tool did not properly send parameters to Canvas. (Thanks, [@altgilbers](https://github.com/altgilbers))
