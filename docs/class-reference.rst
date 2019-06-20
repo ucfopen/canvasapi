@@ -31,6 +31,7 @@ Class Reference
     module-ref
     outcome-ref
     page-ref
+    planner-ref
     poll-ref
     poll-choice-ref
     poll-session-ref

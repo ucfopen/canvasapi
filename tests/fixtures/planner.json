@@ -1,0 +1,114 @@
+{
+  "update_planner_note": {
+    "method": "PUT",
+    "endpoint": "planner_notes/1",
+    "data": {
+      "id": 1,
+      "title": "Go to restroom",
+      "todo_date": "2020-01-07T15:16:18Z"
+    },
+    "status_code": 200
+  },
+  "delete_planner_note": {
+		"method": "DELETE",
+    "endpoint": "planner_notes/1",
+    "data": {
+      "id": 1,
+      "title": "Go to restroom",
+      "todo_date": "2020-01-07T15:16:18Z"
+    },
+		"status_code": 204
+  },
+  "multiple_planner_notes": {
+		"method": "GET",
+		"endpoint": "planner_notes",
+		"data": [
+      {
+        "id": 2,
+        "title": "Breathe",
+        "todo_date": "2019-07-07T01:10:29Z"
+      },
+      {
+        "id": 3,
+        "title": "Eat dinner",
+        "todo_date": "2019-07-01T13:15:00Z"
+      }
+    ],
+		"status_code": 200
+	},
+  "single_planner_note": {
+		"method": "GET",
+		"endpoint": "planner_notes/1",
+		"data": {
+      "id": 1,
+      "title": "Take a nap",
+      "todo_date": "2018-05-09T10:12:00Z"
+    },
+		"status_code": 200
+  },
+  "create_planner_note": {
+		"method": "POST",
+		"endpoint": "planner_notes",
+		"data": {
+      "title": "Perform photosynthesis",
+      "todo_date": "2019-09-05T12:10:30Z"
+    },
+		"status_code": 200
+  },
+  "update_planner_override": {
+    "method": "PUT",
+    "endpoint": "planner/overrides/1",
+    "data": {
+      "id": 1,
+      "plannable_id": 11,
+      "marked_complete": true
+    },
+    "status_code": 200
+  },
+  "delete_planner_override": {
+		"method": "DELETE",
+    "endpoint": "planner/overrides/1",
+    "data": {
+      "id": 1,
+      "plannable_id": 11,
+      "marked_complete": true
+    },
+		"status_code": 204
+  },
+  "multiple_planner_overrides": {
+		"method": "GET",
+		"endpoint": "planner/overrides",
+		"data": [
+      {
+        "id": 2,
+        "plannable_id": 22,
+        "marked_complete": false
+      },
+      {
+        "id": 3,
+        "plannable_id": 33,
+        "marked_complete": true
+      }
+    ],
+		"status_code": 200
+	},
+  "single_planner_override": {
+		"method": "GET",
+		"endpoint": "planner/overrides/1",
+		"data": {
+      "id": 1,
+      "plannable_id": 11,
+      "marked_complete": false
+    },
+		"status_code": 200
+  },
+  "create_planner_override": {
+		"method": "POST",
+		"endpoint": "planner/overrides",
+		"data": {
+      "plannable_id": 11,
+      "marked_complete": false
+    },
+		"status_code": 200
+	}
+}

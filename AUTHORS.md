@@ -45,6 +45,7 @@ Patches and Suggestions
 - Sigurður Baldursson [@sigurdurb](https://github.com/sigurdurb)
 - Spencer Rogers [@spencer1248](https://github.com/spencer1248)
 - Stephen Woosley [@stephenwoosley](https://github.com/stephenwoosley)
+- Toan Vu [@vutoan1245](https://github.com/vutoan1245)
 - [@Tobiaqs](https://github.com/Tobiaqs)
 - Tuan Pham [@tuanvpham](https://github.com/tuanvpham)
 - Tyler Wallace [@wallacetyler](https://github.com/wallacetyler)
