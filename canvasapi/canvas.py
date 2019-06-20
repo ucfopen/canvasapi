@@ -1246,7 +1246,7 @@ class Canvas(object):
         )
         return Poll(self.__requester, response.json()['polls'][0])
 
-    def list_planner_notes(self, **kwargs):
+    def get_planner_notes(self, **kwargs):
         """
         Retrieve the paginated list of planner notes
 
@@ -1315,7 +1315,7 @@ class Canvas(object):
         )
         return PlannerNote(self.__requester, response.json())
 
-    def list_planner_override(self, **kwargs):
+    def get_planner_override(self, **kwargs):
         """
         Retrieve a planner override for the current user
 

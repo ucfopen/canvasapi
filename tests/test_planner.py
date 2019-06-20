@@ -25,11 +25,11 @@ class TestPlannerNote(unittest.TestCase):
         string = str(self.note)
         self.assertIsInstance(string, str)
 
-    # list_planner_notes()
-    def test_list_planner_notes(self, m):
+    # get_planner_notes()
+    def test_get_planner_notes(self, m):
         register_uris({'planner': ['multiple_planner_notes']}, m)
 
-        notes = self.canvas.list_planner_notes()
+        notes = self.canvas.get_planner_notes()
 
         self.assertEqual(len(list(notes)), 2)
         self.assertEqual(notes[0].title, 'Breathe')
@@ -115,11 +115,11 @@ class TestPlannerOverride(unittest.TestCase):
         string = str(self.override)
         self.assertIsInstance(string, str)
 
-    # list_planner_override()
-    def test_list_planner_override(self, m):
+    # get_planner_override()
+    def test_get_planner_override(self, m):
         register_uris({'planner': ['multiple_planner_overrides']}, m)
 
-        overrides = self.canvas.list_planner_override()
+        overrides = self.canvas.get_planner_override()
 
         self.assertEqual(len(list(overrides)), 2)
         self.assertEqual(overrides[0].plannable_id, 22)
