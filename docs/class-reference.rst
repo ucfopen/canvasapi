@@ -33,6 +33,7 @@ Class Reference
     page-ref
     poll-ref
     poll-choice-ref
+    poll-session-ref
     progress-ref
     quiz-ref
     quiz-group-ref

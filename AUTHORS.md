@@ -47,5 +47,6 @@ Patches and Suggestions
 - [@Tobiaqs](https://github.com/Tobiaqs)
 - Tuan Pham [@tuanvpham](https://github.com/tuanvpham)
 - Tyler Wallace [@wallacetyler](https://github.com/wallacetyler)
+- Weining Li [@weining-li](https://github.com/weining-li)
 - William Funk [@WilliamRADFunk](https://github.com/WilliamRADFunk)
 - William Wesley Monroe [@purpleHey](https://github.com/purpleHey)

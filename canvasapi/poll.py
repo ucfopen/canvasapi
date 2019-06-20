@@ -6,6 +6,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.poll_choice import PollChoice
+from canvasapi.poll_session import PollSession
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
@@ -102,13 +103,15 @@ class Poll(CanvasObject):
         :calls: `POST /api/v1/polls/:poll_id/poll_choices \
         <https://canvas.instructure.com/doc/api/poll_choices.html#method.polling/poll_choices.create>`_
 
-        :param choice: 'Text' of the poll is required, 'is_correct' and 'position' are optional.
-        :type choice: list
+        :param poll_choice: 'text' is required, 'is_correct' and 'position' are optional.
+        :type poll_choice: list
         :rtype: :class:`canvasapi.poll_choice.PollChoice`
         """
-        if (isinstance(poll_choice, list)
-                and isinstance(poll_choice[0], dict)
-                and 'text' in poll_choice[0]):
+        if (
+            isinstance(poll_choice, list)
+            and isinstance(poll_choice[0], dict)
+            and 'text' in poll_choice[0]
+        ):
             kwargs['poll_choice'] = poll_choice
         else:
             raise RequiredFieldMissing(
@@ -121,3 +124,75 @@ class Poll(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return PollChoice(self._requester, response.json()['poll_choices'][0])
+
+    def get_sessions(self, **kwargs):
+        """
+        Returns the paginated list of PollSessions in a poll.
+
+        :calls: `GET /api/v1/polls/:poll_id/poll_sessions \
+        <https://canvas.instructure.com/doc/api/poll_sessions.html#method.polling/poll_sessions.index>`_
+
+        :rtype: :class:`canvasapi.paginated_lsit.Paginated List` of
+            :class:`canvasapi.poll_session.PollSession`
+        """
+        return PaginatedList(
+            PollSession,
+            self._requester,
+            'GET',
+            'polls/{}/poll_sessions'.format(self.id),
+            _root='poll_sessions',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_session(self, poll_session, **kwargs):
+        """
+        Returns the poll session with the given id.
+
+        :calls: `GET /api/v1/polls/:poll_id/poll_sessions/:id \
+        <https://canvas.instructure.com/doc/api/poll_sessions.html#method.polling/poll_sessions.show>`_
+
+        :param poll_session: List of arguments. Takes a poll session id (int) or poll session \
+        object.
+
+        :rtype: :class:`canvasapi.poll_session.PollSession`
+        """
+        poll_session_id = obj_or_id(poll_session, "poll_session", (PollSession,))
+
+        response = self._requester.request(
+            'GET',
+            'polls/{}/poll_sessions/{}'.format(self.id, poll_session_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return PollSession(self._requester, response.json()['poll_sessions'][0])
+
+    def create_session(self, poll_session, **kwargs):
+        """
+        Create a new poll session for this poll
+
+        :calls: `POST /api/v1/polls/:poll_id/poll_sessions \
+        <https://canvas.instructure.com/doc/api/poll_sessions.html#method.polling/poll_sessions.create>`_
+
+        :param poll_session: List of arguments. course_id (required): id of the course for the
+            session, course_section_id (optional): id of the course section for this session,
+            has_public_results (optional): whether the results are viewable by students.
+        :type poll_session: list
+
+        :rtype: :class:`canvasapi.poll_session.PollSession`
+        """
+        if (
+            isinstance(poll_session, list)
+            and isinstance(poll_session[0], dict)
+            and 'course_id' in poll_session[0]
+        ):
+            kwargs['poll_session'] = poll_session
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'course_id' is required."
+            )
+
+        response = self._requester.request(
+            'POST',
+            'polls/{}/poll_sessions'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return PollSession(self._requester, response.json()['poll_sessions'][0])
