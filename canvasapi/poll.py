@@ -103,13 +103,15 @@ class Poll(CanvasObject):
         :calls: `POST /api/v1/polls/:poll_id/poll_choices \
         <https://canvas.instructure.com/doc/api/poll_choices.html#method.polling/poll_choices.create>`_
 
-        :param choice: 'Text' of the poll is required, 'is_correct' and 'position' are optional.
+        :param poll_choice: 'text' is required, 'is_correct' and 'position' are optional.
         :type poll_choice: list
         :rtype: :class:`canvasapi.poll_choice.PollChoice`
         """
-        if (isinstance(poll_choice, list)
-                and isinstance(poll_choice[0], dict)
-                and 'text' in poll_choice[0]):
+        if (
+            isinstance(poll_choice, list)
+            and isinstance(poll_choice[0], dict)
+            and 'text' in poll_choice[0]
+        ):
             kwargs['poll_choice'] = poll_choice
         else:
             raise RequiredFieldMissing(
@@ -170,15 +172,18 @@ class Poll(CanvasObject):
         :calls: `POST /api/v1/polls/:poll_id/poll_sessions \
         <https://canvas.instructure.com/doc/api/poll_sessions.html#method.polling/poll_sessions.create>`_
 
-        :param poll_session: List of arguments. course_id (required): id of the course for the \
-        session, course_section_id (optional): id of the course section for this session, \
-        has_public_results (optional): whether the results are viewable by students.
+        :param poll_session: List of arguments. course_id (required): id of the course for the
+            session, course_section_id (optional): id of the course section for this session,
+            has_public_results (optional): whether the results are viewable by students.
         :type poll_session: list
 
         :rtype: :class:`canvasapi.poll_session.PollSession`
         """
-        if (isinstance(poll_session, list) and isinstance(poll_session[0], dict)
-                and 'course_id' in poll_session[0]):
+        if (
+            isinstance(poll_session, list)
+            and isinstance(poll_session[0], dict)
+            and 'course_id' in poll_session[0]
+        ):
             kwargs['poll_session'] = poll_session
         else:
             raise RequiredFieldMissing(

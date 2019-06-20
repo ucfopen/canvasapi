@@ -20,9 +20,9 @@ class PollSession(CanvasObject):
         :calls: `PUT /api/v1/polls/:poll_id/poll_sessions/:id \
         <https://canvas.instructure.com/doc/api/poll_sessions.html#method.polling/poll_sessions.update>`_
 
-        :param poll_session: List of arguments. course_id (required): id of the course for the \
-        session, course_section_id (optional): id of the course section for this session, \
-        has_public_results (optional): whether the results are viewable by students.
+        :param poll_session: List of arguments. course_id (required): id of the course for the
+            session, course_section_id (optional): id of the course section for this session,
+            has_public_results (optional): whether the results are viewable by students.
         :type poll_session: list
 
         :rtype: :class:`canvasapi.poll_session.PollSession`
