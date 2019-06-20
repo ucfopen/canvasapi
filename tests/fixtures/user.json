@@ -820,5 +820,42 @@
 			}
 		],
 		"status_code": 200
+	},
+	"multiple_content_exports": {
+		"method": "GET",
+		"endpoint": "users/1/content_exports",
+		"data": [
+			{
+				"user_id": 1,
+				"id": 2,
+				"export_type": "a"
+			},
+			{
+				"user_id": 1,
+				"id": 22,
+				"export_type": "b"
+			}
+		],
+		"status_code": 200
+	},
+	"single_content_export": {
+		"method": "GET",
+		"endpoint": "users/1/content_exports/11",
+		"data": {
+			"user_id": 1,
+			"id": 11,
+			"export_type": "c"
+		},
+		"status_code": 200
+	},
+	"export_content": {
+		"method": "POST",
+		"endpoint": "users/1/content_exports",
+		"data": {
+			"user_id": 1,
+			"id": 111,
+			"export_type": "d"
+		},
+		"status_code": 200
 	}
 }

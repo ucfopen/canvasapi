@@ -4,10 +4,10 @@ from six import python_2_unicode_compatible
 
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.util import combine_kwargs, obj_or_id
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.poll_choice import PollChoice
 from canvasapi.poll_session import PollSession
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -24,7 +24,7 @@ class Poll(CanvasObject):
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.update>`_
 
         :param poll: List of arguments. 'Question' is required and 'Description' is optional
-        :type poll:
+        :type poll: list
         :rtype: :class:`canvasapi.poll.Poll`
         """
         if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
@@ -103,12 +103,15 @@ class Poll(CanvasObject):
         :calls: `POST /api/v1/polls/:poll_id/poll_choices \
         <https://canvas.instructure.com/doc/api/poll_choices.html#method.polling/poll_choices.create>`_
 
-        :param choice: 'Text' of the poll is required, 'is_correct' and 'position' are optional.
+        :param poll_choice: 'text' is required, 'is_correct' and 'position' are optional.
         :type poll_choice: list
         :rtype: :class:`canvasapi.poll_choice.PollChoice`
         """
-        if (isinstance(poll_choice, list) and isinstance(poll_choice[0], dict)
-                and 'text' in poll_choice[0]):
+        if (
+            isinstance(poll_choice, list)
+            and isinstance(poll_choice[0], dict)
+            and 'text' in poll_choice[0]
+        ):
             kwargs['poll_choice'] = poll_choice
         else:
             raise RequiredFieldMissing(
@@ -169,15 +172,18 @@ class Poll(CanvasObject):
         :calls: `POST /api/v1/polls/:poll_id/poll_sessions \
         <https://canvas.instructure.com/doc/api/poll_sessions.html#method.polling/poll_sessions.create>`_
 
-        :param poll_session: List of arguments. course_id (required): id of the course for the \
-        session, course_section_id (optional): id of the course section for this session, \
-        has_public_results (optional): whether the results are viewable by students.
+        :param poll_session: List of arguments. course_id (required): id of the course for the
+            session, course_section_id (optional): id of the course section for this session,
+            has_public_results (optional): whether the results are viewable by students.
         :type poll_session: list
 
         :rtype: :class:`canvasapi.poll_session.PollSession`
         """
-        if (isinstance(poll_session, list) and isinstance(poll_session[0], dict)
-                and 'course_id' in poll_session[0]):
+        if (
+            isinstance(poll_session, list)
+            and isinstance(poll_session[0], dict)
+            and 'course_id' in poll_session[0]
+        ):
             kwargs['poll_session'] = poll_session
         else:
             raise RequiredFieldMissing(
