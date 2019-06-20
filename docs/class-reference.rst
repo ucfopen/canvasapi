@@ -34,6 +34,7 @@ Class Reference
     poll-ref
     poll-choice-ref
     poll-session-ref
+    poll-submission-ref
     progress-ref
     quiz-ref
     quiz-group-ref
