@@ -13,6 +13,7 @@ Class Reference
     bookmark-ref
     calendar-event-ref
     communication-channel-ref
+    content-export-ref
     content-migration-ref
     conversation-ref
     course-ref
@@ -22,6 +23,7 @@ Class Reference
     enrollment-ref
     enrollment-term-ref
     external-tool-ref
+    favorite-ref
     file-ref
     folder-ref
     group-ref
@@ -31,6 +33,9 @@ Class Reference
     page-ref
     planner-ref
     poll-ref
+    poll-choice-ref
+    poll-session-ref
+    poll-submission-ref
     progress-ref
     quiz-ref
     quiz-group-ref
