@@ -36,6 +36,7 @@ Patches and Suggestions
 - Markus [@elec3647](https://github.com/elec3647)
 - Matthew Fedder [@matthewf-ucsd](https://github.com/matthewf-ucsd)
 - Michael Phelps [@nottheswimmer](https://github.com/nottheswimmer)
+- Mike Nahmias [@Mike-Nahmias](https://github.com/Mike-Nahmias)
 - Nathan Dabu [@nathaned](https://github.com/nathaned)
 - Petar Nikolovski [@petarGitNik](https://github.com/petarGitNik)
 - Philip Austin [@phaustin](https://github.com/phaustin)

@@ -12,6 +12,10 @@
     - PollSession
     - PollSubmission
 
+### Bugfixes
+
+- Fixed an issue where getting Quiz Submissions would only return up to the first 10 results (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+
 ## [0.12.0] - 2019-04-03
 
 ### New Endpoint Coverage
