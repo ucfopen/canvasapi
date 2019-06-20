@@ -6,6 +6,10 @@
 
 - ContentExports (Thanks, [@weining-li](https://github.com/weining-li))
 - Favorites (Thanks, [@atarisafari](https://github.com/atarisafari))
+- Planner (Thanks, [@weining-li](https://github.com/weining-li))
+    - Planner
+    - Planner Notes
+    - Planner Overrides
 - Polls (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
     - Poll
     - PollChoice
