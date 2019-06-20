@@ -115,11 +115,11 @@ class TestPlannerOverride(unittest.TestCase):
         string = str(self.override)
         self.assertIsInstance(string, str)
 
-    # get_planner_override()
-    def test_get_planner_override(self, m):
+    # get_planner_overrides()
+    def test_get_planner_overrides(self, m):
         register_uris({'planner': ['multiple_planner_overrides']}, m)
 
-        overrides = self.canvas.get_planner_override()
+        overrides = self.canvas.get_planner_overrides()
 
         self.assertEqual(len(list(overrides)), 2)
         self.assertEqual(overrides[0].plannable_id, 22)
@@ -142,7 +142,6 @@ class TestPlannerOverride(unittest.TestCase):
         self.assertEqual(override_by_obj.plannable_id, 11)
         self.assertFalse(override_by_obj.marked_complete)
 
-    # get_planner_override()
     def test_get_planner_override_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.canvas.get_planner_override(planner_override=None)

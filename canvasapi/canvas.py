@@ -1315,7 +1315,7 @@ class Canvas(object):
         )
         return PlannerNote(self.__requester, response.json())
 
-    def get_planner_override(self, **kwargs):
+    def get_planner_overrides(self, **kwargs):
         """
         Retrieve a planner override for the current user
 
