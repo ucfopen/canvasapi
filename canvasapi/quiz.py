@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import warnings
+
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
@@ -243,22 +245,43 @@ class Quiz(CanvasObject):
         """
         Get a list of all submissions for this quiz.
 
+        .. warning::
+            .. deprecated:: 0.13.0
+                Use :func:`canvasapi.quiz.Quiz.get_submissions` instead.
+
         :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
         <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
 
         :rtype: list of :class:`canvasapi.quiz.QuizSubmission`
         """
-        response = self._requester.request(
+        warnings.warn(
+            "`get_all_quiz_submissions` is being deprecated and will be removed in a "
+            "future version. Use `get_submissions` instead",
+            DeprecationWarning
+        )
+
+        return self.get_submissions(**kwargs)
+
+    def get_submissions(self, **kwargs):
+        """
+        Get a list of all submissions for this quiz.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
+
+        :rtype: list of :class:`canvasapi.quiz.QuizSubmission`
+        """
+        return PaginatedList(
+            QuizSubmission,
+            self._requester,
             'GET',
             'courses/{}/quizzes/{}/submissions'.format(
                 self.course_id,
                 self.id
             ),
+            _root='quiz_submissions',
             _kwargs=combine_kwargs(**kwargs)
         )
-        submission_list = response.json()['quiz_submissions']
-
-        return [QuizSubmission(self._requester, submission) for submission in submission_list]
 
     def get_quiz_submission(self, quiz_submission, **kwargs):
         """
@@ -318,7 +341,7 @@ class Quiz(CanvasObject):
 class QuizSubmission(CanvasObject):
 
     def __str__(self):
-        return "{}-{}".format(self.quiz_id, self.user_id)
+        return "Quiz {} - User {} ({})".format(self.quiz_id, self.user_id, self.id)
 
     def complete(self, **kwargs):
         """
