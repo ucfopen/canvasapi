@@ -269,7 +269,7 @@ class Quiz(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
         <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
 
-        :rtype: list of :class:`canvasapi.quiz.QuizSubmission`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.quiz.QuizSubmission`
         """
         return PaginatedList(
             QuizSubmission,
