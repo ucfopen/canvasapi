@@ -6,6 +6,7 @@
 
 - ContentExports (Thanks, [@weining-li](https://github.com/weining-li))
 - Favorites (Thanks, [@atarisafari](https://github.com/atarisafari))
+- Peer Reviews (Thanks, [@vutoan1245](https://github.com/vutoan1245))
 - Planner (Thanks, [@weining-li](https://github.com/weining-li))
     - Planner
     - Planner Notes
@@ -15,6 +16,17 @@
     - PollChoice
     - PollSession
     - PollSubmission
+
+### General
+
+- Added a warning when using a blank `CANVAS_URL` (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
+- Added Issue and Pull Request Templates
+- Added [Code of Conduct](https://github.com/ucfopen/canvasapi/blob/develop/CODE_OF_CONDUCT.md)
+- Added CODEOWNERS file
+
+### Bugfixes
+
+- Fixed an issue where creating an external tool did not properly send parameters to Canvas. (Thanks, [@altgilbers](https://github.com/altgilbers))
 
 ## [0.12.0] - 2019-04-03
 
