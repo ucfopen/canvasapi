@@ -108,7 +108,7 @@ class PollSession(CanvasObject):
 
         :rtype: :class:`canvasapi.poll_submission.PollSubmission`
         """
-        poll_submission_id = obj_or_id(poll_submissions, "poll_submissions", (PollSubmission,))
+        poll_submission_id = obj_or_id(poll_submission, "poll_submission", (PollSubmission,))
 
         response = self._requester.request(
             'GET',
