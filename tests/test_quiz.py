@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+import warnings
 
 import requests_mock
 from six import text_type
@@ -8,6 +9,7 @@ from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.quiz import Quiz, QuizSubmission, QuizQuestion, QuizExtension
 from canvasapi.quiz_group import QuizGroup
+from canvasapi.paginated_list import PaginatedList
 from tests import settings
 from tests.util import register_uris
 
@@ -198,20 +200,49 @@ class TestQuiz(unittest.TestCase):
     # get_all_quiz_submissions()
     def test_get_all_quiz_submissions(self, m):
         register_uris({'quiz': ['get_all_quiz_submissions']}, m)
-        submission = self.quiz.get_all_quiz_submissions()
 
-        self.assertIsInstance(submission, list)
-        self.assertEqual(len(submission), 2)
+        with warnings.catch_warnings(record=True) as warning_list:
+            submissions = self.quiz.get_all_quiz_submissions()
 
-        self.assertIsInstance(submission[0], QuizSubmission)
-        self.assertEqual(submission[0].id, 1)
-        self.assertTrue(hasattr(submission[0], 'attempt'))
-        self.assertEqual(submission[0].attempt, 3)
+            self.assertIsInstance(submissions, PaginatedList)
 
-        self.assertIsInstance(submission[1], QuizSubmission)
-        self.assertEqual(submission[1].id, 2)
-        self.assertTrue(hasattr(submission[1], 'score'))
-        self.assertEqual(submission[1].score, 5)
+            submission_list = [sub for sub in submissions]
+
+            self.assertEqual(len(submission_list), 2)
+
+            self.assertIsInstance(submission_list[0], QuizSubmission)
+            self.assertEqual(submission_list[0].id, 1)
+            self.assertTrue(hasattr(submission_list[0], 'attempt'))
+            self.assertEqual(submission_list[0].attempt, 3)
+
+            self.assertIsInstance(submission_list[1], QuizSubmission)
+            self.assertEqual(submission_list[1].id, 2)
+            self.assertTrue(hasattr(submission_list[1], 'score'))
+            self.assertEqual(submission_list[1].score, 5)
+
+            self.assertEqual(len(warning_list), 1)
+            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_submissions()
+    def test_get_submissions(self, m):
+        register_uris({'quiz': ['get_all_quiz_submissions']}, m)
+        submissions = self.quiz.get_submissions()
+
+        self.assertIsInstance(submissions, PaginatedList)
+
+        submission_list = [sub for sub in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+
+        self.assertIsInstance(submission_list[0], QuizSubmission)
+        self.assertEqual(submission_list[0].id, 1)
+        self.assertTrue(hasattr(submission_list[0], 'attempt'))
+        self.assertEqual(submission_list[0].attempt, 3)
+
+        self.assertIsInstance(submission_list[1], QuizSubmission)
+        self.assertEqual(submission_list[1].id, 2)
+        self.assertTrue(hasattr(submission_list[1], 'score'))
+        self.assertEqual(submission_list[1].score, 5)
 
     # get_quiz_submission
     def test_get_quiz_submission(self, m):
