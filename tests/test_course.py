@@ -35,6 +35,7 @@ from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
 from canvasapi.content_migration import ContentMigration, Migrator
+from canvasapi.content_export import ContentExport
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -1542,6 +1543,7 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
 
+<<<<<<< HEAD
     # get_outcome_import_status()
     def test_get_outcome_import_status(self, m):
         register_uris({'course': ['get_outcome_import_status']}, m)
@@ -1574,6 +1576,37 @@ class TestCourse(unittest.TestCase):
 
         with self.assertRaises(IOError):
             self.course.import_outcomes(f)
+=======
+    # get_content_exports()
+    def test_list_content_exports(self, m):
+        register_uris({'course': ['multiple_content_exports']}, m)
+
+        content_exports = self.course.get_content_exports()
+        content_export_list = [content_export for content_export in content_exports]
+
+        self.assertEqual(len(content_export_list), 2)
+        self.assertEqual(content_export_list[0].id, 2)
+        self.assertEqual(content_export_list[1].export_type, "b")
+        self.assertIsInstance(content_export_list[0], ContentExport)
+
+    # get_content_export()
+    def test_show_content_export(self, m):
+        register_uris({'course': ['single_content_export']}, m)
+
+        content_export = self.course.get_content_export(11)
+
+        self.assertTrue(hasattr(content_export, 'export_type'))
+        self.assertIsInstance(content_export, ContentExport)
+
+    # export_content()
+    def test_export_content(self, m):
+        register_uris({'course': ['export_content']}, m)
+
+        content_export = self.course.export_content('d')
+
+        self.assertIsInstance(content_export, ContentExport)
+        self.assertTrue(hasattr(content_export, 'export_type'))
+>>>>>>> 293bb247bad87c58f1aca6329759d6737024e329
 
 
 @requests_mock.Mocker()
