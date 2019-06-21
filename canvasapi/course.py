@@ -2393,7 +2393,7 @@ class Course(CanvasObject):
         )
 
         response_grading_period = response.json()['grading_periods'][0]
-        response_grading_period.update({'course_id': self.course_id})
+        response_grading_period.update({'course_id': self.id})
 
         return GradingPeriod(self._requester, response_grading_period)
 

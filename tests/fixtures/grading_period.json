@@ -9,7 +9,8 @@
                     "id": 1,
                     "start_date" : "2019-05-23T06:00:00Z",
                     "end_date" : "2019-08-23T06:00:00Z",
-                    "weight" : 1
+                    "weight" : 1,
+                    "course_id": 1
                 }
             ]
 		},
