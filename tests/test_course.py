@@ -1543,7 +1543,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
 
-<<<<<<< HEAD
     # get_outcome_import_status()
     def test_get_outcome_import_status(self, m):
         register_uris({'course': ['get_outcome_import_status']}, m)
@@ -1576,7 +1575,7 @@ class TestCourse(unittest.TestCase):
 
         with self.assertRaises(IOError):
             self.course.import_outcomes(f)
-=======
+
     # get_content_exports()
     def test_list_content_exports(self, m):
         register_uris({'course': ['multiple_content_exports']}, m)
@@ -1606,7 +1605,6 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(content_export, ContentExport)
         self.assertTrue(hasattr(content_export, 'export_type'))
->>>>>>> 293bb247bad87c58f1aca6329759d6737024e329
 
 
 @requests_mock.Mocker()
