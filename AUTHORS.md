@@ -31,6 +31,7 @@ Patches and Suggestions
 - [@jackrsteiner](https://github.com/jackrsteiner)
 - Jonathan Guilbe [@JonGuilbe](https://github.com/JonGuilbe)
 - John Raible [@rebelaide](https://github.com/rebelaide)
+- Jose Silveti [@jrsilveti](https://github.com/jrsilveti)
 - [@kensler](https://github.com/kensler)
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
 - Markus [@elec3647](https://github.com/elec3647)

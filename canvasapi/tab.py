@@ -35,6 +35,6 @@ class Tab(CanvasObject):
         response_json = response.json()
         response_json.update({'course_id': self.course_id})
 
-        super(Tab, self).set_attributes(response.json())
+        super(Tab, self).set_attributes(response_json)
 
         return self
