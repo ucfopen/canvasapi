@@ -1070,7 +1070,7 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(response[0].title, "Grading period 1")
         self.assertEqual(response[1].title, "Grading period 2")
 
-    # get_grading_periods()
+    # delete_grading_periods()
     def test_delete_grading_periods(self, m):
         register_uris({'account': ['delete_grading_period']}, m)
 

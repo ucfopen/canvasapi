@@ -30,8 +30,12 @@ class TestGradingPeriod(unittest.TestCase):
     def test_update(self, m):
         register_uris({'grading_period': ['update']}, m)
 
-        edited_grading_period = self.grading_period.update(grading_period=[
-            {'start_date': '2019-06-10T06:00:00Z', 'end_date': '2019-06-15T06:00:00Z'}])
+        edited_grading_period = self.grading_period.update(
+            grading_period=[{
+                'start_date': '2019-06-10T06:00:00Z',
+                'end_date': '2019-06-15T06:00:00Z'
+            }]
+        )
 
         self.assertIsInstance(edited_grading_period, GradingPeriod)
         self.assertTrue(hasattr(edited_grading_period, 'title'))
@@ -48,8 +52,12 @@ class TestGradingPeriod(unittest.TestCase):
         register_uris({'grading_period': ['update']}, m)
 
         with self.assertRaises(RequiredFieldMissing):
-            self.grading_period.update(grading_period={
-                'start_date': '2019-06-10T06:00:00Z', 'end_date': '2019-06-15T06:00:00Z'})
+            self.grading_period.update(
+                grading_period={
+                    'start_date': '2019-06-10T06:00:00Z',
+                    'end_date': '2019-06-15T06:00:00Z'
+                }
+            )
 
     # Check that the grading_period that is passed has a start date
     def test_update_without_start_date(self, m):
@@ -57,7 +65,8 @@ class TestGradingPeriod(unittest.TestCase):
 
         with self.assertRaises(RequiredFieldMissing):
             self.grading_period.update(grading_period=[{
-                 'end_date': '2019-06-15T06:00:00Z'}])
+                'end_date': '2019-06-15T06:00:00Z'
+            }])
 
     # Check that the appropriate exception is raised when no list is given.
     def test_update_without_end_date(self, m):
@@ -65,7 +74,8 @@ class TestGradingPeriod(unittest.TestCase):
 
         with self.assertRaises(RequiredFieldMissing):
             self.grading_period.update(grading_period=[{
-                'start_date': '2019-06-10T06:00:00Z'}])
+                'start_date': '2019-06-10T06:00:00Z'
+            }])
 
     # delete()
     def test_delete(self, m):
