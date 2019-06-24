@@ -6,6 +6,7 @@
 
 - ContentExports (Thanks, [@weining-li](https://github.com/weining-li))
 - Favorites (Thanks, [@atarisafari](https://github.com/atarisafari))
+- Grading Periods (Thanks, [@jrsilveti](https://github.com/jrsilveti))
 - Peer Reviews (Thanks, [@vutoan1245](https://github.com/vutoan1245))
 - Planner (Thanks, [@weining-li](https://github.com/weining-li))
     - Planner
