@@ -2352,7 +2352,7 @@ class Course(CanvasObject):
 
     def import_outcome(self, attachment, **kwargs):
         """
-        Import outcomes into canvas.
+        Import outcome into canvas.
         Pass 'latest' for the outcome import id for the latest import.
 
         :calls: `POST /api/v1/courses/:course_id/outcome_imports \
