@@ -6,7 +6,6 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.outcome_import import OutcomeImport
 from tests import settings
-from tests.util import register_uris
 
 
 @requests_mock.Mocker()

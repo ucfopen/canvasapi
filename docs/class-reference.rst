@@ -31,6 +31,7 @@ Class Reference
     login-ref
     module-ref
     outcome-ref
+    outcome-import-ref
     page-ref
     planner-ref
     poll-ref

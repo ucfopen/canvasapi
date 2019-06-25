@@ -133,7 +133,7 @@
 			}
 		]
 	},
-	"import_outcomes": {
+	"import_outcome": {
 		"method": "POST",
 		"endpoint": "accounts/1/outcome_imports",
 		"data": {

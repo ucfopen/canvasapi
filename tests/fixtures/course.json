@@ -77,7 +77,7 @@
 		},
 		"status_code": 200
 	},
-	"import_outcomes": {
+	"import_outcome": {
 		"method": "POST",
 		"endpoint": "courses/1/outcome_imports",
 		"data": {

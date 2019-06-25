@@ -1554,16 +1554,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.workflow_state, "succeeded")
         self.assertEqual(outcome_import.progress, "100")
 
-    # import_outcomes()
-    def test_import_outcomes_filepath(self, m):
+    # import_outcome()
+    def test_import_outcome_filepath(self, m):
         import os
 
-        register_uris({'course': ['import_outcomes']}, m)
+        register_uris({'course': ['import_outcome']}, m)
 
         filepath = os.path.join('tests', 'fixtures',
-                                'test_import_outcomes.csv')
+                                'test_import_outcome.csv')
 
-        outcome_import = self.course.import_outcomes(filepath)
+        outcome_import = self.course.import_outcome(filepath)
 
         self.assertTrue(isinstance(outcome_import, OutcomeImport))
         self.assertTrue(hasattr(outcome_import, 'course_id'))
@@ -1571,16 +1571,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.id, 1)
         self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
 
-    def test_import_outcomes_binary(self, m):
+    def test_import_outcome_binary(self, m):
         import os
 
-        register_uris({'course': ['import_outcomes']}, m)
+        register_uris({'course': ['import_outcome']}, m)
 
         filepath = os.path.join('tests', 'fixtures',
-                                'test_import_outcomes.csv')
+                                'test_import_outcome.csv')
 
         with open(filepath, 'rb') as f:
-            outcome_import = self.course.import_outcomes(f)
+            outcome_import = self.course.import_outcome(f)
 
         self.assertTrue(isinstance(outcome_import, OutcomeImport))
         self.assertTrue(hasattr(outcome_import, 'course_id'))
@@ -1588,11 +1588,11 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.id, 1)
         self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
 
-    def test_import_outcomes_id(self, m):
+    def test_import_outcome_id(self, m):
 
-        register_uris({'course': ['import_outcomes']}, m)
+        register_uris({'course': ['import_outcome']}, m)
 
-        outcome_import = self.course.import_outcomes(1)
+        outcome_import = self.course.import_outcome(1)
 
         self.assertTrue(isinstance(outcome_import, OutcomeImport))
         self.assertTrue(hasattr(outcome_import, 'course_id'))
@@ -1600,11 +1600,11 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.id, 1)
         self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
 
-    def test_import_outcomes_ioerror(self, m):
+    def test_import_outcome_ioerror(self, m):
         f = '!@#$%^&*()_+QWERTYUIOP{}|'
 
         with self.assertRaises(IOError):
-            self.course.import_outcomes(f)
+            self.course.import_outcome(f)
 
     # list_grading_periods()
     def test_get_grading_periods(self, m):

@@ -2350,13 +2350,16 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs)
         )
 
-    def import_outcomes(self, attachment, **kwargs):
+    def import_outcome(self, attachment, **kwargs):
         """
         Import outcomes into canvas.
-        Pass 'latest' for the outcome import id for the latest import..
+        Pass 'latest' for the outcome import id for the latest import.
 
-        :calls: `POST /api/v1/courses/:course_id/outcome_imports
+        :calls: `POST /api/v1/courses/:course_id/outcome_imports \
         <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.create>`_
+
+        :param attachment: A file handler or path of the file to import.
+        :type attachment: file or str
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
@@ -2382,10 +2385,13 @@ class Course(CanvasObject):
     def get_outcome_import_status(self, outcome_import, **kwargs):
         """
         Get the status of an already created Outcome import.
-        Pass 'latest' for the outcome import id for the latest import..
+        Pass 'latest' for the outcome import id for the latest import.
 
-        :calls: `GET /api/v1/courses/:course_id/outcome_imports/:id
+        :calls: `GET /api/v1/courses/:course_id/outcome_imports/:id \
         <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.show>`_
+
+        :param outcome_import: The outcome import object or ID to get the status of.
+        :type user: :class:`canvasapi.user.User` or int
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
