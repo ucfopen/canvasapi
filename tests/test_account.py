@@ -14,11 +14,13 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.login import Login
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
 from canvasapi.user import User
@@ -1087,3 +1089,28 @@ class TestAccount(unittest.TestCase):
 
         with self.assertRaises(IOError):
             self.account.import_outcomes(f)
+
+    # get_grading_periods()
+    def test_get_grading_periods(self, m):
+        register_uris({'account': ['get_grading_periods']}, m)
+
+        response = self.account.get_grading_periods()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertIsInstance(response[0], GradingPeriod)
+        self.assertIsInstance(response[1], GradingPeriod)
+        self.assertEqual(response[0].id, 1)
+        self.assertEqual(response[1].id, 2)
+        self.assertEqual(response[0].title, "Grading period 1")
+        self.assertEqual(response[1].title, "Grading period 2")
+
+    # delete_grading_periods()
+    def test_delete_grading_periods(self, m):
+        register_uris({'account': ['delete_grading_period']}, m)
+
+        self.grading_period = GradingPeriod(
+            self.canvas._Canvas__requester,
+            {"title": "grading period 1", "id": 1, "course_id": 1}
+        )
+        self.assertTrue(self.account.delete_grading_period(1))
+        self.assertTrue(self.account.delete_grading_period(self.grading_period))

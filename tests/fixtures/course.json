@@ -153,21 +153,21 @@
 			"id": 1,
 			"course_id": 1,
 			"associated_course_count": 3,
-            "latest_migration": null
+			"latest_migration": null
 		},
 		"status_code": 200
 	},
-    "get_blueprint_default": {
-        "method": "GET",
+	"get_blueprint_default": {
+		"method": "GET",
 		"endpoint": "courses/1/blueprint_templates/default",
 		"data": {
 			"id": 1,
 			"course_id": 1,
 			"associated_course_count": 3,
-            "latest_migration": null
+			"latest_migration": null
 		},
 		"status_code": 200
-    },
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "courses/1",
@@ -395,16 +395,16 @@
 		"method": "GET",
 		"endpoint": "courses/1/sections",
 		"data": [
-            {
-                "id": 1,
-                "name": "Section 1",
-                "course_id": 1
-            },
-            {
-                "id": 2,
-                "name": "Section 2",
-                "course_id": 1
-            }
+			{
+				"id": 1,
+				"name": "Section 1",
+				"course_id": 1
+			},
+			{
+				"id": 2,
+				"name": "Section 2",
+				"course_id": 1
+			}
 		],
 		"headers": {
 			"Link": "<https://example.com/api/v1/courses/1/sections?page=2&per_page=2>; rel=\"next\""
@@ -415,16 +415,16 @@
 		"method": "GET",
 		"endpoint": "courses/1/sections?page=2&per_page=2",
 		"data": [
-            {
-                "id": 3,
-                "name": "Section 3",
-                "course_id": 1
-            },
-            {
-                "id": 4,
-                "name": "Section 4",
-                "course_id": 1
-            }
+			{
+				"id": 3,
+				"name": "Section 3",
+				"course_id": 1
+			},
+			{
+				"id": 4,
+				"name": "Section 4",
+				"course_id": 1
+			}
 		],
 		"status_code": 200
 	},
@@ -480,23 +480,23 @@
 		],
 		"status_code": 200
 	},
-    "list_blueprint_subscriptions": {
-        "method": "GET",
-        "endpoint": "courses/1/blueprint_subscriptions",
-        "data": [
-            {
-                "id": 10,
-                "template_id": 2,
-                "blueprint_course": {
-                    "id": 1,
-                    "name": "Test Course",
-                    "course_code": "TES1337",
-                    "term_name": "Summer 2018"
-                }
-            }
-        ],
-        "status_code": 200
-    },
+	"list_blueprint_subscriptions": {
+		"method": "GET",
+		"endpoint": "courses/1/blueprint_subscriptions",
+		"data": [
+			{
+				"id": 10,
+				"template_id": 2,
+				"blueprint_course": {
+					"id": 1,
+					"name": "Test Course",
+					"course_code": "TES1337",
+					"term_name": "Summer 2018"
+				}
+			}
+		],
+		"status_code": 200
+	},
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "courses/1/enrollments",
@@ -1431,6 +1431,39 @@
 			  {"name": "C", "value": 0.7}
 			]
 		  },
+		"status_code": 200
+	},
+	"get_grading_periods": {
+		"method": "GET",
+		"endpoint": "courses/1/grading_periods",
+		"data": {
+			"grading_periods": [
+				{
+					"title": "Grading period 1",
+					"id": 1,
+					"course_id": 1
+				},
+				{
+					"title": "Grading period 2",
+					"id": 2,
+					"course_id": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_grading_period": {
+		"method": "GET",
+		"endpoint": "courses/1/grading_periods/1",
+		"data": {
+			"grading_periods": [
+				{
+					"title": "Grading period 1",
+					"id": 1,
+					"course_id": 1
+				}
+			]
+		},
 		"status_code": 200
 	},
 	"get_grading_standards": {

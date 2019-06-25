@@ -8,6 +8,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.outcome_import import OutcomeImport
@@ -20,6 +21,7 @@ from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, is_multivalued, file_or_path, obj_or_id
 from canvasapi.rubric import Rubric
+
 
 warnings.simplefilter('always', DeprecationWarning)
 
@@ -2399,6 +2401,54 @@ class Course(CanvasObject):
         response_json.update({'course_id': self.id})
 
         return OutcomeImport(self._requester, response_json)
+
+    def get_grading_periods(self, **kwargs):
+        """
+        Return a list of grading periods for the associated course.
+
+        :calls: `GET /api/v1/courses/:course_id/grading_periods\
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_period.GradingPeriod`
+        """
+
+        return PaginatedList(
+            GradingPeriod,
+            self._requester,
+            'GET',
+            'courses/{}/grading_periods'.format(
+                self.id
+            ),
+            {'course_id': self.id},
+            _root="grading_periods",
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_grading_period(self, grading_period, **kwargs):
+        """
+        Return a single grading period for the associated course and id.
+
+        :calls: `GET /api/v1/courses/:course_id/grading_periods/:id\
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+        :param grading_period_id: The ID of the rubric.
+        :type grading_period_id: int
+
+        :rtype: :class:`canvasapi.grading_period.GradingPeriod`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/grading_periods/{}'.format(
+                self.id, grading_period
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_grading_period = response.json()['grading_periods'][0]
+        response_grading_period.update({'course_id': self.id})
+
+        return GradingPeriod(self._requester, response_grading_period)
 
     def get_content_exports(self, **kwargs):
         """
