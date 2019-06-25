@@ -1084,6 +1084,23 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(outcome_import.id, 1)
         self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
 
+    def test_import_outcomes_binary(self, m):
+        import os
+
+        register_uris({'account': ['import_outcomes']}, m)
+
+        filepath = os.path.join('tests', 'fixtures',
+                                'test_import_outcomes.csv')
+
+        with open(filepath, 'rb') as f:
+            outcome_import = self.account.import_outcomes(f)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, 'account_id'))
+        self.assertTrue(hasattr(outcome_import, 'data'))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
+
     def test_import_outcomes_id(self, m):
 
         register_uris({'account': ['import_outcomes']}, m)
