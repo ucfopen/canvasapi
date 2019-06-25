@@ -1068,7 +1068,7 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(outcome_import.progress, "100")
 
     # import_outcomes()
-    def test_import_outcomes(self, m):
+    def test_import_outcomes_filepath(self, m):
         import os
 
         register_uris({'account': ['import_outcomes']}, m)
@@ -1077,6 +1077,18 @@ class TestAccount(unittest.TestCase):
                                 'test_import_outcomes.csv')
 
         outcome_import = self.account.import_outcomes(filepath)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, 'account_id'))
+        self.assertTrue(hasattr(outcome_import, 'data'))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
+
+    def test_import_outcomes_id(self, m):
+
+        register_uris({'account': ['import_outcomes']}, m)
+
+        outcome_import = self.account.import_outcomes(1)
 
         self.assertTrue(isinstance(outcome_import, OutcomeImport))
         self.assertTrue(hasattr(outcome_import, 'account_id'))
