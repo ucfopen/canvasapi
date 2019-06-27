@@ -21,6 +21,7 @@ from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
@@ -34,6 +35,7 @@ from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
 from canvasapi.content_migration import ContentMigration, Migrator
+from canvasapi.content_export import ContentExport
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -1540,6 +1542,61 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].id, 10)
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
+
+    # list_grading_periods()
+    def test_get_grading_periods(self, m):
+        register_uris({'course': ['get_grading_periods']}, m)
+
+        response = self.course.get_grading_periods()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertIsInstance(response[0], GradingPeriod)
+        self.assertIsInstance(response[1], GradingPeriod)
+        self.assertEqual(response[0].id, 1)
+        self.assertEqual(response[1].id, 2)
+        self.assertEqual(response[0].title, "Grading period 1")
+        self.assertEqual(response[1].title, "Grading period 2")
+
+    # get_grading_period()
+    def test_get_grading_period(self, m):
+        register_uris({'course': ['get_grading_period']}, m)
+
+        grading_period_id = 1
+        response = self.course.get_grading_period(grading_period_id)
+
+        self.assertIsInstance(response, GradingPeriod)
+        self.assertEqual(response.id, grading_period_id)
+        self.assertEqual(response.title, "Grading period 1")
+
+    # get_content_exports()
+    def test_list_content_exports(self, m):
+        register_uris({'course': ['multiple_content_exports']}, m)
+
+        content_exports = self.course.get_content_exports()
+        content_export_list = [content_export for content_export in content_exports]
+
+        self.assertEqual(len(content_export_list), 2)
+        self.assertEqual(content_export_list[0].id, 2)
+        self.assertEqual(content_export_list[1].export_type, "b")
+        self.assertIsInstance(content_export_list[0], ContentExport)
+
+    # get_content_export()
+    def test_show_content_export(self, m):
+        register_uris({'course': ['single_content_export']}, m)
+
+        content_export = self.course.get_content_export(11)
+
+        self.assertTrue(hasattr(content_export, 'export_type'))
+        self.assertIsInstance(content_export, ContentExport)
+
+    # export_content()
+    def test_export_content(self, m):
+        register_uris({'course': ['export_content']}, m)
+
+        content_export = self.course.export_content('d')
+
+        self.assertIsInstance(content_export, ContentExport)
+        self.assertTrue(hasattr(content_export, 'export_type'))
 
 
 @requests_mock.Mocker()

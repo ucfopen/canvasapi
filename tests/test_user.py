@@ -18,6 +18,7 @@ from canvasapi.page_view import PageView
 from canvasapi.user import User
 from canvasapi.login import Login
 from canvasapi.content_migration import ContentMigration, Migrator
+from canvasapi.content_export import ContentExport
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -497,6 +498,36 @@ class TestUser(unittest.TestCase):
         self.assertEqual(migration_systems[1].type, "dummy_importer_02")
         self.assertEqual(migration_systems[1].requires_file_upload, False)
         self.assertEqual(migration_systems[1].name, "Dummy Importer 02")
+
+    # get_content_exports()
+    def test_list_content_exports(self, m):
+        register_uris({'user': ['multiple_content_exports']}, m)
+
+        content_exports = self.user.get_content_exports()
+        content_export_list = [content_export for content_export in content_exports]
+
+        self.assertEqual(len(content_export_list), 2)
+        self.assertEqual(content_export_list[0].id, 2)
+        self.assertEqual(content_export_list[1].export_type, "b")
+        self.assertIsInstance(content_export_list[0], ContentExport)
+
+    # get_content_export()
+    def test_show_content_export(self, m):
+        register_uris({'user': ['single_content_export']}, m)
+
+        content_export = self.user.get_content_export(11)
+
+        self.assertTrue(hasattr(content_export, 'export_type'))
+        self.assertIsInstance(content_export, ContentExport)
+
+    # export_content()
+    def test_export_content(self, m):
+        register_uris({'user': ['export_content']}, m)
+
+        content_export = self.user.export_content('d')
+
+        self.assertIsInstance(content_export, ContentExport)
+        self.assertTrue(hasattr(content_export, 'export_type'))
 
 
 @requests_mock.Mocker()

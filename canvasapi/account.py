@@ -7,6 +7,7 @@ from six import python_2_unicode_compatible, string_types
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.grading_standard import GradingStandard
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
@@ -1593,6 +1594,52 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Admin(self._requester, response.json())
+
+    def get_grading_periods(self, **kwargs):
+        """
+        Return a list of grading periods for the associated account.
+
+        :calls: `GET /api/v1/accounts/:account_id/grading_periods \
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_period.GradingPeriod`
+        """
+
+        return PaginatedList(
+            GradingPeriod,
+            self._requester,
+            'GET',
+            'accounts/{}/grading_periods'.format(
+                self.id
+            ),
+            {'account_id': self.id},
+            _root="grading_periods",
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    def delete_grading_period(self, grading_period):
+        """
+        Delete a grading period for an account.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/grading_periods/:id \
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.destroy>`_
+
+        :param grading_period: The GradingPeriod object or ID to delete.
+        :type grading_period: :class:`canvasapi.grading_period.GradingPeriod` or int
+
+        :returns: True if the grading period was deleted, False otherwise.
+        :rtype: bool
+        """
+
+        grading_period_id = obj_or_id(grading_period, "grading_period", (GradingPeriod,))
+
+        response = self._requester.request(
+            'DELETE',
+            'accounts/{}/grading_periods/{}'.format(self.id, grading_period_id),
+        )
+
+        return response.json().get('delete')
 
 
 @python_2_unicode_compatible

@@ -9,6 +9,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.epub_exports import EpubExport
 from canvasapi.grading_standard import GradingStandard
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
 from canvasapi.page import Page
@@ -20,6 +21,7 @@ from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 from canvasapi.rubric import Rubric
+
 
 warnings.simplefilter('always', DeprecationWarning)
 
@@ -2359,13 +2361,135 @@ class Course(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
+            'GET', 
             'courses/{}/epub_exports/{}'.format(
                 self.id, epub_id),
             _kwargs=combine_kwargs(**kwargs)
             )
 
         return EpubExport(self._requester, response.json())
+
+    def get_grading_periods(self, **kwargs):
+        """
+        Return a list of grading periods for the associated course.
+
+        :calls: `GET /api/v1/courses/:course_id/grading_periods\
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_period.GradingPeriod`
+        """
+
+        return PaginatedList(
+            GradingPeriod,
+            self._requester,
+            'GET',
+            'courses/{}/grading_periods'.format(
+                self.id
+            ),
+            {'course_id': self.id},
+            _root="grading_periods",
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_grading_period(self, grading_period, **kwargs):
+        """
+        Return a single grading period for the associated course and id.
+
+        :calls: `GET /api/v1/courses/:course_id/grading_periods/:id\
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+        :param grading_period_id: The ID of the rubric.
+        :type grading_period_id: int
+
+        :rtype: :class:`canvasapi.grading_period.GradingPeriod`
+        """
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/grading_periods/{}'.format(
+                self.id, grading_period
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        response_grading_period = response.json()['grading_periods'][0]
+        response_grading_period.update({'course_id': self.id})
+
+        return GradingPeriod(self._requester, response_grading_period)
+
+    def get_content_exports(self, **kwargs):
+        """
+        Return a paginated list of the past and pending content export jobs for a course.
+
+        :calls: `GET /api/v1/courses/:course_id/content_exports\
+        <https://canvas.instructure.com/doc/api/content_exports.html#method.content_exports_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.content_export.ContentExport`
+        """
+        from canvasapi.content_export import ContentExport
+
+        return PaginatedList(
+            ContentExport,
+            self._requester,
+            'GET',
+            'courses/{}/content_exports'.format(
+                self.id
+            ),
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_content_export(self, content_export, **kwargs):
+        """
+        Return information about a single content export.
+
+        :calls: `GET /api/v1/courses/:course_id/content_exports/:id\
+        <https://canvas.instructure.com/doc/api/content_exports.html#method.content_exports_api.show>`_
+
+        :param content_export: The object or ID of the content export to show.
+        :type content_export: int or :class:`canvasapi.content_export.ContentExport`
+
+        :rtype: :class:`canvasapi.content_export.ContentExport`
+        """
+        from canvasapi.content_export import ContentExport
+
+        export_id = obj_or_id(content_export, "content_export", (ContentExport,))
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/content_exports/{}'.format(
+                self.id,
+                export_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return ContentExport(self._requester, response.json())
+
+    def export_content(self, export_type, **kwargs):
+        """
+        Begin a content export job for a course.
+
+        :calls: `POST /api/v1/courses/:course_id/content_exports\
+        <https://canvas.instructure.com/doc/api/content_exports.html#method.content_exports_api.create>`_
+
+        :param export_type: The type of content to export.
+        :type export_type: str
+
+        :rtype: :class:`canvasapi.content_export.ContentExport`
+        """
+        from canvasapi.content_export import ContentExport
+
+        kwargs['export_type'] = export_type
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/content_exports'.format(
+                self.id,
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return ContentExport(self._requester, response.json())
 
 
 @python_2_unicode_compatible
