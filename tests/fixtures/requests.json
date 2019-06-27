@@ -38,6 +38,24 @@
 		"data": {},
 		"status_code": 500
 	},
+	"502": {
+		"method": "ANY",
+		"endpoint": "502",
+		"data": {},
+		"status_code": 502
+	},
+	"503": {
+		"method": "ANY",
+		"endpoint": "503",
+		"data": {},
+		"status_code": 503
+	},
+	"absurd": {
+		"method": "ANY",
+		"endpoint": "absurd",
+		"data": {},
+		"status_code": 9001
+	},
 	"delete": {
 		"method": "DELETE",
 		"endpoint": "fake_delete_request",
