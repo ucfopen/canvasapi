@@ -773,3 +773,10 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(announcements, PaginatedList)
         self.assertIsInstance(announcement_list[0], DiscussionTopic)
         self.assertEqual(len(announcement_list), 2)
+
+    # get_epup_exports()
+    def get_epub_exports(self, m):
+
+        register_uris({'course': ['get_epub_exports']}, m)
+
+        epub_export_list = self.canvas.get_epub_exports()

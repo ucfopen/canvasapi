@@ -211,6 +211,23 @@
 		"status_code": 200
 
 	},
+	"get_epub_exports": {
+		"method": "GET",
+		"endpoint": "epub_exports",
+		"data": {
+			"id": 1,
+			"Name": "course1",
+			"epub_export": {
+				"id": 1,
+				"created_at": "2019-01-01T00:00:00Z",
+				"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+				"progress_url": "https://dummyurl.com/api/v1/progress/4",
+				"user_id": 4,
+				"workflow_state": "exported"
+			}
+		},
+		"status_code": 200
+	},
 	"create_epub_export": {
 		"method": "POST",
 		"endpoint": "courses/1/epub_exports/",

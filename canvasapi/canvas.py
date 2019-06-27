@@ -1407,3 +1407,23 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs)
         )
         return PlannerOverride(self.__requester, response.json())
+
+    def get_epub_exports(self, **kwargs):
+        """
+        Return a list of epub exports for the associated course.
+
+        :calls: `GET /api/v1/epub_exports\
+        <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course_epub_export.CourseEpubExport`
+        """
+
+        return PaginatedList(
+            CourseEpubExport,
+            self.__requester,
+            'GET',
+            'epub_exports',
+            _root="courses",
+            kwargs=combine_kwargs(**kwargs)
+        )
