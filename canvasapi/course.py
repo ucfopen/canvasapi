@@ -7,7 +7,7 @@ from six import python_2_unicode_compatible, text_type, string_types
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.epub_exports import EpubExport
+from canvasapi.epub_export import EpubExport
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
