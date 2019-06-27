@@ -2354,7 +2354,7 @@ class Course(CanvasObject):
         """
         Get information about a single epub export.
 
-        :calls: `GET /api/v1/courses/:course_id/epub_exports/:id
+        :calls: `GET /api/v1/courses/:course_id/epub_exports/:id\
         <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.show>`_
 
         :rtype: :class:`canvasapi.epub_export.EpubExport`
@@ -2364,6 +2364,25 @@ class Course(CanvasObject):
             'GET', 
             'courses/{}/epub_exports/{}'.format(
                 self.id, epub_id),
+            _kwargs=combine_kwargs(**kwargs)
+            )
+
+        return EpubExport(self._requester, response.json())
+
+    def create_epub_export(self, **kwargs):
+        """
+        Create an ePub export for a course.
+
+        :calls: `POST /api/v1/courses/:course_id/epub_exports/:id\
+        <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.create>`_
+
+        :rtype: :class:`canvasapi.epub_export.EpubExport`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/epub_exports/'.format(
+                self.id),
             _kwargs=combine_kwargs(**kwargs)
             )
 

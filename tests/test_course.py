@@ -1551,6 +1551,18 @@ class TestCourse(unittest.TestCase):
         response = self.course.get_epub_export(1)
 
         self.assertIsInstance(response, EpubExport)
+        self.assertEqual(response.id, 1)
+        self.assertEqual(response.user_id, 4)
+
+    # create_epub_export
+    def test_create_epub_export(self, m):
+        register_uris({'course': ['create_epub_export']}, m)
+
+        response = self.course.create_epub_export()
+
+        self.assertIsInstance(response, EpubExport)
+        self.assertEqual(response.id, 1)
+        self.assertEqual(response.user_id, 4)
 
     # list_grading_periods()
     def test_get_grading_periods(self, m):
