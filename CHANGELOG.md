@@ -24,6 +24,7 @@
 - Added Issue and Pull Request Templates
 - Added [Code of Conduct](https://github.com/ucfopen/canvasapi/blob/develop/CODE_OF_CONDUCT.md)
 - Added CODEOWNERS file
+- Added generic error handling for unhandled 4XX+ HTTP errors
 
 ### Deprecation Warnings
 
@@ -33,6 +34,7 @@
 
 - Fixed an issue where creating an external tool did not properly send parameters to Canvas. (Thanks, [@altgilbers](https://github.com/altgilbers))
 - Fixed an issue where getting Quiz Submissions would only return up to the first 10 results (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed an issue where unhandled 4XX and 5XX HTTP errors would cause a JSONDecodeError
 
 ## [0.12.0] - 2019-04-03
 
