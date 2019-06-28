@@ -1552,7 +1552,13 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(response, CourseEpubExport)
         self.assertEqual(response.id, 1)
-        self.assertEqual(response.user_id, 4)
+        self.assertEqual(response.name, "course1")
+
+        self.assertTrue(hasattr(response, "epub_export"))
+        epub1 = response.epub_export
+
+        self.assertEqual(epub1['id'], 1)
+        self.assertEqual(epub1['workflow_state'], "exported")
 
     # create_epub_export
     def test_create_epub_export(self, m):
@@ -1562,7 +1568,13 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(response, CourseEpubExport)
         self.assertEqual(response.id, 1)
-        self.assertEqual(response.user_id, 4)
+        self.assertEqual(response.name, "course1")
+
+        self.assertTrue(hasattr(response, "epub_export"))
+        epub1 = response.epub_export
+
+        self.assertEqual(epub1['id'], 1)
+        self.assertEqual(epub1['workflow_state'], "exported")
 
     # list_grading_periods()
     def test_get_grading_periods(self, m):

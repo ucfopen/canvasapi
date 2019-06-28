@@ -787,8 +787,8 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(epub_export_list[1], CourseEpubExport)
         self.assertEqual(epub_export_list[0].id, 1)
         self.assertEqual(epub_export_list[1].id, 2)
-        self.assertEqual(epub_export_list[0].Name, "course1")
-        self.assertEqual(epub_export_list[1].Name, "course2")
+        self.assertEqual(epub_export_list[0].name, "course1")
+        self.assertEqual(epub_export_list[1].name, "course2")
 
         self.assertTrue(hasattr(epub_export_list[0], "epub_export"))
         self.assertTrue(hasattr(epub_export_list[1], "epub_export"))
