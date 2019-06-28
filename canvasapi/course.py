@@ -6,8 +6,8 @@ from six import python_2_unicode_compatible, text_type, string_types
 
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.epub_export import EpubExport
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
@@ -2367,7 +2367,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
             )
 
-        return EpubExport(self._requester, response.json())
+        return CourseEpubExport(self._requester, response.json())
 
     def create_epub_export(self, **kwargs):
         """
@@ -2386,7 +2386,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
             )
 
-        return EpubExport(self._requester, response.json())
+        return CourseEpubExport(self._requester, response.json())
 
     def get_grading_periods(self, **kwargs):
         """
