@@ -14,6 +14,7 @@ from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
+from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
@@ -780,3 +781,21 @@ class TestCanvas(unittest.TestCase):
         register_uris({'course': ['get_epub_exports']}, m)
 
         epub_export_list = self.canvas.get_epub_exports()
+
+        self.assertIsInstance(epub_export_list, PaginatedList)
+        self.assertIsInstance(epub_export_list[0], CourseEpubExport)
+        self.assertIsInstance(epub_export_list[1], CourseEpubExport)
+        self.assertEqual(epub_export_list[0].id, 1)
+        self.assertEqual(epub_export_list[1].id, 2)
+        self.assertEqual(epub_export_list[0].name, "course1")
+        self.assertEqual(epub_export_list[1].name, "course2")
+
+        self.assertTrue(hasattr(epub_export_list[0], "epub_export"))
+        self.assertTrue(hasattr(epub_export_list[1], "epub_export"))
+
+        epub1 = epub_export_list[0].epub_export
+        epub2 = epub_export_list[1].epub_export
+        self.assertEqual(epub1.id, 1)
+        self.assertEqual(epub2.id, 2)
+        self.assertEqual(epub1.workflow_state, "exported")
+        self.assertEqual(epub2.workflow_state, "exported")

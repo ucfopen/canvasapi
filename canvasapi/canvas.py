@@ -4,6 +4,7 @@ import warnings
 
 from canvasapi.account import Account
 from canvasapi.course import Course
+from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.current_user import CurrentUser
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
