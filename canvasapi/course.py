@@ -2361,7 +2361,7 @@ class Course(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET', 
+            'GET',
             'courses/{}/epub_exports/{}'.format(
                 self.id, epub_id),
             _kwargs=combine_kwargs(**kwargs)

@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.course_epub_export import CourseEpubExport
 
 
 @python_2_unicode_compatible
