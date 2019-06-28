@@ -2357,7 +2357,7 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/epub_exports/:id\
         <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.show>`_
 
-        :rtype: :class:`canvasapi.epub_export.EpubExport`
+        :rtype: :class:`canvasapi.course_epub_export.CourseEpubExport`
         """
 
         response = self._requester.request(
@@ -2376,7 +2376,7 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/epub_exports/:id\
         <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.create>`_
 
-        :rtype: :class:`canvasapi.epub_export.EpubExport`
+        :rtype: :class:`canvasapi.course_epub_export.CourseEpubExport`
         """
 
         response = self._requester.request(

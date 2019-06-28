@@ -16,7 +16,7 @@ from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
-from canvasapi.epub_export import EpubExport
+from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
@@ -1550,7 +1550,7 @@ class TestCourse(unittest.TestCase):
 
         response = self.course.get_epub_export(1)
 
-        self.assertIsInstance(response, EpubExport)
+        self.assertIsInstance(response, CourseEpubExport)
         self.assertEqual(response.id, 1)
         self.assertEqual(response.user_id, 4)
 
@@ -1560,7 +1560,7 @@ class TestCourse(unittest.TestCase):
 
         response = self.course.create_epub_export()
 
-        self.assertIsInstance(response, EpubExport)
+        self.assertIsInstance(response, CourseEpubExport)
         self.assertEqual(response.id, 1)
         self.assertEqual(response.user_id, 4)
 
