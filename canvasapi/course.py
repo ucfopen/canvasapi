@@ -6,6 +6,7 @@ from six import python_2_unicode_compatible, text_type, string_types
 
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
@@ -2348,6 +2349,47 @@ class Course(CanvasObject):
             {'course_id': self.id},
             kwargs=combine_kwargs(**kwargs)
         )
+
+    def get_epub_export(self, epub, **kwargs):
+        """
+        Get information about a single epub export.
+
+        :calls: `GET /api/v1/courses/:course_id/epub_exports/:id\
+        <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.show>`_
+
+        :param epub: Object or ID of ePub Export
+        :type epub: int or :class:`canvasapi.course_epub_export.CourseEpubExport`
+
+        :rtype: :class:`canvasapi.course_epub_export.CourseEpubExport`
+        """
+
+        epub_id = obj_or_id(epub, 'epub', (CourseEpubExport,))
+
+        response = self._requester.request(
+            'GET',
+            'courses/{}/epub_exports/{}'.format(self.id, epub_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return CourseEpubExport(self._requester, response.json())
+
+    def create_epub_export(self, **kwargs):
+        """
+        Create an ePub export for a course.
+
+        :calls: `POST /api/v1/courses/:course_id/epub_exports/:id\
+        <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.create>`_
+
+        :rtype: :class:`canvasapi.course_epub_export.CourseEpubExport`
+        """
+
+        response = self._requester.request(
+            'POST',
+            'courses/{}/epub_exports/'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return CourseEpubExport(self._requester, response.json())
 
     def get_grading_periods(self, **kwargs):
         """

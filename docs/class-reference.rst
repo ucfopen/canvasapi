@@ -17,6 +17,7 @@ Class Reference
     content-migration-ref
     conversation-ref
     course-ref
+    course-epub-export-ref
     current-user-ref
     discussion-entry-ref
     discussion-topic-ref
