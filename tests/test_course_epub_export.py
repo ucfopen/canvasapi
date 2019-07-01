@@ -15,14 +15,18 @@ class TestCourseEpubExport(unittest.TestCase):
 
         self.course_epub_export = CourseEpubExport(
             self.canvas._Canvas__requester,
-            {"name": "course1", "id": 1,
+            {
+                "name": "course1",
+                "id": 1,
                 "epub_export": {
                     "id": 1,
                     "created_at": "2019-01-01T00:00:00Z",
                     "progress_url": "https://dummyurl.com/api/v1/progress/4",
                     "user_id": 4,
-                    "workflow_state": "exported"
-                }})
+                    "workflow_state": "exported",
+                },
+            },
+        )
 
     def test_str(self, m):
         test_str = str(self.course_epub_export)
