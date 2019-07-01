@@ -1,6 +1,6 @@
 -r requirements.txt
 
-black
+black; python_version < '3.6'
 coverage
 flake8
 requests-mock
