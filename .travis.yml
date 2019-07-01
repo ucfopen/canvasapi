@@ -20,6 +20,7 @@ script:
   - coverage run -m unittest discover
   - flake8 canvasapi tests
   - mdl . .github
+  - black --check canvasapi tests
 after_success:
   - coveralls
 notifications:
