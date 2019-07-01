@@ -15,3 +15,4 @@ Contents:
    examples
    keyword-args
    class-reference
+   exceptions
