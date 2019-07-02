@@ -1637,12 +1637,15 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.show>`_
 
         :param outcome_import: The outcome import object or ID to get the status of.
-        :type user: :class:`canvasapi.user.User` or int
+        :type user: :class:`canvasapi.outcome_import.OutcomeImport` , int or string: latest
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
+        if outcome_import == "latest":
+            outcome_import_id = "latest"
 
-        outcome_import_id = obj_or_id(outcome_import, "outcome_import", (OutcomeImport,))
+        else:
+            outcome_import_id = obj_or_id(outcome_import, "outcome_import", (OutcomeImport,))
 
         response = self._requester.request(
             'GET',

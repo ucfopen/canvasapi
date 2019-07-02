@@ -2395,7 +2395,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
-        if(outcome_import == "latest"):
+        if outcome_import == "latest":
             outcome_import_id = "latest"
 
         else:
