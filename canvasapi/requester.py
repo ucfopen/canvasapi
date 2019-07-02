@@ -109,8 +109,11 @@ class Requester(object):
             raise ResourceDoesNotExist('Not Found')
         elif response.status_code == 409:
             raise Conflict(response.text)
-        elif response.status_code == 500:
-            raise CanvasException("API encountered an error processing your request")
+        elif response.status_code > 400:
+            # generic catch-all for error codes
+            raise CanvasException(
+                "Encountered an error: status code {}".format(response.status_code)
+            )
 
         return response
 
