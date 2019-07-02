@@ -1555,6 +1555,15 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.workflow_state, "succeeded")
         self.assertEqual(outcome_import.progress, "100")
 
+    def test_get_outcome_import_status_latest(self, m):
+        register_uris({'course': ['get_outcome_import_status_latest']}, m)
+        outcome_import = self.course.get_outcome_import_status("latest")
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
+
     # import_outcome()
     def test_import_outcome_filepath(self, m):
         import os

@@ -2354,7 +2354,6 @@ class Course(CanvasObject):
     def import_outcome(self, attachment, **kwargs):
         """
         Import outcome into canvas.
-        Pass 'latest' for the outcome import id for the latest import.
 
         :calls: `POST /api/v1/courses/:course_id/outcome_imports \
         <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.create>`_
@@ -2392,11 +2391,15 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.show>`_
 
         :param outcome_import: The outcome import object or ID to get the status of.
-        :type user: :class:`canvasapi.user.User` or int
+        :type user: :class:`canvasapi.outcome_import.OutcomeImport` , int or string: latest
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
-        outcome_import_id = obj_or_id(outcome_import, "outcome_import", (OutcomeImport,))
+        if(outcome_import == "latest"):
+            outcome_import_id = "latest"
+
+        else:
+            outcome_import_id = obj_or_id(outcome_import, "outcome_import", (OutcomeImport,))
 
         response = self._requester.request(
             'GET',
