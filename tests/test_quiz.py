@@ -7,7 +7,7 @@ from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
-from canvasapi.quiz import Quiz, QuizSubmission, QuizQuestion, QuizExtension
+from canvasapi.quiz import Quiz, QuizSubmission, QuizSubmissionQuestion, QuizQuestion, QuizExtension
 from canvasapi.quiz_group import QuizGroup
 from canvasapi.paginated_list import PaginatedList
 from tests import settings
@@ -367,7 +367,21 @@ class TestQuizSubmission(unittest.TestCase):
         self.assertTrue(hasattr(submission, 'quiz_id'))
         self.assertTrue(hasattr(submission, 'validation_token'))
         self.assertEqual(submission.score, 7)
+    
+    # get_submission_questions
+    def test_get_submission_questions(self, m):
+        register_uris({'submission': ['get_submission_questions']}, m)
 
+        questions = self.submission.get_submission_questions()
+        
+        self.assertIsInstance(questions, list)
+        self.assertIsInstance(questions[0], QuizSubmissionQuestion)
+        self.assertTrue(hasattr(questions[0], 'id'))
+        self.assertTrue(hasattr(questions[0], 'flagged'))
+
+    # answer_submission_questions
+    def test_answer_submission_questions(self, m):
+        register_uris({''})
 
 @requests_mock.Mocker()
 class TestQuizExtension(unittest.TestCase):
