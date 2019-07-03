@@ -17,6 +17,7 @@ Class Reference
     content-migration-ref
     conversation-ref
     course-ref
+    course-epub-export-ref
     current-user-ref
     discussion-entry-ref
     discussion-topic-ref
@@ -31,6 +32,7 @@ Class Reference
     login-ref
     module-ref
     outcome-ref
+    outcome-import-ref
     page-ref
     planner-ref
     poll-ref

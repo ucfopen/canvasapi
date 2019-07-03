@@ -146,3 +146,15 @@ class TestRequester(unittest.TestCase):
 
         with self.assertRaises(CanvasException):
             self.requester.request('GET', '500')
+
+    def test_request_generic(self, m):
+        register_uris({'requests': ['502', '503', 'absurd']}, m)
+
+        with self.assertRaises(CanvasException):
+            self.requester.request('GET', '502')
+
+        with self.assertRaises(CanvasException):
+            self.requester.request('GET', '503')
+
+        with self.assertRaises(CanvasException):
+            self.requester.request('GET', 'absurd')
