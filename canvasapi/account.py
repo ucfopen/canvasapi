@@ -1599,7 +1599,6 @@ class Account(CanvasObject):
     def import_outcome(self, attachment, **kwargs):
         """
         Import outcome into canvas.
-        Pass 'latest' for the outcome import id for the latest import.
 
         :calls: `POST /api/v1/accounts/:account_id/outcome_imports \
         <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.create>`_
@@ -1614,14 +1613,14 @@ class Account(CanvasObject):
 
         try:
             response = self._requester.request(
-                'POST',
-                'accounts/{}/outcome_imports'.format(self.id),
-                file={'attachment': attachment},
-                _kwargs=combine_kwargs(**kwargs)
+                "POST",
+                "accounts/{}/outcome_imports".format(self.id),
+                file={"attachment": attachment},
+                _kwargs=combine_kwargs(**kwargs),
             )
 
             response_json = response.json()
-            response_json.update({'account_id': self.id})
+            response_json.update({"account_id": self.id})
 
             return OutcomeImport(self._requester, response_json)
         finally:
@@ -1637,24 +1636,26 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.show>`_
 
         :param outcome_import: The outcome import object or ID to get the status of.
-        :type user: :class:`canvasapi.outcome_import.OutcomeImport` , int or string: latest
+        :type outcome_import: :class:`canvasapi.outcome_import.OutcomeImport`,
+            int, or string: "latest"
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
         if outcome_import == "latest":
             outcome_import_id = "latest"
-
         else:
-            outcome_import_id = obj_or_id(outcome_import, "outcome_import", (OutcomeImport,))
+            outcome_import_id = obj_or_id(
+                outcome_import, "outcome_import", (OutcomeImport,)
+            )
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/outcome_imports/{}'.format(self.id, outcome_import_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/outcome_imports/{}".format(self.id, outcome_import_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
-        response_json.update({'account_id': self.id})
+        response_json.update({"account_id": self.id})
 
         return OutcomeImport(self._requester, response_json)
 
@@ -1673,9 +1674,7 @@ class Account(CanvasObject):
             GradingPeriod,
             self._requester,
             'GET',
-            'accounts/{}/grading_periods'.format(
-                self.id
-            ),
+            'accounts/{}/grading_periods'.format(self.id),
             {'account_id': self.id},
             _root="grading_periods",
             kwargs=combine_kwargs(**kwargs)

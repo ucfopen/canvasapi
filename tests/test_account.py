@@ -1059,7 +1059,7 @@ class TestAccount(unittest.TestCase):
 
     # get_outcome_import_status()
     def test_get_outcome_import_status(self, m):
-        register_uris({'account': ['get_outcome_import_status']}, m)
+        register_uris({"account": ["get_outcome_import_status"]}, m)
         outcome_import = self.account.get_outcome_import_status(1)
 
         self.assertIsInstance(outcome_import, OutcomeImport)
@@ -1068,7 +1068,7 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(outcome_import.progress, "100")
 
     def test_get_outcome_import_status_latest(self, m):
-        register_uris({'account': ['get_outcome_import_status_latest']}, m)
+        register_uris({"account": ["get_outcome_import_status_latest"]}, m)
         outcome_import = self.account.get_outcome_import_status("latest")
 
         self.assertIsInstance(outcome_import, OutcomeImport)
@@ -1080,50 +1080,48 @@ class TestAccount(unittest.TestCase):
     def test_import_outcome_filepath(self, m):
         import os
 
-        register_uris({'account': ['import_outcome']}, m)
+        register_uris({"account": ["import_outcome"]}, m)
 
-        filepath = os.path.join('tests', 'fixtures',
-                                'test_import_outcome.csv')
+        filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
 
         outcome_import = self.account.import_outcome(filepath)
 
         self.assertTrue(isinstance(outcome_import, OutcomeImport))
-        self.assertTrue(hasattr(outcome_import, 'account_id'))
-        self.assertTrue(hasattr(outcome_import, 'data'))
+        self.assertTrue(hasattr(outcome_import, "account_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
         self.assertEqual(outcome_import.id, 1)
-        self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_binary(self, m):
         import os
 
-        register_uris({'account': ['import_outcome']}, m)
+        register_uris({"account": ["import_outcome"]}, m)
 
-        filepath = os.path.join('tests', 'fixtures',
-                                'test_import_outcome.csv')
+        filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
 
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             outcome_import = self.account.import_outcome(f)
 
         self.assertTrue(isinstance(outcome_import, OutcomeImport))
-        self.assertTrue(hasattr(outcome_import, 'account_id'))
-        self.assertTrue(hasattr(outcome_import, 'data'))
+        self.assertTrue(hasattr(outcome_import, "account_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
         self.assertEqual(outcome_import.id, 1)
-        self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_id(self, m):
 
-        register_uris({'account': ['import_outcome']}, m)
+        register_uris({"account": ["import_outcome"]}, m)
 
         outcome_import = self.account.import_outcome(1)
 
         self.assertTrue(isinstance(outcome_import, OutcomeImport))
-        self.assertTrue(hasattr(outcome_import, 'account_id'))
-        self.assertTrue(hasattr(outcome_import, 'data'))
+        self.assertTrue(hasattr(outcome_import, "account_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
         self.assertEqual(outcome_import.id, 1)
-        self.assertEqual(outcome_import.data['import_type'], 'instructure_csv')
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_ioerror(self, m):
-        f = '!@#$%^&*()_+QWERTYUIOP{}|'
+        f = "!@#$%^&*()_+QWERTYUIOP{}|"
 
         with self.assertRaises(IOError):
             self.account.import_outcome(f)
