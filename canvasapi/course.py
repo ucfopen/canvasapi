@@ -12,6 +12,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.folder import Folder
+from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
@@ -19,7 +20,7 @@ from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
-from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
+from canvasapi.util import combine_kwargs, is_multivalued, file_or_path, obj_or_id
 from canvasapi.rubric import Rubric
 
 
@@ -2349,6 +2350,69 @@ class Course(CanvasObject):
             {'course_id': self.id},
             kwargs=combine_kwargs(**kwargs)
         )
+
+    def import_outcome(self, attachment, **kwargs):
+        """
+        Import outcome into canvas.
+
+        :calls: `POST /api/v1/courses/:course_id/outcome_imports \
+        <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.create>`_
+
+        :param attachment: A file handler or path of the file to import.
+        :type attachment: file or str
+
+        :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
+        """
+
+        attachment, is_path = file_or_path(attachment)
+
+        try:
+            response = self._requester.request(
+                "POST",
+                "courses/{}/outcome_imports".format(self.id),
+                file={"attachment": attachment},
+                _kwargs=combine_kwargs(**kwargs),
+            )
+
+            response_json = response.json()
+            response_json.update({"course_id": self.id})
+
+            return OutcomeImport(self._requester, response_json)
+        finally:
+            if is_path:
+                attachment.close()
+
+    def get_outcome_import_status(self, outcome_import, **kwargs):
+        """
+        Get the status of an already created Outcome import.
+        Pass 'latest' for the outcome import id for the latest import.
+
+        :calls: `GET /api/v1/courses/:course_id/outcome_imports/:id \
+        <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.show>`_
+
+        :param outcome_import: The outcome import object or ID to get the status of.
+        :type outcome_import: :class:`canvasapi.outcome_import.OutcomeImport`,
+            int, or string: "latest"
+
+        :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
+        """
+        if outcome_import == "latest":
+            outcome_import_id = "latest"
+        else:
+            outcome_import_id = obj_or_id(
+                outcome_import, "outcome_import", (OutcomeImport,)
+            )
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/outcome_imports/{}".format(self.id, outcome_import_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return OutcomeImport(self._requester, response_json)
 
     def get_epub_export(self, epub, **kwargs):
         """
