@@ -7,7 +7,9 @@ from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
-from canvasapi.quiz import Quiz, QuizSubmission, QuizSubmissionQuestion, QuizQuestion, QuizExtension
+from canvasapi.quiz import (
+    Quiz, QuizSubmission, QuizSubmissionQuestion, QuizQuestion, QuizExtension
+)
 from canvasapi.quiz_group import QuizGroup
 from canvasapi.paginated_list import PaginatedList
 from tests import settings
@@ -367,13 +369,13 @@ class TestQuizSubmission(unittest.TestCase):
         self.assertTrue(hasattr(submission, 'quiz_id'))
         self.assertTrue(hasattr(submission, 'validation_token'))
         self.assertEqual(submission.score, 7)
-    
+
     # get_submission_questions
     def test_get_submission_questions(self, m):
         register_uris({'submission': ['get_submission_questions']}, m)
 
         questions = self.submission.get_submission_questions()
-        
+
         self.assertIsInstance(questions, list)
         self.assertIsInstance(questions[0], QuizSubmissionQuestion)
         self.assertTrue(hasattr(questions[0], 'id'))
@@ -381,7 +383,35 @@ class TestQuizSubmission(unittest.TestCase):
 
     # answer_submission_questions
     def test_answer_submission_questions(self, m):
-        register_uris({''})
+        register_uris({'submission': ['answer_submission_questions']}, m)
+
+        answered_questions = self.submission.answer_submission_questions()
+
+        self.assertIsInstance(answered_questions, list)
+        self.assertIsInstance(answered_questions[0], QuizSubmissionQuestion)
+        self.assertTrue(hasattr(answered_questions[0], 'id'))
+        self.assertTrue(hasattr(answered_questions[0], 'flagged'))
+
+    def test_answer_submission_questions_manual_validation_token(self, m):
+        register_uris({'submission': ['answer_submission_questions']}, m)
+
+        del self.submission.validation_token
+
+        answered_questions = self.submission.answer_submission_questions(
+            validation_token='new validation token'
+        )
+
+        self.assertIsInstance(answered_questions, list)
+        self.assertIsInstance(answered_questions[0], QuizSubmissionQuestion)
+        self.assertTrue(hasattr(answered_questions[0], 'id'))
+        self.assertTrue(hasattr(answered_questions[0], 'flagged'))
+
+    def test_answer_submission_questions_no_validation_token(self, m):
+        del self.submission.validation_token
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.submission.answer_submission_questions()
+
 
 @requests_mock.Mocker()
 class TestQuizExtension(unittest.TestCase):
@@ -452,3 +482,20 @@ class TestQuizQuestion(unittest.TestCase):
         self.assertIsInstance(self.question, QuizQuestion)
         self.assertEqual(response.question_name, question_dict['question_name'])
         self.assertEqual(self.question.question_name, question_dict['question_name'])
+
+
+@requests_mock.Mocker()
+class TestQuizSubmissionQuestion(unittest.TestCase):
+
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.submission_question = QuizSubmissionQuestion(
+            self.canvas._Canvas__requester,
+            {'id': 1, 'flagged': True, 'answer': None, 'quiz_submission_id': 1}
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.submission_question)
+        self.assertIsInstance(string, str)

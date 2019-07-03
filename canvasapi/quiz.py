@@ -434,29 +434,29 @@ class QuizSubmission(CanvasObject):
         <https://canvas.instructure.com/doc/api/quiz_submission_questions.html#method.quizzes/quiz_submission_questions.index>`_
 
         :returns: A list of quiz submission questions.
-        :rtype: list of
-            :class:`canvasapi.quiz.QuizSubmissionQuestion`
+        :rtype: list of :class:`canvasapi.quiz.QuizSubmissionQuestion`
         """
         response = self._requester.request(
-            'GET',
-            'quiz_submissions/{}/questions'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "quiz_submissions/{}/questions".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
-        questions = response.json().get('quiz_submission_questions', [])
-    
-        return [
-            QuizSubmissionQuestion(self._requester, question)
-            for question in questions
-        ]
-        
-    
+        questions = response.json().get("quiz_submission_questions", [])
+
+        sub_question_list = list()
+        for question in questions:
+            question.update({'quiz_submission_id': self.id})
+            sub_question_list.append(QuizSubmissionQuestion(self._requester, question))
+
+        return sub_question_list
+
     def answer_submission_questions(self, validation_token=None, **kwargs):
         """
         Provide or update an answer to one or more quiz questions.
 
         :calls: `POST /api/v1/quiz_submissions/:quiz_submission_id/questions \
         <https://canvas.instructure.com/doc/api/quiz_submission_questions.html#method.quizzes/quiz_submission_questions.answer>`_
-        
+
         :param validation_token: (Optional) The unique validation token for this quiz submission.
             If one is not provided, canvasapi will attempt to use `self.validation_token`.
         :type validation_token: str
@@ -483,10 +483,16 @@ class QuizSubmission(CanvasObject):
         )
         questions = response.json().get('quiz_submission_questions', [])
 
-        return [
-            QuizSubmissionQuestion(self._requester, question)
-            for question in questions
-        ]
+        sub_question_list = list()
+        for question in questions:
+            question.update({
+                'quiz_submission_id': self.id,
+                'validation_token': kwargs['validation_token']
+            })
+            sub_question_list.append(QuizSubmissionQuestion(self._requester, question))
+
+        return sub_question_list
+
 
 @python_2_unicode_compatible
 class QuizExtension(CanvasObject):
@@ -548,5 +554,8 @@ class QuizQuestion(CanvasObject):
         return self
 
 
+@python_2_unicode_compatible
 class QuizSubmissionQuestion(CanvasObject):
-    pass
+
+    def __str__(self):
+        return "QuizSubmissionQuestion #{}".format(self.id)

@@ -175,5 +175,19 @@
 				}
 			]
 		}
+	},
+	"answer_submission_questions": {
+		"method": "POST",
+		"endpoint": "quiz_submissions/1/questions",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": true,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
 	}
 }
