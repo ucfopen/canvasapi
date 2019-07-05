@@ -3,6 +3,32 @@ Exceptions
 
 CanvasAPI may return a number of different exceptions, which are listed below.
 
+Quick Guide
+------------
+
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| **Exception**                                       | **Status Code** | **Explanation**                                                                 |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.BadRequest`           | 400             | Canvas was unable to process the request.                                       |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.InvalidAccessToken`   | 401             | The supplied API key is invalid.                                                |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.Unauthorized`         | 401             | CanvasAPI's key is valid, but is unauthorized to access the requested resource. |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.Forbidden`            | 403             | Canvas has denied access to the resource for this user.                         |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.ResourceDoesNotExist` | 404             | Canvas could not locate the requested resource.                                 |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.Conflict`             | 409             | Canvas had a conflict with an existing resource.                                |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.RequiredFieldMissing` | N/A             | A required keyword argument was not included.                                   |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.CanvasException`      | N/A             | An unknown error was thrown.                                                    |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+
+Class Reference
+----------------
+
 .. autoclass:: canvasapi.exceptions.CanvasException
     :members:
 
@@ -36,7 +62,7 @@ CanvasAPI may return a number of different exceptions, which are listed below.
 
     The :class:`~canvasapi.exceptions.Unauthorized` exception is thrown when Canvas returns an HTTP 401 error and does **NOT** include a ``WWW-Authenticate`` header.
 
-    This may indicate that the supplied API Key is valid, but the calling user does not have permission to access this resource.
+    This indicates that the supplied API Key is probably valid, but the calling user does not have permission to access this resource.
 
 .. autoclass:: canvasapi.exceptions.ResourceDoesNotExist
     :members:
