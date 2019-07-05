@@ -192,16 +192,19 @@ class Submission(CanvasObject):
 
 @python_2_unicode_compatible
 class GroupedSubmission(CanvasObject):
-
     def __str__(self):
-        return "{} submission(s) for User #{}".format(len(self.submissions), self.user_id)
+        return "{} submission(s) for User #{}".format(
+            len(self.submissions), self.user_id
+        )
 
     def __init__(self, requester, attributes):
-        self.submissions = list()
-
-        if 'submissions' in attributes:
-            for sub_attrs in attributes['submissions']:
-                self.submissions.append(Submission(requester, sub_attrs))
+        try:
+            self.submissions = [
+                Submission(requester, submission)
+                for submission in attributes['submissions']
+            ]
             del attributes['submissions']
+        except KeyError:
+            self.submissions = list()
 
         super(GroupedSubmission, self).__init__(requester, attributes)

@@ -1410,23 +1410,15 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
-        if 'grouped' in kwargs:
-            return PaginatedList(
-                GroupedSubmission,
-                self._requester,
-                'GET',
-                'courses/{}/students/submissions'.format(self.id),
-                {'course_id': self.id},
-                _kwargs=combine_kwargs(**kwargs)
-            )
+        cls = GroupedSubmission if 'grouped' in kwargs else Submission
 
         return PaginatedList(
-            Submission,
+            cls,
             self._requester,
             'GET',
             'courses/{}/students/submissions'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_submission(self, assignment, user, **kwargs):

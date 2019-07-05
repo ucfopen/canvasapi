@@ -121,7 +121,6 @@ class TestSubmission(unittest.TestCase):
             cleanup_file(filename)
 
 
-@requests_mock.Mocker()
 class TestGroupedSubmission(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
@@ -142,8 +141,19 @@ class TestGroupedSubmission(unittest.TestCase):
             },
         )
 
+    # __init__()
+    def test__init__no_submission_key(self):
+        grouped_submission = GroupedSubmission(
+            self.canvas._Canvas__requester, {'user_id': 1}
+        )
+
+        self.assertIsInstance(grouped_submission, GroupedSubmission)
+        self.assertTrue(hasattr(grouped_submission, 'submissions'))
+        self.assertIsInstance(grouped_submission.submissions, list)
+        self.assertEqual(len(grouped_submission.submissions), 0)
+
     # __str__()
-    def test__str__(self, m):
+    def test__str__(self):
         string = str(self.grouped_submission)
         self.assertIsInstance(string, str)
         self.assertEqual(string, '1 submission(s) for User #1')
