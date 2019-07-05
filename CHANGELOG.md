@@ -25,6 +25,7 @@
 - Added [Code of Conduct](https://github.com/ucfopen/canvasapi/blob/develop/CODE_OF_CONDUCT.md)
 - Added CODEOWNERS file
 - Added generic error handling for unhandled 4XX+ HTTP errors
+- Added support for PATCH methods (Thanks, [@us91](https://github.com/us91))
 
 ### Deprecation Warnings
 
