@@ -188,3 +188,20 @@ class Submission(CanvasObject):
                 }
             )
         return response
+
+
+@python_2_unicode_compatible
+class GroupedSubmission(CanvasObject):
+
+    def __str__(self):
+        return "{} submission(s) for User #{}".format(len(self.submissions), self.user_id)
+
+    def __init__(self, requester, attributes):
+        self.submissions = list()
+
+        if 'submissions' in attributes:
+            for sub_attrs in attributes['submissions']:
+                self.submissions.append(Submission(requester, sub_attrs))
+            del attributes['submissions']
+
+        super(GroupedSubmission, self).__init__(requester, attributes)

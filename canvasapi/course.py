@@ -18,7 +18,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
-from canvasapi.submission import Submission
+from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, is_multivalued, file_or_path, obj_or_id
 from canvasapi.rubric import Rubric
@@ -1411,8 +1411,14 @@ class Course(CanvasObject):
             :class:`canvasapi.submission.Submission`
         """
         if 'grouped' in kwargs:
-            warnings.warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
-            del kwargs['grouped']
+            return PaginatedList(
+                GroupedSubmission,
+                self._requester,
+                'GET',
+                'courses/{}/students/submissions'.format(self.id),
+                {'course_id': self.id},
+                _kwargs=combine_kwargs(**kwargs)
+            )
 
         return PaginatedList(
             Submission,

@@ -32,7 +32,7 @@ from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizExtension
 from canvasapi.rubric import Rubric
 from canvasapi.section import Section
-from canvasapi.submission import Submission
+from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
@@ -918,23 +918,13 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(submission_list[0], Submission)
 
     def test_get_multiple_submissions_grouped_param(self, m):
-        register_uris({'course': ['list_multiple_submissions']}, m)
+        register_uris({'course': ['list_multiple_submissions_grouped']}, m)
 
-        with warnings.catch_warnings(record=True) as warning_list:
-            warnings.simplefilter('always')
-            submissions = self.course.get_multiple_submissions(grouped=True)
-            submission_list = [submission for submission in submissions]
+        submissions = self.course.get_multiple_submissions(grouped=True)
+        submission_list = [submission for submission in submissions]
 
-            # Ensure using the `grouped` param raises a warning
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, UserWarning)
-            self.assertEqual(
-                text_type(warning_list[-1].message),
-                'The `grouped` parameter must be empty. Removing kwarg `grouped`.'
-            )
-
-            self.assertEqual(len(submission_list), 2)
-            self.assertIsInstance(submission_list[0], Submission)
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], GroupedSubmission)
 
     # get_submission()
     def test_get_submission(self, m):
