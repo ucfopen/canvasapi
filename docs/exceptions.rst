@@ -36,7 +36,7 @@ CanvasAPI may return a number of different exceptions, which are listed below.
 
     The :class:`~canvasapi.exceptions.Unauthorized` exception is thrown when Canvas returns an HTTP 401 error and does **NOT** include a ``WWW-Authenticate`` header.
 
-    This indicates that while the supplied API Key is probably valid, the calling user does not have permission to access this resource.
+    This may indicate that the supplied API Key is valid, but the calling user does not have permission to access this resource.
 
 .. autoclass:: canvasapi.exceptions.ResourceDoesNotExist
     :members:
