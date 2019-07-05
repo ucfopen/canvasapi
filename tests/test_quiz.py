@@ -305,12 +305,6 @@ class TestQuizSubmission(unittest.TestCase):
 
         submission = self.submission.complete()
 
-        with self.assertRaises(ValueError):
-            self.submission.complete(attempt=1)
-
-        with self.assertRaises(ValueError):
-            self.submission.complete(validation_token='should not pass validation token here')
-
         self.assertIsInstance(submission, QuizSubmission)
         self.assertTrue(hasattr(submission, 'id'))
         self.assertTrue(hasattr(submission, 'quiz_id'))
@@ -322,9 +316,6 @@ class TestQuizSubmission(unittest.TestCase):
         register_uris({'submission': ['get_times']}, m)
 
         submission = self.submission.get_times()
-
-        with self.assertRaises(ValueError):
-            self.submission.get_times(attempt=1)
 
         self.assertIsInstance(submission, dict)
         self.assertIn('end_at', submission)
@@ -492,10 +483,71 @@ class TestQuizSubmissionQuestion(unittest.TestCase):
 
         self.submission_question = QuizSubmissionQuestion(
             self.canvas._Canvas__requester,
-            {'id': 1, 'flagged': True, 'answer': None, 'quiz_submission_id': 1}
+            {
+                'id': 1,
+                'flagged': None,
+                'answer': None,
+                'quiz_submission_id': 1,
+                'validation_token': 'this is a token',
+                'attempt': 1,
+            }
         )
 
     # __str__()
     def test__str__(self, m):
         string = str(self.submission_question)
         self.assertIsInstance(string, str)
+    
+    # flag()
+    def test_flag(self, m):
+        register_uris({'submission': ['flag_submission_question']}, m)
+        
+        result = self.submission_question.flag()
+
+        self.assertIsInstance(result, bool)
+        self.assertTrue(result)
+        self.assertTrue(self.submission_question.flagged)
+    
+    def test_flag_manual_validation_token(self, m):
+        register_uris({'submission': ['flag_submission_question']}, m)
+        
+        del self.submission_question.validation_token
+
+        result = self.submission_question.flag(validation_token='new validation token')
+        
+        self.assertIsInstance(result, bool)
+        self.assertTrue(result)
+        self.assertTrue(self.submission_question.flagged)
+
+    def test_flag_no_validation_token(self, m):
+        del self.submission_question.validation_token
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.submission_question.flag()
+
+    # unflag()
+    def test_unflag(self, m):
+        register_uris({'submission': ['unflag_submission_question']}, m)
+        
+        result = self.submission_question.unflag()
+
+        self.assertIsInstance(result, bool)
+        self.assertTrue(result)
+        self.assertFalse(self.submission_question.flagged)
+    
+    def test_unflag_no_validation_token(self, m):
+        del self.submission_question.validation_token
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.submission_question.unflag()
+  
+    def test_flag_manual_validation_token(self, m):
+        register_uris({'submission': ['unflag_submission_question']}, m)
+        
+        del self.submission_question.validation_token
+
+        result = self.submission_question.unflag(validation_token='new validation token')
+        
+        self.assertIsInstance(result, bool)
+        self.assertTrue(result)
+        self.assertFalse(self.submission_question.flagged)

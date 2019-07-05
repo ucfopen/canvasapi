@@ -189,5 +189,33 @@
 				}
 			]
 		}
+	},
+	"flag_submission_question": {
+		"method": "PUT",
+		"endpoint": "quiz_submissions/1/questions/1/flag",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": true,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
+	},
+	"unflag_submission_question": {
+		"method": "PUT",
+		"endpoint": "quiz_submissions/1/questions/1/unflag",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": false,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
 	}
 }

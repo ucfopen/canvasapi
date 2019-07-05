@@ -344,24 +344,32 @@ class QuizSubmission(CanvasObject):
     def __str__(self):
         return "Quiz {} - User {} ({})".format(self.quiz_id, self.user_id, self.id)
 
-    def complete(self, **kwargs):
+    def complete(self, validation_token=None, **kwargs):
         """
         Complete the quiz submission by marking it as complete and grading it. When the quiz
         submission has been marked as complete, no further modifications will be allowed.
 
+
         :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/complete \
         <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.complete>`_
 
+        :param validation_token: (Optional) The unique validation token for this quiz submission.
+            If one is not provided, canvasapi will attempt to use `self.validation_token`.
+        :type validation_token: str
         :rtype: :class:`canvasapi.quiz.QuizSubmission`
         """
-        if 'attempt' in kwargs:
-            raise ValueError("Key `attempt` provided by Canvas, should not be set.")
+        try:
+            kwargs['validation_token'] = validation_token or self.validation_token
+        except AttributeError:
+            raise RequiredFieldMissing(
+                "`validation_token` not set on this QuizSubmission, must be passed"
+                " as a function argument."
+            ) from None
 
-        if 'validation_token' in kwargs:
-            raise ValueError("Key `validation_token` provided by Canvas, should not be set.")
-
+        # Only the latest attempt for a quiz submission can be updated, and Canvas
+        # automatically returns the latest attempt with every quiz submission response,
+        # so we can just use that.
         kwargs['attempt'] = self.attempt
-        kwargs['validation_token'] = self.validation_token
 
         response = self._requester.request(
             'POST',
@@ -386,9 +394,6 @@ class QuizSubmission(CanvasObject):
 
         :rtype: dict
         """
-        if 'attempt' in kwargs:
-            raise ValueError("Key `attempt` provided by Canvas, should not be set.")
-
         response = self._requester.request(
             'GET',
             'courses/{}/quizzes/{}/submissions/{}/time'.format(
@@ -441,14 +446,16 @@ class QuizSubmission(CanvasObject):
             "quiz_submissions/{}/questions".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
-        questions = response.json().get("quiz_submission_questions", [])
+    
+        questions = list()
+        for question in response.json().get("quiz_submission_questions", []):
+            question.update({
+                'quiz_submission_id': self.id,
+                'attempt': self.attempt
+            })
+            questions.append(QuizSubmissionQuestion(self._requester, question))
 
-        sub_question_list = list()
-        for question in questions:
-            question.update({'quiz_submission_id': self.id})
-            sub_question_list.append(QuizSubmissionQuestion(self._requester, question))
-
-        return sub_question_list
+        return questions
 
     def answer_submission_questions(self, validation_token=None, **kwargs):
         """
@@ -469,7 +476,7 @@ class QuizSubmission(CanvasObject):
             raise RequiredFieldMissing(
                 "`validation_token` not set on this QuizSubmission, must be passed"
                 " as a function argument."
-            )
+            ) from None
 
         # Only the latest attempt for a quiz submission can be updated, and Canvas
         # automatically returns the latest attempt with every quiz submission response,
@@ -481,17 +488,17 @@ class QuizSubmission(CanvasObject):
             'quiz_submissions/{}/questions'.format(self.id),
             _kwargs=combine_kwargs(**kwargs)
         )
-        questions = response.json().get('quiz_submission_questions', [])
 
-        sub_question_list = list()
-        for question in questions:
+        questions = list()
+        for question in response.json().get('quiz_submission_questions', []):
             question.update({
                 'quiz_submission_id': self.id,
-                'validation_token': kwargs['validation_token']
+                'validation_token': kwargs['validation_token'],
+                'attempt': self.attempt
             })
-            sub_question_list.append(QuizSubmissionQuestion(self._requester, question))
+            questions.append(QuizSubmissionQuestion(self._requester, question))
 
-        return sub_question_list
+        return questions
 
 
 @python_2_unicode_compatible
@@ -559,3 +566,91 @@ class QuizSubmissionQuestion(CanvasObject):
 
     def __str__(self):
         return "QuizSubmissionQuestion #{}".format(self.id)
+
+    def flag(self, validation_token=None, **kwargs):
+        """
+        Set a flag on a quiz question to indicate that it should be returned to later.
+
+        :calls: `PUT /api/v1/quiz_submissions/:quiz_submission_id/questions/:id/flag \
+        <https://canvas.instructure.com/doc/api/quiz_submission_questions.html#method.quizzes/quiz_submission_questions.flag>`_
+
+        :param validation_token: (Optional) The unique validation token for the quiz submission.
+            If one is not provided, canvasapi will attempt to use `self.validation_token`.
+        :type validation_token: str
+        :returns: True if the question was successfully flagged, False otherwise.
+        :rtype: bool
+        """
+        try:
+            kwargs['validation_token'] = validation_token or self.validation_token
+        except AttributeError:
+            raise RequiredFieldMissing(
+                "`validation_token` not set on this QuizSubmissionQuestion, must be passed"
+                " as a function argument."
+            ) from None
+        
+        # Only the latest attempt for a quiz submission can be updated, and Canvas
+        # automatically returns the latest attempt with every quiz submission response,
+        # so we can just use that.
+        kwargs['attempt'] = self.attempt
+
+        response = self._requester.request(
+            'PUT',
+            'quiz_submissions/{}/questions/{}/flag'.format(self.quiz_submission_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        try:
+            question = response.json()['quiz_submission_questions'][0]
+            question.update({
+                'validation_token': kwargs['validation_token'],
+                'quiz_submission_id': self.quiz_submission_id
+            })
+            super(QuizSubmissionQuestion, self).set_attributes(question)
+        except (KeyError, IndexError):
+            return False
+
+        return True
+
+    def unflag(self, validation_token=None, **kwargs):
+        """
+        Remove a previously set flag on a quiz question.
+
+        :calls: `PUT /api/v1/quiz_submissions/:quiz_submission_id/questions/:id/unflag \
+        <https://canvas.instructure.com/doc/api/quiz_submission_questions.html#method.quizzes/quiz_submission_questions.unflag>`_
+
+        :param validation_token: (Optional) The unique validation token for the quiz submission.
+            If one is not provided, canvasapi will attempt to use `self.validation_token`.
+        :type validation_token: str
+        :returns: True if the question was successfully unflagged, False otherwise.
+        :rtype: bool
+        """
+        try:
+            kwargs['validation_token'] = validation_token or self.validation_token
+        except AttributeError:
+            raise RequiredFieldMissing(
+                "`validation_token` not set on this QuizSubmissionQuestion, must be passed"
+                " as a function argument."
+            ) from None
+        
+        # Only the latest attempt for a quiz submission can be updated, and Canvas
+        # automatically returns the latest attempt with every quiz submission response,
+        # so we can just use that.
+        kwargs['attempt'] = self.attempt
+
+        response = self._requester.request(
+            'PUT',
+            'quiz_submissions/{}/questions/{}/unflag'.format(self.quiz_submission_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        try:
+            question = response.json()['quiz_submission_questions'][0]
+            question.update({
+                'validation_token': kwargs['validation_token'],
+                'quiz_submission_id': self.quiz_submission_id
+            })
+            super(QuizSubmissionQuestion, self).set_attributes(question)
+        except (KeyError, IndexError):
+            return False
+
+        return True
