@@ -1410,7 +1410,7 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
-        cls = GroupedSubmission if 'grouped' in kwargs else Submission
+        cls = GroupedSubmission if kwargs.get('grouped') is True else Submission
 
         return PaginatedList(
             cls,

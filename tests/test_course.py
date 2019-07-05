@@ -917,7 +917,7 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(submission_list), 2)
         self.assertIsInstance(submission_list[0], Submission)
 
-    def test_get_multiple_submissions_grouped_param(self, m):
+    def test_get_multiple_submissions_grouped_true(self, m):
         register_uris({'course': ['list_multiple_submissions_grouped']}, m)
 
         submissions = self.course.get_multiple_submissions(grouped=True)
@@ -925,6 +925,24 @@ class TestCourse(unittest.TestCase):
 
         self.assertEqual(len(submission_list), 2)
         self.assertIsInstance(submission_list[0], GroupedSubmission)
+
+    def test_get_multiple_submissions_grouped_false(self, m):
+        register_uris({'course': ['list_multiple_submissions']}, m)
+
+        submissions = self.course.get_multiple_submissions(grouped=False)
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
+
+    def test_get_multiple_submissions_grouped_invalid(self, m):
+        register_uris({'course': ['list_multiple_submissions']}, m)
+
+        submissions = self.course.get_multiple_submissions(grouped='blargh')
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
 
     # get_submission()
     def test_get_submission(self, m):
