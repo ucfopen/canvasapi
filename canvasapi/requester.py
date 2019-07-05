@@ -4,8 +4,13 @@ from datetime import datetime
 import requests
 
 from canvasapi.exceptions import (
-    BadRequest, CanvasException, Conflict, Forbidden, InvalidAccessToken,
-    ResourceDoesNotExist, Unauthorized
+    BadRequest,
+    CanvasException,
+    Conflict,
+    Forbidden,
+    InvalidAccessToken,
+    ResourceDoesNotExist,
+    Unauthorized,
 )
 
 
@@ -27,8 +32,15 @@ class Requester(object):
         self._cache = []
 
     def request(
-            self, method, endpoint=None, headers=None, use_auth=True,
-            _url=None, _kwargs=None, **kwargs):
+        self,
+        method,
+        endpoint=None,
+        headers=None,
+        use_auth=True,
+        _url=None,
+        _kwargs=None,
+        **kwargs
+    ):
         """
         Make a request to the Canvas API and return the response.
 
@@ -85,6 +97,8 @@ class Requester(object):
             req_method = self._delete_request
         elif method == 'PUT':
             req_method = self._put_request
+        elif method == 'PATCH':
+            req_method = self._patch_request
 
         # Call the request method
         response = req_method(full_url, headers, _kwargs)
@@ -160,6 +174,16 @@ class Requester(object):
         :param data: dict
         """
         return self._session.delete(url, headers=headers, data=data)
+
+    def _patch_request(self, url, headers, data=None):
+        """
+        Issue a PATCH request to the specified endpoint with the data provided.
+
+        :param url: str
+        :pararm headers: dict
+        :param data: dict
+        """
+        return self._session.patch(url, headers=headers, data=data)
 
     def _put_request(self, url, headers, data=None):
         """

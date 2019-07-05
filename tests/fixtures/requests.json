@@ -74,6 +74,12 @@
 		"data": {},
 		"status_code": 200
 	},
+	"patch": {
+		"method": "PATCH",
+		"endpoint": "fake_patch_request",
+		"data": {},
+		"status_code": 200
+	},
 	"put": {
 		"method": "PUT",
 		"endpoint": "fake_put_request",
