@@ -26,6 +26,7 @@ from canvasapi.grading_period import GradingPeriod
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizExtension
@@ -1543,6 +1544,75 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].id, 10)
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
+
+    # get_outcome_import_status()
+    def test_get_outcome_import_status(self, m):
+        register_uris({"course": ["get_outcome_import_status"]}, m)
+        outcome_import = self.course.get_outcome_import_status(1)
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
+
+    def test_get_outcome_import_status_latest(self, m):
+        register_uris({"course": ["get_outcome_import_status_latest"]}, m)
+        outcome_import = self.course.get_outcome_import_status("latest")
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
+
+    # import_outcome()
+    def test_import_outcome_filepath(self, m):
+        import os
+
+        register_uris({"course": ["import_outcome"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
+
+        outcome_import = self.course.import_outcome(filepath)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "course_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_binary(self, m):
+        import os
+
+        register_uris({"course": ["import_outcome"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
+
+        with open(filepath, "rb") as f:
+            outcome_import = self.course.import_outcome(f)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "course_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_id(self, m):
+
+        register_uris({"course": ["import_outcome"]}, m)
+
+        outcome_import = self.course.import_outcome(1)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "course_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_ioerror(self, m):
+        f = "!@#$%^&*()_+QWERTYUIOP{}|"
+
+        with self.assertRaises(IOError):
+            self.course.import_outcome(f)
 
     # get_epub_export
     def test_get_epub_export(self, m):
