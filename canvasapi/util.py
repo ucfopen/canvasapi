@@ -207,7 +207,7 @@ def clean_headers(headers):
     :returns: A list of headers without sensitive information stripped out.
     :rtype: dict
     """
-    cleaned_headers = {**headers}
+    cleaned_headers = headers.copy()
 
     authorization_header = headers.get("Authorization")
     if authorization_header:
