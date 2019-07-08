@@ -1431,6 +1431,37 @@
 		],
 		"status_code": 200
 	},
+	"list_multiple_submissions_grouped": {
+		"method": "GET",
+		"endpoint": "courses/1/students/submissions",
+		"data": [
+			{
+				"user_id": 1,
+				"submissions": [
+					{
+						"id": 1,
+						"assignments_id": 1,
+						"user_id": 1,
+						"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
+						"submission_type": "online_upload"
+					}
+				]
+			},
+			{
+				"user_id": 2,
+				"submissions": [
+					{
+						"id": 2,
+						"assignments_id": 1,
+						"user_id": 2,
+						"html_url": "https://example.com/courses/1/assignments/1/submissions/2",
+						"submission_type": "online_upload"
+					}
+				]
+			}
+		],
+		"status_code": 200
+	},
 	"list_gradeable_students": {
 		"method": "GET",
 		"endpoint": "courses/1/assignments/1/gradeable_students",

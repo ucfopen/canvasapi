@@ -128,7 +128,9 @@ def obj_or_id(parameter, param_name, object_types):
                     break
 
         obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
-        message = 'Parameter {} must be of type {} or int.'.format(param_name, obj_type_list)
+        message = 'Parameter {} must be of type {} or int.'.format(
+            param_name, obj_type_list
+        )
         raise TypeError(message)
 
 
@@ -168,3 +170,29 @@ def file_or_path(file):
         is_path = True
 
     return file, is_path
+
+
+def normalize_bool(val, param_name):
+    """
+    Normalize boolean-like strings to their corresponding boolean values.
+
+    :param val: Value to normalize. Acceptable values:
+        True, "True", "true", False, "False", "false"
+    :type val: str or bool
+    :param param_name: Name of the parameter being checked
+    :type param_name: str
+
+    :rtype: bool
+    """
+    if isinstance(val, bool):
+        return val
+    elif val in ("True", "true"):
+        return True
+    elif val in ("False", "false"):
+        return False
+    else:
+        raise ValueError(
+            'Parameter `{}` must be True, "True", "true", False, "False", or "false".'.format(
+                param_name
+            )
+        )
