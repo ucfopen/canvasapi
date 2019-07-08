@@ -4,9 +4,11 @@
 
 ### New Endpoint Coverage
 
-- ContentExports (Thanks, [@weining-li](https://github.com/weining-li))
+- Content Exports (Thanks, [@weining-li](https://github.com/weining-li))
+- ePub Exports (Thanks, [@jrsilveti](https://github.com/jrsilveti))
 - Favorites (Thanks, [@atarisafari](https://github.com/atarisafari))
 - Grading Periods (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+- Outcome Import (Thanks, [@jrsilveti](https://github.com/jrsilveti))
 - Peer Reviews (Thanks, [@vutoan1245](https://github.com/vutoan1245))
 - Planner (Thanks, [@weining-li](https://github.com/weining-li))
     - Planner
@@ -17,15 +19,17 @@
     - PollChoice
     - PollSession
     - PollSubmission
+- Quiz Submission Questions (Thanks, [@bradfordlynch](https://github.com/bradfordlynch))
 
 ### General
 
+- Added [documentation for Exceptions](https://canvasapi.readthedocs.io/en/latest/exceptions.html)
+- Added generic error handling for unhandled 4XX+ HTTP errors
+- Added [Code of Conduct](https://github.com/ucfopen/canvasapi/blob/develop/CODE_OF_CONDUCT.md)
+- Added support for PATCH methods (Thanks, [@us91](https://github.com/us91))
 - Added a warning when using a blank `CANVAS_URL` (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
 - Added Issue and Pull Request Templates
-- Added [Code of Conduct](https://github.com/ucfopen/canvasapi/blob/develop/CODE_OF_CONDUCT.md)
 - Added CODEOWNERS file
-- Added generic error handling for unhandled 4XX+ HTTP errors
-- Added support for PATCH methods (Thanks, [@us91](https://github.com/us91))
 
 ### Deprecation Warnings
 
