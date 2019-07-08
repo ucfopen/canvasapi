@@ -242,7 +242,9 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
-        if "grouped" in kwargs and normalize_bool(kwargs["grouped"], "grouped"):
+        is_grouped = kwargs.get("grouped", False)
+
+        if normalize_bool(is_grouped, "grouped"):
             cls = GroupedSubmission
         else:
             cls = Submission
