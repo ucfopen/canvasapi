@@ -1,14 +1,11 @@
 Debugging
 ==========
 
-As you work with CanvasAPI, you may encounter responses that don't match your expectations. In some cases, fixing the discrepancy
-is as simple as realizing you've misspelled a parameter name. In others, the CanvasAPI library might be improperly handling your input, and you'll need to submit
-a pull request or a bug report to get it resolved. Sometimes Canvas itself may be responding erroneously.
+As you work with CanvasAPI, you may encounter responses that don't match your expectations. In some cases, fixing the discrepancy is as simple as realizing you've misspelled a parameter name. In others, the CanvasAPI library might be improperly handling your input, and you'll need to submit a pull request or a bug report to get it resolved. Sometimes Canvas itself may be responding erroneously.
 
 Capturing Logs
 -----------------
-CanvasAPI emits logs for important events through the standard logging module. Inspecting these logs can make debugging much easier, as they provide
-a closer look at the abstracted network activity of the library. In order to view them, you'll need to tell Python where to put them.
+CanvasAPI emits logs for important events through the `standard logging module <https://docs.python.org/3/library/logging.html>`_. Inspecting these logs can make debugging much easier, as they provide a closer look at the abstracted network activity of the library. In order to view them, you'll need to tell Python where to put them.
 
 A basic logging configuration might look like this:
 
@@ -26,7 +23,7 @@ A basic logging configuration might look like this:
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
 
-Once configured, any log event in the `canvasapi` module namespace will be printed to `sys.stdout`:
+Once configured, any log event in the ``canvasapi`` module namespace will be printed to ``sys.stdout``:
 
 .. code:: python
 

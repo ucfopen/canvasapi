@@ -23,6 +23,8 @@
 
 ### General
 
+- Added [documentation for Debugging](https://canvasapi.readthedocs.io/en/latest/debugging.html)
+- Added request and response logging to `Requester.request`
 - Added [documentation for Exceptions](https://canvasapi.readthedocs.io/en/latest/exceptions.html)
 - Added generic error handling for unhandled 4XX+ HTTP errors
 - Added [Code of Conduct](https://github.com/ucfopen/canvasapi/blob/develop/CODE_OF_CONDUCT.md)
