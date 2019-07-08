@@ -18,3 +18,4 @@
 /htmlcov/
 \#*#
 .vscode/settings.json
+setup.sh
