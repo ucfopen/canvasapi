@@ -15,4 +15,5 @@ Contents:
    examples
    keyword-args
    exceptions
+   debugging
    class-reference
