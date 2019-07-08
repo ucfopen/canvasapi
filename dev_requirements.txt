@@ -2,3 +2,4 @@
 
 Sphinx
 sphinx-rtd-theme
+svn+https://svn.code.sf.net/p/docutils/code/trunk/docutils#egg=docutils

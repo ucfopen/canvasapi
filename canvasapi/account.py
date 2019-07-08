@@ -7,6 +7,8 @@ from six import python_2_unicode_compatible, string_types
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.grading_standard import GradingStandard
+from canvasapi.outcome_import import OutcomeImport
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
@@ -686,6 +688,10 @@ class Account(CanvasObject):
         response = self._requester.request(
             'POST',
             'accounts/{}/external_tools'.format(self.id),
+            name=name,
+            privacy_level=privacy_level,
+            consumer_key=consumer_key,
+            shared_secret=shared_secret,
             _kwargs=combine_kwargs(**kwargs)
         )
         response_json = response.json()
@@ -1589,6 +1595,113 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
         return Admin(self._requester, response.json())
+
+    def import_outcome(self, attachment, **kwargs):
+        """
+        Import outcome into canvas.
+
+        :calls: `POST /api/v1/accounts/:account_id/outcome_imports \
+        <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.create>`_
+
+        :param attachment: A file handler or path of the file to import.
+        :type attachment: file or str
+
+        :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
+        """
+
+        attachment, is_path = file_or_path(attachment)
+
+        try:
+            response = self._requester.request(
+                "POST",
+                "accounts/{}/outcome_imports".format(self.id),
+                file={"attachment": attachment},
+                _kwargs=combine_kwargs(**kwargs),
+            )
+
+            response_json = response.json()
+            response_json.update({"account_id": self.id})
+
+            return OutcomeImport(self._requester, response_json)
+        finally:
+            if is_path:
+                attachment.close()
+
+    def get_outcome_import_status(self, outcome_import, **kwargs):
+        """
+        Get the status of an already created Outcome import.
+        Pass 'latest' for the outcome import id for the latest import.
+
+        :calls: `GET /api/v1/accounts/:account_id/outcome_imports/:id \
+        <https://canvas.instructure.com/doc/api/outcome_imports.html#method.outcome_imports_api.show>`_
+
+        :param outcome_import: The outcome import object or ID to get the status of.
+        :type outcome_import: :class:`canvasapi.outcome_import.OutcomeImport`,
+            int, or string: "latest"
+
+        :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
+        """
+        if outcome_import == "latest":
+            outcome_import_id = "latest"
+        else:
+            outcome_import_id = obj_or_id(
+                outcome_import, "outcome_import", (OutcomeImport,)
+            )
+
+        response = self._requester.request(
+            "GET",
+            "accounts/{}/outcome_imports/{}".format(self.id, outcome_import_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return OutcomeImport(self._requester, response_json)
+
+    def get_grading_periods(self, **kwargs):
+        """
+        Return a list of grading periods for the associated account.
+
+        :calls: `GET /api/v1/accounts/:account_id/grading_periods \
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_period.GradingPeriod`
+        """
+
+        return PaginatedList(
+            GradingPeriod,
+            self._requester,
+            'GET',
+            'accounts/{}/grading_periods'.format(self.id),
+            {'account_id': self.id},
+            _root="grading_periods",
+            kwargs=combine_kwargs(**kwargs)
+        )
+
+    def delete_grading_period(self, grading_period):
+        """
+        Delete a grading period for an account.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/grading_periods/:id \
+        <https://canvas.instructure.com/doc/api/grading_periods.html#method.grading_periods.destroy>`_
+
+        :param grading_period: The GradingPeriod object or ID to delete.
+        :type grading_period: :class:`canvasapi.grading_period.GradingPeriod` or int
+
+        :returns: True if the grading period was deleted, False otherwise.
+        :rtype: bool
+        """
+
+        grading_period_id = obj_or_id(grading_period, "grading_period", (GradingPeriod,))
+
+        response = self._requester.request(
+            'DELETE',
+            'accounts/{}/grading_periods/{}'.format(self.id, grading_period_id),
+        )
+
+        return response.json().get('delete')
 
 
 @python_2_unicode_compatible

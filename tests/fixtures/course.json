@@ -77,6 +77,23 @@
 		},
 		"status_code": 200
 	},
+	"import_outcome": {
+		"method": "POST",
+		"endpoint": "courses/1/outcome_imports",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
 	"get_all_assignments": {
 		"method": "GET",
 		"endpoint": "courses/1/assignments",
@@ -136,21 +153,21 @@
 			"id": 1,
 			"course_id": 1,
 			"associated_course_count": 3,
-            "latest_migration": null
+			"latest_migration": null
 		},
 		"status_code": 200
 	},
-    "get_blueprint_default": {
-        "method": "GET",
+	"get_blueprint_default": {
+		"method": "GET",
 		"endpoint": "courses/1/blueprint_templates/default",
 		"data": {
 			"id": 1,
 			"course_id": 1,
 			"associated_course_count": 3,
-            "latest_migration": null
+			"latest_migration": null
 		},
 		"status_code": 200
-    },
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "courses/1",
@@ -194,6 +211,75 @@
 			"root_account_id": 1,
 			"enrollment_term_id": 1,
 			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"get_epub_export": {
+		"method": "GET",
+		"endpoint": "courses/1/epub_exports/1",
+		"data": {
+				"id": 1,
+				"name": "course1",
+				"epub_export": {
+					"id": 1,
+					"created_at": "2019-01-01T00:00:00Z",
+					"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+					"progress_url": "https://dummyurl.com/api/v1/progress/4",
+					"user_id": 4,
+					"workflow_state": "exported"
+					}
+		},
+		"status_code": 200
+
+	},
+	"get_epub_exports": {
+		"method": "GET",
+		"endpoint": "epub_exports",
+		"data": {
+			"courses": [
+				{
+				"id": 1,
+				"name": "course1",
+				"epub_export": {
+					"id": 1,
+					"created_at": "2019-01-01T00:00:00Z",
+					"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+					"progress_url": "https://dummyurl.com/api/v1/progress/4",
+					"user_id": 4,
+					"workflow_state": "exported"
+					}
+				},
+				{
+				"id": 2,
+				"name": "course2",
+				"epub_export": {
+					"id": 2,
+					"created_at": "2019-06-01T00:00:00Z",
+					"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+					"progress_url": "https://dummyurl.com/api/v1/progress/4",
+					"user_id": 5,
+					"workflow_state": "exported"
+					}
+				}
+
+			]
+		},
+		"status_code": 200
+	},
+	"create_epub_export": {
+		"method": "POST",
+		"endpoint": "courses/1/epub_exports/",
+		"data": {
+				"id": 1,
+				"name": "course1",
+				"epub_export": {
+					"id": 1,
+					"created_at": "2019-01-01T00:00:00Z",
+					"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+					"progress_url": "https://dummyurl.com/api/v1/progress/4",
+					"user_id": 4,
+					"workflow_state": "exported"
+					}
 		},
 		"status_code": 200
 	},
@@ -259,6 +345,40 @@
 			"folders_count": 2,
 			"name": "Folder 1",
 			"full_name": "Folder 1"
+		},
+		"status_code": 200
+	},
+	"get_outcome_import_status":{
+		"method" : "GET",
+		"endpoint" : "courses/1/outcome_imports/1",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
+	"get_outcome_import_status_latest":{
+		"method" : "GET",
+		"endpoint" : "courses/1/outcome_imports/latest",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
 		},
 		"status_code": 200
 	},
@@ -361,16 +481,16 @@
 		"method": "GET",
 		"endpoint": "courses/1/sections",
 		"data": [
-            {
-                "id": 1,
-                "name": "Section 1",
-                "course_id": 1
-            },
-            {
-                "id": 2,
-                "name": "Section 2",
-                "course_id": 1
-            }
+			{
+				"id": 1,
+				"name": "Section 1",
+				"course_id": 1
+			},
+			{
+				"id": 2,
+				"name": "Section 2",
+				"course_id": 1
+			}
 		],
 		"headers": {
 			"Link": "<https://example.com/api/v1/courses/1/sections?page=2&per_page=2>; rel=\"next\""
@@ -381,16 +501,16 @@
 		"method": "GET",
 		"endpoint": "courses/1/sections?page=2&per_page=2",
 		"data": [
-            {
-                "id": 3,
-                "name": "Section 3",
-                "course_id": 1
-            },
-            {
-                "id": 4,
-                "name": "Section 4",
-                "course_id": 1
-            }
+			{
+				"id": 3,
+				"name": "Section 3",
+				"course_id": 1
+			},
+			{
+				"id": 4,
+				"name": "Section 4",
+				"course_id": 1
+			}
 		],
 		"status_code": 200
 	},
@@ -446,23 +566,23 @@
 		],
 		"status_code": 200
 	},
-    "list_blueprint_subscriptions": {
-        "method": "GET",
-        "endpoint": "courses/1/blueprint_subscriptions",
-        "data": [
-            {
-                "id": 10,
-                "template_id": 2,
-                "blueprint_course": {
-                    "id": 1,
-                    "name": "Test Course",
-                    "course_code": "TES1337",
-                    "term_name": "Summer 2018"
-                }
-            }
-        ],
-        "status_code": 200
-    },
+	"list_blueprint_subscriptions": {
+		"method": "GET",
+		"endpoint": "courses/1/blueprint_subscriptions",
+		"data": [
+			{
+				"id": 10,
+				"template_id": 2,
+				"blueprint_course": {
+					"id": 1,
+					"name": "Test Course",
+					"course_code": "TES1337",
+					"term_name": "Summer 2018"
+				}
+			}
+		],
+		"status_code": 200
+	},
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "courses/1/enrollments",
@@ -1311,6 +1431,37 @@
 		],
 		"status_code": 200
 	},
+	"list_multiple_submissions_grouped": {
+		"method": "GET",
+		"endpoint": "courses/1/students/submissions",
+		"data": [
+			{
+				"user_id": 1,
+				"submissions": [
+					{
+						"id": 1,
+						"assignments_id": 1,
+						"user_id": 1,
+						"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
+						"submission_type": "online_upload"
+					}
+				]
+			},
+			{
+				"user_id": 2,
+				"submissions": [
+					{
+						"id": 2,
+						"assignments_id": 1,
+						"user_id": 2,
+						"html_url": "https://example.com/courses/1/assignments/1/submissions/2",
+						"submission_type": "online_upload"
+					}
+				]
+			}
+		],
+		"status_code": 200
+	},
 	"list_gradeable_students": {
 		"method": "GET",
 		"endpoint": "courses/1/assignments/1/gradeable_students",
@@ -1397,6 +1548,39 @@
 			  {"name": "C", "value": 0.7}
 			]
 		  },
+		"status_code": 200
+	},
+	"get_grading_periods": {
+		"method": "GET",
+		"endpoint": "courses/1/grading_periods",
+		"data": {
+			"grading_periods": [
+				{
+					"title": "Grading period 1",
+					"id": 1,
+					"course_id": 1
+				},
+				{
+					"title": "Grading period 2",
+					"id": 2,
+					"course_id": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_grading_period": {
+		"method": "GET",
+		"endpoint": "courses/1/grading_periods/1",
+		"data": {
+			"grading_periods": [
+				{
+					"title": "Grading period 1",
+					"id": 1,
+					"course_id": 1
+				}
+			]
+		},
 		"status_code": 200
 	},
 	"get_grading_standards": {
@@ -1536,6 +1720,43 @@
 			"updated_at": "2013-01-15T15:04:00Z",
 			"message": null,
 			"url": "https://canvas.example.edu/api/v1/progress/3"
+		},
+		"status_code": 200
+	},
+	"multiple_content_exports": {
+		"method": "GET",
+		"endpoint": "courses/1/content_exports",
+		"data": [
+			{
+				"user_id": 1,
+				"id": 2,
+				"export_type": "a"
+			},
+			{
+				"user_id": 1,
+				"id": 22,
+				"export_type": "b"
+			}
+		],
+		"status_code": 200
+	},
+	"single_content_export": {
+		"method": "GET",
+		"endpoint": "courses/1/content_exports/11",
+		"data": {
+			"user_id": 1,
+			"id": 11,
+			"export_type": "c"
+		},
+		"status_code": 200
+	},
+	"export_content": {
+		"method": "POST",
+		"endpoint": "courses/1/content_exports",
+		"data": {
+			"user_id": 1,
+			"id": 111,
+			"export_type": "d"
 		},
 		"status_code": 200
 	}

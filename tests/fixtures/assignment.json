@@ -223,6 +223,25 @@
 		],
 		"status_code": 200
 	},
+	"list_peer_reviews": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/peer_reviews",
+		"data": [
+			{
+				"assessor_id": 23,
+				"asset_id": 13,
+				"id": 1,
+				"user_id": 7
+			},
+			{
+				"assessor_id": 24,
+				"asset_id": 14,
+				"id": 2,
+				"user_id": 8
+			}
+		],
+		"status_code": 200
+	},
 	"get_assignment_override": {
 		"method": "GET",
 		"endpoint": "courses/1/assignments/1/overrides/1",

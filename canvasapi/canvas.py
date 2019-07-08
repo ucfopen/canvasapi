@@ -4,6 +4,7 @@ import warnings
 
 from canvasapi.account import Account
 from canvasapi.course import Course
+from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.current_user import CurrentUser
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
@@ -46,6 +47,20 @@ class Canvas(object):
                 "URLs. If possible, please use HTTPS.",
                 UserWarning
             )
+
+        if not base_url.strip():
+            warnings.warn(
+                "Canvas needs a valid URL, please provide a non-blank `base_url`.",
+                UserWarning
+            )
+
+        if '://' not in base_url:
+            warnings.warn(
+                "An invalid `base_url` for the Canvas API Instance was used. "
+                "Please provide a valid HTTP or HTTPS URL if possible.",
+                UserWarning
+            )
+
         base_url = new_url + '/api/v1/'
 
         self.__requester = Requester(base_url, access_token)
@@ -1160,4 +1175,256 @@ class Canvas(object):
             'GET',
             'announcements',
             _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_polls(self, **kwargs):
+        """
+        Returns a paginated list of polls for the current user
+
+        :calls: `GET /api/1/polls \
+        <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.poll.Poll`
+        """
+        from canvasapi.poll import Poll
+
+        return PaginatedList(
+            Poll,
+            self.__requester,
+            'GET',
+            'polls',
+            _root='polls',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_poll(self, poll, **kwargs):
+        """
+        Get a single poll, based on the poll id.
+
+        :calls: `GET /api/v1/polls/:id \
+        <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.show>`_
+
+        :param poll: The ID of the poll or the poll to change.
+        :type poll: int
+        :rtype: :class:`canvasapi.poll.Poll`
+        """
+        from canvasapi.poll import Poll
+
+        poll_id = obj_or_id(poll, "poll", (Poll,))
+
+        response = self.__requester.request(
+            'GET',
+            'polls/{}'.format(poll_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Poll(self.__requester, response.json()['polls'][0])
+
+    def create_poll(self, poll, **kwargs):
+        """
+        Create a new poll for the current user.
+
+        :calls: `POST /api/v1/polls \
+        <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.create>`_
+
+        :param poll: List of polls to create. `'question'` key is required.
+        :type poll: list of dict
+        :rtype: :class:`canvasapi.poll.Poll`
+        """
+        from canvasapi.poll import Poll
+
+        if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
+            kwargs['poll'] = poll
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'question' and is required."
+            )
+
+        response = self.__requester.request(
+            'POST',
+            'polls',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return Poll(self.__requester, response.json()['polls'][0])
+
+    def get_planner_notes(self, **kwargs):
+        """
+        Retrieve the paginated list of planner notes
+
+        :calls: `GET /api/v1/planner_notes \
+        <https://canvas.instructure.com/doc/api/planner.html#method.planner_notes.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.planner.PlannerNote`
+        """
+        from canvasapi.planner import PlannerNote
+
+        return PaginatedList(
+            PlannerNote,
+            self.__requester,
+            'GET',
+            'planner_notes',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_planner_note(self, planner_note, **kwargs):
+        """
+        Retrieve a planner note for the current user
+
+        :calls: `GET /api/v1/planner_notes/:id \
+        <https://canvas.instructure.com/doc/api/planner.html#method.planner_notes.show>`_
+
+        :param planner_note: The ID of the planner note to retrieve.
+        :type planner_note: int or :class:`canvasapi.planner.PlannerNote`
+
+        :rtype: :class:`canvasapi.planner.PlannerNote`
+        """
+        from canvasapi.planner import PlannerNote
+
+        if isinstance(planner_note, int) or isinstance(planner_note, PlannerNote):
+            planner_note_id = obj_or_id(planner_note, "planner_note", (PlannerNote,))
+        else:
+            raise RequiredFieldMissing(
+                "planner_note is required as an object or as an int."
+            )
+
+        response = self.__requester.request(
+            'GET',
+            'planner_notes/{}'.format(
+                planner_note_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return PlannerNote(self.__requester, response.json())
+
+    def create_planner_note(self, **kwargs):
+        """
+        Create a planner note for the current user
+
+        :calls: `POST /api/v1/planner_notes \
+        <https://canvas.instructure.com/doc/api/planner.html#method.planner_notes.create>`_
+
+        :rtype: :class:`canvasapi.planner.PlannerNote`
+        """
+        from canvasapi.planner import PlannerNote
+
+        response = self.__requester.request(
+            'POST',
+            'planner_notes',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return PlannerNote(self.__requester, response.json())
+
+    def get_planner_overrides(self, **kwargs):
+        """
+        Retrieve a planner override for the current user
+
+        :calls: `GET /api/v1/planner/overrides \
+        <https://canvas.instructure.com/doc/api/planner.html#method.planner_overrides.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.planner.PlannerOverride`
+        """
+        from canvasapi.planner import PlannerOverride
+
+        return PaginatedList(
+            PlannerOverride,
+            self.__requester,
+            'GET',
+            'planner/overrides',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+    def get_planner_override(self, planner_override, **kwargs):
+        """
+        Retrieve a planner override for the current user
+
+        :calls: `GET /api/v1/planner/overrides/:id \
+        <https://canvas.instructure.com/doc/api/planner.html#method.planner_overrides.show>`_
+
+        :param planner_override: The override or the ID of the planner override to retrieve.
+        :type planner_override: int or :class:`canvasapi.planner.PlannerOverride`
+
+        :rtype: :class:`canvasapi.planner.PlannerOverride`
+        """
+        from canvasapi.planner import PlannerOverride
+
+        if isinstance(planner_override, int) or isinstance(planner_override, PlannerOverride):
+            planner_override_id = obj_or_id(
+                planner_override,
+                "planner_override",
+                (PlannerOverride,)
+            )
+        else:
+            raise RequiredFieldMissing(
+                "planner_override is required as an object or as an int."
+            )
+
+        response = self.__requester.request(
+            'GET',
+            'planner/overrides/{}'.format(
+                planner_override_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return PlannerOverride(self.__requester, response.json())
+
+    def create_planner_override(self, plannable_type, plannable_id, **kwargs):
+        """
+        Create a planner override for the current user
+
+        :calls: `POST /api/v1/planner/overrides \
+        <https://canvas.instructure.com/doc/api/planner.html#method.planner_overrides.create>`_
+
+        :param plannable_type: Type of the item that you are overriding in the planner
+        :type plannable_type: str
+
+        :param plannable_id: ID of the item that you are overriding in the planner
+        :type plannable_id: int or :class:`canvasapi.planner.PlannerOverride`
+
+        :rtype: :class:`canvasapi.planner.PlannerOverride`
+        """
+        from canvasapi.planner import PlannerOverride
+        from six import text_type, integer_types
+
+        if isinstance(plannable_type, text_type):
+            kwargs['plannable_type'] = plannable_type
+        else:
+            raise RequiredFieldMissing(
+                "plannable_type is required as a str."
+            )
+        if isinstance(plannable_id, integer_types):
+            kwargs['plannable_id'] = plannable_id
+        else:
+            raise RequiredFieldMissing(
+                "plannable_id is required as an int."
+            )
+
+        response = self.__requester.request(
+            'POST',
+            'planner/overrides',
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return PlannerOverride(self.__requester, response.json())
+
+    def get_epub_exports(self, **kwargs):
+        """
+        Return a list of epub exports for the associated course.
+
+        :calls: `GET /api/v1/epub_exports\
+        <https://canvas.instructure.com/doc/api/e_pub_exports.html#method.epub_exports.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course_epub_export.CourseEpubExport`
+        """
+
+        return PaginatedList(
+            CourseEpubExport,
+            self.__requester,
+            'GET',
+            'epub_exports',
+            _root="courses",
+            kwargs=combine_kwargs(**kwargs)
         )

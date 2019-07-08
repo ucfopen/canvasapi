@@ -13,22 +13,32 @@ Class Reference
     bookmark-ref
     calendar-event-ref
     communication-channel-ref
+    content-export-ref
     content-migration-ref
     conversation-ref
     course-ref
+    course-epub-export-ref
     current-user-ref
     discussion-entry-ref
     discussion-topic-ref
     enrollment-ref
     enrollment-term-ref
     external-tool-ref
+    favorite-ref
     file-ref
     folder-ref
+    grading-period-ref
     group-ref
     login-ref
     module-ref
     outcome-ref
+    outcome-import-ref
     page-ref
+    planner-ref
+    poll-ref
+    poll-choice-ref
+    poll-session-ref
+    poll-submission-ref
     progress-ref
     quiz-ref
     quiz-group-ref

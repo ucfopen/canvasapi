@@ -14,6 +14,7 @@ from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
+from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
@@ -40,11 +41,31 @@ class TestCanvas(unittest.TestCase):
             Canvas(settings.BASE_URL_WITH_VERSION, settings.API_KEY)
             self.assertTrue(issubclass(w[0].category, DeprecationWarning))
 
-    # Canvas()
     def test_init_warns_when_url_is_http(self, m):
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             Canvas(settings.BASE_URL_AS_HTTP, settings.API_KEY)
-            self.assertTrue(issubclass(w[0].category, UserWarning))
+            self.assertRaises(
+                UserWarning,
+                msg=('Canvas may respond unexpectedly when making requests to HTTP'
+                     'URLs. If possible, please use HTTPS.')
+            )
+
+    def test_init_warns_when_url_is_blank(self, m):
+        with warnings.catch_warnings(record=True):
+            Canvas(settings.BASE_URL_AS_BLANK, settings.API_KEY)
+            self.assertRaises(
+                UserWarning,
+                msg='Canvas needs a valid URL, please provide a non-blank `base_url`.'
+            )
+
+    def test_init_warns_when_url_is_invalid(self, m):
+        with warnings.catch_warnings(record=True):
+            Canvas(settings.BASE_URL_AS_INVALID, settings.API_KEY)
+            self.assertRaises(
+                UserWarning,
+                msg=('An invalid `base_url` for the Canvas API Instance was used.'
+                     'Please provide a valid HTTP or HTTPS URL if possible.')
+            )
 
     # create_account()
     def test_create_account(self, m):
@@ -753,3 +774,28 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(announcements, PaginatedList)
         self.assertIsInstance(announcement_list[0], DiscussionTopic)
         self.assertEqual(len(announcement_list), 2)
+
+    # get_epub_exports()
+    def test_get_epub_exports(self, m):
+
+        register_uris({'course': ['get_epub_exports']}, m)
+
+        epub_export_list = self.canvas.get_epub_exports()
+
+        self.assertIsInstance(epub_export_list, PaginatedList)
+        self.assertIsInstance(epub_export_list[0], CourseEpubExport)
+        self.assertIsInstance(epub_export_list[1], CourseEpubExport)
+        self.assertEqual(epub_export_list[0].id, 1)
+        self.assertEqual(epub_export_list[1].id, 2)
+        self.assertEqual(epub_export_list[0].name, "course1")
+        self.assertEqual(epub_export_list[1].name, "course2")
+
+        self.assertTrue(hasattr(epub_export_list[0], "epub_export"))
+        self.assertTrue(hasattr(epub_export_list[1], "epub_export"))
+
+        epub1 = epub_export_list[0].epub_export
+        epub2 = epub_export_list[1].epub_export
+        self.assertEqual(epub1['id'], 1)
+        self.assertEqual(epub2['id'], 2)
+        self.assertEqual(epub1['workflow_state'], "exported")
+        self.assertEqual(epub2['workflow_state'], "exported")

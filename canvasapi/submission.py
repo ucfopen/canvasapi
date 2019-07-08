@@ -3,8 +3,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.paginated_list import PaginatedList
+from canvasapi.peer_review import PeerReview
 from canvasapi.upload import Uploader
-from canvasapi.util import combine_kwargs
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 @python_2_unicode_compatible
@@ -12,6 +14,61 @@ class Submission(CanvasObject):
 
     def __str__(self):
         return '{}-{}'.format(self.assignment_id, self.user_id)
+
+    def create_submission_peer_review(self, user, **kwargs):
+        """
+        Create a peer review for this submission.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/:submission_id/peer_reviews \
+        <https://canvas.instructure.com/doc/api/peer_reviews.html#method.peer_reviews_api.index>`_
+
+        :param user: The user object or ID to retrieve notifications for.
+        :type user: :class:`canvasapi.user.User` or int
+
+        :rtype: :class:`canvasapi.peer_review.PeerReview`
+        """
+        from canvasapi.user import User
+
+        user_id = obj_or_id(user, "user", (User,))
+        kwargs['user_id'] = user_id
+        response = self._requester.request(
+            'POST',
+            'courses/{}/assignments/{}/submissions/{}/peer_reviews'.format(
+                self.course_id,
+                self.assignment_id,
+                self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return PeerReview(self._requester, response.json())
+
+    def delete_submission_peer_review(self, user, **kwargs):
+        """
+        Delete a peer review for this submission.
+
+        :calls: `DELETE /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/:submission_id/peer_reviews \
+        <https://canvas.instructure.com/doc/api/peer_reviews.html#method.peer_reviews_api.index>`_
+
+        :param user: The user object or ID to retrieve notifications for.
+        :type user: :class:`canvasapi.user.User` or int
+
+        :rtype: :class:`canvasapi.peer_review.PeerReview`
+        """
+        from canvasapi.user import User
+
+        user_id = obj_or_id(user, "user", (User,))
+        kwargs['user_id'] = user_id
+        response = self._requester.request(
+            'DELETE',
+            'courses/{}/assignments/{}/submissions/{}/peer_reviews'.format(
+                self.course_id,
+                self.assignment_id,
+                self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return PeerReview(self._requester, response.json())
 
     def edit(self, **kwargs):
         """
@@ -79,6 +136,26 @@ class Submission(CanvasObject):
         )
         return response.status_code == 204
 
+    def get_submission_peer_reviews(self, **kwargs):
+        """
+        Get a list of all Peer Reviews this submission.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/:submission_id/peer_reviews \
+        <https://canvas.instructure.com/doc/api/peer_reviews.html#method.peer_reviews_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.peer_review.PeerReview`
+        """
+        return PaginatedList(
+            PeerReview,
+            self._requester,
+            'GET',
+            'courses/{}/assignments/{}/submissions/{}/peer_reviews'
+            .format(self.course_id, self.assignment_id, self.id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
     def upload_comment(self, file, **kwargs):
         """
         Upload a file to attach to this submission as a comment.
@@ -110,5 +187,24 @@ class Submission(CanvasObject):
                     'file_ids': [response[1]['id']]
                 }
             )
-
         return response
+
+
+@python_2_unicode_compatible
+class GroupedSubmission(CanvasObject):
+    def __str__(self):
+        return "{} submission(s) for User #{}".format(
+            len(self.submissions), self.user_id
+        )
+
+    def __init__(self, requester, attributes):
+        try:
+            self.submissions = [
+                Submission(requester, submission)
+                for submission in attributes['submissions']
+            ]
+            del attributes['submissions']
+        except KeyError:
+            self.submissions = list()
+
+        super(GroupedSubmission, self).__init__(requester, attributes)

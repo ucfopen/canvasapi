@@ -14,4 +14,6 @@ Contents:
    getting-started
    examples
    keyword-args
+   exceptions
+   debugging
    class-reference

@@ -16,24 +16,28 @@ from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
+from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.grading_period import GradingPeriod
 from canvasapi.group import Group, GroupCategory
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizExtension
 from canvasapi.rubric import Rubric
 from canvasapi.section import Section
-from canvasapi.submission import Submission
+from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
 from canvasapi.content_migration import ContentMigration, Migrator
+from canvasapi.content_export import ContentExport
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -913,24 +917,29 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(submission_list), 2)
         self.assertIsInstance(submission_list[0], Submission)
 
-    def test_get_multiple_submissions_grouped_param(self, m):
+    def test_get_multiple_submissions_grouped_true(self, m):
+        register_uris({'course': ['list_multiple_submissions_grouped']}, m)
+
+        submissions = self.course.get_multiple_submissions(grouped=True)
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], GroupedSubmission)
+
+    def test_get_multiple_submissions_grouped_false(self, m):
         register_uris({'course': ['list_multiple_submissions']}, m)
 
-        with warnings.catch_warnings(record=True) as warning_list:
-            warnings.simplefilter('always')
-            submissions = self.course.get_multiple_submissions(grouped=True)
-            submission_list = [submission for submission in submissions]
+        submissions = self.course.get_multiple_submissions(grouped=False)
+        submission_list = [submission for submission in submissions]
 
-            # Ensure using the `grouped` param raises a warning
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, UserWarning)
-            self.assertEqual(
-                text_type(warning_list[-1].message),
-                'The `grouped` parameter must be empty. Removing kwarg `grouped`.'
-            )
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
 
-            self.assertEqual(len(submission_list), 2)
-            self.assertIsInstance(submission_list[0], Submission)
+    def test_get_multiple_submissions_grouped_invalid(self, m):
+        with self.assertRaises(ValueError) as cm:
+            self.course.get_multiple_submissions(grouped='blargh')
+
+        self.assertIn("Parameter `grouped` must", cm.exception.args[0])
 
     # get_submission()
     def test_get_submission(self, m):
@@ -1540,6 +1549,162 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(blueprint_subscriptions[0].id, 10)
         self.assertEqual(blueprint_subscriptions[0].template_id, 2)
         self.assertEqual(blueprint_subscriptions[0].blueprint_course.get("id"), 1)
+
+    # get_outcome_import_status()
+    def test_get_outcome_import_status(self, m):
+        register_uris({"course": ["get_outcome_import_status"]}, m)
+        outcome_import = self.course.get_outcome_import_status(1)
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
+
+    def test_get_outcome_import_status_latest(self, m):
+        register_uris({"course": ["get_outcome_import_status_latest"]}, m)
+        outcome_import = self.course.get_outcome_import_status("latest")
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
+
+    # import_outcome()
+    def test_import_outcome_filepath(self, m):
+        import os
+
+        register_uris({"course": ["import_outcome"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
+
+        outcome_import = self.course.import_outcome(filepath)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "course_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_binary(self, m):
+        import os
+
+        register_uris({"course": ["import_outcome"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
+
+        with open(filepath, "rb") as f:
+            outcome_import = self.course.import_outcome(f)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "course_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_id(self, m):
+
+        register_uris({"course": ["import_outcome"]}, m)
+
+        outcome_import = self.course.import_outcome(1)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "course_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_ioerror(self, m):
+        f = "!@#$%^&*()_+QWERTYUIOP{}|"
+
+        with self.assertRaises(IOError):
+            self.course.import_outcome(f)
+
+    # get_epub_export
+    def test_get_epub_export(self, m):
+        register_uris({'course': ['get_epub_export']}, m)
+
+        response = self.course.get_epub_export(1)
+
+        self.assertIsInstance(response, CourseEpubExport)
+        self.assertEqual(response.id, 1)
+        self.assertEqual(response.name, "course1")
+
+        self.assertTrue(hasattr(response, "epub_export"))
+        epub1 = response.epub_export
+
+        self.assertEqual(epub1['id'], 1)
+        self.assertEqual(epub1['workflow_state'], "exported")
+
+    # create_epub_export
+    def test_create_epub_export(self, m):
+        register_uris({'course': ['create_epub_export']}, m)
+
+        response = self.course.create_epub_export()
+
+        self.assertIsInstance(response, CourseEpubExport)
+        self.assertEqual(response.id, 1)
+        self.assertEqual(response.name, "course1")
+
+        self.assertTrue(hasattr(response, "epub_export"))
+        epub1 = response.epub_export
+
+        self.assertEqual(epub1['id'], 1)
+        self.assertEqual(epub1['workflow_state'], "exported")
+
+    # list_grading_periods()
+    def test_get_grading_periods(self, m):
+        register_uris({'course': ['get_grading_periods']}, m)
+
+        response = self.course.get_grading_periods()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertIsInstance(response[0], GradingPeriod)
+        self.assertIsInstance(response[1], GradingPeriod)
+        self.assertEqual(response[0].id, 1)
+        self.assertEqual(response[1].id, 2)
+        self.assertEqual(response[0].title, "Grading period 1")
+        self.assertEqual(response[1].title, "Grading period 2")
+
+    # get_grading_period()
+    def test_get_grading_period(self, m):
+        register_uris({'course': ['get_grading_period']}, m)
+
+        grading_period_id = 1
+        response = self.course.get_grading_period(grading_period_id)
+
+        self.assertIsInstance(response, GradingPeriod)
+        self.assertEqual(response.id, grading_period_id)
+        self.assertEqual(response.title, "Grading period 1")
+
+    # get_content_exports()
+    def test_list_content_exports(self, m):
+        register_uris({'course': ['multiple_content_exports']}, m)
+
+        content_exports = self.course.get_content_exports()
+        content_export_list = [content_export for content_export in content_exports]
+
+        self.assertEqual(len(content_export_list), 2)
+        self.assertEqual(content_export_list[0].id, 2)
+        self.assertEqual(content_export_list[1].export_type, "b")
+        self.assertIsInstance(content_export_list[0], ContentExport)
+
+    # get_content_export()
+    def test_show_content_export(self, m):
+        register_uris({'course': ['single_content_export']}, m)
+
+        content_export = self.course.get_content_export(11)
+
+        self.assertTrue(hasattr(content_export, 'export_type'))
+        self.assertIsInstance(content_export, ContentExport)
+
+    # export_content()
+    def test_export_content(self, m):
+        register_uris({'course': ['export_content']}, m)
+
+        content_export = self.course.export_content('d')
+
+        self.assertIsInstance(content_export, ContentExport)
+        self.assertTrue(hasattr(content_export, 'export_type'))
 
 
 @requests_mock.Mocker()
