@@ -153,13 +153,69 @@
 		"method": "PUT",
 		"endpoint": "courses/1/assignments/1/submissions/1",
 		"data": {
-				"id": 1,
-				"assignments_id": 1,
-				"user_id": 1,
-				"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
-				"submission_type": "online_upload",
-				"excused": true
+			"id": 1,
+			"assignments_id": 1,
+			"user_id": 1,
+			"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
+			"submission_type": "online_upload",
+			"excused": true
 		},
 		"status_code": 200
+	},
+	"get_submission_questions": {
+		"method": "GET",
+		"endpoint": "quiz_submissions/1/questions",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": true,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
+	},
+	"answer_submission_questions": {
+		"method": "POST",
+		"endpoint": "quiz_submissions/1/questions",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": true,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
+	},
+	"flag_submission_question": {
+		"method": "PUT",
+		"endpoint": "quiz_submissions/1/questions/1/flag",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": true,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
+	},
+	"unflag_submission_question": {
+		"method": "PUT",
+		"endpoint": "quiz_submissions/1/questions/1/unflag",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": false,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
 	}
 }

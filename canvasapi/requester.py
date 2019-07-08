@@ -135,9 +135,12 @@ class Requester(object):
         """
         Issue a GET request to the specified endpoint with the data provided.
 
-        :param url: str
-        :pararm headers: dict
-        :param params: dict
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param params: The parameters to send with this request.
+        :type params: dict
         """
         return self._session.get(url, headers=headers, params=params)
 
@@ -145,9 +148,12 @@ class Requester(object):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
-        :param url: str
-        :pararm headers: dict
-        :param data: dict
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param data: The data to send with this request.
+        :type data: dict
         """
 
         # Grab file from data.
@@ -169,9 +175,12 @@ class Requester(object):
         """
         Issue a DELETE request to the specified endpoint with the data provided.
 
-        :param url: str
-        :pararm headers: dict
-        :param data: dict
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param data: The data to send with this request.
+        :type data: dict
         """
         return self._session.delete(url, headers=headers, data=data)
 
@@ -179,9 +188,12 @@ class Requester(object):
         """
         Issue a PATCH request to the specified endpoint with the data provided.
 
-        :param url: str
-        :pararm headers: dict
-        :param data: dict
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param data: The data to send with this request.
+        :type data: dict
         """
         return self._session.patch(url, headers=headers, data=data)
 
@@ -189,8 +201,11 @@ class Requester(object):
         """
         Issue a PUT request to the specified endpoint with the data provided.
 
-        :param url: str
-        :pararm headers: dict
-        :param data: dict
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param data: The data to send with this request.
+        :type data: dict
         """
         return self._session.put(url, headers=headers, data=data)
