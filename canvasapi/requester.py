@@ -126,7 +126,12 @@ class Requester(object):
                 headers=pformat(clean_headers(response.headers))
             )
         )
-        logger.debug("Data: {data}".format(data=pformat(response.json())))
+
+        try:
+            logger.debug("Data: {data}".format(data=pformat(response.json())))
+        except ValueError:
+            logger.debug("Data: {data}".format(data=pformat(response.text)))
+
         # Add response to internal cache
         if len(self._cache) > 4:
             self._cache.pop()
