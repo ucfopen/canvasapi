@@ -36,6 +36,7 @@
 - Fixed an issue where creating an external tool did not properly send parameters to Canvas. (Thanks, [@altgilbers](https://github.com/altgilbers))
 - Fixed an issue where getting Quiz Submissions would only return up to the first 10 results (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
 - Fixed an issue where unhandled 4XX and 5XX HTTP errors would cause a JSONDecodeError
+- Removed a limitation where the parameter `grouped` being passed to `get_multiple_submissions` would be ignored. These methods now return a `GroupedSubmission` object containing multiple `Submission` objects, instead of ignoring. (Thanks, [@bennettscience](https://github.com/bennettscience))
 
 ## [0.12.0] - 2019-04-03
 
