@@ -63,7 +63,6 @@ class Quiz(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.show>`_
 
-
         :param id: The ID of the question group.
         :type id: int
 
@@ -364,7 +363,7 @@ class QuizSubmission(CanvasObject):
             raise RequiredFieldMissing(
                 "`validation_token` not set on this QuizSubmission, must be passed"
                 " as a function argument."
-            ) from None
+            )
 
         # Only the latest attempt for a quiz submission can be updated, and Canvas
         # automatically returns the latest attempt with every quiz submission response,
@@ -446,7 +445,7 @@ class QuizSubmission(CanvasObject):
             "quiz_submissions/{}/questions".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
-    
+
         questions = list()
         for question in response.json().get("quiz_submission_questions", []):
             question.update({
@@ -476,7 +475,7 @@ class QuizSubmission(CanvasObject):
             raise RequiredFieldMissing(
                 "`validation_token` not set on this QuizSubmission, must be passed"
                 " as a function argument."
-            ) from None
+            )
 
         # Only the latest attempt for a quiz submission can be updated, and Canvas
         # automatically returns the latest attempt with every quiz submission response,
@@ -586,8 +585,8 @@ class QuizSubmissionQuestion(CanvasObject):
             raise RequiredFieldMissing(
                 "`validation_token` not set on this QuizSubmissionQuestion, must be passed"
                 " as a function argument."
-            ) from None
-        
+            )
+
         # Only the latest attempt for a quiz submission can be updated, and Canvas
         # automatically returns the latest attempt with every quiz submission response,
         # so we can just use that.
@@ -599,15 +598,12 @@ class QuizSubmissionQuestion(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-        try:
-            question = response.json()['quiz_submission_questions'][0]
-            question.update({
-                'validation_token': kwargs['validation_token'],
-                'quiz_submission_id': self.quiz_submission_id
-            })
-            super(QuizSubmissionQuestion, self).set_attributes(question)
-        except (KeyError, IndexError):
-            return False
+        question = response.json()['quiz_submission_questions'][0]
+        question.update({
+            'validation_token': kwargs['validation_token'],
+            'quiz_submission_id': self.quiz_submission_id
+        })
+        super(QuizSubmissionQuestion, self).set_attributes(question)
 
         return True
 
@@ -630,8 +626,8 @@ class QuizSubmissionQuestion(CanvasObject):
             raise RequiredFieldMissing(
                 "`validation_token` not set on this QuizSubmissionQuestion, must be passed"
                 " as a function argument."
-            ) from None
-        
+            )
+
         # Only the latest attempt for a quiz submission can be updated, and Canvas
         # automatically returns the latest attempt with every quiz submission response,
         # so we can just use that.
@@ -643,14 +639,11 @@ class QuizSubmissionQuestion(CanvasObject):
             _kwargs=combine_kwargs(**kwargs)
         )
 
-        try:
-            question = response.json()['quiz_submission_questions'][0]
-            question.update({
-                'validation_token': kwargs['validation_token'],
-                'quiz_submission_id': self.quiz_submission_id
-            })
-            super(QuizSubmissionQuestion, self).set_attributes(question)
-        except (KeyError, IndexError):
-            return False
+        question = response.json()['quiz_submission_questions'][0]
+        question.update({
+            'validation_token': kwargs['validation_token'],
+            'quiz_submission_id': self.quiz_submission_id
+        })
+        super(QuizSubmissionQuestion, self).set_attributes(question)
 
         return True
