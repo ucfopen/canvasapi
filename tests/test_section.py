@@ -3,7 +3,6 @@ import unittest
 import warnings
 
 import requests_mock
-from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.assignment import AssignmentOverride
@@ -11,7 +10,7 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.progress import Progress
 from canvasapi.section import Section
-from canvasapi.submission import Submission
+from canvasapi.submission import GroupedSubmission, Submission
 from tests import settings
 from tests.util import register_uris
 
@@ -184,24 +183,29 @@ class TestSection(unittest.TestCase):
         self.assertEqual(len(submission_list), 2)
         self.assertIsInstance(submission_list[0], Submission)
 
-    def test_get_multiple_submissions_grouped_param(self, m):
+    def test_get_multiple_submissions_grouped_true(self, m):
+        register_uris({'section': ['list_multiple_submissions_grouped']}, m)
+
+        submissions = self.section.get_multiple_submissions(grouped=True)
+        submission_list = [submission for submission in submissions]
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], GroupedSubmission)
+
+    def test_get_multiple_submissions_grouped_false(self, m):
         register_uris({'section': ['list_multiple_submissions']}, m)
 
-        with warnings.catch_warnings(record=True) as warning_list:
-            warnings.simplefilter('always')
-            submissions = self.section.get_multiple_submissions(grouped=True)
-            submission_list = [submission for submission in submissions]
+        submissions = self.section.get_multiple_submissions(grouped=False)
+        submission_list = [submission for submission in submissions]
 
-            # Ensure using the `grouped` param raises a warning
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, UserWarning)
-            self.assertEqual(
-                text_type(warning_list[-1].message),
-                'The `grouped` parameter must be empty. Removing kwarg `grouped`.'
-            )
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
 
-            self.assertEqual(len(submission_list), 2)
-            self.assertIsInstance(submission_list[0], Submission)
+    def test_get_multiple_submissions_grouped_invalid(self, m):
+        with self.assertRaises(ValueError) as cm:
+            self.section.get_multiple_submissions(grouped='blargh')
+
+        self.assertIn("Parameter `grouped` must", cm.exception.args[0])
 
     # get_submission()
     def test_get_submission(self, m):
