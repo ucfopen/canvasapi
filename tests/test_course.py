@@ -936,13 +936,10 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(submission_list[0], Submission)
 
     def test_get_multiple_submissions_grouped_invalid(self, m):
-        register_uris({'course': ['list_multiple_submissions']}, m)
+        with self.assertRaises(ValueError) as cm:
+            self.course.get_multiple_submissions(grouped='blargh')
 
-        submissions = self.course.get_multiple_submissions(grouped='blargh')
-        submission_list = [submission for submission in submissions]
-
-        self.assertEqual(len(submission_list), 2)
-        self.assertIsInstance(submission_list[0], Submission)
+        self.assertIn("Parameter `grouped` must", cm.exception.args[0])
 
     # get_submission()
     def test_get_submission(self, m):

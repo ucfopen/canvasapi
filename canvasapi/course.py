@@ -20,7 +20,9 @@ from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.upload import Uploader
-from canvasapi.util import combine_kwargs, is_multivalued, file_or_path, obj_or_id
+from canvasapi.util import (
+    combine_kwargs, is_multivalued, file_or_path, obj_or_id, normalize_bool
+)
 from canvasapi.rubric import Rubric
 
 
@@ -1410,7 +1412,11 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
-        cls = GroupedSubmission if kwargs.get('grouped') is True else Submission
+
+        if "grouped" in kwargs and normalize_bool(kwargs["grouped"], "grouped"):
+            cls = GroupedSubmission
+        else:
+            cls = Submission
 
         return PaginatedList(
             cls,

@@ -8,7 +8,12 @@ from canvasapi import Canvas
 from canvasapi.course import CourseNickname
 from canvasapi.user import User
 from canvasapi.util import (
-    combine_kwargs, get_institution_url, is_multivalued, obj_or_id, file_or_path
+    combine_kwargs,
+    get_institution_url,
+    is_multivalued,
+    obj_or_id,
+    file_or_path,
+    normalize_bool,
 )
 from itertools import chain
 from six import integer_types, iterkeys, itervalues, iteritems, text_type
@@ -19,7 +24,6 @@ from tests.util import cleanup_file, register_uris
 
 @requests_mock.Mocker()
 class TestUtil(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -79,6 +83,7 @@ class TestUtil(unittest.TestCase):
     def test_is_multivalued_generator_call(self, m):
         def yielder():
             yield 'item'
+
         self.assertTrue(is_multivalued(yielder()))
 
     def test_is_multivalued_chain(self, m):
@@ -536,3 +541,22 @@ class TestUtil(unittest.TestCase):
 
         with self.assertRaises(IOError):
             handler, is_path = file_or_path(filename)
+
+    # normalize_bool()
+    def test_normalize_bool_boolean(self, m):
+        self.assertTrue(normalize_bool(True, "value"))
+        self.assertFalse(normalize_bool(False, "value"))
+
+    def test_normalize_bool_str_lower(self, m):
+        self.assertTrue(normalize_bool("true", "value"))
+        self.assertFalse(normalize_bool("false", "value"))
+
+    def test_normalize_bool_str_upper(self, m):
+        self.assertTrue(normalize_bool("True", "value"))
+        self.assertFalse(normalize_bool("False", "value"))
+
+    def test_normalize_bool_str_invalid(self, m):
+        with self.assertRaises(ValueError) as cm:
+            normalize_bool("invalid", "value")
+
+        self.assertIn("Parameter `value` must", cm.exception.args[0])
