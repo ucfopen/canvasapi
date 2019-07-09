@@ -19,6 +19,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.login import Login
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
@@ -1055,6 +1056,75 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(admin.user['login_id'], 'jdoe')
         self.assertEqual(admin.role, 'AccountAdmin')
         self.assertEqual(admin.role_id, 1)
+
+    # get_outcome_import_status()
+    def test_get_outcome_import_status(self, m):
+        register_uris({"account": ["get_outcome_import_status"]}, m)
+        outcome_import = self.account.get_outcome_import_status(1)
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
+
+    def test_get_outcome_import_status_latest(self, m):
+        register_uris({"account": ["get_outcome_import_status_latest"]}, m)
+        outcome_import = self.account.get_outcome_import_status("latest")
+
+        self.assertIsInstance(outcome_import, OutcomeImport)
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.workflow_state, "succeeded")
+        self.assertEqual(outcome_import.progress, "100")
+
+    # import_outcome()
+    def test_import_outcome_filepath(self, m):
+        import os
+
+        register_uris({"account": ["import_outcome"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
+
+        outcome_import = self.account.import_outcome(filepath)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "account_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_binary(self, m):
+        import os
+
+        register_uris({"account": ["import_outcome"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
+
+        with open(filepath, "rb") as f:
+            outcome_import = self.account.import_outcome(f)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "account_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_id(self, m):
+
+        register_uris({"account": ["import_outcome"]}, m)
+
+        outcome_import = self.account.import_outcome(1)
+
+        self.assertTrue(isinstance(outcome_import, OutcomeImport))
+        self.assertTrue(hasattr(outcome_import, "account_id"))
+        self.assertTrue(hasattr(outcome_import, "data"))
+        self.assertEqual(outcome_import.id, 1)
+        self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
+
+    def test_import_outcome_ioerror(self, m):
+        f = "!@#$%^&*()_+QWERTYUIOP{}|"
+
+        with self.assertRaises(IOError):
+            self.account.import_outcome(f)
 
     # get_grading_periods()
     def test_get_grading_periods(self, m):

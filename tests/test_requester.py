@@ -8,8 +8,12 @@ from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.exceptions import (
-    BadRequest, CanvasException, Conflict, InvalidAccessToken, ResourceDoesNotExist,
-    Unauthorized
+    BadRequest,
+    CanvasException,
+    Conflict,
+    InvalidAccessToken,
+    ResourceDoesNotExist,
+    Unauthorized,
 )
 from tests import settings
 from tests.util import register_uris
@@ -17,7 +21,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestRequester(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         self.requester = self.canvas._Canvas__requester
@@ -71,6 +74,12 @@ class TestRequester(unittest.TestCase):
         response = self.requester.request('DELETE', 'fake_delete_request')
         self.assertEqual(response.status_code, 200)
 
+    def test_request_patch(self, m):
+        register_uris({'requests': ['patch']}, m)
+
+        response = self.requester.request('PATCH', 'fake_patch_request')
+        self.assertEqual(response.status_code, 200)
+
     def test_request_put(self, m):
         register_uris({'requests': ['put']}, m)
 
@@ -103,12 +112,7 @@ class TestRequester(unittest.TestCase):
 
         m.add_matcher(custom_matcher)
 
-        response = self.requester.request(
-            'POST',
-            'test',
-            test=True,
-            test2=False
-        )
+        response = self.requester.request('POST', 'test', test=True, test2=False)
         self.assertEqual(response.status_code, 200)
 
     def test_request_400(self, m):
