@@ -10,7 +10,6 @@ from canvasapi.poll_submission import PollSubmission
 
 @python_2_unicode_compatible
 class PollSession(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.poll_id, self.id)
 
@@ -35,14 +34,12 @@ class PollSession(CanvasObject):
         ):
             kwargs['poll_session'] = poll_session
         else:
-            raise RequiredFieldMissing(
-                "Dictionary with key 'course_id' is required."
-            )
+            raise RequiredFieldMissing("Dictionary with key 'course_id' is required.")
 
         response = self._requester.request(
             'PUT',
             'polls/{}/poll_sessions/{}'.format(self.poll_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollSession(self._requester, response.json()['poll_sessions'][0])
 
@@ -60,7 +57,7 @@ class PollSession(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'polls/{}/poll_sessions/{}'.format(self.poll_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -76,7 +73,7 @@ class PollSession(CanvasObject):
         response = self._requester.request(
             'GET',
             'polls/{}/poll_sessions/{}/open'.format(self.poll_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollSession(self._requester, response.json()['poll_sessions'][0])
 
@@ -92,7 +89,7 @@ class PollSession(CanvasObject):
         response = self._requester.request(
             'GET',
             'polls/{}/poll_sessions/{}/close'.format(self.poll_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollSession(self._requester, response.json()['poll_sessions'][0])
 
@@ -108,16 +105,16 @@ class PollSession(CanvasObject):
 
         :rtype: :class:`canvasapi.poll_submission.PollSubmission`
         """
-        poll_submission_id = obj_or_id(poll_submission, "poll_submission", (PollSubmission,))
+        poll_submission_id = obj_or_id(
+            poll_submission, "poll_submission", (PollSubmission,)
+        )
 
         response = self._requester.request(
             'GET',
             'polls/{}/poll_sessions/{}/poll_submissions/{}'.format(
-                self.poll_id,
-                self.id,
-                poll_submission_id
+                self.poll_id, self.id, poll_submission_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollSubmission(self._requester, response.json()['poll_submissions'][0])
 
@@ -148,6 +145,6 @@ class PollSession(CanvasObject):
         response = self._requester.request(
             'POST',
             'polls/{}/poll_sessions/{}/poll_submissions'.format(self.poll_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollSubmission(self._requester, response.json()['poll_submissions'][0])

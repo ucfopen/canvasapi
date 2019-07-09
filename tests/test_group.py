@@ -25,7 +25,6 @@ from tests.util import cleanup_file, register_uris
 
 @requests_mock.Mocker()
 class TestGroup(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -128,6 +127,7 @@ class TestGroup(unittest.TestCase):
 
         with warnings.catch_warnings(record=True) as warning_list:
             from canvasapi.user import User
+
             users = self.group.list_users()
             user_list = [user for user in users]
             self.assertIsInstance(user_list[0], User)
@@ -141,6 +141,7 @@ class TestGroup(unittest.TestCase):
         register_uris({'group': ['list_users', 'list_users_p2']}, m)
 
         from canvasapi.user import User
+
         users = self.group.get_users()
         user_list = [user for user in users]
         self.assertIsInstance(user_list[0], User)
@@ -148,16 +149,10 @@ class TestGroup(unittest.TestCase):
 
     # remove_user()
     def test_remove_user(self, m):
-        register_uris(
-            {
-                'group': [
-                    'list_users',
-                    'list_users_p2',
-                    'remove_user'
-                ]
-            }, m)
+        register_uris({'group': ['list_users', 'list_users_p2', 'remove_user']}, m)
 
         from canvasapi.user import User
+
         user_by_id = self.group.remove_user(1)
         self.assertIsInstance(user_by_id, User)
 
@@ -221,14 +216,7 @@ class TestGroup(unittest.TestCase):
 
     # get_membership()
     def test_get_membership(self, m):
-        register_uris(
-            {
-                'group': [
-                    'get_membership',
-                    'list_users',
-                    'list_users_p2'
-                ]
-            }, m)
+        register_uris({'group': ['get_membership', 'list_users', 'list_users_p2']}, m)
 
         membership_by_id = self.group.get_membership(1, "users")
         self.assertIsInstance(membership_by_id, GroupMembership)
@@ -240,13 +228,8 @@ class TestGroup(unittest.TestCase):
     # create_membership()
     def test_create_membership(self, m):
         register_uris(
-            {
-                'group': [
-                    'create_membership',
-                    'list_users',
-                    'list_users_p2'
-                ]
-            }, m)
+            {'group': ['create_membership', 'list_users', 'list_users_p2']}, m
+        )
 
         response = self.group.create_membership(1)
         self.assertIsInstance(response, GroupMembership)
@@ -258,13 +241,8 @@ class TestGroup(unittest.TestCase):
     # update_membership()
     def test_update_membership(self, m):
         register_uris(
-            {
-                'group': [
-                    'list_users',
-                    'list_users_p2',
-                    'update_membership_user'
-                ]
-            }, m)
+            {'group': ['list_users', 'list_users_p2', 'update_membership_user']}, m
+        )
 
         updated_membership_by_id = self.group.update_membership(1)
         self.assertIsInstance(updated_membership_by_id, GroupMembership)
@@ -275,13 +253,7 @@ class TestGroup(unittest.TestCase):
 
     # get_discussion_topic()
     def test_get_discussion_topic(self, m):
-        register_uris(
-            {
-                'group': [
-                    'get_discussion_topic',
-                    'get_discussion_topics'
-                    ]
-            }, m)
+        register_uris({'group': ['get_discussion_topic', 'get_discussion_topics']}, m)
 
         group_id = 1
         discussion_by_id = self.group.get_discussion_topic(group_id)
@@ -314,12 +286,8 @@ class TestGroup(unittest.TestCase):
     # get_full_discussion_topic
     def test_get_full_discussion_topic(self, m):
         register_uris(
-            {
-                'group': [
-                    'get_full_discussion_topic',
-                    'get_discussion_topics'
-                ]
-            }, m)
+            {'group': ['get_full_discussion_topic', 'get_discussion_topics']}, m
+        )
 
         discussion_by_id = self.group.get_full_discussion_topic(1)
         self.assertIsInstance(discussion_by_id, dict)
@@ -537,8 +505,9 @@ class TestGroup(unittest.TestCase):
         self.assertTrue(hasattr(content_migration, 'migration_type'))
 
     def test_create_content_migration_migrator(self, m):
-        register_uris({'group': ['create_content_migration',
-                                 'get_migration_systems_multiple']}, m)
+        register_uris(
+            {'group': ['create_content_migration', 'get_migration_systems_multiple']}, m
+        )
 
         migrators = self.group.get_migration_systems()
         content_migration = self.group.create_content_migration(migrators[0])
@@ -635,7 +604,6 @@ class TestGroup(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -659,11 +627,7 @@ class TestGroupMembership(unittest.TestCase):
 
     # remove_user()
     def test_remove_user(self, m):
-        register_uris(
-            {
-                'group': ['remove_user'],
-                'user': ['get_by_id']
-            }, m)
+        register_uris({'group': ['remove_user'], 'user': ['get_by_id']}, m)
 
         response_by_id = self.membership.remove_user(1)
         self.assertIsInstance(response_by_id, dict)
@@ -686,7 +650,6 @@ class TestGroupMembership(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestGroupCategory(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         with requests_mock.Mocker() as m:
@@ -785,10 +748,7 @@ class TestGroupCategory(unittest.TestCase):
         from canvasapi.paginated_list import PaginatedList
 
         requires = {
-            'group': [
-                'category_assign_members_true',
-                'category_assign_members_false'
-            ]
+            'group': ['category_assign_members_true', 'category_assign_members_false']
         }
         register_uris(requires, m)
 

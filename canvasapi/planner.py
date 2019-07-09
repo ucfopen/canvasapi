@@ -8,7 +8,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class PlannerNote(CanvasObject):
-
     def __str__(self):
         return "{} {} ({})".format(self.title, self.todo_date, self.id)
 
@@ -23,9 +22,7 @@ class PlannerNote(CanvasObject):
         """
 
         response = self._requester.request(
-            'PUT',
-            'planner_notes/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'PUT', 'planner_notes/{}'.format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
         return PlannerNote(self._requester, response.json())
 
@@ -41,7 +38,7 @@ class PlannerNote(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'planner_notes/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return PlannerNote(self._requester, response.json())
@@ -49,7 +46,6 @@ class PlannerNote(CanvasObject):
 
 @python_2_unicode_compatible
 class PlannerOverride(CanvasObject):
-
     def __str__(self):
         return "{} {} ({})".format(self.plannable_id, self.marked_complete, self.id)
 
@@ -66,7 +62,7 @@ class PlannerOverride(CanvasObject):
         response = self._requester.request(
             'PUT',
             'planner/overrides/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PlannerOverride(self._requester, response.json())
 
@@ -82,7 +78,7 @@ class PlannerOverride(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'planner/overrides/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return PlannerOverride(self._requester, response.json())

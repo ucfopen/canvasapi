@@ -12,7 +12,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Poll(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.question, self.id)
 
@@ -27,17 +26,17 @@ class Poll(CanvasObject):
         :type poll: list
         :rtype: :class:`canvasapi.poll.Poll`
         """
-        if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
+        if (
+            isinstance(poll, list)
+            and isinstance(poll[0], dict)
+            and 'question' in poll[0]
+        ):
             kwargs['poll'] = poll
         else:
-            raise RequiredFieldMissing(
-                "Dictionary with key 'question' is required."
-            )
+            raise RequiredFieldMissing("Dictionary with key 'question' is required.")
 
         response = self._requester.request(
-            'PUT',
-            'polls/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'PUT', 'polls/{}'.format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
         return Poll(self._requester, response.json()['polls'][0])
 
@@ -53,9 +52,7 @@ class Poll(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'polls/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'DELETE', 'polls/{}'.format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
         return response.status_code == 204
 
@@ -75,7 +72,7 @@ class Poll(CanvasObject):
             'GET',
             'polls/{}/poll_choices'.format(self.id),
             _root='poll_choices',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_choice(self, poll_choice, **kwargs):
@@ -92,7 +89,7 @@ class Poll(CanvasObject):
         response = self._requester.request(
             'GET',
             'polls/{}/poll_choices/{}'.format(self.id, poll_choice_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollChoice(self._requester, response.json()['poll_choices'][0])
 
@@ -114,14 +111,12 @@ class Poll(CanvasObject):
         ):
             kwargs['poll_choice'] = poll_choice
         else:
-            raise RequiredFieldMissing(
-                    "Dictionary with key 'text' is required."
-                )
+            raise RequiredFieldMissing("Dictionary with key 'text' is required.")
 
         response = self._requester.request(
             'POST',
             'polls/{}/poll_choices'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollChoice(self._requester, response.json()['poll_choices'][0])
 
@@ -141,7 +136,7 @@ class Poll(CanvasObject):
             'GET',
             'polls/{}/poll_sessions'.format(self.id),
             _root='poll_sessions',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_session(self, poll_session, **kwargs):
@@ -161,7 +156,7 @@ class Poll(CanvasObject):
         response = self._requester.request(
             'GET',
             'polls/{}/poll_sessions/{}'.format(self.id, poll_session_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollSession(self._requester, response.json()['poll_sessions'][0])
 
@@ -186,13 +181,11 @@ class Poll(CanvasObject):
         ):
             kwargs['poll_session'] = poll_session
         else:
-            raise RequiredFieldMissing(
-                "Dictionary with key 'course_id' is required."
-            )
+            raise RequiredFieldMissing("Dictionary with key 'course_id' is required.")
 
         response = self._requester.request(
             'POST',
             'polls/{}/poll_sessions'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PollSession(self._requester, response.json()['poll_sessions'][0])

@@ -15,7 +15,6 @@ from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 
 @python_2_unicode_compatible
 class Group(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -39,9 +38,7 @@ class Group(CanvasObject):
             raise RequiredFieldMissing("Dictionary with key 'title' is required.")
 
         response = self._requester.request(
-            'POST',
-            'groups/{}/pages'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'groups/{}/pages'.format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
         page_json = response.json()
@@ -63,7 +60,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'PUT',
             'groups/{}/front_page'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         page_json = response.json()
         page_json.update({'group_id': self.id})
@@ -82,8 +79,7 @@ class Group(CanvasObject):
         from canvasapi.course import Page
 
         response = self._requester.request(
-            'GET',
-            'groups/{}/front_page'.format(self.id)
+            'GET', 'groups/{}/front_page'.format(self.id)
         )
         page_json = response.json()
         page_json.update({'group_id': self.id})
@@ -105,8 +101,7 @@ class Group(CanvasObject):
         from canvasapi.course import Page
 
         response = self._requester.request(
-            'GET',
-            'groups/{}/pages/{}'.format(self.id, url)
+            'GET', 'groups/{}/pages/{}'.format(self.id, url)
         )
         page_json = response.json()
         page_json.update({'group_id': self.id})
@@ -124,13 +119,14 @@ class Group(CanvasObject):
             :class:`canvasapi.page.Page`
         """
         from canvasapi.course import Page
+
         return PaginatedList(
             Page,
             self._requester,
             'GET',
             'groups/{}/pages'.format(self.id),
             {'group_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def edit(self, **kwargs):
@@ -143,9 +139,7 @@ class Group(CanvasObject):
         :rtype: :class:`canvasapi.group.Group`
         """
         response = self._requester.request(
-            'PUT',
-            'groups/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'PUT', 'groups/{}'.format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self._requester, response.json())
 
@@ -158,10 +152,7 @@ class Group(CanvasObject):
 
         :rtype: :class:`canvasapi.group.Group`
         """
-        response = self._requester.request(
-            'DELETE',
-            'groups/{}'.format(self.id)
-        )
+        response = self._requester.request('DELETE', 'groups/{}'.format(self.id))
         return Group(self._requester, response.json())
 
     def invite(self, invitees):
@@ -182,7 +173,7 @@ class Group(CanvasObject):
             self._requester,
             'POST',
             'groups/{}/invite'.format(self.id),
-            invitees=invitees
+            invitees=invitees,
         )
 
     def list_users(self, **kwargs):
@@ -202,7 +193,7 @@ class Group(CanvasObject):
         warnings.warn(
             "`list_users` is being deprecated and will be removed in a future "
             "version. Use `get_users` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_users(**kwargs)
@@ -218,12 +209,13 @@ class Group(CanvasObject):
             :class:`canvasapi.user.User`
         """
         from canvasapi.user import User
+
         return PaginatedList(
             User,
             self._requester,
             'GET',
             'groups/{}/users'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def remove_user(self, user):
@@ -243,8 +235,7 @@ class Group(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            'DELETE',
-            'groups/{}/users/{}'.format(self.id, user_id),
+            'DELETE', 'groups/{}/users/{}'.format(self.id, user_id)
         )
         return User(self._requester, response.json())
 
@@ -268,10 +259,7 @@ class Group(CanvasObject):
         from canvasapi.upload import Uploader
 
         return Uploader(
-            self._requester,
-            'groups/{}/files'.format(self.id),
-            file,
-            **kwargs
+            self._requester, 'groups/{}/files'.format(self.id), file, **kwargs
         ).start()
 
     def preview_html(self, html):
@@ -286,9 +274,7 @@ class Group(CanvasObject):
         :rtype: str
         """
         response = self._requester.request(
-            'POST',
-            'groups/{}/preview_html'.format(self.id),
-            html=html
+            'POST', 'groups/{}/preview_html'.format(self.id), html=html
         )
         return response.json().get('html', '')
 
@@ -302,8 +288,7 @@ class Group(CanvasObject):
         :rtype: dict
         """
         response = self._requester.request(
-            'GET',
-            'groups/{}/activity_stream/summary'.format(self.id)
+            'GET', 'groups/{}/activity_stream/summary'.format(self.id)
         )
         return response.json()
 
@@ -324,7 +309,7 @@ class Group(CanvasObject):
         warnings.warn(
             "`list_memberships` is being deprecated and will be removed in a "
             "future version. Use `get_memberships` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_memberships(**kwargs)
@@ -344,7 +329,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/{}/memberships'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_membership(self, user, membership_type):
@@ -367,8 +352,7 @@ class Group(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            'GET',
-            'groups/{}/{}/{}'.format(self.id, membership_type, user_id)
+            'GET', 'groups/{}/{}/{}'.format(self.id, membership_type, user_id)
         )
         return GroupMembership(self._requester, response.json())
 
@@ -393,7 +377,7 @@ class Group(CanvasObject):
             'POST',
             'groups/{}/memberships'.format(self.id),
             user_id=user_id,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GroupMembership(self._requester, response.json())
 
@@ -416,7 +400,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'PUT',
             'groups/{}/users/{}'.format(self.id, user_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GroupMembership(self._requester, response.json())
 
@@ -435,8 +419,7 @@ class Group(CanvasObject):
         topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
 
         response = self._requester.request(
-            'GET',
-            'groups/{}/discussion_topics/{}'.format(self.id, topic_id)
+            'GET', 'groups/{}/discussion_topics/{}'.format(self.id, topic_id)
         )
 
         response_json = response.json()
@@ -457,12 +440,13 @@ class Group(CanvasObject):
         :rtype: :class:`canvasapi.file.File`
         """
         from canvasapi.file import File
+
         file_id = obj_or_id(file, "file", (File,))
 
         response = self._requester.request(
             'GET',
             'groups/{}/files/{}'.format(self.id, file_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return File(self._requester, response.json())
 
@@ -481,8 +465,7 @@ class Group(CanvasObject):
         topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
 
         response = self._requester.request(
-            'GET',
-            'groups/{}/discussion_topics/{}/view'.format(self.id, topic_id),
+            'GET', 'groups/{}/discussion_topics/{}/view'.format(self.id, topic_id)
         )
         return response.json()
 
@@ -503,7 +486,7 @@ class Group(CanvasObject):
             'GET',
             'groups/{}/discussion_topics'.format(self.id),
             {'group_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_discussion_topic(self, **kwargs):
@@ -518,7 +501,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'POST',
             'groups/{}/discussion_topics'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -550,9 +533,7 @@ class Group(CanvasObject):
             raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
-            'POST',
-            'groups/{}/discussion_topics/reorder'.format(self.id),
-            order=order
+            'POST', 'groups/{}/discussion_topics/reorder'.format(self.id), order=order
         )
 
         return response.json().get('reorder')
@@ -574,7 +555,7 @@ class Group(CanvasObject):
         warnings.warn(
             "`list_external_feeds` is being deprecated and will be removed in "
             "a future version. Use `get_external_feeds` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_external_feeds(**kwargs)
@@ -590,11 +571,12 @@ class Group(CanvasObject):
             :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
+
         return PaginatedList(
             ExternalFeed,
             self._requester,
             'GET',
-            'groups/{}/external_feeds'.format(self.id)
+            'groups/{}/external_feeds'.format(self.id),
         )
 
     def create_external_feed(self, url, **kwargs):
@@ -609,11 +591,12 @@ class Group(CanvasObject):
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
+
         response = self._requester.request(
             'POST',
             'groups/{}/external_feeds'.format(self.id),
             url=url,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return ExternalFeed(self._requester, response.json())
 
@@ -634,8 +617,7 @@ class Group(CanvasObject):
         feed_id = obj_or_id(feed, "feed", (ExternalFeed,))
 
         response = self._requester.request(
-            'DELETE',
-            'groups/{}/external_feeds/{}'.format(self.id, feed_id)
+            'DELETE', 'groups/{}/external_feeds/{}'.format(self.id, feed_id)
         )
         return ExternalFeed(self._requester, response.json())
 
@@ -656,7 +638,7 @@ class Group(CanvasObject):
         warnings.warn(
             "`list_files` is being deprecated and will be removed in a future "
             "version. Use `get_files` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_files(**kwargs)
@@ -678,7 +660,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/{}/files'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_folder(self, folder):
@@ -696,8 +678,7 @@ class Group(CanvasObject):
         folder_id = obj_or_id(folder, "folder", (Folder,))
 
         response = self._requester.request(
-            'GET',
-            'groups/{}/folders/{}'.format(self.id, folder_id)
+            'GET', 'groups/{}/folders/{}'.format(self.id, folder_id)
         )
         return Folder(self._requester, response.json())
 
@@ -719,7 +700,7 @@ class Group(CanvasObject):
         warnings.warn(
             "`list_folders` is being deprecated and will be removed in a "
             "future version. Use `get_folders` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_folders(**kwargs)
@@ -736,10 +717,7 @@ class Group(CanvasObject):
             :class:`canvasapi.folder.Folder`
         """
         return PaginatedList(
-            Folder,
-            self._requester,
-            'GET',
-            'groups/{}/folders'.format(self.id)
+            Folder, self._requester, 'GET', 'groups/{}/folders'.format(self.id)
         )
 
     def create_folder(self, name, **kwargs):
@@ -757,7 +735,7 @@ class Group(CanvasObject):
             'POST',
             'groups/{}/folders'.format(self.id),
             name=name,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Folder(self._requester, response.json())
 
@@ -779,7 +757,7 @@ class Group(CanvasObject):
         warnings.warn(
             "`list_tabs` is being deprecated and will be removed in a future "
             "version. Use `get_tabs` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_tabs(**kwargs)
@@ -801,7 +779,7 @@ class Group(CanvasObject):
             'GET',
             'groups/{}/tabs'.format(self.id),
             {'group_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_content_migration(self, migration_type, **kwargs):
@@ -828,7 +806,7 @@ class Group(CanvasObject):
         response = self._requester.request(
             'POST',
             'groups/{}/content_migrations'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -850,12 +828,14 @@ class Group(CanvasObject):
         """
         from canvasapi.content_migration import ContentMigration
 
-        migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+        migration_id = obj_or_id(
+            content_migration, "content_migration", (ContentMigration,)
+        )
 
         response = self._requester.request(
             'GET',
             'groups/{}/content_migrations/{}'.format(self.id, migration_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -881,7 +861,7 @@ class Group(CanvasObject):
             'GET',
             'groups/{}/content_migrations'.format(self.id),
             {'group_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_migration_systems(self, **kwargs):
@@ -901,7 +881,7 @@ class Group(CanvasObject):
             self._requester,
             'GET',
             'groups/{}/content_migrations/migrators'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_assignment_override(self, assignment, **kwargs):
@@ -921,8 +901,7 @@ class Group(CanvasObject):
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
         response = self._requester.request(
-            'GET',
-            'groups/{}/assignments/{}/override'.format(self.id, assignment_id)
+            'GET', 'groups/{}/assignments/{}/override'.format(self.id, assignment_id)
         )
         response_json = response.json()
         response_json.update({'course_id': self.course_id})
@@ -945,10 +924,8 @@ class Group(CanvasObject):
             ContentExport,
             self._requester,
             'GET',
-            'groups/{}/content_exports'.format(
-                self.id
-            ),
-            kwargs=combine_kwargs(**kwargs)
+            'groups/{}/content_exports'.format(self.id),
+            kwargs=combine_kwargs(**kwargs),
         )
 
     def get_content_export(self, content_export, **kwargs):
@@ -969,11 +946,8 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'groups/{}/content_exports/{}'.format(
-                self.id,
-                export_id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'groups/{}/content_exports/{}'.format(self.id, export_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return ContentExport(self._requester, response.json())
@@ -996,17 +970,14 @@ class Group(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'groups/{}/content_exports'.format(
-                self.id,
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'groups/{}/content_exports'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return ContentExport(self._requester, response.json())
 
 
 @python_2_unicode_compatible
 class GroupMembership(CanvasObject):
-
     def __str__(self):
         return "{} - {} ({})".format(self.user_id, self.group_id, self.id)
 
@@ -1023,7 +994,7 @@ class GroupMembership(CanvasObject):
         response = self._requester.request(
             'PUT',
             'groups/{}/memberships/{}'.format(self.group_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GroupMembership(self._requester, response.json())
 
@@ -1045,8 +1016,7 @@ class GroupMembership(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            'DELETE',
-            'groups/{}/users/{}'.format(self.id, user_id),
+            'DELETE', 'groups/{}/users/{}'.format(self.id, user_id)
         )
         return response.json()
 
@@ -1061,15 +1031,13 @@ class GroupMembership(CanvasObject):
         :rtype: dict
         """
         response = self._requester.request(
-            'DELETE',
-            'groups/{}/memberships/self'.format(self.id),
+            'DELETE', 'groups/{}/memberships/self'.format(self.id)
         )
         return response.json()
 
 
 @python_2_unicode_compatible
 class GroupCategory(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -1085,7 +1053,7 @@ class GroupCategory(CanvasObject):
         response = self._requester.request(
             'POST',
             'group_categories/{}/groups'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Group(self._requester, response.json())
 
@@ -1101,7 +1069,7 @@ class GroupCategory(CanvasObject):
         response = self._requester.request(
             'PUT',
             'group_categories/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GroupCategory(self._requester, response.json())
 
@@ -1115,8 +1083,7 @@ class GroupCategory(CanvasObject):
         :rtype: empty dict
         """
         response = self._requester.request(
-            'DELETE',
-            'group_categories/{}'.format(self.id)
+            'DELETE', 'group_categories/{}'.format(self.id)
         )
         return response.json()
 
@@ -1137,7 +1104,7 @@ class GroupCategory(CanvasObject):
         warnings.warn(
             "`list_groups` is being deprecated and will be removed in a "
             "future version. Use `get_groups` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_groups(**kwargs)
@@ -1153,10 +1120,7 @@ class GroupCategory(CanvasObject):
             :class:`canvasapi.group.Group`
         """
         return PaginatedList(
-            Group,
-            self._requester,
-            'GET',
-            'group_categories/{}/groups'.format(self.id)
+            Group, self._requester, 'GET', 'group_categories/{}/groups'.format(self.id)
         )
 
     def list_users(self, **kwargs):
@@ -1176,7 +1140,7 @@ class GroupCategory(CanvasObject):
         warnings.warn(
             "`list_users` is being deprecated and will be removed in a future version."
             " Use `get_users` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_users(**kwargs)
@@ -1192,12 +1156,13 @@ class GroupCategory(CanvasObject):
             :class:`canvasapi.user.User`
         """
         from canvasapi.user import User
+
         return PaginatedList(
             User,
             self._requester,
             'GET',
             'group_categories/{}/users'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def assign_members(self, sync=False):
@@ -1212,16 +1177,16 @@ class GroupCategory(CanvasObject):
         """
         from canvasapi.user import User
         from canvasapi.progress import Progress
+
         if sync:
             return PaginatedList(
                 User,
                 self._requester,
                 'POST',
-                'group_categories/{}/assign_unassigned_members'.format(self.id)
+                'group_categories/{}/assign_unassigned_members'.format(self.id),
             )
         else:
             response = self._requester.request(
-                'POST',
-                'group_categories/{}/assign_unassigned_members'.format(self.id)
+                'POST', 'group_categories/{}/assign_unassigned_members'.format(self.id)
             )
             return Progress(self._requester, response.json())

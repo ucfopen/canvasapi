@@ -9,7 +9,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class ExternalTool(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -51,8 +50,7 @@ class ExternalTool(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self.parent_type, self.parent_id)
+            'GET', '{}s/{}'.format(self.parent_type, self.parent_id)
         )
 
         if self.parent_type == 'account':
@@ -73,7 +71,9 @@ class ExternalTool(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            '{}s/{}/external_tools/{}'.format(self.parent_type, self.parent_id, self.id)
+            '{}s/{}/external_tools/{}'.format(
+                self.parent_type, self.parent_id, self.id
+            ),
         )
 
         return ExternalTool(self._requester, response.json())
@@ -91,8 +91,10 @@ class ExternalTool(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '{}s/{}/external_tools/{}'.format(self.parent_type, self.parent_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            '{}s/{}/external_tools/{}'.format(
+                self.parent_type, self.parent_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
 
@@ -115,8 +117,10 @@ class ExternalTool(CanvasObject):
         kwargs['id'] = self.id
         response = self._requester.request(
             'GET',
-            '{}s/{}/external_tools/sessionless_launch'.format(self.parent_type, self.parent_id),
-            _kwargs=combine_kwargs(**kwargs)
+            '{}s/{}/external_tools/sessionless_launch'.format(
+                self.parent_type, self.parent_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         try:
             return response.json()['url']

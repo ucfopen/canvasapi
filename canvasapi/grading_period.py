@@ -9,7 +9,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class GradingPeriod(CanvasObject):
-
     def __str__(self):
         return '{} ({})'.format(self.title, self.id)
 
@@ -39,7 +38,7 @@ class GradingPeriod(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/grading_periods/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -61,7 +60,7 @@ class GradingPeriod(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}/grading_periods/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.status_code

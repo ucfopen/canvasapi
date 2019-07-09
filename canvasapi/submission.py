@@ -11,7 +11,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Submission(CanvasObject):
-
     def __str__(self):
         return '{}-{}'.format(self.assignment_id, self.user_id)
 
@@ -35,10 +34,9 @@ class Submission(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/assignments/{}/submissions/{}/peer_reviews'.format(
-                self.course_id,
-                self.assignment_id,
-                self.id),
-            _kwargs=combine_kwargs(**kwargs)
+                self.course_id, self.assignment_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return PeerReview(self._requester, response.json())
@@ -63,10 +61,9 @@ class Submission(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}/assignments/{}/submissions/{}/peer_reviews'.format(
-                self.course_id,
-                self.assignment_id,
-                self.id),
-            _kwargs=combine_kwargs(**kwargs)
+                self.course_id, self.assignment_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PeerReview(self._requester, response.json())
 
@@ -82,11 +79,9 @@ class Submission(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/assignments/{}/submissions/{}'.format(
-                self.course_id,
-                self.assignment_id,
-                self.user_id
+                self.course_id, self.assignment_id, self.user_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update(course_id=self.course_id)
@@ -108,10 +103,8 @@ class Submission(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/assignments/{}/submissions/{}/read'.format(
-                self.course_id,
-                self.assignment_id,
-                self.user_id
-            )
+                self.course_id, self.assignment_id, self.user_id
+            ),
         )
         return response.status_code == 204
 
@@ -129,10 +122,8 @@ class Submission(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}/assignments/{}/submissions/{}/read'.format(
-                self.course_id,
-                self.assignment_id,
-                self.user_id
-            )
+                self.course_id, self.assignment_id, self.user_id
+            ),
         )
         return response.status_code == 204
 
@@ -151,9 +142,10 @@ class Submission(CanvasObject):
             PeerReview,
             self._requester,
             'GET',
-            'courses/{}/assignments/{}/submissions/{}/peer_reviews'
-            .format(self.course_id, self.assignment_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/assignments/{}/submissions/{}/peer_reviews'.format(
+                self.course_id, self.assignment_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def upload_comment(self, file, **kwargs):
@@ -173,20 +165,14 @@ class Submission(CanvasObject):
         response = Uploader(
             self._requester,
             'courses/{}/assignments/{}/submissions/{}/comments/files'.format(
-                self.course_id,
-                self.assignment_id,
-                self.user_id
+                self.course_id, self.assignment_id, self.user_id
             ),
             file,
             **kwargs
         ).start()
 
         if response[0]:
-            self.edit(
-                comment={
-                    'file_ids': [response[1]['id']]
-                }
-            )
+            self.edit(comment={'file_ids': [response[1]['id']]})
         return response
 
 

@@ -9,8 +9,15 @@ class PaginatedList(object):
     """
 
     def __init__(
-        self, content_class, requester, request_method, first_url, extra_attribs=None,
-            _root=None, **kwargs):
+        self,
+        content_class,
+        requester,
+        request_method,
+        first_url,
+        extra_attribs=None,
+        _root=None,
+        **kwargs
+    ):
 
         self._elements = list()
 
@@ -61,9 +68,7 @@ class PaginatedList(object):
 
     def _get_next_page(self):
         response = self._requester.request(
-            self._request_method,
-            self._next_url,
-            **self._next_params
+            self._request_method, self._next_url, **self._next_params
         )
         data = response.json()
         self._next_url = None
@@ -71,7 +76,9 @@ class PaginatedList(object):
         next_link = response.links.get('next')
         regex = r'{}(.*)'.format(re.escape(self._requester.base_url))
 
-        self._next_url = re.search(regex, next_link['url']).group(1) if next_link else None
+        self._next_url = (
+            re.search(regex, next_link['url']).group(1) if next_link else None
+        )
 
         self._next_params = {}
 

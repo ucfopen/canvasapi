@@ -9,7 +9,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class AppointmentGroup(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
@@ -25,7 +24,7 @@ class AppointmentGroup(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'appointment_groups/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return AppointmentGroup(self._requester, response.json())
 
@@ -51,7 +50,7 @@ class AppointmentGroup(CanvasObject):
         response = self._requester.request(
             'PUT',
             'appointment_groups/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if 'title' in response.json():

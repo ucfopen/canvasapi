@@ -13,7 +13,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestModule(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -105,10 +104,7 @@ class TestModule(unittest.TestCase):
         register_uris({'module': ['create_module_item']}, m)
 
         module_item = self.module.create_module_item(
-            module_item={
-                'type': 'Page',
-                'content_id': 1
-            }
+            module_item={'type': 'Page', 'content_id': 1}
         )
         self.assertIsInstance(module_item, ModuleItem)
         self.assertTrue(hasattr(module_item, 'course_id'))
@@ -116,15 +112,11 @@ class TestModule(unittest.TestCase):
 
     def test_create_module_item_fail1(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.module.create_module_item(
-                module_item={'content_id': 1}
-            )
+            self.module.create_module_item(module_item={'content_id': 1})
 
     def test_create_module_item_fail2(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.module.create_module_item(
-                module_item={'type': 'Page'}
-            )
+            self.module.create_module_item(module_item={'type': 'Page'})
 
     # __str__
     def test__str__(self, m):
@@ -134,14 +126,13 @@ class TestModule(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestModuleItem(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
             requires = {
                 'course': ['get_by_id', 'get_module_by_id'],
-                'module': ['get_module_item_by_id']
+                'module': ['get_module_item_by_id'],
             }
             register_uris(requires, m)
 
@@ -154,9 +145,7 @@ class TestModuleItem(unittest.TestCase):
         register_uris({'module': ['edit_module_item']}, m)
 
         title = 'New Title'
-        edited_module_item = self.module_item.edit(
-            module_item={'title': title}
-        )
+        edited_module_item = self.module_item.edit(module_item={'title': title})
 
         self.assertIsInstance(edited_module_item, ModuleItem)
         self.assertTrue(hasattr(edited_module_item, 'title'))

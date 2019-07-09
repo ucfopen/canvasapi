@@ -25,7 +25,6 @@ from tests.util import cleanup_file, register_uris
 
 @requests_mock.Mocker()
 class TestUser(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -175,8 +174,10 @@ class TestUser(unittest.TestCase):
         register_uris(
             {
                 'course': ['get_by_id'],
-                'user': ['get_user_assignments', 'get_user_assignments2']
-            }, m)
+                'user': ['get_user_assignments', 'get_user_assignments2'],
+            },
+            m,
+        )
 
         assignments_by_id = self.user.get_assignments(1)
         assignment_list = [assignment for assignment in assignments_by_id]
@@ -263,11 +264,10 @@ class TestUser(unittest.TestCase):
     def test_create_communication_channels(self, m):
         register_uris({'user': ['create_comm_channel']}, m)
 
-        channel = {
-            "type": "email",
-            "address": "username@example.org"
-        }
-        new_channel = self.user.create_communication_channel(communication_channel=channel)
+        channel = {"type": "email", "address": "username@example.org"}
+        new_channel = self.user.create_communication_channel(
+            communication_channel=channel
+        )
 
         self.assertIsInstance(new_channel, CommunicationChannel)
 
@@ -443,8 +443,9 @@ class TestUser(unittest.TestCase):
         self.assertTrue(hasattr(content_migration, 'migration_type'))
 
     def test_create_content_migration_migrator(self, m):
-        register_uris({'user': ['create_content_migration',
-                                'get_migration_systems_multiple']}, m)
+        register_uris(
+            {'user': ['create_content_migration', 'get_migration_systems_multiple']}, m
+        )
 
         migrators = self.user.get_migration_systems()
         content_migration = self.user.create_content_migration(migrators[0])
@@ -532,14 +533,20 @@ class TestUser(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestUserDisplay(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({
-                'course': ['get_by_id', 'get_assignment_by_id', 'list_gradeable_students']
-            }, m)
+            register_uris(
+                {
+                    'course': [
+                        'get_by_id',
+                        'get_assignment_by_id',
+                        'list_gradeable_students',
+                    ]
+                },
+                m,
+            )
 
             self.course = self.canvas.get_course(1)
             self.assignment = self.course.get_assignment(1)

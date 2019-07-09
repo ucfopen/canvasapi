@@ -31,7 +31,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestCanvas(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -46,8 +45,10 @@ class TestCanvas(unittest.TestCase):
             Canvas(settings.BASE_URL_AS_HTTP, settings.API_KEY)
             self.assertRaises(
                 UserWarning,
-                msg=('Canvas may respond unexpectedly when making requests to HTTP'
-                     'URLs. If possible, please use HTTPS.')
+                msg=(
+                    'Canvas may respond unexpectedly when making requests to HTTP'
+                    'URLs. If possible, please use HTTPS.'
+                ),
             )
 
     def test_init_warns_when_url_is_blank(self, m):
@@ -55,7 +56,7 @@ class TestCanvas(unittest.TestCase):
             Canvas(settings.BASE_URL_AS_BLANK, settings.API_KEY)
             self.assertRaises(
                 UserWarning,
-                msg='Canvas needs a valid URL, please provide a non-blank `base_url`.'
+                msg='Canvas needs a valid URL, please provide a non-blank `base_url`.',
             )
 
     def test_init_warns_when_url_is_invalid(self, m):
@@ -63,8 +64,10 @@ class TestCanvas(unittest.TestCase):
             Canvas(settings.BASE_URL_AS_INVALID, settings.API_KEY)
             self.assertRaises(
                 UserWarning,
-                msg=('An invalid `base_url` for the Canvas API Instance was used.'
-                     'Please provide a valid HTTP or HTTPS URL if possible.')
+                msg=(
+                    'An invalid `base_url` for the Canvas API Instance was used.'
+                    'Please provide a valid HTTP or HTTPS URL if possible.'
+                ),
             )
 
     # create_account()
@@ -73,9 +76,7 @@ class TestCanvas(unittest.TestCase):
 
         name = 'Newly Created Account'
 
-        account_dict = {
-            'name': name
-        }
+        account_dict = {'name': name}
         account = self.canvas.create_account(account=account_dict)
 
         self.assertIsInstance(account, Account)
@@ -364,8 +365,7 @@ class TestCanvas(unittest.TestCase):
         body = 'Hello, World!'
 
         conversations = self.canvas.create_conversation(
-            recipients=recipients,
-            body=body
+            recipients=recipients, body=body
         )
         self.assertIsInstance(conversations, list)
         self.assertEqual(len(conversations), 1)
@@ -380,8 +380,7 @@ class TestCanvas(unittest.TestCase):
         body = 'Hey guys!'
 
         conversations = self.canvas.create_conversation(
-            recipients=recipients,
-            body=body
+            recipients=recipients, body=body
         )
         self.assertIsInstance(conversations, list)
         self.assertEqual(len(conversations), 2)
@@ -408,9 +407,7 @@ class TestCanvas(unittest.TestCase):
 
     # get_conversations()
     def test_get_conversations(self, m):
-        requires = {
-            'conversation': ['get_conversations', 'get_conversations_2']
-        }
+        requires = {'conversation': ['get_conversations', 'get_conversations_2']}
         register_uris(requires, m)
 
         convos = self.canvas.get_conversations()
@@ -449,8 +446,7 @@ class TestCanvas(unittest.TestCase):
         conversation_ids = [1, 2]
         this_event = "mark_as_read"
         result = self.canvas.conversations_batch_update(
-            event=this_event,
-            conversation_ids=conversation_ids
+            event=this_event, conversation_ids=conversation_ids
         )
         self.assertIsInstance(result, Progress)
 
@@ -458,8 +454,7 @@ class TestCanvas(unittest.TestCase):
         conversation_ids = [1, 2]
         this_event = "this doesn't work"
         result = self.canvas.conversations_batch_update(
-            event=this_event,
-            conversation_ids=conversation_ids
+            event=this_event, conversation_ids=conversation_ids
         )
         self.assertIsInstance(result, ValueError)
 
@@ -467,8 +462,7 @@ class TestCanvas(unittest.TestCase):
         conversation_ids = [None] * 501
         this_event = "mark_as_read"
         result = self.canvas.conversations_batch_update(
-            event=this_event,
-            conversation_ids=conversation_ids
+            event=this_event, conversation_ids=conversation_ids
         )
         self.assertIsInstance(result, ValueError)
 
@@ -476,9 +470,7 @@ class TestCanvas(unittest.TestCase):
     def test_create_calendar_event(self, m):
         register_uris({'calendar_event': ['create_calendar_event']}, m)
 
-        cal_event = {
-            "context_code": "course_123"
-        }
+        cal_event = {"context_code": "course_123"}
         evnt = self.canvas.create_calendar_event(calendar_event=cal_event)
 
         self.assertIsInstance(evnt, CalendarEvent)
@@ -529,16 +521,18 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(calendar_event_by_id, CalendarEvent)
         self.assertEqual(calendar_event_by_id.title, "Test Reservation")
 
-        calendar_event_by_obj = self.canvas.reserve_time_slot(calendar_event=calendar_event_by_id)
+        calendar_event_by_obj = self.canvas.reserve_time_slot(
+            calendar_event=calendar_event_by_id
+        )
         self.assertIsInstance(calendar_event_by_obj, CalendarEvent)
         self.assertEqual(calendar_event_by_obj.title, "Test Reservation")
 
     def test_reserve_time_slot_by_participant_id(self, m):
-        register_uris({
-            'calendar_event': ['reserve_time_slot_participant_id']
-        }, m)
+        register_uris({'calendar_event': ['reserve_time_slot_participant_id']}, m)
 
-        cal_event = self.canvas.reserve_time_slot(calendar_event=567, participant_id=777)
+        cal_event = self.canvas.reserve_time_slot(
+            calendar_event=567, participant_id=777
+        )
         self.assertIsInstance(cal_event, CalendarEvent)
         self.assertEqual(cal_event.title, "Test Reservation")
         self.assertEqual(cal_event.user, 777)
@@ -571,7 +565,9 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(appointment_group_by_id, AppointmentGroup)
         self.assertEqual(appointment_group_by_id.title, "Test Group 3")
 
-        appointment_group_by_obj = self.canvas.get_appointment_group(appointment_group_by_id)
+        appointment_group_by_obj = self.canvas.get_appointment_group(
+            appointment_group_by_id
+        )
         self.assertIsInstance(appointment_group_by_obj, AppointmentGroup)
         self.assertEqual(appointment_group_by_obj.title, "Test Group 3")
 
@@ -579,10 +575,9 @@ class TestCanvas(unittest.TestCase):
     def test_create_appointment_group(self, m):
         register_uris({'appointment_group': ['create_appointment_group']}, m)
 
-        evnt = self.canvas.create_appointment_group({
-            "context_codes": ["course_123"],
-            "title": "Test Group"
-        })
+        evnt = self.canvas.create_appointment_group(
+            {"context_codes": ["course_123"], "title": "Test Group"}
+        )
 
         self.assertIsInstance(evnt, AppointmentGroup)
         self.assertEqual(evnt.context_codes[0], "course_123")
@@ -590,9 +585,7 @@ class TestCanvas(unittest.TestCase):
 
     def test_create_appointment_group_fail_on_context_codes(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.canvas.create_appointment_group({
-                "title": "Test Group"
-            })
+            self.canvas.create_appointment_group({"title": "Test Group"})
 
     def test_create_appointment_group_fail_on_title(self, m):
         with self.assertRaises(RequiredFieldMissing):
@@ -604,9 +597,11 @@ class TestCanvas(unittest.TestCase):
             {
                 'appointment_group': [
                     'get_appointment_group_222',
-                    'list_user_participants'
+                    'list_user_participants',
                 ]
-            }, m)
+            },
+            m,
+        )
 
         with warnings.catch_warnings(record=True) as warning_list:
             users_by_id = self.canvas.list_user_participants(222)
@@ -631,9 +626,11 @@ class TestCanvas(unittest.TestCase):
             {
                 'appointment_group': [
                     'get_appointment_group_222',
-                    'list_user_participants'
+                    'list_user_participants',
                 ]
-            }, m)
+            },
+            m,
+        )
 
         users_by_id = self.canvas.get_user_participants(222)
         users_get_by_id = [user for user in users_by_id]
@@ -650,9 +647,11 @@ class TestCanvas(unittest.TestCase):
             {
                 'appointment_group': [
                     'get_appointment_group_222',
-                    'list_group_participants'
+                    'list_group_participants',
                 ]
-            }, m)
+            },
+            m,
+        )
 
         with warnings.catch_warnings(record=True) as warning_list:
             groups_by_id = self.canvas.list_group_participants(222)
@@ -664,7 +663,9 @@ class TestCanvas(unittest.TestCase):
 
         with warnings.catch_warnings(record=True) as warning_list:
             appointment_group_for_obj = self.canvas.get_appointment_group(222)
-            groups_by_obj = self.canvas.list_group_participants(appointment_group_for_obj)
+            groups_by_obj = self.canvas.list_group_participants(
+                appointment_group_for_obj
+            )
             groups_list_by_obj = [group for group in groups_by_obj]
             self.assertEqual(len(groups_list_by_obj), 2)
 
@@ -677,9 +678,11 @@ class TestCanvas(unittest.TestCase):
             {
                 'appointment_group': [
                     'get_appointment_group_222',
-                    'list_group_participants'
+                    'list_group_participants',
                 ]
-            }, m)
+            },
+            m,
+        )
 
         groups_by_id = self.canvas.get_group_participants(222)
         groups_get_by_id = [group for group in groups_by_id]

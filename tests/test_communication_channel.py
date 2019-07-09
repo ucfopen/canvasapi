@@ -12,7 +12,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestCommunicationChannel(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -91,8 +90,7 @@ class TestCommunicationChannel(unittest.TestCase):
         frequency = 'daily'
 
         updated_pref = self.comm_chan.update_preference(
-            notification=notification,
-            frequency=frequency
+            notification=notification, frequency=frequency
         )
 
         self.assertIsInstance(updated_pref, NotificationPreference)
@@ -102,15 +100,12 @@ class TestCommunicationChannel(unittest.TestCase):
 
     # update_preferences_by_category()
     def test_update_preferences_by_category(self, m):
-        register_uris({
-            'communication_channel': ['update_preferences_by_category']
-        }, m)
+        register_uris({'communication_channel': ['update_preferences_by_category']}, m)
         category = 'course_content'
         frequency = 'daily'
 
         updated_prefs = self.comm_chan.update_preferences_by_catagory(
-            category=category,
-            frequency=frequency
+            category=category, frequency=frequency
         )
 
         self.assertEqual(len(updated_prefs), 3)
@@ -123,12 +118,8 @@ class TestCommunicationChannel(unittest.TestCase):
         register_uris({'communication_channel': ['update_multiple_preferences']}, m)
 
         notification_preferences = {
-            "assignment_due_date_changed": {
-                "frequency": "daily"
-            },
-            "assignment_changed": {
-                "frequency": "daily"
-            }
+            "assignment_due_date_changed": {"frequency": "daily"},
+            "assignment_changed": {"frequency": "daily"},
         }
 
         updated_prefs = self.comm_chan.update_multiple_preferences(
@@ -161,13 +152,12 @@ class TestCommunicationChannel(unittest.TestCase):
 
     # delete()
     def test_delete(self, m):
-        register_uris({
-            'communication_channel': ['create_comm_channel', 'delete_comm_channel']
-        }, m)
+        register_uris(
+            {'communication_channel': ['create_comm_channel', 'delete_comm_channel']}, m
+        )
 
-        channel = {
-            "type": "email",
-            "address": "username@example.org"
-        }
-        new_channel = self.user.create_communication_channel(communication_channel=channel)
+        channel = {"type": "email", "address": "username@example.org"}
+        new_channel = self.user.create_communication_channel(
+            communication_channel=channel
+        )
         self.assertTrue(new_channel.delete())

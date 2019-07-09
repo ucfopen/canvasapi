@@ -11,7 +11,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class CommunicationChannel(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.address, self.id)
 
@@ -34,7 +33,7 @@ class CommunicationChannel(CanvasObject):
         warnings.warn(
             "`list_preferences` is being deprecated and will be removed in a future version."
             " Use `get_preferences` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_preferences(**kwargs)
@@ -53,10 +52,9 @@ class CommunicationChannel(CanvasObject):
         response = self._requester.request(
             'GET',
             'users/{}/communication_channels/{}/notification_preferences'.format(
-                self.user_id,
-                self.id
+                self.user_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()['notification_preferences']
@@ -83,7 +81,7 @@ class CommunicationChannel(CanvasObject):
             "`list_preference_categories`"
             " is being deprecated and will be removed in a future version."
             " Use `get_preference_categories` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_preference_categories(**kwargs)
@@ -103,10 +101,9 @@ class CommunicationChannel(CanvasObject):
         response = self._requester.request(
             'GET',
             'users/{}/communication_channels/{}/notification_preference_categories'.format(
-                self.user_id,
-                self.id
+                self.user_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()['categories']
 
@@ -127,10 +124,8 @@ class CommunicationChannel(CanvasObject):
         response = self._requester.request(
             'GET',
             'users/{}/communication_channels/{}/notification_preferences/{}'.format(
-                self.user_id,
-                self.id,
-                notification
-            )
+                self.user_id, self.id, notification
+            ),
         )
         data = response.json()['notification_preferences'][0]
         return NotificationPreference(self._requester, data)
@@ -156,10 +151,9 @@ class CommunicationChannel(CanvasObject):
         response = self._requester.request(
             'PUT',
             'users/self/communication_channels/{}/notification_preferences/{}'.format(
-                self.id,
-                notification
+                self.id, notification
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         data = response.json()['notification_preferences'][0]
         return NotificationPreference(self._requester, data)
@@ -187,10 +181,9 @@ class CommunicationChannel(CanvasObject):
         response = self._requester.request(
             'PUT',
             'users/self/communication_channels/{}/notification_preference_categories/{}'.format(
-                self.id,
-                category
+                self.id, category
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()['notification_preferences']
 
@@ -225,7 +218,7 @@ class CommunicationChannel(CanvasObject):
                 'users/self/communication_channels/{}/notification_preferences'.format(
                     self.id
                 ),
-                _kwargs=combine_kwargs(**kwargs)
+                _kwargs=combine_kwargs(**kwargs),
             )
             return response.json()['notification_preferences']
         return False
@@ -242,8 +235,7 @@ class CommunicationChannel(CanvasObject):
         """
 
         response = self._requester.request(
-            'DELETE',
-            'users/{}/communication_channels/{}'.format(self.user_id, self.id)
+            'DELETE', 'users/{}/communication_channels/{}'.format(self.user_id, self.id)
         )
 
         return response.json().get('workflow_state') == 'deleted'

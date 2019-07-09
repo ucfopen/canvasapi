@@ -38,27 +38,27 @@ class Canvas(object):
             warnings.warn(
                 "`base_url` no longer requires an API version be specified. "
                 "Rewriting `base_url` to {}".format(new_url),
-                DeprecationWarning
+                DeprecationWarning,
             )
 
         if 'http://' in base_url:
             warnings.warn(
                 "Canvas may respond unexpectedly when making requests to HTTP "
                 "URLs. If possible, please use HTTPS.",
-                UserWarning
+                UserWarning,
             )
 
         if not base_url.strip():
             warnings.warn(
                 "Canvas needs a valid URL, please provide a non-blank `base_url`.",
-                UserWarning
+                UserWarning,
             )
 
         if '://' not in base_url:
             warnings.warn(
                 "An invalid `base_url` for the Canvas API Instance was used. "
                 "Please provide a valid HTTP or HTTPS URL if possible.",
-                UserWarning
+                UserWarning,
             )
 
         base_url = new_url + '/api/v1/'
@@ -75,9 +75,7 @@ class Canvas(object):
         :rtype: :class:`canvasapi.account.Account`
         """
         response = self.__requester.request(
-            'POST',
-            'accounts',
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'accounts', _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self.__requester, response.json())
 
@@ -104,9 +102,7 @@ class Canvas(object):
             uri_str = 'accounts/{}'
 
         response = self.__requester.request(
-            'GET',
-            uri_str.format(account_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', uri_str.format(account_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self.__requester, response.json())
 
@@ -129,7 +125,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'accounts',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_course_accounts(self):
@@ -146,12 +142,7 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.Account`
         """
-        return PaginatedList(
-            Account,
-            self.__requester,
-            'GET',
-            'course_accounts',
-        )
+        return PaginatedList(Account, self.__requester, 'GET', 'course_accounts')
 
     def get_course(self, course, use_sis_id=False, **kwargs):
         """
@@ -176,9 +167,7 @@ class Canvas(object):
             uri_str = 'courses/{}'
 
         response = self.__requester.request(
-            'GET',
-            uri_str.format(course_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', uri_str.format(course_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Course(self.__requester, response.json())
 
@@ -209,10 +198,7 @@ class Canvas(object):
             user_id = obj_or_id(user, "user", (User,))
             uri = 'users/{}'.format(user_id)
 
-        response = self.__requester.request(
-            'GET',
-            uri
-        )
+        response = self.__requester.request('GET', uri)
         return User(self.__requester, response.json())
 
     def get_current_user(self):
@@ -229,11 +215,7 @@ class Canvas(object):
             :class:`canvasapi.course.Course`
         """
         return PaginatedList(
-            Course,
-            self.__requester,
-            'GET',
-            'courses',
-            _kwargs=combine_kwargs(**kwargs)
+            Course, self.__requester, 'GET', 'courses', _kwargs=combine_kwargs(**kwargs)
         )
 
     def get_activity_stream_summary(self):
@@ -245,10 +227,7 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request(
-            'GET',
-            'users/self/activity_stream/summary'
-        )
+        response = self.__requester.request('GET', 'users/self/activity_stream/summary')
         return response.json()
 
     def get_todo_items(self):
@@ -260,10 +239,7 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request(
-            'GET',
-            'users/self/todo'
-        )
+        response = self.__requester.request('GET', 'users/self/todo')
         return response.json()
 
     def get_upcoming_events(self):
@@ -276,10 +252,7 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request(
-            'GET',
-            'users/self/upcoming_events'
-        )
+        response = self.__requester.request('GET', 'users/self/upcoming_events')
         return response.json()
 
     def get_course_nicknames(self):
@@ -295,10 +268,7 @@ class Canvas(object):
         from canvasapi.course import CourseNickname
 
         return PaginatedList(
-            CourseNickname,
-            self.__requester,
-            'GET',
-            'users/self/course_nicknames'
+            CourseNickname, self.__requester, 'GET', 'users/self/course_nicknames'
         )
 
     def get_course_nickname(self, course):
@@ -318,8 +288,7 @@ class Canvas(object):
         course_id = obj_or_id(course, "course", (Course,))
 
         response = self.__requester.request(
-            'GET',
-            'users/self/course_nicknames/{}'.format(course_id)
+            'GET', 'users/self/course_nicknames/{}'.format(course_id)
         )
         return CourseNickname(self.__requester, response.json())
 
@@ -346,9 +315,7 @@ class Canvas(object):
             uri_str = 'sections/{}'
 
         response = self.__requester.request(
-            'GET',
-            uri_str.format(section_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', uri_str.format(section_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Section(self.__requester, response.json())
 
@@ -373,9 +340,7 @@ class Canvas(object):
         course_id = obj_or_id(course, "course", (Course,))
 
         response = self.__requester.request(
-            'PUT',
-            'users/self/course_nicknames/{}'.format(course_id),
-            nickname=nickname
+            'PUT', 'users/self/course_nicknames/{}'.format(course_id), nickname=nickname
         )
         return CourseNickname(self.__requester, response.json())
 
@@ -391,10 +356,7 @@ class Canvas(object):
         :rtype: bool
         """
 
-        response = self.__requester.request(
-            'DELETE',
-            'users/self/course_nicknames'
-        )
+        response = self.__requester.request('DELETE', 'users/self/course_nicknames')
         return response.json().get('message') == 'OK'
 
     def search_accounts(self, **kwargs):
@@ -408,9 +370,7 @@ class Canvas(object):
         :rtype: dict
         """
         response = self.__requester.request(
-            'GET',
-            'accounts/search',
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', 'accounts/search', _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
 
@@ -424,9 +384,7 @@ class Canvas(object):
         :rtype: :class:`canvasapi.group.Group`
         """
         response = self.__requester.request(
-            'POST',
-            'groups',
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'groups', _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
 
@@ -456,9 +414,7 @@ class Canvas(object):
             uri_str = 'groups/{}'
 
         response = self.__requester.request(
-            'GET',
-            uri_str.format(group_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', uri_str.format(group_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
 
@@ -477,8 +433,7 @@ class Canvas(object):
         category_id = obj_or_id(category, "category", (GroupCategory,))
 
         response = self.__requester.request(
-            'GET',
-            'group_categories/{}'.format(category_id)
+            'GET', 'group_categories/{}'.format(category_id)
         )
         return GroupCategory(self.__requester, response.json())
 
@@ -504,9 +459,7 @@ class Canvas(object):
         kwargs['body'] = body
 
         response = self.__requester.request(
-            'POST',
-            'conversations',
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'conversations', _kwargs=combine_kwargs(**kwargs)
         )
         return [Conversation(self.__requester, convo) for convo in response.json()]
 
@@ -529,7 +482,7 @@ class Canvas(object):
         response = self.__requester.request(
             'GET',
             'conversations/{}'.format(conversation_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Conversation(self.__requester, response.json())
 
@@ -550,7 +503,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'conversations',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def conversations_mark_all_as_read(self):
@@ -562,10 +515,7 @@ class Canvas(object):
 
         :rtype: `bool`
         """
-        response = self.__requester.request(
-            'POST',
-            'conversations/mark_all_as_read'
-        )
+        response = self.__requester.request('POST', 'conversations/mark_all_as_read')
         return response.json() == {}
 
     def conversations_unread_count(self):
@@ -578,10 +528,7 @@ class Canvas(object):
         :returns: simple object with unread_count, example: {'unread_count': '7'}
         :rtype: `dict`
         """
-        response = self.__requester.request(
-            'GET',
-            'conversations/unread_count'
-        )
+        response = self.__requester.request('GET', 'conversations/unread_count')
 
         return response.json()
 
@@ -598,10 +545,7 @@ class Canvas(object):
         :rtype: `dict`
         """
 
-        response = self.__requester.request(
-            'GET',
-            'conversations/batches'
-        )
+        response = self.__requester.request('GET', 'conversations/batches')
 
         return response.json()
 
@@ -626,15 +570,14 @@ class Canvas(object):
             'star',
             'unstar',
             'archive',
-            'destroy'
+            'destroy',
         ]
 
         try:
             if event not in ALLOWED_EVENTS:
                 raise ValueError(
                     '{} is not a valid action. Please use one of the following: {}'.format(
-                        event,
-                        ','.join(ALLOWED_EVENTS)
+                        event, ','.join(ALLOWED_EVENTS)
                     )
                 )
 
@@ -678,9 +621,7 @@ class Canvas(object):
             )
 
         response = self.__requester.request(
-            'POST',
-            'calendar_events',
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'calendar_events', _kwargs=combine_kwargs(**kwargs)
         )
 
         return CalendarEvent(self.__requester, response.json())
@@ -702,7 +643,7 @@ class Canvas(object):
         warnings.warn(
             "`list_calendar_events` is being deprecated and will be removed "
             "in a future version. Use `get_calendar_events` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_calendar_events(**kwargs)
@@ -724,7 +665,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'calendar_events',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_calendar_event(self, calendar_event):
@@ -741,11 +682,12 @@ class Canvas(object):
         """
         from canvasapi.calendar_event import CalendarEvent
 
-        calendar_event_id = obj_or_id(calendar_event, "calendar_event", (CalendarEvent,))
+        calendar_event_id = obj_or_id(
+            calendar_event, "calendar_event", (CalendarEvent,)
+        )
 
         response = self.__requester.request(
-            'GET',
-            'calendar_events/{}'.format(calendar_event_id)
+            'GET', 'calendar_events/{}'.format(calendar_event_id)
         )
         return CalendarEvent(self.__requester, response.json())
 
@@ -766,7 +708,9 @@ class Canvas(object):
         """
         from canvasapi.calendar_event import CalendarEvent
 
-        calendar_event_id = obj_or_id(calendar_event, "calendar_event", (CalendarEvent,))
+        calendar_event_id = obj_or_id(
+            calendar_event, "calendar_event", (CalendarEvent,)
+        )
 
         if participant_id:
             uri = 'calendar_events/{}/reservations/{}'.format(
@@ -776,9 +720,7 @@ class Canvas(object):
             uri = 'calendar_events/{}/reservations'.format(calendar_event_id)
 
         response = self.__requester.request(
-            'POST',
-            uri,
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', uri, _kwargs=combine_kwargs(**kwargs)
         )
         return CalendarEvent(self.__requester, response.json())
 
@@ -799,7 +741,7 @@ class Canvas(object):
         warnings.warn(
             "`list_appointment_groups` is being deprecated and will be removed"
             " in a future version. Use `get_appointment_groups` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_appointment_groups(**kwargs)
@@ -821,7 +763,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'appointment_groups',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_appointment_group(self, appointment_group):
@@ -843,8 +785,7 @@ class Canvas(object):
         )
 
         response = self.__requester.request(
-            'GET',
-            'appointment_groups/{}'.format(appointment_group_id)
+            'GET', 'appointment_groups/{}'.format(appointment_group_id)
         )
         return AppointmentGroup(self.__requester, response.json())
 
@@ -864,15 +805,15 @@ class Canvas(object):
         from canvasapi.appointment_group import AppointmentGroup
 
         if (
-                isinstance(appointment_group, dict) and
-                'context_codes' in appointment_group and
-                'title' in appointment_group
+            isinstance(appointment_group, dict)
+            and 'context_codes' in appointment_group
+            and 'title' in appointment_group
         ):
             kwargs['appointment_group'] = appointment_group
 
         elif (
-            isinstance(appointment_group, dict) and
-            'context_codes' not in appointment_group
+            isinstance(appointment_group, dict)
+            and 'context_codes' not in appointment_group
         ):
             raise RequiredFieldMissing(
                 "Dictionary with key 'context_codes' is missing."
@@ -882,9 +823,7 @@ class Canvas(object):
             raise RequiredFieldMissing("Dictionary with key 'title' is missing.")
 
         response = self.__requester.request(
-            'POST',
-            'appointment_groups',
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'appointment_groups', _kwargs=combine_kwargs(**kwargs)
         )
 
         return AppointmentGroup(self.__requester, response.json())
@@ -908,7 +847,7 @@ class Canvas(object):
         warnings.warn(
             "`list_user_participants` is being deprecated and will be removed in a future version."
             " Use `get_user_participants` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_user_participants(appointment_group, **kwargs)
@@ -937,7 +876,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'appointment_groups/{}/users'.format(appointment_group_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_group_participants(self, appointment_group, **kwargs):
@@ -959,7 +898,7 @@ class Canvas(object):
         warnings.warn(
             "`list_group_participants` is being deprecated and will be removed "
             "in a future version. Use `get_group_participants` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_group_participants(appointment_group, **kwargs)
@@ -988,7 +927,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'appointment_groups/{}/groups'.format(appointment_group_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_file(self, file, **kwargs):
@@ -1006,9 +945,7 @@ class Canvas(object):
         file_id = obj_or_id(file, "file", (File,))
 
         response = self.__requester.request(
-            'GET',
-            'files/{}'.format(file_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', 'files/{}'.format(file_id), _kwargs=combine_kwargs(**kwargs)
         )
         return File(self.__requester, response.json())
 
@@ -1026,10 +963,7 @@ class Canvas(object):
         """
         folder_id = obj_or_id(folder, "folder", (Folder,))
 
-        response = self.__requester.request(
-            'GET',
-            'folders/{}'.format(folder_id)
-        )
+        response = self.__requester.request('GET', 'folders/{}'.format(folder_id))
         return Folder(self.__requester, response.json())
 
     def search_recipients(self, **kwargs):
@@ -1047,9 +981,7 @@ class Canvas(object):
             kwargs['search'] = ' '
 
         response = self.__requester.request(
-            'GET',
-            'search/recipients',
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', 'search/recipients', _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
 
@@ -1064,9 +996,7 @@ class Canvas(object):
         :rtype: `list`
         """
         response = self.__requester.request(
-            'GET',
-            'search/all_courses',
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', 'search/all_courses', _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
 
@@ -1086,10 +1016,7 @@ class Canvas(object):
         from canvasapi.outcome import Outcome
 
         outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
-        response = self.__requester.request(
-            'GET',
-            'outcomes/{}'.format(outcome_id)
-        )
+        response = self.__requester.request('GET', 'outcomes/{}'.format(outcome_id))
         return Outcome(self.__requester, response.json())
 
     def get_root_outcome_group(self):
@@ -1104,10 +1031,7 @@ class Canvas(object):
         """
         from canvasapi.outcome import OutcomeGroup
 
-        response = self.__requester.request(
-            'GET',
-            'global/root_outcome_group'
-        )
+        response = self.__requester.request('GET', 'global/root_outcome_group')
         return OutcomeGroup(self.__requester, response.json())
 
     def get_outcome_group(self, group):
@@ -1128,8 +1052,7 @@ class Canvas(object):
         outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
 
         response = self.__requester.request(
-            'GET',
-            'global/outcome_groups/{}'.format(outcome_group_id)
+            'GET', 'global/outcome_groups/{}'.format(outcome_group_id)
         )
 
         return OutcomeGroup(self.__requester, response.json())
@@ -1152,9 +1075,7 @@ class Canvas(object):
         progress_id = obj_or_id(progress, "progress", (Progress,))
 
         response = self.__requester.request(
-            'GET',
-            'progress/{}'.format(progress_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', 'progress/{}'.format(progress_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Progress(self.__requester, response.json())
 
@@ -1169,12 +1090,13 @@ class Canvas(object):
                 :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         from canvasapi.discussion_topic import DiscussionTopic
+
         return PaginatedList(
             DiscussionTopic,
             self.__requester,
             'GET',
             'announcements',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_polls(self, **kwargs):
@@ -1195,7 +1117,7 @@ class Canvas(object):
             'GET',
             'polls',
             _root='polls',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_poll(self, poll, **kwargs):
@@ -1214,9 +1136,7 @@ class Canvas(object):
         poll_id = obj_or_id(poll, "poll", (Poll,))
 
         response = self.__requester.request(
-            'GET',
-            'polls/{}'.format(poll_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', 'polls/{}'.format(poll_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Poll(self.__requester, response.json()['polls'][0])
 
@@ -1233,7 +1153,11 @@ class Canvas(object):
         """
         from canvasapi.poll import Poll
 
-        if isinstance(poll, list) and isinstance(poll[0], dict) and 'question' in poll[0]:
+        if (
+            isinstance(poll, list)
+            and isinstance(poll[0], dict)
+            and 'question' in poll[0]
+        ):
             kwargs['poll'] = poll
         else:
             raise RequiredFieldMissing(
@@ -1241,9 +1165,7 @@ class Canvas(object):
             )
 
         response = self.__requester.request(
-            'POST',
-            'polls',
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'polls', _kwargs=combine_kwargs(**kwargs)
         )
         return Poll(self.__requester, response.json()['polls'][0])
 
@@ -1264,7 +1186,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'planner_notes',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_planner_note(self, planner_note, **kwargs):
@@ -1290,10 +1212,8 @@ class Canvas(object):
 
         response = self.__requester.request(
             'GET',
-            'planner_notes/{}'.format(
-                planner_note_id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'planner_notes/{}'.format(planner_note_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return PlannerNote(self.__requester, response.json())
@@ -1310,9 +1230,7 @@ class Canvas(object):
         from canvasapi.planner import PlannerNote
 
         response = self.__requester.request(
-            'POST',
-            'planner_notes',
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'planner_notes', _kwargs=combine_kwargs(**kwargs)
         )
         return PlannerNote(self.__requester, response.json())
 
@@ -1333,7 +1251,7 @@ class Canvas(object):
             self.__requester,
             'GET',
             'planner/overrides',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_planner_override(self, planner_override, **kwargs):
@@ -1350,11 +1268,11 @@ class Canvas(object):
         """
         from canvasapi.planner import PlannerOverride
 
-        if isinstance(planner_override, int) or isinstance(planner_override, PlannerOverride):
+        if isinstance(planner_override, int) or isinstance(
+            planner_override, PlannerOverride
+        ):
             planner_override_id = obj_or_id(
-                planner_override,
-                "planner_override",
-                (PlannerOverride,)
+                planner_override, "planner_override", (PlannerOverride,)
             )
         else:
             raise RequiredFieldMissing(
@@ -1363,10 +1281,8 @@ class Canvas(object):
 
         response = self.__requester.request(
             'GET',
-            'planner/overrides/{}'.format(
-                planner_override_id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'planner/overrides/{}'.format(planner_override_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return PlannerOverride(self.__requester, response.json())
@@ -1392,20 +1308,14 @@ class Canvas(object):
         if isinstance(plannable_type, text_type):
             kwargs['plannable_type'] = plannable_type
         else:
-            raise RequiredFieldMissing(
-                "plannable_type is required as a str."
-            )
+            raise RequiredFieldMissing("plannable_type is required as a str.")
         if isinstance(plannable_id, integer_types):
             kwargs['plannable_id'] = plannable_id
         else:
-            raise RequiredFieldMissing(
-                "plannable_id is required as an int."
-            )
+            raise RequiredFieldMissing("plannable_id is required as an int.")
 
         response = self.__requester.request(
-            'POST',
-            'planner/overrides',
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'planner/overrides', _kwargs=combine_kwargs(**kwargs)
         )
         return PlannerOverride(self.__requester, response.json())
 
@@ -1426,5 +1336,5 @@ class Canvas(object):
             'GET',
             'epub_exports',
             _root="courses",
-            kwargs=combine_kwargs(**kwargs)
+            kwargs=combine_kwargs(**kwargs),
         )

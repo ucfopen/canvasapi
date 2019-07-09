@@ -7,6 +7,5 @@ from canvasapi.canvas_object import CanvasObject
 
 @python_2_unicode_compatible
 class Rubric(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.id)

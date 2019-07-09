@@ -13,7 +13,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Quiz(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
@@ -30,7 +29,7 @@ class Quiz(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/quizzes/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         quiz_json = response.json()
         quiz_json.update({'course_id': self.course_id})
@@ -49,7 +48,7 @@ class Quiz(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}/quizzes/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         quiz_json = response.json()
         quiz_json.update({'course_id': self.course_id})
@@ -72,7 +71,7 @@ class Quiz(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.id, id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -104,7 +103,12 @@ class Quiz(CanvasObject):
         if not isinstance(quiz_groups[0], dict):
             raise ValueError("Param `quiz_groups must contain a dictionary")
 
-        param_list = ['name', 'pick_count', 'question_points', 'assessment_question_bank_id']
+        param_list = [
+            'name',
+            'pick_count',
+            'question_points',
+            'assessment_question_bank_id',
+        ]
         if not any(param in quiz_groups[0] for param in param_list):
             raise RequiredFieldMissing("quiz_groups must contain at least 1 parameter.")
 
@@ -113,7 +117,7 @@ class Quiz(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/quizzes/{}/groups'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -134,7 +138,7 @@ class Quiz(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/quizzes/{}/questions'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update({'course_id': self.course_id})
@@ -158,11 +162,9 @@ class Quiz(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/quizzes/{}/questions/{}'.format(
-                self.course_id,
-                self.id,
-                question_id
+                self.course_id, self.id, question_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update({'course_id': self.course_id})
@@ -185,7 +187,7 @@ class Quiz(CanvasObject):
             'GET',
             'courses/{}/quizzes/{}/questions'.format(self.course_id, self.id),
             {'course_id': self.course_id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def set_extensions(self, quiz_extensions, **kwargs):
@@ -235,10 +237,12 @@ class Quiz(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/quizzes/{}/extensions'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         extension_list = response.json()['quiz_extensions']
-        return [QuizExtension(self._requester, extension) for extension in extension_list]
+        return [
+            QuizExtension(self._requester, extension) for extension in extension_list
+        ]
 
     def get_all_quiz_submissions(self, **kwargs):
         """
@@ -256,7 +260,7 @@ class Quiz(CanvasObject):
         warnings.warn(
             "`get_all_quiz_submissions` is being deprecated and will be removed in a "
             "future version. Use `get_submissions` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_submissions(**kwargs)
@@ -275,12 +279,9 @@ class Quiz(CanvasObject):
             QuizSubmission,
             self._requester,
             'GET',
-            'courses/{}/quizzes/{}/submissions'.format(
-                self.course_id,
-                self.id
-            ),
+            'courses/{}/quizzes/{}/submissions'.format(self.course_id, self.id),
             _root='quiz_submissions',
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_quiz_submission(self, quiz_submission, **kwargs):
@@ -295,16 +296,16 @@ class Quiz(CanvasObject):
 
         :rtype: :class:`canvasapi.quiz.QuizSubmission`
         """
-        quiz_submission_id = obj_or_id(quiz_submission, "quiz_submission", (QuizSubmission,))
+        quiz_submission_id = obj_or_id(
+            quiz_submission, "quiz_submission", (QuizSubmission,)
+        )
 
         response = self._requester.request(
             'GET',
             'courses/{}/quizzes/{}/submissions/{}'.format(
-                self.course_id,
-                self.id,
-                quiz_submission_id
+                self.course_id, self.id, quiz_submission_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()["quiz_submissions"][0]
@@ -324,11 +325,8 @@ class Quiz(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'courses/{}/quizzes/{}/submissions'.format(
-                self.course_id,
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/quizzes/{}/submissions'.format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()["quiz_submissions"][0]
@@ -339,7 +337,6 @@ class Quiz(CanvasObject):
 
 @python_2_unicode_compatible
 class QuizSubmission(CanvasObject):
-
     def __str__(self):
         return "Quiz {} - User {} ({})".format(self.quiz_id, self.user_id, self.id)
 
@@ -373,11 +370,9 @@ class QuizSubmission(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/quizzes/{}/submissions/{}/complete'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()["quiz_submissions"][0]
@@ -396,11 +391,9 @@ class QuizSubmission(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/quizzes/{}/submissions/{}/time'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
@@ -420,11 +413,9 @@ class QuizSubmission(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/quizzes/{}/submissions/{}'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()["quiz_submissions"][0]
 
@@ -448,10 +439,7 @@ class QuizSubmission(CanvasObject):
 
         questions = list()
         for question in response.json().get("quiz_submission_questions", []):
-            question.update({
-                'quiz_submission_id': self.id,
-                'attempt': self.attempt
-            })
+            question.update({'quiz_submission_id': self.id, 'attempt': self.attempt})
             questions.append(QuizSubmissionQuestion(self._requester, question))
 
         return questions
@@ -485,16 +473,18 @@ class QuizSubmission(CanvasObject):
         response = self._requester.request(
             'POST',
             'quiz_submissions/{}/questions'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         questions = list()
         for question in response.json().get('quiz_submission_questions', []):
-            question.update({
-                'quiz_submission_id': self.id,
-                'validation_token': kwargs['validation_token'],
-                'attempt': self.attempt
-            })
+            question.update(
+                {
+                    'quiz_submission_id': self.id,
+                    'validation_token': kwargs['validation_token'],
+                    'attempt': self.attempt,
+                }
+            )
             questions.append(QuizSubmissionQuestion(self._requester, question))
 
         return questions
@@ -502,14 +492,12 @@ class QuizSubmission(CanvasObject):
 
 @python_2_unicode_compatible
 class QuizExtension(CanvasObject):
-
     def __str__(self):
         return "{}-{}".format(self.quiz_id, self.user_id)
 
 
 @python_2_unicode_compatible
 class QuizQuestion(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.question_name, self.id)
 
@@ -526,11 +514,9 @@ class QuizQuestion(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}/quizzes/{}/questions/{}'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.status_code == 204
@@ -547,11 +533,9 @@ class QuizQuestion(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/quizzes/{}/questions/{}'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update({'course_id': self.course_id})
@@ -562,7 +546,6 @@ class QuizQuestion(CanvasObject):
 
 @python_2_unicode_compatible
 class QuizSubmissionQuestion(CanvasObject):
-
     def __str__(self):
         return "QuizSubmissionQuestion #{}".format(self.id)
 
@@ -594,15 +577,19 @@ class QuizSubmissionQuestion(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'quiz_submissions/{}/questions/{}/flag'.format(self.quiz_submission_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'quiz_submissions/{}/questions/{}/flag'.format(
+                self.quiz_submission_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         question = response.json()['quiz_submission_questions'][0]
-        question.update({
-            'validation_token': kwargs['validation_token'],
-            'quiz_submission_id': self.quiz_submission_id
-        })
+        question.update(
+            {
+                'validation_token': kwargs['validation_token'],
+                'quiz_submission_id': self.quiz_submission_id,
+            }
+        )
         super(QuizSubmissionQuestion, self).set_attributes(question)
 
         return True
@@ -635,15 +622,19 @@ class QuizSubmissionQuestion(CanvasObject):
 
         response = self._requester.request(
             'PUT',
-            'quiz_submissions/{}/questions/{}/unflag'.format(self.quiz_submission_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'quiz_submissions/{}/questions/{}/unflag'.format(
+                self.quiz_submission_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         question = response.json()['quiz_submission_questions'][0]
-        question.update({
-            'validation_token': kwargs['validation_token'],
-            'quiz_submission_id': self.quiz_submission_id
-        })
+        question.update(
+            {
+                'validation_token': kwargs['validation_token'],
+                'quiz_submission_id': self.quiz_submission_id,
+            }
+        )
         super(QuizSubmissionQuestion, self).set_attributes(question)
 
         return True

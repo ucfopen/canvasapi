@@ -44,7 +44,6 @@ from tests.util import cleanup_file, register_uris
 
 @requests_mock.Mocker()
 class TestCourse(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -52,7 +51,7 @@ class TestCourse(unittest.TestCase):
             requires = {
                 'course': ['get_assignment_by_id', 'get_by_id', 'get_page'],
                 'quiz': ['get_by_id'],
-                'user': ['get_by_id']
+                'user': ['get_by_id'],
             }
             register_uris(requires, m)
 
@@ -82,13 +81,13 @@ class TestCourse(unittest.TestCase):
             {
                 'student_ids': [1, 2, 3],
                 'title': 'New Assignment Override',
-                'assignment_id': 1
+                'assignment_id': 1,
             },
             {
                 'assignment_id': 2,
                 'student_ids': [1, 2, 3],
-                'title': 'New Assignment Override 2'
-            }
+                'title': 'New Assignment Override 2',
+            },
         ]
         created_overrides = self.course.create_assignment_overrides(override_list)
         created_list = [created for created in created_overrides]
@@ -120,13 +119,13 @@ class TestCourse(unittest.TestCase):
             {
                 'student_ids': [4, 5, 6],
                 'title': 'Updated Assignment Override',
-                'assignment_id': 1
+                'assignment_id': 1,
             },
             {
                 'assignment_id': 2,
                 'student_ids': [6, 7],
-                'title': 'Updated Assignment Override 2'
-            }
+                'title': 'Updated Assignment Override 2',
+            },
         ]
         updated_overrides = self.course.update_assignment_overrides(override_list)
         updated_list = [updated for updated in updated_overrides]
@@ -167,10 +166,7 @@ class TestCourse(unittest.TestCase):
 
     # enroll_user()
     def test_enroll_user(self, m):
-        requires = {
-            'course': ['enroll_user'],
-            'user': ['get_by_id']
-        }
+        requires = {'course': ['enroll_user'], 'user': ['get_by_id']}
         register_uris(requires, m)
 
         enrollment_type = 'TeacherEnrollment'
@@ -408,15 +404,17 @@ class TestCourse(unittest.TestCase):
 
     # get_assignment_overrides()
     def test_get_assignment_overrides(self, m):
-        register_uris({'assignment': [
-            'batch_get_assignment_overrides',
-            'batch_get_assignment_overrides_p2'
-        ]}, m)
+        register_uris(
+            {
+                'assignment': [
+                    'batch_get_assignment_overrides',
+                    'batch_get_assignment_overrides_p2',
+                ]
+            },
+            m,
+        )
 
-        bulk_select = [
-            {'id': 1, 'assignment_id': 1},
-            {'id': 20, 'assignment_id': 2}
-        ]
+        bulk_select = [{'id': 1, 'assignment_id': 1}, {'id': 20, 'assignment_id': 2}]
         overrides = self.course.get_assignment_overrides(bulk_select)
 
         override_list = [override for override in overrides]
@@ -622,12 +620,8 @@ class TestCourse(unittest.TestCase):
     # get_full_discussion_topic()
     def test_get_full_discussion_topic(self, m):
         register_uris(
-            {
-                'course': [
-                    'get_discussion_topics',
-                    'get_full_discussion_topic'
-                ]
-            }, m)
+            {'course': ['get_discussion_topics', 'get_full_discussion_topic']}, m
+        )
 
         topic_id = 1
         discussion_by_id = self.course.get_full_discussion_topic(topic_id)
@@ -714,7 +708,9 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(assignment_group_by_id, 'course_id'))
         self.assertEqual(assignment_group_by_id.course_id, 1)
 
-        assignment_group_by_obj = self.course.get_assignment_group(assignment_group_by_id)
+        assignment_group_by_obj = self.course.get_assignment_group(
+            assignment_group_by_id
+        )
 
         self.assertIsInstance(assignment_group_by_obj, AssignmentGroup)
         self.assertTrue(hasattr(assignment_group_by_obj, 'id'))
@@ -724,9 +720,9 @@ class TestCourse(unittest.TestCase):
 
     # list_assignment_groups()
     def test_list_assignment_groups(self, m):
-        register_uris({
-            'assignment': ['list_assignment_groups', 'get_assignment_group']
-        }, m)
+        register_uris(
+            {'assignment': ['list_assignment_groups', 'get_assignment_group']}, m
+        )
 
         with warnings.catch_warnings(record=True) as warning_list:
             response = self.course.list_assignment_groups()
@@ -742,9 +738,9 @@ class TestCourse(unittest.TestCase):
 
     # get_assignment_groups()
     def test_get_assignment_groups(self, m):
-        register_uris({
-            'assignment': ['list_assignment_groups', 'get_assignment_group']
-        }, m)
+        register_uris(
+            {'assignment': ['list_assignment_groups', 'get_assignment_group']}, m
+        )
 
         response = self.course.get_assignment_groups()
         asnt_group_list = [assignment_group for assignment_group in response]
@@ -772,7 +768,7 @@ class TestCourse(unittest.TestCase):
             name="External Tool - Course",
             privacy_level="public",
             consumer_key="key",
-            shared_secret="secret"
+            shared_secret="secret",
         )
 
         self.assertIsInstance(response, ExternalTool)
@@ -943,10 +939,9 @@ class TestCourse(unittest.TestCase):
 
     # get_submission()
     def test_get_submission(self, m):
-        register_uris({
-            'course': ['get_assignment_by_id'],
-            'submission': ['get_by_id_course']
-        }, m)
+        register_uris(
+            {'course': ['get_assignment_by_id'], 'submission': ['get_by_id_course']}, m
+        )
 
         assignment_for_id = 1
         user_id = 1
@@ -961,7 +956,9 @@ class TestCourse(unittest.TestCase):
 
         with warnings.catch_warnings(record=True) as warning_list:
             assignment_for_obj = self.course.get_assignment(1)
-            submission_by_obj = self.course.get_submission(assignment_for_obj, self.user)
+            submission_by_obj = self.course.get_submission(
+                assignment_for_obj, self.user
+            )
             self.assertIsInstance(submission_by_obj, Submission)
             self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
 
@@ -970,18 +967,19 @@ class TestCourse(unittest.TestCase):
 
     # update_submission()
     def test_update_submission(self, m):
-        register_uris({
-            'course': ['get_assignment_by_id'],
-            'submission': ['edit', 'get_by_id_course']
-        }, m)
+        register_uris(
+            {
+                'course': ['get_assignment_by_id'],
+                'submission': ['edit', 'get_by_id_course'],
+            },
+            m,
+        )
 
         assignment_for_id = 1
         user_id = 1
         with warnings.catch_warnings(record=True) as warning_list:
             submission = self.course.update_submission(
-                assignment_for_id,
-                user_id,
-                submission={'excuse': True}
+                assignment_for_id, user_id, submission={'excuse': True}
             )
             self.assertIsInstance(submission, Submission)
             self.assertTrue(hasattr(submission, 'excused'))
@@ -992,9 +990,7 @@ class TestCourse(unittest.TestCase):
         assignment_for_obj = self.course.get_assignment(1)
         with warnings.catch_warnings(record=True) as warning_list:
             submission = self.course.update_submission(
-                assignment_for_obj,
-                self.user,
-                submission={'excuse': True}
+                assignment_for_obj, self.user, submission={'excuse': True}
             )
             self.assertIsInstance(submission, Submission)
             self.assertTrue(hasattr(submission, 'excused'))
@@ -1004,7 +1000,9 @@ class TestCourse(unittest.TestCase):
 
     # list_gradeable_students()
     def test_list_gradeable_students(self, m):
-        register_uris({'course': ['get_assignment_by_id', 'list_gradeable_students']}, m)
+        register_uris(
+            {'course': ['get_assignment_by_id', 'list_gradeable_students']}, m
+        )
 
         assignment_for_id = 1
         with warnings.catch_warnings(record=True) as warning_list:
@@ -1030,12 +1028,16 @@ class TestCourse(unittest.TestCase):
 
     # mark_submission_as_read
     def test_mark_submission_as_read(self, m):
-        register_uris({'course': ['get_assignment_by_id', 'mark_submission_as_read']}, m)
+        register_uris(
+            {'course': ['get_assignment_by_id', 'mark_submission_as_read']}, m
+        )
 
         assignment_for_id = 1
         user_for_id = 1
         with warnings.catch_warnings(record=True) as warning_list:
-            submission_by_id = self.course.mark_submission_as_read(assignment_for_id, user_for_id)
+            submission_by_id = self.course.mark_submission_as_read(
+                assignment_for_id, user_for_id
+            )
             self.assertTrue(submission_by_id)
 
             self.assertEqual(len(warning_list), 1)
@@ -1043,7 +1045,9 @@ class TestCourse(unittest.TestCase):
 
         assignment_for_obj = self.course.get_assignment(1)
         with warnings.catch_warnings(record=True) as warning_list:
-            submission_by_obj = self.course.mark_submission_as_read(assignment_for_obj, self.user)
+            submission_by_obj = self.course.mark_submission_as_read(
+                assignment_for_obj, self.user
+            )
             self.assertTrue(submission_by_obj)
 
             self.assertEqual(len(warning_list), 1)
@@ -1051,15 +1055,16 @@ class TestCourse(unittest.TestCase):
 
     # mark_submission_as_unread
     def test_mark_submission_as_unread(self, m):
-        register_uris({'course': ['get_assignment_by_id', 'mark_submission_as_unread']}, m)
+        register_uris(
+            {'course': ['get_assignment_by_id', 'mark_submission_as_unread']}, m
+        )
 
         assignment_for_id = 1
         user_for_id = 1
 
         with warnings.catch_warnings(record=True) as warning_list:
             submission_by_id = self.course.mark_submission_as_unread(
-                assignment_for_id,
-                user_for_id
+                assignment_for_id, user_for_id
             )
             self.assertTrue(submission_by_id)
 
@@ -1069,8 +1074,7 @@ class TestCourse(unittest.TestCase):
         assignment_for_obj = self.course.get_assignment(1)
         with warnings.catch_warnings(record=True) as warning_list:
             submission_by_obj = self.course.mark_submission_as_unread(
-                assignment_for_obj,
-                self.user
+                assignment_for_obj, self.user
             )
             self.assertTrue(submission_by_obj)
 
@@ -1408,8 +1412,10 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(content_migration, 'migration_type'))
 
     def test_create_content_migration_migrator(self, m):
-        register_uris({'course': ['create_content_migration',
-                                  'get_migration_systems_multiple']}, m)
+        register_uris(
+            {'course': ['create_content_migration', 'get_migration_systems_multiple']},
+            m,
+        )
 
         migrators = self.course.get_migration_systems()
         content_migration = self.course.create_content_migration(migrators[0])
@@ -1468,16 +1474,9 @@ class TestCourse(unittest.TestCase):
     def test_set_quiz_extensions(self, m):
         register_uris({'course': ['set_quiz_extensions']}, m)
 
-        extension = self.course.set_quiz_extensions([
-            {
-                'user_id': 1,
-                'extra_time': 60
-            },
-            {
-                'user_id': 2,
-                'extra_attempts': 3
-            }
-        ])
+        extension = self.course.set_quiz_extensions(
+            [{'user_id': 1, 'extra_time': 60}, {'user_id': 2, 'extra_attempts': 3}]
+        )
 
         self.assertIsInstance(extension, list)
         self.assertEqual(len(extension), 2)
@@ -1512,16 +1511,9 @@ class TestCourse(unittest.TestCase):
     def test_submissions_bulk_update(self, m):
         register_uris({'course': ['update_submissions']}, m)
         register_uris({'progress': ['course_progress']}, m)
-        progress = self.course.submissions_bulk_update(grade_data={
-            '1': {
-                '1': {
-                    'posted_grade': 97
-                },
-                '2': {
-                    'posted_grade': 98
-                }
-            }
-        })
+        progress = self.course.submissions_bulk_update(
+            grade_data={'1': {'1': {'posted_grade': 97}, '2': {'posted_grade': 98}}}
+        )
         self.assertIsInstance(progress, Progress)
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()
@@ -1709,7 +1701,6 @@ class TestCourse(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 

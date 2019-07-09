@@ -15,14 +15,13 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestDiscussionTopic(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
             requires = {
                 'course': ['get_by_id', 'get_discussion_topic'],
-                'group': ['get_by_id', 'get_discussion_topic']
+                'group': ['get_by_id', 'get_discussion_topic'],
             }
             register_uris(requires, m)
 
@@ -273,15 +272,17 @@ class TestDiscussionTopic(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestDiscussionEntry(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
             requires = {
                 'course': ['get_by_id', 'get_discussion_topic'],
-                'discussion_topic': ['list_entries_single', 'list_entries_single_group'],
-                'group': ['get_by_id', 'get_discussion_topic']
+                'discussion_topic': [
+                    'list_entries_single',
+                    'list_entries_single_group',
+                ],
+                'group': ['get_by_id', 'get_discussion_topic'],
             }
             register_uris(requires, m)
 
@@ -290,7 +291,9 @@ class TestDiscussionEntry(unittest.TestCase):
             self.discussion_topic = self.course.get_discussion_topic(1)
             self.discussion_topic_group = self.group.get_discussion_topic(1)
             self.discussion_entry = self.discussion_topic.get_entries([1])[0]
-            self.discussion_entry_group = self.discussion_topic_group.get_entries([1])[0]
+            self.discussion_entry_group = self.discussion_topic_group.get_entries([1])[
+                0
+            ]
 
     # __str__()
     def test__str__(self, m):

@@ -17,7 +17,6 @@ from tests.util import register_uris, cleanup_file
 
 @requests_mock.Mocker()
 class TestAssignment(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -34,7 +33,7 @@ class TestAssignment(unittest.TestCase):
         override = self.assignment.create_override(
             assignment_override={
                 'student_ids': [1, 2, 3],
-                'title': 'New Assignment Override'
+                'title': 'New Assignment Override',
             }
         )
 
@@ -80,10 +79,15 @@ class TestAssignment(unittest.TestCase):
 
     # get_overrides()
     def test_get_overrides(self, m):
-        register_uris({'assignment': [
-            'list_assignment_overrides',
-            'list_assignment_overrides_p2'
-        ]}, m)
+        register_uris(
+            {
+                'assignment': [
+                    'list_assignment_overrides',
+                    'list_assignment_overrides_p2',
+                ]
+            },
+            m,
+        )
 
         overrides = self.assignment.get_overrides()
         override_list = [override for override in overrides]
@@ -104,10 +108,7 @@ class TestAssignment(unittest.TestCase):
 
     # get_submission()
     def test_get_submission(self, m):
-        register_uris({
-            'submission': ['get_by_id_course'],
-            'user': ['get_by_id']
-        }, m)
+        register_uris({'submission': ['get_by_id_course'], 'user': ['get_by_id']}, m)
 
         user_id = 1
         submission_by_id = self.assignment.get_submission(user_id)
@@ -194,14 +195,9 @@ class TestAssignment(unittest.TestCase):
     def test_submissions_bulk_update(self, m):
         register_uris({'assignment': ['update_submissions']}, m)
         register_uris({'progress': ['course_progress']}, m)
-        progress = self.assignment.submissions_bulk_update(grade_data={
-            '1': {
-                'posted_grade': 97
-             },
-            '2': {
-                'posted_grade': 98
-            }
-        })
+        progress = self.assignment.submissions_bulk_update(
+            grade_data={'1': {'posted_grade': 97}, '2': {'posted_grade': 98}}
+        )
         self.assertIsInstance(progress, Progress)
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()
@@ -243,15 +239,13 @@ class TestAssignment(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestAssignmentGroup(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({
-                'course': ['get_by_id'],
-                'assignment': ['get_assignment_group']
-            }, m)
+            register_uris(
+                {'course': ['get_by_id'], 'assignment': ['get_assignment_group']}, m
+            )
 
             self.course = self.canvas.get_course(1)
             self.assignment_group = self.course.get_assignment_group(5)
@@ -287,15 +281,17 @@ class TestAssignmentGroup(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestAssignmentOverride(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({
-                'course': ['get_by_id', 'get_assignment_by_id'],
-                'assignment': ['get_assignment_override'],
-            }, m)
+            register_uris(
+                {
+                    'course': ['get_by_id', 'get_assignment_by_id'],
+                    'assignment': ['get_assignment_override'],
+                },
+                m,
+            )
 
             self.course = self.canvas.get_course(1)
             self.assignment = self.course.get_assignment(1)
@@ -319,10 +315,12 @@ class TestAssignmentOverride(unittest.TestCase):
     def test_edit(self, m):
         register_uris({'assignment': ['edit_override']}, m)
 
-        edited = self.assignment_override.edit(assignment_override={
-            'title': 'New Title',
-            'student_ids': self.assignment_override.student_ids
-        })
+        edited = self.assignment_override.edit(
+            assignment_override={
+                'title': 'New Title',
+                'student_ids': self.assignment_override.student_ids,
+            }
+        )
 
         self.assertEqual(edited, self.assignment_override)
         self.assertIsInstance(self.assignment_override, AssignmentOverride)

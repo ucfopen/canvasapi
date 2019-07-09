@@ -12,12 +12,14 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestSisImportGroup(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {'account': ['get_by_id', 'get_role'], 'sis_import': ['get_by_id']}
+            requires = {
+                'account': ['get_by_id', 'get_role'],
+                'sis_import': ['get_by_id'],
+            }
             register_uris(requires, m)
 
             self.account = self.canvas.get_account(1)
@@ -31,8 +33,11 @@ class TestSisImportGroup(unittest.TestCase):
 
         self.assertIsInstance(aborted_sis_import, SisImport)
 
-        self.assertTrue(aborted_sis_import.workflow_state == "aborted" if
-                        aborted_sis_import.progress < 100 else True)
+        self.assertTrue(
+            aborted_sis_import.workflow_state == "aborted"
+            if aborted_sis_import.progress < 100
+            else True
+        )
 
     # restore_states()
     def test_restore_states(self, m):

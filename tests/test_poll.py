@@ -12,7 +12,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestPoll(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -58,8 +57,9 @@ class TestPoll(unittest.TestCase):
         self.assertIsInstance(new_poll_q, Poll)
         self.assertTrue(hasattr(new_poll_q, 'question'))
 
-        new_poll_q_d = self.canvas.create_poll([{'question': 'Is this a question?'},
-                                                {'description': 'This is a test.'}])
+        new_poll_q_d = self.canvas.create_poll(
+            [{'question': 'Is this a question?'}, {'description': 'This is a test.'}]
+        )
         self.assertIsInstance(new_poll_q_d, Poll)
         self.assertTrue(hasattr(new_poll_q_d, 'question'))
         self.assertTrue(hasattr(new_poll_q_d, 'description'))
@@ -77,10 +77,12 @@ class TestPoll(unittest.TestCase):
         self.assertIsInstance(updated_poll_q, Poll)
         self.assertEqual(updated_poll_q.question, 'Is this not a question?')
 
-        updated_poll_q_and_d = self.poll.update([
+        updated_poll_q_and_d = self.poll.update(
+            [
                 {'question': 'Is this not a question?'},
-                {'description': 'This is not a test.'}
-            ])
+                {'description': 'This is not a test.'},
+            ]
+        )
         self.assertIsInstance(updated_poll_q_and_d, Poll)
         self.assertEqual(updated_poll_q_and_d.question, 'Is this not a question?')
         self.assertEqual(updated_poll_q_and_d.description, 'This is not a test.')

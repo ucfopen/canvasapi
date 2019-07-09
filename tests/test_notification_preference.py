@@ -10,7 +10,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestNotificationPreference(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -18,8 +17,10 @@ class TestNotificationPreference(unittest.TestCase):
             register_uris(
                 {
                     'user': ['get_by_id', 'list_comm_channels'],
-                    'communication_channel': ['get_preference']
-                }, m)
+                    'communication_channel': ['get_preference'],
+                },
+                m,
+            )
 
             self.user = self.canvas.get_user(1)
             self.comm_chan = self.user.get_communication_channels()[0]

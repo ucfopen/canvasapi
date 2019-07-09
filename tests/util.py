@@ -31,16 +31,19 @@ def register_uris(requirements, requests_mocker):
             obj = data.get(obj_name)
 
             if obj is None:
-                raise ValueError('{} does not exist in {}.json'.format(
-                    obj_name.__repr__(),
-                    fixture
-                ))
+                raise ValueError(
+                    '{} does not exist in {}.json'.format(obj_name.__repr__(), fixture)
+                )
 
             method = requests_mock.ANY if obj['method'] == 'ANY' else obj['method']
             if obj['endpoint'] == 'ANY':
                 url = requests_mock.ANY
             else:
-                url = get_institution_url(settings.BASE_URL) + '/api/v1/' + obj['endpoint']
+                url = (
+                    get_institution_url(settings.BASE_URL)
+                    + '/api/v1/'
+                    + obj['endpoint']
+                )
 
             try:
                 requests_mocker.register_uri(
@@ -48,7 +51,7 @@ def register_uris(requirements, requests_mocker):
                     url,
                     json=obj.get('data'),
                     status_code=obj.get('status_code', 200),
-                    headers=obj.get('headers', {})
+                    headers=obj.get('headers', {}),
                 )
             except Exception as e:
                 print(e)

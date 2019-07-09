@@ -11,15 +11,13 @@ from canvasapi.exceptions import RequiredFieldMissing
 
 @requests_mock.Mocker()
 class TestQuizGroup(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({
-                'course': ['get_by_id'],
-                'quiz': ['get_by_id', 'get_quiz_group']
-            }, m)
+            register_uris(
+                {'course': ['get_by_id'], 'quiz': ['get_by_id', 'get_quiz_group']}, m
+            )
 
             self.course = self.canvas.get_course(1)
             self.quiz_group = self.course.get_quiz(1).get_quiz_group(1)
@@ -43,7 +41,9 @@ class TestQuizGroup(unittest.TestCase):
         self.assertEqual(self.quiz_group.quiz_id, 1)
         self.assertEqual(self.quiz_group.name, quiz_group[0].get('name'))
         self.assertEqual(self.quiz_group.pick_count, quiz_group[0].get('pick_count'))
-        self.assertEqual(self.quiz_group.question_points, quiz_group[0].get('question_points'))
+        self.assertEqual(
+            self.quiz_group.question_points, quiz_group[0].get('question_points')
+        )
 
     def test_update_empty_list(self, m):
         register_uris({'quiz_group': ['update']}, m)

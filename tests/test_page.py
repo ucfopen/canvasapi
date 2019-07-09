@@ -14,7 +14,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestPage(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -22,7 +21,7 @@ class TestPage(unittest.TestCase):
             requires = {
                 'course': ['get_by_id'],
                 'group': ['get_by_id', 'pages_get_page'],
-                'page': ['get_page']
+                'page': ['get_page'],
             }
             register_uris(requires, m)
 
@@ -155,7 +154,6 @@ class TestPage(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestPageRevision(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -163,7 +161,7 @@ class TestPageRevision(unittest.TestCase):
             requires = {
                 'course': ['get_by_id', 'get_page'],
                 'group': ['get_by_id', 'pages_get_page'],
-                'page': ['get_latest_rev_by_id', 'get_latest_rev_by_id_group']
+                'page': ['get_latest_rev_by_id', 'get_latest_rev_by_id_group'],
             }
             register_uris(requires, m)
 

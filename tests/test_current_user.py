@@ -87,8 +87,7 @@ class TestCurrentUser(unittest.TestCase):
     def test_create_bookmark(self, m):
         register_uris({'bookmark': ['create_bookmark']}, m)
         evnt = self.user.create_bookmark(
-            name="Test Bookmark",
-            url="https://www.google.com"
+            name="Test Bookmark", url="https://www.google.com"
         )
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")
@@ -122,7 +121,9 @@ class TestCurrentUser(unittest.TestCase):
 
     # add_favorite_course()
     def test_add_favorite_course(self, m):
-        register_uris({'current_user': ['add_favorite_course'], 'course': ['get_by_id']}, m)
+        register_uris(
+            {'current_user': ['add_favorite_course'], 'course': ['get_by_id']}, m
+        )
 
         fav_by_id = self.user.add_favorite_course(1)
         self.assertIsInstance(fav_by_id, Favorite)
@@ -146,7 +147,9 @@ class TestCurrentUser(unittest.TestCase):
 
     # add_favorite_group()
     def test_add_favorite_group(self, m):
-        register_uris({'current_user': ['add_favorite_group'], 'group': ['get_by_id']}, m)
+        register_uris(
+            {'current_user': ['add_favorite_group'], 'group': ['get_by_id']}, m
+        )
 
         fav_by_id = self.user.add_favorite_group(1)
         self.assertIsInstance(fav_by_id, Favorite)

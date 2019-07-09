@@ -10,7 +10,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Outcome(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
 
@@ -25,9 +24,7 @@ class Outcome(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            'outcomes/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'PUT', 'outcomes/{}'.format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
         if 'id' in response.json():
@@ -38,12 +35,9 @@ class Outcome(CanvasObject):
 
 @python_2_unicode_compatible
 class OutcomeLink(CanvasObject):
-
     def __str__(self):
         return "Group {} with Outcome {} ({})".format(
-            self.outcome_group,
-            self.outcome,
-            self.url
+            self.outcome_group, self.outcome, self.url
         )
 
     def context_ref(self):
@@ -63,10 +57,7 @@ class OutcomeLink(CanvasObject):
         :rtype: :class:`canvasapi.outcome.Outcome`
         """
         oid = self.outcome['id']
-        response = self._requester.request(
-            'GET',
-            'outcomes/{}'.format(oid)
-        )
+        response = self._requester.request('GET', 'outcomes/{}'.format(oid))
 
         return Outcome(self._requester, response.json())
 
@@ -86,8 +77,7 @@ class OutcomeLink(CanvasObject):
         """
         ogid = self.outcome_group['id']
         response = self._requester.request(
-            'GET',
-            '{}/outcome_groups/{}'.format(self.context_ref(), ogid)
+            'GET', '{}/outcome_groups/{}'.format(self.context_ref(), ogid)
         )
 
         return OutcomeGroup(self._requester, response.json())
@@ -95,7 +85,6 @@ class OutcomeLink(CanvasObject):
 
 @python_2_unicode_compatible
 class OutcomeGroup(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
 
@@ -124,7 +113,7 @@ class OutcomeGroup(CanvasObject):
         response = self._requester.request(
             'PUT',
             '{}/outcome_groups/{}'.format(self.context_ref(), self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if 'id' in response.json():
@@ -147,8 +136,7 @@ class OutcomeGroup(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}/outcome_groups/{}'.format(self.context_ref(), self.id)
+            'DELETE', '{}/outcome_groups/{}'.format(self.context_ref(), self.id)
         )
 
         if 'id' in response.json():
@@ -178,7 +166,7 @@ class OutcomeGroup(CanvasObject):
         warnings.warn(
             "`list_linked_outcomes` is being deprecated and will be removed "
             "in a future version. Use `get_linked_outcomes` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_linked_outcomes(**kwargs)
@@ -203,7 +191,7 @@ class OutcomeGroup(CanvasObject):
             self._requester,
             'GET',
             '{}/outcome_groups/{}/outcomes'.format(self.context_ref(), self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def link_existing(self, outcome):
@@ -228,10 +216,8 @@ class OutcomeGroup(CanvasObject):
         response = self._requester.request(
             'PUT',
             '{}/outcome_groups/{}/outcomes/{}'.format(
-                self.context_ref(),
-                self.id,
-                outcome_id
-            )
+                self.context_ref(), self.id, outcome_id
+            ),
         )
 
         return OutcomeLink(self._requester, response.json())
@@ -257,7 +243,7 @@ class OutcomeGroup(CanvasObject):
             'POST',
             '{}/outcome_groups/{}/outcomes'.format(self.context_ref(), self.id),
             title=title,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeLink(self._requester, response.json())
@@ -284,10 +270,8 @@ class OutcomeGroup(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '{}/outcome_groups/{}/outcomes/{}'.format(
-                self.context_ref(),
-                self.id,
-                outcome_id
-            )
+                self.context_ref(), self.id, outcome_id
+            ),
         )
 
         if 'context_id' in response.json():
@@ -317,7 +301,7 @@ class OutcomeGroup(CanvasObject):
         warnings.warn(
             "`list_subgroups` is being deprecated and will be removed in a "
             "future version. Use `get_subgroups` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_subgroups(**kwargs)
@@ -343,7 +327,7 @@ class OutcomeGroup(CanvasObject):
             'GET',
             '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id),
             {'context_type': self.context_type, 'context_id': self.context_id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_subgroup(self, title, **kwargs):
@@ -367,7 +351,7 @@ class OutcomeGroup(CanvasObject):
             'POST',
             '{}/outcome_groups/{}/subgroups'.format(self.context_ref(), self.id),
             title=title,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self._requester, response.json())
@@ -389,12 +373,14 @@ class OutcomeGroup(CanvasObject):
         :returns: Itself as an OutcomeGroup object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        source_outcome_group_id = obj_or_id(outcome_group, "outcome_group", (OutcomeGroup,))
+        source_outcome_group_id = obj_or_id(
+            outcome_group, "outcome_group", (OutcomeGroup,)
+        )
 
         response = self._requester.request(
             'POST',
             '{}/outcome_groups/{}/import'.format(self.context_ref(), self.id),
-            source_outcome_group_id=source_outcome_group_id
+            source_outcome_group_id=source_outcome_group_id,
         )
 
         return OutcomeGroup(self._requester, response.json())

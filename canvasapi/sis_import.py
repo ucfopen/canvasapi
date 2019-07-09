@@ -9,7 +9,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class SisImport(CanvasObject):
-
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.workflow_state, self.id)
 
@@ -25,7 +24,7 @@ class SisImport(CanvasObject):
         response = self._requester.request(
             'PUT',
             'accounts/{}/sis_imports/{}/abort'.format(self.account_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return SisImport(self._requester, response.json())
 
@@ -40,7 +39,9 @@ class SisImport(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'accounts/{}/sis_imports/{}/restore_states'.format(self.account_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'accounts/{}/sis_imports/{}/restore_states'.format(
+                self.account_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Progress(self._requester, response.json())

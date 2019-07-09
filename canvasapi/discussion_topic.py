@@ -52,8 +52,7 @@ class DiscussionTopic(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self._parent_type, self._parent_id)
+            'GET', '{}s/{}'.format(self._parent_type, self._parent_id)
         )
 
         if self._parent_type == 'group':
@@ -77,10 +76,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '{}s/{}/discussion_topics/{}'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return 'deleted_at' in response.json()
 
@@ -99,11 +96,9 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '{}s/{}/discussion_topics/{}'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return DiscussionTopic(self._requester, response.json())
 
@@ -122,17 +117,17 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'POST',
             '{}s/{}/discussion_topics/{}/entries'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({
-            'discussion_id': self.id,
-            '{}_id'.format(self._parent_type): self._parent_id
-        })
+        response_json.update(
+            {
+                'discussion_id': self.id,
+                '{}_id'.format(self._parent_type): self._parent_id,
+            }
+        )
         return DiscussionEntry(self._requester, response_json)
 
     def list_topic_entries(self, **kwargs):
@@ -155,7 +150,7 @@ class DiscussionTopic(CanvasObject):
         warnings.warn(
             "`list_topic_entries` is being deprecated and will be removed in "
             "a future version. Use `get_topic_entries` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_topic_entries(**kwargs)
@@ -178,15 +173,13 @@ class DiscussionTopic(CanvasObject):
             self._requester,
             'GET',
             '{}s/{}/discussion_topics/{}/entries'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+                self._parent_type, self._parent_id, self.id
             ),
             {
                 'discussion_id': self.id,
-                '{}_id'.format(self._parent_type): self._parent_id
+                '{}_id'.format(self._parent_type): self._parent_id,
             },
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_entries(self, ids, **kwargs):
@@ -213,7 +206,7 @@ class DiscussionTopic(CanvasObject):
         warnings.warn(
             "`list_entries` is being deprecated and will be removed in a "
             "future version. Use `get_entries` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_entries(ids, **kwargs)
@@ -236,7 +229,7 @@ class DiscussionTopic(CanvasObject):
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
 
-        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry, )) for item in ids]
+        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry,)) for item in ids]
 
         kwargs.update(ids=entry_ids)
         return PaginatedList(
@@ -244,13 +237,11 @@ class DiscussionTopic(CanvasObject):
             self._requester,
             'GET',
             '{}s/{}/discussion_topics/{}/entry_list'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+                self._parent_type, self._parent_id, self.id
             ),
             {
                 'discussion_id': self.id,
-                '{}_id'.format(self._parent_type): self._parent_id
+                '{}_id'.format(self._parent_type): self._parent_id,
             },
             _kwargs=combine_kwargs(**kwargs),
         )
@@ -270,10 +261,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '{}s/{}/discussion_topics/{}/read'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -292,10 +281,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '{}s/{}/discussion_topics/{}/read'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -314,11 +301,9 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '{}s/{}/discussion_topics/{}/read_all'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -337,11 +322,9 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '{}s/{}/discussion_topics/{}/read_all'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -360,10 +343,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'PUT',
             '{}s/{}/discussion_topics/{}/subscribed'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -382,10 +363,8 @@ class DiscussionTopic(CanvasObject):
         response = self._requester.request(
             'DELETE',
             '{}s/{}/discussion_topics/{}/subscribed'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -435,8 +414,8 @@ class DiscussionEntry(CanvasObject):
             '{}s/{}/discussion_topics/{}'.format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
-                self.discussion_id
-            )
+                self.discussion_id,
+            ),
         )
 
         response_json = response.json()
@@ -464,9 +443,9 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if response.json().get('updated_at'):
@@ -492,9 +471,9 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return 'deleted_at' in response.json()
 
@@ -517,9 +496,9 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update(discussion_id=self.discussion_id)
@@ -547,7 +526,7 @@ class DiscussionEntry(CanvasObject):
         warnings.warn(
             "`list_replies` is being deprecated and will be removed in a "
             "future version. Use `get_replies` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_replies(**kwargs)
@@ -575,13 +554,15 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
             {
                 'discussion_id': self.discussion_id,
-                '{}_id'.format(self._discussion_parent_type): self._discussion_parent_id
+                '{}_id'.format(
+                    self._discussion_parent_type
+                ): self._discussion_parent_id,
             },
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     # TODO: update to use correct class
@@ -603,8 +584,8 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
-            )
+                self.id,
+            ),
         )
         return response.status_code == 204
 
@@ -629,8 +610,8 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
-            )
+                self.id,
+            ),
         )
         return response.status_code == 204
 
@@ -659,9 +640,9 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
             rating=rating,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204

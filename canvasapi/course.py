@@ -21,7 +21,11 @@ from canvasapi.tab import Tab
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import (
-    combine_kwargs, is_multivalued, file_or_path, obj_or_id, normalize_bool
+    combine_kwargs,
+    is_multivalued,
+    file_or_path,
+    obj_or_id,
+    normalize_bool,
 )
 from canvasapi.rubric import Rubric
 
@@ -31,7 +35,6 @@ warnings.simplefilter('always', DeprecationWarning)
 
 @python_2_unicode_compatible
 class Course(CanvasObject):
-
     def __str__(self):
         return '{} {} ({})'.format(self.course_code, self.name, self.id)
 
@@ -46,9 +49,7 @@ class Course(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}'.format(self.id),
-            event="conclude"
+            'DELETE', 'courses/{}'.format(self.id), event="conclude"
         )
 
         return response.json().get('conclude')
@@ -76,7 +77,7 @@ class Course(CanvasObject):
             'POST',
             'courses/{}/assignments/overrides'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def delete(self):
@@ -90,9 +91,7 @@ class Course(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}'.format(self.id),
-            event="delete"
+            'DELETE', 'courses/{}'.format(self.id), event="delete"
         )
         return response.json().get('delete')
 
@@ -107,9 +106,7 @@ class Course(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'PUT', 'courses/{}'.format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
         if response.json().get('name'):
@@ -142,7 +139,7 @@ class Course(CanvasObject):
             'PUT',
             'courses/{}/assignments/overrides'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_user(self, user, user_id_type=None):
@@ -168,10 +165,7 @@ class Course(CanvasObject):
             user_id = obj_or_id(user, "user", (User,))
             uri = 'courses/{}/users/{}'.format(self.id, user_id)
 
-        response = self._requester.request(
-            'GET',
-            uri
-        )
+        response = self._requester.request('GET', uri)
         return User(self._requester, response.json())
 
     def get_users(self, **kwargs):
@@ -191,7 +185,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/search_users'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def enroll_user(self, user, enrollment_type, **kwargs):
@@ -216,7 +210,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/enrollments'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return Enrollment(self._requester, response.json())
@@ -235,10 +229,7 @@ class Course(CanvasObject):
         from canvasapi.user import User
 
         return PaginatedList(
-            User,
-            self._requester,
-            'GET',
-            'courses/{}/recent_students'.format(self.id)
+            User, self._requester, 'GET', 'courses/{}/recent_students'.format(self.id)
         )
 
     def preview_html(self, html):
@@ -253,9 +244,7 @@ class Course(CanvasObject):
         :rtype: str
         """
         response = self._requester.request(
-            'POST',
-            'courses/{}/preview_html'.format(self.id),
-            html=html
+            'POST', 'courses/{}/preview_html'.format(self.id), html=html
         )
         return response.json().get('html', '')
 
@@ -268,10 +257,7 @@ class Course(CanvasObject):
 
         :rtype: dict
         """
-        response = self._requester.request(
-            'GET',
-            'courses/{}/settings'.format(self.id)
-        )
+        response = self._requester.request('GET', 'courses/{}/settings'.format(self.id))
         return response.json()
 
     def update_settings(self, **kwargs):
@@ -284,9 +270,7 @@ class Course(CanvasObject):
         :rtype: dict
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/settings'.format(self.id),
-            **kwargs
+            'PUT', 'courses/{}/settings'.format(self.id), **kwargs
         )
         return response.json()
 
@@ -304,10 +288,7 @@ class Course(CanvasObject):
         :rtype: tuple
         """
         return Uploader(
-            self._requester,
-            'courses/{}/files'.format(self.id),
-            file,
-            **kwargs
+            self._requester, 'courses/{}/files'.format(self.id), file, **kwargs
         ).start()
 
     def reset(self):
@@ -321,8 +302,7 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.course.Course`
         """
         response = self._requester.request(
-            'POST',
-            'courses/{}/reset_content'.format(self.id),
+            'POST', 'courses/{}/reset_content'.format(self.id)
         )
         return Course(self._requester, response.json())
 
@@ -337,12 +317,13 @@ class Course(CanvasObject):
             :class:`canvasapi.enrollment.Enrollment`
         """
         from canvasapi.enrollment import Enrollment
+
         return PaginatedList(
             Enrollment,
             self._requester,
             'GET',
             'courses/{}/enrollments'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_assignment(self, assignment, **kwargs):
@@ -364,7 +345,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/assignments/{}'.format(self.id, assignment_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Assignment(self._requester, response.json())
 
@@ -389,7 +370,7 @@ class Course(CanvasObject):
             'GET',
             'courses/{}/assignments/overrides'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_assignments(self, **kwargs):
@@ -409,7 +390,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/assignments'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_assignment(self, assignment, **kwargs):
@@ -435,7 +416,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/assignments'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return Assignment(self._requester, response.json())
@@ -451,13 +432,14 @@ class Course(CanvasObject):
             :class:`canvasapi.quiz.Quiz`
         """
         from canvasapi.quiz import Quiz
+
         return PaginatedList(
             Quiz,
             self._requester,
             'GET',
             'courses/{}/quizzes'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_quiz(self, quiz):
@@ -477,8 +459,7 @@ class Course(CanvasObject):
         quiz_id = obj_or_id(quiz, "quiz", (Quiz,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/quizzes/{}'.format(self.id, quiz_id)
+            'GET', 'courses/{}/quizzes/{}'.format(self.id, quiz_id)
         )
         quiz_json = response.json()
         quiz_json.update({'course_id': self.id})
@@ -506,7 +487,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/quizzes'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         quiz_json = response.json()
         quiz_json.update({'course_id': self.id})
@@ -531,7 +512,7 @@ class Course(CanvasObject):
             'GET',
             'courses/{}/modules'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_module(self, module, **kwargs):
@@ -551,8 +532,7 @@ class Course(CanvasObject):
         module_id = obj_or_id(module, "module", (Module,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/modules/{}'.format(self.id, module_id),
+            'GET', 'courses/{}/modules/{}'.format(self.id, module_id)
         )
         module_json = response.json()
         module_json.update({'course_id': self.id})
@@ -581,7 +561,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/modules'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_json = response.json()
         module_json.update({'course_id': self.id})
@@ -603,8 +583,7 @@ class Course(CanvasObject):
         tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/external_tools/{}'.format(self.id, tool_id),
+            'GET', 'courses/{}/external_tools/{}'.format(self.id, tool_id)
         )
         tool_json = response.json()
         tool_json.update({'course_id': self.id})
@@ -627,7 +606,7 @@ class Course(CanvasObject):
             'GET',
             'courses/{}/external_tools'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_sections(self, **kwargs):
@@ -647,7 +626,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/sections'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_section(self, section, **kwargs):
@@ -669,7 +648,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/sections/{}'.format(self.id, section_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Section(self._requester, response.json())
 
@@ -683,8 +662,7 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.course.Course`
         """
         response = self._requester.request(
-            'GET',
-            'courses/{}/front_page'.format(self.id)
+            'GET', 'courses/{}/front_page'.format(self.id)
         )
         page_json = response.json()
         page_json.update({'course_id': self.id})
@@ -703,7 +681,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/front_page'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         page_json = response.json()
         page_json.update({'course_id': self.id})
@@ -726,7 +704,7 @@ class Course(CanvasObject):
             'GET',
             'courses/{}/pages'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_page(self, wiki_page, **kwargs):
@@ -748,9 +726,7 @@ class Course(CanvasObject):
             raise RequiredFieldMissing("Dictionary with key 'title' is required.")
 
         response = self._requester.request(
-            'POST',
-            'courses/{}/pages'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'POST', 'courses/{}/pages'.format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
         page_json = response.json()
@@ -772,8 +748,7 @@ class Course(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/pages/{}'.format(self.id, url)
+            'GET', 'courses/{}/pages/{}'.format(self.id, url)
         )
         page_json = response.json()
         page_json.update({'course_id': self.id})
@@ -797,7 +772,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_sections` is being deprecated and will be removed in a future version."
             " Use `get_sections` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
         return self.get_sections(**kwargs)
 
@@ -812,10 +787,11 @@ class Course(CanvasObject):
         """
 
         from canvasapi.section import Section
+
         response = self._requester.request(
             'POST',
             'courses/{}/sections'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return Section(self._requester, response.json())
@@ -837,7 +813,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_groups` is being deprecated and will be removed in a future version."
             " Use `get_groups` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_groups(**kwargs)
@@ -853,12 +829,13 @@ class Course(CanvasObject):
             :class:`canvasapi.course.Course`
         """
         from canvasapi.group import Group
+
         return PaginatedList(
             Group,
             self._requester,
             'GET',
             'courses/{}/groups'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_group_category(self, name, **kwargs):
@@ -878,7 +855,7 @@ class Course(CanvasObject):
             'POST',
             'courses/{}/group_categories'.format(self.id),
             name=name,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GroupCategory(self._requester, response.json())
 
@@ -899,7 +876,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_group_categories` is being deprecated and will be removed in a future version."
             " Use `get_group_categories` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_group_categories(**kwargs)
@@ -921,7 +898,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/group_categories'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_file(self, file, **kwargs):
@@ -943,7 +920,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/files/{}'.format(self.id, file_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return File(self._requester, response.json())
 
@@ -962,8 +939,7 @@ class Course(CanvasObject):
         topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/discussion_topics/{}'.format(self.id, topic_id)
+            'GET', 'courses/{}/discussion_topics/{}'.format(self.id, topic_id)
         )
 
         response_json = response.json()
@@ -986,8 +962,7 @@ class Course(CanvasObject):
         topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/discussion_topics/{}/view'.format(self.id, topic_id),
+            'GET', 'courses/{}/discussion_topics/{}/view'.format(self.id, topic_id)
         )
         return response.json()
 
@@ -1007,7 +982,7 @@ class Course(CanvasObject):
             'GET',
             'courses/{}/discussion_topics'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_assignment_group(self, assignment_group, **kwargs):
@@ -1024,12 +999,14 @@ class Course(CanvasObject):
         """
         from canvasapi.assignment import AssignmentGroup
 
-        assignment_group_id = obj_or_id(assignment_group, "assignment_group", (AssignmentGroup,))
+        assignment_group_id = obj_or_id(
+            assignment_group, "assignment_group", (AssignmentGroup,)
+        )
 
         response = self._requester.request(
             'GET',
             'courses/{}/assignment_groups/{}'.format(self.id, assignment_group_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update({'course_id': self.id})
@@ -1053,7 +1030,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_assignment_groups` is being deprecated and will be removed "
             "in a future version. Use `get_assignment_groups` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_assignment_groups(**kwargs)
@@ -1076,7 +1053,7 @@ class Course(CanvasObject):
             'GET',
             'courses/{}/assignment_groups'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_discussion_topic(self, **kwargs):
@@ -1091,7 +1068,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/discussion_topics'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -1123,9 +1100,7 @@ class Course(CanvasObject):
             raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
-            'POST',
-            'courses/{}/discussion_topics/reorder'.format(self.id),
-            order=order
+            'POST', 'courses/{}/discussion_topics/reorder'.format(self.id), order=order
         )
 
         return response.json().get('reorder')
@@ -1144,14 +1119,16 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/assignment_groups'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update({'course_id': self.id})
 
         return AssignmentGroup(self._requester, response_json)
 
-    def create_external_tool(self, name, privacy_level, consumer_key, shared_secret, **kwargs):
+    def create_external_tool(
+        self, name, privacy_level, consumer_key, shared_secret, **kwargs
+    ):
         """
         Create an external tool in the current course.
 
@@ -1178,7 +1155,7 @@ class Course(CanvasObject):
             privacy_level=privacy_level,
             consumer_key=consumer_key,
             shared_secret=shared_secret,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update({'course_id': self.id})
@@ -1196,8 +1173,7 @@ class Course(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/analytics/activity'.format(self.id)
+            'GET', 'courses/{}/analytics/activity'.format(self.id)
         )
 
         return response.json()
@@ -1215,7 +1191,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/analytics/assignments'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
@@ -1233,7 +1209,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/analytics/student_summaries'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
@@ -1255,8 +1231,7 @@ class Course(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/analytics/users/{}/activity'.format(self.id, user_id)
+            'GET', 'courses/{}/analytics/users/{}/activity'.format(self.id, user_id)
         )
 
         return response.json()
@@ -1278,8 +1253,7 @@ class Course(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/analytics/users/{}/assignments'.format(self.id, user_id)
+            'GET', 'courses/{}/analytics/users/{}/assignments'.format(self.id, user_id)
         )
 
         return response.json()
@@ -1302,7 +1276,7 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/analytics/users/{}/communication'.format(self.id, user_id)
+            'courses/{}/analytics/users/{}/communication'.format(self.id, user_id),
         )
 
         return response.json()
@@ -1331,14 +1305,13 @@ class Course(CanvasObject):
         warnings.warn(
             'Course.submit_assignment() is deprecated and will be removed in '
             'the future. Use Assignment.submit() instead.',
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
         assignment = Assignment(
-            self._requester,
-            {'course_id': self.id, 'id': assignment_id}
+            self._requester, {'course_id': self.id, 'id': assignment_id}
         )
 
         return assignment.submit(submission, **kwargs)
@@ -1365,14 +1338,13 @@ class Course(CanvasObject):
         warnings.warn(
             'Course.list_submissions() is deprecated and will be removed in '
             'the future. Use Assignment.get_submissions() instead.',
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
         assignment = Assignment(
-            self._requester,
-            {'course_id': self.id, 'id': assignment_id}
+            self._requester, {'course_id': self.id, 'id': assignment_id}
         )
 
         return assignment.get_submissions(**kwargs)
@@ -1396,7 +1368,7 @@ class Course(CanvasObject):
             "`list_multiple_submissions`"
             " is being deprecated and will be removed in a future version."
             " Use `get_multiple_submissions` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_multiple_submissions(**kwargs)
@@ -1452,14 +1424,13 @@ class Course(CanvasObject):
         warnings.warn(
             '`Course.get_submission()` is deprecated and will be removed in a '
             'future version. Use `Assignment.get_submission()` instead',
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, 'assignment', (Assignment,))
 
         assignment = Assignment(
-            self._requester,
-            {'course_id': self.id, 'id': assignment_id}
+            self._requester, {'course_id': self.id, 'id': assignment_id}
         )
 
         return assignment.get_submission(user, **kwargs)
@@ -1488,17 +1459,16 @@ class Course(CanvasObject):
         warnings.warn(
             '`Course.update_submission()` is deprecated and will be removed in a '
             'future version. Use `Submission.edit()` instead',
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         user_id = obj_or_id(user, "user", (User,))
 
-        submission = Submission(self._requester, {
-            'course_id': self.id,
-            'assignment_id': assignment_id,
-            'user_id': user_id,
-        })
+        submission = Submission(
+            self._requester,
+            {'course_id': self.id, 'assignment_id': assignment_id, 'user_id': user_id},
+        )
 
         return submission.edit(**kwargs)
 
@@ -1525,13 +1495,12 @@ class Course(CanvasObject):
             '`Course.list_gradeable_students()` is deprecated and will be '
             'removed in a future version. Use '
             '`Assignment.get_gradeable_students()` instead.',
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         assignment = Assignment(
-            self._requester,
-            {'id': assignment_id, 'course_id': self.id}
+            self._requester, {'id': assignment_id, 'course_id': self.id}
         )
 
         return assignment.get_gradeable_students(**kwargs)
@@ -1561,17 +1530,16 @@ class Course(CanvasObject):
         warnings.warn(
             '`Course.mark_submission_as_read()` is deprecated and will be '
             'removed in a future version. Use `Submission.mark_read()` instead.',
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         user_id = obj_or_id(user, "user", (User,))
 
-        submission = Submission(self._requester, {
-            'course_id': self.id,
-            'assignment_id': assignment_id,
-            'user_id': user_id
-        })
+        submission = Submission(
+            self._requester,
+            {'course_id': self.id, 'assignment_id': assignment_id, 'user_id': user_id},
+        )
         return submission.mark_read(**kwargs)
 
     def mark_submission_as_unread(self, assignment, user, **kwargs):
@@ -1599,17 +1567,16 @@ class Course(CanvasObject):
         warnings.warn(
             '`Course.mark_submission_as_unread()` is deprecated and will be '
             'removed in a future version. Use `Submission.mark_unread()` instead.',
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         user_id = obj_or_id(user, "user", (User,))
 
-        submission = Submission(self._requester, {
-            'course_id': self.id,
-            'assignment_id': assignment_id,
-            'user_id': user_id
-        })
+        submission = Submission(
+            self._requester,
+            {'course_id': self.id, 'assignment_id': assignment_id, 'user_id': user_id},
+        )
         return submission.mark_unread(**kwargs)
 
     def list_external_feeds(self, **kwargs):
@@ -1629,7 +1596,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_external_feeds` is being deprecated and will be removed in "
             "a future version. Use `get_external_feeds` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_external_feeds(**kwargs)
@@ -1645,12 +1612,13 @@ class Course(CanvasObject):
             :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
+
         return PaginatedList(
             ExternalFeed,
             self._requester,
             'GET',
             'courses/{}/external_feeds'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_external_feed(self, url, **kwargs):
@@ -1665,11 +1633,12 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
         from canvasapi.external_feed import ExternalFeed
+
         response = self._requester.request(
             'POST',
             'courses/{}/external_feeds'.format(self.id),
             url=url,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return ExternalFeed(self._requester, response.json())
 
@@ -1690,8 +1659,7 @@ class Course(CanvasObject):
         feed_id = obj_or_id(feed, "feed", (ExternalFeed,))
 
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/external_feeds/{}'.format(self.id, feed_id)
+            'DELETE', 'courses/{}/external_feeds/{}'.format(self.id, feed_id)
         )
         return ExternalFeed(self._requester, response.json())
 
@@ -1712,7 +1680,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_files` is being deprecated and will be removed in a future "
             "version. Use `get_files` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_files(**kwargs)
@@ -1734,7 +1702,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/files'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_folder(self, folder):
@@ -1752,8 +1720,7 @@ class Course(CanvasObject):
         folder_id = obj_or_id(folder, "folder", (Folder,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/folders/{}'.format(self.id, folder_id)
+            'GET', 'courses/{}/folders/{}'.format(self.id, folder_id)
         )
         return Folder(self._requester, response.json())
 
@@ -1775,7 +1742,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_folders` is being deprecated and will be removed in a "
             "future version. Use `get_folders` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_folders(**kwargs)
@@ -1796,7 +1763,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/folders'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_folder(self, name, **kwargs):
@@ -1814,7 +1781,7 @@ class Course(CanvasObject):
             'POST',
             'courses/{}/folders'.format(self.id),
             name=name,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Folder(self._requester, response.json())
 
@@ -1836,7 +1803,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_tabs` is being deprecated and will be removed in a future "
             "version. Use `get_tabs` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_tabs(**kwargs)
@@ -1858,7 +1825,7 @@ class Course(CanvasObject):
             'GET',
             'courses/{}/tabs'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def update_tab(self, tab_id, **kwargs):
@@ -1880,13 +1847,10 @@ class Course(CanvasObject):
         warnings.warn(
             "`Course.update_tab()` is being deprecated and will be removed in "
             "a future version. Use `Tab.update()` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
-        tab = Tab(self._requester, {
-            'course_id': self.id,
-            'id': tab_id
-        })
+        tab = Tab(self._requester, {'course_id': self.id, 'id': tab_id})
         return tab.update(**kwargs)
 
     def get_rubric(self, rubric_id, **kwargs):
@@ -1903,7 +1867,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/rubrics/%s' % (self.id, rubric_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return Rubric(self._requester, response.json())
@@ -1925,7 +1889,7 @@ class Course(CanvasObject):
         warnings.warn(
             "`list_rubrics` is being deprecated and will be removed in a "
             "future version. Use `get_rubrics` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_rubrics(**kwargs)
@@ -1945,7 +1909,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/rubrics' % (self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_root_outcome_group(self):
@@ -1961,8 +1925,7 @@ class Course(CanvasObject):
         from canvasapi.outcome import OutcomeGroup
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/root_outcome_group'.format(self.id)
+            'GET', 'courses/{}/root_outcome_group'.format(self.id)
         )
         return OutcomeGroup(self._requester, response.json())
 
@@ -1984,8 +1947,7 @@ class Course(CanvasObject):
         outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/outcome_groups/{}'.format(self.id, outcome_group_id)
+            'GET', 'courses/{}/outcome_groups/{}'.format(self.id, outcome_group_id)
         )
 
         return OutcomeGroup(self._requester, response.json())
@@ -2007,7 +1969,7 @@ class Course(CanvasObject):
             OutcomeGroup,
             self._requester,
             'GET',
-            'courses/{}/outcome_groups'.format(self.id)
+            'courses/{}/outcome_groups'.format(self.id),
         )
 
     def get_all_outcome_links_in_context(self):
@@ -2027,7 +1989,7 @@ class Course(CanvasObject):
             OutcomeLink,
             self._requester,
             'GET',
-            'courses/{}/outcome_group_links'.format(self.id)
+            'courses/{}/outcome_group_links'.format(self.id),
         )
 
     def get_outcome_results(self, **kwargs):
@@ -2043,7 +2005,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/outcome_results'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
@@ -2061,7 +2023,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/outcome_rollups'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
@@ -2086,14 +2048,16 @@ class Course(CanvasObject):
             if not isinstance(entry, dict):
                 raise ValueError("grading_scheme_entry must consist of dictionaries.")
             if "name" not in entry or "value" not in entry:
-                raise ValueError("Dictionaries with keys 'name' and 'value' are required.")
+                raise ValueError(
+                    "Dictionaries with keys 'name' and 'value' are required."
+                )
         kwargs["grading_scheme_entry"] = grading_scheme_entry
 
         response = self._requester.request(
             'POST',
             'courses/%s/grading_standards' % (self.id),
             title=title,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GradingStandard(self._requester, response.json())
 
@@ -2112,7 +2076,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/%s/grading_standards' % (self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_single_grading_standard(self, grading_standard_id, **kwargs):
@@ -2130,7 +2094,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/%s/grading_standards/%d' % (self.id, grading_standard_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GradingStandard(self._requester, response.json())
 
@@ -2158,7 +2122,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/content_migrations'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -2180,12 +2144,14 @@ class Course(CanvasObject):
         """
         from canvasapi.content_migration import ContentMigration
 
-        migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+        migration_id = obj_or_id(
+            content_migration, "content_migration", (ContentMigration,)
+        )
 
         response = self._requester.request(
             'GET',
             'courses/{}/content_migrations/{}'.format(self.id, migration_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -2211,7 +2177,7 @@ class Course(CanvasObject):
             'GET',
             'courses/{}/content_migrations'.format(self.id),
             {'course_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_migration_systems(self, **kwargs):
@@ -2231,7 +2197,7 @@ class Course(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/content_migrations/migrators'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def set_quiz_extensions(self, quiz_extensions, **kwargs):
@@ -2281,10 +2247,12 @@ class Course(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/quiz_extensions'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         extension_list = response.json()['quiz_extensions']
-        return [QuizExtension(self._requester, extension) for extension in extension_list]
+        return [
+            QuizExtension(self._requester, extension) for extension in extension_list
+        ]
 
     def submissions_bulk_update(self, **kwargs):
         """
@@ -2298,10 +2266,8 @@ class Course(CanvasObject):
         """
         response = self._requester.request(
             'POST',
-            'courses/{}/submissions/update_grades'.format(
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/submissions/update_grades'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Progress(self._requester, response.json())
 
@@ -2326,11 +2292,8 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/blueprint_templates/{}'.format(
-                self.id,
-                template_id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/blueprint_templates/{}'.format(self.id, template_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return BlueprintTemplate(self._requester, response.json())
 
@@ -2350,11 +2313,9 @@ class Course(CanvasObject):
             BlueprintSubscription,
             self._requester,
             'GET',
-            'courses/{}/blueprint_subscriptions'.format(
-                self.id
-            ),
+            'courses/{}/blueprint_subscriptions'.format(self.id),
             {'course_id': self.id},
-            kwargs=combine_kwargs(**kwargs)
+            kwargs=combine_kwargs(**kwargs),
         )
 
     def import_outcome(self, attachment, **kwargs):
@@ -2476,12 +2437,10 @@ class Course(CanvasObject):
             GradingPeriod,
             self._requester,
             'GET',
-            'courses/{}/grading_periods'.format(
-                self.id
-            ),
+            'courses/{}/grading_periods'.format(self.id),
             {'course_id': self.id},
             _root="grading_periods",
-            kwargs=combine_kwargs(**kwargs)
+            kwargs=combine_kwargs(**kwargs),
         )
 
     def get_grading_period(self, grading_period, **kwargs):
@@ -2498,10 +2457,8 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/grading_periods/{}'.format(
-                self.id, grading_period
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/grading_periods/{}'.format(self.id, grading_period),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_grading_period = response.json()['grading_periods'][0]
@@ -2525,10 +2482,8 @@ class Course(CanvasObject):
             ContentExport,
             self._requester,
             'GET',
-            'courses/{}/content_exports'.format(
-                self.id
-            ),
-            kwargs=combine_kwargs(**kwargs)
+            'courses/{}/content_exports'.format(self.id),
+            kwargs=combine_kwargs(**kwargs),
         )
 
     def get_content_export(self, content_export, **kwargs):
@@ -2549,11 +2504,8 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/content_exports/{}'.format(
-                self.id,
-                export_id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/content_exports/{}'.format(self.id, export_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return ContentExport(self._requester, response.json())
@@ -2576,17 +2528,14 @@ class Course(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'courses/{}/content_exports'.format(
-                self.id,
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/content_exports'.format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return ContentExport(self._requester, response.json())
 
 
 @python_2_unicode_compatible
 class CourseNickname(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.nickname, self.course_id)
 
@@ -2601,7 +2550,6 @@ class CourseNickname(CanvasObject):
         :rtype: :class:`canvasapi.course.CourseNickname`
         """
         response = self._requester.request(
-            'DELETE',
-            'users/self/course_nicknames/{}'.format(self.course_id)
+            'DELETE', 'users/self/course_nicknames/{}'.format(self.course_id)
         )
         return CourseNickname(self._requester, response.json())

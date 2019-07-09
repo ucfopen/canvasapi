@@ -10,7 +10,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Page(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
 
@@ -27,7 +26,7 @@ class Page(CanvasObject):
         response = self._requester.request(
             'PUT',
             '{}s/{}/pages/{}'.format(self.parent_type, self.parent_id, self.url),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         page_json = response.json()
@@ -46,8 +45,7 @@ class Page(CanvasObject):
         :rtype: :class:`canvasapi.page.Page`
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/pages/{}'.format(self.course_id, self.url)
+            'DELETE', 'courses/{}/pages/{}'.format(self.course_id, self.url)
         )
         return Page(self._requester, response.json())
 
@@ -94,8 +92,7 @@ class Page(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self.parent_type, self.parent_id)
+            'GET', '{}s/{}'.format(self.parent_type, self.parent_id)
         )
 
         if self.parent_type == 'group':
@@ -114,8 +111,10 @@ class Page(CanvasObject):
         """
         response = self._requester.request(
             'GET',
-            '{}s/{}/pages/{}/revisions/latest'.format(self.parent_type, self.parent_id, self.url),
-            _kwargs=combine_kwargs(**kwargs)
+            '{}s/{}/pages/{}/revisions/latest'.format(
+                self.parent_type, self.parent_id, self.url
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return PageRevision(self._requester, response.json())
 
@@ -137,12 +136,9 @@ class Page(CanvasObject):
         response = self._requester.request(
             'GET',
             '{}s/{}/pages/{}/revisions/{}'.format(
-                self.parent_type,
-                self.parent_id,
-                self.url,
-                revision_id
+                self.parent_type, self.parent_id, self.url, revision_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
@@ -169,7 +165,7 @@ class Page(CanvasObject):
         warnings.warn(
             "`list_revisions` is being deprecated and will be removed in a "
             "future version. Use `get_revisions` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_revisions(**kwargs)
@@ -188,8 +184,10 @@ class Page(CanvasObject):
             PageRevision,
             self._requester,
             'GET',
-            '{}s/{}/pages/{}/revisions'.format(self.parent_type, self.parent_id, self.url),
-            _kwargs=combine_kwargs(**kwargs)
+            '{}s/{}/pages/{}/revisions'.format(
+                self.parent_type, self.parent_id, self.url
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def revert_to_revision(self, revision):
@@ -209,10 +207,7 @@ class Page(CanvasObject):
         response = self._requester.request(
             'POST',
             '{}s/{}/pages/{}/revisions/{}'.format(
-                self.parent_type,
-                self.parent_id,
-                self.url,
-                revision_id
+                self.parent_type, self.parent_id, self.url, revision_id
             ),
         )
         pagerev_json = response.json()
@@ -226,7 +221,6 @@ class Page(CanvasObject):
 
 @python_2_unicode_compatible
 class PageRevision(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.updated_at, self.revision_id)
 
@@ -273,8 +267,7 @@ class PageRevision(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self.parent_type, self.parent_id)
+            'GET', '{}s/{}'.format(self.parent_type, self.parent_id)
         )
 
         if self.parent_type == 'group':

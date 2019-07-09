@@ -12,7 +12,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestPlannerNote(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -66,8 +65,7 @@ class TestPlannerNote(unittest.TestCase):
         self.assertTrue(hasattr(note_create_1, 'title'))
 
         note_create_2 = self.canvas.create_planner_note(
-            title='Perform photosynthesis',
-            todo_date='2019-09-05T12:10:30Z'
+            title='Perform photosynthesis', todo_date='2019-09-05T12:10:30Z'
         )
         self.assertIsInstance(note_create_2, PlannerNote)
         self.assertTrue(hasattr(note_create_2, 'title'))
@@ -82,9 +80,8 @@ class TestPlannerNote(unittest.TestCase):
         self.assertEqual(note_update_1.title, 'Go to restroom')
 
         note_update_2 = self.note.update(
-                title='Go to restroom',
-                todo_date='2020-01-07T15:16:18Z'
-            )
+            title='Go to restroom', todo_date='2020-01-07T15:16:18Z'
+        )
         self.assertIsInstance(note_update_2, PlannerNote)
         self.assertEqual(note_update_2.title, 'Go to restroom')
         self.assertEqual(note_update_2.todo_date, '2020-01-07T15:16:18Z')
@@ -102,7 +99,6 @@ class TestPlannerNote(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestPlannerOverride(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -151,8 +147,7 @@ class TestPlannerOverride(unittest.TestCase):
         register_uris({'planner': ['create_planner_override']}, m)
 
         override_create = self.canvas.create_planner_override(
-            plannable_type='assignment',
-            plannable_id=69
+            plannable_type='assignment', plannable_id=69
         )
         self.assertIsInstance(override_create, PlannerOverride)
         self.assertTrue(hasattr(override_create, 'plannable_id'))
@@ -165,7 +160,9 @@ class TestPlannerOverride(unittest.TestCase):
     # create_planner_override()
     def test_create_planner_override_fail_2(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.canvas.create_planner_override(plannable_type='assignment', plannable_id=None)
+            self.canvas.create_planner_override(
+                plannable_type='assignment', plannable_id=None
+            )
 
     # update()
     def test_update(self, m):

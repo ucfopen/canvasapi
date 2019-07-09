@@ -24,7 +24,7 @@ class TestContentMigration(unittest.TestCase):
                 'course': ['get_by_id', 'get_content_migration_single'],
                 'group': ['get_by_id', 'get_content_migration_single'],
                 'account': ['get_by_id', 'get_content_migration_single'],
-                'user': ['get_by_id', 'get_content_migration_single']
+                'user': ['get_by_id', 'get_content_migration_single'],
             }
             register_uris(requires, m)
 
@@ -163,7 +163,6 @@ class TestContentMigration(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestMigrationIssue(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -173,10 +172,12 @@ class TestMigrationIssue(unittest.TestCase):
                 'group': ['get_by_id', 'get_content_migration_single'],
                 'account': ['get_by_id', 'get_content_migration_single'],
                 'user': ['get_by_id', 'get_content_migration_single'],
-                'content_migration': ['get_migration_issue_single',
-                                      'get_migration_issue_single_course',
-                                      'get_migration_issue_single_group',
-                                      'get_migration_issue_single_user']
+                'content_migration': [
+                    'get_migration_issue_single',
+                    'get_migration_issue_single_course',
+                    'get_migration_issue_single_group',
+                    'get_migration_issue_single_user',
+                ],
             }
             register_uris(requires, m)
 
@@ -191,9 +192,15 @@ class TestMigrationIssue(unittest.TestCase):
             self.content_migration_user = self.user.get_content_migration(1)
 
             self.migration_issue = self.content_migration.get_migration_issue(1)
-            self.migration_issue_course = self.content_migration_course.get_migration_issue(1)
-            self.migration_issue_group = self.content_migration_group.get_migration_issue(1)
-            self.migration_issue_user = self.content_migration_user.get_migration_issue(1)
+            self.migration_issue_course = self.content_migration_course.get_migration_issue(
+                1
+            )
+            self.migration_issue_group = self.content_migration_group.get_migration_issue(
+                1
+            )
+            self.migration_issue_user = self.content_migration_user.get_migration_issue(
+                1
+            )
 
     # __str__()
     def test__str__(self, m):
@@ -227,10 +234,12 @@ class TestMigrator(unittest.TestCase):
                 'group': ['get_by_id', 'get_migration_systems_multiple'],
                 'account': ['get_by_id', 'get_migration_systems_multiple'],
                 'user': ['get_by_id', 'get_migration_systems_multiple'],
-                'content_migration': ['get_migration_issue_single',
-                                      'get_migration_issue_single_course',
-                                      'get_migration_issue_single_group',
-                                      'get_migration_issue_single_user']
+                'content_migration': [
+                    'get_migration_issue_single',
+                    'get_migration_issue_single_course',
+                    'get_migration_issue_single_group',
+                    'get_migration_issue_single_user',
+                ],
             }
             register_uris(requires, m)
 

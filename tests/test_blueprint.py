@@ -13,14 +13,17 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestBlueprint(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_blueprint', 'get_by_id', 'list_blueprint_subscriptions'],
-                'blueprint': ['show_blueprint_migration']
+                'course': [
+                    'get_blueprint',
+                    'get_by_id',
+                    'list_blueprint_subscriptions',
+                ],
+                'blueprint': ['show_blueprint_migration'],
             }
             register_uris(requires, m)
 
@@ -57,7 +60,9 @@ class TestBlueprint(unittest.TestCase):
     # change_blueprint_restrictions()
     def test_change_blueprint_restrictions(self, m):
         register_uris({'blueprint': ['change_blueprint_restrictions']}, m)
-        blueprint_restriction = self.blueprint.change_blueprint_restrictions("quiz", 1, True)
+        blueprint_restriction = self.blueprint.change_blueprint_restrictions(
+            "quiz", 1, True
+        )
         self.assertIsInstance(blueprint_restriction, bool)
 
     # get_unsynced_changes()
@@ -94,14 +99,17 @@ class TestBlueprint(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestBlueprintSubscription(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_blueprint', 'get_by_id', 'list_blueprint_subscriptions'],
-                'blueprint': ['show_blueprint_migration']
+                'course': [
+                    'get_blueprint',
+                    'get_by_id',
+                    'list_blueprint_subscriptions',
+                ],
+                'blueprint': ['show_blueprint_migration'],
             }
             register_uris(requires, m)
 
@@ -116,6 +124,7 @@ class TestBlueprintSubscription(unittest.TestCase):
         self.assertIsInstance(string, str)
 
         # list_blueprint_imports()
+
     def test_list_blueprint_imports(self, m):
         register_uris({'blueprint': ['list_blueprint_imports']}, m)
         blueprint_imports = self.blueprint_subscription.list_blueprint_imports()
@@ -125,6 +134,7 @@ class TestBlueprintSubscription(unittest.TestCase):
         self.assertEqual(blueprint_imports[0].subscription_id, 10)
 
         # show_blueprint_import
+
     def test_show_blueprint_import(self, m):
         register_uris({'blueprint': ['show_blueprint_import']}, m)
         blueprint_import = self.blueprint_subscription.show_blueprint_import(3)
@@ -133,17 +143,21 @@ class TestBlueprintSubscription(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestBlueprintMigration(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_blueprint', 'get_by_id', 'list_blueprint_subscriptions'],
+                'course': [
+                    'get_blueprint',
+                    'get_by_id',
+                    'list_blueprint_subscriptions',
+                ],
                 'blueprint': [
-                    'show_blueprint_migration', 'list_blueprint_imports',
-                    'show_blueprint_import'
-                ]
+                    'show_blueprint_migration',
+                    'list_blueprint_imports',
+                    'show_blueprint_import',
+                ],
             }
             register_uris(requires, m)
 
@@ -151,7 +165,9 @@ class TestBlueprintMigration(unittest.TestCase):
             self.blueprint = self.course.get_blueprint(1)
             self.blueprint_migration = self.blueprint.show_blueprint_migration(1)
             self.blueprint_subscription = self.course.list_blueprint_subscriptions()[0]
-            self.blueprint_imports = self.blueprint_subscription.list_blueprint_imports()[0]
+            self.blueprint_imports = self.blueprint_subscription.list_blueprint_imports()[
+                0
+            ]
             self.b_import = self.blueprint_subscription.show_blueprint_import(3)
 
     # __str__()

@@ -7,7 +7,6 @@ from canvasapi.canvas_object import CanvasObject
 
 @python_2_unicode_compatible
 class Enrollment(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.type, self.id)
 
@@ -28,15 +27,16 @@ class Enrollment(CanvasObject):
         ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
 
         if task not in ALLOWED_TASKS:
-            raise ValueError('{} is not a valid task. Please use one of the following: {}'.format(
-                task,
-                ','.join(ALLOWED_TASKS)
-            ))
+            raise ValueError(
+                '{} is not a valid task. Please use one of the following: {}'.format(
+                    task, ','.join(ALLOWED_TASKS)
+                )
+            )
 
         response = self._requester.request(
             'DELETE',
             'courses/{}/enrollments/{}'.format(self.course_id, self.id),
-            task=task
+            task=task,
         )
         return Enrollment(self._requester, response.json())
 
@@ -51,6 +51,6 @@ class Enrollment(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/{}/enrollments/{}/reactivate'.format(self.course_id, self.id)
+            'courses/{}/enrollments/{}/reactivate'.format(self.course_id, self.id),
         )
         return Enrollment(self._requester, response.json())

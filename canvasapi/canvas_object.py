@@ -29,7 +29,13 @@ class CanvasObject(object):
 
     def __repr__(self):  # pragma: no cover
         classname = self.__class__.__name__
-        attrs = ', '.join(['{}={}'.format(attr, val) for attr, val in self.__dict__.items() if attr != 'attributes'])  # noqa
+        attrs = ', '.join(
+            [
+                '{}={}'.format(attr, val)
+                for attr, val in self.__dict__.items()
+                if attr != 'attributes'
+            ]
+        )  # noqa
         return '{}({})'.format(classname, attrs)
 
     def to_json(self):

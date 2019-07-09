@@ -12,7 +12,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestPollSession(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -20,7 +19,7 @@ class TestPollSession(unittest.TestCase):
             requires = {
                 'user': ['get_by_id'],
                 'poll': ['get_poll'],
-                'poll_session': ['get_session']
+                'poll_session': ['get_session'],
             }
             register_uris(requires, m)
 
@@ -70,21 +69,23 @@ class TestPollSession(unittest.TestCase):
         self.assertIsInstance(new_session_cid, PollSession)
         self.assertEqual(new_session_cid.course_id, 1)
 
-        new_session_cid_sid = self.poll.create_session([{'course_id': 1},
-                                                        {'course_section_id': 1}])
+        new_session_cid_sid = self.poll.create_session(
+            [{'course_id': 1}, {'course_section_id': 1}]
+        )
         self.assertIsInstance(new_session_cid_sid, PollSession)
         self.assertEqual(new_session_cid_sid.course_id, 1)
         self.assertEqual(new_session_cid_sid.course_section_id, 1)
 
-        new_session_cid_hpr = self.poll.create_session([{'course_id': 1},
-                                                        {'has_public_results': False}])
+        new_session_cid_hpr = self.poll.create_session(
+            [{'course_id': 1}, {'has_public_results': False}]
+        )
         self.assertIsInstance(new_session_cid_hpr, PollSession)
         self.assertEqual(new_session_cid_hpr.course_id, 1)
         self.assertFalse(new_session_cid_hpr.has_public_results)
 
-        new_session_cid_sid_hpr = self.poll.create_session([{'course_id': 1},
-                                                            {'course_section_id': 1},
-                                                            {'has_public_results': False}])
+        new_session_cid_sid_hpr = self.poll.create_session(
+            [{'course_id': 1}, {'course_section_id': 1}, {'has_public_results': False}]
+        )
         self.assertIsInstance(new_session_cid_sid_hpr, PollSession)
         self.assertEqual(new_session_cid_sid_hpr.course_id, 1)
         self.assertEqual(new_session_cid_sid_hpr.course_section_id, 1)
@@ -104,32 +105,22 @@ class TestPollSession(unittest.TestCase):
         self.assertEqual(updated_session_cid.course_id, 2)
 
         updated_session_cid_sid = self.poll.poll_session.update(
-                [
-                    {'course_id': 2},
-                    {'course_section_id': 2}
-                ]
-            )
+            [{'course_id': 2}, {'course_section_id': 2}]
+        )
         self.assertIsInstance(updated_session_cid_sid, PollSession)
         self.assertEqual(updated_session_cid_sid.course_id, 2)
         self.assertEqual(updated_session_cid_sid.course_section_id, 2)
 
         updated_session_cid_hpr = self.poll.poll_session.update(
-                [
-                    {'course_id': 2},
-                    {'has_public_results': True}
-                ]
-            )
+            [{'course_id': 2}, {'has_public_results': True}]
+        )
         self.assertIsInstance(updated_session_cid_hpr, PollSession)
         self.assertEqual(updated_session_cid_hpr.course_id, 2)
         self.assertTrue(updated_session_cid_hpr.has_public_results)
 
         updated_session_cid_sid_hpr = self.poll.poll_session.update(
-                [
-                    {'course_id': 2},
-                    {'course_section_id': 2},
-                    {'has_public_results': True}
-                ]
-            )
+            [{'course_id': 2}, {'course_section_id': 2}, {'has_public_results': True}]
+        )
         self.assertIsInstance(updated_session_cid_sid_hpr, PollSession)
         self.assertEqual(updated_session_cid_sid_hpr.course_id, 2)
         self.assertEqual(updated_session_cid_sid_hpr.course_section_id, 2)

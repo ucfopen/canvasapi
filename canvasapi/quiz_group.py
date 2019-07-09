@@ -9,7 +9,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class QuizGroup(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -46,7 +45,7 @@ class QuizGroup(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.quiz_id, id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         successful = 'name' in response.json().get('quiz_groups')[0]
@@ -70,9 +69,9 @@ class QuizGroup(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.quiz_id, id)
+            'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.quiz_id, id),
         )
-        return (response.status_code == 204)
+        return response.status_code == 204
 
     def reorder_question_group(self, id, order, **kwargs):
         """
@@ -107,8 +106,10 @@ class QuizGroup(CanvasObject):
 
         response = self._requester.request(
             'POST',
-            'courses/{}/quizzes/{}/groups/{}/reorder'.format(self.course_id, self.quiz_id, id),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/quizzes/{}/groups/{}/reorder'.format(
+                self.course_id, self.quiz_id, id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-        return (response.status_code == 204)
+        return response.status_code == 204

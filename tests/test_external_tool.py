@@ -15,7 +15,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestExternalTool(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -94,14 +93,14 @@ class TestExternalTool(unittest.TestCase):
         requires = {'external_tool': ['get_sessionless_launch_url_course']}
         register_uris(requires, m)
 
-        self.assertIsInstance(self.ext_tool_course.get_sessionless_launch_url(), text_type)
+        self.assertIsInstance(
+            self.ext_tool_course.get_sessionless_launch_url(), text_type
+        )
 
     def test_get_sessionless_launch_url_no_url(self, m):
         requires = {
             'course': ['get_by_id_2'],
-            'external_tool': [
-                'get_by_id_course_2', 'sessionless_launch_no_url'
-            ]
+            'external_tool': ['get_by_id_course_2', 'sessionless_launch_no_url'],
         }
         register_uris(requires, m)
 

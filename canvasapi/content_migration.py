@@ -30,7 +30,8 @@ class ContentMigration(CanvasObject):
             return self.user_id
         else:
             raise ValueError(
-                "Content Migration does not have an account_id, course_id, group_id or user_id")
+                "Content Migration does not have an account_id, course_id, group_id or user_id"
+            )
 
     @property
     def _parent_type(self):
@@ -49,7 +50,8 @@ class ContentMigration(CanvasObject):
             return 'user'
         else:
             raise ValueError(
-                "Content Migration does not have an account_id, course_id, group_id or user_id")
+                "Content Migration does not have an account_id, course_id, group_id or user_id"
+            )
 
     def get_migration_issue(self, migration_issue, **kwargs):
         """
@@ -78,23 +80,26 @@ class ContentMigration(CanvasObject):
         """
         from canvasapi.content_migration import MigrationIssue
 
-        migration_issue_id = obj_or_id(migration_issue, "migration_issue", (MigrationIssue,))
+        migration_issue_id = obj_or_id(
+            migration_issue, "migration_issue", (MigrationIssue,)
+        )
 
         response = self._requester.request(
             'GET',
             '{}s/{}/content_migrations/{}/migration_issues/{}'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id,
-                migration_issue_id),
-            _kwargs=combine_kwargs(**kwargs)
+                self._parent_type, self._parent_id, self.id, migration_issue_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
-        response_json.update({
-            'context_type': self._parent_type,
-            'context_id': self._parent_id,
-            'content_migration_id': self.id})
+        response_json.update(
+            {
+                'context_type': self._parent_type,
+                'context_id': self._parent_id,
+                'content_migration_id': self.id,
+            }
+        )
 
         return MigrationIssue(self._requester, response_json)
 
@@ -128,12 +133,14 @@ class ContentMigration(CanvasObject):
             self._requester,
             'GET',
             '{}s/{}/content_migrations/{}/migration_issues/'.format(
-                self._parent_type,
-                self._parent_id, self.id),
-            {'context_type': self._parent_type,
-             'context_id': self._parent_id,
-             'content_migration_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+                self._parent_type, self._parent_id, self.id
+            ),
+            {
+                'context_type': self._parent_type,
+                'context_id': self._parent_id,
+                'content_migration_id': self.id,
+            },
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_parent(self, **kwargs):
@@ -153,7 +160,7 @@ class ContentMigration(CanvasObject):
         response = self._requester.request(
             'GET',
             '{}s/{}'.format(self._parent_type, self._parent_id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if self._parent_type == 'group':
@@ -180,9 +187,7 @@ class ContentMigration(CanvasObject):
         progress_id = self.progress_url.split("/")[-1]
 
         response = self._requester.request(
-            'GET',
-            'progress/{}'.format(progress_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'GET', 'progress/{}'.format(progress_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Progress(self._requester, response.json())
 
@@ -207,8 +212,10 @@ class ContentMigration(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            '{}s/{}/content_migrations/{}'.format(self._parent_type, self._parent_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            '{}s/{}/content_migrations/{}'.format(
+                self._parent_type, self._parent_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if 'migration_type' in response.json():
@@ -246,11 +253,9 @@ class MigrationIssue(CanvasObject):
         response = self._requester.request(
             'PUT',
             '{}s/{}/content_migrations/{}/migration_issues/{}'.format(
-                self.context_type,
-                self.context_id,
-                self.content_migration_id,
-                self.id),
-            _kwargs=combine_kwargs(**kwargs)
+                self.context_type, self.context_id, self.content_migration_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if 'workflow_state' in response.json():

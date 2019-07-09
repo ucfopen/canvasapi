@@ -11,15 +11,11 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestEnrollment(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {
-                'account': ['get_by_id'],
-                'enrollment': ['get_by_id']
-            }
+            requires = {'account': ['get_by_id'], 'enrollment': ['get_by_id']}
             register_uris(requires, m)
 
             self.account = self.canvas.get_account(1)

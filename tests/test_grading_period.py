@@ -12,13 +12,12 @@ from tests import settings
 
 @requests_mock.Mocker()
 class TestGradingPeriod(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         self.grading_period = GradingPeriod(
             self.canvas._Canvas__requester,
-            {"title": "grading period 1", "id": 1, "course_id": 1}
+            {"title": "grading period 1", "id": 1, "course_id": 1},
         )
 
     def test_str(self, m):
@@ -31,10 +30,12 @@ class TestGradingPeriod(unittest.TestCase):
         register_uris({'grading_period': ['update']}, m)
 
         edited_grading_period = self.grading_period.update(
-            grading_period=[{
-                'start_date': '2019-06-10T06:00:00Z',
-                'end_date': '2019-06-15T06:00:00Z'
-            }]
+            grading_period=[
+                {
+                    'start_date': '2019-06-10T06:00:00Z',
+                    'end_date': '2019-06-15T06:00:00Z',
+                }
+            ]
         )
 
         self.assertIsInstance(edited_grading_period, GradingPeriod)
@@ -55,7 +56,7 @@ class TestGradingPeriod(unittest.TestCase):
             self.grading_period.update(
                 grading_period={
                     'start_date': '2019-06-10T06:00:00Z',
-                    'end_date': '2019-06-15T06:00:00Z'
+                    'end_date': '2019-06-15T06:00:00Z',
                 }
             )
 
@@ -64,18 +65,18 @@ class TestGradingPeriod(unittest.TestCase):
         register_uris({'grading_period': ['update']}, m)
 
         with self.assertRaises(RequiredFieldMissing):
-            self.grading_period.update(grading_period=[{
-                'end_date': '2019-06-15T06:00:00Z'
-            }])
+            self.grading_period.update(
+                grading_period=[{'end_date': '2019-06-15T06:00:00Z'}]
+            )
 
     # Check that the appropriate exception is raised when no list is given.
     def test_update_without_end_date(self, m):
         register_uris({'grading_period': ['update']}, m)
 
         with self.assertRaises(RequiredFieldMissing):
-            self.grading_period.update(grading_period=[{
-                'start_date': '2019-06-10T06:00:00Z'
-            }])
+            self.grading_period.update(
+                grading_period=[{'start_date': '2019-06-10T06:00:00Z'}]
+            )
 
     # delete()
     def test_delete(self, m):

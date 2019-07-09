@@ -62,9 +62,7 @@ class Uploader(object):
         self.kwargs['size'] = os.fstat(file.fileno()).st_size
 
         response = self._requester.request(
-            'POST',
-            self.url,
-            _kwargs=combine_kwargs(**self.kwargs)
+            'POST', self.url, _kwargs=combine_kwargs(**self.kwargs)
         )
 
         return self.upload(response, file)
@@ -94,7 +92,7 @@ class Uploader(object):
             use_auth=False,
             _url=response.get('upload_url'),
             file=file,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         # remove `while(1);` that may appear at the top of a response

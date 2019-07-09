@@ -11,7 +11,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Module(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -27,7 +26,7 @@ class Module(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/modules/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_json = response.json()
         module_json.update({'course_id': self.course_id})
@@ -44,8 +43,7 @@ class Module(CanvasObject):
         :rtype: :class:`canvasapi.module.Module`
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/modules/{}'.format(self.course_id, self.id),
+            'DELETE', 'courses/{}/modules/{}'.format(self.course_id, self.id)
         )
         module_json = response.json()
         module_json.update({'course_id': self.course_id})
@@ -66,8 +64,7 @@ class Module(CanvasObject):
         :rtype: :class:`canvasapi.module.Module`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/modules/{}/relock'.format(self.course_id, self.id),
+            'PUT', 'courses/{}/modules/{}/relock'.format(self.course_id, self.id)
         )
         module_json = response.json()
         module_json.update({'course_id': self.course_id})
@@ -91,7 +88,7 @@ class Module(CanvasObject):
         warnings.warn(
             "`list_module_items` is being deprecated and will be removed in a "
             "future version. Use `get_module_items` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_module_items(**kwargs)
@@ -112,7 +109,7 @@ class Module(CanvasObject):
             'GET',
             'courses/{}/modules/{}/items'.format(self.course_id, self.id),
             {'course_id': self.course_id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_module_item(self, module_item, **kwargs):
@@ -131,8 +128,10 @@ class Module(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.id, module_item_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/modules/{}/items/{}'.format(
+                self.course_id, self.id, module_item_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -155,14 +154,16 @@ class Module(CanvasObject):
             if 'content_id' in module_item:
                 kwargs['module_item'] = module_item
             else:
-                raise RequiredFieldMissing("Dictionary with key 'content_id' is required.")
+                raise RequiredFieldMissing(
+                    "Dictionary with key 'content_id' is required."
+                )
         else:
             raise RequiredFieldMissing("Dictionary with key 'type' is required.")
 
         response = self._requester.request(
             'POST',
             'courses/{}/modules/{}/items'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -172,7 +173,6 @@ class Module(CanvasObject):
 
 @python_2_unicode_compatible
 class ModuleItem(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
@@ -188,8 +188,10 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.module_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/modules/{}/items/{}'.format(
+                self.course_id, self.module_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -207,7 +209,9 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/{}/modules/{}/items/{}'.format(self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}'.format(
+                self.course_id, self.module_id, self.id
+            ),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -225,7 +229,9 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'PUT',
-            'courses/{}/modules/{}/items/{}/done'.format(self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}/done'.format(
+                self.course_id, self.module_id, self.id
+            ),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})
@@ -243,7 +249,9 @@ class ModuleItem(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'courses/{}/modules/{}/items/{}/done'.format(self.course_id, self.module_id, self.id),
+            'courses/{}/modules/{}/items/{}/done'.format(
+                self.course_id, self.module_id, self.id
+            ),
         )
         module_item_json = response.json()
         module_item_json.update({'course_id': self.course_id})

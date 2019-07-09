@@ -11,7 +11,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestConversation(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -61,7 +60,9 @@ class TestConversation(unittest.TestCase):
         recipients = {'bob': 1, 'joe': 2}
         string_bob = "Bob was added to the conversation by Hank TA"
         string_joe = "Joe was added to the conversation by Hank TA"
-        result = self.conversation.add_recipients([recipients['bob'], recipients['joe']])
+        result = self.conversation.add_recipients(
+            [recipients['bob'], recipients['joe']]
+        )
         self.assertTrue(hasattr(result, 'messages'))
         self.assertEqual(len(result.messages), 2)
         self.assertEqual(result.messages[0]["body"], string_bob)

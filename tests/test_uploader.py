@@ -12,7 +12,6 @@ from tests.util import cleanup_file, register_uris
 
 @requests_mock.Mocker()
 class TestUploader(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         self.requester = self.canvas._Canvas__requester
@@ -26,9 +25,7 @@ class TestUploader(unittest.TestCase):
 
     # start()
     def test_start(self, m):
-        requires = {
-            'uploader': ['upload_response', 'upload_response_upload_url']
-        }
+        requires = {'uploader': ['upload_response', 'upload_response_upload_url']}
         register_uris(requires, m)
 
         uploader = Uploader(self.requester, 'upload_response', self.file)
@@ -39,9 +36,7 @@ class TestUploader(unittest.TestCase):
         self.assertIn('url', result[1])
 
     def test_start_path(self, m):
-        requires = {
-            'uploader': ['upload_response', 'upload_response_upload_url']
-        }
+        requires = {'uploader': ['upload_response', 'upload_response_upload_url']}
         register_uris(requires, m)
 
         uploader = Uploader(self.requester, 'upload_response', self.filename)
@@ -60,18 +55,20 @@ class TestUploader(unittest.TestCase):
         register_uris({'uploader': ['upload_response_no_upload_url']}, m)
 
         with self.assertRaises(ValueError):
-            Uploader(self.requester, 'upload_response_no_upload_url', self.filename).start()
+            Uploader(
+                self.requester, 'upload_response_no_upload_url', self.filename
+            ).start()
 
     def test_upload_no_upload_params(self, m):
         register_uris({'uploader': ['upload_response_no_upload_params']}, m)
 
         with self.assertRaises(ValueError):
-            Uploader(self.requester, 'upload_response_no_upload_params', self.filename).start()
+            Uploader(
+                self.requester, 'upload_response_no_upload_params', self.filename
+            ).start()
 
     def test_upload_fail(self, m):
-        requires = {
-            'uploader': ['upload_fail', 'upload_response_fail']
-        }
+        requires = {'uploader': ['upload_fail', 'upload_response_fail']}
         register_uris(requires, m)
 
         uploader = Uploader(self.requester, 'upload_response_fail', self.file)

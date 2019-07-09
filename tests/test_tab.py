@@ -11,15 +11,17 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestTab(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({
-                'course': ['get_by_id', 'list_tabs'],
-                'group': ['get_by_id', 'list_tabs']
-            }, m)
+            register_uris(
+                {
+                    'course': ['get_by_id', 'list_tabs'],
+                    'group': ['get_by_id', 'list_tabs'],
+                },
+                m,
+            )
 
             self.course = self.canvas.get_course(1)
 

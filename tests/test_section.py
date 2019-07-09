@@ -17,7 +17,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestSection(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -51,11 +50,7 @@ class TestSection(unittest.TestCase):
         self.assertIsInstance(enrollment_list[0], Enrollment)
 
     def test_cross_list_section(self, m):
-        register_uris(
-            {
-                'course': ['get_by_id_2'],
-                'section': ['crosslist_section']
-            }, m)
+        register_uris({'course': ['get_by_id_2'], 'section': ['crosslist_section']}, m)
 
         section_by_id = self.section.cross_list_section(2)
         self.assertIsInstance(section_by_id, Section)
@@ -91,8 +86,10 @@ class TestSection(unittest.TestCase):
             {
                 'assignment': ['submit'],
                 'submission': ['get_by_id_section'],
-                'user': ['get_by_id', 'get_user_assignments']
-            }, m)
+                'user': ['get_by_id', 'get_user_assignments'],
+            },
+            m,
+        )
 
         assignment_id = 1
         sub_type = "online_upload"
@@ -112,7 +109,9 @@ class TestSection(unittest.TestCase):
         sub_type = "online_upload"
         sub_dict = {'submission_type': sub_type}
         with warnings.catch_warnings(record=True) as warning_list:
-            assignment_by_obj = self.section.submit_assignment(assignments_obj[0], sub_dict)
+            assignment_by_obj = self.section.submit_assignment(
+                assignments_obj[0], sub_dict
+            )
 
             self.assertIsInstance(assignment_by_obj, Submission)
             self.assertTrue(hasattr(assignment_by_obj, 'submission_type'))
@@ -133,8 +132,10 @@ class TestSection(unittest.TestCase):
         register_uris(
             {
                 'submission': ['list_submissions'],
-                'user': ['get_by_id', 'get_user_assignments']
-            }, m)
+                'user': ['get_by_id', 'get_user_assignments'],
+            },
+            m,
+        )
 
         assignment_id = 1
         with warnings.catch_warnings(record=True) as warning_list:
@@ -212,8 +213,10 @@ class TestSection(unittest.TestCase):
         register_uris(
             {
                 'submission': ['get_by_id_course'],
-                'user': ['get_by_id', 'get_user_assignments']
-            }, m)
+                'user': ['get_by_id', 'get_user_assignments'],
+            },
+            m,
+        )
 
         assignment_id = 1
         user_id = 1
@@ -229,7 +232,9 @@ class TestSection(unittest.TestCase):
         user_obj = self.canvas.get_user(1)
         assignments_obj = user_obj.get_assignments(1)
         with warnings.catch_warnings(record=True) as warning_list:
-            submission_by_obj = self.section.get_submission(assignments_obj[0], user_obj)
+            submission_by_obj = self.section.get_submission(
+                assignments_obj[0], user_obj
+            )
 
             self.assertIsInstance(submission_by_obj, Submission)
             self.assertTrue(hasattr(submission_by_obj, 'submission_type'))
@@ -242,16 +247,16 @@ class TestSection(unittest.TestCase):
         register_uris(
             {
                 'submission': ['get_by_id_section', 'edit'],
-                'user': ['get_by_id', 'get_user_assignments']
-            }, m)
+                'user': ['get_by_id', 'get_user_assignments'],
+            },
+            m,
+        )
 
         assignment_id = 1
         user_id = 1
         with warnings.catch_warnings(record=True) as warning_list:
             submission_by_id = self.section.update_submission(
-                assignment_id,
-                user_id,
-                submission={'excuse': True}
+                assignment_id, user_id, submission={'excuse': True}
             )
 
             self.assertIsInstance(submission_by_id, Submission)
@@ -265,9 +270,7 @@ class TestSection(unittest.TestCase):
 
         with warnings.catch_warnings(record=True) as warning_list:
             submission_by_obj = self.section.update_submission(
-                assignments_obj[0],
-                user_obj,
-                submission={'excuse': True}
+                assignments_obj[0], user_obj, submission={'excuse': True}
             )
 
             self.assertIsInstance(submission_by_obj, Submission)
@@ -282,13 +285,17 @@ class TestSection(unittest.TestCase):
             {
                 'course': ['mark_submission_as_read'],
                 'submission': ['get_by_id_section'],
-                'user': ['get_by_id', 'get_user_assignments']
-            }, m)
+                'user': ['get_by_id', 'get_user_assignments'],
+            },
+            m,
+        )
 
         submission_id = 1
         user_id = 1
         with warnings.catch_warnings(record=True) as warning_list:
-            submission_by_id = self.section.mark_submission_as_read(submission_id, user_id)
+            submission_by_id = self.section.mark_submission_as_read(
+                submission_id, user_id
+            )
 
             self.assertTrue(submission_by_id)
 
@@ -298,7 +305,9 @@ class TestSection(unittest.TestCase):
         user_obj = self.canvas.get_user(1)
         with warnings.catch_warnings(record=True) as warning_list:
             assignments_obj = user_obj.get_assignments(1)
-            submission_by_obj = self.section.mark_submission_as_read(assignments_obj[0], user_obj)
+            submission_by_obj = self.section.mark_submission_as_read(
+                assignments_obj[0], user_obj
+            )
 
             self.assertTrue(submission_by_obj)
 
@@ -311,13 +320,17 @@ class TestSection(unittest.TestCase):
             {
                 'course': ['mark_submission_as_unread'],
                 'submission': ['get_by_id_section'],
-                'user': ['get_by_id', 'get_user_assignments']
-            }, m)
+                'user': ['get_by_id', 'get_user_assignments'],
+            },
+            m,
+        )
 
         user_id = 1
         assignment_id = 1
         with warnings.catch_warnings(record=True) as warning_list:
-            submission_by_id = self.section.mark_submission_as_unread(assignment_id, user_id)
+            submission_by_id = self.section.mark_submission_as_unread(
+                assignment_id, user_id
+            )
             self.assertTrue(submission_by_id)
 
             self.assertEqual(len(warning_list), 1)
@@ -327,8 +340,7 @@ class TestSection(unittest.TestCase):
         assignments_obj = user_obj.get_assignments(1)
         with warnings.catch_warnings(record=True) as warning_list:
             submission_by_obj = self.section.mark_submission_as_unread(
-                assignments_obj[0],
-                user_obj
+                assignments_obj[0], user_obj
             )
             self.assertTrue(submission_by_obj)
 
@@ -338,16 +350,9 @@ class TestSection(unittest.TestCase):
     def test_submissions_bulk_update(self, m):
         register_uris({'section': ['update_submissions']}, m)
         register_uris({'progress': ['course_progress']}, m)
-        progress = self.section.submissions_bulk_update(grade_data={
-            '1': {
-                '1': {
-                    'posted_grade': 97
-                },
-                '2': {
-                    'posted_grade': 98
-                }
-            }
-        })
+        progress = self.section.submissions_bulk_update(
+            grade_data={'1': {'1': {'posted_grade': 97}, '2': {'posted_grade': 98}}}
+        )
         self.assertIsInstance(progress, Progress)
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()

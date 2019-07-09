@@ -12,7 +12,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestPollChoice(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -60,20 +59,23 @@ class TestPollChoice(unittest.TestCase):
         self.assertIsInstance(new_choice_t, PollChoice)
         self.assertTrue(hasattr(new_choice_t, 'text'))
 
-        new_choice_t_ic = self.poll.create_choice([{'text': 'Example choice'},
-                                                   {'is_correct': True}])
+        new_choice_t_ic = self.poll.create_choice(
+            [{'text': 'Example choice'}, {'is_correct': True}]
+        )
         self.assertIsInstance(new_choice_t_ic, PollChoice)
         self.assertTrue(hasattr(new_choice_t_ic, 'text'))
         self.assertTrue(hasattr(new_choice_t_ic, 'is_correct'))
 
-        new_choice_t_p = self.poll.create_choice([{'text': 'Example choice'}, {'position': 1}])
+        new_choice_t_p = self.poll.create_choice(
+            [{'text': 'Example choice'}, {'position': 1}]
+        )
         self.assertIsInstance(new_choice_t_p, PollChoice)
         self.assertTrue(hasattr(new_choice_t_p, 'text'))
         self.assertTrue(hasattr(new_choice_t_p, 'position'))
 
-        new_choice_t_ic_p = self.poll.create_choice([{'text': 'Example choice'},
-                                                     {'is_correct': True},
-                                                     {'position': 1}])
+        new_choice_t_ic_p = self.poll.create_choice(
+            [{'text': 'Example choice'}, {'is_correct': True}, {'position': 1}]
+        )
         self.assertIsInstance(new_choice_t_ic_p, PollChoice)
         self.assertTrue(hasattr(new_choice_t_ic_p, 'text'))
         self.assertTrue(hasattr(new_choice_t_ic_p, 'is_correct'))
@@ -92,21 +94,23 @@ class TestPollChoice(unittest.TestCase):
         self.assertIsInstance(updated_choice_t, PollChoice)
         self.assertEqual(updated_choice_t.text, 'Changed example')
 
-        updated_choice_t_ic = self.poll.poll_choice.update([{'text': 'Changed example'},
-                                                            {'is_correct': False}])
+        updated_choice_t_ic = self.poll.poll_choice.update(
+            [{'text': 'Changed example'}, {'is_correct': False}]
+        )
         self.assertIsInstance(updated_choice_t_ic, PollChoice)
         self.assertEqual(updated_choice_t_ic.text, 'Changed example')
         self.assertFalse(updated_choice_t_ic.is_correct)
 
-        updated_choice_t_p = self.poll.poll_choice.update([{'text': 'Changed example'},
-                                                           {'position': 2}])
+        updated_choice_t_p = self.poll.poll_choice.update(
+            [{'text': 'Changed example'}, {'position': 2}]
+        )
         self.assertIsInstance(updated_choice_t_p, PollChoice)
         self.assertEqual(updated_choice_t_p.text, 'Changed example')
         self.assertEqual(updated_choice_t_p.position, 2)
 
-        updated_choice_t_ic_p = self.poll.poll_choice.update([{'text': 'Changed example'},
-                                                              {'is_correct': False},
-                                                              {'position': 2}])
+        updated_choice_t_ic_p = self.poll.poll_choice.update(
+            [{'text': 'Changed example'}, {'is_correct': False}, {'position': 2}]
+        )
         self.assertIsInstance(updated_choice_t_ic_p, PollChoice)
         self.assertEqual(updated_choice_t_ic_p.text, 'Changed example')
         self.assertFalse(updated_choice_t_ic.is_correct)

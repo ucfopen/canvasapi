@@ -7,7 +7,14 @@ import warnings
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.account import Account, AccountNotification, AccountReport, Admin, Role, SSOSettings
+from canvasapi.account import (
+    Account,
+    AccountNotification,
+    AccountReport,
+    Admin,
+    Role,
+    SSOSettings,
+)
 from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
@@ -31,7 +38,6 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestAccount(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -124,7 +130,7 @@ class TestAccount(unittest.TestCase):
             'subject': subject,
             'message': 'Message',
             'start_at': '2015-04-01T00:00:00Z',
-            'end_at': '2018-04-01T00:00:00Z'
+            'end_at': '2018-04-01T00:00:00Z',
         }
         notif = self.account.create_notification(notif_dict)
 
@@ -461,7 +467,7 @@ class TestAccount(unittest.TestCase):
             name="External Tool - Account",
             privacy_level="public",
             consumer_key="key",
-            shared_secret="secret"
+            shared_secret="secret",
         )
 
         self.assertIsInstance(response, ExternalTool)
@@ -472,10 +478,7 @@ class TestAccount(unittest.TestCase):
     def test_create_enrollment_term(self, m):
         register_uris({'enrollment_term': ['create_enrollment_term']}, m)
 
-        evnt = self.account.create_enrollment_term(
-            name="Test Enrollment Term",
-            id=45
-        )
+        evnt = self.account.create_enrollment_term(name="Test Enrollment Term", id=45)
 
         self.assertIsInstance(evnt, EnrollmentTerm)
         self.assertEqual(evnt.name, "Test Enrollment Term")
@@ -536,8 +539,7 @@ class TestAccount(unittest.TestCase):
         unique_id = 'belieber@example.com'
 
         response = self.account.create_user_login(
-            user={'id': 1},
-            login={'unique_id': unique_id}
+            user={'id': 1}, login={'unique_id': unique_id}
         )
 
         self.assertIsInstance(response, Login)
@@ -556,15 +558,21 @@ class TestAccount(unittest.TestCase):
 
     # get_department_level_participation_data_with_given_term()
     def test_get_department_level_participation_data_with_given_term(self, m):
-        register_uris({'account': ['get_department_level_participation_data_with_given_term']}, m)
+        register_uris(
+            {'account': ['get_department_level_participation_data_with_given_term']}, m
+        )
 
-        response = self.account.get_department_level_participation_data_with_given_term(1)
+        response = self.account.get_department_level_participation_data_with_given_term(
+            1
+        )
 
         self.assertIsInstance(response, list)
 
     # get_department_level_participation_data_current()
     def test_get_department_level_participation_data_current(self, m):
-        register_uris({'account': ['get_department_level_participation_data_current']}, m)
+        register_uris(
+            {'account': ['get_department_level_participation_data_current']}, m
+        )
 
         response = self.account.get_department_level_participation_data_current()
 
@@ -572,7 +580,9 @@ class TestAccount(unittest.TestCase):
 
     # get_department_level_participation_data_completed()
     def test_get_department_level_participation_data_completed(self, m):
-        register_uris({'account': ['get_department_level_participation_data_completed']}, m)
+        register_uris(
+            {'account': ['get_department_level_participation_data_completed']}, m
+        )
 
         response = self.account.get_department_level_participation_data_completed()
 
@@ -580,7 +590,9 @@ class TestAccount(unittest.TestCase):
 
     # get_department_level_grade_data_with_given_term()
     def test_get_department_level_grade_data_with_given_term(self, m):
-        register_uris({'account': ['get_department_level_grade_data_with_given_term']}, m)
+        register_uris(
+            {'account': ['get_department_level_grade_data_with_given_term']}, m
+        )
 
         response = self.account.get_department_level_grade_data_with_given_term(1)
 
@@ -604,7 +616,9 @@ class TestAccount(unittest.TestCase):
 
     # get_department_level_statistics_with_given_term()
     def test_get_department_level_statistics_with_given_term(self, m):
-        register_uris({'account': ['get_department_level_statistics_with_given_term']}, m)
+        register_uris(
+            {'account': ['get_department_level_statistics_with_given_term']}, m
+        )
 
         response = self.account.get_department_level_statistics_with_given_term(1)
 
@@ -628,18 +642,25 @@ class TestAccount(unittest.TestCase):
 
     # list_authentication_providers()
     def test_list_authentication_providers(self, m):
-        requires = {'account': ['list_authentication_providers',
-                                'list_authentication_providers_2']}
+        requires = {
+            'account': [
+                'list_authentication_providers',
+                'list_authentication_providers_2',
+            ]
+        }
         register_uris(requires, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             authentication_providers = self.account.list_authentication_providers()
             authentication_providers_list = [
-                authentication_provider for authentication_provider in authentication_providers
+                authentication_provider
+                for authentication_provider in authentication_providers
             ]
 
             self.assertEqual(len(authentication_providers_list), 4)
-            self.assertIsInstance(authentication_providers_list[0], AuthenticationProvider)
+            self.assertIsInstance(
+                authentication_providers_list[0], AuthenticationProvider
+            )
             self.assertTrue(hasattr(authentication_providers_list[0], 'auth_type'))
             self.assertTrue(hasattr(authentication_providers_list[0], 'position'))
 
@@ -648,13 +669,18 @@ class TestAccount(unittest.TestCase):
 
     # get_authentication_providers()
     def test_get_authentication_providers(self, m):
-        requires = {'account': ['list_authentication_providers',
-                                'list_authentication_providers_2']}
+        requires = {
+            'account': [
+                'list_authentication_providers',
+                'list_authentication_providers_2',
+            ]
+        }
         register_uris(requires, m)
 
         authentication_providers = self.account.get_authentication_providers()
         authentication_providers_list = [
-            authentication_provider for authentication_provider in authentication_providers
+            authentication_provider
+            for authentication_provider in authentication_providers
         ]
 
         self.assertEqual(len(authentication_providers_list), 4)
@@ -864,8 +890,10 @@ class TestAccount(unittest.TestCase):
         self.assertTrue(hasattr(content_migration, 'migration_type'))
 
     def test_create_content_migration_migrator(self, m):
-        register_uris({'account': ['create_content_migration',
-                                   'get_migration_systems_multiple']}, m)
+        register_uris(
+            {'account': ['create_content_migration', 'get_migration_systems_multiple']},
+            m,
+        )
 
         migrators = self.account.get_migration_systems()
         content_migration = self.account.create_content_migration(migrators[0])
@@ -947,8 +975,7 @@ class TestAccount(unittest.TestCase):
 
         register_uris({'account': ['create_sis_import']}, m)
 
-        filepath = os.path.join('tests', 'fixtures',
-                                'test_create_sis_import.csv')
+        filepath = os.path.join('tests', 'fixtures', 'test_create_sis_import.csv')
 
         sis_import = self.account.create_sis_import(filepath)
 
@@ -963,8 +990,7 @@ class TestAccount(unittest.TestCase):
 
         register_uris({'account': ['create_sis_import']}, m)
 
-        filepath = os.path.join('tests', 'fixtures',
-                                'test_create_sis_import.csv')
+        filepath = os.path.join('tests', 'fixtures', 'test_create_sis_import.csv')
 
         with open(filepath, 'rb') as f:
             sis_import = self.account.create_sis_import(f)
@@ -1146,7 +1172,7 @@ class TestAccount(unittest.TestCase):
 
         self.grading_period = GradingPeriod(
             self.canvas._Canvas__requester,
-            {"title": "grading period 1", "id": 1, "course_id": 1}
+            {"title": "grading period 1", "id": 1, "course_id": 1},
         )
         self.assertTrue(self.account.delete_grading_period(1))
         self.assertTrue(self.account.delete_grading_period(self.grading_period))

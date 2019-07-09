@@ -16,7 +16,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Assignment(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -32,7 +31,7 @@ class Assignment(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update(course_id=self.course_id)
@@ -50,7 +49,7 @@ class Assignment(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}/assignments/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Assignment(self._requester, response.json())
 
@@ -66,7 +65,7 @@ class Assignment(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/assignments/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if 'name' in response.json():
@@ -88,9 +87,11 @@ class Assignment(CanvasObject):
             UserDisplay,
             self._requester,
             'GET',
-            'courses/{}/assignments/{}/gradeable_students'.format(self.course_id, self.id),
+            'courses/{}/assignments/{}/gradeable_students'.format(
+                self.course_id, self.id
+            ),
             {'course_id': self.course_id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_override(self, override, **kwargs):
@@ -110,11 +111,9 @@ class Assignment(CanvasObject):
         response = self._requester.request(
             'GET',
             'courses/{}/assignments/{}/overrides/{}'.format(
-                self.course_id,
-                self.id,
-                override_id
+                self.course_id, self.id, override_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update(course_id=self.course_id)
@@ -137,7 +136,7 @@ class Assignment(CanvasObject):
             'GET',
             'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
             {'course_id': self.course_id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_peer_reviews(self, **kwargs):
@@ -155,7 +154,7 @@ class Assignment(CanvasObject):
             self._requester,
             'GET',
             'courses/{}/assignments/{}/peer_reviews'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_submission(self, user, **kwargs):
@@ -174,8 +173,10 @@ class Assignment(CanvasObject):
 
         response = self._requester.request(
             'GET',
-            'courses/{}/assignments/{}/submissions/{}'.format(self.course_id, self.id, user_id),
-            _kwargs=combine_kwargs(**kwargs)
+            'courses/{}/assignments/{}/submissions/{}'.format(
+                self.course_id, self.id, user_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update(course_id=self.course_id)
@@ -198,7 +199,7 @@ class Assignment(CanvasObject):
             'GET',
             'courses/{}/assignments/{}/submissions'.format(self.course_id, self.id),
             {'course_id': self.course_id},
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def submit(self, submission, file=None, **kwargs):
@@ -238,7 +239,7 @@ class Assignment(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/assignments/{}/submissions'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update(course_id=self.course_id)
@@ -259,10 +260,9 @@ class Assignment(CanvasObject):
         response = self._requester.request(
             'POST',
             'courses/{}/assignments/{}/submissions/update_grades'.format(
-                self.course_id,
-                self.id
+                self.course_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Progress(self._requester, response.json())
 
@@ -289,9 +289,7 @@ class Assignment(CanvasObject):
         return Uploader(
             self._requester,
             'courses/{}/assignments/{}/submissions/{}/files'.format(
-                self.course_id,
-                self.id,
-                user_id
+                self.course_id, self.id, user_id
             ),
             file,
             **kwargs
@@ -300,7 +298,6 @@ class Assignment(CanvasObject):
 
 @python_2_unicode_compatible
 class AssignmentGroup(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -316,7 +313,7 @@ class AssignmentGroup(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/assignment_groups/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if 'name' in response.json():
@@ -336,14 +333,13 @@ class AssignmentGroup(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}/assignment_groups/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return AssignmentGroup(self._requester, response.json())
 
 
 @python_2_unicode_compatible
 class AssignmentOverride(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
@@ -360,10 +356,8 @@ class AssignmentOverride(CanvasObject):
         response = self._requester.request(
             'DELETE',
             'courses/{}/assignments/{}/overrides/{}'.format(
-                self.course_id,
-                self.assignment_id,
-                self.id
-            )
+                self.course_id, self.assignment_id, self.id
+            ),
         )
 
         response_json = response.json()
@@ -385,10 +379,8 @@ class AssignmentOverride(CanvasObject):
         response = self._requester.request(
             'PUT',
             'courses/{}/assignments/{}/overrides/{}'.format(
-                self.course_id,
-                self.assignment_id,
-                self.id
-            )
+                self.course_id, self.assignment_id, self.id
+            ),
         )
 
         response_json = response.json()

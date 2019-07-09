@@ -8,7 +8,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class AuthenticationProvider(CanvasObject):
-
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.auth_type, self.position)
 
@@ -24,7 +23,7 @@ class AuthenticationProvider(CanvasObject):
         response = self._requester.request(
             'PUT',
             'accounts/{}/authentication_providers/{}'.format(self.account_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if response.json().get('auth_type'):
@@ -43,6 +42,6 @@ class AuthenticationProvider(CanvasObject):
         """
         response = self._requester.request(
             'DELETE',
-            'accounts/{}/authentication_providers/{}'.format(self.account_id, self.id)
+            'accounts/{}/authentication_providers/{}'.format(self.account_id, self.id),
         )
         return AuthenticationProvider(self._requester, response.json())

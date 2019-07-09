@@ -11,13 +11,16 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestFavorite(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
             requires = {
-                'current_user': ['add_favorite_course', 'add_favorite_group', 'get_by_id']
+                'current_user': [
+                    'add_favorite_course',
+                    'add_favorite_group',
+                    'get_by_id',
+                ]
             }
             register_uris(requires, m)
 
