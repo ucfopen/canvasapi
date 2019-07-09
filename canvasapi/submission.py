@@ -89,6 +89,27 @@ class Submission(CanvasObject):
         super(Submission, self).set_attributes(response_json)
         return self
 
+    def get_submission_peer_reviews(self, **kwargs):
+        """
+        Get a list of all Peer Reviews this submission.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/:submission_id/peer_reviews \
+        <https://canvas.instructure.com/doc/api/peer_reviews.html#method.peer_reviews_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.peer_review.PeerReview`
+        """
+        return PaginatedList(
+            PeerReview,
+            self._requester,
+            "GET",
+            "courses/{}/assignments/{}/submissions/{}/peer_reviews".format(
+                self.course_id, self.assignment_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def mark_read(self, **kwargs):
         """
         Mark submission as read. No request fields are necessary.
@@ -127,27 +148,6 @@ class Submission(CanvasObject):
         )
         return response.status_code == 204
 
-    def get_submission_peer_reviews(self, **kwargs):
-        """
-        Get a list of all Peer Reviews this submission.
-
-        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/ \
-            submissions/:submission_id/peer_reviews \
-        <https://canvas.instructure.com/doc/api/peer_reviews.html#method.peer_reviews_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.peer_review.PeerReview`
-        """
-        return PaginatedList(
-            PeerReview,
-            self._requester,
-            "GET",
-            "courses/{}/assignments/{}/submissions/{}/peer_reviews".format(
-                self.course_id, self.assignment_id, self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
     def upload_comment(self, file, **kwargs):
         """
         Upload a file to attach to this submission as a comment.
@@ -178,11 +178,6 @@ class Submission(CanvasObject):
 
 @python_2_unicode_compatible
 class GroupedSubmission(CanvasObject):
-    def __str__(self):
-        return "{} submission(s) for User #{}".format(
-            len(self.submissions), self.user_id
-        )
-
     def __init__(self, requester, attributes):
         try:
             self.submissions = [
@@ -194,3 +189,8 @@ class GroupedSubmission(CanvasObject):
             self.submissions = list()
 
         super(GroupedSubmission, self).__init__(requester, attributes)
+
+    def __str__(self):
+        return "{} submission(s) for User #{}".format(
+            len(self.submissions), self.user_id
+        )

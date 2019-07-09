@@ -33,22 +33,6 @@ class Uploader(object):
         self.file = file
         self.kwargs = kwargs
 
-    def start(self):
-        """
-        Kick off uploading process. Handles open/closing file if a path
-        is passed.
-
-        :calls: request_upload_token
-        :returns: True if the file uploaded successfully, False \
-            otherwise, and the JSON response from the API.
-        :rtype: tuple
-        """
-        if self._using_filename:
-            with open(self.file, "rb") as file:
-                return self.request_upload_token(file)
-        else:
-            return self.request_upload_token(self.file)
-
     def request_upload_token(self, file):
         """
         Request an upload token.
@@ -66,6 +50,22 @@ class Uploader(object):
         )
 
         return self.upload(response, file)
+
+    def start(self):
+        """
+        Kick off uploading process. Handles open/closing file if a path
+        is passed.
+
+        :calls: request_upload_token
+        :returns: True if the file uploaded successfully, False \
+            otherwise, and the JSON response from the API.
+        :rtype: tuple
+        """
+        if self._using_filename:
+            with open(self.file, "rb") as file:
+                return self.request_upload_token(file)
+        else:
+            return self.request_upload_token(self.file)
 
     def upload(self, response, file):
         """

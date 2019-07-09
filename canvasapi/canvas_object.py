@@ -38,13 +38,6 @@ class CanvasObject(object):
         )  # noqa
         return "{}({})".format(classname, attrs)
 
-    def to_json(self):
-        """
-        Return the original JSON response from the API that was used to
-        construct the object.
-        """
-        return json.dumps(self.attributes)
-
     def set_attributes(self, attributes):
         """
         Load this object with attributes.
@@ -79,3 +72,10 @@ class CanvasObject(object):
                 naive = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
                 aware = naive.replace(tzinfo=pytz.utc)
                 self.__setattr__(attribute + "_date", aware)
+
+    def to_json(self):
+        """
+        Return the original JSON response from the API that was used to
+        construct the object.
+        """
+        return json.dumps(self.attributes)

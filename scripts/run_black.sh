@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ev
+set -e
 
 PYTHON_VERSION=`python -c 'import sys; version=sys.version_info[:3]; print("{0}.{1}".format(*version))'`
 
