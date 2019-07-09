@@ -23,14 +23,14 @@ class BlueprintTemplate(CanvasObject):
         :rtype: :class:`canvasapi.blueprint.BlueprintMigration`
         """
         response = self._requester.request(
-            'POST',
-            'courses/{}/blueprint_templates/{}/migrations'.format(
+            "POST",
+            "courses/{}/blueprint_templates/{}/migrations".format(
                 self.course_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({'course_id': self.course_id})
+        response_json.update({"course_id": self.course_id})
         return BlueprintMigration(self._requester, response_json)
 
     def change_blueprint_restrictions(
@@ -58,8 +58,8 @@ class BlueprintTemplate(CanvasObject):
         kwargs["restricted"] = restricted
 
         response = self._requester.request(
-            'PUT',
-            'courses/{}/blueprint_templates/{}/restrict_item'.format(
+            "PUT",
+            "courses/{}/blueprint_templates/{}/restrict_item".format(
                 self.course_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -82,8 +82,8 @@ class BlueprintTemplate(CanvasObject):
         return PaginatedList(
             Course,
             self._requester,
-            'GET',
-            'courses/{}/blueprint_templates/{}/associated_courses'.format(
+            "GET",
+            "courses/{}/blueprint_templates/{}/associated_courses".format(
                 self.course_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -104,8 +104,8 @@ class BlueprintTemplate(CanvasObject):
         return PaginatedList(
             ChangeRecord,
             self._requester,
-            'GET',
-            'courses/{}/blueprint_templates/{}/unsynced_changes'.format(
+            "GET",
+            "courses/{}/blueprint_templates/{}/unsynced_changes".format(
                 self.course_id, self.id
             ),
             kwargs=combine_kwargs(**kwargs),
@@ -126,11 +126,11 @@ class BlueprintTemplate(CanvasObject):
         return PaginatedList(
             BlueprintMigration,
             self._requester,
-            'GET',
-            'courses/{}/blueprint_templates/{}/migrations'.format(
+            "GET",
+            "courses/{}/blueprint_templates/{}/migrations".format(
                 self.course_id, self.id
             ),
-            {'course_id': self.course_id},
+            {"course_id": self.course_id},
             kwargs=combine_kwargs(**kwargs),
         )
 
@@ -149,16 +149,16 @@ class BlueprintTemplate(CanvasObject):
         :rtype: :class:`canvasapi.blueprint.BlueprintMigration`
         """
 
-        migration_id = obj_or_id(migration, 'migration', (BlueprintMigration,))
+        migration_id = obj_or_id(migration, "migration", (BlueprintMigration,))
         response = self._requester.request(
-            'GET',
-            'courses/{}/blueprint_templates/{}/migrations/{}'.format(
+            "GET",
+            "courses/{}/blueprint_templates/{}/migrations/{}".format(
                 self.course_id, self.id, migration_id
             ),
             kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({'course_id': self.course_id})
+        response_json.update({"course_id": self.course_id})
         return BlueprintMigration(self._requester, response_json)
 
     def update_associated_courses(self, **kwargs):
@@ -173,8 +173,8 @@ class BlueprintTemplate(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/blueprint_templates/{}/update_associations'.format(
+            "PUT",
+            "courses/{}/blueprint_templates/{}/update_associations".format(
                 self.course_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -203,8 +203,8 @@ class BlueprintMigration(CanvasObject):
         return PaginatedList(
             ChangeRecord,
             self._requester,
-            'GET',
-            'courses/{}/blueprint_templates/{}/migrations/{}/details'.format(
+            "GET",
+            "courses/{}/blueprint_templates/{}/migrations/{}/details".format(
                 self.course_id, self.template_id, self.id
             ),
             kwargs=combine_kwargs(**kwargs),
@@ -226,8 +226,8 @@ class BlueprintMigration(CanvasObject):
         return PaginatedList(
             ChangeRecord,
             self._requester,
-            'GET',
-            'courses/{}/blueprint_subscriptions/{}/migrations/{}/details'.format(
+            "GET",
+            "courses/{}/blueprint_subscriptions/{}/migrations/{}/details".format(
                 self.course_id, self.subscription_id, self.id
             ),
             kwargs=combine_kwargs(**kwargs),
@@ -261,11 +261,11 @@ class BlueprintSubscription(CanvasObject):
         return PaginatedList(
             BlueprintMigration,
             self._requester,
-            'GET',
-            'courses/{}/blueprint_subscriptions/{}/migrations'.format(
+            "GET",
+            "courses/{}/blueprint_subscriptions/{}/migrations".format(
                 self.course_id, self.id
             ),
-            {'course_id': self.id},
+            {"course_id": self.id},
             kwargs=combine_kwargs(**kwargs),
         )
 
@@ -284,14 +284,14 @@ class BlueprintSubscription(CanvasObject):
         :rtype: :class:`canvasapi.blueprint.BlueprintMigration`
         """
 
-        migration_id = obj_or_id(migration, 'migration', (BlueprintMigration,))
+        migration_id = obj_or_id(migration, "migration", (BlueprintMigration,))
         response = self._requester.request(
-            'GET',
-            'courses/{}/blueprint_subscriptions/{}/migrations/{}'.format(
+            "GET",
+            "courses/{}/blueprint_subscriptions/{}/migrations/{}".format(
                 self.course_id, self.id, migration_id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({'course_id': self.course_id})
+        response_json.update({"course_id": self.course_id})
         return BlueprintMigration(self._requester, response_json)

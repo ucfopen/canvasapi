@@ -17,8 +17,8 @@ class TestTab(unittest.TestCase):
         with requests_mock.Mocker() as m:
             register_uris(
                 {
-                    'course': ['get_by_id', 'list_tabs'],
-                    'group': ['get_by_id', 'list_tabs'],
+                    "course": ["get_by_id", "list_tabs"],
+                    "group": ["get_by_id", "list_tabs"],
                 },
                 m,
             )
@@ -39,7 +39,7 @@ class TestTab(unittest.TestCase):
 
     # update()
     def test_update_course(self, m):
-        register_uris({'course': ['update_tab']}, m)
+        register_uris({"course": ["update_tab"]}, m)
 
         new_position = 3
         self.tab.update(position=new_position)

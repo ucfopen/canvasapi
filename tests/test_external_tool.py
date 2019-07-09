@@ -20,9 +20,9 @@ class TestExternalTool(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'account': ['get_by_id'],
-                'course': ['get_by_id'],
-                'external_tool': ['get_by_id_account', 'get_by_id_course'],
+                "account": ["get_by_id"],
+                "course": ["get_by_id"],
+                "external_tool": ["get_by_id_account", "get_by_id_course"],
             }
             register_uris(requires, m)
 
@@ -44,42 +44,42 @@ class TestExternalTool(unittest.TestCase):
         self.assertEqual(self.ext_tool_course.parent_id, 1)
 
     def test_parent_id_no_id(self, m):
-        tool = ExternalTool(self.canvas._Canvas__requester, {'id': 1})
+        tool = ExternalTool(self.canvas._Canvas__requester, {"id": 1})
         with self.assertRaises(ValueError):
             tool.parent_id
 
     # parent_type
     def test_parent_type_account(self, m):
-        self.assertEqual(self.ext_tool_account.parent_type, 'account')
+        self.assertEqual(self.ext_tool_account.parent_type, "account")
 
     def test_parent_type_course(self, m):
-        self.assertEqual(self.ext_tool_course.parent_type, 'course')
+        self.assertEqual(self.ext_tool_course.parent_type, "course")
 
     def test_parent_type_no_id(self, m):
-        tool = ExternalTool(self.canvas._Canvas__requester, {'id': 1})
+        tool = ExternalTool(self.canvas._Canvas__requester, {"id": 1})
         with self.assertRaises(ValueError):
             tool.parent_type
 
     # get_parent()
     def test_get_parent_account(self, m):
-        register_uris({'account': ['get_by_id']}, m)
+        register_uris({"account": ["get_by_id"]}, m)
         self.assertIsInstance(self.ext_tool_account.get_parent(), Account)
 
     def test_get_parent_course(self, m):
-        register_uris({'course': ['get_by_id']}, m)
+        register_uris({"course": ["get_by_id"]}, m)
         self.assertIsInstance(self.ext_tool_course.get_parent(), Course)
 
     # delete()
     def test_delete(self, m):
-        register_uris({'external_tool': ['delete_tool_course']}, m)
+        register_uris({"external_tool": ["delete_tool_course"]}, m)
         deleted_tool = self.ext_tool_course.delete()
 
         self.assertIsInstance(deleted_tool, ExternalTool)
-        self.assertTrue(hasattr(deleted_tool, 'name'))
+        self.assertTrue(hasattr(deleted_tool, "name"))
 
     # edit()
     def test_edit(self, m):
-        register_uris({'external_tool': ['edit_tool_course']}, m)
+        register_uris({"external_tool": ["edit_tool_course"]}, m)
         new_name = "New Tool Name"
 
         edited_tool = self.ext_tool_course.edit(name=new_name)
@@ -90,7 +90,7 @@ class TestExternalTool(unittest.TestCase):
 
     # get_sessionless_launch_url()
     def test_get_sessionless_launch_url(self, m):
-        requires = {'external_tool': ['get_sessionless_launch_url_course']}
+        requires = {"external_tool": ["get_sessionless_launch_url_course"]}
         register_uris(requires, m)
 
         self.assertIsInstance(
@@ -99,8 +99,8 @@ class TestExternalTool(unittest.TestCase):
 
     def test_get_sessionless_launch_url_no_url(self, m):
         requires = {
-            'course': ['get_by_id_2'],
-            'external_tool': ['get_by_id_course_2', 'sessionless_launch_no_url'],
+            "course": ["get_by_id_2"],
+            "external_tool": ["get_by_id_course_2", "sessionless_launch_no_url"],
         }
         register_uris(requires, m)
 

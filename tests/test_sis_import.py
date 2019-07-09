@@ -17,8 +17,8 @@ class TestSisImportGroup(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'account': ['get_by_id', 'get_role'],
-                'sis_import': ['get_by_id'],
+                "account": ["get_by_id", "get_role"],
+                "sis_import": ["get_by_id"],
             }
             register_uris(requires, m)
 
@@ -27,7 +27,7 @@ class TestSisImportGroup(unittest.TestCase):
 
     # abort()
     def test_abort_sis_import(self, m):
-        register_uris({'sis_import': ['abort_sis_import']}, m)
+        register_uris({"sis_import": ["abort_sis_import"]}, m)
 
         aborted_sis_import = self.sis_import.abort()
 
@@ -41,11 +41,11 @@ class TestSisImportGroup(unittest.TestCase):
 
     # restore_states()
     def test_restore_states(self, m):
-        register_uris({'sis_import': ['restore_sis_import_states']}, m)
+        register_uris({"sis_import": ["restore_sis_import_states"]}, m)
 
         restore_state_progress = self.sis_import.restore_states()
 
         self.assertIsInstance(restore_state_progress, Progress)
         self.assertEqual(restore_state_progress.context_id, self.sis_import.id)
-        self.assertEqual(restore_state_progress.context_type, 'SisBatch')
-        self.assertEqual(restore_state_progress.tag, 'sis_batch_state_restore')
+        self.assertEqual(restore_state_progress.context_type, "SisBatch")
+        self.assertEqual(restore_state_progress.tag, "sis_batch_state_restore")

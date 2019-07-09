@@ -11,13 +11,13 @@ class CanvasException(Exception):  # pragma: no cover
 
     def __init__(self, message):
         if isinstance(message, dict):
-            self.error_report_id = message.get('error_report_id', None)
+            self.error_report_id = message.get("error_report_id", None)
 
-            errors = message.get('errors', False)
+            errors = message.get("errors", False)
             if errors:
                 self.message = errors
             else:
-                self.message = ('Something went wrong. ', message)
+                self.message = ("Something went wrong. ", message)
         else:
             self.message = message
 

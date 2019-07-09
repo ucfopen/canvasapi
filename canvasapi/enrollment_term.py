@@ -21,7 +21,7 @@ class EnrollmentTerm(CanvasObject):
         :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
         response = self._requester.request(
-            'DELETE', 'accounts/{}/terms/{}'.format(self.account_id, self.id)
+            "DELETE", "accounts/{}/terms/{}".format(self.account_id, self.id)
         )
         return EnrollmentTerm(self._requester, response.json())
 
@@ -35,8 +35,8 @@ class EnrollmentTerm(CanvasObject):
         :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
         response = self._requester.request(
-            'PUT',
-            'accounts/{}/terms/{}'.format(self.account_id, self.id),
+            "PUT",
+            "accounts/{}/terms/{}".format(self.account_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 

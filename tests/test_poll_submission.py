@@ -17,9 +17,9 @@ class TestPollSubmission(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'poll': ['get_poll'],
-                'poll_session': ['get_session'],
-                'poll_submission': ['get_submission'],
+                "poll": ["get_poll"],
+                "poll_session": ["get_session"],
+                "poll_submission": ["get_submission"],
             }
             register_uris(requires, m)
 
@@ -36,28 +36,28 @@ class TestPollSubmission(unittest.TestCase):
 
     # get_submission()
     def test_get_submission(self, m):
-        register_uris({'poll_submission': ['get_submission']}, m)
+        register_uris({"poll_submission": ["get_submission"]}, m)
 
         choice_by_id = self.poll.poll_session.get_submission(1)
         self.assertIsInstance(choice_by_id, PollSubmission)
-        self.assertTrue(hasattr(choice_by_id, 'id'))
-        self.assertTrue(hasattr(choice_by_id, 'poll_choice_id'))
-        self.assertTrue(hasattr(choice_by_id, 'user_id'))
-        self.assertTrue(hasattr(choice_by_id, 'created_at'))
+        self.assertTrue(hasattr(choice_by_id, "id"))
+        self.assertTrue(hasattr(choice_by_id, "poll_choice_id"))
+        self.assertTrue(hasattr(choice_by_id, "user_id"))
+        self.assertTrue(hasattr(choice_by_id, "created_at"))
 
         choice_by_obj = self.poll.poll_session.get_submission(choice_by_id)
         self.assertIsInstance(choice_by_obj, PollSubmission)
-        self.assertTrue(hasattr(choice_by_obj, 'id'))
-        self.assertTrue(hasattr(choice_by_obj, 'poll_choice_id'))
-        self.assertTrue(hasattr(choice_by_obj, 'user_id'))
-        self.assertTrue(hasattr(choice_by_obj, 'created_at'))
+        self.assertTrue(hasattr(choice_by_obj, "id"))
+        self.assertTrue(hasattr(choice_by_obj, "poll_choice_id"))
+        self.assertTrue(hasattr(choice_by_obj, "user_id"))
+        self.assertTrue(hasattr(choice_by_obj, "created_at"))
 
     # create_submission()
     def test_create_submission(self, m):
-        register_uris({'poll_submission': ['create_submission']}, m)
+        register_uris({"poll_submission": ["create_submission"]}, m)
 
         new_submission = self.poll.poll_session.create_submission(
-            [{'poll_choice_id': 1}]
+            [{"poll_choice_id": 1}]
         )
         self.assertIsInstance(new_submission, PollSubmission)
         self.assertEqual(new_submission.poll_choice_id, 1)

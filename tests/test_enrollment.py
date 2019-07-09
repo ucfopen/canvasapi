@@ -15,7 +15,7 @@ class TestEnrollment(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {'account': ['get_by_id'], 'enrollment': ['get_by_id']}
+            requires = {"account": ["get_by_id"], "enrollment": ["get_by_id"]}
             register_uris(requires, m)
 
             self.account = self.canvas.get_account(1)
@@ -28,19 +28,19 @@ class TestEnrollment(unittest.TestCase):
 
     # deactivate()
     def test_deactivate(self, m):
-        register_uris({'enrollment': ['deactivate']}, m)
+        register_uris({"enrollment": ["deactivate"]}, m)
 
-        target_enrollment = self.enrollment.deactivate('conclude')
+        target_enrollment = self.enrollment.deactivate("conclude")
 
         self.assertIsInstance(target_enrollment, Enrollment)
 
     def test_deactivate_invalid_task(self, m):
         with self.assertRaises(ValueError):
-            self.enrollment.deactivate('finish')
+            self.enrollment.deactivate("finish")
 
     # reactivate()
     def test_reactivate(self, m):
-        register_uris({'enrollment': ['reactivate']}, m)
+        register_uris({"enrollment": ["reactivate"]}, m)
 
         target_enrollment = self.enrollment.reactivate()
 

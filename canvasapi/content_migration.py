@@ -20,13 +20,13 @@ class ContentMigration(CanvasObject):
 
         :rtype: int
         """
-        if hasattr(self, 'course_id'):
+        if hasattr(self, "course_id"):
             return self.course_id
-        elif hasattr(self, 'group_id'):
+        elif hasattr(self, "group_id"):
             return self.group_id
-        elif hasattr(self, 'account_id'):
+        elif hasattr(self, "account_id"):
             return self.account_id
-        elif hasattr(self, 'user_id'):
+        elif hasattr(self, "user_id"):
             return self.user_id
         else:
             raise ValueError(
@@ -40,14 +40,14 @@ class ContentMigration(CanvasObject):
 
         :rtype: str
         """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
-        elif hasattr(self, 'account_id'):
-            return 'account'
-        elif hasattr(self, 'user_id'):
-            return 'user'
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
+        elif hasattr(self, "account_id"):
+            return "account"
+        elif hasattr(self, "user_id"):
+            return "user"
         else:
             raise ValueError(
                 "Content Migration does not have an account_id, course_id, group_id or user_id"
@@ -85,8 +85,8 @@ class ContentMigration(CanvasObject):
         )
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}/content_migrations/{}/migration_issues/{}'.format(
+            "GET",
+            "{}s/{}/content_migrations/{}/migration_issues/{}".format(
                 self._parent_type, self._parent_id, self.id, migration_issue_id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -95,9 +95,9 @@ class ContentMigration(CanvasObject):
         response_json = response.json()
         response_json.update(
             {
-                'context_type': self._parent_type,
-                'context_id': self._parent_id,
-                'content_migration_id': self.id,
+                "context_type": self._parent_type,
+                "context_id": self._parent_id,
+                "content_migration_id": self.id,
             }
         )
 
@@ -131,14 +131,14 @@ class ContentMigration(CanvasObject):
         return PaginatedList(
             MigrationIssue,
             self._requester,
-            'GET',
-            '{}s/{}/content_migrations/{}/migration_issues/'.format(
+            "GET",
+            "{}s/{}/content_migrations/{}/migration_issues/".format(
                 self._parent_type, self._parent_id, self.id
             ),
             {
-                'context_type': self._parent_type,
-                'context_id': self._parent_id,
-                'content_migration_id': self.id,
+                "context_type": self._parent_type,
+                "context_id": self._parent_id,
+                "content_migration_id": self.id,
             },
             _kwargs=combine_kwargs(**kwargs),
         )
@@ -158,18 +158,18 @@ class ContentMigration(CanvasObject):
         from canvasapi.user import User
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self._parent_type, self._parent_id),
+            "GET",
+            "{}s/{}".format(self._parent_type, self._parent_id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if self._parent_type == 'group':
+        if self._parent_type == "group":
             return Group(self._requester, response.json())
-        elif self._parent_type == 'course':
+        elif self._parent_type == "course":
             return Course(self._requester, response.json())
-        elif self._parent_type == 'account':
+        elif self._parent_type == "account":
             return Account(self._requester, response.json())
-        elif self._parent_type == 'user':
+        elif self._parent_type == "user":
             return User(self._requester, response.json())
 
     def get_progress(self, **kwargs):
@@ -187,7 +187,7 @@ class ContentMigration(CanvasObject):
         progress_id = self.progress_url.split("/")[-1]
 
         response = self._requester.request(
-            'GET', 'progress/{}'.format(progress_id), _kwargs=combine_kwargs(**kwargs)
+            "GET", "progress/{}".format(progress_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Progress(self._requester, response.json())
 
@@ -211,14 +211,14 @@ class ContentMigration(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/content_migrations/{}'.format(
+            "PUT",
+            "{}s/{}/content_migrations/{}".format(
                 self._parent_type, self._parent_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if 'migration_type' in response.json():
+        if "migration_type" in response.json():
             super(ContentMigration, self).set_attributes(response.json())
             return True
         else:
@@ -251,14 +251,14 @@ class MigrationIssue(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/content_migrations/{}/migration_issues/{}'.format(
+            "PUT",
+            "{}s/{}/content_migrations/{}/migration_issues/{}".format(
                 self.context_type, self.context_id, self.content_migration_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if 'workflow_state' in response.json():
+        if "workflow_state" in response.json():
             super(MigrationIssue, self).set_attributes(response.json())
             return True
         else:

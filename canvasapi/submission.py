@@ -12,7 +12,7 @@ from canvasapi.util import combine_kwargs, obj_or_id
 @python_2_unicode_compatible
 class Submission(CanvasObject):
     def __str__(self):
-        return '{}-{}'.format(self.assignment_id, self.user_id)
+        return "{}-{}".format(self.assignment_id, self.user_id)
 
     def create_submission_peer_review(self, user, **kwargs):
         """
@@ -30,10 +30,10 @@ class Submission(CanvasObject):
         from canvasapi.user import User
 
         user_id = obj_or_id(user, "user", (User,))
-        kwargs['user_id'] = user_id
+        kwargs["user_id"] = user_id
         response = self._requester.request(
-            'POST',
-            'courses/{}/assignments/{}/submissions/{}/peer_reviews'.format(
+            "POST",
+            "courses/{}/assignments/{}/submissions/{}/peer_reviews".format(
                 self.course_id, self.assignment_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -57,10 +57,10 @@ class Submission(CanvasObject):
         from canvasapi.user import User
 
         user_id = obj_or_id(user, "user", (User,))
-        kwargs['user_id'] = user_id
+        kwargs["user_id"] = user_id
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/assignments/{}/submissions/{}/peer_reviews'.format(
+            "DELETE",
+            "courses/{}/assignments/{}/submissions/{}/peer_reviews".format(
                 self.course_id, self.assignment_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -77,8 +77,8 @@ class Submission(CanvasObject):
         :rtype: :class:`canvasapi.submission.Submission`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/assignments/{}/submissions/{}'.format(
+            "PUT",
+            "courses/{}/assignments/{}/submissions/{}".format(
                 self.course_id, self.assignment_id, self.user_id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -101,8 +101,8 @@ class Submission(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/assignments/{}/submissions/{}/read'.format(
+            "PUT",
+            "courses/{}/assignments/{}/submissions/{}/read".format(
                 self.course_id, self.assignment_id, self.user_id
             ),
         )
@@ -120,8 +120,8 @@ class Submission(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/assignments/{}/submissions/{}/read'.format(
+            "DELETE",
+            "courses/{}/assignments/{}/submissions/{}/read".format(
                 self.course_id, self.assignment_id, self.user_id
             ),
         )
@@ -141,8 +141,8 @@ class Submission(CanvasObject):
         return PaginatedList(
             PeerReview,
             self._requester,
-            'GET',
-            'courses/{}/assignments/{}/submissions/{}/peer_reviews'.format(
+            "GET",
+            "courses/{}/assignments/{}/submissions/{}/peer_reviews".format(
                 self.course_id, self.assignment_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -164,7 +164,7 @@ class Submission(CanvasObject):
         """
         response = Uploader(
             self._requester,
-            'courses/{}/assignments/{}/submissions/{}/comments/files'.format(
+            "courses/{}/assignments/{}/submissions/{}/comments/files".format(
                 self.course_id, self.assignment_id, self.user_id
             ),
             file,
@@ -172,7 +172,7 @@ class Submission(CanvasObject):
         ).start()
 
         if response[0]:
-            self.edit(comment={'file_ids': [response[1]['id']]})
+            self.edit(comment={"file_ids": [response[1]["id"]]})
         return response
 
 
@@ -187,9 +187,9 @@ class GroupedSubmission(CanvasObject):
         try:
             self.submissions = [
                 Submission(requester, submission)
-                for submission in attributes['submissions']
+                for submission in attributes["submissions"]
             ]
-            del attributes['submissions']
+            del attributes["submissions"]
         except KeyError:
             self.submissions = list()
 

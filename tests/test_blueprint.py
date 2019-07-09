@@ -18,12 +18,12 @@ class TestBlueprint(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': [
-                    'get_blueprint',
-                    'get_by_id',
-                    'list_blueprint_subscriptions',
+                "course": [
+                    "get_blueprint",
+                    "get_by_id",
+                    "list_blueprint_subscriptions",
                 ],
-                'blueprint': ['show_blueprint_migration'],
+                "blueprint": ["show_blueprint_migration"],
             }
             register_uris(requires, m)
 
@@ -38,7 +38,7 @@ class TestBlueprint(unittest.TestCase):
 
     # get_associated_courses()
     def test_get_associated_courses(self, m):
-        register_uris({'blueprint': ['get_associated_courses']}, m)
+        register_uris({"blueprint": ["get_associated_courses"]}, m)
         associated_courses = self.blueprint.get_associated_courses()
         self.assertIsInstance(associated_courses, PaginatedList)
         self.assertEqual(associated_courses[0].id, 1)
@@ -46,20 +46,20 @@ class TestBlueprint(unittest.TestCase):
 
     # update_associated_courses()
     def test_update_associated_courses(self, m):
-        register_uris({'blueprint': ['update_associated_courses']}, m)
+        register_uris({"blueprint": ["update_associated_courses"]}, m)
         updated_associations = self.blueprint.update_associated_courses()
         self.assertEqual(updated_associations, True)
 
     # associated_course_migration()
     def test_associated_course_migration(self, m):
-        register_uris({'blueprint': ['associated_course_migration']}, m)
+        register_uris({"blueprint": ["associated_course_migration"]}, m)
         associated_migration = self.blueprint.associated_course_migration()
         self.assertEqual(associated_migration.id, 1)
         self.assertEqual(associated_migration.comment, "test1")
 
     # change_blueprint_restrictions()
     def test_change_blueprint_restrictions(self, m):
-        register_uris({'blueprint': ['change_blueprint_restrictions']}, m)
+        register_uris({"blueprint": ["change_blueprint_restrictions"]}, m)
         blueprint_restriction = self.blueprint.change_blueprint_restrictions(
             "quiz", 1, True
         )
@@ -67,7 +67,7 @@ class TestBlueprint(unittest.TestCase):
 
     # get_unsynced_changes()
     def test_get_unsynced_changes(self, m):
-        register_uris({'blueprint': ['get_unsynced_changes']}, m)
+        register_uris({"blueprint": ["get_unsynced_changes"]}, m)
         unsynced_changes = self.blueprint.get_unsynced_changes()
         self.assertIsInstance(unsynced_changes, PaginatedList)
         self.assertIsInstance(unsynced_changes[0], ChangeRecord)
@@ -78,7 +78,7 @@ class TestBlueprint(unittest.TestCase):
 
     # list_blueprint_migrations()
     def test_list_blueprint_migrations(self, m):
-        register_uris({'blueprint': ['list_blueprint_migrations']}, m)
+        register_uris({"blueprint": ["list_blueprint_migrations"]}, m)
         blueprint_migrations = self.blueprint.list_blueprint_migrations()
         self.assertIsInstance(blueprint_migrations, PaginatedList)
         self.assertIsInstance(blueprint_migrations[0], BlueprintMigration)
@@ -88,7 +88,7 @@ class TestBlueprint(unittest.TestCase):
 
     # show_blueprint_migration()
     def test_show_blueprint_migration(self, m):
-        register_uris({'blueprint': ['show_blueprint_migration']}, m)
+        register_uris({"blueprint": ["show_blueprint_migration"]}, m)
         blueprint_migration = self.blueprint.show_blueprint_migration(1)
         self.assertIsInstance(blueprint_migration, BlueprintMigration)
         self.assertEqual(blueprint_migration.id, 1)
@@ -104,12 +104,12 @@ class TestBlueprintSubscription(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': [
-                    'get_blueprint',
-                    'get_by_id',
-                    'list_blueprint_subscriptions',
+                "course": [
+                    "get_blueprint",
+                    "get_by_id",
+                    "list_blueprint_subscriptions",
                 ],
-                'blueprint': ['show_blueprint_migration'],
+                "blueprint": ["show_blueprint_migration"],
             }
             register_uris(requires, m)
 
@@ -126,7 +126,7 @@ class TestBlueprintSubscription(unittest.TestCase):
         # list_blueprint_imports()
 
     def test_list_blueprint_imports(self, m):
-        register_uris({'blueprint': ['list_blueprint_imports']}, m)
+        register_uris({"blueprint": ["list_blueprint_imports"]}, m)
         blueprint_imports = self.blueprint_subscription.list_blueprint_imports()
         self.assertIsInstance(blueprint_imports, PaginatedList)
         self.assertIsInstance(blueprint_imports[0], BlueprintMigration)
@@ -136,7 +136,7 @@ class TestBlueprintSubscription(unittest.TestCase):
         # show_blueprint_import
 
     def test_show_blueprint_import(self, m):
-        register_uris({'blueprint': ['show_blueprint_import']}, m)
+        register_uris({"blueprint": ["show_blueprint_import"]}, m)
         blueprint_import = self.blueprint_subscription.show_blueprint_import(3)
         self.assertIsInstance(blueprint_import, BlueprintMigration)
 
@@ -148,15 +148,15 @@ class TestBlueprintMigration(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': [
-                    'get_blueprint',
-                    'get_by_id',
-                    'list_blueprint_subscriptions',
+                "course": [
+                    "get_blueprint",
+                    "get_by_id",
+                    "list_blueprint_subscriptions",
                 ],
-                'blueprint': [
-                    'show_blueprint_migration',
-                    'list_blueprint_imports',
-                    'show_blueprint_import',
+                "blueprint": [
+                    "show_blueprint_migration",
+                    "list_blueprint_imports",
+                    "show_blueprint_import",
                 ],
             }
             register_uris(requires, m)
@@ -177,7 +177,7 @@ class TestBlueprintMigration(unittest.TestCase):
 
     # get_details()
     def test_get_details(self, m):
-        register_uris({'blueprint': ['get_details']}, m)
+        register_uris({"blueprint": ["get_details"]}, m)
         migration_details = self.blueprint_migration.get_details()
         self.assertIsInstance(migration_details, PaginatedList)
         self.assertIsInstance(migration_details[0], ChangeRecord)
@@ -192,7 +192,7 @@ class TestBlueprintMigration(unittest.TestCase):
 
     # get_import_details()
     def test_get_import_details(self, m):
-        register_uris({'blueprint': ['get_import_details']}, m)
+        register_uris({"blueprint": ["get_import_details"]}, m)
         import_details = self.b_import.get_import_details()
         self.assertIsInstance(import_details, PaginatedList)
         self.assertIsInstance(import_details[0], ChangeRecord)

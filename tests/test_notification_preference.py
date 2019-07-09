@@ -16,15 +16,15 @@ class TestNotificationPreference(unittest.TestCase):
         with requests_mock.Mocker() as m:
             register_uris(
                 {
-                    'user': ['get_by_id', 'list_comm_channels'],
-                    'communication_channel': ['get_preference'],
+                    "user": ["get_by_id", "list_comm_channels"],
+                    "communication_channel": ["get_preference"],
                 },
                 m,
             )
 
             self.user = self.canvas.get_user(1)
             self.comm_chan = self.user.get_communication_channels()[0]
-            self.notif_pref = self.comm_chan.get_preference('new_announcement')
+            self.notif_pref = self.comm_chan.get_preference("new_announcement")
 
     # __str__()
     def test__str__(self, m):

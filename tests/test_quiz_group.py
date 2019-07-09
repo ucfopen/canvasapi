@@ -16,7 +16,7 @@ class TestQuizGroup(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             register_uris(
-                {'course': ['get_by_id'], 'quiz': ['get_by_id', 'get_quiz_group']}, m
+                {"course": ["get_by_id"], "quiz": ["get_by_id", "get_quiz_group"]}, m
             )
 
             self.course = self.canvas.get_course(1)
@@ -29,9 +29,9 @@ class TestQuizGroup(unittest.TestCase):
 
     # update_question_group()
     def test_update(self, m):
-        register_uris({'quiz_group': ['update']}, m)
+        register_uris({"quiz_group": ["update"]}, m)
 
-        quiz_group = [{'name': 'Test Group', 'pick_count': 1, 'question_points': 2}]
+        quiz_group = [{"name": "Test Group", "pick_count": 1, "question_points": 2}]
         result = self.quiz_group.update(1, quiz_group)
 
         self.assertIsInstance(result, bool)
@@ -39,14 +39,14 @@ class TestQuizGroup(unittest.TestCase):
 
         self.assertEqual(self.quiz_group.id, 1)
         self.assertEqual(self.quiz_group.quiz_id, 1)
-        self.assertEqual(self.quiz_group.name, quiz_group[0].get('name'))
-        self.assertEqual(self.quiz_group.pick_count, quiz_group[0].get('pick_count'))
+        self.assertEqual(self.quiz_group.name, quiz_group[0].get("name"))
+        self.assertEqual(self.quiz_group.pick_count, quiz_group[0].get("pick_count"))
         self.assertEqual(
-            self.quiz_group.question_points, quiz_group[0].get('question_points')
+            self.quiz_group.question_points, quiz_group[0].get("question_points")
         )
 
     def test_update_empty_list(self, m):
-        register_uris({'quiz_group': ['update']}, m)
+        register_uris({"quiz_group": ["update"]}, m)
 
         quiz_group = []
 
@@ -54,7 +54,7 @@ class TestQuizGroup(unittest.TestCase):
             self.quiz_group.update(1, quiz_group)
 
     def test_update_incorrect_param(self, m):
-        register_uris({'quiz_group': ['update']}, m)
+        register_uris({"quiz_group": ["update"]}, m)
 
         quiz_group = [1]
 
@@ -62,7 +62,7 @@ class TestQuizGroup(unittest.TestCase):
             self.quiz_group.update(1, quiz_group)
 
     def test_update_incorrect_dict(self, m):
-        register_uris({'quiz_group': ['update']}, m)
+        register_uris({"quiz_group": ["update"]}, m)
 
         quiz_group = [{}]
 
@@ -71,7 +71,7 @@ class TestQuizGroup(unittest.TestCase):
 
     # delete_question_group()
     def test_delete(self, m):
-        register_uris({'quiz_group': ['delete']}, m)
+        register_uris({"quiz_group": ["delete"]}, m)
 
         result = self.quiz_group.delete(1)
 
@@ -79,15 +79,15 @@ class TestQuizGroup(unittest.TestCase):
 
     # reorder_question_group()
     def test_reorder_question_group(self, m):
-        register_uris({'quiz_group': ['reorder_question_group']}, m)
+        register_uris({"quiz_group": ["reorder_question_group"]}, m)
 
-        newOrdering = [{'id': 2}, {'id': 1, 'type': 'question'}]
+        newOrdering = [{"id": 2}, {"id": 1, "type": "question"}]
         result = self.quiz_group.reorder_question_group(1, newOrdering)
 
         self.assertTrue(result)
 
     def test_reorderquestion_group_empty_list(self, m):
-        register_uris({'quiz_group': ['reorder_question_group']}, m)
+        register_uris({"quiz_group": ["reorder_question_group"]}, m)
 
         order = []
 
@@ -95,7 +95,7 @@ class TestQuizGroup(unittest.TestCase):
             self.quiz_group.reorder_question_group(1, order)
 
     def test_reorderquestion_group_incorrect_param(self, m):
-        register_uris({'quiz_group': ['reorder_question_group']}, m)
+        register_uris({"quiz_group": ["reorder_question_group"]}, m)
 
         order = [1]
 
@@ -103,7 +103,7 @@ class TestQuizGroup(unittest.TestCase):
             self.quiz_group.reorder_question_group(1, order)
 
     def test_reorderquestion_group_incorrect_dict(self, m):
-        register_uris({'quiz_group': ['reorder_question_group']}, m)
+        register_uris({"quiz_group": ["reorder_question_group"]}, m)
 
         order = [{"something": 2}]
 

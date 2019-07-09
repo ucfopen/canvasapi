@@ -22,8 +22,8 @@ class AppointmentGroup(CanvasObject):
         :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
         response = self._requester.request(
-            'DELETE',
-            'appointment_groups/{}'.format(self.id),
+            "DELETE",
+            "appointment_groups/{}".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
         return AppointmentGroup(self._requester, response.json())
@@ -40,20 +40,20 @@ class AppointmentGroup(CanvasObject):
 
         :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
-        if isinstance(appointment_group, dict) and 'context_codes' in appointment_group:
-            kwargs['appointment_group'] = appointment_group
+        if isinstance(appointment_group, dict) and "context_codes" in appointment_group:
+            kwargs["appointment_group"] = appointment_group
         else:
             raise RequiredFieldMissing(
                 "Dictionary with key 'context_codes' is required."
             )
 
         response = self._requester.request(
-            'PUT',
-            'appointment_groups/{}'.format(self.id),
+            "PUT",
+            "appointment_groups/{}".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if 'title' in response.json():
+        if "title" in response.json():
             super(AppointmentGroup, self).set_attributes(response.json())
 
         return AppointmentGroup(self._requester, response.json())

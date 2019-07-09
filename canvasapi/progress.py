@@ -19,7 +19,7 @@ class Progress(CanvasObject):
 
         :rtype: :class:`canvasapi.progress.Progress`
         """
-        response = self._requester.request('GET', 'progress/{}'.format(self.id))
+        response = self._requester.request("GET", "progress/{}".format(self.id))
         response_json = response.json()
 
         super(Progress, self).set_attributes(response_json)

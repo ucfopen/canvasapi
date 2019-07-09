@@ -21,15 +21,15 @@ class AuthenticationProvider(CanvasObject):
         :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
         response = self._requester.request(
-            'PUT',
-            'accounts/{}/authentication_providers/{}'.format(self.account_id, self.id),
+            "PUT",
+            "accounts/{}/authentication_providers/{}".format(self.account_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if response.json().get('auth_type'):
+        if response.json().get("auth_type"):
             super(AuthenticationProvider, self).set_attributes(response.json())
 
-        return response.json().get('auth_type')
+        return response.json().get("auth_type")
 
     def delete(self):
         """
@@ -41,7 +41,7 @@ class AuthenticationProvider(CanvasObject):
         :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
         response = self._requester.request(
-            'DELETE',
-            'accounts/{}/authentication_providers/{}'.format(self.account_id, self.id),
+            "DELETE",
+            "accounts/{}/authentication_providers/{}".format(self.account_id, self.id),
         )
         return AuthenticationProvider(self._requester, response.json())

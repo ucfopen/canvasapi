@@ -15,8 +15,8 @@ class TestPeerReview(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_by_id', 'get_assignment_by_id'],
-                'assignment': ['list_peer_reviews'],
+                "course": ["get_by_id", "get_assignment_by_id"],
+                "assignment": ["list_peer_reviews"],
             }
 
             register_uris(requires, m)

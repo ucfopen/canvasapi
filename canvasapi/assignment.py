@@ -29,8 +29,8 @@ class Assignment(CanvasObject):
         :rtype: :class:`canvasapi.assignment.AssignmentOverride`
         """
         response = self._requester.request(
-            'POST',
-            'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
+            "POST",
+            "courses/{}/assignments/{}/overrides".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
@@ -47,8 +47,8 @@ class Assignment(CanvasObject):
         :rtype: :class:`canvasapi.assignment.Assignment`
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/assignments/{}'.format(self.course_id, self.id),
+            "DELETE",
+            "courses/{}/assignments/{}".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
         return Assignment(self._requester, response.json())
@@ -63,12 +63,12 @@ class Assignment(CanvasObject):
         :rtype: :class:`canvasapi.assignment.Assignment`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/assignments/{}'.format(self.course_id, self.id),
+            "PUT",
+            "courses/{}/assignments/{}".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if 'name' in response.json():
+        if "name" in response.json():
             super(Assignment, self).set_attributes(response.json())
 
         return Assignment(self._requester, response.json())
@@ -86,11 +86,11 @@ class Assignment(CanvasObject):
         return PaginatedList(
             UserDisplay,
             self._requester,
-            'GET',
-            'courses/{}/assignments/{}/gradeable_students'.format(
+            "GET",
+            "courses/{}/assignments/{}/gradeable_students".format(
                 self.course_id, self.id
             ),
-            {'course_id': self.course_id},
+            {"course_id": self.course_id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -109,8 +109,8 @@ class Assignment(CanvasObject):
         override_id = obj_or_id(override, "override", (AssignmentOverride,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/assignments/{}/overrides/{}'.format(
+            "GET",
+            "courses/{}/assignments/{}/overrides/{}".format(
                 self.course_id, self.id, override_id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -133,9 +133,9 @@ class Assignment(CanvasObject):
         return PaginatedList(
             AssignmentOverride,
             self._requester,
-            'GET',
-            'courses/{}/assignments/{}/overrides'.format(self.course_id, self.id),
-            {'course_id': self.course_id},
+            "GET",
+            "courses/{}/assignments/{}/overrides".format(self.course_id, self.id),
+            {"course_id": self.course_id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -152,8 +152,8 @@ class Assignment(CanvasObject):
         return PaginatedList(
             PeerReview,
             self._requester,
-            'GET',
-            'courses/{}/assignments/{}/peer_reviews'.format(self.course_id, self.id),
+            "GET",
+            "courses/{}/assignments/{}/peer_reviews".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -172,8 +172,8 @@ class Assignment(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/assignments/{}/submissions/{}'.format(
+            "GET",
+            "courses/{}/assignments/{}/submissions/{}".format(
                 self.course_id, self.id, user_id
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -196,9 +196,9 @@ class Assignment(CanvasObject):
         return PaginatedList(
             Submission,
             self._requester,
-            'GET',
-            'courses/{}/assignments/{}/submissions'.format(self.course_id, self.id),
-            {'course_id': self.course_id},
+            "GET",
+            "courses/{}/assignments/{}/submissions".format(self.course_id, self.id),
+            {"course_id": self.course_id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -217,28 +217,28 @@ class Assignment(CanvasObject):
 
         :rtype: :class:`canvasapi.submission.Submission`
         """
-        if isinstance(submission, dict) and 'submission_type' in submission:
-            kwargs['submission'] = submission
+        if isinstance(submission, dict) and "submission_type" in submission:
+            kwargs["submission"] = submission
         else:
             raise RequiredFieldMissing(
                 "Dictionary with key 'submission_type' is required."
             )
 
         if file:
-            if submission.get('submission_type') != 'online_upload':
+            if submission.get("submission_type") != "online_upload":
                 raise ValueError(
                     "To upload a file, `submission['submission_type']` must be `online_upload`."
                 )
 
             upload_response = self.upload_to_submission(file, **kwargs)
             if upload_response[0]:
-                kwargs['submission']['file_ids'] = [upload_response[1]['id']]
+                kwargs["submission"]["file_ids"] = [upload_response[1]["id"]]
             else:
-                raise CanvasException('File upload failed. Not submitting.')
+                raise CanvasException("File upload failed. Not submitting.")
 
         response = self._requester.request(
-            'POST',
-            'courses/{}/assignments/{}/submissions'.format(self.course_id, self.id),
+            "POST",
+            "courses/{}/assignments/{}/submissions".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
@@ -258,15 +258,15 @@ class Assignment(CanvasObject):
         :rtype: :class:`canvasapi.progress.Progress`
         """
         response = self._requester.request(
-            'POST',
-            'courses/{}/assignments/{}/submissions/update_grades'.format(
+            "POST",
+            "courses/{}/assignments/{}/submissions/update_grades".format(
                 self.course_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
         return Progress(self._requester, response.json())
 
-    def upload_to_submission(self, file, user='self', **kwargs):
+    def upload_to_submission(self, file, user="self", **kwargs):
         """
         Upload a file to a submission.
 
@@ -288,7 +288,7 @@ class Assignment(CanvasObject):
 
         return Uploader(
             self._requester,
-            'courses/{}/assignments/{}/submissions/{}/files'.format(
+            "courses/{}/assignments/{}/submissions/{}/files".format(
                 self.course_id, self.id, user_id
             ),
             file,
@@ -311,12 +311,12 @@ class AssignmentGroup(CanvasObject):
         :rtype: :class:`canvasapi.assignment.AssignmentGroup`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/assignment_groups/{}'.format(self.course_id, self.id),
+            "PUT",
+            "courses/{}/assignment_groups/{}".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if 'name' in response.json():
+        if "name" in response.json():
             super(AssignmentGroup, self).set_attributes(response.json())
 
         return AssignmentGroup(self._requester, response.json())
@@ -331,8 +331,8 @@ class AssignmentGroup(CanvasObject):
         :rtype: :class:`canvasapi.assignment.AssignmentGroup`
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/assignment_groups/{}'.format(self.course_id, self.id),
+            "DELETE",
+            "courses/{}/assignment_groups/{}".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
         return AssignmentGroup(self._requester, response.json())
@@ -354,8 +354,8 @@ class AssignmentOverride(CanvasObject):
         :rtype: :class:`canvasapi.assignment.AssignmentGroup`
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/assignments/{}/overrides/{}'.format(
+            "DELETE",
+            "courses/{}/assignments/{}/overrides/{}".format(
                 self.course_id, self.assignment_id, self.id
             ),
         )
@@ -377,15 +377,15 @@ class AssignmentOverride(CanvasObject):
         :rtype: :class:`canvasapi.assignment.AssignmentOverride`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/assignments/{}/overrides/{}'.format(
+            "PUT",
+            "courses/{}/assignments/{}/overrides/{}".format(
                 self.course_id, self.assignment_id, self.id
             ),
         )
 
         response_json = response.json()
         response_json.update(course_id=self.course_id)
-        if 'title' in response_json:
+        if "title" in response_json:
             super(AssignmentOverride, self).set_attributes(response_json)
 
         return self

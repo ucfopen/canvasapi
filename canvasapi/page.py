@@ -24,13 +24,13 @@ class Page(CanvasObject):
         :rtype: :class:`canvasapi.page.Page`
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/pages/{}'.format(self.parent_type, self.parent_id, self.url),
+            "PUT",
+            "{}s/{}/pages/{}".format(self.parent_type, self.parent_id, self.url),
             _kwargs=combine_kwargs(**kwargs),
         )
 
         page_json = response.json()
-        page_json.update({'course_id': self.course_id})
+        page_json.update({"course_id": self.course_id})
         super(Page, self).set_attributes(page_json)
 
         return self
@@ -45,7 +45,7 @@ class Page(CanvasObject):
         :rtype: :class:`canvasapi.page.Page`
         """
         response = self._requester.request(
-            'DELETE', 'courses/{}/pages/{}'.format(self.course_id, self.url)
+            "DELETE", "courses/{}/pages/{}".format(self.course_id, self.url)
         )
         return Page(self._requester, response.json())
 
@@ -56,9 +56,9 @@ class Page(CanvasObject):
 
         :rtype: int
         """
-        if hasattr(self, 'course_id'):
+        if hasattr(self, "course_id"):
             return self.course_id
-        elif hasattr(self, 'group_id'):
+        elif hasattr(self, "group_id"):
             return self.group_id
         else:
             raise ValueError("Page does not have a course_id or group_id")
@@ -70,10 +70,10 @@ class Page(CanvasObject):
 
         :rtype: str
         """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
         else:
             raise ValueError("ExternalTool does not have a course_id or group_id")
 
@@ -92,12 +92,12 @@ class Page(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET', '{}s/{}'.format(self.parent_type, self.parent_id)
+            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
         )
 
-        if self.parent_type == 'group':
+        if self.parent_type == "group":
             return Group(self._requester, response.json())
-        elif self.parent_type == 'course':
+        elif self.parent_type == "course":
             return Course(self._requester, response.json())
 
     def show_latest_revision(self, **kwargs):
@@ -110,8 +110,8 @@ class Page(CanvasObject):
         :rtype: :class:`canvasapi.pagerevision.PageRevision`
         """
         response = self._requester.request(
-            'GET',
-            '{}s/{}/pages/{}/revisions/latest'.format(
+            "GET",
+            "{}s/{}/pages/{}/revisions/latest".format(
                 self.parent_type, self.parent_id, self.url
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -134,17 +134,17 @@ class Page(CanvasObject):
         revision_id = obj_or_id(revision, "revision", (PageRevision,))
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}/pages/{}/revisions/{}'.format(
+            "GET",
+            "{}s/{}/pages/{}/revisions/{}".format(
                 self.parent_type, self.parent_id, self.url, revision_id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
-            pagerev_json.update({'group_id': self.id})
+            pagerev_json.update({"group_id": self.id})
         elif self.parent_type == "course":
-            pagerev_json.update({'course_id': self.id})
+            pagerev_json.update({"course_id": self.id})
 
         return PageRevision(self._requester, pagerev_json)
 
@@ -183,8 +183,8 @@ class Page(CanvasObject):
         return PaginatedList(
             PageRevision,
             self._requester,
-            'GET',
-            '{}s/{}/pages/{}/revisions'.format(
+            "GET",
+            "{}s/{}/pages/{}/revisions".format(
                 self.parent_type, self.parent_id, self.url
             ),
             _kwargs=combine_kwargs(**kwargs),
@@ -205,16 +205,16 @@ class Page(CanvasObject):
         """
         revision_id = obj_or_id(revision, "revision", (PageRevision,))
         response = self._requester.request(
-            'POST',
-            '{}s/{}/pages/{}/revisions/{}'.format(
+            "POST",
+            "{}s/{}/pages/{}/revisions/{}".format(
                 self.parent_type, self.parent_id, self.url, revision_id
             ),
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
-            pagerev_json.update({'group_id': self.id})
+            pagerev_json.update({"group_id": self.id})
         elif self.parent_type == "course":
-            pagerev_json.update({'group_id': self.id})
+            pagerev_json.update({"group_id": self.id})
 
         return PageRevision(self._requester, pagerev_json)
 
@@ -231,9 +231,9 @@ class PageRevision(CanvasObject):
 
         :rtype: int
         """
-        if hasattr(self, 'course_id'):
+        if hasattr(self, "course_id"):
             return self.course_id
-        elif hasattr(self, 'group_id'):
+        elif hasattr(self, "group_id"):
             return self.group_id
         else:
             raise ValueError("Page does not have a course_id or group_id")
@@ -245,10 +245,10 @@ class PageRevision(CanvasObject):
 
         :rtype: str
         """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
         else:
             raise ValueError("ExternalTool does not have a course_id or group_id")
 
@@ -267,10 +267,10 @@ class PageRevision(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET', '{}s/{}'.format(self.parent_type, self.parent_id)
+            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
         )
 
-        if self.parent_type == 'group':
+        if self.parent_type == "group":
             return Group(self._requester, response.json())
-        elif self.parent_type == 'course':
+        elif self.parent_type == "course":
             return Course(self._requester, response.json())

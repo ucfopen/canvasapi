@@ -19,9 +19,9 @@ class ExternalTool(CanvasObject):
 
         :rtype: int
         """
-        if hasattr(self, 'course_id'):
+        if hasattr(self, "course_id"):
             return self.course_id
-        elif hasattr(self, 'account_id'):
+        elif hasattr(self, "account_id"):
             return self.account_id
         else:
             raise ValueError("ExternalTool does not have a course_id or account_id")
@@ -33,10 +33,10 @@ class ExternalTool(CanvasObject):
 
         :rtype: str
         """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'account_id'):
-            return 'account'
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "account_id"):
+            return "account"
         else:
             raise ValueError("ExternalTool does not have a course_id or account_id")
 
@@ -50,12 +50,12 @@ class ExternalTool(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET', '{}s/{}'.format(self.parent_type, self.parent_id)
+            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
         )
 
-        if self.parent_type == 'account':
+        if self.parent_type == "account":
             return Account(self._requester, response.json())
-        elif self.parent_type == 'course':
+        elif self.parent_type == "course":
             return Course(self._requester, response.json())
 
     def delete(self):
@@ -70,8 +70,8 @@ class ExternalTool(CanvasObject):
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/external_tools/{}'.format(
+            "DELETE",
+            "{}s/{}/external_tools/{}".format(
                 self.parent_type, self.parent_id, self.id
             ),
         )
@@ -90,15 +90,15 @@ class ExternalTool(CanvasObject):
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/external_tools/{}'.format(
+            "PUT",
+            "{}s/{}/external_tools/{}".format(
                 self.parent_type, self.parent_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
 
-        if 'name' in response_json:
+        if "name" in response_json:
             super(ExternalTool, self).set_attributes(response_json)
 
         return ExternalTool(self._requester, response_json)
@@ -114,15 +114,15 @@ class ExternalTool(CanvasObject):
 
         :rtype: str
         """
-        kwargs['id'] = self.id
+        kwargs["id"] = self.id
         response = self._requester.request(
-            'GET',
-            '{}s/{}/external_tools/sessionless_launch'.format(
+            "GET",
+            "{}s/{}/external_tools/sessionless_launch".format(
                 self.parent_type, self.parent_id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
         try:
-            return response.json()['url']
+            return response.json()["url"]
         except KeyError:
-            raise CanvasException('Canvas did not respond with a valid URL')
+            raise CanvasException("Canvas did not respond with a valid URL")

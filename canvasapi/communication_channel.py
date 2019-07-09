@@ -50,14 +50,14 @@ class CommunicationChannel(CanvasObject):
         :rtype: `list`
         """
         response = self._requester.request(
-            'GET',
-            'users/{}/communication_channels/{}/notification_preferences'.format(
+            "GET",
+            "users/{}/communication_channels/{}/notification_preferences".format(
                 self.user_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return response.json()['notification_preferences']
+        return response.json()["notification_preferences"]
 
     def list_preference_categories(self, **kwargs):
         """
@@ -99,13 +99,13 @@ class CommunicationChannel(CanvasObject):
         :rtype: `list`
         """
         response = self._requester.request(
-            'GET',
-            'users/{}/communication_channels/{}/notification_preference_categories'.format(
+            "GET",
+            "users/{}/communication_channels/{}/notification_preference_categories".format(
                 self.user_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
-        return response.json()['categories']
+        return response.json()["categories"]
 
     def get_preference(self, notification):
         """
@@ -122,12 +122,12 @@ class CommunicationChannel(CanvasObject):
         :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
         """
         response = self._requester.request(
-            'GET',
-            'users/{}/communication_channels/{}/notification_preferences/{}'.format(
+            "GET",
+            "users/{}/communication_channels/{}/notification_preferences/{}".format(
                 self.user_id, self.id, notification
             ),
         )
-        data = response.json()['notification_preferences'][0]
+        data = response.json()["notification_preferences"][0]
         return NotificationPreference(self._requester, data)
 
     def update_preference(self, notification, frequency, **kwargs):
@@ -147,15 +147,15 @@ class CommunicationChannel(CanvasObject):
 
         :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
         """
-        kwargs['notification_preferences[frequency]'] = frequency
+        kwargs["notification_preferences[frequency]"] = frequency
         response = self._requester.request(
-            'PUT',
-            'users/self/communication_channels/{}/notification_preferences/{}'.format(
+            "PUT",
+            "users/self/communication_channels/{}/notification_preferences/{}".format(
                 self.id, notification
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
-        data = response.json()['notification_preferences'][0]
+        data = response.json()["notification_preferences"][0]
         return NotificationPreference(self._requester, data)
 
     def update_preferences_by_catagory(self, category, frequency, **kwargs):
@@ -177,15 +177,15 @@ class CommunicationChannel(CanvasObject):
 
         :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
         """
-        kwargs['notification_preferences[frequency]'] = frequency
+        kwargs["notification_preferences[frequency]"] = frequency
         response = self._requester.request(
-            'PUT',
-            'users/self/communication_channels/{}/notification_preference_categories/{}'.format(
+            "PUT",
+            "users/self/communication_channels/{}/notification_preference_categories/{}".format(
                 self.id, category
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
-        return response.json()['notification_preferences']
+        return response.json()["notification_preferences"]
 
     def update_multiple_preferences(self, notification_preferences, **kwargs):
         """
@@ -207,20 +207,20 @@ class CommunicationChannel(CanvasObject):
 
             for key, value in notification_preferences.items():
                 try:
-                    if not value['frequency']:
+                    if not value["frequency"]:
                         return False
                 except KeyError:
                     return False
 
-            kwargs['notification_preferences'] = notification_preferences
+            kwargs["notification_preferences"] = notification_preferences
             response = self._requester.request(
-                'PUT',
-                'users/self/communication_channels/{}/notification_preferences'.format(
+                "PUT",
+                "users/self/communication_channels/{}/notification_preferences".format(
                     self.id
                 ),
                 _kwargs=combine_kwargs(**kwargs),
             )
-            return response.json()['notification_preferences']
+            return response.json()["notification_preferences"]
         return False
 
     def delete(self):
@@ -235,7 +235,7 @@ class CommunicationChannel(CanvasObject):
         """
 
         response = self._requester.request(
-            'DELETE', 'users/{}/communication_channels/{}'.format(self.user_id, self.id)
+            "DELETE", "users/{}/communication_channels/{}".format(self.user_id, self.id)
         )
 
-        return response.json().get('workflow_state') == 'deleted'
+        return response.json().get("workflow_state") == "deleted"

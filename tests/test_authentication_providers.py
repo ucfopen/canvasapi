@@ -15,7 +15,7 @@ class TestAuthenticationProvider(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({'account': ['get_by_id', 'add_authentication_providers']}, m)
+            register_uris({"account": ["get_by_id", "add_authentication_providers"]}, m)
 
             self.account = self.canvas.get_account(1)
             self.authentication_providers = self.account.add_authentication_providers(
@@ -25,10 +25,10 @@ class TestAuthenticationProvider(unittest.TestCase):
     # update()
     def test_update_authentication_providers(self, m):
         register_uris(
-            {'authentication_providers': ['update_authentication_providers']}, m
+            {"authentication_providers": ["update_authentication_providers"]}, m
         )
 
-        new_auth_type = 'New Authentication Providers'
+        new_auth_type = "New Authentication Providers"
 
         self.authentication_providers.update(
             authentication_providers={"auth_type": new_auth_type}
@@ -38,15 +38,15 @@ class TestAuthenticationProvider(unittest.TestCase):
     # delete()
     def test_delete_authentication_providers(self, m):
         register_uris(
-            {'authentication_providers': ['delete_authentication_providers']}, m
+            {"authentication_providers": ["delete_authentication_providers"]}, m
         )
 
         deleted_authentication_providers = self.authentication_providers.delete()
 
         self.assertIsInstance(deleted_authentication_providers, AuthenticationProvider)
-        self.assertTrue(hasattr(deleted_authentication_providers, 'auth_type'))
+        self.assertTrue(hasattr(deleted_authentication_providers, "auth_type"))
         self.assertEqual(
-            deleted_authentication_providers.auth_type, 'Authentication Providers'
+            deleted_authentication_providers.auth_type, "Authentication Providers"
         )
 
     # __str__()

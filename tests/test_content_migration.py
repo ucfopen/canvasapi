@@ -21,10 +21,10 @@ class TestContentMigration(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_by_id', 'get_content_migration_single'],
-                'group': ['get_by_id', 'get_content_migration_single'],
-                'account': ['get_by_id', 'get_content_migration_single'],
-                'user': ['get_by_id', 'get_content_migration_single'],
+                "course": ["get_by_id", "get_content_migration_single"],
+                "group": ["get_by_id", "get_content_migration_single"],
+                "account": ["get_by_id", "get_content_migration_single"],
+                "user": ["get_by_id", "get_content_migration_single"],
             }
             register_uris(requires, m)
 
@@ -45,19 +45,19 @@ class TestContentMigration(unittest.TestCase):
 
     # _parent_type
     def test_parent_type_account(self, m):
-        self.assertEqual(self.content_migration._parent_type, 'account')
+        self.assertEqual(self.content_migration._parent_type, "account")
 
     def test_parent_type_course(self, m):
-        self.assertEqual(self.content_migration_course._parent_type, 'course')
+        self.assertEqual(self.content_migration_course._parent_type, "course")
 
     def test_parent_type_group(self, m):
-        self.assertEqual(self.content_migration_group._parent_type, 'group')
+        self.assertEqual(self.content_migration_group._parent_type, "group")
 
     def test_parent_type_user(self, m):
-        self.assertEqual(self.content_migration_user._parent_type, 'user')
+        self.assertEqual(self.content_migration_user._parent_type, "user")
 
     def test_parent_type_no_type(self, m):
-        migration = ContentMigration(self.canvas._Canvas__requester, {'id': 1})
+        migration = ContentMigration(self.canvas._Canvas__requester, {"id": 1})
         with self.assertRaises(ValueError):
             migration._parent_type
 
@@ -75,87 +75,87 @@ class TestContentMigration(unittest.TestCase):
         self.assertEqual(self.content_migration_user._parent_id, 1)
 
     def test_parent_id_no_id(self, m):
-        migration = ContentMigration(self.canvas._Canvas__requester, {'id': 1})
+        migration = ContentMigration(self.canvas._Canvas__requester, {"id": 1})
         with self.assertRaises(ValueError):
             migration._parent_id
 
     # get_migration_issue()
     def test_get_migration_issue(self, m):
-        register_uris({'content_migration': ['get_migration_issue_single']}, m)
+        register_uris({"content_migration": ["get_migration_issue_single"]}, m)
 
         issue = self.content_migration.get_migration_issue(1)
         self.assertIsInstance(issue, MigrationIssue)
-        self.assertTrue(hasattr(issue, 'id'))
+        self.assertTrue(hasattr(issue, "id"))
         self.assertEqual(issue.id, 1)
 
     # get_migration_issues()
     def test_get_migration_issues(self, m):
-        register_uris({'content_migration': ['get_migration_issue_multiple']}, m)
+        register_uris({"content_migration": ["get_migration_issue_multiple"]}, m)
 
         issues = self.content_migration.get_migration_issues()
 
         self.assertEqual(len(list(issues)), 2)
 
         self.assertIsInstance(issues[0], MigrationIssue)
-        self.assertTrue(hasattr(issues[0], 'id'))
+        self.assertTrue(hasattr(issues[0], "id"))
         self.assertEqual(issues[0].id, 1)
         self.assertIsInstance(issues[1], MigrationIssue)
-        self.assertTrue(hasattr(issues[1], 'id'))
+        self.assertTrue(hasattr(issues[1], "id"))
         self.assertEqual(issues[1].id, 2)
 
     # get_parent()
     def test_get_parent_account(self, m):
-        register_uris({'content_migration': ['get_parent_account']}, m)
+        register_uris({"content_migration": ["get_parent_account"]}, m)
 
         account = self.content_migration.get_parent()
         self.assertIsInstance(account, Account)
-        self.assertTrue(hasattr(account, 'id'))
+        self.assertTrue(hasattr(account, "id"))
         self.assertEqual(account.id, 1)
 
     def test_get_parent_course(self, m):
-        register_uris({'content_migration': ['get_parent_course']}, m)
+        register_uris({"content_migration": ["get_parent_course"]}, m)
 
         course = self.content_migration_course.get_parent()
         self.assertIsInstance(course, Course)
-        self.assertTrue(hasattr(course, 'id'))
+        self.assertTrue(hasattr(course, "id"))
         self.assertEqual(course.id, 1)
 
     def test_get_parent_group(self, m):
-        register_uris({'content_migration': ['get_parent_group']}, m)
+        register_uris({"content_migration": ["get_parent_group"]}, m)
 
         group = self.content_migration_group.get_parent()
         self.assertIsInstance(group, Group)
-        self.assertTrue(hasattr(group, 'id'))
+        self.assertTrue(hasattr(group, "id"))
         self.assertEqual(group.id, 1)
 
     def test_get_parent_user(self, m):
-        register_uris({'content_migration': ['get_parent_user']}, m)
+        register_uris({"content_migration": ["get_parent_user"]}, m)
 
         user = self.content_migration_user.get_parent()
         self.assertIsInstance(user, User)
-        self.assertTrue(hasattr(user, 'id'))
+        self.assertTrue(hasattr(user, "id"))
         self.assertEqual(user.id, 1)
 
     # get_progress()
     def test_get_progress(self, m):
-        register_uris({'content_migration': ['get_progress']}, m)
+        register_uris({"content_migration": ["get_progress"]}, m)
 
         progress = self.content_migration.get_progress()
         self.assertIsInstance(progress, Progress)
-        self.assertTrue(hasattr(progress, 'id'))
+        self.assertTrue(hasattr(progress, "id"))
         self.assertEqual(progress.id, 1)
 
     # update()
     def test_update(self, m):
-        register_uris({'content_migration': ['update']}, m)
+        register_uris({"content_migration": ["update"]}, m)
 
         worked = self.content_migration.update()
         self.assertTrue(worked)
-        self.assertTrue(hasattr(self.content_migration, 'migration_type'))
+        self.assertTrue(hasattr(self.content_migration, "migration_type"))
         self.assertEqual(self.content_migration.migration_type, "dummy_importer")
 
     def test_update_fail(self, m):
-        register_uris({'content_migration': ['update_fail']}, m)
+        register_uris({"content_migration": ["update_fail"]}, m)
 
         worked = self.content_migration.update()
         self.assertFalse(worked)
@@ -168,15 +168,15 @@ class TestMigrationIssue(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_by_id', 'get_content_migration_single'],
-                'group': ['get_by_id', 'get_content_migration_single'],
-                'account': ['get_by_id', 'get_content_migration_single'],
-                'user': ['get_by_id', 'get_content_migration_single'],
-                'content_migration': [
-                    'get_migration_issue_single',
-                    'get_migration_issue_single_course',
-                    'get_migration_issue_single_group',
-                    'get_migration_issue_single_user',
+                "course": ["get_by_id", "get_content_migration_single"],
+                "group": ["get_by_id", "get_content_migration_single"],
+                "account": ["get_by_id", "get_content_migration_single"],
+                "user": ["get_by_id", "get_content_migration_single"],
+                "content_migration": [
+                    "get_migration_issue_single",
+                    "get_migration_issue_single_course",
+                    "get_migration_issue_single_group",
+                    "get_migration_issue_single_user",
                 ],
             }
             register_uris(requires, m)
@@ -209,15 +209,15 @@ class TestMigrationIssue(unittest.TestCase):
 
     # update()
     def test_update(self, m):
-        register_uris({'content_migration': ['update_issue']}, m)
+        register_uris({"content_migration": ["update_issue"]}, m)
 
         worked = self.migration_issue.update()
         self.assertTrue(worked)
-        self.assertTrue(hasattr(self.migration_issue, 'id'))
+        self.assertTrue(hasattr(self.migration_issue, "id"))
         self.assertEqual(self.migration_issue.id, 1)
 
     def test_update_fail(self, m):
-        register_uris({'content_migration': ['update_issue_fail']}, m)
+        register_uris({"content_migration": ["update_issue_fail"]}, m)
 
         worked = self.migration_issue.update()
         self.assertFalse(worked)
@@ -230,15 +230,15 @@ class TestMigrator(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_by_id', 'get_migration_systems_multiple'],
-                'group': ['get_by_id', 'get_migration_systems_multiple'],
-                'account': ['get_by_id', 'get_migration_systems_multiple'],
-                'user': ['get_by_id', 'get_migration_systems_multiple'],
-                'content_migration': [
-                    'get_migration_issue_single',
-                    'get_migration_issue_single_course',
-                    'get_migration_issue_single_group',
-                    'get_migration_issue_single_user',
+                "course": ["get_by_id", "get_migration_systems_multiple"],
+                "group": ["get_by_id", "get_migration_systems_multiple"],
+                "account": ["get_by_id", "get_migration_systems_multiple"],
+                "user": ["get_by_id", "get_migration_systems_multiple"],
+                "content_migration": [
+                    "get_migration_issue_single",
+                    "get_migration_issue_single_course",
+                    "get_migration_issue_single_group",
+                    "get_migration_issue_single_user",
                 ],
             }
             register_uris(requires, m)

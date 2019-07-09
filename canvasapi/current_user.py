@@ -18,7 +18,7 @@ class CurrentUser(User):
     def __init__(self, _requester):
         self._requester = _requester
 
-        response = self._requester.request('GET', 'users/self')
+        response = self._requester.request("GET", "users/self")
 
         super(CurrentUser, self).__init__(self._requester, response.json())
 
@@ -60,8 +60,8 @@ class CurrentUser(User):
         return PaginatedList(
             Group,
             self._requester,
-            'GET',
-            'users/self/groups',
+            "GET",
+            "users/self/groups",
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -97,7 +97,7 @@ class CurrentUser(User):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.bookmark.Bookmark`
         """
-        return PaginatedList(Bookmark, self._requester, 'GET', 'users/self/bookmarks')
+        return PaginatedList(Bookmark, self._requester, "GET", "users/self/bookmarks")
 
     def create_bookmark(self, name, url, **kwargs):
         """
@@ -115,8 +115,8 @@ class CurrentUser(User):
         from canvasapi.bookmark import Bookmark
 
         response = self._requester.request(
-            'POST',
-            'users/self/bookmarks',
+            "POST",
+            "users/self/bookmarks",
             name=name,
             url=url,
             _kwargs=combine_kwargs(**kwargs),
@@ -141,7 +141,7 @@ class CurrentUser(User):
         bookmark_id = obj_or_id(bookmark, "bookmark", (Bookmark,))
 
         response = self._requester.request(
-            'GET', 'users/self/bookmarks/{}'.format(bookmark_id)
+            "GET", "users/self/bookmarks/{}".format(bookmark_id)
         )
         return Bookmark(self._requester, response.json())
 
@@ -161,8 +161,8 @@ class CurrentUser(User):
         return PaginatedList(
             Course,
             self._requester,
-            'GET',
-            'users/self/favorites/courses',
+            "GET",
+            "users/self/favorites/courses",
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -182,8 +182,8 @@ class CurrentUser(User):
         return PaginatedList(
             Group,
             self._requester,
-            'GET',
-            'users/self/favorites/groups',
+            "GET",
+            "users/self/favorites/groups",
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -206,13 +206,13 @@ class CurrentUser(User):
         """
         if use_sis_id:
             course_id = course
-            uri_str = 'users/self/favorites/courses/sis_course_id:{}'
+            uri_str = "users/self/favorites/courses/sis_course_id:{}"
         else:
             course_id = obj_or_id(course, "course", (Course,))
-            uri_str = 'users/self/favorites/courses/{}'
+            uri_str = "users/self/favorites/courses/{}"
 
         response = self._requester.request(
-            'POST', uri_str.format(course_id), _kwargs=combine_kwargs(**kwargs)
+            "POST", uri_str.format(course_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Favorite(self._requester, response.json())
 
@@ -235,13 +235,13 @@ class CurrentUser(User):
         """
         if use_sis_id:
             group_id = group
-            uri_str = 'users/self/favorites/groups/sis_group_id:{}'
+            uri_str = "users/self/favorites/groups/sis_group_id:{}"
         else:
             group_id = obj_or_id(group, "group", (Group,))
-            uri_str = 'users/self/favorites/groups/{}'
+            uri_str = "users/self/favorites/groups/{}"
 
         response = self._requester.request(
-            'POST', uri_str.format(group_id), _kwargs=combine_kwargs(**kwargs)
+            "POST", uri_str.format(group_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Favorite(self._requester, response.json())
 
@@ -258,9 +258,9 @@ class CurrentUser(User):
         """
 
         response = self._requester.request(
-            'DELETE', 'users/self/favorites/courses', _kwargs=combine_kwargs(**kwargs)
+            "DELETE", "users/self/favorites/courses", _kwargs=combine_kwargs(**kwargs)
         )
-        return response.json().get('message') == 'OK'
+        return response.json().get("message") == "OK"
 
     def reset_favorite_groups(self, **kwargs):
         """
@@ -275,6 +275,6 @@ class CurrentUser(User):
         """
 
         response = self._requester.request(
-            'DELETE', 'users/self/favorites/groups', _kwargs=combine_kwargs(**kwargs)
+            "DELETE", "users/self/favorites/groups", _kwargs=combine_kwargs(**kwargs)
         )
-        return response.json().get('message') == 'OK'
+        return response.json().get("message") == "OK"

@@ -25,7 +25,7 @@ class PaginatedList(object):
         self._content_class = content_class
         self._first_url = first_url
         self._first_params = kwargs or {}
-        self._first_params['per_page'] = kwargs.get('per_page', 100)
+        self._first_params["per_page"] = kwargs.get("per_page", 100)
         self._next_url = first_url
         self._next_params = self._first_params
         self._extra_attribs = extra_attribs or {}
@@ -73,11 +73,11 @@ class PaginatedList(object):
         data = response.json()
         self._next_url = None
 
-        next_link = response.links.get('next')
-        regex = r'{}(.*)'.format(re.escape(self._requester.base_url))
+        next_link = response.links.get("next")
+        regex = r"{}(.*)".format(re.escape(self._requester.base_url))
 
         self._next_url = (
-            re.search(regex, next_link['url']).group(1) if next_link else None
+            re.search(regex, next_link["url"]).group(1) if next_link else None
         )
 
         self._next_params = {}

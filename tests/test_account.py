@@ -42,7 +42,7 @@ class TestAccount(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {'account': ['get_by_id', 'get_role'], 'user': ['get_by_id']}
+            requires = {"account": ["get_by_id", "get_role"], "user": ["get_by_id"]}
             register_uris(requires, m)
 
             self.account = self.canvas.get_account(1)
@@ -56,50 +56,50 @@ class TestAccount(unittest.TestCase):
 
     # close_notification_for_user()
     def test_close_notification_for_user_id(self, m):
-        register_uris({'account': ['close_notification']}, m)
+        register_uris({"account": ["close_notification"]}, m)
 
         user_id = self.user.id
         notif_id = 1
         closed_notif = self.account.close_notification_for_user(user_id, notif_id)
 
         self.assertIsInstance(closed_notif, AccountNotification)
-        self.assertTrue(hasattr(closed_notif, 'subject'))
+        self.assertTrue(hasattr(closed_notif, "subject"))
 
     def test_close_notification_for_user_obj(self, m):
-        register_uris({'account': ['close_notification']}, m)
+        register_uris({"account": ["close_notification"]}, m)
 
         notif_id = 1
         self.account.close_notification_for_user(self.user, notif_id)
 
     # create_account()
     def test_create_account(self, m):
-        register_uris({'account': ['create_2']}, m)
+        register_uris({"account": ["create_2"]}, m)
 
         new_account = self.account.create_account()
 
         self.assertIsInstance(new_account, Account)
-        self.assertTrue(hasattr(new_account, 'id'))
+        self.assertTrue(hasattr(new_account, "id"))
 
     # create_course()
     def test_create_course(self, m):
-        register_uris({'account': ['create_course']}, m)
+        register_uris({"account": ["create_course"]}, m)
 
         course = self.account.create_course()
 
         self.assertIsInstance(course, Course)
-        self.assertTrue(hasattr(course, 'name'))
+        self.assertTrue(hasattr(course, "name"))
 
     # create_subaccount()
     def test_create_subaccount(self, m):
-        register_uris({'account': ['create_subaccount']}, m)
+        register_uris({"account": ["create_subaccount"]}, m)
 
         subaccount_name = "New Subaccount"
-        subaccount = self.account.create_subaccount({'name': subaccount_name})
+        subaccount = self.account.create_subaccount({"name": subaccount_name})
 
         self.assertIsInstance(subaccount, Account)
-        self.assertTrue(hasattr(subaccount, 'name'))
+        self.assertTrue(hasattr(subaccount, "name"))
         self.assertEqual(subaccount.name, subaccount_name)
-        self.assertTrue(hasattr(subaccount, 'root_account_id'))
+        self.assertTrue(hasattr(subaccount, "root_account_id"))
         self.assertEqual(subaccount.root_account_id, self.account.id)
 
     def test_create_course_missing_field(self, m):
@@ -108,13 +108,13 @@ class TestAccount(unittest.TestCase):
 
     # create_user()
     def test_create_user(self, m):
-        register_uris({'account': ['create_user']}, m)
+        register_uris({"account": ["create_user"]}, m)
 
         unique_id = 123456
-        user = self.account.create_user({'unique_id': unique_id})
+        user = self.account.create_user({"unique_id": unique_id})
 
         self.assertIsInstance(user, User)
-        self.assertTrue(hasattr(user, 'unique_id'))
+        self.assertTrue(hasattr(user, "unique_id"))
         self.assertEqual(user.unique_id, unique_id)
 
     def test_create_user_missing_field(self, m):
@@ -123,21 +123,21 @@ class TestAccount(unittest.TestCase):
 
     # create_notification()
     def test_create_notification(self, m):
-        register_uris({'account': ['create_notification']}, m)
+        register_uris({"account": ["create_notification"]}, m)
 
-        subject = 'Subject'
+        subject = "Subject"
         notif_dict = {
-            'subject': subject,
-            'message': 'Message',
-            'start_at': '2015-04-01T00:00:00Z',
-            'end_at': '2018-04-01T00:00:00Z',
+            "subject": subject,
+            "message": "Message",
+            "start_at": "2015-04-01T00:00:00Z",
+            "end_at": "2018-04-01T00:00:00Z",
         }
         notif = self.account.create_notification(notif_dict)
 
         self.assertIsInstance(notif, AccountNotification)
-        self.assertTrue(hasattr(notif, 'subject'))
+        self.assertTrue(hasattr(notif, "subject"))
         self.assertEqual(notif.subject, subject)
-        self.assertTrue(hasattr(notif, 'start_at_date'))
+        self.assertTrue(hasattr(notif, "start_at_date"))
         self.assertIsInstance(notif.start_at_date, datetime.datetime)
         self.assertEqual(notif.start_at_date.tzinfo, pytz.utc)
 
@@ -147,9 +147,9 @@ class TestAccount(unittest.TestCase):
 
     # delete()
     def test_delete(self, m):
-        register_uris({'account': ['create_subaccount', 'delete_subaccount']}, m)
+        register_uris({"account": ["create_subaccount", "delete_subaccount"]}, m)
 
-        subaccount = self.account.create_subaccount({'name': 'New Subaccount'})
+        subaccount = self.account.create_subaccount({"name": "New Subaccount"})
 
         self.assertTrue(subaccount.delete())
 
@@ -159,24 +159,24 @@ class TestAccount(unittest.TestCase):
 
     # delete_user()
     def test_delete_user_id(self, m):
-        register_uris({'account': ['delete_user']}, m)
+        register_uris({"account": ["delete_user"]}, m)
 
         deleted_user = self.account.delete_user(self.user.id)
 
         self.assertIsInstance(deleted_user, User)
-        self.assertTrue(hasattr(deleted_user, 'name'))
+        self.assertTrue(hasattr(deleted_user, "name"))
 
     def test_delete_user_obj(self, m):
-        register_uris({'account': ['delete_user']}, m)
+        register_uris({"account": ["delete_user"]}, m)
 
         deleted_user = self.account.delete_user(self.user)
 
         self.assertIsInstance(deleted_user, User)
-        self.assertTrue(hasattr(deleted_user, 'name'))
+        self.assertTrue(hasattr(deleted_user, "name"))
 
     # get_courses()
     def test_get_courses(self, m):
-        required = {'account': ['get_courses', 'get_courses_page_2']}
+        required = {"account": ["get_courses", "get_courses_page_2"]}
         register_uris(required, m)
 
         courses = self.account.get_courses()
@@ -184,24 +184,24 @@ class TestAccount(unittest.TestCase):
         course_list = [course for course in courses]
         self.assertEqual(len(course_list), 4)
         self.assertIsInstance(course_list[0], Course)
-        self.assertTrue(hasattr(course_list[0], 'name'))
+        self.assertTrue(hasattr(course_list[0], "name"))
 
     # get_external_tool()
     def test_get_external_tool(self, m):
-        required = {'external_tool': ['get_by_id_account']}
+        required = {"external_tool": ["get_by_id_account"]}
         register_uris(required, m)
 
         tool_by_id = self.account.get_external_tool(1)
         self.assertIsInstance(tool_by_id, ExternalTool)
-        self.assertTrue(hasattr(tool_by_id, 'name'))
+        self.assertTrue(hasattr(tool_by_id, "name"))
 
         tool_by_obj = self.account.get_external_tool(tool_by_id)
         self.assertIsInstance(tool_by_obj, ExternalTool)
-        self.assertTrue(hasattr(tool_by_obj, 'name'))
+        self.assertTrue(hasattr(tool_by_obj, "name"))
 
     # get_external_tools()
     def test_get_external_tools(self, m):
-        required = {'account': ['get_external_tools', 'get_external_tools_p2']}
+        required = {"account": ["get_external_tools", "get_external_tools_p2"]}
         register_uris(required, m)
 
         tools = self.account.get_external_tools()
@@ -212,7 +212,7 @@ class TestAccount(unittest.TestCase):
 
     # get_index_of_reports()
     def test_get_index_of_reports(self, m):
-        required = {'account': ['report_index', 'report_index_page_2']}
+        required = {"account": ["report_index", "report_index_page_2"]}
         register_uris(required, m)
 
         reports_index = self.account.get_index_of_reports("sis_export_csv")
@@ -220,11 +220,11 @@ class TestAccount(unittest.TestCase):
         reports_index_list = [index for index in reports_index]
         self.assertEqual(len(reports_index_list), 4)
         self.assertIsInstance(reports_index_list[0], AccountReport)
-        self.assertTrue(hasattr(reports_index_list[0], 'id'))
+        self.assertTrue(hasattr(reports_index_list[0], "id"))
 
     # get_reports()
     def test_get_reports(self, m):
-        required = {'account': ['reports', 'reports_page_2']}
+        required = {"account": ["reports", "reports_page_2"]}
         register_uris(required, m)
 
         reports = self.account.get_reports()
@@ -232,11 +232,11 @@ class TestAccount(unittest.TestCase):
         reports_list = [report for report in reports]
         self.assertEqual(len(reports_list), 4)
         self.assertIsInstance(reports_list[0], AccountReport)
-        self.assertTrue(hasattr(reports_list[0], 'id'))
+        self.assertTrue(hasattr(reports_list[0], "id"))
 
     # get_subaccounts()
     def test_get_subaccounts(self, m):
-        required = {'account': ['subaccounts', 'subaccounts_page_2']}
+        required = {"account": ["subaccounts", "subaccounts_page_2"]}
         register_uris(required, m)
 
         subaccounts = self.account.get_subaccounts()
@@ -244,11 +244,11 @@ class TestAccount(unittest.TestCase):
         subaccounts_list = [account for account in subaccounts]
         self.assertEqual(len(subaccounts_list), 4)
         self.assertIsInstance(subaccounts_list[0], Account)
-        self.assertTrue(hasattr(subaccounts_list[0], 'name'))
+        self.assertTrue(hasattr(subaccounts_list[0], "name"))
 
     # get_users()
     def test_get_users(self, m):
-        required = {'account': ['users', 'users_page_2']}
+        required = {"account": ["users", "users_page_2"]}
         register_uris(required, m)
 
         users = self.account.get_users()
@@ -256,11 +256,11 @@ class TestAccount(unittest.TestCase):
         user_list = [user for user in users]
         self.assertEqual(len(user_list), 4)
         self.assertIsInstance(user_list[0], User)
-        self.assertTrue(hasattr(user_list[0], 'name'))
+        self.assertTrue(hasattr(user_list[0], "name"))
 
     # get_user_notifications()
     def test_get_user_notifications_id(self, m):
-        required = {'account': ['user_notifs', 'user_notifs_page_2']}
+        required = {"account": ["user_notifs", "user_notifs_page_2"]}
         register_uris(required, m)
 
         user_notifs = self.account.get_user_notifications(self.user.id)
@@ -268,10 +268,10 @@ class TestAccount(unittest.TestCase):
         notif_list = [notif for notif in user_notifs]
         self.assertEqual(len(notif_list), 4)
         self.assertIsInstance(user_notifs[0], AccountNotification)
-        self.assertTrue(hasattr(user_notifs[0], 'subject'))
+        self.assertTrue(hasattr(user_notifs[0], "subject"))
 
     def test_get_user_notifications_obj(self, m):
-        required = {'account': ['user_notifs', 'user_notifs_page_2']}
+        required = {"account": ["user_notifs", "user_notifs_page_2"]}
         register_uris(required, m)
 
         user_notifs = self.account.get_user_notifications(self.user)
@@ -279,33 +279,33 @@ class TestAccount(unittest.TestCase):
         notif_list = [notif for notif in user_notifs]
         self.assertEqual(len(notif_list), 4)
         self.assertIsInstance(user_notifs[0], AccountNotification)
-        self.assertTrue(hasattr(user_notifs[0], 'subject'))
+        self.assertTrue(hasattr(user_notifs[0], "subject"))
 
     # update()
     def test_update(self, m):
-        register_uris({'account': ['update']}, m)
+        register_uris({"account": ["update"]}, m)
 
-        self.assertEqual(self.account.name, 'Canvas Account')
+        self.assertEqual(self.account.name, "Canvas Account")
 
-        new_name = 'Updated Name'
-        update_account_dict = {'name': new_name}
+        new_name = "Updated Name"
+        update_account_dict = {"name": new_name}
 
         self.assertTrue(self.account.update(account=update_account_dict))
         self.assertEqual(self.account.name, new_name)
 
     def test_update_fail(self, m):
-        register_uris({'account': ['update_fail']}, m)
+        register_uris({"account": ["update_fail"]}, m)
 
-        self.assertEqual(self.account.name, 'Canvas Account')
+        self.assertEqual(self.account.name, "Canvas Account")
 
-        new_name = 'Updated Name'
-        update_account_dict = {'name': new_name}
+        new_name = "Updated Name"
+        update_account_dict = {"name": new_name}
 
         self.assertFalse(self.account.update(account=update_account_dict))
 
     # list_roles()
     def test_list_roles(self, m):
-        requires = {'account': ['get_roles', 'get_roles_2']}
+        requires = {"account": ["get_roles", "get_roles_2"]}
         register_uris(requires, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
@@ -314,15 +314,15 @@ class TestAccount(unittest.TestCase):
 
             self.assertEqual(len(role_list), 4)
             self.assertIsInstance(role_list[0], Role)
-            self.assertTrue(hasattr(role_list[0], 'role'))
-            self.assertTrue(hasattr(role_list[0], 'label'))
+            self.assertTrue(hasattr(role_list[0], "role"))
+            self.assertTrue(hasattr(role_list[0], "label"))
 
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_roles()
     def test_get_roles(self, m):
-        requires = {'account': ['get_roles', 'get_roles_2']}
+        requires = {"account": ["get_roles", "get_roles_2"]}
         register_uris(requires, m)
 
         roles = self.account.get_roles()
@@ -330,72 +330,72 @@ class TestAccount(unittest.TestCase):
 
         self.assertEqual(len(role_list), 4)
         self.assertIsInstance(role_list[0], Role)
-        self.assertTrue(hasattr(role_list[0], 'role'))
-        self.assertTrue(hasattr(role_list[0], 'label'))
+        self.assertTrue(hasattr(role_list[0], "role"))
+        self.assertTrue(hasattr(role_list[0], "label"))
 
     def test_get_role(self, m):
-        register_uris({'account': ['get_role']}, m)
+        register_uris({"account": ["get_role"]}, m)
 
         target_role_by_id = self.account.get_role(2)
         self.assertIsInstance(target_role_by_id, Role)
-        self.assertTrue(hasattr(target_role_by_id, 'role'))
-        self.assertTrue(hasattr(target_role_by_id, 'label'))
+        self.assertTrue(hasattr(target_role_by_id, "role"))
+        self.assertTrue(hasattr(target_role_by_id, "label"))
 
         target_role_by_obj = self.account.get_role(self.role)
         self.assertIsInstance(target_role_by_obj, Role)
-        self.assertTrue(hasattr(target_role_by_obj, 'role'))
-        self.assertTrue(hasattr(target_role_by_obj, 'label'))
+        self.assertTrue(hasattr(target_role_by_obj, "role"))
+        self.assertTrue(hasattr(target_role_by_obj, "label"))
 
     def test_create_role(self, m):
-        register_uris({'account': ['create_role']}, m)
+        register_uris({"account": ["create_role"]}, m)
 
         new_role = self.account.create_role(1)
         self.assertIsInstance(new_role, Role)
-        self.assertTrue(hasattr(new_role, 'role'))
-        self.assertTrue(hasattr(new_role, 'label'))
+        self.assertTrue(hasattr(new_role, "role"))
+        self.assertTrue(hasattr(new_role, "label"))
 
     def test_deactivate_role(self, m):
-        register_uris({'account': ['deactivate_role']}, m)
+        register_uris({"account": ["deactivate_role"]}, m)
 
         old_role_by_id = self.account.deactivate_role(2)
         self.assertIsInstance(old_role_by_id, Role)
-        self.assertTrue(hasattr(old_role_by_id, 'role'))
-        self.assertTrue(hasattr(old_role_by_id, 'label'))
+        self.assertTrue(hasattr(old_role_by_id, "role"))
+        self.assertTrue(hasattr(old_role_by_id, "label"))
 
         old_role_by_obj = self.account.deactivate_role(self.role)
         self.assertIsInstance(old_role_by_obj, Role)
-        self.assertTrue(hasattr(old_role_by_obj, 'role'))
-        self.assertTrue(hasattr(old_role_by_obj, 'label'))
+        self.assertTrue(hasattr(old_role_by_obj, "role"))
+        self.assertTrue(hasattr(old_role_by_obj, "label"))
 
     def test_activate_role(self, m):
-        register_uris({'account': ['activate_role']}, m)
+        register_uris({"account": ["activate_role"]}, m)
 
         activated_role_by_id = self.account.activate_role(2)
         self.assertIsInstance(activated_role_by_id, Role)
-        self.assertTrue(hasattr(activated_role_by_id, 'role'))
-        self.assertTrue(hasattr(activated_role_by_id, 'label'))
+        self.assertTrue(hasattr(activated_role_by_id, "role"))
+        self.assertTrue(hasattr(activated_role_by_id, "label"))
 
         activated_role_by_obj = self.account.activate_role(self.role)
         self.assertIsInstance(activated_role_by_obj, Role)
-        self.assertTrue(hasattr(activated_role_by_obj, 'role'))
-        self.assertTrue(hasattr(activated_role_by_obj, 'label'))
+        self.assertTrue(hasattr(activated_role_by_obj, "role"))
+        self.assertTrue(hasattr(activated_role_by_obj, "label"))
 
     def test_update_role(self, m):
-        register_uris({'account': ['update_role']}, m)
+        register_uris({"account": ["update_role"]}, m)
 
         updated_role_by_id = self.account.update_role(2)
         self.assertIsInstance(updated_role_by_id, Role)
-        self.assertTrue(hasattr(updated_role_by_id, 'role'))
-        self.assertTrue(hasattr(updated_role_by_id, 'label'))
+        self.assertTrue(hasattr(updated_role_by_id, "role"))
+        self.assertTrue(hasattr(updated_role_by_id, "label"))
 
         updated_role_by_obj = self.account.update_role(self.role)
         self.assertIsInstance(updated_role_by_obj, Role)
-        self.assertTrue(hasattr(updated_role_by_obj, 'role'))
-        self.assertTrue(hasattr(updated_role_by_obj, 'label'))
+        self.assertTrue(hasattr(updated_role_by_obj, "role"))
+        self.assertTrue(hasattr(updated_role_by_obj, "label"))
 
     # get_enrollment()
     def test_get_enrollment(self, m):
-        register_uris({'enrollment': ['get_by_id']}, m)
+        register_uris({"enrollment": ["get_by_id"]}, m)
 
         enrollment_by_id = self.account.get_enrollment(1)
         self.assertIsInstance(enrollment_by_id, Enrollment)
@@ -405,7 +405,7 @@ class TestAccount(unittest.TestCase):
 
     # list_groups()
     def test_list_groups(self, m):
-        requires = {'account': ['get_groups_context', 'get_groups_context2']}
+        requires = {"account": ["get_groups_context", "get_groups_context2"]}
         register_uris(requires, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
@@ -420,7 +420,7 @@ class TestAccount(unittest.TestCase):
 
     # get_groups()
     def test_get_groups(self, m):
-        requires = {'account': ['get_groups_context', 'get_groups_context2']}
+        requires = {"account": ["get_groups_context", "get_groups_context2"]}
         register_uris(requires, m)
 
         groups = self.account.get_groups()
@@ -431,7 +431,7 @@ class TestAccount(unittest.TestCase):
 
     # create_group_category()
     def test_create_group_category(self, m):
-        register_uris({'account': ['create_group_category']}, m)
+        register_uris({"account": ["create_group_category"]}, m)
 
         name_str = "Test String"
         response = self.account.create_group_category(name=name_str)
@@ -439,7 +439,7 @@ class TestAccount(unittest.TestCase):
 
     # list_group_categories()
     def test_list_group_categories(self, m):
-        register_uris({'account': ['get_group_categories']}, m)
+        register_uris({"account": ["get_group_categories"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             response = self.account.list_group_categories()
@@ -452,7 +452,7 @@ class TestAccount(unittest.TestCase):
 
     # get_group_categories()
     def test_get_group_categories(self, m):
-        register_uris({'account': ['get_group_categories']}, m)
+        register_uris({"account": ["get_group_categories"]}, m)
 
         response = self.account.get_group_categories()
         category_list = [category for category in response]
@@ -461,7 +461,7 @@ class TestAccount(unittest.TestCase):
 
     # create_external_tool()
     def test_create_external_tool(self, m):
-        register_uris({'external_tool': ['create_tool_account']}, m)
+        register_uris({"external_tool": ["create_tool_account"]}, m)
 
         response = self.account.create_external_tool(
             name="External Tool - Account",
@@ -471,12 +471,12 @@ class TestAccount(unittest.TestCase):
         )
 
         self.assertIsInstance(response, ExternalTool)
-        self.assertTrue(hasattr(response, 'id'))
+        self.assertTrue(hasattr(response, "id"))
         self.assertEqual(response.id, 10)
 
     # create_enrollment_term()
     def test_create_enrollment_term(self, m):
-        register_uris({'enrollment_term': ['create_enrollment_term']}, m)
+        register_uris({"enrollment_term": ["create_enrollment_term"]}, m)
 
         evnt = self.account.create_enrollment_term(name="Test Enrollment Term", id=45)
 
@@ -486,7 +486,7 @@ class TestAccount(unittest.TestCase):
 
     # list_enrollment_terms()
     def test_list_enrollment_terms(self, m):
-        register_uris({'account': ['get_enrollment_terms']}, m)
+        register_uris({"account": ["get_enrollment_terms"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             response = self.account.list_enrollment_terms()
@@ -499,7 +499,7 @@ class TestAccount(unittest.TestCase):
 
     # get_enrollment_terms()
     def test_get_enrollment_terms(self, m):
-        register_uris({'account': ['get_enrollment_terms']}, m)
+        register_uris({"account": ["get_enrollment_terms"]}, m)
 
         response = self.account.get_enrollment_terms()
         enrollment_terms_list = [category for category in response]
@@ -508,7 +508,7 @@ class TestAccount(unittest.TestCase):
 
     # list_user_logins()
     def test_list_user_logins(self, m):
-        requires = {'account': ['get_user_logins', 'get_user_logins_2']}
+        requires = {"account": ["get_user_logins", "get_user_logins_2"]}
         register_uris(requires, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
@@ -523,7 +523,7 @@ class TestAccount(unittest.TestCase):
 
     # get_user_logins()
     def test_get_user_logins(self, m):
-        requires = {'account': ['get_user_logins', 'get_user_logins_2']}
+        requires = {"account": ["get_user_logins", "get_user_logins_2"]}
         register_uris(requires, m)
 
         response = self.account.get_user_logins()
@@ -534,17 +534,17 @@ class TestAccount(unittest.TestCase):
 
     # create_user_login()
     def test_create_user_login(self, m):
-        register_uris({'login': ['create_user_login']}, m)
+        register_uris({"login": ["create_user_login"]}, m)
 
-        unique_id = 'belieber@example.com'
+        unique_id = "belieber@example.com"
 
         response = self.account.create_user_login(
-            user={'id': 1}, login={'unique_id': unique_id}
+            user={"id": 1}, login={"unique_id": unique_id}
         )
 
         self.assertIsInstance(response, Login)
-        self.assertTrue(hasattr(response, 'id'))
-        self.assertTrue(hasattr(response, 'unique_id'))
+        self.assertTrue(hasattr(response, "id"))
+        self.assertTrue(hasattr(response, "unique_id"))
         self.assertEqual(response.id, 101)
         self.assertEqual(response.unique_id, unique_id)
 
@@ -554,12 +554,12 @@ class TestAccount(unittest.TestCase):
 
     def test_create_user_login_fail_on_login_unique_id(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.account.create_user_login(user={'id': 1}, login={})
+            self.account.create_user_login(user={"id": 1}, login={})
 
     # get_department_level_participation_data_with_given_term()
     def test_get_department_level_participation_data_with_given_term(self, m):
         register_uris(
-            {'account': ['get_department_level_participation_data_with_given_term']}, m
+            {"account": ["get_department_level_participation_data_with_given_term"]}, m
         )
 
         response = self.account.get_department_level_participation_data_with_given_term(
@@ -571,7 +571,7 @@ class TestAccount(unittest.TestCase):
     # get_department_level_participation_data_current()
     def test_get_department_level_participation_data_current(self, m):
         register_uris(
-            {'account': ['get_department_level_participation_data_current']}, m
+            {"account": ["get_department_level_participation_data_current"]}, m
         )
 
         response = self.account.get_department_level_participation_data_current()
@@ -581,7 +581,7 @@ class TestAccount(unittest.TestCase):
     # get_department_level_participation_data_completed()
     def test_get_department_level_participation_data_completed(self, m):
         register_uris(
-            {'account': ['get_department_level_participation_data_completed']}, m
+            {"account": ["get_department_level_participation_data_completed"]}, m
         )
 
         response = self.account.get_department_level_participation_data_completed()
@@ -591,7 +591,7 @@ class TestAccount(unittest.TestCase):
     # get_department_level_grade_data_with_given_term()
     def test_get_department_level_grade_data_with_given_term(self, m):
         register_uris(
-            {'account': ['get_department_level_grade_data_with_given_term']}, m
+            {"account": ["get_department_level_grade_data_with_given_term"]}, m
         )
 
         response = self.account.get_department_level_grade_data_with_given_term(1)
@@ -600,7 +600,7 @@ class TestAccount(unittest.TestCase):
 
     # get_department_level_grade_data_current()
     def test_get_department_level_grade_data_current(self, m):
-        register_uris({'account': ['get_department_level_grade_data_current']}, m)
+        register_uris({"account": ["get_department_level_grade_data_current"]}, m)
 
         response = self.account.get_department_level_grade_data_current()
 
@@ -608,7 +608,7 @@ class TestAccount(unittest.TestCase):
 
     # get_department_level_grade_data_completed()
     def test_get_department_level_grade_data_completed(self, m):
-        register_uris({'account': ['get_department_level_grade_data_completed']}, m)
+        register_uris({"account": ["get_department_level_grade_data_completed"]}, m)
 
         response = self.account.get_department_level_grade_data_completed()
 
@@ -617,7 +617,7 @@ class TestAccount(unittest.TestCase):
     # get_department_level_statistics_with_given_term()
     def test_get_department_level_statistics_with_given_term(self, m):
         register_uris(
-            {'account': ['get_department_level_statistics_with_given_term']}, m
+            {"account": ["get_department_level_statistics_with_given_term"]}, m
         )
 
         response = self.account.get_department_level_statistics_with_given_term(1)
@@ -626,7 +626,7 @@ class TestAccount(unittest.TestCase):
 
     # get_department_level_statistics_current()
     def test_get_department_level_statistics_current(self, m):
-        register_uris({'account': ['get_department_level_statistics_current']}, m)
+        register_uris({"account": ["get_department_level_statistics_current"]}, m)
 
         response = self.account.get_department_level_statistics_current()
 
@@ -634,7 +634,7 @@ class TestAccount(unittest.TestCase):
 
     # get_department_level_statistics_completed()
     def test_get_department_level_statistics_completed(self, m):
-        register_uris({'account': ['get_department_level_statistics_completed']}, m)
+        register_uris({"account": ["get_department_level_statistics_completed"]}, m)
 
         response = self.account.get_department_level_statistics_completed()
 
@@ -643,9 +643,9 @@ class TestAccount(unittest.TestCase):
     # list_authentication_providers()
     def test_list_authentication_providers(self, m):
         requires = {
-            'account': [
-                'list_authentication_providers',
-                'list_authentication_providers_2',
+            "account": [
+                "list_authentication_providers",
+                "list_authentication_providers_2",
             ]
         }
         register_uris(requires, m)
@@ -661,8 +661,8 @@ class TestAccount(unittest.TestCase):
             self.assertIsInstance(
                 authentication_providers_list[0], AuthenticationProvider
             )
-            self.assertTrue(hasattr(authentication_providers_list[0], 'auth_type'))
-            self.assertTrue(hasattr(authentication_providers_list[0], 'position'))
+            self.assertTrue(hasattr(authentication_providers_list[0], "auth_type"))
+            self.assertTrue(hasattr(authentication_providers_list[0], "position"))
 
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
@@ -670,9 +670,9 @@ class TestAccount(unittest.TestCase):
     # get_authentication_providers()
     def test_get_authentication_providers(self, m):
         requires = {
-            'account': [
-                'list_authentication_providers',
-                'list_authentication_providers_2',
+            "account": [
+                "list_authentication_providers",
+                "list_authentication_providers_2",
             ]
         }
         register_uris(requires, m)
@@ -685,22 +685,22 @@ class TestAccount(unittest.TestCase):
 
         self.assertEqual(len(authentication_providers_list), 4)
         self.assertIsInstance(authentication_providers_list[0], AuthenticationProvider)
-        self.assertTrue(hasattr(authentication_providers_list[0], 'auth_type'))
-        self.assertTrue(hasattr(authentication_providers_list[0], 'position'))
+        self.assertTrue(hasattr(authentication_providers_list[0], "auth_type"))
+        self.assertTrue(hasattr(authentication_providers_list[0], "position"))
 
     # add_authentication_providers()
     def test_add_authentication_providers(self, m):
-        register_uris({'account': ['add_authentication_providers']}, m)
+        register_uris({"account": ["add_authentication_providers"]}, m)
 
         new_authentication_provider = self.account.add_authentication_providers()
 
         self.assertIsInstance(new_authentication_provider, AuthenticationProvider)
-        self.assertTrue(hasattr(new_authentication_provider, 'auth_type'))
-        self.assertTrue(hasattr(new_authentication_provider, 'position'))
+        self.assertTrue(hasattr(new_authentication_provider, "auth_type"))
+        self.assertTrue(hasattr(new_authentication_provider, "position"))
 
     # get_authentication_provider()
     def test_get_authentication_provider(self, m):
-        register_uris({'account': ['get_authentication_providers']}, m)
+        register_uris({"account": ["get_authentication_providers"]}, m)
 
         authentication_provider_by_id = self.account.get_authentication_provider(1)
         self.assertIsInstance(authentication_provider_by_id, AuthenticationProvider)
@@ -712,7 +712,7 @@ class TestAccount(unittest.TestCase):
 
     # show_account_auth_settings()
     def test_show_account_auth_settings(self, m):
-        register_uris({'account': ['show_account_auth_settings']}, m)
+        register_uris({"account": ["show_account_auth_settings"]}, m)
 
         response = self.account.show_account_auth_settings()
 
@@ -720,7 +720,7 @@ class TestAccount(unittest.TestCase):
 
     # update_account_auth_settings()
     def test_update_account_auth_settings(self, m):
-        register_uris({'account': ['update_account_auth_settings']}, m)
+        register_uris({"account": ["update_account_auth_settings"]}, m)
 
         response = self.account.update_account_auth_settings()
 
@@ -728,7 +728,7 @@ class TestAccount(unittest.TestCase):
 
     # get_root_outcome_group()
     def test_get_root_outcome_group(self, m):
-        register_uris({'outcome': ['account_root_outcome_group']}, m)
+        register_uris({"outcome": ["account_root_outcome_group"]}, m)
 
         outcome_group = self.account.get_root_outcome_group()
 
@@ -738,7 +738,7 @@ class TestAccount(unittest.TestCase):
 
     # get_outcome_group()
     def test_get_outcome_group(self, m):
-        register_uris({'outcome': ['account_get_outcome_group']}, m)
+        register_uris({"outcome": ["account_get_outcome_group"]}, m)
 
         outcome_group_by_id = self.account.get_outcome_group(1)
         self.assertIsInstance(outcome_group_by_id, OutcomeGroup)
@@ -752,7 +752,7 @@ class TestAccount(unittest.TestCase):
 
     # get_outcome_groups_in_context()
     def test_get_outcome_groups_in_context(self, m):
-        register_uris({'outcome': ['account_outcome_groups_in_context']}, m)
+        register_uris({"outcome": ["account_outcome_groups_in_context"]}, m)
 
         outcome_group_list = self.account.get_outcome_groups_in_context()
 
@@ -762,17 +762,17 @@ class TestAccount(unittest.TestCase):
 
     # get_all_outcome_links_in_context()
     def test_get_outcome_links_in_context(self, m):
-        register_uris({'outcome': ['account_outcome_links_in_context']}, m)
+        register_uris({"outcome": ["account_outcome_links_in_context"]}, m)
 
         outcome_link_list = self.account.get_all_outcome_links_in_context()
 
         self.assertIsInstance(outcome_link_list[0], OutcomeLink)
-        self.assertEqual(outcome_link_list[0].outcome_group['id'], 2)
-        self.assertEqual(outcome_link_list[0].outcome_group['title'], "test outcome")
+        self.assertEqual(outcome_link_list[0].outcome_group["id"], 2)
+        self.assertEqual(outcome_link_list[0].outcome_group["title"], "test outcome")
 
     # add_grading_standards()
     def test_add_grading_standards(self, m):
-        register_uris({'account': ['add_grading_standards']}, m)
+        register_uris({"account": ["add_grading_standards"]}, m)
 
         title = "Grading Standard 1"
         grading_scheme = []
@@ -783,36 +783,36 @@ class TestAccount(unittest.TestCase):
         response = self.account.add_grading_standards(title, grading_scheme)
 
         self.assertIsInstance(response, GradingStandard)
-        self.assertTrue(hasattr(response, 'title'))
+        self.assertTrue(hasattr(response, "title"))
         self.assertEqual(title, response.title)
         self.assertTrue(hasattr(response, "grading_scheme"))
-        self.assertEqual(response.grading_scheme[0].get('name'), "A")
-        self.assertEqual(response.grading_scheme[0].get('value'), 0.9)
+        self.assertEqual(response.grading_scheme[0].get("name"), "A")
+        self.assertEqual(response.grading_scheme[0].get("value"), 0.9)
 
     # add_grading_standards()
     def test_add_grading_standards_empty_list(self, m):
-        register_uris({'account': ['add_grading_standards']}, m)
+        register_uris({"account": ["add_grading_standards"]}, m)
         with self.assertRaises(ValueError):
             self.account.add_grading_standards("title", [])
 
     def test_add_grading_standards_non_dict_list(self, m):
-        register_uris({'account': ['add_grading_standards']}, m)
+        register_uris({"account": ["add_grading_standards"]}, m)
         with self.assertRaises(ValueError):
             self.account.add_grading_standards("title", [1, 2, 3])
 
     def test_add_grading_standards_missing_value_key(self, m):
-        register_uris({'account': ['add_grading_standards']}, m)
+        register_uris({"account": ["add_grading_standards"]}, m)
         with self.assertRaises(ValueError):
-            self.account.add_grading_standards("title", [{'name': "test"}])
+            self.account.add_grading_standards("title", [{"name": "test"}])
 
     def test_add_grading_standards_missing_name_key(self, m):
-        register_uris({'account': ['add_grading_standards']}, m)
+        register_uris({"account": ["add_grading_standards"]}, m)
         with self.assertRaises(ValueError):
-            self.account.add_grading_standards("title", [{'value': 2}])
+            self.account.add_grading_standards("title", [{"value": 2}])
 
     # get_grading_standards()
     def test_get_grading_standards(self, m):
-        register_uris({'account': ['get_grading_standards']}, m)
+        register_uris({"account": ["get_grading_standards"]}, m)
 
         standards = self.account.get_grading_standards()
         standard_list = [standard for standard in standards]
@@ -822,22 +822,22 @@ class TestAccount(unittest.TestCase):
 
     # get_single_grading_standards()
     def test_get_single_grading_standard(self, m):
-        register_uris({'account': ['get_single_grading_standard']}, m)
+        register_uris({"account": ["get_single_grading_standard"]}, m)
 
         response = self.account.get_single_grading_standard(1)
 
         self.assertIsInstance(response, GradingStandard)
-        self.assertTrue(hasattr(response, 'id'))
+        self.assertTrue(hasattr(response, "id"))
         self.assertEqual(1, response.id)
-        self.assertTrue(hasattr(response, 'title'))
+        self.assertTrue(hasattr(response, "title"))
         self.assertEqual("Grading Standard 1", response.title)
         self.assertTrue(hasattr(response, "grading_scheme"))
-        self.assertEqual(response.grading_scheme[0].get('name'), "A")
-        self.assertEqual(response.grading_scheme[0].get('value'), 0.9)
+        self.assertEqual(response.grading_scheme[0].get("name"), "A")
+        self.assertEqual(response.grading_scheme[0].get("value"), 0.9)
 
     # get_rubric
     def test_get_rubric(self, m):
-        register_uris({'account': ['get_rubric_single']}, m)
+        register_uris({"account": ["get_rubric_single"]}, m)
 
         rubric_id = 1
         rubric = self.account.get_rubric(rubric_id)
@@ -848,7 +848,7 @@ class TestAccount(unittest.TestCase):
 
     # list_rubrics
     def test_list_rubrics(self, m):
-        register_uris({'account': ['get_rubric_multiple']}, m)
+        register_uris({"account": ["get_rubric_multiple"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             rubrics = self.account.list_rubrics()
@@ -867,7 +867,7 @@ class TestAccount(unittest.TestCase):
 
     # get_rubrics
     def test_get_rubrics(self, m):
-        register_uris({'account': ['get_rubric_multiple']}, m)
+        register_uris({"account": ["get_rubric_multiple"]}, m)
 
         rubrics = self.account.get_rubrics()
 
@@ -882,16 +882,16 @@ class TestAccount(unittest.TestCase):
 
     # create_content_migration
     def test_create_content_migration(self, m):
-        register_uris({'account': ['create_content_migration']}, m)
+        register_uris({"account": ["create_content_migration"]}, m)
 
-        content_migration = self.account.create_content_migration('dummy_importer')
+        content_migration = self.account.create_content_migration("dummy_importer")
 
         self.assertIsInstance(content_migration, ContentMigration)
-        self.assertTrue(hasattr(content_migration, 'migration_type'))
+        self.assertTrue(hasattr(content_migration, "migration_type"))
 
     def test_create_content_migration_migrator(self, m):
         register_uris(
-            {'account': ['create_content_migration', 'get_migration_systems_multiple']},
+            {"account": ["create_content_migration", "get_migration_systems_multiple"]},
             m,
         )
 
@@ -899,26 +899,26 @@ class TestAccount(unittest.TestCase):
         content_migration = self.account.create_content_migration(migrators[0])
 
         self.assertIsInstance(content_migration, ContentMigration)
-        self.assertTrue(hasattr(content_migration, 'migration_type'))
+        self.assertTrue(hasattr(content_migration, "migration_type"))
 
     def test_create_content_migration_bad_migration_type(self, m):
-        register_uris({'account': ['create_content_migration']}, m)
+        register_uris({"account": ["create_content_migration"]}, m)
 
         with self.assertRaises(TypeError):
             self.account.create_content_migration(1)
 
     # get_content_migration
     def test_get_content_migration(self, m):
-        register_uris({'account': ['get_content_migration_single']}, m)
+        register_uris({"account": ["get_content_migration_single"]}, m)
 
         content_migration = self.account.get_content_migration(1)
 
         self.assertIsInstance(content_migration, ContentMigration)
-        self.assertTrue(hasattr(content_migration, 'migration_type'))
+        self.assertTrue(hasattr(content_migration, "migration_type"))
 
     # get_content_migrations
     def test_get_content_migrations(self, m):
-        register_uris({'account': ['get_content_migration_multiple']}, m)
+        register_uris({"account": ["get_content_migration_multiple"]}, m)
 
         content_migrations = self.account.get_content_migrations()
 
@@ -933,7 +933,7 @@ class TestAccount(unittest.TestCase):
 
     # get_migration_systems
     def test_get_migration_systems(self, m):
-        register_uris({'account': ['get_migration_systems_multiple']}, m)
+        register_uris({"account": ["get_migration_systems_multiple"]}, m)
 
         migration_systems = self.account.get_migration_systems()
 
@@ -950,7 +950,7 @@ class TestAccount(unittest.TestCase):
 
     # get_admins()
     def test_get_admins(self, m):
-        register_uris({'account': ['get_admins', 'get_admins_page_2']}, m)
+        register_uris({"account": ["get_admins", "get_admins_page_2"]}, m)
 
         admins = self.account.get_admins()
         admin_list = [admin for admin in admins]
@@ -960,109 +960,109 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(admin_list[0], Admin)
         self.assertIsInstance(admin_list[1], Admin)
 
-        self.assertTrue(hasattr(admin_list[0], 'id'))
-        self.assertTrue(hasattr(admin_list[1], 'role'))
-        self.assertTrue(hasattr(admin_list[0], 'role_id'))
-        self.assertTrue(hasattr(admin_list[1], 'workflow_state'))
+        self.assertTrue(hasattr(admin_list[0], "id"))
+        self.assertTrue(hasattr(admin_list[1], "role"))
+        self.assertTrue(hasattr(admin_list[0], "role_id"))
+        self.assertTrue(hasattr(admin_list[1], "workflow_state"))
 
-        self.assertEqual(admin_list[1].user['login_id'], 'jdoe')
-        self.assertEqual(admin_list[1].role, 'AccountAdmin')
+        self.assertEqual(admin_list[1].user["login_id"], "jdoe")
+        self.assertEqual(admin_list[1].role, "AccountAdmin")
         self.assertEqual(admin_list[0].role_id, 2)
 
     # create_sis_import()
     def test_create_sis_import(self, m):
         import os
 
-        register_uris({'account': ['create_sis_import']}, m)
+        register_uris({"account": ["create_sis_import"]}, m)
 
-        filepath = os.path.join('tests', 'fixtures', 'test_create_sis_import.csv')
+        filepath = os.path.join("tests", "fixtures", "test_create_sis_import.csv")
 
         sis_import = self.account.create_sis_import(filepath)
 
         self.assertTrue(isinstance(sis_import, SisImport))
-        self.assertTrue(hasattr(sis_import, 'account_id'))
-        self.assertTrue(hasattr(sis_import, 'user'))
+        self.assertTrue(hasattr(sis_import, "account_id"))
+        self.assertTrue(hasattr(sis_import, "user"))
 
-        self.assertEqual(sis_import.account_id, sis_import.user['id'])
+        self.assertEqual(sis_import.account_id, sis_import.user["id"])
 
     def test_create_sis_import_binary(self, m):
         import os
 
-        register_uris({'account': ['create_sis_import']}, m)
+        register_uris({"account": ["create_sis_import"]}, m)
 
-        filepath = os.path.join('tests', 'fixtures', 'test_create_sis_import.csv')
+        filepath = os.path.join("tests", "fixtures", "test_create_sis_import.csv")
 
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             sis_import = self.account.create_sis_import(f)
 
         self.assertIsInstance(sis_import, SisImport)
 
-        self.assertTrue(hasattr(sis_import, 'account_id'))
-        self.assertTrue(hasattr(sis_import, 'user'))
+        self.assertTrue(hasattr(sis_import, "account_id"))
+        self.assertTrue(hasattr(sis_import, "user"))
 
-        self.assertEqual(sis_import.account_id, sis_import.user['id'])
+        self.assertEqual(sis_import.account_id, sis_import.user["id"])
 
     def test_create_sis_import_ioerror(self, m):
-        f = '!@#$%^&*()_+QWERTYUIOP{}|'
+        f = "!@#$%^&*()_+QWERTYUIOP{}|"
 
         with self.assertRaises(IOError):
             self.account.create_sis_import(f)
 
     # get_sis_import()
     def test_get_sis_import(self, m):
-        register_uris({'account': ['get_sis_import']}, m)
+        register_uris({"account": ["get_sis_import"]}, m)
 
         sis_import_id = 2
         sis_import = self.account.get_sis_import(sis_import_id)
 
         self.assertIsInstance(sis_import, SisImport)
-        self.assertTrue(hasattr(sis_import, 'account_id'))
+        self.assertTrue(hasattr(sis_import, "account_id"))
 
         self.assertEqual(sis_import_id, sis_import.id)
 
     # get_sis_imports()
     def test_get_sis_imports(self, m):
-        register_uris({'account': ['get_sis_imports']}, m)
+        register_uris({"account": ["get_sis_imports"]}, m)
 
         sis_imports = self.account.get_sis_imports()
 
         self.assertIsInstance(sis_imports[0], SisImport)
         self.assertIsInstance(sis_imports[1], SisImport)
 
-        self.assertTrue(hasattr(sis_imports[0], 'account_id'))
+        self.assertTrue(hasattr(sis_imports[0], "account_id"))
 
         self.assertNotEqual(sis_imports[0].id, sis_imports[1].id)
 
     # get_sis_imports_running()
     def test_get_sis_imports_running(self, m):
-        register_uris({'account': ['get_sis_imports_running']}, m)
+        register_uris({"account": ["get_sis_imports_running"]}, m)
 
         sis_imports = self.account.get_sis_imports_running()
 
         self.assertIsInstance(sis_imports[0], SisImport)
 
-        self.assertTrue(hasattr(sis_imports[0], 'account_id'))
+        self.assertTrue(hasattr(sis_imports[0], "account_id"))
 
         for sis_import in sis_imports:
             self.assertEqual(sis_import.workflow_state, "importing")
 
     # abort_sis_imports_pending()
     def test_abort_sis_imports_pending(self, m):
-        register_uris({'account': ['abort_sis_imports_pending']}, m)
+        register_uris({"account": ["abort_sis_imports_pending"]}, m)
 
         aborted = self.account.abort_sis_imports_pending()
 
         self.assertTrue(aborted)
 
     def test_abort_sis_imports_pending_false(self, m):
-        register_uris({'account': ['abort_sis_imports_pending_false']}, m)
+        register_uris({"account": ["abort_sis_imports_pending_false"]}, m)
 
         aborted = self.account.abort_sis_imports_pending()
 
         self.assertFalse(aborted)
 
     def test_abort_sis_imports_pending_blank(self, m):
-        register_uris({'account': ['abort_sis_imports_pending_blank']}, m)
+        register_uris({"account": ["abort_sis_imports_pending_blank"]}, m)
 
         aborted = self.account.abort_sis_imports_pending()
 
@@ -1070,17 +1070,17 @@ class TestAccount(unittest.TestCase):
 
     # create_admins()
     def test_create_admin(self, m):
-        register_uris({'account': ['create_admin']}, m)
+        register_uris({"account": ["create_admin"]}, m)
 
         user_id = 123
         admin = self.account.create_admin(user=user_id)
         self.assertIsInstance(admin, Admin)
-        self.assertTrue(hasattr(admin, 'id'))
-        self.assertTrue(hasattr(admin, 'role'))
-        self.assertTrue(hasattr(admin, 'role_id'))
-        self.assertTrue(hasattr(admin, 'workflow_state'))
-        self.assertEqual(admin.user['login_id'], 'jdoe')
-        self.assertEqual(admin.role, 'AccountAdmin')
+        self.assertTrue(hasattr(admin, "id"))
+        self.assertTrue(hasattr(admin, "role"))
+        self.assertTrue(hasattr(admin, "role_id"))
+        self.assertTrue(hasattr(admin, "workflow_state"))
+        self.assertEqual(admin.user["login_id"], "jdoe")
+        self.assertEqual(admin.role, "AccountAdmin")
         self.assertEqual(admin.role_id, 1)
 
     # get_outcome_import_status()
@@ -1154,7 +1154,7 @@ class TestAccount(unittest.TestCase):
 
     # get_grading_periods()
     def test_get_grading_periods(self, m):
-        register_uris({'account': ['get_grading_periods']}, m)
+        register_uris({"account": ["get_grading_periods"]}, m)
 
         response = self.account.get_grading_periods()
 
@@ -1168,7 +1168,7 @@ class TestAccount(unittest.TestCase):
 
     # delete_grading_periods()
     def test_delete_grading_periods(self, m):
-        register_uris({'account': ['delete_grading_period']}, m)
+        register_uris({"account": ["delete_grading_period"]}, m)
 
         self.grading_period = GradingPeriod(
             self.canvas._Canvas__requester,

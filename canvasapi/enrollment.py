@@ -24,18 +24,18 @@ class Enrollment(CanvasObject):
         :type task: str
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
-        ALLOWED_TASKS = ['conclude', 'delete', 'inactivate', 'deactivate']
+        ALLOWED_TASKS = ["conclude", "delete", "inactivate", "deactivate"]
 
         if task not in ALLOWED_TASKS:
             raise ValueError(
-                '{} is not a valid task. Please use one of the following: {}'.format(
-                    task, ','.join(ALLOWED_TASKS)
+                "{} is not a valid task. Please use one of the following: {}".format(
+                    task, ",".join(ALLOWED_TASKS)
                 )
             )
 
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/enrollments/{}'.format(self.course_id, self.id),
+            "DELETE",
+            "courses/{}/enrollments/{}".format(self.course_id, self.id),
             task=task,
         )
         return Enrollment(self._requester, response.json())
@@ -50,7 +50,7 @@ class Enrollment(CanvasObject):
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/enrollments/{}/reactivate'.format(self.course_id, self.id),
+            "PUT",
+            "courses/{}/enrollments/{}/reactivate".format(self.course_id, self.id),
         )
         return Enrollment(self._requester, response.json())

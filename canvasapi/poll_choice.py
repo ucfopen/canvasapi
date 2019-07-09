@@ -27,18 +27,18 @@ class PollChoice(CanvasObject):
         if (
             isinstance(poll_choice, list)
             and isinstance(poll_choice[0], dict)
-            and 'text' in poll_choice[0]
+            and "text" in poll_choice[0]
         ):
-            kwargs['poll_choice'] = poll_choice
+            kwargs["poll_choice"] = poll_choice
         else:
             raise RequiredFieldMissing("Dictionary with key 'text' is required.")
 
         response = self._requester.request(
-            'PUT',
-            'polls/{}/poll_choices/{}'.format(self.poll_id, self.id),
+            "PUT",
+            "polls/{}/poll_choices/{}".format(self.poll_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
-        return PollChoice(self._requester, response.json()['poll_choices'][0])
+        return PollChoice(self._requester, response.json()["poll_choices"][0])
 
     def delete(self, **kwargs):
         """
@@ -52,8 +52,8 @@ class PollChoice(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'polls/{}/poll_choices/{}'.format(self.poll_id, self.id),
+            "DELETE",
+            "polls/{}/poll_choices/{}".format(self.poll_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204

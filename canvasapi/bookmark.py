@@ -21,7 +21,7 @@ class Bookmark(CanvasObject):
         :rtype: :class:`canvasapi.bookmark.Bookmark`
         """
         response = self._requester.request(
-            'DELETE', 'users/self/bookmarks/{}'.format(self.id)
+            "DELETE", "users/self/bookmarks/{}".format(self.id)
         )
         return Bookmark(self._requester, response.json())
 
@@ -35,12 +35,12 @@ class Bookmark(CanvasObject):
         :rtype: :class:`canvasapi.bookmark.Bookmark`
         """
         response = self._requester.request(
-            'PUT',
-            'users/self/bookmarks/{}'.format(self.id),
+            "PUT",
+            "users/self/bookmarks/{}".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if 'name' in response.json() and 'url' in response.json():
+        if "name" in response.json() and "url" in response.json():
             super(Bookmark, self).set_attributes(response.json())
 
         return Bookmark(self._requester, response.json())
