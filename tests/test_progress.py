@@ -11,14 +11,13 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestProgress(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_by_id', 'create_group_category'],
-                'group': ['category_assign_members_false']
+                "course": ["get_by_id", "create_group_category"],
+                "group": ["category_assign_members_false"],
             }
 
             register_uris(requires, m)
@@ -34,7 +33,7 @@ class TestProgress(unittest.TestCase):
 
     # query()
     def test_query(self, m):
-        register_uris({'progress': ['progress_query']}, m)
+        register_uris({"progress": ["progress_query"]}, m)
 
         response = self.progress.query()
         self.assertIsInstance(response, Progress)

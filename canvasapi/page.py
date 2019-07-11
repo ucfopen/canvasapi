@@ -10,9 +10,22 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Page(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
+
+    def delete(self):
+        """
+        Delete this page.
+
+        :calls: `DELETE /api/v1/courses/:course_id/pages/:url \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.destroy>`_
+
+        :rtype: :class:`canvasapi.page.Page`
+        """
+        response = self._requester.request(
+            "DELETE", "courses/{}/pages/{}".format(self.course_id, self.url)
+        )
+        return Page(self._requester, response.json())
 
     def edit(self, **kwargs):
         """
@@ -25,59 +38,16 @@ class Page(CanvasObject):
         :rtype: :class:`canvasapi.page.Page`
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/pages/{}'.format(self.parent_type, self.parent_id, self.url),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "{}s/{}/pages/{}".format(self.parent_type, self.parent_id, self.url),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         page_json = response.json()
-        page_json.update({'course_id': self.course_id})
+        page_json.update({"course_id": self.course_id})
         super(Page, self).set_attributes(page_json)
 
         return self
-
-    def delete(self):
-        """
-        Delete this page.
-
-        :calls: `DELETE /api/v1/courses/:course_id/pages/:url \
-        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.destroy>`_
-
-        :rtype: :class:`canvasapi.page.Page`
-        """
-        response = self._requester.request(
-            'DELETE',
-            'courses/{}/pages/{}'.format(self.course_id, self.url)
-        )
-        return Page(self._requester, response.json())
-
-    @property
-    def parent_id(self):
-        """
-        Return the id of the course or group that spawned this page.
-
-        :rtype: int
-        """
-        if hasattr(self, 'course_id'):
-            return self.course_id
-        elif hasattr(self, 'group_id'):
-            return self.group_id
-        else:
-            raise ValueError("Page does not have a course_id or group_id")
-
-    @property
-    def parent_type(self):
-        """
-        Return whether the page was spawned from a course or group.
-
-        :rtype: str
-        """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
-        else:
-            raise ValueError("ExternalTool does not have a course_id or group_id")
 
     def get_parent(self):
         """
@@ -94,30 +64,13 @@ class Page(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self.parent_type, self.parent_id)
+            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
         )
 
-        if self.parent_type == 'group':
+        if self.parent_type == "group":
             return Group(self._requester, response.json())
-        elif self.parent_type == 'course':
+        elif self.parent_type == "course":
             return Course(self._requester, response.json())
-
-    def show_latest_revision(self, **kwargs):
-        """
-        Retrieve the contents of the latest revision.
-
-        :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions/latest \
-        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_revision>`_
-
-        :rtype: :class:`canvasapi.pagerevision.PageRevision`
-        """
-        response = self._requester.request(
-            'GET',
-            '{}s/{}/pages/{}/revisions/latest'.format(self.parent_type, self.parent_id, self.url),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-        return PageRevision(self._requester, response.json())
 
     def get_revision_by_id(self, revision, **kwargs):
         """
@@ -135,22 +88,39 @@ class Page(CanvasObject):
         revision_id = obj_or_id(revision, "revision", (PageRevision,))
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}/pages/{}/revisions/{}'.format(
-                self.parent_type,
-                self.parent_id,
-                self.url,
-                revision_id
+            "GET",
+            "{}s/{}/pages/{}/revisions/{}".format(
+                self.parent_type, self.parent_id, self.url, revision_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
-            pagerev_json.update({'group_id': self.id})
+            pagerev_json.update({"group_id": self.id})
         elif self.parent_type == "course":
-            pagerev_json.update({'course_id': self.id})
+            pagerev_json.update({"course_id": self.id})
 
         return PageRevision(self._requester, pagerev_json)
+
+    def get_revisions(self, **kwargs):
+        """
+        List the revisions of a page.
+
+        :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.pagerevision.PageRevision`
+        """
+        return PaginatedList(
+            PageRevision,
+            self._requester,
+            "GET",
+            "{}s/{}/pages/{}/revisions".format(
+                self.parent_type, self.parent_id, self.url
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def list_revisions(self, **kwargs):
         """
@@ -169,28 +139,38 @@ class Page(CanvasObject):
         warnings.warn(
             "`list_revisions` is being deprecated and will be removed in a "
             "future version. Use `get_revisions` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_revisions(**kwargs)
 
-    def get_revisions(self, **kwargs):
+    @property
+    def parent_id(self):
         """
-        List the revisions of a page.
+        Return the id of the course or group that spawned this page.
 
-        :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
-        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.pagerevision.PageRevision`
+        :rtype: int
         """
-        return PaginatedList(
-            PageRevision,
-            self._requester,
-            'GET',
-            '{}s/{}/pages/{}/revisions'.format(self.parent_type, self.parent_id, self.url),
-            _kwargs=combine_kwargs(**kwargs)
-        )
+        if hasattr(self, "course_id"):
+            return self.course_id
+        elif hasattr(self, "group_id"):
+            return self.group_id
+        else:
+            raise ValueError("Page does not have a course_id or group_id")
+
+    @property
+    def parent_type(self):
+        """
+        Return whether the page was spawned from a course or group.
+
+        :rtype: str
+        """
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
+        else:
+            raise ValueError("ExternalTool does not have a course_id or group_id")
 
     def revert_to_revision(self, revision):
         """
@@ -207,56 +187,42 @@ class Page(CanvasObject):
         """
         revision_id = obj_or_id(revision, "revision", (PageRevision,))
         response = self._requester.request(
-            'POST',
-            '{}s/{}/pages/{}/revisions/{}'.format(
-                self.parent_type,
-                self.parent_id,
-                self.url,
-                revision_id
+            "POST",
+            "{}s/{}/pages/{}/revisions/{}".format(
+                self.parent_type, self.parent_id, self.url, revision_id
             ),
         )
         pagerev_json = response.json()
         if self.parent_type == "group":
-            pagerev_json.update({'group_id': self.id})
+            pagerev_json.update({"group_id": self.id})
         elif self.parent_type == "course":
-            pagerev_json.update({'group_id': self.id})
+            pagerev_json.update({"group_id": self.id})
 
         return PageRevision(self._requester, pagerev_json)
+
+    def show_latest_revision(self, **kwargs):
+        """
+        Retrieve the contents of the latest revision.
+
+        :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions/latest \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.show_revision>`_
+
+        :rtype: :class:`canvasapi.pagerevision.PageRevision`
+        """
+        response = self._requester.request(
+            "GET",
+            "{}s/{}/pages/{}/revisions/latest".format(
+                self.parent_type, self.parent_id, self.url
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return PageRevision(self._requester, response.json())
 
 
 @python_2_unicode_compatible
 class PageRevision(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.updated_at, self.revision_id)
-
-    @property
-    def parent_id(self):
-        """
-        Return the id of the course or group that spawned this page.
-
-        :rtype: int
-        """
-        if hasattr(self, 'course_id'):
-            return self.course_id
-        elif hasattr(self, 'group_id'):
-            return self.group_id
-        else:
-            raise ValueError("Page does not have a course_id or group_id")
-
-    @property
-    def parent_type(self):
-        """
-        Return whether the page was spawned from a course or group.
-
-        :rtype: str
-        """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
-        else:
-            raise ValueError("ExternalTool does not have a course_id or group_id")
 
     def get_parent(self):
         """
@@ -273,11 +239,38 @@ class PageRevision(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self.parent_type, self.parent_id)
+            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
         )
 
-        if self.parent_type == 'group':
+        if self.parent_type == "group":
             return Group(self._requester, response.json())
-        elif self.parent_type == 'course':
+        elif self.parent_type == "course":
             return Course(self._requester, response.json())
+
+    @property
+    def parent_id(self):
+        """
+        Return the id of the course or group that spawned this page.
+
+        :rtype: int
+        """
+        if hasattr(self, "course_id"):
+            return self.course_id
+        elif hasattr(self, "group_id"):
+            return self.group_id
+        else:
+            raise ValueError("Page does not have a course_id or group_id")
+
+    @property
+    def parent_type(self):
+        """
+        Return whether the page was spawned from a course or group.
+
+        :rtype: str
+        """
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
+        else:
+            raise ValueError("ExternalTool does not have a course_id or group_id")

@@ -9,7 +9,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class PollChoice(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.text, self.id)
 
@@ -25,20 +24,21 @@ class PollChoice(CanvasObject):
         :type poll_choice: list
         :rtype: :class:`canvasapi.poll_choice.PollChoice`
         """
-        if (isinstance(poll_choice, list) and isinstance(poll_choice[0], dict)
-                and 'text' in poll_choice[0]):
-            kwargs['poll_choice'] = poll_choice
+        if (
+            isinstance(poll_choice, list)
+            and isinstance(poll_choice[0], dict)
+            and "text" in poll_choice[0]
+        ):
+            kwargs["poll_choice"] = poll_choice
         else:
-            raise RequiredFieldMissing(
-                    "Dictionary with key 'text' is required."
-                )
+            raise RequiredFieldMissing("Dictionary with key 'text' is required.")
 
         response = self._requester.request(
-            'PUT',
-            'polls/{}/poll_choices/{}'.format(self.poll_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "polls/{}/poll_choices/{}".format(self.poll_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
-        return PollChoice(self._requester, response.json()['poll_choices'][0])
+        return PollChoice(self._requester, response.json()["poll_choices"][0])
 
     def delete(self, **kwargs):
         """
@@ -52,8 +52,8 @@ class PollChoice(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'polls/{}/poll_choices/{}'.format(self.poll_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "DELETE",
+            "polls/{}/poll_choices/{}".format(self.poll_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204

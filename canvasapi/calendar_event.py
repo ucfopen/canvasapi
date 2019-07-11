@@ -5,7 +5,6 @@ from canvasapi.util import combine_kwargs
 
 
 class CalendarEvent(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
@@ -19,9 +18,9 @@ class CalendarEvent(CanvasObject):
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
         response = self._requester.request(
-            'DELETE',
-            'calendar_events/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "DELETE",
+            "calendar_events/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return CalendarEvent(self._requester, response.json())
 
@@ -35,12 +34,12 @@ class CalendarEvent(CanvasObject):
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
         response = self._requester.request(
-            'PUT',
-            'calendar_events/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "calendar_events/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-        if 'title' in response.json():
+        if "title" in response.json():
             super(CalendarEvent, self).set_attributes(response.json())
 
         return CalendarEvent(self._requester, response.json())

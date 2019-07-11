@@ -37,6 +37,85 @@ class Requester(object):
         self._session = requests.Session()
         self._cache = []
 
+    def _delete_request(self, url, headers, data=None):
+        """
+        Issue a DELETE request to the specified endpoint with the data provided.
+
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param data: The data to send with this request.
+        :type data: dict
+        """
+        return self._session.delete(url, headers=headers, data=data)
+
+    def _get_request(self, url, headers, params=None):
+        """
+        Issue a GET request to the specified endpoint with the data provided.
+
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param params: The parameters to send with this request.
+        :type params: dict
+        """
+        return self._session.get(url, headers=headers, params=params)
+
+    def _patch_request(self, url, headers, data=None):
+        """
+        Issue a PATCH request to the specified endpoint with the data provided.
+
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param data: The data to send with this request.
+        :type data: dict
+        """
+        return self._session.patch(url, headers=headers, data=data)
+
+    def _post_request(self, url, headers, data=None):
+        """
+        Issue a POST request to the specified endpoint with the data provided.
+
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param data: The data to send with this request.
+        :type data: dict
+        """
+
+        # Grab file from data.
+        files = None
+        for field, value in data:
+            if field == "file":
+                if isinstance(value, dict):
+                    files = value
+                else:
+                    files = {"file": value}
+                break
+
+        # Remove file entry from data.
+        data[:] = [tup for tup in data if tup[0] != "file"]
+
+        return self._session.post(url, headers=headers, data=data, files=files)
+
+    def _put_request(self, url, headers, data=None):
+        """
+        Issue a PUT request to the specified endpoint with the data provided.
+
+        :param url: The URL to request.
+        :type url: str
+        :param headers: The HTTP headers to send with this request.
+        :type headers: dict
+        :param data: The data to send with this request.
+        :type data: dict
+        """
+        return self._session.put(url, headers=headers, data=data)
+
     def request(
         self,
         method,
@@ -159,82 +238,3 @@ class Requester(object):
             )
 
         return response
-
-    def _get_request(self, url, headers, params=None):
-        """
-        Issue a GET request to the specified endpoint with the data provided.
-
-        :param url: The URL to request.
-        :type url: str
-        :param headers: The HTTP headers to send with this request.
-        :type headers: dict
-        :param params: The parameters to send with this request.
-        :type params: dict
-        """
-        return self._session.get(url, headers=headers, params=params)
-
-    def _post_request(self, url, headers, data=None):
-        """
-        Issue a POST request to the specified endpoint with the data provided.
-
-        :param url: The URL to request.
-        :type url: str
-        :param headers: The HTTP headers to send with this request.
-        :type headers: dict
-        :param data: The data to send with this request.
-        :type data: dict
-        """
-
-        # Grab file from data.
-        files = None
-        for field, value in data:
-            if field == "file":
-                if isinstance(value, dict):
-                    files = value
-                else:
-                    files = {"file": value}
-                break
-
-        # Remove file entry from data.
-        data[:] = [tup for tup in data if tup[0] != "file"]
-
-        return self._session.post(url, headers=headers, data=data, files=files)
-
-    def _delete_request(self, url, headers, data=None):
-        """
-        Issue a DELETE request to the specified endpoint with the data provided.
-
-        :param url: The URL to request.
-        :type url: str
-        :param headers: The HTTP headers to send with this request.
-        :type headers: dict
-        :param data: The data to send with this request.
-        :type data: dict
-        """
-        return self._session.delete(url, headers=headers, data=data)
-
-    def _patch_request(self, url, headers, data=None):
-        """
-        Issue a PATCH request to the specified endpoint with the data provided.
-
-        :param url: The URL to request.
-        :type url: str
-        :param headers: The HTTP headers to send with this request.
-        :type headers: dict
-        :param data: The data to send with this request.
-        :type data: dict
-        """
-        return self._session.patch(url, headers=headers, data=data)
-
-    def _put_request(self, url, headers, data=None):
-        """
-        Issue a PUT request to the specified endpoint with the data provided.
-
-        :param url: The URL to request.
-        :type url: str
-        :param headers: The HTTP headers to send with this request.
-        :type headers: dict
-        :param data: The data to send with this request.
-        :type data: dict
-        """
-        return self._session.put(url, headers=headers, data=data)

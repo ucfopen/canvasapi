@@ -15,9 +15,9 @@ class TestContentExport(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                'course': ['get_by_id', 'single_content_export'],
-                'group': ['get_by_id', 'single_content_export'],
-                'user': ['get_by_id', 'single_content_export']
+                "course": ["get_by_id", "single_content_export"],
+                "group": ["get_by_id", "single_content_export"],
+                "user": ["get_by_id", "single_content_export"],
             }
             register_uris(requires, m)
 
