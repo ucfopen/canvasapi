@@ -20,6 +20,7 @@ from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
+from canvasapi.feature import Feature
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.grading_period import GradingPeriod
@@ -1697,6 +1698,15 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(content_export, ContentExport)
         self.assertTrue(hasattr(content_export, "export_type"))
+
+    # get_features()
+    def test_get_features(self, m):
+        register_uris({"course": ["get_features"]}, m)
+
+        features = self.course.get_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
 
 
 @requests_mock.Mocker()

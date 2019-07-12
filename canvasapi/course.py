@@ -11,6 +11,7 @@ from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.feature import Feature
 from canvasapi.folder import Folder
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
@@ -989,6 +990,24 @@ class Course(CanvasObject):
             "GET",
             "courses/{}/external_tools".format(self.id),
             {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_features(self, **kwargs):
+        """
+        Lists all features of a course.
+
+        :calls: `GET /api/v1/courses/:course_id/features \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "courses/{}/features".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
