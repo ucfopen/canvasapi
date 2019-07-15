@@ -6,6 +6,7 @@ import warnings
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
+from canvasapi.feature import Feature
 from canvasapi.folder import Folder
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
@@ -419,6 +420,24 @@ class User(CanvasObject):
             self._requester,
             "GET",
             "users/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_features(self, **kwargs):
+        """
+        Lists all of the features for this user.
+
+        :calls: `GET /api/v1/users/:user_id/features \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.index>`
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "users/{}/features".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 

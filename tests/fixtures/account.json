@@ -1525,5 +1525,22 @@
 			},
 			"workflow_state": "active"
 		}
+	},
+	"get_features": {
+		"method": "GET",
+		"endpoint": "accounts/1/features",
+		"data": [
+			{
+				"name": "feature_one",
+				"display_name": "Feature One",
+				"applies_to": "Account"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "Account"
+			}
+		],
+		"status_code": 200
 	}
 }

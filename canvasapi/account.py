@@ -6,9 +6,10 @@ from six import python_2_unicode_compatible, string_types
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.feature import Feature
 from canvasapi.grading_standard import GradingStandard
-from canvasapi.outcome_import import OutcomeImport
 from canvasapi.grading_period import GradingPeriod
+from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
@@ -962,6 +963,24 @@ class Account(CanvasObject):
             "GET",
             "accounts/{}/external_tools".format(self.id),
             {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_features(self, **kwargs):
+        """
+        Lists all of the features of an account.
+
+        :calls: `GET /api/v1/accounts/:account_id/features \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "accounts/{}/features".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 

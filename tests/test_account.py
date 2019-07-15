@@ -21,6 +21,7 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.feature import Feature
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
@@ -1176,3 +1177,12 @@ class TestAccount(unittest.TestCase):
         )
         self.assertTrue(self.account.delete_grading_period(1))
         self.assertTrue(self.account.delete_grading_period(self.grading_period))
+
+    # get_features()
+    def test_get_features(self, m):
+        register_uris({"account": ["get_features"]}, m)
+
+        features = self.account.get_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
