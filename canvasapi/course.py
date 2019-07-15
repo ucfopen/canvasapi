@@ -889,6 +889,24 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_enabled_features(self, **kwargs):
+        """
+        Lists all enabled features in a course.
+
+        :calls: `GET /api/v1/courses/:course_id/features/enabled \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "courses/{}/features/enabled".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_enrollments(self, **kwargs):
         """
         List all of the enrollments in this course.

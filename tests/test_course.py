@@ -1708,6 +1708,15 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(features, PaginatedList)
         self.assertIsInstance(features[0], Feature)
 
+    # get_enabled_features()
+    def test_get__enabled_features(self, m):
+        register_uris({"course": ["get_enabled_features"]}, m)
+
+        enabled_features = self.course.get_enabled_features()
+
+        self.assertIsInstance(enabled_features, PaginatedList)
+        self.assertIsInstance(enabled_features[0], Feature)
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):

@@ -541,6 +541,15 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(features, PaginatedList)
         self.assertIsInstance(features[0], Feature)
 
+    # get_enabled_features()
+    def test_get_enabled_features(self, m):
+        register_uris({"user": ["get_enabled_features"]}, m)
+
+        features = self.user.get_enabled_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
+
 
 @requests_mock.Mocker()
 class TestUserDisplay(unittest.TestCase):

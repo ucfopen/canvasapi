@@ -874,5 +874,22 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_enabled_features": {
+		"method": "GET",
+		"endpoint": "users/1/features/enabled",
+		"data": [
+			{
+				"name": "feature_one",
+				"display_name": "Feature One",
+				"applies_to": "User"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "User"
+			}
+		],
+		"status_code": 200
 	}
 }

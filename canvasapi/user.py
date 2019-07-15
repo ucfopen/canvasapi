@@ -403,6 +403,24 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_enabled_features(self, **kwargs):
+        """
+        Lists all of the enabled features for a user.
+
+        :calls: `GET /api/v1/users/:user_id/features/enabled \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "users/{}/features/enabled".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_enrollments(self, **kwargs):
         """
         List all of the enrollments for this user.
@@ -428,7 +446,7 @@ class User(CanvasObject):
         Lists all of the features for this user.
 
         :calls: `GET /api/v1/users/:user_id/features \
-        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.index>`
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.feature.Feature`

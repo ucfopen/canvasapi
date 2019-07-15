@@ -1186,3 +1186,12 @@ class TestAccount(unittest.TestCase):
 
         self.assertIsInstance(features, PaginatedList)
         self.assertIsInstance(features[0], Feature)
+
+    # get_enabled_features()
+    def test_get_enabled_features(self, m):
+        register_uris({"account": ["get_enabled_features"]}, m)
+
+        features = self.account.get_enabled_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)

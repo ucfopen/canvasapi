@@ -1776,5 +1776,22 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_enabled_features": {
+		"method": "GET",
+		"endpoint": "courses/1/features/enabled",
+		"data": [
+			{
+				"name": "feature_test",
+				"display_name": "Feature Test",
+				"applies_to": "Course"
+			},
+			{
+				"name": "feature_second",
+				"display_name": "Feature Second",
+				"applies_to": "Course"
+			}
+		],
+		"status_code": 200
 	}
 }

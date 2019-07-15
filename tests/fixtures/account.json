@@ -1542,5 +1542,22 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_enabled_features": {
+		"method": "GET",
+		"endpoint": "accounts/1/features/enabled",
+		"data": [
+			{
+				"name": "feature_one",
+				"display_name": "Feature One",
+				"applies_to": "Account"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "Account"
+			}
+		],
+		"status_code": 200
 	}
 }
