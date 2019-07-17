@@ -17,9 +17,6 @@ from canvasapi.user import User
 from canvasapi.util import combine_kwargs, get_institution_url, obj_or_id
 
 
-warnings.simplefilter("always", DeprecationWarning)
-
-
 class Canvas(object):
     """
     The main class to be instantiated to provide access to Canvas's API.
