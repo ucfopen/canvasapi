@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### General
+
+- Removed overzealous global enabling of `DeprecationWarning`. (Thanks, [@Screeeech](https://github.com/Screeeech))
+    - *Note:* `DeprecationWarnings` are disabled by default, so you may need to run your code with `python -Wd` to see them.
+
 ## [0.13.0] - 2019-07-08
 
 ### New Endpoint Coverage
