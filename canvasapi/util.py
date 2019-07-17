@@ -134,6 +134,36 @@ def obj_or_id(parameter, param_name, object_types):
         raise TypeError(message)
 
 
+def obj_or_str(obj, attr, object_types):
+    """
+    Accepts an object. If the object has the attribute, return the
+    corresponding string. Otherwise, throw an exception.
+
+    :param obj: object
+    :param attr: str
+    :param object_types: tuple
+    :rtype: str
+    """
+    try:
+        return text_type(getattr(obj, attr))
+    except (AttributeError, TypeError):
+        if not isinstance(attr, string_types):
+            raise TypeError(
+                "Atttibute parameter {} must be of type string".format(attr)
+            )
+        for obj_type in object_types:
+            if isinstance(obj, obj_type):
+                try:
+                    return text_type(getattr(obj, attr))
+                except AttributeError:
+                    raise AttributeError("{} object does not have {} attribute").format(
+                        obj, attr
+                    )
+
+        obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
+        raise TypeError("Parameter {} must be of type {}.".format(obj, obj_type_list))
+
+
 def get_institution_url(base_url):
     """
     Clean up a given base URL.
