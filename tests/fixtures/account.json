@@ -1531,9 +1531,9 @@
 		"endpoint": "accounts/1/features",
 		"data": [
 			{
-				"name": "feature_one",
-				"display_name": "Feature One",
-				"applies_to": "Account"
+				"name": "epub_export",
+				"display_name": "ePub Exporting",
+				"applies_to": "Course"
 			},
 			{
 				"name": "feature_two",
@@ -1558,6 +1558,17 @@
 				"applies_to": "Account"
 			}
 		],
+		"status_code": 200
+	},
+	"get_feature_flag": {
+		"method": "GET",
+		"endpoint": "accounts/1/features/flags/epub_export",
+		"data": {
+			"feature": "epub_export",
+			"context_id": 1,
+			"context_type": "Account",
+			"state": "on"
+		},
 		"status_code": 200
 	}
 }

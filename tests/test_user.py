@@ -14,7 +14,7 @@ from canvasapi.content_export import ContentExport
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
-from canvasapi.feature import Feature
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.login import Login
@@ -549,6 +549,17 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(features, PaginatedList)
         self.assertIsInstance(features[0], Feature)
+
+    # get_feature_flag()
+    def test_get_feature_flag(self, m):
+        register_uris({"user": ["get_features", "get_feature_flag"]}, m)
+
+        feature = self.user.get_features()[0]
+
+        feature_flag = self.user.get_feature_flag(feature)
+
+        self.assertIsInstance(feature_flag, FeatureFlag)
+        self.assertEqual(feature_flag.feature, "high_contrast")
 
 
 @requests_mock.Mocker()

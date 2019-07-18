@@ -11,7 +11,7 @@ from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
-from canvasapi.feature import Feature
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
@@ -26,6 +26,7 @@ from canvasapi.util import (
     is_multivalued,
     file_or_path,
     obj_or_id,
+    obj_or_str,
     normalize_bool,
 )
 from canvasapi.rubric import Rubric
@@ -1010,6 +1011,27 @@ class Course(CanvasObject):
             {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
+
+    def get_feature_flag(self, feature, **kwargs):
+        """
+        Return the feature flag that applies to given course.
+
+        :calls: `GET /api/v1/courses/:course_id/features/flags/:feature \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.show>`_
+
+        :param feature: The object to retrieve.
+        :type feature: :class:`canvasapi.feature.Feature`
+
+        :rtype: :class:`canvasapi.feature.FeatureFlag`
+        """
+        feature_name = obj_or_str(feature, "name", (Feature,))
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/features/flags/{}".format(self.id, feature_name),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return FeatureFlag(self._requester, response.json())
 
     def get_features(self, **kwargs):
         """

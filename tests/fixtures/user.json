@@ -863,8 +863,8 @@
 		"endpoint": "users/1/features",
 		"data": [
 			{
-				"name": "feature_one",
-				"display_name": "Feature One",
+				"name": "high_contrast",
+				"display_name": "High Contrast UI",
 				"applies_to": "User"
 			},
 			{
@@ -890,6 +890,15 @@
 				"applies_to": "User"
 			}
 		],
+		"status_code": 200
+	},
+	"get_feature_flag": {
+		"method": "GET",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
 		"status_code": 200
 	}
 }
