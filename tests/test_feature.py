@@ -20,6 +20,26 @@ class TestFeature(unittest.TestCase):
             self.course = self.canvas.get_course(1)
             self.feature = self.course.get_features()[0]
 
+    # __str__()
     def test__str__(self, m):
         string = str(self.feature)
+        self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestFeatureFlag(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {"course": ["get_by_id", "get_features", "get_feature_flag"]}
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.feature = self.course.get_features()[0]
+            self.feature_flag = self.course.get_feature_flag(self.feature)
+
+    # __Str__()
+    def test__str__(self, m):
+        string = str(self.feature_flag)
         self.assertIsInstance(string, str)
