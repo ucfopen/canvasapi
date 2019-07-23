@@ -1004,7 +1004,6 @@ class Account(CanvasObject):
             "accounts/{}/features/flags/{}".format(self.id, feature_name),
             _kwargs=combine_kwargs(**kwargs),
         )
-
         return FeatureFlag(self._requester, response.json())
 
     def get_features(self, **kwargs):

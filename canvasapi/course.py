@@ -1032,7 +1032,6 @@ class Course(CanvasObject):
             "courses/{}/features/flags/{}".format(self.id, feature_name),
             _kwargs=combine_kwargs(**kwargs),
         )
-
         return FeatureFlag(self._requester, response.json())
 
     def get_features(self, **kwargs):
@@ -2331,34 +2330,6 @@ class Course(CanvasObject):
             "POST", "courses/{}/reset_content".format(self.id)
         )
         return Course(self._requester, response.json())
-
-    # def set_feature_flag(self, feature, state, **kwargs):
-    #     """
-    #     Set a feature flag for a given course.
-
-    #     :calls: `PUT /api/v1/courses/:course_id/features/flags/:feature \
-    #     <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.update>`_
-
-    #     :param feature: The feature to set
-    #     :type feature: :class:`canvasapi.feature.Feature`
-    #     :param state: The state of the feature. Allowed values: "off", "allowed", "on"
-    #     :type state: string
-
-    #     :rtype: :class:`canvasapi.feature.FeatureFlag`
-    #     """
-    #     feature_flag = self.course.get_feature_flag(feature)
-
-    #     # what happens if state isn't a valid string? just make a update_state()?
-    #     feature_flag.state = state
-
-    #     feature_name = obj_or_str(feature, "name", (Feature,))
-
-    #     response = self._requester.request(
-    #         "PUT",
-    #         "courses/{}/features/flags/{}".format(self.id, feature_name),
-    #         _kwargs=combine_kwargs(**kwargs),
-    #     )
-    #     return FeatureFlag(self._requester, response.json())
 
     def set_quiz_extensions(self, quiz_extensions, **kwargs):
         """
