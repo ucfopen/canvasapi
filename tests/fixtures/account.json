@@ -1536,8 +1536,8 @@
 				"applies_to": "Course"
 			},
 			{
-				"name": "feature_two",
-				"display_name": "Feature Two",
+				"name": "outcome_gradebook",
+				"display_name": "Learning Mastery Gradebook",
 				"applies_to": "Account"
 			}
 		],
@@ -1567,6 +1567,17 @@
 			"feature": "epub_export",
 			"context_id": 1,
 			"context_type": "Account",
+			"state": "on"
+		},
+		"status_code": 200
+	},
+	"set_feature_flag": {
+		"method": "PUT",
+		"endpoint": "accounts/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
 			"state": "on"
 		},
 		"status_code": 200

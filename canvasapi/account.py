@@ -895,6 +895,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/features/enabled".format(self.id),
+            {"account_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -1003,6 +1004,7 @@ class Account(CanvasObject):
             "accounts/{}/features/flags/{}".format(self.id, feature_name),
             _kwargs=combine_kwargs(**kwargs),
         )
+
         return FeatureFlag(self._requester, response.json())
 
     def get_features(self, **kwargs):
@@ -1020,6 +1022,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/features".format(self.id),
+            {"account_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 

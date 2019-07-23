@@ -900,5 +900,14 @@
 			"state": "allowed"
 		},
 		"status_code": 200
+	},
+	"set_feature_flag": {
+		"method": "PUT",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
+		"status_code": 200
 	}
 }

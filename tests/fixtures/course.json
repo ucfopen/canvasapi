@@ -1770,8 +1770,8 @@
 				"applies_to": "Course"
 			},
 			{
-				"name": "feature_second",
-				"display_name": "Feature Second",
+				"name": "gradebook_list_students_by_sortable_name",
+				"display_name": "Gradebook - List Students by Sortable Name",
 				"applies_to": "Course"
 			}
 		],
@@ -1801,6 +1801,17 @@
 			"feature": "epub_export",
 			"context_id": 1,
 			"context_type": "Account",
+			"state": "on"
+		},
+		"status_code": 200
+	},
+	"set_feature_flag": {
+		"method": "PUT",
+		"endpoint": "courses/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
 			"state": "on"
 		},
 		"status_code": 200

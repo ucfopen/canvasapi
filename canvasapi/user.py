@@ -418,6 +418,7 @@ class User(CanvasObject):
             self._requester,
             "GET",
             "users/{}/features/enabled".format(self.id),
+            {"user_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -460,6 +461,7 @@ class User(CanvasObject):
             "users/{}/features/flags/{}".format(self.id, feature_name),
             _kwargs=combine_kwargs(**kwargs),
         )
+
         return FeatureFlag(self._requester, response.json())
 
     def get_features(self, **kwargs):
@@ -477,6 +479,7 @@ class User(CanvasObject):
             self._requester,
             "GET",
             "users/{}/features".format(self.id),
+            {"user_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
