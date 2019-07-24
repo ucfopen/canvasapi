@@ -32,9 +32,6 @@ from canvasapi.util import (
 from canvasapi.rubric import Rubric
 
 
-warnings.simplefilter("always", DeprecationWarning)
-
-
 @python_2_unicode_compatible
 class Course(CanvasObject):
     def __str__(self):

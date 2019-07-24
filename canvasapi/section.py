@@ -9,8 +9,6 @@ from canvasapi.progress import Progress
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.util import combine_kwargs, obj_or_id, normalize_bool
 
-warnings.simplefilter("always", DeprecationWarning)
-
 
 @python_2_unicode_compatible
 class Section(CanvasObject):
