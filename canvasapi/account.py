@@ -992,7 +992,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/features/flags/:feature \
         <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.show>`_
 
-        :param feature: The object to retrieve.
+        :param feature: The feature to retrieve.
         :type feature: :class:`canvasapi.feature.Feature`
 
         :rtype: :class:`canvasapi.feature.FeatureFlag`

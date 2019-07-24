@@ -95,6 +95,25 @@ class TestFeatureFlag(unittest.TestCase):
         string = str(self.feature_flag_course)
         self.assertIsInstance(string, str)
 
+    # delete()
+    def test_delete_account(self, m):
+        register_uris({"account": ["delete_feature_flag"]}, m)
+        delete_flag = self.feature_flag_account.delete(self.feature_account)
+
+        self.assertIsInstance(delete_flag, FeatureFlag)
+
+    def test_delete_course(self, m):
+        register_uris({"course": ["delete_feature_flag"]}, m)
+        delete_flag = self.feature_flag_course.delete(self.feature_course)
+
+        self.assertIsInstance(delete_flag, FeatureFlag)
+
+    def test_delete_user(self, m):
+        register_uris({"user": ["delete_feature_flag"]}, m)
+        delete_flag = self.feature_flag_user.delete(self.feature_user)
+
+        self.assertIsInstance(delete_flag, FeatureFlag)
+
     # set_feature_flag()
     def test_set_feature_flag_account(self, m):
         register_uris({"account": ["set_feature_flag"]}, m)

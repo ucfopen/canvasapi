@@ -909,5 +909,14 @@
 			"state": "allowed"
 		},
 		"status_code": 200
+	},
+	"delete_feature_flag": {
+		"method": "DELETE",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
+		"status_code": 200
 	}
 }

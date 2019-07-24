@@ -1815,5 +1815,16 @@
 			"state": "on"
 		},
 		"status_code": 200
+	},
+	"delete_feature_flag": {
+		"method": "DELETE",
+		"endpoint": "courses/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
+			"state": "on"
+		},
+		"status_code": 200
 	}
 }

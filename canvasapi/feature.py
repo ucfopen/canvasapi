@@ -56,12 +56,50 @@ class FeatureFlag(CanvasObject):
             self.context_type, self.context_id, self.feature, self.state
         )
 
+    def delete(self, feature, **kwargs):
+        """
+        Remove a feature flag for a given account, course or user.
+
+        :calls: `DELETE /api/v1/courses/:course_id/features/flags/:feature \
+            <https://canvas.instructure.com/doc/api/
+            feature_flags.html#method.feature_flags.delete>`_
+
+            or `DELETE /api/v1/accounts/:account_id/features/flags/:feature \
+            <https://canvas.instructure.com/doc/api/
+            feature_flags.html#method.feature_flags.delete>`_
+
+            or `DELETE /api/v1/users/:user_id/features/flags/:feature \
+            <https://canvas.instructure.com/doc/api/
+            feature_flags.html#method.feature_flags.delete>`_
+
+        :rtype: :class:`canvasapi.feature.FeatureFlag`
+        """
+        feature_name = obj_or_str(feature, "name", (Feature,))
+
+        response = self._requester.request(
+            "DELETE",
+            "{}s/{}/features/flags/{}".format(
+                feature._parent_type, feature._parent_id, feature_name
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return FeatureFlag(self._requester, response.json())
+
     def set_feature_flag(self, feature, **kwargs):
         """
         Set a feature flag for a given account, course or user.
 
         :calls: `PUT /api/v1/courses/:course_id/features/flags/:feature \
-        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.update>`_
+            <https://canvas.instructure.com/doc/api/
+            feature_flags.html#method.feature_flags.update>`_
+
+            or ` PUT /api/v1/accounts/:account_id/features/flags/:feature \
+            <https://canvas.instructure.com/doc/api/
+            feature_flags.html#method.feature_flags.update>`_
+
+            or ` PUT /api/v1/users/:user_id/features/flags/:feature \
+            <https://canvas.instructure.com/doc/api/
+            feature_flags.html#method.feature_flags.update>`_
 
         :param feature: The feature object to set
         :type feature: :class:`canvasapi.feature.Feature`
