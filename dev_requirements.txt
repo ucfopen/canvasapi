@@ -1,6 +1,6 @@
 -r tests_requirements.txt
 
+docutils==0.15.1
 pre-commit; python_version >= '3.6'
 Sphinx
 sphinx-rtd-theme
-svn+https://svn.code.sf.net/p/docutils/code/trunk/docutils#egg=docutils
