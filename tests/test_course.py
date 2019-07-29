@@ -1700,6 +1700,29 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(content_export, ContentExport)
         self.assertTrue(hasattr(content_export, "export_type"))
 
+    # create_rubric()
+    def test_create_rubric_no_association(self, m):
+        register_uris({"course": ["create_rubric"]}, m)
+
+        rubric = self.course.create_rubric()
+
+        self.assertIsInstance(rubric, dict)
+        self.assertEqual(rubric["rubric"].title, "Course Rubric 1")
+        self.assertEqual(rubric["rubric"].id, 1)
+
+    def test_create_rubric_with_association(self, m):
+        register_uris({"course": ["create_rubric_with_association"]}, m)
+
+        rubric = self.course.create_rubric()
+
+        self.assertIsInstance(rubric, dict)
+        self.assertEqual(rubric["rubric"].title, "Course Rubric 1")
+        self.assertEqual(rubric["rubric"].id, 1)
+
+        self.assertEqual(rubric["rubric_association"].id, 1)
+        self.assertEqual(rubric["rubric_association"].rubric_id, 1)
+        self.assertEqual(rubric["rubric_association"].association_type, "Course")
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
