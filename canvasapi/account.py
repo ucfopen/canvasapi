@@ -1698,6 +1698,25 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
+    def get_scopes(self, **kwargs):
+        """
+        Retrieve a list of scopes.
+
+        :calls: `GET /api/v1/accounts/:account_id/scopes \
+        <https://canvas.instructure.com/doc/api/api_token_scopes.html#method.scopes_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.scope.Scope`
+        """
+        from canvasapi.scope import Scope
+
+        return PaginatedList(
+            Scope,
+            self._requester,
+            "GET",
+            "accounts/{}/scopes".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):
