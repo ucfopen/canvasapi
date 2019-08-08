@@ -29,6 +29,7 @@ from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
+from canvasapi.scope import Scope
 from canvasapi.sis_import import SisImport
 from canvasapi.user import User
 from canvasapi.content_migration import ContentMigration, Migrator
@@ -1185,3 +1186,11 @@ class TestAccount(unittest.TestCase):
         scope_list = [scope for scope in scopes]
 
         self.assertEqual(len(list(scopes)), 2)
+        self.assertTrue(isinstance(scopes, PaginatedList))
+        self.assertTrue(isinstance(scope_list[0], Scope))
+
+        self.assertEqual(scope_list[0].resource, "users")
+        self.assertEqual(scope_list[1].resource, "users")
+
+        self.assertEqual(scope_list[0].verb, "PUT")
+        self.assertEqual(scope_list[1].verb, "GET")
