@@ -1700,7 +1700,7 @@ class Account(CanvasObject):
 
     def get_scopes(self, **kwargs):
         """
-        Retrieve a list of scopes.
+        Retrieve a paginated list of scopes.
 
         :calls: `GET /api/v1/accounts/:account_id/scopes \
         <https://canvas.instructure.com/doc/api/api_token_scopes.html#method.scopes_api.index>`_
