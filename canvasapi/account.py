@@ -114,6 +114,29 @@ class Account(CanvasObject):
 
         return GradingStandard(self._requester, response.json())
 
+    def get_global_notification(self, notification, **kwargs):
+        """
+        Returns a global notification for the current user.
+
+        :calls: `GET /api/v1/accounts/:account_id/account_notifications/:id \
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_close_notification>`_
+
+        :param notification: The notification object or ID to close.
+        :type notification: :class:`canvasapi.account.AccountNotification` or int
+
+        :rtype: :class:`canvasapi.account.AccountNotification`
+        """
+
+        notif_id = obj_or_id(notification, "notification", (AccountNotification,))
+
+        response = self._requester.request(
+            "GET",
+            "accounts/{}/account_notifications/{}".format(
+                self.id, notif_id),
+        )
+
+        return AccountNotification(self._requester, response_json())
+
     def close_notification_for_user(self, user, notification):
         """
         If the user no long wants to see a notification, it can be
