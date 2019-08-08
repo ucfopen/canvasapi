@@ -77,6 +77,21 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(closed_notif, AccountNotification)
         self.assertTrue(hasattr(closed_notif, "subject"))
 
+    # update_global_notification()
+    def test_update_global_notification(self, m):
+        register_uris({"account": ["update_notification"]}, m)
+
+        notif_dict = {
+            "subject": "subject",
+            "message": "Message",
+            "start_at": "2015-04-01T00:00:00Z",
+            "end_at": "2018-04-01T00:00:00Z",
+        }
+
+        updated_notif = self.account.update_global_notification(notif_dict, 1)
+
+        self.assertIsInstance(updated_notif, AccountNotification)
+
     def test_close_notification_for_user_obj(self, m):
         register_uris({"account": ["close_notification"]}, m)
 

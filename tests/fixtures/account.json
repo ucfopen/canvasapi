@@ -665,6 +665,17 @@
 		"data": {},
 		"status_code": 200
 	},
+	"update_notification": {
+		"method": "PUT",
+		"endpoint": "accounts/1/account_notifications/1",
+		"data": {
+            "subject": "subject",
+            "message": "Message",
+            "start_at": "2015-04-01T00:00:00Z",
+            "end_at": "2018-04-01T00:00:00Z"
+		},
+		"status_code": 200
+	},
 	"create_group_category": {
 		"method": "POST",
 		"endpoint": "accounts/1/group_categories",

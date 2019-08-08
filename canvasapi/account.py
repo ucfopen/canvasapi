@@ -135,6 +135,40 @@ class Account(CanvasObject):
 
         return AccountNotification(self._requester, response.json())
 
+    def update_global_notification(self, account_notification, notification_id, **kwargs):
+        """
+        Updates a global notification.
+
+        :calls: `PUT /api/v1/accounts/:account_id/account_notifications/:id \
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.update>`_
+
+        :param notification_id: The notification ID of the desired notification.
+        :type: int
+
+        :rtype: :class:`canvasapi.account.AccountNotification`
+        """
+        required_key_list = ["subject", "message", "start_at", "end_at"]
+        required_keys_present = all(
+            (x in account_notification for x in required_key_list)
+        )
+
+        if isinstance(account_notification, dict) and required_keys_present:
+            kwargs["account_notification"] = account_notification
+        else:
+            raise RequiredFieldMissing(
+                (
+                    "account_notification must be a dictionary with keys "
+                    "'subject', 'message', 'start_at', and 'end_at'."
+                )
+            )
+
+        response = self._requester.request(
+            "PUT",
+            "accounts/{}/account_notifications/{}".format(self.id, notification_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return AccountNotification(self._requester, response.json())
+
     def close_notification_for_user(self, user, notification):
         """
         If the user no long wants to see a notification, it can be
