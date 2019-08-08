@@ -55,6 +55,17 @@ class TestAccount(unittest.TestCase):
         string = str(self.account)
         self.assertIsInstance(string, str)
 
+    # get_global_notification()
+    def test_get_global_notification(self, m):
+        register_uris({"account": ["get_notification"]}, m)
+
+        notif_id = 1
+        notification = self.account.get_global_notification(notif_id)
+
+        self.assertIsInstance(notification, AccountNotification)
+        self.assertTrue(hasattr(notification, "subject"))
+        self.assertEqual(notification.subject, "Attention Students")
+
     # close_notification_for_user()
     def test_close_notification_for_user_id(self, m):
         register_uris({"account": ["close_notification"]}, m)
