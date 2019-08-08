@@ -1176,3 +1176,12 @@ class TestAccount(unittest.TestCase):
         )
         self.assertTrue(self.account.delete_grading_period(1))
         self.assertTrue(self.account.delete_grading_period(self.grading_period))
+
+    # get_scopes()
+    def test_get_scopes(self, m):
+        register_uris({"account": ["get_scopes"]}, m)
+
+        scopes = self.account.get_scopes()
+        scope_list = [scope for scope in scopes]
+
+        self.assertEqual(len(list(scopes)), 2)

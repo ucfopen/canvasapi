@@ -1195,6 +1195,31 @@
 		  },
 		"status_code": 200
 	},
+	"get_scopes": {
+	"method": "GET",
+	"endpoint": "accounts/1/scopes",
+	"data": [
+		{
+        	"controller": "users",
+        	"action": "settings",
+        	"verb": "PUT",
+        	"path": "/api/v1/users/:id/settings",
+        	"scope": "url:PUT|/api/v1/users/:id/settings",
+        	"resource": "users",
+        	"resource_name": "Users"
+		},
+		{
+        	"controller": "course_nicknames",
+        	"action": "show",
+        	"verb": "GET",
+        	"path": "/api/v1/users/self/course_nicknames/:course_id",
+        	"scope": "url:GET|/api/v1/users/self/course_nicknames/:course_id",
+        	"resource": "users",
+        	"resource_name": "Users"	
+		}
+	],
+	"status_code": 200
+	},
 	"create_content_migration": {
 		"method": "POST",
 		"endpoint": "accounts/1/content_migrations",
