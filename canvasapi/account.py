@@ -119,10 +119,10 @@ class Account(CanvasObject):
         Returns a global notification for the current user.
 
         :calls: `GET /api/v1/accounts/:account_id/account_notifications/:id \
-        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_close_notification>`_
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.show>`_
 
-        :param notification: The notification object or ID to close.
-        :type notification: :class:`canvasapi.account.AccountNotification` or int
+        :param notification_id: The notification ID of the desired notification..
+        :type: int
 
         :rtype: :class:`canvasapi.account.AccountNotification`
         """
