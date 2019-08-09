@@ -133,7 +133,10 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return AccountNotification(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountNotification(self._requester, response_json)
 
     def update_global_notification(self, account_notification, notification_id, **kwargs):
         """
@@ -142,7 +145,10 @@ class Account(CanvasObject):
         :calls: `PUT /api/v1/accounts/:account_id/account_notifications/:id \
         <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.update>`_
 
-        :param notification_id: The notification ID of the desired notification.
+        :param account_notification: The notification to update with.
+        :type account_notification: dict
+
+        :param notification_id: The notification ID of the to be replaced notification.
         :type: int
 
         :rtype: :class:`canvasapi.account.AccountNotification`
@@ -397,7 +403,11 @@ class Account(CanvasObject):
             "accounts/{}/account_notifications".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
-        return AccountNotification(self._requester, response.json())
+
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountNotification(self._requester, response_json)
 
     def create_role(self, label, **kwargs):
         """
@@ -1776,7 +1786,65 @@ class Account(CanvasObject):
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):
     def __str__(self):  # pragma: no cover
-        return "{}".format(self.subject)
+        return "{} ({})".format(self.subject, self.id)
+
+    def update_global_notification(self, account_notification, **kwargs):
+        """
+        Updates a global notification.
+
+        :calls: `PUT /api/v1/accounts/:account_id/account_notifications/:id \
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.update>`_
+
+        :param account_notification: The notification to update with.
+        :type account_notification: dict
+
+        :rtype: :class:`canvasapi.account.AccountNotification`
+        """
+        required_key_list = ["subject", "message", "start_at", "end_at"]
+        required_keys_present = all(
+            (x in account_notification for x in required_key_list)
+        )
+
+        if isinstance(account_notification, dict) and required_keys_present:
+            kwargs["account_notification"] = account_notification
+        else:
+            raise RequiredFieldMissing(
+                (
+                    "account_notification must be a dictionary with keys "
+                    "'subject', 'message', 'start_at', and 'end_at'."
+                )
+            )
+
+        response = self._requester.request(
+            "PUT",
+            "accounts/{}/account_notifications/{}".format(self.account_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountNotification(self._requester, response.json())
+
+    def close_notification_for_user(self, user, notification):
+        """
+        If the user no long wants to see a notification, it can be
+        excused with this call.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/users/:user_id/account_notifications/:id \
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_close_notification>`_
+
+        :param user: The user object or ID to close the notificaton for.
+        :type user: :class:`canvasapi.user.User` or int
+        :param notification: The notification object or ID to close.
+        :type notification: :class:`canvasapi.account.AccountNotification` or int
+
+        :rtype: :class:`canvasapi.account.AccountNotification`
+        """
+        response = self._requester.request(
+            "DELETE",
+            "accounts/{}/account_notifications/{}".format(
+                self.account_id, self.id
+            ),
+        )
+        return AccountNotification(self._requester, response.json())
 
 
 @python_2_unicode_compatible
