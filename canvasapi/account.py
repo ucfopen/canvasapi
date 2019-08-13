@@ -361,14 +361,11 @@ class Account(CanvasObject):
         """
         response = self._requester.request(
             "POST",
-            "accounts/{}/account_notifications/{}".format(self.id, report_type),
+            "accounts/{}/reports/{}".format(self.id, report_type),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        response_json = response.json()
-        response_json.update({"account_id": self.id})
-
-        return AccountReport(self._requester, response_json)
+        return AccountReport(self._requester, response.json())
 
     def create_role(self, label, **kwargs):
         """

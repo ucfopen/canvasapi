@@ -213,6 +213,8 @@ class TestAccount(unittest.TestCase):
         report = self.account.create_report("zero_activity_csv")
 
         self.assertIsInstance(report, AccountReport)
+        self.assertTrue(hasattr(report, "title"))
+        self.assertEqual(report.title, "Zero Activity")
 
     # get_index_of_reports()
     def test_get_index_of_reports(self, m):
@@ -1259,4 +1261,4 @@ class TestAccount(unittest.TestCase):
         }
 
         with self.assertRaises(RequiredFieldMissing):
-            updated_notif = self.AccountNotification.update_global_notification(notif)
+            self.AccountNotification.update_global_notification(notif)
