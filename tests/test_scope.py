@@ -4,7 +4,6 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.scope import Scope
 from tests import settings
 

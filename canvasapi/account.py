@@ -1208,6 +1208,29 @@ class Account(CanvasObject):
 
         return OutcomeImport(self._requester, response_json)
 
+    def get_report(self, report_type, report_id, **kwargs):
+        """
+        Return a list of reports for the current context.
+
+        :calls: `GET /api/v1/accounts/:account_id/reports/:report/:id \
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.show>`_
+
+        :param report_type: The type of the report which is being looked up.
+        :type report_type: :string:
+
+        :param report_id: The id for the report which is being looked up.
+        :type report_id: :int:
+
+        :rtype: :class:`canvasapi.account.AccountReport`
+        """
+        response = self._requester.request(
+            "GET",
+            "accounts/{}/reports/{}/{}".format(self.id, report_type, report_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountReport(self._requester, response.json())
+
     def get_reports(self):
         """
         Return a list of reports for the current context.
@@ -1219,10 +1242,7 @@ class Account(CanvasObject):
             :class:`canvasapi.account.AccountReport`
         """
         return PaginatedList(
-            AccountReport,
-            self._requester,
-            "GET",
-            "accounts/{}/reports".format(self.id),
+            AccountReport, self._requester, "GET", "accounts/{}/reports".format(self.id)
         )
 
     def get_role(self, role):

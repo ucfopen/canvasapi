@@ -215,22 +215,33 @@ class TestAccount(unittest.TestCase):
             "parameters": {
                 "enrollment_term_id": {
                     "required": False,
-                    "description": "The canvas id of the term to get grades from"
+                    "description": "The canvas id of the term to get grades from",
                 },
                 "start_at": {
                     "required": False,
-                    "description": "The first date in the date range, the second date is the time the report is run."
+                    "description": "The first date in the date range",
                 },
                 "course_id": {
                     "required": False,
-                    "description": "The course to report on"
-                }
+                    "description": "The course to report on",
+                },
             },
             "report": "zero_activity_csv",
-            "last_run": "null"
+            "last_run": "null",
         }
 
         report = self.account.create_report(report_template, "zero_activity_csv")
+
+        self.assertIsInstance(report, AccountReport)
+        self.assertTrue(hasattr(report, "title"))
+        self.assertEqual(report.title, "Zero Activity")
+
+    # get_report
+    def test_get_report(self, m):
+        required = {"account": ["get_report"]}
+        register_uris(required, m)
+
+        report = self.account.get_report("zero_activity_csv", 1)
 
         self.assertIsInstance(report, AccountReport)
         self.assertTrue(hasattr(report, "title"))
@@ -1277,8 +1288,7 @@ class TestAccount(unittest.TestCase):
             },
         )
 
-        notif = {
-        }
+        notif = {}
 
         with self.assertRaises(RequiredFieldMissing):
             self.AccountNotification.update_global_notification(notif)
