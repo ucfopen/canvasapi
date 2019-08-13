@@ -355,6 +355,9 @@ class Account(CanvasObject):
         :calls: `POST /api/v1/accounts/:account_id/reports/:report \
         <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.create>`_
 
+        :param report: The dictionary with which to build the report object.
+        :type report: dict
+
         :param report_type: The type of report.
         :type report_type: str
         :rtype: :class:`canvasapi.account.AccountReport`
@@ -1001,8 +1004,8 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/account_notifications/:id \
         <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.show>`_
 
-        :param notification_id: The notification ID of the desired notification..
-        :type: int
+        :param notification_id: The notification ID of the desired notification.
+        :type notification_id: `int`
 
         :rtype: :class:`canvasapi.account.AccountNotification`
         """
@@ -1214,16 +1217,16 @@ class Account(CanvasObject):
 
     def get_report(self, report_type, report_id, **kwargs):
         """
-        Return a list of reports for the current context.
+        Return a report which corresponds to the given report type and ID.
 
         :calls: `GET /api/v1/accounts/:account_id/reports/:report/:id \
         <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.show>`_
 
         :param report_type: The type of the report which is being looked up.
-        :type report_type: :string:
+        :type report_type: `string`
 
         :param report_id: The id for the report which is being looked up.
-        :type report_id: :int:
+        :type report_id: `int`
 
         :rtype: :class:`canvasapi.account.AccountReport`
         """
