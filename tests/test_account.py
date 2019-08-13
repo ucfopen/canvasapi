@@ -1230,3 +1230,24 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(updated_notif, AccountNotification)
         self.assertTrue(hasattr(updated_notif, "subject"))
         self.assertEqual(updated_notif.subject, "subject")
+
+    def test_update_global_notification_missing_field(self, m):
+        register_uris({"account": ["update_notification"]}, m)
+
+        self.AccountNotification = AccountNotification(
+            self.canvas._Canvas__requester,
+            {
+                "subject": "",
+                "message": "",
+                "start_at": "",
+                "end_at": "",
+                "id": 1,
+                "account_id": 1,
+            },
+        )
+
+        notif = {
+        }
+
+        with self.assertRaises(RequiredFieldMissing):
+            updated_notif = self.AccountNotification.update_global_notification(notif)
