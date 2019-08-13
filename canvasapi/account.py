@@ -368,7 +368,10 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return AccountReport(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountReport(self._requester, response_json)
 
     def create_role(self, label, **kwargs):
         """
@@ -1111,6 +1114,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/reports/{}".format(self.id, report_type),
+            {"account_id": self.id},
         )
 
     def get_migration_systems(self, **kwargs):
@@ -1229,7 +1233,10 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return AccountReport(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountReport(self._requester, response_json)
 
     def get_reports(self):
         """
@@ -1242,7 +1249,11 @@ class Account(CanvasObject):
             :class:`canvasapi.account.AccountReport`
         """
         return PaginatedList(
-            AccountReport, self._requester, "GET", "accounts/{}/reports".format(self.id)
+            AccountReport,
+            self._requester,
+            "GET",
+            "accounts/{}/reports".format(self.id),
+            {"account_id": self.id},
         )
 
     def get_role(self, role):
