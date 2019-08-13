@@ -473,6 +473,14 @@
 		},
 		"status_code": 200
 	},
+	"create_report":{
+		"method": "GET",
+		"endpoint": "accounts/1/reports/zero_activity_csv",
+		"data": {
+
+		},
+		"status_code": 200
+	},
 	"reports": {
 		"method": "GET",
 		"endpoint": "accounts/1/reports",

@@ -1094,7 +1094,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-     def get_index_of_reports(self, report_type):
+    def get_index_of_reports(self, report_type):
         """
         Retrieve all reports that have been run for the account of a specific type.
 
@@ -1111,8 +1111,6 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/reports/{}".format(self.id, report_type),
-            {"account_id": self.id},
-            _root="reports",
         )
 
     def get_migration_systems(self, **kwargs):
@@ -1225,8 +1223,6 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/reports".format(self.id),
-            {"account_id": self.id},
-            _root="reports",
         )
 
     def get_role(self, role):

@@ -205,6 +205,15 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(tool_list[0], ExternalTool)
         self.assertEqual(len(tool_list), 4)
 
+    # create_report
+    def test_create_report(self, m):
+        required = {"account": ["create_report"]}
+        register_uris(required, m)
+
+        report = self.account.create_report("zero_activity_csv")
+
+        self.assertIsInstance(report, AccountReport)
+
     # get_index_of_reports()
     def test_get_index_of_reports(self, m):
         required = {"account": ["report_index", "report_index_page_2"]}
