@@ -348,6 +348,28 @@ class Account(CanvasObject):
 
         return AccountNotification(self._requester, response_json)
 
+    def create_report(self, report_type, **kwargs):
+        """
+        Generates a report of a specific type for the account.
+
+        :calls: `POST /api/v1/accounts/:account_id/reports/:report \
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.create>`_
+
+        :param report_type: The type of report.
+        :type report_type: str
+        :rtype: :class:`canvasapi.account.AccountReport`
+        """
+        response = self._requester.request(
+            "POST",
+            "accounts/{}/account_notifications/{}".format(self.id, report_type),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountReport(self._requester, response_json)
+
     def create_role(self, label, **kwargs):
         """
         Create a new course-level or account-level role.
@@ -1072,7 +1094,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_index_of_reports(self, report_type):
+     def get_index_of_reports(self, report_type):
         """
         Retrieve all reports that have been run for the account of a specific type.
 
@@ -1089,6 +1111,8 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/reports/{}".format(self.id, report_type),
+            {"account_id": self.id},
+            _root="reports",
         )
 
     def get_migration_systems(self, **kwargs):
@@ -1197,7 +1221,12 @@ class Account(CanvasObject):
             :class:`canvasapi.account.AccountReport`
         """
         return PaginatedList(
-            AccountReport, self._requester, "GET", "accounts/{}/reports".format(self.id)
+            AccountReport,
+            self._requester,
+            "GET",
+            "accounts/{}/reports".format(self.id),
+            {"account_id": self.id},
+            _root="reports",
         )
 
     def get_role(self, role):
