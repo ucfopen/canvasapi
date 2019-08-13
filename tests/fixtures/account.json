@@ -497,6 +497,48 @@
 		},
 		"status_code": 200
 	},
+	"delete_report":{
+		"method": "DELETE",
+		"endpoint": "accounts/1/reports/zero_activity_csv/1",
+		"data": {
+    		"id": 1,
+    		"progress": 100,
+    		"parameters": {
+    		    "extra_text": "Term: All Terms;"
+    		},
+    		"current_line": 1,
+    		"status": "deleted",
+    		"report": "zero_activity_csv",
+    		"created_at": "2019-08-13T15:23:15-04:00",
+    		"started_at": "2019-08-13T15:23:17-04:00",
+    		"ended_at": "2019-08-13T15:23:17-04:00",
+    		"file_url": "https://canvas.dev.cdl.ucf.edu/accounts/1/files/1432/download",
+    		"attachment": {
+    		    "id": 1432,
+    		    "uuid": "CCVh71fQEPsDqc4VOoGBr5llCbzAeLEpBcWcAe88",
+    		    "folder_id": 53,
+    		    "display_name": "zero_activity_csv_13_Aug_2019_420190813-16-ecpli.csv",
+    		    "filename": "zero_activity_csv_13_Aug_2019_120190813-16-8jbpun.csv",
+    		    "workflow_state": "processed",
+    		    "upload_status": "success",
+    		    "content-type": "text/csv",
+    		    "url": "https://canvas.dev.cdl.ucf.edu/files/1432/download?download_frd=1&verifier=CCVh71fQEPsDqc4VOoGBr5llCbzAeLEpBcWcAe88",
+    		    "size": 100,
+    		    "created_at": "2019-08-13T19:23:17Z",
+    		    "updated_at": "2019-08-13T19:23:17Z",
+    		    "unlock_at": null,
+    		    "locked": false,
+    		    "hidden": false,
+    		    "lock_at": null,
+    		    "hidden_for_user": false,
+    		    "thumbnail_url": null,
+    		    "modified_at": "2019-08-13T19:23:17Z",
+    		    "mime_class": "file",
+    		    "media_entry_id": null,
+    		    "locked_for_user": false
+    			}
+		}
+	},
 	"get_report":{
 		"method": "GET",
 		"endpoint": "accounts/1/reports/zero_activity_csv/1",

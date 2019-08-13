@@ -1848,6 +1848,23 @@ class AccountReport(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.report, self.id)
 
+    def delete_report(self, **kwargs):
+        """
+        Delete this report.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/reports/:report/:id \
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.destroy>`_
+
+        :rtype: :class:`canvasapi.account.AccountReport`
+        """
+        response = self._requester.request(
+            "DELETE",
+            "accounts/{}/reports/{}/{}".format(self.account_id, self.report, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountNotification(self._requester, response.json())
+
 
 @python_2_unicode_compatible
 class Role(CanvasObject):

@@ -236,6 +236,31 @@ class TestAccount(unittest.TestCase):
         self.assertTrue(hasattr(report, "title"))
         self.assertEqual(report.title, "Zero Activity")
 
+    # delete_report
+    def test_delete_report(self, m):
+        required = {"account": ["delete_report"]}
+        register_uris(required, m)
+
+        self.account_report = AccountReport(
+            self.canvas._Canvas__requester,
+            {"title": "Zero Activity","parameters": {
+                "enrollment_term_id": {
+                    "required": False,
+                    "description": "The canvas id of the term to get grades from",
+                },
+                "start_at": {
+                    "required": False,
+                    "description": "The first date in the date range",
+                },
+                "course_id": {
+                    "required": False,
+                    "description": "The course to report on",
+                },
+            },"report": "zero_activity_csv","last_run": "null","account_id": 1, "id": 1, },
+        )
+
+        self.account_report.delete_report()
+
     # get_report
     def test_get_report(self, m):
         required = {"account": ["get_report"]}
