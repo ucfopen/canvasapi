@@ -1190,37 +1190,40 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(scope_list[1].verb, "GET")
 
     # close_notification
-    #def test_close_notification_for_user_id(self, m):
-    #    register_uris({"account": ["close_notification"]}, m)
-#
-    #    user_id = self.user.id
-    #    notif_id = 1
-    #    closed_notif = self.account.close_notification_for_user(user_id, notif_id)
-#
-    #    self.assertIsInstance(closed_notif, AccountNotification)
-    #    self.assertTrue(hasattr(closed_notif, "subject"))
+    def test_close_notification_for_user_id(self, m):
+        register_uris({"account": ["close_notification"]}, m)
+
+        user_id = self.user.id
+        notif_id = 1
+        closed_notif = self.account.close_notification_for_user(user_id, notif_id)
+
+        self.assertIsInstance(closed_notif, AccountNotification)
+        self.assertTrue(hasattr(closed_notif, "subject"))
 
     # update_global_notification()
     def test_update_global_notification(self, m):
         register_uris({"account": ["update_notification"]}, m)
 
-        self.AccountNotification = AccountNotification(self.canvas._Canvas__requester,{
-            "subject": "",
-            "message": "",
-            "start_at": "",
-            "end_at": "",
-            "id": 1,
-            "account_id": 1,
-        })
+        self.AccountNotification = AccountNotification(
+            self.canvas._Canvas__requester,
+            {
+                "subject": "",
+                "message": "",
+                "start_at": "",
+                "end_at": "",
+                "id": 1,
+                "account_id": 1,
+            },
+        )
 
-        notif = AccountNotification(self.canvas._Canvas__requester,{
+        notif = {
             "subject": "subject",
             "message": "Message",
             "start_at": "2015-04-01T00:00:00Z",
             "end_at": "2018-04-01T00:00:00Z",
             "id": 1,
             "account_id": 1,
-        })
+        }
 
         updated_notif = self.AccountNotification.update_global_notification(notif)
 

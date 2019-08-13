@@ -138,7 +138,9 @@ class Account(CanvasObject):
 
         return AccountNotification(self._requester, response_json)
 
-    def update_global_notification(self, account_notification, notification_id, **kwargs):
+    def update_global_notification(
+        self, account_notification, notification_id, **kwargs
+    ):
         """
         Updates a global notification.
 
@@ -1821,29 +1823,6 @@ class AccountNotification(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return AccountNotification(self._requester, response.json())
-
-    def close_notification_for_user(self, user, notification):
-        """
-        If the user no long wants to see a notification, it can be
-        excused with this call.
-
-        :calls: `DELETE /api/v1/accounts/:account_id/users/:user_id/account_notifications/:id \
-        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.user_close_notification>`_
-
-        :param user: The user object or ID to close the notificaton for.
-        :type user: :class:`canvasapi.user.User` or int
-        :param notification: The notification object or ID to close.
-        :type notification: :class:`canvasapi.account.AccountNotification` or int
-
-        :rtype: :class:`canvasapi.account.AccountNotification`
-        """
-        response = self._requester.request(
-            "DELETE",
-            "accounts/{}/account_notifications/{}".format(
-                self.account_id, self.id
-            ),
-        )
         return AccountNotification(self._requester, response.json())
 
 
