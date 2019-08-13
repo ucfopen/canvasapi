@@ -243,23 +243,34 @@ class TestAccount(unittest.TestCase):
 
         self.account_report = AccountReport(
             self.canvas._Canvas__requester,
-            {"title": "Zero Activity","parameters": {
-                "enrollment_term_id": {
-                    "required": False,
-                    "description": "The canvas id of the term to get grades from",
+            {
+                "title": "Zero Activity",
+                "parameters": {
+                    "enrollment_term_id": {
+                        "required": False,
+                        "description": "The canvas id of the term to get grades from",
+                    },
+                    "start_at": {
+                        "required": False,
+                        "description": "The first date in the date range",
+                    },
+                    "course_id": {
+                        "required": False,
+                        "description": "The course to report on",
+                    },
                 },
-                "start_at": {
-                    "required": False,
-                    "description": "The first date in the date range",
-                },
-                "course_id": {
-                    "required": False,
-                    "description": "The course to report on",
-                },
-            },"report": "zero_activity_csv","last_run": "null","account_id": 1, "id": 1, },
+                "report": "zero_activity_csv",
+                "last_run": "null",
+                "account_id": 1,
+                "id": 1,
+            },
         )
 
-        self.account_report.delete_report()
+        report = self.account_report.delete_report()
+
+        self.assertIsInstance(report, AccountReport)
+        self.assertTrue(hasattr(report, "status"))
+        self.assertEqual(report.status, "deleted")
 
     # get_report
     def test_get_report(self, m):

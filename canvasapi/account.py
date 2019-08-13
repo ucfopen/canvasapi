@@ -1863,7 +1863,7 @@ class AccountReport(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return AccountNotification(self._requester, response.json())
+        return AccountReport(self._requester, response.json())
 
 
 @python_2_unicode_compatible
