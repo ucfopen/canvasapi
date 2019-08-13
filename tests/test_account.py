@@ -210,7 +210,27 @@ class TestAccount(unittest.TestCase):
         required = {"account": ["create_report"]}
         register_uris(required, m)
 
-        report = self.account.create_report("zero_activity_csv")
+        report_template = {
+            "title": "Zero Activity",
+            "parameters": {
+                "enrollment_term_id": {
+                    "required": False,
+                    "description": "The canvas id of the term to get grades from"
+                },
+                "start_at": {
+                    "required": False,
+                    "description": "The first date in the date range, the second date is the time the report is run."
+                },
+                "course_id": {
+                    "required": False,
+                    "description": "The course to report on"
+                }
+            },
+            "report": "zero_activity_csv",
+            "last_run": "null"
+        }
+
+        report = self.account.create_report(report_template, "zero_activity_csv")
 
         self.assertIsInstance(report, AccountReport)
         self.assertTrue(hasattr(report, "title"))

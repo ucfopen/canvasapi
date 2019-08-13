@@ -348,7 +348,7 @@ class Account(CanvasObject):
 
         return AccountNotification(self._requester, response_json)
 
-    def create_report(self, report_type, **kwargs):
+    def create_report(self, report, report_type, **kwargs):
         """
         Generates a report of a specific type for the account.
 
@@ -359,6 +359,9 @@ class Account(CanvasObject):
         :type report_type: str
         :rtype: :class:`canvasapi.account.AccountReport`
         """
+
+        kwargs["report"] = report
+
         response = self._requester.request(
             "POST",
             "accounts/{}/reports/{}".format(self.id, report_type),
