@@ -18,6 +18,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
+from canvasapi.rubric import RubricAssociation, Rubric
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import (
@@ -27,7 +28,6 @@ from canvasapi.util import (
     obj_or_id,
     normalize_bool,
 )
-from canvasapi.rubric import Rubric
 
 
 @python_2_unicode_compatible
@@ -429,6 +429,40 @@ class Course(CanvasObject):
         quiz_json.update({"course_id": self.id})
 
         return Quiz(self._requester, quiz_json)
+
+    def create_rubric(self, **kwargs):
+        """
+        Create a new rubric.
+
+        :calls: `POST /api/v1/courses/:course_id/rubrics \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics.create>`_
+
+        :returns: Returns a dictionary with rubric and rubric association.
+        :rtype: `dict`
+        """
+        response = self._requester.request(
+            "POST",
+            "courses/{}/rubrics".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        dictionary = response.json()
+
+        rubric_dict = {}
+
+        if "rubric" in dictionary:
+            r_dict = dictionary["rubric"]
+            rubric = Rubric(self._requester, r_dict)
+
+            rubric_dict = {"rubric": rubric}
+
+        if "rubric_association" in dictionary:
+            ra_dict = dictionary["rubric_association"]
+            rubric_association = RubricAssociation(self._requester, ra_dict)
+
+            rubric_dict.update({"rubric_association": rubric_association})
+
+        return rubric_dict
 
     def delete(self):
         """
