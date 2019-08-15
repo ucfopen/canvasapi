@@ -16,6 +16,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.content_export import ContentExport
@@ -522,6 +523,22 @@ class TestGroup(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             self.group.create_content_migration(1)
+
+    # get_collaborations
+    def test_get_collaborations(self, m):
+        register_uris({"group": ["get_collaborations"]}, m)
+
+        from canvasapi.collaboration import Collaboration
+
+        collab_list = self.group.get_collaborations()
+
+        self.assertIsInstance(collab_list, PaginatedList)
+        self.assertIsInstance(collab_list[0], Collaboration)
+        self.assertIsInstance(collab_list[1], Collaboration)
+        self.assertEqual(collab_list[0].id, 1)
+        self.assertEqual(collab_list[1].id, 2)
+        self.assertEqual(collab_list[0].document_id, "oinwoenfe8w8ef_onweufe89fef")
+        self.assertEqual(collab_list[1].document_id, "oinwoenfe8w8ef_onweufe89zzz")
 
     # get_content_migration
     def test_get_content_migration(self, m):
