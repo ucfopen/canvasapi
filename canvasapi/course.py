@@ -698,12 +698,12 @@ class Course(CanvasObject):
         )
         return BlueprintTemplate(self._requester, response.json())
 
-    def get_gollaborations(self, **kwargs):
+    def get_collaborations(self, **kwargs):
         """
         Return a list of collaborations for a given course ID.
 
         :calls: `GET /api/v1/courses/:course_id/collaborations \
-        <https://canvas.instructure.com/doc/api/all_resources.html#method.collaborations.api_index>`_
+        <https://canvas.instructure.com/doc/api/collaborations.html#method.collaborations.api_index>`_
 
         :rtype: :class:`canvasapi.collaboration.Collaboration`
         """
@@ -712,8 +712,9 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/collaborations".format(self.id),
+            _root="collaborations",
             kwargs=combine_kwargs(**kwargs),
-            )
+        )
 
     def get_content_export(self, content_export, **kwargs):
         """

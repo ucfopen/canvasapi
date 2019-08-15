@@ -10,4 +10,4 @@ from canvasapi.util import combine_kwargs
 @python_2_unicode_compatible
 class Collaboration(CanvasObject):
     def __str__(self):
-        return "{} ({})".format(self.collaboration_type, self.id)
+        return "{} ({})".format(self.document_id, self.id)
