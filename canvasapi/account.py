@@ -348,22 +348,18 @@ class Account(CanvasObject):
 
         return AccountNotification(self._requester, response_json)
 
-    def create_report(self, report, report_type, **kwargs):
+    def create_report(self, report_type, **kwargs):
         """
         Generates a report of a specific type for the account.
 
         :calls: `POST /api/v1/accounts/:account_id/reports/:report \
         <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.create>`_
 
-        :param report: The dictionary with which to build the report object.
-        :type report: dict
-
         :param report_type: The type of report.
         :type report_type: str
+
         :rtype: :class:`canvasapi.account.AccountReport`
         """
-
-        kwargs["report"] = report
 
         response = self._requester.request(
             "POST",

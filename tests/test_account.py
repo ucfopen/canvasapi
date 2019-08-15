@@ -230,7 +230,7 @@ class TestAccount(unittest.TestCase):
             "last_run": "null",
         }
 
-        report = self.account.create_report(report_template, "zero_activity_csv")
+        report = self.account.create_report("zero_activity_csv", parameters=report_template)
 
         self.assertIsInstance(report, AccountReport)
         self.assertTrue(hasattr(report, "title"))
