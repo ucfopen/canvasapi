@@ -45,6 +45,9 @@ class TestCollaboration(unittest.TestCase):
         collaborator_list = self.collaboration.get_collaborators()
 
         self.assertIsInstance(collaborator_list, PaginatedList)
+        self.assertIsInstance(collaborator_list[0], Collaborator)
+        self.assertEqual(collaborator_list[0].id, 12345)
+        self.assertEqual(collaborator_list[0].name, "Don Draper")
 
 
 @requests_mock.Mocker()
