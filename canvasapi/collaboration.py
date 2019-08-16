@@ -4,9 +4,7 @@ from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.util import combine_kwargs
-from tests import settings
 
 
 @python_2_unicode_compatible

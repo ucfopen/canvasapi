@@ -7,7 +7,7 @@ from canvasapi import Canvas
 from canvasapi.collaboration import Collaboration, Collaborator
 from canvasapi.paginated_list import PaginatedList
 from tests import settings
-from tests.util import cleanup_file, register_uris
+from tests.util import register_uris
 
 
 @requests_mock.Mocker()
@@ -57,11 +57,8 @@ class TestCollaborator(unittest.TestCase):
 
         self.collaborator = Collaborator(
             self.canvas._Canvas__requester,
-            {
-                "id": 12345,
-                "type": "user",
-                "name": "Don Draper"
-            })
+            {"id": 12345, "type": "user", "name": "Don Draper"},
+        )
 
     def test_str(self, m):
         test_str = str(self.collaborator)

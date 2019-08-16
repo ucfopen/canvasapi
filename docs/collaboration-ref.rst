@@ -6,9 +6,9 @@ Collaboration
     :members:
 
 
-=============
-Collaborators
-=============
+============
+Collaborator
+============
 
-.. autoclass:: canvasapi.collaboration.Collaborators
+.. autoclass:: canvasapi.collaboration.Collaborator
     :members:
