@@ -1803,7 +1803,7 @@ class Account(CanvasObject):
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         return "{} ({})".format(self.subject, self.id)
 
     def update_global_notification(self, account_notification, **kwargs):
@@ -1820,7 +1820,7 @@ class AccountNotification(CanvasObject):
         """
         required_key_list = ["subject", "message", "start_at", "end_at"]
         required_keys_present = all(
-            (x in account_notification for x in required_key_list)
+            x in account_notification for x in required_key_list
         )
 
         if isinstance(account_notification, dict) and required_keys_present:
@@ -1844,7 +1844,7 @@ class AccountNotification(CanvasObject):
 
 @python_2_unicode_compatible
 class AccountReport(CanvasObject):
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         return "{} ({})".format(self.report, self.id)
 
     def delete_report(self, **kwargs):

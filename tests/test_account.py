@@ -1330,3 +1330,60 @@ class TestAccount(unittest.TestCase):
 
         with self.assertRaises(RequiredFieldMissing):
             self.AccountNotification.update_global_notification(notif)
+
+
+@requests_mock.Mocker()
+class TestAccountNotification(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.AccountNotification = AccountNotification(
+            self.canvas._Canvas__requester,
+            {
+                "subject": "subject",
+                "message": "Message",
+                "start_at": "2015-04-01T00:00:00Z",
+                "end_at": "2018-04-01T00:00:00Z",
+                "id": 1,
+                "account_id": 1,
+            },
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.AccountNotification)
+        self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestAccountReport(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.AccountReport = AccountReport(
+            self.canvas._Canvas__requester,
+            {
+                "title": "Zero Activity",
+                "parameters": {
+                    "enrollment_term_id": {
+                        "required": False,
+                        "description": "The canvas id of the term to get grades from",
+                    },
+                    "start_at": {
+                        "required": False,
+                        "description": "The first date in the date range",
+                    },
+                    "course_id": {
+                        "required": False,
+                        "description": "The course to report on",
+                    },
+                },
+                "report": "zero_activity_csv",
+                "last_run": "null",
+            },
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.AccountReport)
+        self.assertIsInstance(string, str)
