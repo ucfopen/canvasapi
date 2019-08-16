@@ -1824,6 +1824,49 @@
 			"context_type": "Account",
 			"feature": "epub_export",
 			"state": "on"
+		}
+	},
+	"create_rubric": {
+		"method": "POST",
+		"endpoint": "courses/1/rubrics",
+		"data": {
+			"rubric": {
+				"id": 1,
+				"title": "Course Rubric 1",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			}
+		},
+		"status_code": 200
+	},
+	"create_rubric_with_association": {
+		"method": "POST",
+		"endpoint": "courses/1/rubrics",
+		"data": {
+			"rubric": {
+				"id": 1,
+				"title": "Course Rubric 1",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			},
+			"rubric_association": {
+				"id": 1,
+				"rubric_id": 1,
+				"association_id": 1,
+				"association_type": "Course",
+				"used_for_grading": true,
+				"hide_score_total": true
+			}
 		},
 		"status_code": 200
 	}
