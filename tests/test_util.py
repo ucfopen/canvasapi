@@ -13,11 +13,12 @@ from canvasapi.util import (
     get_institution_url,
     is_multivalued,
     obj_or_id,
+    obj_or_str,
     file_or_path,
     normalize_bool,
 )
 from itertools import chain
-from six import integer_types, iterkeys, itervalues, iteritems, text_type
+from six import integer_types, iterkeys, itervalues, iteritems, string_types, text_type
 from six.moves import zip
 from tests import settings
 from tests.util import cleanup_file, register_uris
@@ -433,6 +434,46 @@ class TestUtil(unittest.TestCase):
     def test_obj_or_id_nonuser_self(self, m):
         with self.assertRaises(TypeError):
             obj_or_id("self", "user_id", (CourseNickname,))
+
+    # obj_or_str()
+    def test_obj_or_str_obj_attr(self, m):
+        register_uris({"user": ["get_by_id"]}, m)
+
+        user = self.canvas.get_user(1)
+
+        user_name = obj_or_str(user, "name", (User,))
+
+        self.assertIsInstance(user_name, string_types)
+        self.assertEqual(user_name, "John Doe")
+
+    def test_obj_or_str_obj_no_attr(self, m):
+        register_uris({"user": ["get_by_id"]}, m)
+
+        user = self.canvas.get_user(1)
+
+        with self.assertRaises(AttributeError):
+            obj_or_str(user, "display_name", (User,))
+
+    def test_obj_or_str_mult_obj(self, m):
+        register_uris({"user": ["get_by_id"]}, m)
+
+        user = self.canvas.get_user(1)
+
+        user_name = obj_or_str(user, "name", (CourseNickname, User))
+
+        self.assertIsInstance(user_name, string_types)
+
+    def test_obj_or_str_invalid_attr_parameter(self, m):
+        register_uris({"user": ["get_by_id"]}, m)
+
+        user = self.canvas.get_user(1)
+
+        with self.assertRaises(TypeError):
+            obj_or_str(user, user, (User,))
+
+    def test_obj_or_str_invalid_obj_type(self, m):
+        with self.assertRaises(TypeError):
+            obj_or_str("user", "name", (User,))
 
     # get_institution_url()
     def test_get_institution_url(self, m):

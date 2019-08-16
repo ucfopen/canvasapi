@@ -857,5 +857,66 @@
 			"export_type": "d"
 		},
 		"status_code": 200
+	},
+	"get_features": {
+		"method": "GET",
+		"endpoint": "users/1/features",
+		"data": [
+			{
+				"name": "high_contrast",
+				"display_name": "High Contrast UI",
+				"applies_to": "User"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "User"
+			}
+		],
+		"status_code": 200
+	},
+	"get_enabled_features": {
+		"method": "GET",
+		"endpoint": "users/1/features/enabled",
+		"data": [
+			{
+				"name": "feature_one",
+				"display_name": "Feature One",
+				"applies_to": "User"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "User"
+			}
+		],
+		"status_code": 200
+	},
+	"get_feature_flag": {
+		"method": "GET",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
+		"status_code": 200
+	},
+	"set_feature_flag": {
+		"method": "PUT",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
+		"status_code": 200
+	},
+	"delete_feature_flag": {
+		"method": "DELETE",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
+		"status_code": 200
 	}
 }

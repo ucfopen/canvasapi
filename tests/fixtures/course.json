@@ -1760,6 +1760,72 @@
 		},
 		"status_code": 200
 	},
+	"get_features": {
+		"method": "GET",
+		"endpoint": "courses/1/features",
+		"data": [
+			{
+				"name": "epub_export",
+				"display_name": "ePub Exporting",
+				"applies_to": "Course"
+			},
+			{
+				"name": "gradebook_list_students_by_sortable_name",
+				"display_name": "Gradebook - List Students by Sortable Name",
+				"applies_to": "Course"
+			}
+		],
+		"status_code": 200
+	},
+	"get_enabled_features": {
+		"method": "GET",
+		"endpoint": "courses/1/features/enabled",
+		"data": [
+			{
+				"name": "feature_test",
+				"display_name": "Feature Test",
+				"applies_to": "Course"
+			},
+			{
+				"name": "feature_second",
+				"display_name": "Feature Second",
+				"applies_to": "Course"
+			}
+		],
+		"status_code": 200
+	},
+	"get_feature_flag": {
+		"method": "GET",
+		"endpoint": "courses/1/features/flags/epub_export",
+		"data": {
+			"feature": "epub_export",
+			"context_id": 1,
+			"context_type": "Account",
+			"state": "on"
+		},
+		"status_code": 200
+	},
+	"set_feature_flag": {
+		"method": "PUT",
+		"endpoint": "courses/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
+			"state": "on"
+		},
+		"status_code": 200
+	},
+	"delete_feature_flag": {
+		"method": "DELETE",
+		"endpoint": "courses/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
+			"state": "on"
+		}
+	},
 	"create_rubric": {
 		"method": "POST",
 		"endpoint": "courses/1/rubrics",
