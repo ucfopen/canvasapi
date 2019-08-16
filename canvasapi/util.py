@@ -139,9 +139,12 @@ def obj_or_str(obj, attr, object_types):
     Accepts an object. If the object has the attribute, return the
     corresponding string. Otherwise, throw an exception.
 
-    :param obj: object
-    :param attr: str
-    :param object_types: tuple
+    :param obj: object from which to retrieve attribute
+    :type obj: object
+    :param attr: name of the attribute to retrieve
+    :type attr: str
+    :param object_types: tuple containing the types of the object being passed in
+    :type object_types: tuple
     :rtype: str
     """
     try:

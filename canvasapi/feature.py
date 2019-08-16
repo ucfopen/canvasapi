@@ -93,11 +93,11 @@ class FeatureFlag(CanvasObject):
             <https://canvas.instructure.com/doc/api/
             feature_flags.html#method.feature_flags.update>`_
 
-            or ` PUT /api/v1/accounts/:account_id/features/flags/:feature \
+            or `PUT /api/v1/accounts/:account_id/features/flags/:feature \
             <https://canvas.instructure.com/doc/api/
             feature_flags.html#method.feature_flags.update>`_
 
-            or ` PUT /api/v1/users/:user_id/features/flags/:feature \
+            or `PUT /api/v1/users/:user_id/features/flags/:feature \
             <https://canvas.instructure.com/doc/api/
             feature_flags.html#method.feature_flags.update>`_
 

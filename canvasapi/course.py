@@ -1017,8 +1017,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/features/flags/:feature \
         <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.show>`_
 
-        :param feature: The feature to retrieve.
-        :type feature: :class:`canvasapi.feature.Feature`
+        :param feature: The feature object or name of the feature to retrieve.
+        :type feature: :class:`canvasapi.feature.Feature` or str
 
         :rtype: :class:`canvasapi.feature.FeatureFlag`
         """
