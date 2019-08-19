@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+### New Endpoint Coverage
+
+- API Token scopes (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - List scopes
+- Account Notifications (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - Show a global notification
+    - Update a global notification
+- Account Reports (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - Start a report
+    - Status of a report
+    - Delete a report
+- Collaborations (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - List collaborations
+    - List members of a collaboration
+- Feature Flags (Thanks, [@cat0698](https://github.com/cat0698))
+    - List features
+    - List enabled features
+    - Get feature flag
+    - Set feature flag
+    - Remove feature flag
+- Rubric (Thanks, [@cat0698](https://github.com/cat0698))
+    - Create a single rubric
+
 ### General
 
 - Removed overzealous global enabling of `DeprecationWarning`. (Thanks, [@Screeeech](https://github.com/Screeeech))
