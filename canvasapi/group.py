@@ -5,6 +5,7 @@ from six import python_2_unicode_compatible, text_type, string_types
 import warnings
 
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.collaboration import Collaboration
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
@@ -291,6 +292,24 @@ class Group(CanvasObject):
         response_json.update({"course_id": self.course_id})
 
         return AssignmentOverride(self._requester, response_json)
+
+    def get_collaborations(self, **kwargs):
+        """
+        Return a list of collaborations for a given course ID.
+
+        :calls: `GET /api/v1/groups/:group_id/collaborations \
+        <https://canvas.instructure.com/doc/api/collaborations.html#method.collaborations.api_index>`_
+
+        :rtype: :class:`canvasapi.collaboration.Collaboration`
+        """
+        return PaginatedList(
+            Collaboration,
+            self._requester,
+            "GET",
+            "groups/{}/collaborations".format(self.id),
+            _root="collaborations",
+            kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_content_export(self, content_export, **kwargs):
         """

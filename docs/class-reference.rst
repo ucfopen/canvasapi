@@ -12,6 +12,7 @@ Class Reference
     blueprint-ref
     bookmark-ref
     calendar-event-ref
+    collaboration-ref
     communication-channel-ref
     content-export-ref
     content-migration-ref

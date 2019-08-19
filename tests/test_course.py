@@ -778,6 +778,22 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(response, "id"))
         self.assertEqual(response.id, 20)
 
+    # get_collaborations
+    def test_get_collaborations(self, m):
+        register_uris({"course": ["get_collaborations"]}, m)
+
+        from canvasapi.collaboration import Collaboration
+
+        collab_list = self.course.get_collaborations()
+
+        self.assertIsInstance(collab_list, PaginatedList)
+        self.assertIsInstance(collab_list[0], Collaboration)
+        self.assertIsInstance(collab_list[1], Collaboration)
+        self.assertEqual(collab_list[0].id, 1)
+        self.assertEqual(collab_list[1].id, 2)
+        self.assertEqual(collab_list[0].document_id, "oinwoenfe8w8ef_onweufe89fef")
+        self.assertEqual(collab_list[1].document_id, "oinwoenfe8w8ef_onweufe89zzz")
+
     # get_course_level_participation_data()
     def test_get_course_level_participation_data(self, m):
         register_uris({"course": ["get_course_level_participation_data"]}, m)

@@ -1215,6 +1215,47 @@
 		},
 		"status_code": 200
 	},
+	"get_collaborations": {
+		"method": "GET",
+		"endpoint": "courses/1/collaborations",
+		"data": {
+			"collaborations": [
+				{
+					"id": 1,
+					"collaboration_type": "Microsoft Office",
+					"document_id": "oinwoenfe8w8ef_onweufe89fef",
+					"user_id": 92,
+					"context_id": 77,
+					"context_type": "Course",
+					"url": null,
+					"created_at": "2012-06-01T00:00:00-06:00",
+					"updated_at": "2012-06-01T00:00:00-06:00",
+					"description": null,
+					"title": null,
+					"type": "ExternalToolCollaboration",
+					"update_url": null,
+					"user_name": "John Danger"
+				},
+				{
+					"id": 2,
+					"collaboration_type": "Microsoft Office",
+					"document_id": "oinwoenfe8w8ef_onweufe89zzz",
+					"user_id": 93,
+					"context_id": 78,
+					"context_type": "Course",
+					"url": null,
+					"created_at": "2012-06-01T00:00:00-06:00",
+					"updated_at": "2012-06-01T00:00:00-06:00",
+					"description": null,
+					"title": null,
+					"type": "ExternalToolCollaboration",
+					"update_url": null,
+					"user_name": "John Danger"
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"get_course_level_participation_data": {
 		"method": "GET",
 		"endpoint": "courses/1/analytics/activity",
