@@ -47,6 +47,7 @@ Class Reference
     rubric-ref
     scope-ref
     section-ref
+    sis-import-ref
     submission-ref
     tab-ref
     upload-ref
