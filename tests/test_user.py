@@ -10,15 +10,17 @@ from canvasapi.assignment import Assignment
 from canvasapi.avatar import Avatar
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.communication_channel import CommunicationChannel
+from canvasapi.content_export import ContentExport
+from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course
+from canvasapi.enrollment import Enrollment
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
-from canvasapi.enrollment import Enrollment
-from canvasapi.page_view import PageView
-from canvasapi.user import User
 from canvasapi.login import Login
-from canvasapi.content_migration import ContentMigration, Migrator
-from canvasapi.content_export import ContentExport
+from canvasapi.page_view import PageView
+from canvasapi.paginated_list import PaginatedList
+from canvasapi.user import User
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -531,6 +533,35 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(content_export, ContentExport)
         self.assertTrue(hasattr(content_export, "export_type"))
+
+    # get_features()
+    def test_get_features(self, m):
+        register_uris({"user": ["get_features"]}, m)
+
+        features = self.user.get_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
+
+    # get_enabled_features()
+    def test_get_enabled_features(self, m):
+        register_uris({"user": ["get_enabled_features"]}, m)
+
+        features = self.user.get_enabled_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
+
+    # get_feature_flag()
+    def test_get_feature_flag(self, m):
+        register_uris({"user": ["get_features", "get_feature_flag"]}, m)
+
+        feature = self.user.get_features()[0]
+
+        feature_flag = self.user.get_feature_flag(feature)
+
+        self.assertIsInstance(feature_flag, FeatureFlag)
+        self.assertEqual(feature_flag.feature, "high_contrast")
 
 
 @requests_mock.Mocker()

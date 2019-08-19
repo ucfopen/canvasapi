@@ -12,6 +12,7 @@ from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
@@ -19,6 +20,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
+from canvasapi.rubric import RubricAssociation, Rubric
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.upload import Uploader
 from canvasapi.util import (
@@ -26,9 +28,9 @@ from canvasapi.util import (
     is_multivalued,
     file_or_path,
     obj_or_id,
+    obj_or_str,
     normalize_bool,
 )
-from canvasapi.rubric import Rubric
 
 
 @python_2_unicode_compatible
@@ -430,6 +432,40 @@ class Course(CanvasObject):
         quiz_json.update({"course_id": self.id})
 
         return Quiz(self._requester, quiz_json)
+
+    def create_rubric(self, **kwargs):
+        """
+        Create a new rubric.
+
+        :calls: `POST /api/v1/courses/:course_id/rubrics \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics.create>`_
+
+        :returns: Returns a dictionary with rubric and rubric association.
+        :rtype: `dict`
+        """
+        response = self._requester.request(
+            "POST",
+            "courses/{}/rubrics".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        dictionary = response.json()
+
+        rubric_dict = {}
+
+        if "rubric" in dictionary:
+            r_dict = dictionary["rubric"]
+            rubric = Rubric(self._requester, r_dict)
+
+            rubric_dict = {"rubric": rubric}
+
+        if "rubric_association" in dictionary:
+            ra_dict = dictionary["rubric_association"]
+            rubric_association = RubricAssociation(self._requester, ra_dict)
+
+            rubric_dict.update({"rubric_association": rubric_association})
+
+        return rubric_dict
 
     def delete(self):
         """
@@ -904,6 +940,25 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_enabled_features(self, **kwargs):
+        """
+        Lists all enabled features in a course.
+
+        :calls: `GET /api/v1/courses/:course_id/features/enabled \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "courses/{}/features/enabled".format(self.id),
+            {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_enrollments(self, **kwargs):
         """
         List all of the enrollments in this course.
@@ -1004,6 +1059,46 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/external_tools".format(self.id),
+            {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_feature_flag(self, feature, **kwargs):
+        """
+        Return the feature flag that applies to given course.
+
+        :calls: `GET /api/v1/courses/:course_id/features/flags/:feature \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.show>`_
+
+        :param feature: The feature object or name of the feature to retrieve.
+        :type feature: :class:`canvasapi.feature.Feature` or str
+
+        :rtype: :class:`canvasapi.feature.FeatureFlag`
+        """
+        feature_name = obj_or_str(feature, "name", (Feature,))
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/features/flags/{}".format(self.id, feature_name),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return FeatureFlag(self._requester, response.json())
+
+    def get_features(self, **kwargs):
+        """
+        Lists all features of a course.
+
+        :calls: `GET /api/v1/courses/:course_id/features \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "courses/{}/features".format(self.id),
             {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )

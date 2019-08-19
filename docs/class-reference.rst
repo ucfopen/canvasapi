@@ -26,6 +26,7 @@ Class Reference
     enrollment-term-ref
     external-tool-ref
     favorite-ref
+    feature-ref
     file-ref
     folder-ref
     grading-period-ref
@@ -44,6 +45,7 @@ Class Reference
     quiz-ref
     quiz-group-ref
     rubric-ref
+    scope-ref
     section-ref
     submission-ref
     tab-ref

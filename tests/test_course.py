@@ -20,6 +20,7 @@ from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.grading_period import GradingPeriod
@@ -1715,6 +1716,58 @@ class TestCourse(unittest.TestCase):
 
         self.assertIsInstance(content_export, ContentExport)
         self.assertTrue(hasattr(content_export, "export_type"))
+
+    # get_enabled_features()
+    def test_get__enabled_features(self, m):
+        register_uris({"course": ["get_enabled_features"]}, m)
+
+        enabled_features = self.course.get_enabled_features()
+
+        self.assertIsInstance(enabled_features, PaginatedList)
+        self.assertIsInstance(enabled_features[0], Feature)
+
+    # get_feature_flag()
+    def test_get_feature_flag(self, m):
+        register_uris({"course": ["get_features", "get_feature_flag"]}, m)
+
+        feature = self.course.get_features()[0]
+
+        feature_flag = self.course.get_feature_flag(feature)
+
+        self.assertIsInstance(feature_flag, FeatureFlag)
+        self.assertEqual(feature_flag.feature, "epub_export")
+
+    # get_features()
+    def test_get_features(self, m):
+        register_uris({"course": ["get_features"]}, m)
+
+        features = self.course.get_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
+
+    # create_rubric()
+    def test_create_rubric_no_association(self, m):
+        register_uris({"course": ["create_rubric"]}, m)
+
+        rubric = self.course.create_rubric()
+
+        self.assertIsInstance(rubric, dict)
+        self.assertEqual(rubric["rubric"].title, "Course Rubric 1")
+        self.assertEqual(rubric["rubric"].id, 1)
+
+    def test_create_rubric_with_association(self, m):
+        register_uris({"course": ["create_rubric_with_association"]}, m)
+
+        rubric = self.course.create_rubric()
+
+        self.assertIsInstance(rubric, dict)
+        self.assertEqual(rubric["rubric"].title, "Course Rubric 1")
+        self.assertEqual(rubric["rubric"].id, 1)
+
+        self.assertEqual(rubric["rubric_association"].id, 1)
+        self.assertEqual(rubric["rubric_association"].rubric_id, 1)
+        self.assertEqual(rubric["rubric_association"].association_type, "Course")
 
 
 @requests_mock.Mocker()

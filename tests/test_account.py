@@ -21,6 +21,7 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
@@ -29,6 +30,7 @@ from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
+from canvasapi.scope import Scope
 from canvasapi.sis_import import SisImport
 from canvasapi.user import User
 from canvasapi.content_migration import ContentMigration, Migrator
@@ -54,22 +56,16 @@ class TestAccount(unittest.TestCase):
         string = str(self.account)
         self.assertIsInstance(string, str)
 
-    # close_notification_for_user()
-    def test_close_notification_for_user_id(self, m):
-        register_uris({"account": ["close_notification"]}, m)
-
-        user_id = self.user.id
-        notif_id = 1
-        closed_notif = self.account.close_notification_for_user(user_id, notif_id)
-
-        self.assertIsInstance(closed_notif, AccountNotification)
-        self.assertTrue(hasattr(closed_notif, "subject"))
-
-    def test_close_notification_for_user_obj(self, m):
-        register_uris({"account": ["close_notification"]}, m)
+    # get_global_notification()
+    def test_get_global_notification(self, m):
+        register_uris({"account": ["get_notification"]}, m)
 
         notif_id = 1
-        self.account.close_notification_for_user(self.user, notif_id)
+        notification = self.account.get_global_notification(notif_id)
+
+        self.assertIsInstance(notification, AccountNotification)
+        self.assertTrue(hasattr(notification, "subject"))
+        self.assertEqual(notification.subject, "Attention Students")
 
     # create_account()
     def test_create_account(self, m):
@@ -209,6 +205,86 @@ class TestAccount(unittest.TestCase):
 
         self.assertIsInstance(tool_list[0], ExternalTool)
         self.assertEqual(len(tool_list), 4)
+
+    # create_report
+    def test_create_report(self, m):
+        required = {"account": ["create_report"]}
+        register_uris(required, m)
+
+        report_template = {
+            "title": "Zero Activity",
+            "parameters": {
+                "enrollment_term_id": {
+                    "required": False,
+                    "description": "The canvas id of the term to get grades from",
+                },
+                "start_at": {
+                    "required": False,
+                    "description": "The first date in the date range",
+                },
+                "course_id": {
+                    "required": False,
+                    "description": "The course to report on",
+                },
+            },
+            "report": "zero_activity_csv",
+            "last_run": "null",
+        }
+
+        report = self.account.create_report(
+            "zero_activity_csv", parameters=report_template
+        )
+
+        self.assertIsInstance(report, AccountReport)
+        self.assertTrue(hasattr(report, "title"))
+        self.assertEqual(report.title, "Zero Activity")
+
+    # delete_report
+    def test_delete_report(self, m):
+        required = {"account": ["delete_report"]}
+        register_uris(required, m)
+
+        self.account_report = AccountReport(
+            self.canvas._Canvas__requester,
+            {
+                "title": "Zero Activity",
+                "parameters": {
+                    "enrollment_term_id": {
+                        "required": False,
+                        "description": "The canvas id of the term to get grades from",
+                    },
+                    "start_at": {
+                        "required": False,
+                        "description": "The first date in the date range",
+                    },
+                    "course_id": {
+                        "required": False,
+                        "description": "The course to report on",
+                    },
+                },
+                "report": "zero_activity_csv",
+                "last_run": "null",
+                "account_id": 1,
+                "id": 1,
+            },
+        )
+
+        report = self.account_report.delete_report()
+
+        self.assertIsInstance(report, AccountReport)
+        self.assertTrue(hasattr(report, "status"))
+        self.assertEqual(report.status, "deleted")
+
+    # get_report
+    def test_get_report(self, m):
+        required = {"account": ["get_report"]}
+        register_uris(required, m)
+
+        report = self.account.get_report("zero_activity_csv", 1)
+
+        self.assertIsInstance(report, AccountReport)
+        self.assertTrue(hasattr(report, "title"))
+        self.assertEqual(report.title, "Zero Activity")
 
     # get_index_of_reports()
     def test_get_index_of_reports(self, m):
@@ -1176,3 +1252,170 @@ class TestAccount(unittest.TestCase):
         )
         self.assertTrue(self.account.delete_grading_period(1))
         self.assertTrue(self.account.delete_grading_period(self.grading_period))
+
+    # get_scopes()
+    def test_get_scopes(self, m):
+        register_uris({"account": ["get_scopes"]}, m)
+
+        scopes = self.account.get_scopes()
+        scope_list = [scope for scope in scopes]
+
+        self.assertEqual(len(list(scopes)), 2)
+        self.assertTrue(isinstance(scopes, PaginatedList))
+        self.assertTrue(isinstance(scope_list[0], Scope))
+
+        self.assertEqual(scope_list[0].resource, "users")
+        self.assertEqual(scope_list[1].resource, "users")
+
+        self.assertEqual(scope_list[0].verb, "PUT")
+        self.assertEqual(scope_list[1].verb, "GET")
+
+    # close_notification
+    def test_close_notification_for_user_id(self, m):
+        register_uris({"account": ["close_notification"]}, m)
+
+        user_id = self.user.id
+        notif_id = 1
+        closed_notif = self.account.close_notification_for_user(user_id, notif_id)
+
+        self.assertIsInstance(closed_notif, AccountNotification)
+        self.assertTrue(hasattr(closed_notif, "subject"))
+
+    # update_global_notification()
+    def test_update_global_notification(self, m):
+        register_uris({"account": ["update_notification"]}, m)
+
+        self.AccountNotification = AccountNotification(
+            self.canvas._Canvas__requester,
+            {
+                "subject": "",
+                "message": "",
+                "start_at": "",
+                "end_at": "",
+                "id": 1,
+                "account_id": 1,
+            },
+        )
+
+        notif = {
+            "subject": "subject",
+            "message": "Message",
+            "start_at": "2015-04-01T00:00:00Z",
+            "end_at": "2018-04-01T00:00:00Z",
+            "id": 1,
+            "account_id": 1,
+        }
+
+        updated_notif = self.AccountNotification.update_global_notification(notif)
+
+        self.assertIsInstance(updated_notif, AccountNotification)
+        self.assertTrue(hasattr(updated_notif, "subject"))
+        self.assertEqual(updated_notif.subject, "subject")
+
+    def test_update_global_notification_missing_field(self, m):
+        register_uris({"account": ["update_notification"]}, m)
+
+        self.AccountNotification = AccountNotification(
+            self.canvas._Canvas__requester,
+            {
+                "subject": "",
+                "message": "",
+                "start_at": "",
+                "end_at": "",
+                "id": 1,
+                "account_id": 1,
+            },
+        )
+
+        notif = {}
+
+        with self.assertRaises(RequiredFieldMissing):
+            self.AccountNotification.update_global_notification(notif)
+
+
+@requests_mock.Mocker()
+class TestAccountNotification(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.AccountNotification = AccountNotification(
+            self.canvas._Canvas__requester,
+            {
+                "subject": "subject",
+                "message": "Message",
+                "start_at": "2015-04-01T00:00:00Z",
+                "end_at": "2018-04-01T00:00:00Z",
+                "id": 1,
+                "account_id": 1,
+            },
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.AccountNotification)
+        self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestAccountReport(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+        self.account = Account(self.canvas._Canvas__requester, {"id": 1})
+
+        self.AccountReport = AccountReport(
+            self.canvas._Canvas__requester,
+            {
+                "id": 1,
+                "title": "Zero Activity",
+                "parameters": {
+                    "enrollment_term_id": {
+                        "required": False,
+                        "description": "The canvas id of the term to get grades from",
+                    },
+                    "start_at": {
+                        "required": False,
+                        "description": "The first date in the date range",
+                    },
+                    "course_id": {
+                        "required": False,
+                        "description": "The course to report on",
+                    },
+                },
+                "report": "zero_activity_csv",
+                "last_run": "null",
+            },
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.AccountReport)
+        self.assertIsInstance(string, str)
+
+    # get_features()
+    def test_get_features(self, m):
+        register_uris({"account": ["get_features"]}, m)
+
+        features = self.account.get_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
+
+    # get_enabled_features()
+    def test_get_enabled_features(self, m):
+        register_uris({"account": ["get_enabled_features"]}, m)
+
+        features = self.account.get_enabled_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
+
+    # get_feature_flag()
+    def test_get_feature_flag(self, m):
+        register_uris({"account": ["get_features", "get_feature_flag"]}, m)
+
+        feature = self.account.get_features()[0]
+
+        feature_flag = self.account.get_feature_flag(feature)
+
+        self.assertIsInstance(feature_flag, FeatureFlag)
+        self.assertEqual(feature_flag.feature, "epub_export")
