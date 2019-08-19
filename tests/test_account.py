@@ -21,6 +21,7 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
@@ -1359,10 +1360,12 @@ class TestAccountNotification(unittest.TestCase):
 class TestAccountReport(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+        self.account = Account(self.canvas._Canvas__requester, {"id": 1})
 
         self.AccountReport = AccountReport(
             self.canvas._Canvas__requester,
             {
+                "id": 1,
                 "title": "Zero Activity",
                 "parameters": {
                     "enrollment_term_id": {
@@ -1387,3 +1390,32 @@ class TestAccountReport(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.AccountReport)
         self.assertIsInstance(string, str)
+
+    # get_features()
+    def test_get_features(self, m):
+        register_uris({"account": ["get_features"]}, m)
+
+        features = self.account.get_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
+
+    # get_enabled_features()
+    def test_get_enabled_features(self, m):
+        register_uris({"account": ["get_enabled_features"]}, m)
+
+        features = self.account.get_enabled_features()
+
+        self.assertIsInstance(features, PaginatedList)
+        self.assertIsInstance(features[0], Feature)
+
+    # get_feature_flag()
+    def test_get_feature_flag(self, m):
+        register_uris({"account": ["get_features", "get_feature_flag"]}, m)
+
+        feature = self.account.get_features()[0]
+
+        feature_flag = self.account.get_feature_flag(feature)
+
+        self.assertIsInstance(feature_flag, FeatureFlag)
+        self.assertEqual(feature_flag.feature, "epub_export")

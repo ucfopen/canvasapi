@@ -6,10 +6,11 @@ import warnings
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
-from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.util import combine_kwargs, obj_or_id, obj_or_str
 
 
 @python_2_unicode_compatible
@@ -402,6 +403,25 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_enabled_features(self, **kwargs):
+        """
+        Lists all of the enabled features for a user.
+
+        :calls: `GET /api/v1/users/:user_id/features/enabled \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "users/{}/features/enabled".format(self.id),
+            {"user_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_enrollments(self, **kwargs):
         """
         List all of the enrollments for this user.
@@ -419,6 +439,46 @@ class User(CanvasObject):
             self._requester,
             "GET",
             "users/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_feature_flag(self, feature, **kwargs):
+        """
+        Returns the feature flag that applies to the given user.
+
+        :calls: `GET /api/v1/users/:user_id/features/flags/:feature \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.show>`_
+
+        :param feature: The feature object or name of the feature to retrieve.
+        :type feature: :class:`canvasapi.feature.Feature` or str
+
+        :rtype: :class:`canvasapi.feature.FeatureFlag`
+        """
+        feature_name = obj_or_str(feature, "name", (Feature,))
+
+        response = self._requester.request(
+            "GET",
+            "users/{}/features/flags/{}".format(self.id, feature_name),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return FeatureFlag(self._requester, response.json())
+
+    def get_features(self, **kwargs):
+        """
+        Lists all of the features for this user.
+
+        :calls: `GET /api/v1/users/:user_id/features \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "users/{}/features".format(self.id),
+            {"user_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 

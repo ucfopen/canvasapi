@@ -6,13 +6,14 @@ from six import python_2_unicode_compatible, string_types
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.grading_standard import GradingStandard
-from canvasapi.outcome_import import OutcomeImport
 from canvasapi.grading_period import GradingPeriod
+from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
 from canvasapi.sis_import import SisImport
-from canvasapi.util import combine_kwargs, file_or_path, obj_or_id
+from canvasapi.util import combine_kwargs, file_or_path, obj_or_id, obj_or_str
 
 
 @python_2_unicode_compatible
@@ -907,6 +908,25 @@ class Account(CanvasObject):
         )
         return response.json()
 
+    def get_enabled_features(self, **kwargs):
+        """
+        Lists all enabled features in an account.
+
+        :calls: `GET /api/v1/accounts/:account_id/features/enabled \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "accounts/{}/features/enabled".format(self.id),
+            {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_enrollment(self, enrollment, **kwargs):
         """
         Get an enrollment object by ID.
@@ -989,6 +1009,46 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/external_tools".format(self.id),
+            {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_feature_flag(self, feature, **kwargs):
+        """
+        Returns the feature flag that applies to the given account.
+
+        :calls: `GET /api/v1/accounts/:account_id/features/flags/:feature \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.show>`_
+
+        :param feature: The feature object or name of the feature to retrieve.
+        :type feature: :class:`canvasapi.feature.Feature` or str
+
+        :rtype: :class:`canvasapi.feature.FeatureFlag`
+        """
+        feature_name = obj_or_str(feature, "name", (Feature,))
+
+        response = self._requester.request(
+            "GET",
+            "accounts/{}/features/flags/{}".format(self.id, feature_name),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return FeatureFlag(self._requester, response.json())
+
+    def get_features(self, **kwargs):
+        """
+        Lists all of the features of an account.
+
+        :calls: `GET /api/v1/accounts/:account_id/features \
+        <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.feature.Feature`
+        """
+        return PaginatedList(
+            Feature,
+            self._requester,
+            "GET",
+            "accounts/{}/features".format(self.id),
             {"account_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
