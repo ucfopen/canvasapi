@@ -343,7 +343,35 @@ class Account(CanvasObject):
             "accounts/{}/account_notifications".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
-        return AccountNotification(self._requester, response.json())
+
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountNotification(self._requester, response_json)
+
+    def create_report(self, report_type, **kwargs):
+        """
+        Generates a report of a specific type for the account.
+
+        :calls: `POST /api/v1/accounts/:account_id/reports/:report \
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.create>`_
+
+        :param report_type: The type of report.
+        :type report_type: str
+
+        :rtype: :class:`canvasapi.account.AccountReport`
+        """
+
+        response = self._requester.request(
+            "POST",
+            "accounts/{}/reports/{}".format(self.id, report_type),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountReport(self._requester, response_json)
 
     def create_role(self, label, **kwargs):
         """
@@ -1025,6 +1053,30 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_global_notification(self, notification_id, **kwargs):
+        """
+        Returns a global notification for the current user.
+
+        :calls: `GET /api/v1/accounts/:account_id/account_notifications/:id \
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.show>`_
+
+        :param notification_id: The notification ID of the desired notification.
+        :type notification_id: `int`
+
+        :rtype: :class:`canvasapi.account.AccountNotification`
+        """
+
+        response = self._requester.request(
+            "GET",
+            "accounts/{}/account_notifications/{}".format(self.id, notification_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountNotification(self._requester, response_json)
+
     def get_grading_periods(self, **kwargs):
         """
         Return a list of grading periods for the associated account.
@@ -1121,6 +1173,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/reports/{}".format(self.id, report_type),
+            {"account_id": self.id},
         )
 
     def get_migration_systems(self, **kwargs):
@@ -1218,6 +1271,32 @@ class Account(CanvasObject):
 
         return OutcomeImport(self._requester, response_json)
 
+    def get_report(self, report_type, report_id, **kwargs):
+        """
+        Return a report which corresponds to the given report type and ID.
+
+        :calls: `GET /api/v1/accounts/:account_id/reports/:report/:id \
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.show>`_
+
+        :param report_type: The type of the report which is being looked up.
+        :type report_type: `string`
+
+        :param report_id: The id for the report which is being looked up.
+        :type report_id: `int`
+
+        :rtype: :class:`canvasapi.account.AccountReport`
+        """
+        response = self._requester.request(
+            "GET",
+            "accounts/{}/reports/{}/{}".format(self.id, report_type, report_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"account_id": self.id})
+
+        return AccountReport(self._requester, response_json)
+
     def get_reports(self):
         """
         Return a list of reports for the current context.
@@ -1229,7 +1308,11 @@ class Account(CanvasObject):
             :class:`canvasapi.account.AccountReport`
         """
         return PaginatedList(
-            AccountReport, self._requester, "GET", "accounts/{}/reports".format(self.id)
+            AccountReport,
+            self._requester,
+            "GET",
+            "accounts/{}/reports".format(self.id),
+            {"account_id": self.id},
         )
 
     def get_role(self, role):
@@ -1321,6 +1404,25 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/%s/rubrics" % (self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_scopes(self, **kwargs):
+        """
+        Retrieve a paginated list of scopes.
+
+        :calls: `GET /api/v1/accounts/:account_id/scopes \
+        <https://canvas.instructure.com/doc/api/api_token_scopes.html#method.scopes_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.scope.Scope`
+        """
+        from canvasapi.scope import Scope
+
+        return PaginatedList(
+            Scope,
+            self._requester,
+            "GET",
+            "accounts/{}/scopes".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -1761,14 +1863,66 @@ class Account(CanvasObject):
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):
-    def __str__(self):  # pragma: no cover
-        return "{}".format(self.subject)
+    def __str__(self):
+        return "{} ({})".format(self.subject, self.id)
+
+    def update_global_notification(self, account_notification, **kwargs):
+        """
+        Updates a global notification.
+
+        :calls: `PUT /api/v1/accounts/:account_id/account_notifications/:id \
+        <https://canvas.instructure.com/doc/api/account_notifications.html#method.account_notifications.update>`_
+
+        :param account_notification: The notification to update with.
+        :type account_notification: dict
+
+        :rtype: :class:`canvasapi.account.AccountNotification`
+        """
+        required_key_list = ["subject", "message", "start_at", "end_at"]
+        required_keys_present = all(
+            x in account_notification for x in required_key_list
+        )
+
+        if isinstance(account_notification, dict) and required_keys_present:
+            kwargs["account_notification"] = account_notification
+        else:
+            raise RequiredFieldMissing(
+                (
+                    "account_notification must be a dictionary with keys "
+                    "'subject', 'message', 'start_at', and 'end_at'."
+                )
+            )
+
+        response = self._requester.request(
+            "PUT",
+            "accounts/{}/account_notifications/{}".format(self.account_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountNotification(self._requester, response.json())
 
 
 @python_2_unicode_compatible
 class AccountReport(CanvasObject):
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         return "{} ({})".format(self.report, self.id)
+
+    def delete_report(self, **kwargs):
+        """
+        Delete this report.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/reports/:report/:id \
+        <https://canvas.instructure.com/doc/api/account_reports.html#method.account_reports.destroy>`_
+
+        :rtype: :class:`canvasapi.account.AccountReport`
+        """
+        response = self._requester.request(
+            "DELETE",
+            "accounts/{}/reports/{}/{}".format(self.account_id, self.report, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountReport(self._requester, response.json())
 
 
 @python_2_unicode_compatible

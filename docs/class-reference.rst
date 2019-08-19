@@ -44,6 +44,7 @@ Class Reference
     quiz-ref
     quiz-group-ref
     rubric-ref
+    scope-ref
     section-ref
     submission-ref
     tab-ref
