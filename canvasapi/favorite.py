@@ -8,7 +8,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class Favorite(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.context_type, self.context_id)
 
@@ -23,17 +22,15 @@ class Favorite(CanvasObject):
 
         :rtype: :class:`canvasapi.favorite.Favorite`
         """
-        if(self.context_type == "course"):
+        if self.context_type == "course":
             id = self.context_id
-            uri_str = 'users/self/favorites/courses/{}'
+            uri_str = "users/self/favorites/courses/{}"
 
-        elif(self.context_type == "group"):
+        elif self.context_type == "group":
             id = self.context_id
-            uri_str = 'users/self/favorites/groups/{}'
+            uri_str = "users/self/favorites/groups/{}"
 
         response = self._requester.request(
-            'DELETE',
-            uri_str.format(id),
-            _kwargs=combine_kwargs(**kwargs)
+            "DELETE", uri_str.format(id), _kwargs=combine_kwargs(**kwargs)
         )
         return Favorite(self._requester, response.json())

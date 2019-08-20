@@ -21,9 +21,9 @@ class DiscussionTopic(CanvasObject):
 
         :rtype: int
         """
-        if hasattr(self, 'course_id'):
+        if hasattr(self, "course_id"):
             return self.course_id
-        elif hasattr(self, 'group_id'):
+        elif hasattr(self, "group_id"):
             return self.group_id
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
@@ -35,31 +35,12 @@ class DiscussionTopic(CanvasObject):
 
         :rtype: str
         """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
-
-    def get_parent(self):
-        """
-        Return the object that spawned this discussion topic.
-
-        :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
-        """
-        from canvasapi.group import Group
-        from canvasapi.course import Course
-
-        response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self._parent_type, self._parent_id)
-        )
-
-        if self._parent_type == 'group':
-            return Group(self._requester, response.json())
-        elif self._parent_type == 'course':
-            return Course(self._requester, response.json())
 
     def delete(self):
         """
@@ -75,90 +56,65 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
-        )
-        return 'deleted_at' in response.json()
-
-    def update(self, **kwargs):
-        """
-        Updates an existing discussion topic for the course or group.
-
-        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
-
-            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
-
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
-        """
-        response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "DELETE",
+            "{}s/{}/discussion_topics/{}".format(
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
         )
-        return DiscussionTopic(self._requester, response.json())
+        return "deleted_at" in response.json()
 
-    def post_entry(self, **kwargs):
+    def get_entries(self, ids, **kwargs):
         """
-        Creates a new entry in a discussion topic.
+        Retrieve a paginated list of discussion entries, given a list
+        of ids. Entries will be returned in id order, smallest id first.
 
-        :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
 
-            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_
+            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entry_list \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
 
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry`
-        """
-        response = self._requester.request(
-            'POST',
-            '{}s/{}/discussion_topics/{}/entries'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-        response_json = response.json()
-        response_json.update({
-            'discussion_id': self.id,
-            '{}_id'.format(self._parent_type): self._parent_id
-        })
-        return DiscussionEntry(self._requester, response_json)
-
-    def list_topic_entries(self, **kwargs):
-        """
-        Retreive the top-level entries in a discussion topic.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.discussion_topic.DiscussionTopic.get_topic_entries` instead.
-
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
-
-            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
+        :param ids: A list of entry objects or IDs to retrieve.
+        :type ids: :class:`canvasapi.discussion_topic.DiscussionEntry`, or list or tuple of int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
-        warnings.warn(
-            "`list_topic_entries` is being deprecated and will be removed in "
-            "a future version. Use `get_topic_entries` instead",
-            DeprecationWarning
+
+        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry,)) for item in ids]
+
+        kwargs.update(ids=entry_ids)
+        return PaginatedList(
+            DiscussionEntry,
+            self._requester,
+            "GET",
+            "{}s/{}/discussion_topics/{}/entry_list".format(
+                self._parent_type, self._parent_id, self.id
+            ),
+            {
+                "discussion_id": self.id,
+                "{}_id".format(self._parent_type): self._parent_id,
+            },
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-        return self.get_topic_entries(**kwargs)
+    def get_parent(self):
+        """
+        Return the object that spawned this discussion topic.
+
+        :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
+        """
+        from canvasapi.group import Group
+        from canvasapi.course import Course
+
+        response = self._requester.request(
+            "GET", "{}s/{}".format(self._parent_type, self._parent_id)
+        )
+
+        if self._parent_type == "group":
+            return Group(self._requester, response.json())
+        elif self._parent_type == "course":
+            return Course(self._requester, response.json())
 
     def get_topic_entries(self, **kwargs):
         """
@@ -176,17 +132,15 @@ class DiscussionTopic(CanvasObject):
         return PaginatedList(
             DiscussionEntry,
             self._requester,
-            'GET',
-            '{}s/{}/discussion_topics/{}/entries'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "GET",
+            "{}s/{}/discussion_topics/{}/entries".format(
+                self._parent_type, self._parent_id, self.id
             ),
             {
-                'discussion_id': self.id,
-                '{}_id'.format(self._parent_type): self._parent_id
+                "discussion_id": self.id,
+                "{}_id".format(self._parent_type): self._parent_id,
             },
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_entries(self, ids, **kwargs):
@@ -213,47 +167,35 @@ class DiscussionTopic(CanvasObject):
         warnings.warn(
             "`list_entries` is being deprecated and will be removed in a "
             "future version. Use `get_entries` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_entries(ids, **kwargs)
 
-    def get_entries(self, ids, **kwargs):
+    def list_topic_entries(self, **kwargs):
         """
-        Retrieve a paginated list of discussion entries, given a list
-        of ids. Entries will be returned in id order, smallest id first.
+        Retreive the top-level entries in a discussion topic.
 
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.discussion_topic.DiscussionTopic.get_topic_entries` instead.
 
-            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entry_list \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
+        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
 
-        :param ids: A list of entry objects or IDs to retrieve.
-        :type ids: :class:`canvasapi.discussion_topic.DiscussionEntry`, or list or tuple of int
+            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
-
-        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry, )) for item in ids]
-
-        kwargs.update(ids=entry_ids)
-        return PaginatedList(
-            DiscussionEntry,
-            self._requester,
-            'GET',
-            '{}s/{}/discussion_topics/{}/entry_list'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            ),
-            {
-                'discussion_id': self.id,
-                '{}_id'.format(self._parent_type): self._parent_id
-            },
-            _kwargs=combine_kwargs(**kwargs),
+        warnings.warn(
+            "`list_topic_entries` is being deprecated and will be removed in "
+            "a future version. Use `get_topic_entries` instead",
+            DeprecationWarning,
         )
+
+        return self.get_topic_entries(**kwargs)
 
     def mark_as_read(self):
         """
@@ -268,12 +210,10 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/read'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "PUT",
+            "{}s/{}/discussion_topics/{}/read".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -290,12 +230,10 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/read'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/read".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -312,13 +250,11 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/read_all'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "PUT",
+            "{}s/{}/discussion_topics/{}/read_all".format(
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -335,15 +271,41 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/read_all'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/read_all".format(
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
+
+    def post_entry(self, **kwargs):
+        """
+        Creates a new entry in a discussion topic.
+
+        :calls: `POST /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_
+
+            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_entry>`_
+
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry`
+        """
+        response = self._requester.request(
+            "POST",
+            "{}s/{}/discussion_topics/{}/entries".format(
+                self._parent_type, self._parent_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        response_json = response.json()
+        response_json.update(
+            {
+                "discussion_id": self.id,
+                "{}_id".format(self._parent_type): self._parent_id,
+            }
+        )
+        return DiscussionEntry(self._requester, response_json)
 
     def subscribe(self):
         """
@@ -358,12 +320,10 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/subscribed'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "PUT",
+            "{}s/{}/discussion_topics/{}/subscribed".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -380,14 +340,33 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/subscribed'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/subscribed".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
+
+    def update(self, **kwargs):
+        """
+        Updates an existing discussion topic for the course or group.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
+
+            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.update>`_
+
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
+        """
+        response = self._requester.request(
+            "PUT",
+            "{}s/{}/discussion_topics/{}".format(
+                self._parent_type, self._parent_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return DiscussionTopic(self._requester, response.json())
 
 
 @python_2_unicode_compatible
@@ -402,9 +381,9 @@ class DiscussionEntry(CanvasObject):
 
         :rtype: int
         """
-        if hasattr(self, 'course_id'):
+        if hasattr(self, "course_id"):
             return self.course_id
-        elif hasattr(self, 'group_id'):
+        elif hasattr(self, "group_id"):
             return self.group_id
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
@@ -416,63 +395,12 @@ class DiscussionEntry(CanvasObject):
 
         :rtype: str
         """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
-
-    def get_discussion(self):
-        """
-        Return the discussion topic object this entry is related to
-
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
-        """
-
-        response = self._requester.request(
-            'GET',
-            '{}s/{}/discussion_topics/{}'.format(
-                self._discussion_parent_type,
-                self._discussion_parent_id,
-                self.discussion_id
-            )
-        )
-
-        response_json = response.json()
-        response_json.update(
-            {'{}_id'.format(self._discussion_parent_type): self._discussion_parent_id}
-        )
-
-        return DiscussionTopic(self._requester, response.json())
-
-    def update(self, **kwargs):
-        """
-        Updates an existing discussion entry.
-
-        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:id \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
-
-            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:id \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
-
-        :rtype: bool
-        """
-        response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/entries/{}'.format(
-                self._discussion_parent_type,
-                self._discussion_parent_id,
-                self.discussion_id,
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
-        if response.json().get('updated_at'):
-            super(DiscussionEntry, self).set_attributes(response.json())
-
-        return 'updated_at' in response.json()
 
     def delete(self, **kwargs):
         """
@@ -487,43 +415,73 @@ class DiscussionEntry(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/entries/{}'.format(
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/entries/{}".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
-        return 'deleted_at' in response.json()
+        return "deleted_at" in response.json()
 
-    def post_reply(self, **kwargs):
+    def get_discussion(self):
         """
-        Add a reply to this entry.
+        Return the discussion topic object this entry is related to
 
-        :calls: `POST
-            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
-
-            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
-
-        :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry`
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
+
         response = self._requester.request(
-            'POST',
-            '{}s/{}/discussion_topics/{}/entries/{}/replies'.format(
+            "GET",
+            "{}s/{}/discussion_topics/{}".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
         )
+
         response_json = response.json()
-        response_json.update(discussion_id=self.discussion_id)
-        return DiscussionEntry(self._requester, response_json)
+        response_json.update(
+            {"{}_id".format(self._discussion_parent_type): self._discussion_parent_id}
+        )
+
+        return DiscussionTopic(self._requester, response.json())
+
+    def get_replies(self, **kwargs):
+        """
+        Retrieves the replies to a top-level entry in a discussion topic.
+
+        :calls: `GET
+            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
+
+            or `GET
+            /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.discussion_topic.DiscussionEntry`
+        """
+        return PaginatedList(
+            DiscussionEntry,
+            self._requester,
+            "GET",
+            "{}s/{}/discussion_topics/{}/entries/{}/replies".format(
+                self._discussion_parent_type,
+                self._discussion_parent_id,
+                self.discussion_id,
+                self.id,
+            ),
+            {
+                "discussion_id": self.discussion_id,
+                "{}_id".format(
+                    self._discussion_parent_type
+                ): self._discussion_parent_id,
+            },
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def list_replies(self, **kwargs):
         """
@@ -547,44 +505,11 @@ class DiscussionEntry(CanvasObject):
         warnings.warn(
             "`list_replies` is being deprecated and will be removed in a "
             "future version. Use `get_replies` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_replies(**kwargs)
 
-    def get_replies(self, **kwargs):
-        """
-        Retrieves the replies to a top-level entry in a discussion topic.
-
-        :calls: `GET
-            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
-
-            or `GET
-            /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.discussion_topic.DiscussionEntry`
-        """
-        return PaginatedList(
-            DiscussionEntry,
-            self._requester,
-            'GET',
-            '{}s/{}/discussion_topics/{}/entries/{}/replies'.format(
-                self._discussion_parent_type,
-                self._discussion_parent_id,
-                self.discussion_id,
-                self.id
-            ),
-            {
-                'discussion_id': self.discussion_id,
-                '{}_id'.format(self._discussion_parent_type): self._discussion_parent_id
-            },
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
-    # TODO: update to use correct class
     def mark_as_read(self):
         """
         Mark a discussion entry as read.
@@ -598,17 +523,16 @@ class DiscussionEntry(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/entries/{}/read'.format(
+            "PUT",
+            "{}s/{}/discussion_topics/{}/entries/{}/read".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
-            )
+                self.id,
+            ),
         )
         return response.status_code == 204
 
-    # TODO: update to use correct class
     def mark_as_unread(self):
         """
         Mark a discussion entry as unread.
@@ -624,16 +548,45 @@ class DiscussionEntry(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/entries/{}/read'.format(
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/entries/{}/read".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
-            )
+                self.id,
+            ),
         )
         return response.status_code == 204
 
+    # TODO: update to use correct class
+    def post_reply(self, **kwargs):
+        """
+        Add a reply to this entry.
+
+        :calls: `POST
+            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
+
+            or `POST /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.add_reply>`_
+
+        :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry`
+        """
+        response = self._requester.request(
+            "POST",
+            "{}s/{}/discussion_topics/{}/entries/{}/replies".format(
+                self._discussion_parent_type,
+                self._discussion_parent_id,
+                self.discussion_id,
+                self.id,
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        response_json = response.json()
+        response_json.update(discussion_id=self.discussion_id)
+        return DiscussionEntry(self._requester, response_json)
+
+    # TODO: update to use correct class
     def rate(self, rating, **kwargs):
         """
         Rate this discussion entry.
@@ -654,14 +607,42 @@ class DiscussionEntry(CanvasObject):
             raise ValueError("`rating` must be 0 or 1.")
 
         response = self._requester.request(
-            'POST',
-            '{}s/{}/discussion_topics/{}/entries/{}/rating'.format(
+            "POST",
+            "{}s/{}/discussion_topics/{}/entries/{}/rating".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
             rating=rating,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
+
+    def update(self, **kwargs):
+        """
+        Updates an existing discussion entry.
+
+        :calls: `PUT /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
+
+            or `PUT /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:id \
+            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_entries.update>`_
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            "PUT",
+            "{}s/{}/discussion_topics/{}/entries/{}".format(
+                self._discussion_parent_type,
+                self._discussion_parent_id,
+                self.discussion_id,
+                self.id,
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        if response.json().get("updated_at"):
+            super(DiscussionEntry, self).set_attributes(response.json())
+
+        return "updated_at" in response.json()

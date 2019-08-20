@@ -321,6 +321,20 @@
 		},
 		"status_code": 200
 	},
+	"get_notification": {
+		"method": "GET",
+		"endpoint": "accounts/1/account_notifications/1",
+		"data":{
+  			"subject": "Attention Students",
+  			"message": "This is a test of the notification system.",
+  			"start_at": "2013-08-28T23:59:00-06:00",
+  			"end_at": "2013-08-29T23:59:00-06:00",
+  			"icon": "information",
+  			"roles": ["StudentEnrollment"],
+  			"role_ids": [1]
+		},
+		"status_code": 200
+	},
 	"get_grading_periods": {
         "method": "GET",
         "endpoint": "accounts/1/grading_periods",
@@ -456,6 +470,96 @@
 			},
 			"progress": "100",
 			"user": null
+		},
+		"status_code": 200
+	},
+	"create_report":{
+		"method": "POST",
+		"endpoint": "accounts/1/reports/zero_activity_csv",
+		"data": {
+        	"title": "Zero Activity",
+        	"parameters": {
+            	"enrollment_term_id": {
+                	"required": false,
+                	"description": "The canvas id of the term to get grades from"
+            	},
+            	"start_at": {
+                	"required": false,
+                	"description": "The first date in the date range, the second date is the time the report is run."
+            	},
+            	"course_id": {
+                	"required": false,
+                	"description": "The course to report on"
+            	}
+        },
+        "report": "zero_activity_csv",
+        "last_run": null
+		},
+		"status_code": 200
+	},
+	"delete_report":{
+		"method": "DELETE",
+		"endpoint": "accounts/1/reports/zero_activity_csv/1",
+		"data": {
+    		"id": 1,
+    		"progress": 100,
+    		"parameters": {
+    		    "extra_text": "Term: All Terms;"
+    		},
+    		"current_line": 1,
+    		"status": "deleted",
+    		"report": "zero_activity_csv",
+    		"created_at": "2019-08-13T15:23:15-04:00",
+    		"started_at": "2019-08-13T15:23:17-04:00",
+    		"ended_at": "2019-08-13T15:23:17-04:00",
+    		"file_url": "xxxxxxxxxxxxxxxxxxxxxxx",
+    		"attachment": {
+    		    "id": 1,
+    		    "uuid": "CCVh71fQEPsDqc4VOoGBr5llCbzAeLEpBcWcAe88",
+    		    "folder_id": 1,
+    		    "display_name": "zero_activity_csv_xxxxxxxxxxxxxxxxxxxxxxx.csv",
+    		    "filename": "zero_activity_csv_xxxxxxxxxxxxxxxxxxxxxxx.csv",
+    		    "workflow_state": "processed",
+    		    "upload_status": "success",
+    		    "content-type": "text/csv",
+    		    "url": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    		    "size": 100,
+    		    "created_at": "2019-08-13T19:23:17Z",
+    		    "updated_at": "2019-08-13T19:23:17Z",
+    		    "unlock_at": null,
+    		    "locked": false,
+    		    "hidden": false,
+    		    "lock_at": null,
+    		    "hidden_for_user": false,
+    		    "thumbnail_url": null,
+    		    "modified_at": "2019-08-13T19:23:17Z",
+    		    "mime_class": "file",
+    		    "media_entry_id": null,
+    		    "locked_for_user": false
+    			}
+		}
+	},
+	"get_report":{
+		"method": "GET",
+		"endpoint": "accounts/1/reports/zero_activity_csv/1",
+		"data":{
+        	"title": "Zero Activity",
+        	"parameters": {
+            	"enrollment_term_id": {
+                	"required": false,
+                	"description": "The canvas id of the term to get grades from"
+            	},
+            	"start_at": {
+                	"required": false,
+                	"description": "The first date in the date range, the second date is the time the report is run."
+            	},
+            	"course_id": {
+                	"required": false,
+                	"description": "The course to report on"
+            	}
+        },
+        "report": "zero_activity_csv",
+        "last_run": null
 		},
 		"status_code": 200
 	},
@@ -649,6 +753,17 @@
 		"method": "PUT",
 		"endpoint": "accounts/1",
 		"data": {},
+		"status_code": 200
+	},
+	"update_notification": {
+		"method": "PUT",
+		"endpoint": "accounts/1/account_notifications/1",
+		"data": {
+            "subject": "subject",
+            "message": "Message",
+            "start_at": "2015-04-01T00:00:00Z",
+            "end_at": "2018-04-01T00:00:00Z"
+		},
 		"status_code": 200
 	},
 	"create_group_category": {
@@ -1195,6 +1310,31 @@
 		  },
 		"status_code": 200
 	},
+	"get_scopes": {
+	"method": "GET",
+	"endpoint": "accounts/1/scopes",
+	"data": [
+		{
+        	"controller": "users",
+        	"action": "settings",
+        	"verb": "PUT",
+        	"path": "/api/v1/users/:id/settings",
+        	"scope": "url:PUT|/api/v1/users/:id/settings",
+        	"resource": "users",
+        	"resource_name": "Users"
+		},
+		{
+        	"controller": "course_nicknames",
+        	"action": "show",
+        	"verb": "GET",
+        	"path": "/api/v1/users/self/course_nicknames/:course_id",
+        	"scope": "url:GET|/api/v1/users/self/course_nicknames/:course_id",
+        	"resource": "users",
+        	"resource_name": "Users"	
+		}
+	],
+	"status_code": 200
+	},
 	"create_content_migration": {
 		"method": "POST",
 		"endpoint": "accounts/1/content_migrations",
@@ -1525,5 +1665,72 @@
 			},
 			"workflow_state": "active"
 		}
+	},
+	"get_features": {
+		"method": "GET",
+		"endpoint": "accounts/1/features",
+		"data": [
+			{
+				"name": "epub_export",
+				"display_name": "ePub Exporting",
+				"applies_to": "Course"
+			},
+			{
+				"name": "outcome_gradebook",
+				"display_name": "Learning Mastery Gradebook",
+				"applies_to": "Account"
+			}
+		],
+		"status_code": 200
+	},
+	"get_enabled_features": {
+		"method": "GET",
+		"endpoint": "accounts/1/features/enabled",
+		"data": [
+			{
+				"name": "feature_one",
+				"display_name": "Feature One",
+				"applies_to": "Account"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "Account"
+			}
+		],
+		"status_code": 200
+	},
+	"get_feature_flag": {
+		"method": "GET",
+		"endpoint": "accounts/1/features/flags/epub_export",
+		"data": {
+			"feature": "epub_export",
+			"context_id": 1,
+			"context_type": "Account",
+			"state": "on"
+		},
+		"status_code": 200
+	},
+	"set_feature_flag": {
+		"method": "PUT",
+		"endpoint": "accounts/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
+			"state": "on"
+		},
+		"status_code": 200
+	},
+	"delete_feature_flag": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
+			"state": "on"
+		},
+		"status_code": 200
 	}
 }

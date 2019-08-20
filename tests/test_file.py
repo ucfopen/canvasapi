@@ -13,12 +13,13 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestFile(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({'course': ['get_by_id', 'list_course_files', 'list_course_files2']}, m)
+            register_uris(
+                {"course": ["get_by_id", "list_course_files", "list_course_files2"]}, m
+            )
 
             self.course = self.canvas.get_course(1)
             self.file = self.course.get_files()[0]
@@ -30,27 +31,27 @@ class TestFile(unittest.TestCase):
 
     # delete()
     def test_delete_file(self, m):
-        register_uris({'file': ['delete_file']}, m)
+        register_uris({"file": ["delete_file"]}, m)
 
         deleted_file = self.file.delete()
 
         self.assertIsInstance(deleted_file, File)
-        self.assertTrue(hasattr(deleted_file, 'display_name'))
+        self.assertTrue(hasattr(deleted_file, "display_name"))
         self.assertEqual(deleted_file.display_name, "Bad File.docx")
 
     # download()
     def test_download_file(self, m):
-        register_uris({'file': ['file_download']}, m)
+        register_uris({"file": ["file_download"]}, m)
         try:
-            self.file.download('canvasapi_file_download_test.txt')
-            self.assertTrue(isfile('canvasapi_file_download_test.txt'))
-            with open('canvasapi_file_download_test.txt') as downloaded_file:
+            self.file.download("canvasapi_file_download_test.txt")
+            self.assertTrue(isfile("canvasapi_file_download_test.txt"))
+            with open("canvasapi_file_download_test.txt") as downloaded_file:
                 self.assertEqual(downloaded_file.read(), '"file contents are here"')
         finally:
-            cleanup_file('canvasapi_file_download_test.txt')
+            cleanup_file("canvasapi_file_download_test.txt")
 
     # contents()
     def test_contents_file(self, m):
-        register_uris({'file': ['file_contents']}, m)
+        register_uris({"file": ["file_contents"]}, m)
         contents = self.file.get_contents()
         self.assertEqual(contents, '"Hello there"')

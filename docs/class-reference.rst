@@ -12,6 +12,7 @@ Class Reference
     blueprint-ref
     bookmark-ref
     calendar-event-ref
+    collaboration-ref
     communication-channel-ref
     content-export-ref
     content-migration-ref
@@ -25,6 +26,7 @@ Class Reference
     enrollment-term-ref
     external-tool-ref
     favorite-ref
+    feature-ref
     file-ref
     folder-ref
     grading-period-ref
@@ -43,7 +45,9 @@ Class Reference
     quiz-ref
     quiz-group-ref
     rubric-ref
+    scope-ref
     section-ref
+    sis-import-ref
     submission-ref
     tab-ref
     upload-ref

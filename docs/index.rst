@@ -17,3 +17,4 @@ Contents:
    exceptions
    debugging
    class-reference
+   internal-classes

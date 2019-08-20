@@ -1,5 +1,35 @@
 # Change Log
 
+## [0.14.0] - 2019-08-20
+
+### New Endpoint Coverage
+
+- API Token scopes (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - List scopes
+- Account Notifications (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - Show a global notification
+    - Update a global notification
+- Account Reports (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - Start a report
+    - Status of a report
+    - Delete a report
+- Collaborations (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - List collaborations
+    - List members of a collaboration
+- Feature Flags (Thanks, [@cat0698](https://github.com/cat0698))
+    - List features
+    - List enabled features
+    - Get feature flag
+    - Set feature flag
+    - Remove feature flag
+- Rubric (Thanks, [@cat0698](https://github.com/cat0698))
+    - Create a single rubric
+
+### General
+
+- Removed overzealous global enabling of `DeprecationWarning`. (Thanks, [@Screeeech](https://github.com/Screeeech))
+    - *Note:* `DeprecationWarnings` are disabled by default, so you may need to run your code with `python -Wd` to see them.
+
 ## [0.13.0] - 2019-07-08
 
 ### New Endpoint Coverage
@@ -338,7 +368,7 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.13.0...develop
+[0.14.0]: https://github.com/ucfopen/canvasapi/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/ucfopen/canvasapi/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/ucfopen/canvasapi/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/ucfopen/canvasapi/compare/v0.10.0...v0.11.0
