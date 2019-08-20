@@ -7,7 +7,6 @@
 [![Join UCF Open Slack Discussions](https://ucf-open-slackin.herokuapp.com/badge.svg)](https://ucf-open-slackin.herokuapp.com/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-
 # CanvasAPI
 
 CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](https://canvas.instructure.com/doc/api/index.html). The library enables developers to programmatically manage Canvas courses, users, gradebooks, and more.
