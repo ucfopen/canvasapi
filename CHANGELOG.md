@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Bugfixes
+
+- Fixed an issue where `util.clean_headers()` would throw a `ValueError` if a user accidentally included a space in their API token. (Thanks, [@keeeeeegan](https://github.com/keeeeeegan))
+
 ## [0.14.0] - 2019-08-20
 
 ### New Endpoint Coverage
