@@ -584,4 +584,4 @@ class TestUtil(unittest.TestCase):
         headers = {"Authorization": "Bearer  123,45"}
 
         cleaned_headers = clean_headers(headers)
-        self.assertEqual(cleaned_headers, "****3,45")
+        self.assertEqual(cleaned_headers["Authorization"], "****3,45")
