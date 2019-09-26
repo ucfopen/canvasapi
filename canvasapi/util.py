@@ -244,7 +244,7 @@ def clean_headers(headers):
 
     authorization_header = headers.get("Authorization")
     if authorization_header:
-        sanitized = "****" + authorization_header[-4:]    
+        sanitized = "****" + authorization_header[-4:]
         cleaned_headers["Authorization"] = sanitized
 
     return cleaned_headers
