@@ -579,3 +579,9 @@ class TestUtil(unittest.TestCase):
 
         cleaned_headers = clean_headers(headers)
         self.assertIsNot(cleaned_headers, headers)
+
+    def test_clean_headers_strips_malformed_keys_correctly(self, m):
+        headers = {"Authorization": "Bearer  123,45"}
+
+        cleaned_headers = clean_headers(headers)
+        self.assertEqual(cleaned_headers, "****3,45")
