@@ -261,25 +261,6 @@ class Quiz(CanvasObject):
 
         return QuizSubmission(self._requester, response_json)
 
-    def get_submissions(self, **kwargs):
-        """
-        Get a list of all submissions for this quiz.
-
-        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
-        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.quiz.QuizSubmission`
-        """
-        return PaginatedList(
-            QuizSubmission,
-            self._requester,
-            "GET",
-            "courses/{}/quizzes/{}/submissions".format(self.course_id, self.id),
-            _root="quiz_submissions",
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
     def get_submission_events(self, quiz_submission=None, **kwargs):
         """
         Retrieve the set of eventws captured during a specific submission attempt.
@@ -306,6 +287,25 @@ class Quiz(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()["quiz_submission_events"]
+
+    def get_submissions(self, **kwargs):
+        """
+        Get a list of all submissions for this quiz.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizSubmission`
+        """
+        return PaginatedList(
+            QuizSubmission,
+            self._requester,
+            "GET",
+            "courses/{}/quizzes/{}/submissions".format(self.course_id, self.id),
+            _root="quiz_submissions",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def set_extensions(self, quiz_extensions, **kwargs):
         """
