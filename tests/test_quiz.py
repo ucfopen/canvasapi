@@ -277,6 +277,25 @@ class TestQuiz(unittest.TestCase):
 
         self.assertIsInstance(submission, QuizSubmission)
 
+    # get_submission_events
+    def test_get_submission_events(self, m):
+        register_uris({"quiz": ["get_submission_events", "get_quiz_submission"]}, m)
+
+        events_by_id = self.quiz.get_submission_events(1)
+        self.assertIsInstance(events_by_id, list)
+        self.assertIsInstance(events_by_id[0], dict)
+        self.assertIsInstance(events_by_id[1], dict)
+        self.assertEqual(events_by_id[0]["event_type"], "question_answered")
+        self.assertEqual(events_by_id[1]["event_type"], "question_flagged")
+
+        # events_by_obj = self.quiz.get_submission_events(events_by_id)
+        events_by_obj = self.quiz.get_submission_events(self.quiz.get_quiz_submission(1))
+        self.assertIsInstance(events_by_obj, list)
+        self.assertIsInstance(events_by_obj[0], dict)
+        self.assertIsInstance(events_by_obj[1], dict)
+        self.assertEqual(events_by_obj[0]["event_type"], "question_answered")
+        self.assertEqual(events_by_obj[1]["event_type"], "question_flagged")
+
 
 @requests_mock.Mocker()
 class TestQuizSubmission(unittest.TestCase):
@@ -399,6 +418,25 @@ class TestQuizSubmission(unittest.TestCase):
 
         with self.assertRaises(RequiredFieldMissing):
             self.submission.answer_submission_questions()
+
+    # submit_events()
+    def test_submit_events(self, m):
+        register_uris({"submission": ["submit_events"]}, m)
+
+        test_events = [
+            {
+                "client_timestamp": "2014-10-08T19:29:58Z",
+                "event_type": "question_answered",
+                "event_data": {"answer": "42"}
+            }
+        ]
+
+        result = self.submission.submit_events(test_events)
+        self.assertTrue(result)
+
+    def test_submit_events_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.submission.submit_events([{}])
 
 
 @requests_mock.Mocker()
