@@ -289,7 +289,9 @@ class TestQuiz(unittest.TestCase):
         self.assertEqual(events_by_id[1]["event_type"], "question_flagged")
 
         # events_by_obj = self.quiz.get_submission_events(events_by_id)
-        events_by_obj = self.quiz.get_submission_events(self.quiz.get_quiz_submission(1))
+        events_by_obj = self.quiz.get_submission_events(
+            self.quiz.get_quiz_submission(1)
+        )
         self.assertIsInstance(events_by_obj, list)
         self.assertIsInstance(events_by_obj[0], dict)
         self.assertIsInstance(events_by_obj[1], dict)
@@ -427,7 +429,7 @@ class TestQuizSubmission(unittest.TestCase):
             {
                 "client_timestamp": "2014-10-08T19:29:58Z",
                 "event_type": "question_answered",
-                "event_data": {"answer": "42"}
+                "event_data": {"answer": "42"},
             }
         ]
 
