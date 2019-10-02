@@ -334,6 +334,33 @@ class Quiz(CanvasObject):
             QuizExtension(self._requester, extension) for extension in extension_list
         ]
 
+    def get_submission_events(self, quiz_submission=None, **kwargs):
+        """
+        Retrieve the set of eventws captured during a specific submission attempt.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
+        <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.index>`_
+
+        :param attempt: (Optional) The specific submission attempt to look up the events \
+        for. If unspecified, the latest attempt will be used.
+        :type attempt: int or :class:`canvasapi.quiz.QuizSubmission`
+
+        :returns: list of submission events.
+        :rtype: list
+        """
+        quiz_submission_id = obj_or_id(
+            quiz_submission, "quiz_submission", (QuizSubmission,)
+        )
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/quizzes/{}/submissions/{}/events".format(
+                self.course_id, self.id, quiz_submission_id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return response.json()["quiz_submission_events"]
+
 
 @python_2_unicode_compatible
 class QuizSubmission(CanvasObject):
@@ -488,6 +515,42 @@ class QuizSubmission(CanvasObject):
         response_json = response.json()["quiz_submissions"][0]
 
         return QuizSubmission(self._requester, response_json)
+
+    def submit_events(self, quiz_submission_events, **kwargs):
+        """
+        Store a set of events which were captured during a quiz taking session.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
+        <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.create>`_
+
+        :param quiz_submission_events: The submission events to be recorded.
+        :type quiz_submission_events: list
+
+        :returns: True if the submission was successful, false otherwise.
+        :rtype: bool
+        """
+        if (
+            isinstance(quiz_submission_events, list)
+            and isinstance(quiz_submission_events[0], dict)
+            and "client_timestamp" in quiz_submission_events[0]
+            and "event_type" in quiz_submission_events[0]
+            and "event_data" in quiz_submission_events[0]
+        ):
+            kwargs["quiz_submission_events"] = quiz_submission_events
+        else:
+            raise RequiredFieldMissing(
+                "Array of quiz submission event dictionaries with keys"
+                " 'client_timestamp', 'event_type', and 'event_data' required."
+            )
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/quizzes/{}/submissions/{}/events".format(
+                self.course_id, self.quiz_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+        return response.status_code == 204
 
 
 @python_2_unicode_compatible
