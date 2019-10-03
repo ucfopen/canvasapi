@@ -217,11 +217,5 @@
 				}
 			]
 		}
-	},
-	"submit_events": {
-		"method": "POST",
-		"endpoint": "courses/1/quizzes/1/submissions/1/events",
-		"data": {},
-		"status_code": 204
 	}
 }

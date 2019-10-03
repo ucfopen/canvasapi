@@ -261,33 +261,6 @@ class Quiz(CanvasObject):
 
         return QuizSubmission(self._requester, response_json)
 
-    def get_submission_events(self, quiz_submission=None, **kwargs):
-        """
-        Retrieve the set of eventws captured during a specific submission attempt.
-
-        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
-        <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.index>`_
-
-        :param attempt: (Optional) The specific submission attempt to look up the events \
-        for. If unspecified, the latest attempt will be used.
-        :type attempt: int or :class:`canvasapi.quiz.QuizSubmission`
-
-        :returns: list of submission events.
-        :rtype: list
-        """
-        quiz_submission_id = obj_or_id(
-            quiz_submission, "quiz_submission", (QuizSubmission,)
-        )
-
-        response = self._requester.request(
-            "GET",
-            "courses/{}/quizzes/{}/submissions/{}/events".format(
-                self.course_id, self.id, quiz_submission_id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-        return response.json()["quiz_submission_events"]
-
     def get_submissions(self, **kwargs):
         """
         Get a list of all submissions for this quiz.
@@ -450,6 +423,27 @@ class QuizSubmission(CanvasObject):
         response_json = response.json()["quiz_submissions"][0]
         return QuizSubmission(self._requester, response_json)
 
+    def get_submission_events(self, **kwargs):
+        """
+        Retrieve the set of events captured during a specific submission attempt.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
+        <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.index>`_
+
+        :returns: list of QuizSubmissionEvents.
+        :rtype: list
+        """
+        response = self._requester.request(
+            "GET",
+            "courses/{}/quizzes/{}/submissions/{}/events".format(
+                self.course_id, self.quiz_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        events = response.json()["quiz_submission_events"]
+
+        return [QuizSubmissionEvent(self._requester, event) for event in events]
+
     def get_submission_questions(self, **kwargs):
         """
         Get a list of all the question records for this quiz submission.
@@ -506,18 +500,13 @@ class QuizSubmission(CanvasObject):
         :returns: True if the submission was successful, false otherwise.
         :rtype: bool
         """
-        if (
-            isinstance(quiz_submission_events, list)
-            and isinstance(quiz_submission_events[0], dict)
-            and "client_timestamp" in quiz_submission_events[0]
-            and "event_type" in quiz_submission_events[0]
-            and "event_data" in quiz_submission_events[0]
+        if isinstance(quiz_submission_events, list) and isinstance(
+            quiz_submission_events[0], QuizSubmissionEvent
         ):
             kwargs["quiz_submission_events"] = quiz_submission_events
         else:
             raise RequiredFieldMissing(
-                "Array of quiz submission event dictionaries with keys"
-                " 'client_timestamp', 'event_type', and 'event_data' required."
+                "Required parameter quiz_submission_events missing."
             )
 
         response = self._requester.request(
@@ -605,6 +594,12 @@ class QuizQuestion(CanvasObject):
 
         super(QuizQuestion, self).set_attributes(response_json)
         return self
+
+
+@python_2_unicode_compatible
+class QuizSubmissionEvent(CanvasObject):
+    def __str__(self):
+        return "{}".format(self.event_type)
 
 
 @python_2_unicode_compatible
