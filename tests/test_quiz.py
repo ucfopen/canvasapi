@@ -13,6 +13,7 @@ from canvasapi.quiz import (
     QuizSubmissionQuestion,
     QuizQuestion,
     QuizExtension,
+    QuizSubmissionEvent,
 )
 from canvasapi.quiz_group import QuizGroup
 from canvasapi.paginated_list import PaginatedList
@@ -358,6 +359,17 @@ class TestQuizSubmission(unittest.TestCase):
         self.assertTrue(hasattr(submission, "validation_token"))
         self.assertEqual(submission.score, 7)
 
+    # get_submission_events
+    def test_get_submission_events(self, m):
+        register_uris({"quiz": ["get_submission_events"]}, m)
+
+        events = self.submission.get_submission_events()
+        self.assertIsInstance(events, list)
+        self.assertIsInstance(events[0], QuizSubmissionEvent)
+        self.assertIsInstance(events[1], QuizSubmissionEvent)
+        self.assertEqual(str(events[0]), "page_blurred")
+        self.assertEqual(str(events[1]), "page_focused")
+
     # get_submission_questions
     def test_get_submission_questions(self, m):
         register_uris({"submission": ["get_submission_questions"]}, m)
@@ -399,6 +411,19 @@ class TestQuizSubmission(unittest.TestCase):
 
         with self.assertRaises(RequiredFieldMissing):
             self.submission.answer_submission_questions()
+
+    # submit_events()
+    def test_submit_events(self, m):
+        register_uris({"quiz": ["get_submission_events", "submit_events"]}, m)
+
+        test_events = self.submission.get_submission_events()
+
+        result = self.submission.submit_events(test_events)
+        self.assertTrue(result)
+
+    def test_submit_events_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.submission.submit_events([{}])
 
 
 @requests_mock.Mocker()
@@ -471,6 +496,26 @@ class TestQuizQuestion(unittest.TestCase):
         self.assertIsInstance(self.question, QuizQuestion)
         self.assertEqual(response.question_name, question_dict["question_name"])
         self.assertEqual(self.question.question_name, question_dict["question_name"])
+
+
+@requests_mock.Mocker()
+class TestQuizSubmissionEvent(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.submission_event = QuizSubmissionEvent(
+            self.canvas._Canvas__requester,
+            {
+                "client_timestamp": "2014-10-08T19:29:58Z",
+                "event_type": "question_answered",
+                "event_data": {"answer": "42"},
+            },
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.submission_event)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()

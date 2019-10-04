@@ -423,6 +423,27 @@ class QuizSubmission(CanvasObject):
         response_json = response.json()["quiz_submissions"][0]
         return QuizSubmission(self._requester, response_json)
 
+    def get_submission_events(self, **kwargs):
+        """
+        Retrieve the set of events captured during a specific submission attempt.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
+        <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.index>`_
+
+        :returns: list of QuizSubmissionEvents.
+        :rtype: list
+        """
+        response = self._requester.request(
+            "GET",
+            "courses/{}/quizzes/{}/submissions/{}/events".format(
+                self.course_id, self.quiz_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        events = response.json()["quiz_submission_events"]
+
+        return [QuizSubmissionEvent(self._requester, event) for event in events]
+
     def get_submission_questions(self, **kwargs):
         """
         Get a list of all the question records for this quiz submission.
@@ -465,6 +486,37 @@ class QuizSubmission(CanvasObject):
         )
 
         return response.json()
+
+    def submit_events(self, quiz_submission_events, **kwargs):
+        """
+        Store a set of events which were captured during a quiz taking session.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
+        <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.create>`_
+
+        :param quiz_submission_events: The submission events to be recorded.
+        :type quiz_submission_events: list
+
+        :returns: True if the submission was successful, false otherwise.
+        :rtype: bool
+        """
+        if isinstance(quiz_submission_events, list) and isinstance(
+            quiz_submission_events[0], QuizSubmissionEvent
+        ):
+            kwargs["quiz_submission_events"] = quiz_submission_events
+        else:
+            raise RequiredFieldMissing(
+                "Required parameter quiz_submission_events missing."
+            )
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/quizzes/{}/submissions/{}/events".format(
+                self.course_id, self.quiz_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.status_code == 204
 
     def update_score_and_comments(self, **kwargs):
         """
@@ -542,6 +594,12 @@ class QuizQuestion(CanvasObject):
 
         super(QuizQuestion, self).set_attributes(response_json)
         return self
+
+
+@python_2_unicode_compatible
+class QuizSubmissionEvent(CanvasObject):
+    def __str__(self):
+        return "{}".format(self.event_type)
 
 
 @python_2_unicode_compatible
