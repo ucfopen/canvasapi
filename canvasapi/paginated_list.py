@@ -11,6 +11,8 @@ class PaginatedList(object):
     def __getitem__(self, index):
         assert isinstance(index, (int, slice))
         if isinstance(index, int):
+            if index < 0:
+                raise IndexError("Cannot negative index a PaginatedList")
             self._get_up_to_index(index)
             return self._elements[index]
         else:
@@ -104,6 +106,9 @@ class PaginatedList(object):
             self._start = the_slice.start or 0
             self._stop = the_slice.stop
             self._step = the_slice.step or 1
+
+            if self._start < 0 or self._stop < 0:
+                raise IndexError("Cannot negative index a PaginatedList slice")
 
         def __iter__(self):
             index = self._start
