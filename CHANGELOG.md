@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General
+
+- Throw `IndexError` when using negative indexes on `PaginatedList` objects (Thanks, [@UniversalSuperBox](https://github.com/UniversalSuperBox))
+
 ## [0.14.0] - 2019-08-20
 
 ### New Endpoint Coverage
