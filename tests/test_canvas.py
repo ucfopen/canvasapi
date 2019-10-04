@@ -70,6 +70,10 @@ class TestCanvas(unittest.TestCase):
                 ),
             )
 
+    def test_init_strips_extra_spaces_in_api_key(self, m):
+        client = Canvas(settings.BASE_URL, " 12345 ")
+        self.assertEqual(client._Canvas__requester.access_token, "12345")
+
     # create_account()
     def test_create_account(self, m):
         register_uris({"account": ["create"]}, m)
