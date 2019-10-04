@@ -18,6 +18,7 @@ Patches and Suggestions
 - Bill Wrbican [@wjw27](https://github.com/wjw27)
 - Bradford Lynch [@bradfordlynch](https://github.com/bradfordlynch)
 - Catherine Abbruzzese [@cat0698](https://github.com/cat0698))
+- Dalton Durst [@UniversalSuperBox](https://github.com/UniversalSuperBox)
 - Daniel Brinkman [@DanBrink91](https://github.com/DanBrink91)
 - Daniel Grobani [@dgrobani](https://github.com/dgrobani)
 - David Warden [@dfwarden](https://github.com/dfwarden)
