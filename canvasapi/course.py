@@ -534,12 +534,14 @@ class Course(CanvasObject):
         """
         from canvasapi.rubric import RubricAssociation
 
-        association_id = obj_or_id(rubric_association, "rubric_association", (RubricAssociation,))
+        association_id = obj_or_id(
+            rubric_association, "rubric_association", (RubricAssociation,)
+        )
 
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/rubric_associations/{}'.format(self.id, association_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "DELETE",
+            "courses/{}/rubric_associations/{}".format(self.id, association_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return RubricAssociation(self._requester, response.json())
@@ -2604,12 +2606,14 @@ class Course(CanvasObject):
         """
         from canvasapi.rubric import RubricAssociation
 
-        association_id = obj_or_id(rubric_association, "rubric_association", (RubricAssociation,))
+        association_id = obj_or_id(
+            rubric_association, "rubric_association", (RubricAssociation,)
+        )
 
         response = self._requester.request(
-            'PUT',
-            'courses/{}/rubric_associations/{}'.format(self.id, association_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "courses/{}/rubric_associations/{}".format(self.id, association_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return RubricAssociation(self._requester, response.json())
