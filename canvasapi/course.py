@@ -2592,6 +2592,28 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def update_rubric_association(self, rubric_association, **kwargs):
+        """
+        Update a RubricAssociation.
+
+        :calls: `PUT /api/v1/courses/:course_id/rubric_associations/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_associations.update>`_
+
+        :returns: Returns a RubricAssociation.
+        :rtype: :class:`canvasapi.rubric.RubricAssociation`
+        """
+        from canvasapi.rubric import RubricAssociation
+
+        association_id = obj_or_id(rubric_association, "rubric_association", (RubricAssociation,))
+
+        response = self._requester.request(
+            'PUT',
+            'courses/{}/rubric_associations/{}'.format(self.id, association_id),
+            _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return RubricAssociation(self._requester, response.json())
+
     def update_settings(self, **kwargs):
         """
         Update a course's settings.
@@ -2667,28 +2689,6 @@ class Course(CanvasObject):
 
         tab = Tab(self._requester, {"course_id": self.id, "id": tab_id})
         return tab.update(**kwargs)
-
-    def update_rubric_association(self, rubric_association, **kwargs):
-        """
-        Update a RubricAssociation.
-
-        :calls: `PUT /api/v1/courses/:course_id/rubric_associations/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_associations.update>`_
-
-        :returns: Returns a RubricAssociation.
-        :rtype: :class:`canvasapi.rubric.RubricAssociation`
-        """
-        from canvasapi.rubric import RubricAssociation
-
-        association_id = obj_or_id(rubric_association, "rubric_association", (RubricAssociation,))
-
-        response = self._requester.request(
-            'PUT',
-            'courses/{}/rubric_associations/{}'.format(self.id, association_id),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
-        return RubricAssociation(self._requester, response.json())
 
     def upload(self, file, **kwargs):
         """
