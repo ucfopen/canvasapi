@@ -63,15 +63,6 @@
 			"user_id": 1
 		}
 	},
-	"get_by_id": {
-		"method": "GET",
-		"endpoint": "logins/1",
-		"data": {
-			"id": 1,
-			"name": "John Doe"
-		},
-		"status_code": 200
-	},
 	"get_authentication_event": {
 		"method": "GET",
 		"endpoint": "audit/authentication/logins/101",
