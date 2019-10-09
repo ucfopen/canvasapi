@@ -697,6 +697,26 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_authentication_event(self, **kwargs):
+        """
+        List authentication events for a given user.
+
+        :calls: `GET /api/v1/audit/authentication/users/:user_id \
+        <https://canvas.instructure.com/doc/api/authentications_log.html#method.authentication_audit_api.for_user>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+                :class:`canvasapi.authentication_event.AuthenticationEvent`
+        """
+        from canvasapi.authentication_event import AuthenticationEvent
+
+        return PaginatedList(
+            AuthenticationEvent,
+            self._requester,
+            "GET",
+            "audit/authentication/users/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def list_calendar_events_for_user(self, **kwargs):
         """
         List calendar events that the current user can view or manage.

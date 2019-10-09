@@ -604,6 +604,26 @@ class Account(CanvasObject):
         )
         return User(self._requester, response.json())
 
+    def get_authentication_event(self, **kwargs):
+        """
+        List authentication events for a given account.
+
+        :calls: `GET /api/v1/audit/authentication/accounts/:account_id \
+        <https://canvas.instructure.com/doc/api/authentications_log.html#method.authentication_audit_api.for_account>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+                :class:`canvasapi.authentication_event.AuthenticationEvent`
+        """
+        from canvasapi.authentication_event import AuthenticationEvent
+
+        return PaginatedList(
+            AuthenticationEvent,
+            self._requester,
+            "GET",
+            "audit/authentication/accounts/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_admins(self, **kwargs):
         """
         Get the paginated list of admins for the current account.
