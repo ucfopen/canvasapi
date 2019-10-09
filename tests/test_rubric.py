@@ -37,10 +37,10 @@ class TestRubricAssociation(unittest.TestCase):
                     "course": [
                         "get_by_id",
                         "create_rubric_with_association",
-                        "create_rubric_association"
+                        "create_rubric_association",
                     ]
                 },
-                m
+                m,
             )
 
             self.course = self.canvas.get_course(1)
