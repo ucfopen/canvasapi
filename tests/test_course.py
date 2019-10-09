@@ -1779,26 +1779,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(rubric_association.id, 4)
         self.assertEqual(rubric_association.association_type, "Course")
 
-    # update_rubric_association
-    def test_update_rubric_association(self, m):
-        register_uris({"course": ["update_rubric_association"]}, m)
-
-        rubric_association = self.course.update_rubric_association(4)
-
-        self.assertIsInstance(rubric_association, RubricAssociation)
-        self.assertEqual(rubric_association.id, 5)
-        self.assertEqual(rubric_association.association_type, "Assignment")
-
-    # delete_rubric_association
-    def test_delete_rubric_association(self, m):
-        register_uris({"course": ["delete_rubric_association"]}, m)
-
-        rubric_association = self.course.delete_rubric_association(5)
-
-        self.assertIsInstance(rubric_association, RubricAssociation)
-        self.assertEqual(rubric_association.id, 5)
-        self.assertEqual(rubric_association.association_type, "Assignment")
-
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
