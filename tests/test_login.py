@@ -6,7 +6,6 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.login import Login
-from canvasapi.paginated_list import PaginatedList
 from tests import settings
 from tests.util import register_uris
 
