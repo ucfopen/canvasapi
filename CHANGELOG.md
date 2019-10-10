@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Quiz Submission Events (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
+
 ### General
 
 - Throw `IndexError` when using negative indexes on `PaginatedList` objects (Thanks, [@UniversalSuperBox](https://github.com/UniversalSuperBox))
