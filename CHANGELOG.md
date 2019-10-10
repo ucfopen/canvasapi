@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General
+
+- Throw `IndexError` when using negative indexes on `PaginatedList` objects (Thanks, [@UniversalSuperBox](https://github.com/UniversalSuperBox))
+
 ### Bugfixes
 
 - Fixed an issue where `util.clean_headers()` would throw a `ValueError` if a user accidentally included a space in their API token. (Thanks, [@keeeeeegan](https://github.com/keeeeeegan))
