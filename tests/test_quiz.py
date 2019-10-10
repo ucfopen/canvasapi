@@ -43,7 +43,6 @@ class TestQuiz(unittest.TestCase):
 
         title = "New Title"
         edited_quiz = self.quiz.edit(quiz={"title": title})
-        print(edited_quiz.course_id)
 
         self.assertIsInstance(edited_quiz, Quiz)
         self.assertTrue(hasattr(edited_quiz, "title"))

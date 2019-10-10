@@ -56,5 +56,7 @@ class RubricAssociation(CanvasObject):
 
         response_json = response.json()
         response_json.update({"course_id": self.course_id})
+        if "association_type" in response_json:
+            super(RubricAssociation, self).set_attributes(response_json)
 
-        return RubricAssociation(self._requester, response.json())
+        return self

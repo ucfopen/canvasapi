@@ -5,6 +5,7 @@
 ### New Endpoint Coverage
 
 - Quiz Submission Events (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
+- Rubric Associations (Thanks, [@weining-li](https://github.com/weining-li))
 
 ### General
 

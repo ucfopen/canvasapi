@@ -56,10 +56,13 @@ class TestRubricAssociation(unittest.TestCase):
     def test_update(self, m):
         register_uris({"rubric": ["update_rubric_association"]}, m)
 
+        self.assertEqual(self.association.id, 4)
+
         rubric_association = self.association.update()
 
-        self.assertIsInstance(rubric_association, RubricAssociation)
+        self.assertEqual(rubric_association, self.association)
         self.assertEqual(rubric_association.id, 5)
+        self.assertIsInstance(rubric_association, RubricAssociation)
         self.assertEqual(rubric_association.association_type, "Assignment")
 
     # delete
