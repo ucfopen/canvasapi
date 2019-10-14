@@ -31,7 +31,7 @@ from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizExtension
-from canvasapi.rubric import Rubric
+from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
@@ -1768,6 +1768,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(rubric["rubric_association"].id, 1)
         self.assertEqual(rubric["rubric_association"].rubric_id, 1)
         self.assertEqual(rubric["rubric_association"].association_type, "Course")
+
+    # create_rubric_association()
+    def test_create_rubric_association(self, m):
+        register_uris({"course": ["create_rubric_association"]}, m)
+
+        rubric_association = self.course.create_rubric_association()
+
+        self.assertIsInstance(rubric_association, RubricAssociation)
+        self.assertEqual(rubric_association.id, 4)
+        self.assertEqual(rubric_association.association_type, "Course")
 
 
 @requests_mock.Mocker()
