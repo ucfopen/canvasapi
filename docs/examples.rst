@@ -385,10 +385,10 @@ Change a User's Assignment Score
     # Set `score` to a Int value
 
     submission = assignment.get_submission(student_id)
-    submission.edit(submission={'posted_grade'=score})
+    submission.edit(submission={'posted_grade':score})
 
 Add n Points to All Users' Assignments
-####################################
+######################################
 
 .. code-block:: python
 
