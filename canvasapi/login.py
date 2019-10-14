@@ -8,7 +8,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class Login(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.id, self.unique_id)
 
@@ -22,8 +21,7 @@ class Login(CanvasObject):
         :rtype: :class:`canvasapi.login.Login`
         """
         response = self._requester.request(
-            'DELETE',
-            'users/{}/logins/{}'.format(self.user_id, self.id)
+            "DELETE", "users/{}/logins/{}".format(self.user_id, self.id)
         )
         return Login(self._requester, response.json())
 
@@ -37,8 +35,8 @@ class Login(CanvasObject):
         :rtype: :class:`canvasapi.login.Login`
         """
         response = self._requester.request(
-            'PUT',
-            'accounts/{}/logins/{}'.format(self.account_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "accounts/{}/logins/{}".format(self.account_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Login(self._requester, response.json())

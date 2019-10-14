@@ -412,6 +412,19 @@
 		],
 		"status_code": 200
 	},
+	"create_comm_channel": {
+		"method": "POST",
+		"endpoint": "users/1/communication_channels",
+		"data": {
+			"id": 1,
+			"address": "username@example.org",
+			"type": "email",
+			"position": 1,
+			"user_id": 1,
+			"workflow_state": "active"
+		},
+		"status_code": 200
+	},
 	"list_enrollments": {
 		"method": "GET",
 		"endpoint": "users/1/enrollments",
@@ -806,6 +819,104 @@
 				"name": "Dummy Importer 02"
 			}
 		],
+		"status_code": 200
+	},
+	"multiple_content_exports": {
+		"method": "GET",
+		"endpoint": "users/1/content_exports",
+		"data": [
+			{
+				"user_id": 1,
+				"id": 2,
+				"export_type": "a"
+			},
+			{
+				"user_id": 1,
+				"id": 22,
+				"export_type": "b"
+			}
+		],
+		"status_code": 200
+	},
+	"single_content_export": {
+		"method": "GET",
+		"endpoint": "users/1/content_exports/11",
+		"data": {
+			"user_id": 1,
+			"id": 11,
+			"export_type": "c"
+		},
+		"status_code": 200
+	},
+	"export_content": {
+		"method": "POST",
+		"endpoint": "users/1/content_exports",
+		"data": {
+			"user_id": 1,
+			"id": 111,
+			"export_type": "d"
+		},
+		"status_code": 200
+	},
+	"get_features": {
+		"method": "GET",
+		"endpoint": "users/1/features",
+		"data": [
+			{
+				"name": "high_contrast",
+				"display_name": "High Contrast UI",
+				"applies_to": "User"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "User"
+			}
+		],
+		"status_code": 200
+	},
+	"get_enabled_features": {
+		"method": "GET",
+		"endpoint": "users/1/features/enabled",
+		"data": [
+			{
+				"name": "feature_one",
+				"display_name": "Feature One",
+				"applies_to": "User"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "User"
+			}
+		],
+		"status_code": 200
+	},
+	"get_feature_flag": {
+		"method": "GET",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
+		"status_code": 200
+	},
+	"set_feature_flag": {
+		"method": "PUT",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
+		"status_code": 200
+	},
+	"delete_feature_flag": {
+		"method": "DELETE",
+		"endpoint": "users/1/features/flags/high_contrast",
+		"data": {
+			"feature": "high_contrast",
+			"state": "allowed"
+		},
 		"status_code": 200
 	}
 }

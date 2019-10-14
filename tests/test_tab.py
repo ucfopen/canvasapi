@@ -11,15 +11,17 @@ from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestTab(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({
-                'course': ['get_by_id', 'list_tabs'],
-                'group': ['get_by_id', 'list_tabs']
-            }, m)
+            register_uris(
+                {
+                    "course": ["get_by_id", "list_tabs"],
+                    "group": ["get_by_id", "list_tabs"],
+                },
+                m,
+            )
 
             self.course = self.canvas.get_course(1)
 
@@ -37,7 +39,7 @@ class TestTab(unittest.TestCase):
 
     # update()
     def test_update_course(self, m):
-        register_uris({'course': ['update_tab']}, m)
+        register_uris({"course": ["update_tab"]}, m)
 
         new_position = 3
         self.tab.update(position=new_position)

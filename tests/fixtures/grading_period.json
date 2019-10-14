@@ -1,0 +1,24 @@
+{
+	"update": {
+		"method": "PUT",
+		"endpoint": "courses/1/grading_periods/1",
+		"data": {
+			"grading_periods": [
+                {
+                    "title": "Grading period 1",
+                    "id": 1,
+                    "start_date" : "2019-05-23T06:00:00Z",
+                    "end_date" : "2019-08-23T06:00:00Z",
+                    "weight" : 1,
+                    "course_id": 1
+                }
+            ]
+		},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "courses/1/grading_periods/1",
+		"status_code": 204
+	}
+}

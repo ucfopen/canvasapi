@@ -1,0 +1,16 @@
+{
+	"get_collaborators": {
+		"method": "GET",
+		"endpoint": "collaborations/1/members",
+		"data": {
+			"collaborators": [
+				{
+				  "id": 12345,
+				  "type": "user",
+				  "name": "Don Draper"
+				}
+			]
+		},
+		"status_code": 200
+	}
+}

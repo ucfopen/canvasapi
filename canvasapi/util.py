@@ -1,6 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import os
 from collections import Iterable
+
 from six import binary_type, string_types, text_type
 
 
@@ -48,11 +50,11 @@ def combine_kwargs(**kwargs):
         if isinstance(arg, dict):
             for k, v in arg.items():
                 for tup in flatten_kwarg(k, v):
-                    combined_kwargs.append(('{}{}'.format(kw, tup[0]), tup[1]))
+                    combined_kwargs.append(("{}{}".format(kw, tup[0]), tup[1]))
         elif is_multivalued(arg):
             for i in arg:
-                for tup in flatten_kwarg('', i):
-                    combined_kwargs.append(('{}{}'.format(kw, tup[0]), tup[1]))
+                for tup in flatten_kwarg("", i):
+                    combined_kwargs.append(("{}{}".format(kw, tup[0]), tup[1]))
         else:
             combined_kwargs.append((text_type(kw), arg))
 
@@ -82,19 +84,19 @@ def flatten_kwarg(key, obj):
         new_list = []
         for k, v in obj.items():
             for tup in flatten_kwarg(k, v):
-                new_list.append(('[{}]{}'.format(key, tup[0]), tup[1]))
+                new_list.append(("[{}]{}".format(key, tup[0]), tup[1]))
         return new_list
 
     elif is_multivalued(obj):
         # Add empty brackets (i.e. "[]")
         new_list = []
         for i in obj:
-            for tup in flatten_kwarg(key, i):
-                new_list.append((tup[0] + '[]', tup[1]))
+            for tup in flatten_kwarg(key + "][", i):
+                new_list.append((tup[0], tup[1]))
         return new_list
     else:
         # Base case. Return list with tuple containing the value
-        return [('[{}]'.format(text_type(key)), obj)]
+        return [("[{}]".format(text_type(key)), obj)]
 
 
 def obj_or_id(parameter, param_name, object_types):
@@ -115,7 +117,7 @@ def obj_or_id(parameter, param_name, object_types):
         return int(parameter)
     except (ValueError, TypeError):
         # Special case where 'self' is a valid ID of a User object
-        if User in object_types and parameter == 'self':
+        if User in object_types and parameter == "self":
             return parameter
 
         for obj_type in object_types:
@@ -126,8 +128,43 @@ def obj_or_id(parameter, param_name, object_types):
                     break
 
         obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
-        message = 'Parameter {} must be of type {} or int.'.format(param_name, obj_type_list)
+        message = "Parameter {} must be of type {} or int.".format(
+            param_name, obj_type_list
+        )
         raise TypeError(message)
+
+
+def obj_or_str(obj, attr, object_types):
+    """
+    Accepts an object. If the object has the attribute, return the
+    corresponding string. Otherwise, throw an exception.
+
+    :param obj: object from which to retrieve attribute
+    :type obj: object
+    :param attr: name of the attribute to retrieve
+    :type attr: str
+    :param object_types: tuple containing the types of the object being passed in
+    :type object_types: tuple
+    :rtype: str
+    """
+    try:
+        return text_type(getattr(obj, attr))
+    except (AttributeError, TypeError):
+        if not isinstance(attr, string_types):
+            raise TypeError(
+                "Atttibute parameter {} must be of type string".format(attr)
+            )
+        for obj_type in object_types:
+            if isinstance(obj, obj_type):
+                try:
+                    return text_type(getattr(obj, attr))
+                except AttributeError:
+                    raise AttributeError("{} object does not have {} attribute").format(
+                        obj, attr
+                    )
+
+        obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
+        raise TypeError("Parameter {} must be of type {}.".format(obj, obj_type_list))
 
 
 def get_institution_url(base_url):
@@ -138,10 +175,76 @@ def get_institution_url(base_url):
     :type base_url: str
     :rtype: str
     """
-    base_url = base_url.rstrip('/')
-    index = base_url.find('/api/v1')
+    base_url = base_url.rstrip("/")
+    index = base_url.find("/api/v1")
 
     if index != -1:
         return base_url[0:index]
 
     return base_url
+
+
+def file_or_path(file):
+    """
+    Open a file and return the handler if a path is given.
+    If a file handler is given, return it directly.
+
+    :param file: A file handler or path to a file.
+
+    :returns: A tuple with the open file handler and whether it was a path.
+    :rtype: (file, bool)
+    """
+
+    is_path = False
+    if isinstance(file, string_types):
+        if not os.path.exists(file):
+            raise IOError("File at path " + file + " does not exist.")
+        file = open(file, "rb")
+        is_path = True
+
+    return file, is_path
+
+
+def normalize_bool(val, param_name):
+    """
+    Normalize boolean-like strings to their corresponding boolean values.
+
+    :param val: Value to normalize. Acceptable values:
+        True, "True", "true", False, "False", "false"
+    :type val: str or bool
+    :param param_name: Name of the parameter being checked
+    :type param_name: str
+
+    :rtype: bool
+    """
+    if isinstance(val, bool):
+        return val
+    elif val in ("True", "true"):
+        return True
+    elif val in ("False", "false"):
+        return False
+    else:
+        raise ValueError(
+            'Parameter `{}` must be True, "True", "true", False, "False", or "false".'.format(
+                param_name
+            )
+        )
+
+
+def clean_headers(headers):
+    """
+    Sanitize a dictionary containing HTTP headers of sensitive values.
+
+    :param headers: The headers to sanitize.
+    :type headers: dict
+    :returns: A list of headers without sensitive information stripped out.
+    :rtype: dict
+    """
+    cleaned_headers = headers.copy()
+
+    authorization_header = headers.get("Authorization")
+    if authorization_header:
+        sanitized = "****" + authorization_header[-4:]
+        cleaned_headers["Authorization"] = sanitized
+
+    return cleaned_headers
