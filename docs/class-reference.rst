@@ -12,28 +12,42 @@ Class Reference
     blueprint-ref
     bookmark-ref
     calendar-event-ref
+    collaboration-ref
     communication-channel-ref
+    content-export-ref
     content-migration-ref
     conversation-ref
     course-ref
+    course-epub-export-ref
     current-user-ref
     discussion-entry-ref
     discussion-topic-ref
     enrollment-ref
     enrollment-term-ref
     external-tool-ref
+    favorite-ref
+    feature-ref
     file-ref
     folder-ref
+    grading-period-ref
     group-ref
     login-ref
     module-ref
     outcome-ref
+    outcome-import-ref
     page-ref
+    planner-ref
+    poll-ref
+    poll-choice-ref
+    poll-session-ref
+    poll-submission-ref
     progress-ref
     quiz-ref
     quiz-group-ref
     rubric-ref
+    scope-ref
     section-ref
+    sis-import-ref
     submission-ref
     tab-ref
     upload-ref

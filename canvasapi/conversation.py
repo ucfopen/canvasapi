@@ -8,7 +8,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class Conversation(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.subject, self.id)
 
@@ -22,12 +21,10 @@ class Conversation(CanvasObject):
         :rtype: `bool`
         """
         response = self._requester.request(
-            'PUT',
-            'conversations/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT", "conversations/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
-        if response.json().get('id'):
+        if response.json().get("id"):
             super(Conversation, self).set_attributes(response.json())
             return True
         else:
@@ -42,12 +39,9 @@ class Conversation(CanvasObject):
 
         :rtype: `bool`
         """
-        response = self._requester.request(
-            'DELETE',
-            'conversations/{}'.format(self.id)
-        )
+        response = self._requester.request("DELETE", "conversations/{}".format(self.id))
 
-        if response.json().get('id'):
+        if response.json().get("id"):
             super(Conversation, self).set_attributes(response.json())
             return True
         else:
@@ -68,9 +62,9 @@ class Conversation(CanvasObject):
         :rtype: :class:`canvasapi.account.Conversation`
         """
         response = self._requester.request(
-            'POST',
-            'conversations/{}/add_recipients'.format(self.id),
-            recipients=recipients
+            "POST",
+            "conversations/{}/add_recipients".format(self.id),
+            recipients=recipients,
         )
         return Conversation(self._requester, response.json())
 
@@ -87,10 +81,10 @@ class Conversation(CanvasObject):
         :rtype: :class:`canvasapi.account.Conversation`
         """
         response = self._requester.request(
-            'POST',
-            'conversations/{}/add_message'.format(self.id),
+            "POST",
+            "conversations/{}/add_message".format(self.id),
             body=body,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Conversation(self._requester, response.json())
 
@@ -109,8 +103,6 @@ class Conversation(CanvasObject):
         :rtype: `dict`
         """
         response = self._requester.request(
-            'POST',
-            'conversations/{}/remove_messages'.format(self.id),
-            remove=remove
+            "POST", "conversations/{}/remove_messages".format(self.id), remove=remove
         )
         return response.json()

@@ -4,9 +4,101 @@
 
 ### New Endpoint Coverage
 
+- Quiz Submission Events (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
+- Rubric Associations (Thanks, [@weining-li](https://github.com/weining-li))
+
+### General
+
+- Throw `IndexError` when using negative indexes on `PaginatedList` objects (Thanks, [@UniversalSuperBox](https://github.com/UniversalSuperBox))
+
+### Bugfixes
+
+- Fixed an issue where `util.clean_headers()` would throw a `ValueError` if a user accidentally included a space in their API token. (Thanks, [@keeeeeegan](https://github.com/keeeeeegan))
+
+## [0.14.0] - 2019-08-20
+
+### New Endpoint Coverage
+
+- API Token scopes (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - List scopes
+- Account Notifications (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - Show a global notification
+    - Update a global notification
+- Account Reports (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - Start a report
+    - Status of a report
+    - Delete a report
+- Collaborations (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+    - List collaborations
+    - List members of a collaboration
+- Feature Flags (Thanks, [@cat0698](https://github.com/cat0698))
+    - List features
+    - List enabled features
+    - Get feature flag
+    - Set feature flag
+    - Remove feature flag
+- Rubric (Thanks, [@cat0698](https://github.com/cat0698))
+    - Create a single rubric
+
+### General
+
+- Removed overzealous global enabling of `DeprecationWarning`. (Thanks, [@Screeeech](https://github.com/Screeeech))
+    - *Note:* `DeprecationWarnings` are disabled by default, so you may need to run your code with `python -Wd` to see them.
+
+## [0.13.0] - 2019-07-08
+
+### New Endpoint Coverage
+
+- Content Exports (Thanks, [@weining-li](https://github.com/weining-li))
+- ePub Exports (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+- Favorites (Thanks, [@atarisafari](https://github.com/atarisafari))
+- Grading Periods (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+- Outcome Import (Thanks, [@jrsilveti](https://github.com/jrsilveti))
+- Peer Reviews (Thanks, [@vutoan1245](https://github.com/vutoan1245))
+- Planner (Thanks, [@weining-li](https://github.com/weining-li))
+    - Planner
+    - Planner Notes
+    - Planner Overrides
+- Polls (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
+    - Poll
+    - PollChoice
+    - PollSession
+    - PollSubmission
+- Quiz Submission Questions (Thanks, [@bradfordlynch](https://github.com/bradfordlynch))
+
+### General
+
+- Added [documentation for Debugging](https://canvasapi.readthedocs.io/en/latest/debugging.html)
+- Added request and response logging to `Requester.request`
+- Added [documentation for Exceptions](https://canvasapi.readthedocs.io/en/latest/exceptions.html)
+- Added generic error handling for unhandled 4XX+ HTTP errors
+- Added [Code of Conduct](https://github.com/ucfopen/canvasapi/blob/develop/CODE_OF_CONDUCT.md)
+- Added support for PATCH methods (Thanks, [@us91](https://github.com/us91))
+- Added a warning when using a blank `CANVAS_URL` (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
+- Added Issue and Pull Request Templates
+- Added CODEOWNERS file
+
+### Deprecation Warnings
+
+- `Quiz.get_all_quiz_submissions` is now deprecated. Use `Quiz.get_submissions` instead.
+
+### Bugfixes
+
+- Fixed an issue where creating an external tool did not properly send parameters to Canvas. (Thanks, [@altgilbers](https://github.com/altgilbers))
+- Fixed an issue where getting Quiz Submissions would only return up to the first 10 results (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed an issue where unhandled 4XX and 5XX HTTP errors would cause a JSONDecodeError
+- Removed a limitation where the parameter `grouped` being passed to `get_multiple_submissions` would be ignored. These methods now return a `GroupedSubmission` object containing multiple `Submission` objects, instead of ignoring. (Thanks, [@bennettscience](https://github.com/bennettscience))
+
+## [0.12.0] - 2019-04-03
+
+### New Endpoint Coverage
+
 - Assignment Overrides
 - Quiz Submissions (Thanks, [@wallacetyler](https://github.com/wallacetyler))
 - Blueprints (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
+- Create an Admin (Thanks, [@altgilbers](https://github.com/altgilbers))
+- SIS Imports (Thanks, [@nottheswimmer](https://github.com/nottheswimmer))
+- Create and Delete Communication Channels (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
 
 ### General
 
@@ -291,6 +383,10 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.14.0...develop
+[0.14.0]: https://github.com/ucfopen/canvasapi/compare/v0.13.0...v0.14.0
+[0.13.0]: https://github.com/ucfopen/canvasapi/compare/v0.12.0...v0.13.0
+[0.12.0]: https://github.com/ucfopen/canvasapi/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/ucfopen/canvasapi/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/ucfopen/canvasapi/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/ucfopen/canvasapi/compare/v0.8.2...v0.9.0

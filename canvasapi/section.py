@@ -6,66 +6,14 @@ from six import python_2_unicode_compatible
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
-from canvasapi.submission import Submission
-from canvasapi.util import combine_kwargs, obj_or_id
-
-warnings.simplefilter('always', DeprecationWarning)
+from canvasapi.submission import GroupedSubmission, Submission
+from canvasapi.util import combine_kwargs, obj_or_id, normalize_bool
 
 
 @python_2_unicode_compatible
 class Section(CanvasObject):
-
     def __str__(self):
-        return '{} - {} ({})'.format(
-            self.name,
-            self.course_id,
-            self.id,
-        )
-
-    def get_assignment_override(self, assignment, **kwargs):
-        """
-        Return override for the specified assignment for this section.
-
-        :param assignment: The assignment to get an override for
-        :type assignment: :class:`canvasapi.assignment.Assignment` or int
-
-        :calls: `GET /api/v1/sections/:course_section_id/assignments/:assignment_id/override \
-        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.section_alias>`_
-
-        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
-        """
-        from canvasapi.assignment import Assignment, AssignmentOverride
-
-        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
-
-        response = self._requester.request(
-            'GET',
-            'sections/{}/assignments/{}/override'.format(self.id, assignment_id)
-        )
-        response_json = response.json()
-        response_json.update({'course_id': self.course_id})
-
-        return AssignmentOverride(self._requester, response_json)
-
-    def get_enrollments(self, **kwargs):
-        """
-        List all of the enrollments for the current user.
-
-        :calls: `GET /api/v1/sections/:section_id/enrollments \
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.enrollment.Enrollment`
-        """
-        from canvasapi.enrollment import Enrollment
-
-        return PaginatedList(
-            Enrollment,
-            self._requester,
-            'GET',
-            'sections/{}/enrollments'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
-        )
+        return "{} - {} ({})".format(self.name, self.course_id, self.id)
 
     def cross_list_section(self, new_course):
         """
@@ -84,8 +32,7 @@ class Section(CanvasObject):
         new_course_id = obj_or_id(new_course, "new_course", (Course,))
 
         response = self._requester.request(
-            'POST',
-            'sections/{}/crosslist/{}'.format(self.id, new_course_id)
+            "POST", "sections/{}/crosslist/{}".format(self.id, new_course_id)
         )
         return Section(self._requester, response.json())
 
@@ -99,9 +46,20 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            'DELETE',
-            'sections/{}/crosslist'.format(self.id)
+            "DELETE", "sections/{}/crosslist".format(self.id)
         )
+        return Section(self._requester, response.json())
+
+    def delete(self):
+        """
+        Delete a target section.
+
+        :calls: `DELETE /api/v1/sections/:id \
+        <https://canvas.instructure.com/doc/api/sections.html#method.sections.destroy>`_
+
+        :rtype: :class:`canvasapi.section.Section`
+        """
+        response = self._requester.request("DELETE", "sections/{}".format(self.id))
         return Section(self._requester, response.json())
 
     def edit(self, **kwargs):
@@ -114,122 +72,57 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            'PUT',
-            'sections/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT", "sections/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
-        if 'name' in response.json():
+        if "name" in response.json():
             super(Section, self).set_attributes(response.json())
 
         return self
 
-    def delete(self):
+    def get_assignment_override(self, assignment, **kwargs):
         """
-        Delete a target section.
+        Return override for the specified assignment for this section.
 
-        :calls: `DELETE /api/v1/sections/:id \
-        <https://canvas.instructure.com/doc/api/sections.html#method.sections.destroy>`_
+        :param assignment: The assignment to get an override for
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
 
-        :rtype: :class:`canvasapi.section.Section`
+        :calls: `GET /api/v1/sections/:course_section_id/assignments/:assignment_id/override \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.section_alias>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
         """
+        from canvasapi.assignment import Assignment, AssignmentOverride
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+
         response = self._requester.request(
-            'DELETE',
-            'sections/{}'.format(self.id)
+            "GET", "sections/{}/assignments/{}/override".format(self.id, assignment_id)
         )
-        return Section(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({"course_id": self.course_id})
 
-    def submit_assignment(self, assignment, submission, **kwargs):
+        return AssignmentOverride(self._requester, response_json)
+
+    def get_enrollments(self, **kwargs):
         """
-        Makes a submission for an assignment.
+        List all of the enrollments for the current user.
 
-        .. warning::
-            .. deprecated:: 0.9.0
-                Use :func:`canvasapi.assignment.Assignment.submit` instead.
-
-        :calls: `POST /api/v1/sections/:section_id/assignments/:assignment_id/submissions \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
-
-        :param assignment: The object or ID of the assignment.
-        :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param submission: The attributes of the submission.
-        :type submission: dict
-
-        :rtype: :class:`canvasapi.submission.Submission`
-        """
-        from canvasapi.assignment import Assignment
-
-        warnings.warn(
-            'Section.submit_assignment() is deprecated and will be removed '
-            'in the future. Use Assignment.submit() instead.',
-            DeprecationWarning
-        )
-
-        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
-        assignment = Assignment(self._requester, {
-            'course_id': self.course_id,
-            'section_id': self.id,
-            'id': assignment_id
-        })
-        return assignment.submit(submission, **kwargs)
-
-    def list_submissions(self, assignment, **kwargs):
-        """
-        Get all existing submissions for an assignment.
-
-        .. warning::
-            .. deprecated:: 0.9.0
-                Use :func:`canvasapi.assignment.Assignment.get_submissions` instead.
-
-        :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
-
-        :param assignment: The object or ID of the assignment.
-        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :calls: `GET /api/v1/sections/:section_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.submission.Submission`
+            :class:`canvasapi.enrollment.Enrollment`
         """
-        from canvasapi.assignment import Assignment
+        from canvasapi.enrollment import Enrollment
 
-        warnings.warn(
-            'Section.list_submissions() is deprecated and will be removed '
-            'in the future. Use Assignment.get_submissions() instead.',
-            DeprecationWarning
+        return PaginatedList(
+            Enrollment,
+            self._requester,
+            "GET",
+            "sections/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
-
-        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
-        assignment = Assignment(self._requester, {
-            'course_id': self.course_id,
-            'section_id': self.id,
-            'id': assignment_id
-        })
-
-        return assignment.get_submissions(**kwargs)
-
-    def list_multiple_submissions(self, **kwargs):
-        """
-        List submissions for multiple assignments.
-        Get all existing submissions for a given set of students and assignments.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.section.Section.get_multiple_submissions` instead.
-
-        :calls: `GET /api/v1/sections/:section_id/students/submissions \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.submission.Submission`
-        """
-        warnings.warn(
-            "`list_multiple_submissions`"
-            " is being deprecated and will be removed in a future version."
-            " Use `get_multiple_submissions` instead",
-            DeprecationWarning
-        )
-
-        return self.get_multiple_submissions(**kwargs)
 
     def get_multiple_submissions(self, **kwargs):
         """
@@ -242,17 +135,20 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
-        if 'grouped' in kwargs:
-            warnings.warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
-            del kwargs['grouped']
+        is_grouped = kwargs.get("grouped", False)
+
+        if normalize_bool(is_grouped, "grouped"):
+            cls = GroupedSubmission
+        else:
+            cls = Submission
 
         return PaginatedList(
-            Submission,
+            cls,
             self._requester,
-            'GET',
-            'sections/{}/students/submissions'.format(self.id),
-            {'section_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "sections/{}/students/submissions".format(self.id),
+            {"section_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_submission(self, assignment, user, **kwargs):
@@ -276,58 +172,76 @@ class Section(CanvasObject):
         from canvasapi.assignment import Assignment
 
         warnings.warn(
-            'Section.get_submission() is deprecated and will be removed '
-            'in the future. Use Assignment.get_submission() instead.',
-            DeprecationWarning
+            "Section.get_submission() is deprecated and will be removed "
+            "in the future. Use Assignment.get_submission() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
-        assignment = Assignment(self._requester, {
-            'course_id': self.course_id,
-            'section_id': self.id,
-            'id': assignment_id
-        })
+        assignment = Assignment(
+            self._requester,
+            {"course_id": self.course_id, "section_id": self.id, "id": assignment_id},
+        )
 
         return assignment.get_submission(user, **kwargs)
 
-    def update_submission(self, assignment, user, **kwargs):
+    def list_multiple_submissions(self, **kwargs):
         """
-        Comment on and/or update the grading for a student's assignment submission.
+        List submissions for multiple assignments.
+        Get all existing submissions for a given set of students and assignments.
+
+        .. warning::
+            .. deprecated:: 0.10.0
+                Use :func:`canvasapi.section.Section.get_multiple_submissions` instead.
+
+        :calls: `GET /api/v1/sections/:section_id/students/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.for_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
+        """
+        warnings.warn(
+            "`list_multiple_submissions`"
+            " is being deprecated and will be removed in a future version."
+            " Use `get_multiple_submissions` instead",
+            DeprecationWarning,
+        )
+
+        return self.get_multiple_submissions(**kwargs)
+
+    def list_submissions(self, assignment, **kwargs):
+        """
+        Get all existing submissions for an assignment.
 
         .. warning::
             .. deprecated:: 0.9.0
-                Use :func:`canvasapi.submission.Submission.edit` instead.
+                Use :func:`canvasapi.assignment.Assignment.get_submissions` instead.
 
-        :calls: `PUT /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update>`_
+        :calls: `GET /api/v1/sections/:section_id/assignments/:assignment_id/submissions  \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.index>`_
 
         :param assignment: The object or ID of the assignment.
         :type assignment: :class:`canvasapi.assignment.Assignment` or int
-        :param user: The object or ID of the user.
-        :type user: :class:`canvasapi.user.User` or int or str
 
-        :rtype: :class:`canvasapi.submission.Submission`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.submission.Submission`
         """
         from canvasapi.assignment import Assignment
-        from canvasapi.user import User
 
         warnings.warn(
-            'Section.update_submission() is deprecated and will be removed '
-            'in the future. Use Submission.edit() instead.',
-            DeprecationWarning
+            "Section.list_submissions() is deprecated and will be removed "
+            "in the future. Use Assignment.get_submissions() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
-        user_id = obj_or_id(user, "user", (User,))
+        assignment = Assignment(
+            self._requester,
+            {"course_id": self.course_id, "section_id": self.id, "id": assignment_id},
+        )
 
-        submission = Submission(self._requester, {
-            'course_id': self.course_id,
-            'assignment_id': assignment_id,
-            'user_id': user_id
-        })
-
-        return submission.edit(**kwargs)
+        return assignment.get_submissions(**kwargs)
 
     def mark_submission_as_read(self, assignment, user, **kwargs):
         """
@@ -352,19 +266,22 @@ class Section(CanvasObject):
         from canvasapi.user import User
 
         warnings.warn(
-            'Section.mark_submission_as_read() is deprecated and will be '
-            'removed in the future. Use Submission.mark_read() instead.',
-            DeprecationWarning
+            "Section.mark_submission_as_read() is deprecated and will be "
+            "removed in the future. Use Submission.mark_read() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         user_id = obj_or_id(user, "user", (User,))
 
-        submission = Submission(self._requester, {
-            'course_id': self.course_id,
-            'assignment_id': assignment_id,
-            'user_id': user_id
-        })
+        submission = Submission(
+            self._requester,
+            {
+                "course_id": self.course_id,
+                "assignment_id": assignment_id,
+                "user_id": user_id,
+            },
+        )
         return submission.mark_read(**kwargs)
 
     def mark_submission_as_unread(self, assignment, user, **kwargs):
@@ -390,19 +307,22 @@ class Section(CanvasObject):
         from canvasapi.user import User
 
         warnings.warn(
-            'Section.mark_submission_as_unread() is deprecated and will be '
-            'removed in the future. Use Submission.mark_unread() instead.',
-            DeprecationWarning
+            "Section.mark_submission_as_unread() is deprecated and will be "
+            "removed in the future. Use Submission.mark_unread() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         user_id = obj_or_id(user, "user", (User,))
 
-        submission = Submission(self._requester, {
-            'course_id': self.course_id,
-            'assignment_id': assignment_id,
-            'user_id': user_id
-        })
+        submission = Submission(
+            self._requester,
+            {
+                "course_id": self.course_id,
+                "assignment_id": assignment_id,
+                "user_id": user_id,
+            },
+        )
         return submission.mark_unread(**kwargs)
 
     def submissions_bulk_update(self, **kwargs):
@@ -416,10 +336,82 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.progress.Progress`
         """
         response = self._requester.request(
-            'POST',
-            'sections/{}/submissions/update_grades'.format(
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "sections/{}/submissions/update_grades".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Progress(self._requester, response.json())
+
+    def submit_assignment(self, assignment, submission, **kwargs):
+        """
+        Makes a submission for an assignment.
+
+        .. warning::
+            .. deprecated:: 0.9.0
+                Use :func:`canvasapi.assignment.Assignment.submit` instead.
+
+        :calls: `POST /api/v1/sections/:section_id/assignments/:assignment_id/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
+
+        :param assignment: The object or ID of the assignment.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param submission: The attributes of the submission.
+        :type submission: dict
+
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        from canvasapi.assignment import Assignment
+
+        warnings.warn(
+            "Section.submit_assignment() is deprecated and will be removed "
+            "in the future. Use Assignment.submit() instead.",
+            DeprecationWarning,
+        )
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        assignment = Assignment(
+            self._requester,
+            {"course_id": self.course_id, "section_id": self.id, "id": assignment_id},
+        )
+        return assignment.submit(submission, **kwargs)
+
+    def update_submission(self, assignment, user, **kwargs):
+        """
+        Comment on and/or update the grading for a student's assignment submission.
+
+        .. warning::
+            .. deprecated:: 0.9.0
+                Use :func:`canvasapi.submission.Submission.edit` instead.
+
+        :calls: `PUT /api/v1/sections/:section_id/assignments/:assignment_id/submissions/:user_id \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update>`_
+
+        :param assignment: The object or ID of the assignment.
+        :type assignment: :class:`canvasapi.assignment.Assignment` or int
+        :param user: The object or ID of the user.
+        :type user: :class:`canvasapi.user.User` or int or str
+
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        from canvasapi.assignment import Assignment
+        from canvasapi.user import User
+
+        warnings.warn(
+            "Section.update_submission() is deprecated and will be removed "
+            "in the future. Use Submission.edit() instead.",
+            DeprecationWarning,
+        )
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
+        user_id = obj_or_id(user, "user", (User,))
+
+        submission = Submission(
+            self._requester,
+            {
+                "course_id": self.course_id,
+                "assignment_id": assignment_id,
+                "user_id": user_id,
+            },
+        )
+
+        return submission.edit(**kwargs)

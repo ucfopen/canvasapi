@@ -1,0 +1,20 @@
+{
+    "get_course_by_id": {
+            "method": "GET",
+            "endpoint": "/users/self/favorites/courses/1",
+            "data": {
+                "context_id": 1,
+                "context_type": "course"
+            },
+            "status_code": 200
+    },
+    "get_group_by_id": {
+            "method": "GET",
+            "endpoint": "/users/self/favorites/groups/1",
+            "data": {
+                "context_id": 1,
+                "context_type": "group"
+            },
+            "status_code": 200
+    }
+}

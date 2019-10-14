@@ -213,6 +213,18 @@ We use `flake8` for linting:
 flake8 canvasapi tests
 ```
 
+We use `black` for auto-formatting. When you run the command below, `black` will automatically convert your code to our desired style.
+
+```sh
+black canvasapi tests
+```
+
+We require methods to be in alphabetical order for ease of reading. Run this script to confirm order:
+
+```sh
+python scripts/alphabetic.py
+```
+
 ### Foolish consistency
 
 > A foolish consistency is the hobgoblin of little minds. -- Ralph Waldo Emerson

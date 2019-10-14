@@ -6,7 +6,7 @@ import re
 
 from six import text_type
 
-DATE_PATTERN = re.compile('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z')
+DATE_PATTERN = re.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z")
 
 
 class CanvasObject(object):
@@ -29,15 +29,14 @@ class CanvasObject(object):
 
     def __repr__(self):  # pragma: no cover
         classname = self.__class__.__name__
-        attrs = ', '.join(['{}={}'.format(attr, val) for attr, val in self.__dict__.items() if attr != 'attributes'])  # noqa
-        return '{}({})'.format(classname, attrs)
-
-    def to_json(self):
-        """
-        Return the original JSON response from the API that was used to
-        construct the object.
-        """
-        return json.dumps(self.attributes)
+        attrs = ", ".join(
+            [
+                "{}={}".format(attr, val)
+                for attr, val in self.__dict__.items()
+                if attr != "attributes"
+            ]
+        )  # noqa
+        return "{}({})".format(classname, attrs)
 
     def set_attributes(self, attributes):
         """
@@ -70,6 +69,13 @@ class CanvasObject(object):
 
             # datetime field
             if DATE_PATTERN.match(text_type(value)):
-                naive = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
+                naive = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
                 aware = naive.replace(tzinfo=pytz.utc)
-                self.__setattr__(attribute + '_date', aware)
+                self.__setattr__(attribute + "_date", aware)
+
+    def to_json(self):
+        """
+        Return the original JSON response from the API that was used to
+        construct the object.
+        """
+        return json.dumps(self.attributes)

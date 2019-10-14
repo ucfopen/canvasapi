@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import warnings
+
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
@@ -11,73 +13,28 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Quiz(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
-    def edit(self, **kwargs):
+    def create_question(self, **kwargs):
         """
-        Modify this quiz.
+        Create a new quiz question for this quiz.
 
-        :calls: `PUT /api/v1/courses/:course_id/quizzes/:id \
-        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.update>`_
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/questions \
+        <https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.create>`_
 
-        :returns: The updated quiz.
-        :rtype: :class:`canvasapi.quiz.Quiz`
+        :rtype: :class:`canvasapi.quiz.QuizQuestion`
         """
+
         response = self._requester.request(
-            'PUT',
-            'courses/{}/quizzes/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "courses/{}/quizzes/{}/questions".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
-        quiz_json = response.json()
-        quiz_json.update({'course_id': self.course_id})
-
-        return Quiz(self._requester, quiz_json)
-
-    def delete(self, **kwargs):
-        """
-        Delete this quiz.
-
-        :calls: `DELETE /api/v1/courses/:course_id/quizzes/:id \
-        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.destroy>`_
-
-        :rtype: :class:`canvasapi.quiz.Quiz`
-        """
-        response = self._requester.request(
-            'DELETE',
-            'courses/{}/quizzes/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-        quiz_json = response.json()
-        quiz_json.update({'course_id': self.course_id})
-
-        return Quiz(self._requester, quiz_json)
-
-    def get_quiz_group(self, id, **kwargs):
-        """
-        Get details of the quiz group with the given id
-
-        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
-        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.show>`_
-
-
-        :param id: The ID of the question group.
-        :type id: int
-
-        :returns: `QuizGroup` object
-        :rtype: :class:`canvasapi.quiz_group.QuizGroup`
-        """
-        response = self._requester.request(
-            'GET',
-            'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.id, id),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
         response_json = response.json()
-        response_json.update({'course_id': self.id})
+        response_json.update({"course_id": self.course_id})
 
-        return QuizGroup(self._requester, response_json)
+        return QuizQuestion(self._requester, response_json)
 
     def create_question_group(self, quiz_groups, **kwargs):
         """
@@ -103,42 +60,108 @@ class Quiz(CanvasObject):
         if not isinstance(quiz_groups[0], dict):
             raise ValueError("Param `quiz_groups must contain a dictionary")
 
-        param_list = ['name', 'pick_count', 'question_points', 'assessment_question_bank_id']
+        param_list = [
+            "name",
+            "pick_count",
+            "question_points",
+            "assessment_question_bank_id",
+        ]
         if not any(param in quiz_groups[0] for param in param_list):
             raise RequiredFieldMissing("quiz_groups must contain at least 1 parameter.")
 
         kwargs["quiz_groups"] = quiz_groups
 
         response = self._requester.request(
-            'POST',
-            'courses/{}/quizzes/{}/groups'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "courses/{}/quizzes/{}/groups".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
-        response_json['quiz_groups'][0].update({'course_id': self.id})
+        response_json["quiz_groups"][0].update({"course_id": self.id})
 
-        return QuizGroup(self._requester, response_json.get('quiz_groups')[0])
+        return QuizGroup(self._requester, response_json.get("quiz_groups")[0])
 
-    def create_question(self, **kwargs):
+    def create_submission(self, **kwargs):
         """
-        Create a new quiz question for this quiz.
+        Start taking a Quiz by creating a QuizSubmission can be used to answer
+        questions and submit answers.
 
-        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/questions \
-        <https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.create>`_
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.create>`_
 
-        :rtype: :class:`canvasapi.quiz.QuizQuestion`
+        :rtype: :class:`canvasapi.quiz.QuizSubmission`
         """
-
         response = self._requester.request(
-            'POST',
-            'courses/{}/quizzes/{}/questions'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "courses/{}/quizzes/{}/submissions".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
-        response_json = response.json()
-        response_json.update({'course_id': self.course_id})
 
-        return QuizQuestion(self._requester, response_json)
+        response_json = response.json()["quiz_submissions"][0]
+        response_json.update({"course_id": self.course_id})
+
+        return QuizSubmission(self._requester, response_json)
+
+    def delete(self, **kwargs):
+        """
+        Delete this quiz.
+
+        :calls: `DELETE /api/v1/courses/:course_id/quizzes/:id \
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.destroy>`_
+
+        :rtype: :class:`canvasapi.quiz.Quiz`
+        """
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/quizzes/{}".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        quiz_json = response.json()
+        quiz_json.update({"course_id": self.course_id})
+
+        return Quiz(self._requester, quiz_json)
+
+    def edit(self, **kwargs):
+        """
+        Modify this quiz.
+
+        :calls: `PUT /api/v1/courses/:course_id/quizzes/:id \
+        <https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.update>`_
+
+        :returns: The updated quiz.
+        :rtype: :class:`canvasapi.quiz.Quiz`
+        """
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/quizzes/{}".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        quiz_json = response.json()
+        quiz_json.update({"course_id": self.course_id})
+
+        return Quiz(self._requester, quiz_json)
+
+    def get_all_quiz_submissions(self, **kwargs):
+        """
+        Get a list of all submissions for this quiz.
+
+        .. warning::
+            .. deprecated:: 0.13.0
+                Use :func:`canvasapi.quiz.Quiz.get_submissions` instead.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
+
+        :rtype: list of :class:`canvasapi.quiz.QuizSubmission`
+        """
+        warnings.warn(
+            "`get_all_quiz_submissions` is being deprecated and will be removed in a "
+            "future version. Use `get_submissions` instead",
+            DeprecationWarning,
+        )
+
+        return self.get_submissions(**kwargs)
 
     def get_question(self, question, **kwargs):
         """
@@ -155,16 +178,14 @@ class Quiz(CanvasObject):
         question_id = obj_or_id(question, "question", (QuizQuestion,))
 
         response = self._requester.request(
-            'GET',
-            'courses/{}/quizzes/{}/questions/{}'.format(
-                self.course_id,
-                self.id,
-                question_id
+            "GET",
+            "courses/{}/quizzes/{}/questions/{}".format(
+                self.course_id, self.id, question_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({'course_id': self.course_id})
+        response_json.update({"course_id": self.course_id})
 
         return QuizQuestion(self._requester, response_json)
 
@@ -181,10 +202,82 @@ class Quiz(CanvasObject):
         return PaginatedList(
             QuizQuestion,
             self._requester,
-            'GET',
-            'courses/{}/quizzes/{}/questions'.format(self.course_id, self.id),
-            {'course_id': self.course_id},
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "courses/{}/quizzes/{}/questions".format(self.course_id, self.id),
+            {"course_id": self.course_id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_quiz_group(self, id, **kwargs):
+        """
+        Get details of the quiz group with the given id
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
+        <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.show>`_
+
+        :param id: The ID of the question group.
+        :type id: int
+
+        :returns: `QuizGroup` object
+        :rtype: :class:`canvasapi.quiz_group.QuizGroup`
+        """
+        response = self._requester.request(
+            "GET",
+            "courses/{}/quizzes/{}/groups/{}".format(self.course_id, self.id, id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return QuizGroup(self._requester, response_json)
+
+    def get_quiz_submission(self, quiz_submission, **kwargs):
+        """
+        Get a single quiz submission.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.show>`_
+
+        :param quiz_submission: The object or ID of the quiz submission to retrieve.
+        :type quiz_submission: int, string, :class:`canvasapi.quiz.QuizSubmission`
+
+        :rtype: :class:`canvasapi.quiz.QuizSubmission`
+        """
+        quiz_submission_id = obj_or_id(
+            quiz_submission, "quiz_submission", (QuizSubmission,)
+        )
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/quizzes/{}/submissions/{}".format(
+                self.course_id, self.id, quiz_submission_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()["quiz_submissions"][0]
+        response_json.update({"course_id": self.course_id})
+
+        return QuizSubmission(self._requester, response_json)
+
+    def get_submissions(self, **kwargs):
+        """
+        Get a list of all submissions for this quiz.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
+        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizSubmission`
+        """
+        return PaginatedList(
+            QuizSubmission,
+            self._requester,
+            "GET",
+            "courses/{}/quizzes/{}/submissions".format(self.course_id, self.id),
+            _root="quiz_submissions",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def set_extensions(self, quiz_extensions, **kwargs):
@@ -219,138 +312,160 @@ class Quiz(CanvasObject):
         """
 
         if not isinstance(quiz_extensions, list) or not quiz_extensions:
-            raise ValueError('Param `quiz_extensions` must be a non-empty list.')
+            raise ValueError("Param `quiz_extensions` must be a non-empty list.")
 
         if any(not isinstance(extension, dict) for extension in quiz_extensions):
-            raise ValueError('Param `quiz_extensions` must only contain dictionaries')
+            raise ValueError("Param `quiz_extensions` must only contain dictionaries")
 
-        if any('user_id' not in extension for extension in quiz_extensions):
+        if any("user_id" not in extension for extension in quiz_extensions):
             raise RequiredFieldMissing(
-                'Dictionaries in `quiz_extensions` must contain key `user_id`'
+                "Dictionaries in `quiz_extensions` must contain key `user_id`"
             )
 
-        kwargs['quiz_extensions'] = quiz_extensions
+        kwargs["quiz_extensions"] = quiz_extensions
 
         response = self._requester.request(
-            'POST',
-            'courses/{}/quizzes/{}/extensions'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "courses/{}/quizzes/{}/extensions".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
-        extension_list = response.json()['quiz_extensions']
-        return [QuizExtension(self._requester, extension) for extension in extension_list]
-
-    def get_all_quiz_submissions(self, **kwargs):
-        """
-        Get a list of all submissions for this quiz.
-
-        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
-        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
-
-        :rtype: list of :class:`canvasapi.quiz.QuizSubmission`
-        """
-        response = self._requester.request(
-            'GET',
-            'courses/{}/quizzes/{}/submissions'.format(
-                self.course_id,
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-        submission_list = response.json()['quiz_submissions']
-
-        return [QuizSubmission(self._requester, submission) for submission in submission_list]
-
-    def get_quiz_submission(self, quiz_submission, **kwargs):
-        """
-        Get a single quiz submission.
-
-        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id \
-        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.show>`_
-
-        :param quiz_submission: The object or ID of the quiz submission to retrieve.
-        :type quiz_submission: int, string, :class:`canvasapi.quiz.QuizSubmission`
-
-        :rtype: :class:`canvasapi.quiz.QuizSubmission`
-        """
-        quiz_submission_id = obj_or_id(quiz_submission, "quiz_submission", (QuizSubmission,))
-
-        response = self._requester.request(
-            'GET',
-            'courses/{}/quizzes/{}/submissions/{}'.format(
-                self.course_id,
-                self.id,
-                quiz_submission_id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
-        response_json = response.json()["quiz_submissions"][0]
-        response_json.update({'course_id': self.course_id})
-
-        return QuizSubmission(self._requester, response_json)
-
-    def create_submission(self, **kwargs):
-        """
-        Start taking a Quiz by creating a QuizSubmission can be used to answer
-        questions and submit answers.
-
-        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
-        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.create>`_
-
-        :rtype: :class:`canvasapi.quiz.QuizSubmission`
-        """
-        response = self._requester.request(
-            'POST',
-            'courses/{}/quizzes/{}/submissions'.format(
-                self.course_id,
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
-        )
-
-        response_json = response.json()["quiz_submissions"][0]
-        response_json.update({'course_id': self.course_id})
-
-        return QuizSubmission(self._requester, response_json)
+        extension_list = response.json()["quiz_extensions"]
+        return [
+            QuizExtension(self._requester, extension) for extension in extension_list
+        ]
 
 
 @python_2_unicode_compatible
 class QuizSubmission(CanvasObject):
-
     def __str__(self):
-        return "{}-{}".format(self.quiz_id, self.user_id)
+        return "Quiz {} - User {} ({})".format(self.quiz_id, self.user_id, self.id)
 
-    def complete(self, **kwargs):
+    def answer_submission_questions(self, validation_token=None, **kwargs):
+        """
+        Provide or update an answer to one or more quiz questions.
+
+        :calls: `POST /api/v1/quiz_submissions/:quiz_submission_id/questions \
+        <https://canvas.instructure.com/doc/api/quiz_submission_questions.html#method.quizzes/quiz_submission_questions.answer>`_
+
+        :param validation_token: (Optional) The unique validation token for this quiz submission.
+            If one is not provided, canvasapi will attempt to use `self.validation_token`.
+        :type validation_token: str
+        :returns: A list of quiz submission questions.
+        :rtype: list of :class:`canvasapi.quiz.QuizSubmissionQuestion`
+        """
+        try:
+            kwargs["validation_token"] = validation_token or self.validation_token
+        except AttributeError:
+            raise RequiredFieldMissing(
+                "`validation_token` not set on this QuizSubmission, must be passed"
+                " as a function argument."
+            )
+
+        # Only the latest attempt for a quiz submission can be updated, and Canvas
+        # automatically returns the latest attempt with every quiz submission response,
+        # so we can just use that.
+        kwargs["attempt"] = self.attempt
+
+        response = self._requester.request(
+            "POST",
+            "quiz_submissions/{}/questions".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        questions = list()
+        for question in response.json().get("quiz_submission_questions", []):
+            question.update(
+                {
+                    "quiz_submission_id": self.id,
+                    "validation_token": kwargs["validation_token"],
+                    "attempt": self.attempt,
+                }
+            )
+            questions.append(QuizSubmissionQuestion(self._requester, question))
+
+        return questions
+
+    def complete(self, validation_token=None, **kwargs):
         """
         Complete the quiz submission by marking it as complete and grading it. When the quiz
         submission has been marked as complete, no further modifications will be allowed.
 
+
         :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/complete \
         <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.complete>`_
 
+        :param validation_token: (Optional) The unique validation token for this quiz submission.
+            If one is not provided, canvasapi will attempt to use `self.validation_token`.
+        :type validation_token: str
         :rtype: :class:`canvasapi.quiz.QuizSubmission`
         """
-        if 'attempt' in kwargs:
-            raise ValueError("Key `attempt` provided by Canvas, should not be set.")
+        try:
+            kwargs["validation_token"] = validation_token or self.validation_token
+        except AttributeError:
+            raise RequiredFieldMissing(
+                "`validation_token` not set on this QuizSubmission, must be passed"
+                " as a function argument."
+            )
 
-        if 'validation_token' in kwargs:
-            raise ValueError("Key `validation_token` provided by Canvas, should not be set.")
-
-        kwargs['attempt'] = self.attempt
-        kwargs['validation_token'] = self.validation_token
+        # Only the latest attempt for a quiz submission can be updated, and Canvas
+        # automatically returns the latest attempt with every quiz submission response,
+        # so we can just use that.
+        kwargs["attempt"] = self.attempt
 
         response = self._requester.request(
-            'POST',
-            'courses/{}/quizzes/{}/submissions/{}/complete'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+            "POST",
+            "courses/{}/quizzes/{}/submissions/{}/complete".format(
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()["quiz_submissions"][0]
         return QuizSubmission(self._requester, response_json)
+
+    def get_submission_events(self, **kwargs):
+        """
+        Retrieve the set of events captured during a specific submission attempt.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
+        <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.index>`_
+
+        :returns: list of QuizSubmissionEvents.
+        :rtype: list
+        """
+        response = self._requester.request(
+            "GET",
+            "courses/{}/quizzes/{}/submissions/{}/events".format(
+                self.course_id, self.quiz_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        events = response.json()["quiz_submission_events"]
+
+        return [QuizSubmissionEvent(self._requester, event) for event in events]
+
+    def get_submission_questions(self, **kwargs):
+        """
+        Get a list of all the question records for this quiz submission.
+
+        :calls: `GET /api/v1/quiz_submissions/:quiz_submission_id/questions \
+        <https://canvas.instructure.com/doc/api/quiz_submission_questions.html#method.quizzes/quiz_submission_questions.index>`_
+
+        :returns: A list of quiz submission questions.
+        :rtype: list of :class:`canvasapi.quiz.QuizSubmissionQuestion`
+        """
+        response = self._requester.request(
+            "GET",
+            "quiz_submissions/{}/questions".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        questions = list()
+        for question in response.json().get("quiz_submission_questions", []):
+            question.update({"quiz_submission_id": self.id, "attempt": self.attempt})
+            questions.append(QuizSubmissionQuestion(self._requester, question))
+
+        return questions
 
     def get_times(self, **kwargs):
         """
@@ -362,20 +477,46 @@ class QuizSubmission(CanvasObject):
 
         :rtype: dict
         """
-        if 'attempt' in kwargs:
-            raise ValueError("Key `attempt` provided by Canvas, should not be set.")
-
         response = self._requester.request(
-            'GET',
-            'courses/{}/quizzes/{}/submissions/{}/time'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+            "GET",
+            "courses/{}/quizzes/{}/submissions/{}/time".format(
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
+
+    def submit_events(self, quiz_submission_events, **kwargs):
+        """
+        Store a set of events which were captured during a quiz taking session.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
+        <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.create>`_
+
+        :param quiz_submission_events: The submission events to be recorded.
+        :type quiz_submission_events: list
+
+        :returns: True if the submission was successful, false otherwise.
+        :rtype: bool
+        """
+        if isinstance(quiz_submission_events, list) and isinstance(
+            quiz_submission_events[0], QuizSubmissionEvent
+        ):
+            kwargs["quiz_submission_events"] = quiz_submission_events
+        else:
+            raise RequiredFieldMissing(
+                "Required parameter quiz_submission_events missing."
+            )
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/quizzes/{}/submissions/{}/events".format(
+                self.course_id, self.quiz_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.status_code == 204
 
     def update_score_and_comments(self, **kwargs):
         """
@@ -390,13 +531,11 @@ class QuizSubmission(CanvasObject):
         :rtype: :class:`canvasapi.quiz.QuizSubmission`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/quizzes/{}/submissions/{}'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+            "PUT",
+            "courses/{}/quizzes/{}/submissions/{}".format(
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()["quiz_submissions"][0]
 
@@ -405,14 +544,12 @@ class QuizSubmission(CanvasObject):
 
 @python_2_unicode_compatible
 class QuizExtension(CanvasObject):
-
     def __str__(self):
         return "{}-{}".format(self.quiz_id, self.user_id)
 
 
 @python_2_unicode_compatible
 class QuizQuestion(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.question_name, self.id)
 
@@ -427,13 +564,11 @@ class QuizQuestion(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/quizzes/{}/questions/{}'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+            "DELETE",
+            "courses/{}/quizzes/{}/questions/{}".format(
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.status_code == 204
@@ -448,16 +583,116 @@ class QuizQuestion(CanvasObject):
         :rtype: :class:`canvasapi.quiz.QuizQuestion`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/quizzes/{}/questions/{}'.format(
-                self.course_id,
-                self.quiz_id,
-                self.id
+            "PUT",
+            "courses/{}/quizzes/{}/questions/{}".format(
+                self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({'course_id': self.course_id})
+        response_json.update({"course_id": self.course_id})
 
         super(QuizQuestion, self).set_attributes(response_json)
         return self
+
+
+@python_2_unicode_compatible
+class QuizSubmissionEvent(CanvasObject):
+    def __str__(self):
+        return "{}".format(self.event_type)
+
+
+@python_2_unicode_compatible
+class QuizSubmissionQuestion(CanvasObject):
+    def __str__(self):
+        return "QuizSubmissionQuestion #{}".format(self.id)
+
+    def flag(self, validation_token=None, **kwargs):
+        """
+        Set a flag on a quiz question to indicate that it should be returned to later.
+
+        :calls: `PUT /api/v1/quiz_submissions/:quiz_submission_id/questions/:id/flag \
+        <https://canvas.instructure.com/doc/api/quiz_submission_questions.html#method.quizzes/quiz_submission_questions.flag>`_
+
+        :param validation_token: (Optional) The unique validation token for the quiz submission.
+            If one is not provided, canvasapi will attempt to use `self.validation_token`.
+        :type validation_token: str
+        :returns: True if the question was successfully flagged, False otherwise.
+        :rtype: bool
+        """
+        try:
+            kwargs["validation_token"] = validation_token or self.validation_token
+        except AttributeError:
+            raise RequiredFieldMissing(
+                "`validation_token` not set on this QuizSubmissionQuestion, must be passed"
+                " as a function argument."
+            )
+
+        # Only the latest attempt for a quiz submission can be updated, and Canvas
+        # automatically returns the latest attempt with every quiz submission response,
+        # so we can just use that.
+        kwargs["attempt"] = self.attempt
+
+        response = self._requester.request(
+            "PUT",
+            "quiz_submissions/{}/questions/{}/flag".format(
+                self.quiz_submission_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        question = response.json()["quiz_submission_questions"][0]
+        question.update(
+            {
+                "validation_token": kwargs["validation_token"],
+                "quiz_submission_id": self.quiz_submission_id,
+            }
+        )
+        super(QuizSubmissionQuestion, self).set_attributes(question)
+
+        return True
+
+    def unflag(self, validation_token=None, **kwargs):
+        """
+        Remove a previously set flag on a quiz question.
+
+        :calls: `PUT /api/v1/quiz_submissions/:quiz_submission_id/questions/:id/unflag \
+        <https://canvas.instructure.com/doc/api/quiz_submission_questions.html#method.quizzes/quiz_submission_questions.unflag>`_
+
+        :param validation_token: (Optional) The unique validation token for the quiz submission.
+            If one is not provided, canvasapi will attempt to use `self.validation_token`.
+        :type validation_token: str
+        :returns: True if the question was successfully unflagged, False otherwise.
+        :rtype: bool
+        """
+        try:
+            kwargs["validation_token"] = validation_token or self.validation_token
+        except AttributeError:
+            raise RequiredFieldMissing(
+                "`validation_token` not set on this QuizSubmissionQuestion, must be passed"
+                " as a function argument."
+            )
+
+        # Only the latest attempt for a quiz submission can be updated, and Canvas
+        # automatically returns the latest attempt with every quiz submission response,
+        # so we can just use that.
+        kwargs["attempt"] = self.attempt
+
+        response = self._requester.request(
+            "PUT",
+            "quiz_submissions/{}/questions/{}/unflag".format(
+                self.quiz_submission_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        question = response.json()["quiz_submission_questions"][0]
+        question.update(
+            {
+                "validation_token": kwargs["validation_token"],
+                "quiz_submission_id": self.quiz_submission_id,
+            }
+        )
+        super(QuizSubmissionQuestion, self).set_attributes(question)
+
+        return True

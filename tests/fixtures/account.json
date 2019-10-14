@@ -133,6 +133,23 @@
 			}
 		]
 	},
+	"import_outcome": {
+		"method": "POST",
+		"endpoint": "accounts/1/outcome_imports",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "accounts/1",
@@ -304,6 +321,37 @@
 		},
 		"status_code": 200
 	},
+	"get_notification": {
+		"method": "GET",
+		"endpoint": "accounts/1/account_notifications/1",
+		"data":{
+  			"subject": "Attention Students",
+  			"message": "This is a test of the notification system.",
+  			"start_at": "2013-08-28T23:59:00-06:00",
+  			"end_at": "2013-08-29T23:59:00-06:00",
+  			"icon": "information",
+  			"roles": ["StudentEnrollment"],
+  			"role_ids": [1]
+		},
+		"status_code": 200
+	},
+	"get_grading_periods": {
+        "method": "GET",
+        "endpoint": "accounts/1/grading_periods",
+        "data": {
+            "grading_periods": [
+                {
+                    "title": "Grading period 1",
+                    "id": 1
+                },
+                {
+                    "title": "Grading period 2",
+                    "id": 2
+                }
+            ]
+        },
+        "status_code": 200
+    },
 	"get_groups_context": {
 		"method": "GET",
 		"endpoint": "accounts/1/groups",
@@ -389,6 +437,130 @@
 				"default_time_zone": "America/Denver"
 			}
 		],
+		"status_code": 200
+	},
+	"get_outcome_import_status":{
+		"method" : "GET",
+		"endpoint" : "accounts/1/outcome_imports/1",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
+	"get_outcome_import_status_latest":{
+		"method" : "GET",
+		"endpoint" : "accounts/1/outcome_imports/latest",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
+	"create_report":{
+		"method": "POST",
+		"endpoint": "accounts/1/reports/zero_activity_csv",
+		"data": {
+        	"title": "Zero Activity",
+        	"parameters": {
+            	"enrollment_term_id": {
+                	"required": false,
+                	"description": "The canvas id of the term to get grades from"
+            	},
+            	"start_at": {
+                	"required": false,
+                	"description": "The first date in the date range, the second date is the time the report is run."
+            	},
+            	"course_id": {
+                	"required": false,
+                	"description": "The course to report on"
+            	}
+        },
+        "report": "zero_activity_csv",
+        "last_run": null
+		},
+		"status_code": 200
+	},
+	"delete_report":{
+		"method": "DELETE",
+		"endpoint": "accounts/1/reports/zero_activity_csv/1",
+		"data": {
+    		"id": 1,
+    		"progress": 100,
+    		"parameters": {
+    		    "extra_text": "Term: All Terms;"
+    		},
+    		"current_line": 1,
+    		"status": "deleted",
+    		"report": "zero_activity_csv",
+    		"created_at": "2019-08-13T15:23:15-04:00",
+    		"started_at": "2019-08-13T15:23:17-04:00",
+    		"ended_at": "2019-08-13T15:23:17-04:00",
+    		"file_url": "xxxxxxxxxxxxxxxxxxxxxxx",
+    		"attachment": {
+    		    "id": 1,
+    		    "uuid": "CCVh71fQEPsDqc4VOoGBr5llCbzAeLEpBcWcAe88",
+    		    "folder_id": 1,
+    		    "display_name": "zero_activity_csv_xxxxxxxxxxxxxxxxxxxxxxx.csv",
+    		    "filename": "zero_activity_csv_xxxxxxxxxxxxxxxxxxxxxxx.csv",
+    		    "workflow_state": "processed",
+    		    "upload_status": "success",
+    		    "content-type": "text/csv",
+    		    "url": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    		    "size": 100,
+    		    "created_at": "2019-08-13T19:23:17Z",
+    		    "updated_at": "2019-08-13T19:23:17Z",
+    		    "unlock_at": null,
+    		    "locked": false,
+    		    "hidden": false,
+    		    "lock_at": null,
+    		    "hidden_for_user": false,
+    		    "thumbnail_url": null,
+    		    "modified_at": "2019-08-13T19:23:17Z",
+    		    "mime_class": "file",
+    		    "media_entry_id": null,
+    		    "locked_for_user": false
+    			}
+		}
+	},
+	"get_report":{
+		"method": "GET",
+		"endpoint": "accounts/1/reports/zero_activity_csv/1",
+		"data":{
+        	"title": "Zero Activity",
+        	"parameters": {
+            	"enrollment_term_id": {
+                	"required": false,
+                	"description": "The canvas id of the term to get grades from"
+            	},
+            	"start_at": {
+                	"required": false,
+                	"description": "The first date in the date range, the second date is the time the report is run."
+            	},
+            	"course_id": {
+                	"required": false,
+                	"description": "The course to report on"
+            	}
+        },
+        "report": "zero_activity_csv",
+        "last_run": null
+		},
 		"status_code": 200
 	},
 	"reports": {
@@ -581,6 +753,17 @@
 		"method": "PUT",
 		"endpoint": "accounts/1",
 		"data": {},
+		"status_code": 200
+	},
+	"update_notification": {
+		"method": "PUT",
+		"endpoint": "accounts/1/account_notifications/1",
+		"data": {
+            "subject": "subject",
+            "message": "Message",
+            "start_at": "2015-04-01T00:00:00Z",
+            "end_at": "2018-04-01T00:00:00Z"
+		},
 		"status_code": 200
 	},
 	"create_group_category": {
@@ -1058,6 +1241,14 @@
 		],
 		"status_code": 200
 	},
+	"delete_grading_period": {
+        "method": "DELETE",
+        "endpoint": "accounts/1/grading_periods/1",
+        "data": {
+            "delete": true
+        },
+        "status_code": 200
+    },
 		"get_rubric_single": {
 		"method": "GET",
 		"endpoint": "accounts/1/rubrics/1",
@@ -1118,6 +1309,31 @@
 			]
 		  },
 		"status_code": 200
+	},
+	"get_scopes": {
+	"method": "GET",
+	"endpoint": "accounts/1/scopes",
+	"data": [
+		{
+        	"controller": "users",
+        	"action": "settings",
+        	"verb": "PUT",
+        	"path": "/api/v1/users/:id/settings",
+        	"scope": "url:PUT|/api/v1/users/:id/settings",
+        	"resource": "users",
+        	"resource_name": "Users"
+		},
+		{
+        	"controller": "course_nicknames",
+        	"action": "show",
+        	"verb": "GET",
+        	"path": "/api/v1/users/self/course_nicknames/:course_id",
+        	"scope": "url:GET|/api/v1/users/self/course_nicknames/:course_id",
+        	"resource": "users",
+        	"resource_name": "Users"	
+		}
+	],
+	"status_code": 200
 	},
 	"create_content_migration": {
 		"method": "POST",
@@ -1254,7 +1470,267 @@
 			}
 		],
 		"status_code": 200
+	},
+	"create_sis_import": {
+		"method": "POST",
+		"endpoint": "accounts/1/sis_imports",
+		"data": {
+			"id": 2,
+			"progress": 100,
+			"workflow_state": "created",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"batch_mode": null,
+			"batch_mode_term_id": null,
+			"multi_term_batch_mode": null,
+			"override_sis_stickiness": null,
+			"add_sis_stickiness": null,
+			"clear_sis_stickiness": null,
+			"diffing_data_set_identifier": null,
+			"diffed_against_import_id": null,
+			"diffing_drop_status": null,
+			"skip_deletes": null,
+			"change_threshold": null,
+			"user": {
+				"id": 1,
+				"name": "SIS Import Admin",
+				"sortable_name": "Admin, SIS Import",
+				"short_name": "SIS Import Admin",
+				"sis_user_id": "sisimporter",
+				"integration_id": null,
+				"sis_import_id": null,
+				"login_id": "sisimporter"
+			},
+			"account_id": 1
+		},
+		"status_code": 200
+	},
+	"get_sis_import": {
+		"method": "GET",
+		"endpoint": "accounts/1/sis_imports/2",
+		"data": {
+			"id": 2,
+			"progress": 100,
+			"workflow_state": "imported",
+			"data": {
+				"import_type": "instructure_csv",
+				"supplied_batches": [
+					"enrollments"
+				],
+				"counts": {
+					"change_sis_ids": 0,
+					"accounts": 0,
+					"terms": 0,
+					"abstract_courses": 0,
+					"courses": 0,
+					"sections": 0,
+					"xlists": 0,
+					"users": 0,
+					"enrollments": 1,
+					"groups": 0,
+					"group_memberships": 0,
+					"grade_publishing_results": 0,
+					"user_observers": 0
+				}
+			},
+			"user": {
+				"id": 1,
+				"name": "SIS Import Admin",
+				"sortable_name": "Admin, SIS Import",
+				"short_name": "SIS Import Admin",
+				"sis_user_id": "sisimporter",
+				"integration_id": null,
+				"sis_import_id": null,
+				"login_id": "sisimporter"
+			},
+			"account_id": 1
+		},
+		"status_code": 200
+	},
+	"get_sis_imports": {
+		"method": "GET",
+		"endpoint": "accounts/1/sis_imports",
+		"data": {
+			"sis_imports": [
+				{
+					"id": 2,
+					"progress": 10,
+					"workflow_state": "importing",
+					"data": {
+						"import_type": "instructure_csv"
+					},
+					"user": {
+						"id": 1,
+						"name": "SIS Import Admin",
+						"sortable_name": "Admin, SIS Import",
+						"short_name": "SIS Import Admin",
+						"sis_user_id": "sisimporter",
+						"integration_id": null,
+						"sis_import_id": null,
+						"login_id": "sisimporter"
+					},
+					"account_id": 1
+				},
+				{
+					"id": 3,
+					"progress": 100,
+					"workflow_state": "imported",
+					"data": {
+						"import_type": "instructure_csv"
+					},
+					"user": {
+						"id": 8,
+						"name": "SIS Import Admin",
+						"sortable_name": "Admin, SIS Import",
+						"short_name": "SIS Import Admin",
+						"sis_user_id": "sisimporter",
+						"integration_id": null,
+						"sis_import_id": null,
+						"login_id": "sisimporter"
+					},
+					"account_id": 8
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"get_sis_imports_running": {
+		"method": "GET",
+		"endpoint": "accounts/1/sis_imports/importing",
+		"data": {
+			"sis_imports": [
+				{
+					"id": 2,
+					"progress": 10,
+					"workflow_state": "importing",
+					"data": {
+						"import_type": "instructure_csv"
+					},
+					"user": {
+						"id": 1,
+						"name": "SIS Import Admin",
+						"sortable_name": "Admin, SIS Import",
+						"short_name": "SIS Import Admin",
+						"sis_user_id": "sisimporter",
+						"integration_id": null,
+						"sis_import_id": null,
+						"login_id": "sisimporter"
+					},
+					"account_id": 1
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"abort_sis_imports_pending": {
+		"method": "PUT",
+		"endpoint": "accounts/1/sis_imports/abort_all_pending",
+		"data": {
+			"aborted": true
+		},
+		"status_code": 200
+	},
+	"abort_sis_imports_pending_false": {
+		"method": "PUT",
+		"endpoint": "accounts/1/sis_imports/abort_all_pending",
+		"data": {
+			"aborted": false
+		},
+		"status_code": 200
+	},
+	"abort_sis_imports_pending_blank": {
+		"method": "PUT",
+		"endpoint": "accounts/1/sis_imports/abort_all_pending",
+		"data": {
+		},
+		"status_code": 200
+	},
+	"create_admin": {
+		"method": "POST",
+		"endpoint": "accounts/1/admins",
+		"data": {
+			"id": 100,
+			"role": "AccountAdmin",
+			"role_id": 1,
+			"user": {
+				"id": 123,
+				"name": "John Doe",
+				"sortable_name": "John Doe",
+				"short_name": "J Doe",
+				"sis_user_id": null,
+				"integration_id": null,
+				"sis_import_id": null,
+				"login_id": "jdoe"
+			},
+			"workflow_state": "active"
+		}
+	},
+	"get_features": {
+		"method": "GET",
+		"endpoint": "accounts/1/features",
+		"data": [
+			{
+				"name": "epub_export",
+				"display_name": "ePub Exporting",
+				"applies_to": "Course"
+			},
+			{
+				"name": "outcome_gradebook",
+				"display_name": "Learning Mastery Gradebook",
+				"applies_to": "Account"
+			}
+		],
+		"status_code": 200
+	},
+	"get_enabled_features": {
+		"method": "GET",
+		"endpoint": "accounts/1/features/enabled",
+		"data": [
+			{
+				"name": "feature_one",
+				"display_name": "Feature One",
+				"applies_to": "Account"
+			},
+			{
+				"name": "feature_two",
+				"display_name": "Feature Two",
+				"applies_to": "Account"
+			}
+		],
+		"status_code": 200
+	},
+	"get_feature_flag": {
+		"method": "GET",
+		"endpoint": "accounts/1/features/flags/epub_export",
+		"data": {
+			"feature": "epub_export",
+			"context_id": 1,
+			"context_type": "Account",
+			"state": "on"
+		},
+		"status_code": 200
+	},
+	"set_feature_flag": {
+		"method": "PUT",
+		"endpoint": "accounts/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
+			"state": "on"
+		},
+		"status_code": 200
+	},
+	"delete_feature_flag": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/features/flags/epub_export",
+		"data": {
+			"context_id": 1,
+			"context_type": "Account",
+			"feature": "epub_export",
+			"state": "on"
+		},
+		"status_code": 200
 	}
-
-
 }

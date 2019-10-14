@@ -7,6 +7,5 @@ from canvasapi.canvas_object import CanvasObject
 
 @python_2_unicode_compatible
 class PageView(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.context_type, self.id)

@@ -1,4 +1,15 @@
 {
+	"create_submission_peer_review": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/submissions/1/peer_reviews",
+		"data": {
+			"assessor_id": 23,
+			"asset_id": 13,
+			"id": 1,
+			"user_id": 7
+		},
+		"status_code": 200
+	},
 	"complete": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes/1/submissions/1/complete",
@@ -14,6 +25,17 @@
 					"score": 1
 				}
 			]
+		},
+		"status_code": 200
+	},
+	"delete_submission_peer_review": {
+		"method": "DELETE",
+		"endpoint": "courses/1/assignments/1/submissions/1/peer_reviews",
+		"data": {
+			"assessor_id": 23,
+			"asset_id": 13,
+			"id": 1,
+			"user_id": 7
 		},
 		"status_code": 200
 	},
@@ -71,6 +93,25 @@
 		],
 		"status_code": 200
 	},
+	"list_submission_peer_reviews": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/submissions/1/peer_reviews",
+		"data": [
+			{
+				"assessor_id": 23,
+				"asset_id": 13,
+				"id": 1,
+				"user_id": 7
+			},
+			{
+				"assessor_id": 24,
+				"asset_id": 14,
+				"id": 2,
+				"user_id": 8
+			}
+		],
+		"status_code": 200
+	},
 	"update_score_and_comments": {
 		"method": "PUT",
 		"endpoint": "courses/1/quizzes/1/submissions/1",
@@ -112,13 +153,69 @@
 		"method": "PUT",
 		"endpoint": "courses/1/assignments/1/submissions/1",
 		"data": {
-				"id": 1,
-				"assignments_id": 1,
-				"user_id": 1,
-				"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
-				"submission_type": "online_upload",
-				"excused": true
+			"id": 1,
+			"assignments_id": 1,
+			"user_id": 1,
+			"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
+			"submission_type": "online_upload",
+			"excused": true
 		},
 		"status_code": 200
+	},
+	"get_submission_questions": {
+		"method": "GET",
+		"endpoint": "quiz_submissions/1/questions",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": true,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
+	},
+	"answer_submission_questions": {
+		"method": "POST",
+		"endpoint": "quiz_submissions/1/questions",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": true,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
+	},
+	"flag_submission_question": {
+		"method": "PUT",
+		"endpoint": "quiz_submissions/1/questions/1/flag",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": true,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
+	},
+	"unflag_submission_question": {
+		"method": "PUT",
+		"endpoint": "quiz_submissions/1/questions/1/unflag",
+		"data": {
+			"quiz_submission_questions": [
+				{
+					"id": 1,
+					"flagged": false,
+					"answer": null,
+					"answers": null
+				}
+			]
+		}
 	}
 }
