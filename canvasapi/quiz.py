@@ -276,6 +276,7 @@ class Quiz(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/quizzes/{}/submissions".format(self.course_id, self.id),
+            {"course_id": self.course_id},
             _root="quiz_submissions",
             _kwargs=combine_kwargs(**kwargs),
         )
@@ -538,6 +539,7 @@ class QuizSubmission(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()["quiz_submissions"][0]
+        response_json.update({"course_id": self.course_id})
 
         return QuizSubmission(self._requester, response_json)
 
