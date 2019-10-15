@@ -564,11 +564,11 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(feature_flag, FeatureFlag)
         self.assertEqual(feature_flag.feature, "high_contrast")
 
-    # get_authentication_event()
-    def test_get_authentication_event(self, m):
-        register_uris({"user": ["get_authentication_event"]}, m)
+    # get_authentication_events()
+    def test_get_authentication_events(self, m):
+        register_uris({"user": ["get_authentication_events"]}, m)
 
-        authentication_event = self.user.get_authentication_event()
+        authentication_event = self.user.get_authentication_events()
         event_list = [event for event in authentication_event]
 
         self.assertEqual(len(event_list), 2)

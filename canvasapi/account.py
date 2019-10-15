@@ -642,7 +642,7 @@ class Account(CanvasObject):
             "accounts/{}/outcome_group_links".format(self.id),
         )
 
-    def get_authentication_event(self, **kwargs):
+    def get_authentication_events(self, **kwargs):
         """
         List authentication events for a given account.
 

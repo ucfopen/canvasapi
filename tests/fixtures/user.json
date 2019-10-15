@@ -919,7 +919,7 @@
 		},
 		"status_code": 200
 	},
-	"get_authentication_event": {
+	"get_authentication_events": {
 		"method": "GET",
 		"endpoint": "audit/authentication/users/1",
 		"data": [

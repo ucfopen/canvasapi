@@ -15,9 +15,9 @@ class TestAuthenticationEvent(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                "account": ["get_by_id", "get_authentication_event"],
-                "login": ["create_user_login", "get_authentication_event"],
-                "user": ["get_by_id", "get_authentication_event"],
+                "account": ["get_by_id", "get_authentication_events"],
+                "login": ["create_user_login", "get_authentication_events"],
+                "user": ["get_by_id", "get_authentication_events"],
             }
             register_uris(requires, m)
 
@@ -27,11 +27,11 @@ class TestAuthenticationEvent(unittest.TestCase):
             )
             self.user = self.canvas.get_user(1)
 
-            self.authentication_event_account = self.account.get_authentication_event()[
+            self.authentication_event_account = self.account.get_authentication_events()[
                 0
             ]
-            self.authentication_event_login = self.login.get_authentication_event()[0]
-            self.authentication_event_user = self.user.get_authentication_event()[0]
+            self.authentication_event_login = self.login.get_authentication_events()[0]
+            self.authentication_event_user = self.user.get_authentication_events()[0]
 
     # __str__()
     def test__str__(self, m):

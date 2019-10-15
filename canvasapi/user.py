@@ -185,7 +185,7 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_authentication_event(self, **kwargs):
+    def get_authentication_events(self, **kwargs):
         """
         List authentication events for a given user.
 

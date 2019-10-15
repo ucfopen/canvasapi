@@ -42,7 +42,7 @@ class Login(CanvasObject):
         )
         return Login(self._requester, response.json())
 
-    def get_authentication_event(self, **kwargs):
+    def get_authentication_events(self, **kwargs):
         """
         List authentication events for a given login.
 

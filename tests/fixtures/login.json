@@ -63,7 +63,7 @@
 			"user_id": 1
 		}
 	},
-	"get_authentication_event": {
+	"get_authentication_events": {
 		"method": "GET",
 		"endpoint": "audit/authentication/logins/101",
 		"data": [
