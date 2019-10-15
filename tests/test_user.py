@@ -7,6 +7,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment
+from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.avatar import Avatar
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.communication_channel import CommunicationChannel
@@ -562,6 +563,23 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(feature_flag, FeatureFlag)
         self.assertEqual(feature_flag.feature, "high_contrast")
+
+    # get_authentication_events()
+    def test_get_authentication_events(self, m):
+        register_uris({"user": ["get_authentication_events"]}, m)
+
+        authentication_event = self.user.get_authentication_events()
+        event_list = [event for event in authentication_event]
+
+        self.assertEqual(len(event_list), 2)
+
+        self.assertIsInstance(event_list[0], AuthenticationEvent)
+        self.assertEqual(event_list[0].event_type, "login")
+        self.assertEqual(event_list[0].pseudonym_id, 9478)
+
+        self.assertIsInstance(event_list[1], AuthenticationEvent)
+        self.assertEqual(event_list[1].created_at, "2012-07-20T15:00:00-06:00")
+        self.assertEqual(event_list[1].event_type, "logout")
 
 
 @requests_mock.Mocker()

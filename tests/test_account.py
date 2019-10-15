@@ -16,6 +16,7 @@ from canvasapi.account import (
     SSOSettings,
 )
 from canvasapi.authentication_provider import AuthenticationProvider
+from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
@@ -1331,6 +1332,23 @@ class TestAccount(unittest.TestCase):
 
         with self.assertRaises(RequiredFieldMissing):
             self.AccountNotification.update_global_notification(notif)
+
+    # get_authentication_events()
+    def test_get_authentication_events(self, m):
+        register_uris({"account": ["get_authentication_events"]}, m)
+
+        authentication_event = self.account.get_authentication_events()
+        event_list = [event for event in authentication_event]
+
+        self.assertEqual(len(event_list), 2)
+
+        self.assertIsInstance(event_list[0], AuthenticationEvent)
+        self.assertEqual(event_list[0].event_type, "login")
+        self.assertEqual(event_list[0].pseudonym_id, 9478)
+
+        self.assertIsInstance(event_list[1], AuthenticationEvent)
+        self.assertEqual(event_list[1].created_at, "2012-07-20T15:00:00-06:00")
+        self.assertEqual(event_list[1].event_type, "logout")
 
 
 @requests_mock.Mocker()

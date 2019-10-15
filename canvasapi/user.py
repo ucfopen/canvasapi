@@ -185,6 +185,26 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_authentication_events(self, **kwargs):
+        """
+        List authentication events for a given user.
+
+        :calls: `GET /api/v1/audit/authentication/users/:user_id \
+        <https://canvas.instructure.com/doc/api/authentications_log.html#method.authentication_audit_api.for_user>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+                :class:`canvasapi.authentication_event.AuthenticationEvent`
+        """
+        from canvasapi.authentication_event import AuthenticationEvent
+
+        return PaginatedList(
+            AuthenticationEvent,
+            self._requester,
+            "GET",
+            "audit/authentication/users/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_avatars(self):
         """
         Retrieve the possible user avatar options that can be set with the user update endpoint.
