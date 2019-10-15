@@ -4,6 +4,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
+from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.login import Login
 from tests import settings
 from tests.util import register_uris
@@ -49,3 +50,20 @@ class TestLogin(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.login)
         self.assertIsInstance(string, str)
+
+    # get_authentication_events()
+    def test_get_authentication_events(self, m):
+        register_uris({"login": ["get_authentication_events"]}, m)
+
+        authentication_event = self.login.get_authentication_events()
+        event_list = [event for event in authentication_event]
+
+        self.assertEqual(len(event_list), 2)
+
+        self.assertIsInstance(event_list[0], AuthenticationEvent)
+        self.assertEqual(event_list[0].event_type, "login")
+        self.assertEqual(event_list[0].pseudonym_id, 9478)
+
+        self.assertIsInstance(event_list[1], AuthenticationEvent)
+        self.assertEqual(event_list[1].created_at, "2012-07-20T15:00:00-06:00")
+        self.assertEqual(event_list[1].event_type, "logout")
