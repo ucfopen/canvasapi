@@ -7,6 +7,7 @@ Class Reference
     account-ref
     appointment-group-ref
     assignment-ref
+    authentication-event-ref
     authentication-provider-ref
     avatar-ref
     blueprint-ref

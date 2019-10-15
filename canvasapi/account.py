@@ -642,6 +642,26 @@ class Account(CanvasObject):
             "accounts/{}/outcome_group_links".format(self.id),
         )
 
+    def get_authentication_events(self, **kwargs):
+        """
+        List authentication events for a given account.
+
+        :calls: `GET /api/v1/audit/authentication/accounts/:account_id \
+        <https://canvas.instructure.com/doc/api/authentications_log.html#method.authentication_audit_api.for_account>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+                :class:`canvasapi.authentication_event.AuthenticationEvent`
+        """
+        from canvasapi.authentication_event import AuthenticationEvent
+
+        return PaginatedList(
+            AuthenticationEvent,
+            self._requester,
+            "GET",
+            "audit/authentication/accounts/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_authentication_provider(self, authentication_provider, **kwargs):
         """
         Get the specified authentication provider
