@@ -127,6 +127,13 @@ class TestCanvas(unittest.TestCase):
         account_list = [account for account in accounts]
         self.assertEqual(len(account_list), 2)
 
+    # get_brand_variables()
+    def test_get_brand_variables(self, m):
+        register_uris({"account": ["get_brand_variables"]}, m)
+
+        variables = self.canvas.get_brand_variables()
+        self.assertIsInstance(variables, dict)
+
     # get_course()
     def test_get_course(self, m):
         register_uris({"course": ["get_by_id"]}, m)

@@ -496,6 +496,19 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_brand_variables(self):
+        """
+        Get account brand variables
+
+        :calls: `GET /api/v1/brand_variables \
+        <https://canvas.instructure.com/doc/api/brand_configs.html>`_
+
+        :returns: JSON with brand variables for the account.
+        :rtype: dict
+        """
+        response = self.__requester.request("GET", "brand_variables")
+        return response.json()
+
     def get_calendar_event(self, calendar_event):
         """
         Return single Calendar Event by id
