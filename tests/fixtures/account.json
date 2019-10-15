@@ -195,6 +195,16 @@
 			"default_time_zone": "America/New_York"
 		}
 	},
+	"get_brand_variables": {
+		"method": "GET",
+		"endpoint": "brand_variables",
+		"data": {
+			"ic-brand-primary-darkened-5": "#343637",
+			"ic-brand-primary-darkened-10": "#313334",
+			"ic-brand-primary-darkened-15": "#2E3031",
+			"ic-brand-primary-lightened-5": "#404142"
+		}
+	},
 	"get_courses": {
 		"method": "GET",
 		"endpoint": "accounts/1/courses",
