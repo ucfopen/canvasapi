@@ -1910,5 +1910,14 @@
 			}
 		},
 		"status_code": 200
+	},
+	"create_rubric_association": {
+		"method": "POST",
+		"endpoint": "courses/1/rubric_associations",
+		"data": {
+			"id": 4,
+			"association_type": "Course"
+		},
+		"status_code": 200
 	}
 }

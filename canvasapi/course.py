@@ -467,6 +467,29 @@ class Course(CanvasObject):
 
         return rubric_dict
 
+    def create_rubric_association(self, **kwargs):
+        """
+        Create a new RubricAssociation.
+
+        :calls: `POST /api/v1/courses/:course_id/rubric_associations \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_associations.create>`_
+
+        :returns: Returns a RubricAssociation.
+        :rtype: :class:`canvasapi.rubric.RubricAssociation`
+        """
+        from canvasapi.rubric import RubricAssociation
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/rubric_associations".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        quiz_json = response.json()
+        quiz_json.update({"course_id": self.id})
+
+        return RubricAssociation(self._requester, quiz_json)
+
     def delete(self):
         """
         Permanently delete this course.

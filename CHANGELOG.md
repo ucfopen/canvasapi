@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Quiz Submission Events (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
+- Rubric Associations (Thanks, [@weining-li](https://github.com/weining-li))
+
 ### General
 
 - Throw `IndexError` when using negative indexes on `PaginatedList` objects (Thanks, [@UniversalSuperBox](https://github.com/UniversalSuperBox))
