@@ -358,6 +358,7 @@ class AssignmentOverride(CanvasObject):
             "courses/{}/assignments/{}/overrides/{}".format(
                 self.course_id, self.assignment_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -381,6 +382,7 @@ class AssignmentOverride(CanvasObject):
             "courses/{}/assignments/{}/overrides/{}".format(
                 self.course_id, self.assignment_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
