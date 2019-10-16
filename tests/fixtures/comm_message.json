@@ -1,0 +1,34 @@
+{
+  "comm_messages": {
+    "method": "GET",
+    "endpoint": "comm_messages",
+    "data": [{
+        "id": 42,
+        "created_at": "2013-03-19T21:00:00Z",
+        "sent_at": "2013-03-20T22:42:00Z",
+        "workflow_state": "sent",
+        "from": "notifications@example.com",
+        "from_name": "Instructure Canvas",
+        "to": "someone@example.com",
+        "reply_to": "notifications+specialdata@example.com",
+        "subject": "example subject line",
+        "body": "This is the body of the message",
+        "html_body": "<html><body>This is the body of the message</body></html>"
+      },
+      {
+        "id": 2,
+        "created_at": "2013-03-19T21:00:00Z",
+        "sent_at": "2013-03-20T22:42:00Z",
+        "workflow_state": "sent",
+        "from": "johndoe@ucf.edu",
+        "from_name": "John Doe",
+        "to": "janedoe@ucf.edu",
+        "reply_to": "notifications+specialdata@example.com",
+        "subject": "My Subject",
+        "body": "My Message Body",
+        "html_body": "<html><body>My Message Body</body></html>"
+      }
+    ],
+    "status_code": 200
+  }
+}

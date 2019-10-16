@@ -14,6 +14,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
 from canvasapi.section import Section
 from canvasapi.user import User
+from canvasapi.comm_message import CommMessage
 from canvasapi.util import combine_kwargs, get_institution_url, obj_or_id
 
 
@@ -549,6 +550,29 @@ class Canvas(object):
             self.__requester,
             "GET",
             "calendar_events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_comm_messages(self, user_id, **kwargs):
+        """
+        Retrieve a paginated list of messages sent to a user.
+
+        :calls: `GET /api/v1/comm_messages \
+        <https://canvas.instructure.com/doc/api/comm_messages.html#method.comm_messages_api.index>`_
+
+        :returns: Paginated list containing messages sent to user
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.comm_message.CommMessage`
+
+        """
+
+        kwargs["user_id"] = user_id
+
+        return PaginatedList(
+            CommMessage,
+            self.__requester,
+            "GET",
+            "comm_messages",
             _kwargs=combine_kwargs(**kwargs),
         )
 
