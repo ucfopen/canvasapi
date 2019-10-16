@@ -4,6 +4,8 @@
 
 ### New Endpoint Coverage
 
+- Authentications Log (Thanks, [@weining-li](https://github.com/weining-li))
+- Brand Configs (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Quiz Submission Events (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
 - Rubric Associations (Thanks, [@weining-li](https://github.com/weining-li))
 
@@ -14,6 +16,7 @@
 ### Bugfixes
 
 - Fixed an issue where `util.clean_headers()` would throw a `ValueError` if a user accidentally included a space in their API token. (Thanks, [@keeeeeegan](https://github.com/keeeeeegan))
+- Fixed an issue where `QuizSubmission` objects sometimes wouldn't have a course_id, making some methods unusable. (Thanks, [@bennettscience](https://github.com/bennettscience))
 
 ## [0.14.0] - 2019-08-20
 
