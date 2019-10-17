@@ -5,7 +5,12 @@ import uuid
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
+from canvasapi.assignment import (
+    Assignment,
+    AssignmentGroup,
+    AssignmentOverride,
+    AssignmentExtension
+)
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
@@ -130,6 +135,50 @@ class TestAssignment(unittest.TestCase):
         self.assertEqual(len(submission_list_by_id), 2)
         self.assertIsInstance(submission_list_by_id[0], Submission)
 
+    # set_extensions()
+    def test_set_extensions(self, m):
+        register_uris({'assignment': ['set_extensions']}, m)
+
+        extension = self.assignment.set_extensions([
+            {
+                'user_id': 3,
+                'extra_attempts': 2
+            },
+            {
+                'user_id': 2,
+                'extra_attempts': 2
+            }
+        ])
+
+        self.assertIsInstance(extension, list)
+        self.assertEqual(len(extension), 2)
+
+        self.assertIsInstance(extension[0], AssignmentExtension)
+        self.assertEqual(extension[0].user_id, 3)
+        self.assertTrue(hasattr(extension[0], 'extra_attempts'))
+        self.assertEqual(extension[0].extra_attempts, 2)
+
+        self.assertIsInstance(extension[1], AssignmentExtension)
+        self.assertEqual(extension[1].user_id, 2)
+        self.assertTrue(hasattr(extension[1], 'extra_attempts'))
+        self.assertEqual(extension[1].extra_attempts, 2)
+
+    def test_set_extensions_not_list(self, m):
+        with self.assertRaises(ValueError):
+            self.assignment.set_extensions({'user_id': 3, 'exrra_attempts': 2})
+
+    def test_set_extensions_empty_list(self, m):
+        with self.assertRaises(ValueError):
+            self.assignment.set_extensions([])
+
+    def test_set_extensions_non_dicts(self, m):
+        with self.assertRaises(ValueError):
+            self.assignment.set_extensions([('user_id', 1), ('extra_attempts', 2)])
+
+    def test_set_extensions_missing_key(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.assignment.set_extensions([{'extra_attempts': 3}])
+
     # submit()
     def test_submit(self, m):
         register_uris({"assignment": ["submit"]}, m)
@@ -235,6 +284,26 @@ class TestAssignment(unittest.TestCase):
             self.assertIn("url", response[1])
         finally:
             cleanup_file(filename)
+
+
+@requests_mock.Mocker()
+class TestAssignmentExtension(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.extension = AssignmentExtension(
+            self.canvas._Canvas__requester,
+            {
+                'assignment_id': 2,
+                'user_id': 3,
+                'extra_attempts': 2
+            }
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.extension)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()
