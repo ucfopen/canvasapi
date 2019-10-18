@@ -230,7 +230,9 @@ class Assignment(CanvasObject):
             raise ValueError("Param `assignment_extensions` must be a non-empty list.")
 
         if any(not isinstance(extension, dict) for extension in assignment_extensions):
-            raise ValueError("Param `assignment_extensions` must only contain dictionaries")
+            raise ValueError(
+                "Param `assignment_extensions` must only contain dictionaries"
+            )
 
         if any("user_id" not in extension for extension in assignment_extensions):
             raise RequiredFieldMissing(
@@ -244,7 +246,8 @@ class Assignment(CanvasObject):
         )
         extension_list = response.json()["assignment_extensions"]
         return [
-            AssignmentExtension(self._requester, extension) for extension in extension_list
+            AssignmentExtension(self._requester, extension)
+            for extension in extension_list
         ]
 
     def submit(self, submission, file=None, **kwargs):
