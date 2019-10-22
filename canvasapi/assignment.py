@@ -204,7 +204,7 @@ class Assignment(CanvasObject):
 
     def set_extensions(self, assignment_extensions, **kwargs):
         """
-        Set extensions on student assignment submissions
+        Set extensions for student assignment submissions
 
         :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/extensions  \
         <https://canvas.instructure.com/doc/api/assignment_extensions.html#method.assignment_extensions.create>`_
