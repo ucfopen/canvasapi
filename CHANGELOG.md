@@ -6,6 +6,7 @@
 
 - Authentications Log (Thanks, [@weining-li](https://github.com/weining-li))
 - Brand Configs (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Comm Messages (Thanks, [@ljoks](https://github.com/ljoks))
 - Quiz Submission Events (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
 - Rubric Associations (Thanks, [@weining-li](https://github.com/weining-li))
 
