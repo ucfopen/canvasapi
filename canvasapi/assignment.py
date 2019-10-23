@@ -206,13 +206,13 @@ class Assignment(CanvasObject):
         """
         Set extensions for student assignment submissions
 
-        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/extensions  \
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/extensions  \
         <https://canvas.instructure.com/doc/api/assignment_extensions.html#method.assignment_extensions.create>`_
 
         :param assignment_extensions: list of dictionsaries representing extensions
         :type assignment_extensions: list
 
-        :rtype: list of :class:`canvasapi.assignment.AssignmentExtension`
+        :rtype: list of :class:`canvasapi.assignment.AssignmentExtension`
 
         Example Usage:
         >>> assignment.set_extensions([
@@ -347,7 +347,7 @@ class Assignment(CanvasObject):
 @python_2_unicode_compatible
 class AssignmentExtension(CanvasObject):
     def __str__(self):
-        return "{} ({})".format(self.assignment_id, self.user_id)
+        return "{} ({})".format(self.assignment_id, self.user_id)
 
 
 @python_2_unicode_compatible
