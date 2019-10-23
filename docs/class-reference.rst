@@ -14,6 +14,7 @@ Class Reference
     bookmark-ref
     calendar-event-ref
     collaboration-ref
+    comm-message-ref
     communication-channel-ref
     content-export-ref
     content-migration-ref
