@@ -215,6 +215,7 @@ class Assignment(CanvasObject):
         :rtype: list of :class:`canvasapi.assignment.AssignmentExtension`
 
         Example Usage:
+
         >>> assignment.set_extensions([
         ...     {
         ...         'user_id': 3,
