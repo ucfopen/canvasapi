@@ -206,10 +206,10 @@ class Assignment(CanvasObject):
         """
         Set extensions for student assignment submissions
 
-        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/extensions  \
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/extensions \
         <https://canvas.instructure.com/doc/api/assignment_extensions.html#method.assignment_extensions.create>`_
 
-        :param assignment_extensions: list of dictionsaries representing extensions
+        :param assignment_extensions: list of dictionaries representing extensions
         :type assignment_extensions: list
 
         :rtype: list of :class:`canvasapi.assignment.AssignmentExtension`
