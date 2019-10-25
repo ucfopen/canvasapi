@@ -9,6 +9,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.gradebook_history import Day, Grader
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
@@ -1225,6 +1226,55 @@ class Course(CanvasObject):
             "GET", "courses/{}/discussion_topics/{}/view".format(self.id, topic_id)
         )
         return response.json()
+
+    def get_gradebook_history_dates(self, **kwargs):
+        """
+        Returns a map of dates to grader/assignment groups
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/days\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.gradebook_history_api.days>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_history.Day`
+        """
+
+        return PaginatedList(
+            Day,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/days".format(
+                self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_gradebook_history_details(self, **kwargs):
+        """
+        Returns the graders who worked on this day, along with the \
+        assignments they worked on. More details can be obtained by \
+        selecting a grader and assignment and calling the 'submissions' \
+        api endpoint for a given date.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
+        gradebook_history_api.day_details>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.Grader`
+        """
+
+        date = kwargs["date"]
+
+        return PaginatedList(
+            Grader,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/{}".format(
+                self.id, date
+            ),
+            kwargs=combine_kwargs(**kwargs),
+        )
+
 
     def get_grading_period(self, grading_period, **kwargs):
         """
