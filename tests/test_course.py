@@ -1676,6 +1676,24 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(response[0].title, "Grading period 1")
         self.assertEqual(response[1].title, "Grading period 2")
 
+    # get_grade_change_log()
+    def test_get_grade_change_log(self, m):
+        register_uris({"course": ["get_grade_change_log"]}, m)
+
+        response = self.course.get_grade_change_log()
+
+        events = [event for event in response]
+        course_id = 1
+        event_type = "grade_change"
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertEqual(len(events), 2)
+        self.assertEqual(events[0].links["course"], course_id)
+        self.assertEqual(events[1].links["course"], course_id)
+        self.assertEqual(events[0].event_type, event_type)
+        self.assertEqual(events[1].event_type, event_type)
+        self.assertEqual(events[0].version_number, events[1].version_number + 1)
+
     # get_grading_period()
     def test_get_grading_period(self, m):
         register_uris({"course": ["get_grading_period"]}, m)
