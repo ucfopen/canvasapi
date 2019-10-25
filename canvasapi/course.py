@@ -9,6 +9,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.grade_change_event import GradeChangeEvent
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
@@ -1225,6 +1226,26 @@ class Course(CanvasObject):
             "GET", "courses/{}/discussion_topics/{}/view".format(self.id, topic_id)
         )
         return response.json()
+
+    def get_grade_change_log(self, **kwargs):
+        """
+        Return a paginated list of grade change events for the course.
+
+        :calls: `GET /api/v1/audit/grade_change/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_course>`
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_event.GradingPeriod`
+        """
+
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/courses/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_grading_period(self, grading_period, **kwargs):
         """
