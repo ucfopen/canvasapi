@@ -394,7 +394,8 @@
 					}
 				}
 			]
-		}
+		},
+		"status_code": 200
 	},
 	"get_outcome_import_status":{
 		"method" : "GET",
