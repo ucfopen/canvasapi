@@ -1235,7 +1235,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_course>`
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.grade_change_event.GradingPeriod`
+            :class:`canvasapi.grade_change_event.GradeChangeEvent`
         """
 
         return PaginatedList(
