@@ -24,7 +24,7 @@ class SubmissionVersion(CanvasObject):
     def __str__(self):
         return "{} {}".format(self.assignment_id, self.id)
 
-    def get_submissions(self, grader_id, assignment_id, **kwargs):
+    def get_submissions(self, grader_id, assignment_id, date, **kwargs):
         """
         Gives a nested list of submission versions.
 
@@ -39,15 +39,15 @@ class SubmissionVersion(CanvasObject):
         :type assignment_id: int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.gradebook_history.Grader`
+            :class:`canvasapi.gradebook_history.SubmissionHistory`
         """
     
         return PaginatedList(
-            Grader,
+            SubmissionHistory,
             self._requester,
             "GET",
             "courses/{}/gradebook_history/{}/graders/{}/assignments/{}/submissions".format(
-                self.course_id, self.date, grader_id, assignment_id 
+                self.id, date, grader_id, assignment_id 
             ),
             kwargs=combine_kwargs(**kwargs),
         )

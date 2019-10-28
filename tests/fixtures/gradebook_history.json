@@ -1,0 +1,16 @@
+{
+	"get_submissions": {
+		"method": "GET",
+		"endpoint": "courses/1/gradebook_history/08-23-2019/graders/1/assignments/1/submissions",
+		"data": [
+			{
+                "submission_id": 4,
+                "versions": null
+            },
+            {
+                "submission_id": 7,
+                "versions": null
+            }
+        ]
+    }
+}

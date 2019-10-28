@@ -14,6 +14,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.gradebook_history import Day, Grader, SubmissionVersion
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.course_epub_export import CourseEpubExport
@@ -551,6 +552,26 @@ class TestCourse(unittest.TestCase):
 
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_gradebook_history_dates()
+    def test_get_gradebook_history_dates(self, m):
+        register_uris({"course": ["get_gradebook_history_dates"]}, m)
+
+        gradebook_history = self.course.get_gradebook_history_dates()
+        gh_list = [gh for gh in gradebook_history]
+        self.assertEqual(len(gh_list), 2)
+        self.assertIsInstance(gh_list[0], Day)
+        self.assertIsInstance(gh_list[1], Day)
+
+    #get_gradebook_history_details
+    def test_get_gradebook_history_details(self, m):
+        register_uris({"course": ["get_gradebook_history_details"]}, m)
+
+        gradebook_history_details = self.course.get_gradebook_history_details("03-26-2019")
+        ghd_list = [ghd for ghd in gradebook_history_details]
+        self.assertEqual(len(ghd_list), 2)
+        self.assertIsInstance(ghd_list[0], Grader)
+        self.assertIsInstance(ghd_list[1], Grader)
 
     # get_groups()
     def test_get_groups(self, m):

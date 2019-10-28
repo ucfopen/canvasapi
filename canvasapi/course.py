@@ -9,7 +9,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.gradebook_history import Day, Grader
+from canvasapi.gradebook_history import Day, Grader, SubmissionVersion
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
@@ -1248,7 +1248,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_gradebook_history_details(self, **kwargs):
+    def get_gradebook_history_details(self, date, **kwargs):
         """
         Returns the graders who worked on this day, along with the \
         assignments they worked on. More details can be obtained by \
@@ -1262,8 +1262,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.gradebook_history.Grader`
         """
-
-        date = kwargs["date"]
 
         return PaginatedList(
             Grader,
@@ -1864,6 +1862,31 @@ class Course(CanvasObject):
             "courses/{}/tabs".format(self.id),
             {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_uncollated_submissions(self, **kwargs):
+        """
+        Gives a paginated, uncollated list of submission versions for all matching 
+        submissions in the context. This SubmissionVersion objects will not include 
+        the new_grade or previous_grade keys, only the grade; same for graded_at 
+        and grader.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/feed\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method\
+        .gradebook_history_api.feed>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.SubmissionVersion`
+        """
+    
+        return PaginatedList(
+            SubmissionVersion,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/feed".format(
+                self.id 
+            ),
+            kwargs=combine_kwargs(**kwargs),
         )
 
     def get_user(self, user, user_id_type=None):
