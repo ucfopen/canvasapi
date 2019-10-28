@@ -10,7 +10,7 @@ from tests.util import register_uris
 
 
 @requests_mock.Mocker()
-class TestCommMessage(unittest.TestCase):
+class TestGradeChangeEvent(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
