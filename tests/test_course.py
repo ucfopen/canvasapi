@@ -14,6 +14,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.grade_change_event import GradeChangeEvent
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.course_epub_export import CourseEpubExport
@@ -1683,16 +1684,14 @@ class TestCourse(unittest.TestCase):
         response = self.course.get_grade_change_log()
 
         events = [event for event in response]
-        course_id = 1
-        event_type = "grade_change"
 
         self.assertIsInstance(response, PaginatedList)
         self.assertEqual(len(events), 2)
-        self.assertEqual(events[0].links["course"], course_id)
-        self.assertEqual(events[1].links["course"], course_id)
-        self.assertEqual(events[0].event_type, event_type)
-        self.assertEqual(events[1].event_type, event_type)
-        self.assertEqual(events[0].version_number, events[1].version_number + 1)
+
+        for event in response:
+            self.assertEqual(event.links["course"], self.course.id)
+            self.assertIsInstance(event, GradeChangeEvent)
+            self.assertEqual(event.event_type, "grade_change")
 
     # get_grading_period()
     def test_get_grading_period(self, m):
