@@ -37,6 +37,7 @@ from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
+from canvasapi.usage_rights import UsageRights
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.content_export import ContentExport
 from tests import settings
@@ -1778,6 +1779,24 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(rubric_association, RubricAssociation)
         self.assertEqual(rubric_association.id, 4)
         self.assertEqual(rubric_association.association_type, "Course")
+
+    # set_usage_rights()
+    def test_set_usage_rights(self, m):
+        register_uris({"course": ["set_usage_rights"]}, m)
+
+        usage_rights = self.course.set_usage_rights(
+            file_ids = [1,2],
+            usage_rights ={
+                "use_justification": "fair_use",
+                "license": "private"
+            }
+        )
+
+        self.assertIsInstance(usage_rights, UsageRights)
+        self.assertEqual(usage_rights.use_justification, "fair_use")
+        self.assertEqual(usage_rights.message, "2 files updated")
+        self.assertEqual(usage_rights.license, "private")
+        self.assertEqual(usage_rights.file_ids, [1,2])
 
 
 @requests_mock.Mocker()

@@ -22,6 +22,7 @@ from canvasapi.login import Login
 from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.user import User
+from canvasapi.usage_rights import UsageRights
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -580,6 +581,24 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(event_list[1], AuthenticationEvent)
         self.assertEqual(event_list[1].created_at, "2012-07-20T15:00:00-06:00")
         self.assertEqual(event_list[1].event_type, "logout")
+
+    # set_usage_rights()
+    def test_set_usage_rights(self, m):
+        register_uris({"user": ["set_usage_rights"]}, m)
+
+        usage_rights = self.user.set_usage_rights(
+            file_ids = [1,2],
+            usage_rights ={
+                "use_justification": "fair_use",
+                "license": "private"
+            }
+        )
+
+        self.assertIsInstance(usage_rights, UsageRights)
+        self.assertEqual(usage_rights.use_justification, "fair_use")
+        self.assertEqual(usage_rights.message, "2 files updated")
+        self.assertEqual(usage_rights.license, "private")
+        self.assertEqual(usage_rights.file_ids, [1,2])
 
 
 @requests_mock.Mocker()

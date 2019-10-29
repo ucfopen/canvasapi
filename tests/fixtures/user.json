@@ -935,5 +935,16 @@
 			}
 		],
 		"status_code": 200
+	},
+	"set_usage_rights": {
+		"method": "PUT",
+		"endpoint": "users/1/usage_rights",
+		"data": {
+			"use_justification": "fair_use",
+			"license": "private",
+			"message": "2 files updated",
+			"file_ids": [1,2]
+		},
+		"status_code": 200
 	}
 }

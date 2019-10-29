@@ -23,6 +23,7 @@ from canvasapi.tab import Tab
 from canvasapi.rubric import RubricAssociation, Rubric
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.upload import Uploader
+from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
     combine_kwargs,
     is_multivalued,
@@ -2457,6 +2458,24 @@ class Course(CanvasObject):
         return [
             QuizExtension(self._requester, extension) for extension in extension_list
         ]
+    
+    def set_usage_rights(self, **kwargs):
+        """
+        Changes the usage rights for specified files that are under the current group scope
+
+        :calls: `PUT /api/v1/courses/:course_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.set_usage_rights>`_
+
+        :rtype: :class: `canvasapi.usage_rights.UsageRights`
+        """
+        
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return UsageRights(self._requester, response.json())
 
     def show_front_page(self):
         """
