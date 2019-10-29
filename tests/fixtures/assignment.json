@@ -275,6 +275,24 @@
 			"title": "Section Assignment Override"
 		}
 	},
+	"set_extensions":{
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/extensions",
+		"data": {
+			"assignment_extensions": [
+				{
+					"assignment_id": 2,
+					"user_id": 3,
+					"extra_attempts": 2
+				},
+				{
+					"assignment_id": 2,
+					"user_id": 2,
+					"extra_attempts": 2
+				}
+			]
+		}
+	},
 	"submit": {
 		"method": "POST",
 		"endpoint": "courses/1/assignments/1/submissions",
