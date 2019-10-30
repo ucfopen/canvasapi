@@ -14,7 +14,7 @@ class GradeChangeLog(CanvasObject):
         :param attributes: The JSON object to build this object with.
         :type attributes: dict
         """
-        super().__init__(requester, attributes)
+        super(GradeChangeLog, self).__init__(requester, attributes)
 
         # NOTE: canvas's api paginates these events so this probably needs to be paginated
         self.events = [
