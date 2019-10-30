@@ -2390,7 +2390,7 @@ class Course(CanvasObject):
 
         :rtype: dict
         """
-        
+
         response = self._requester.request(
             "DELETE",
             "courses/{}/usage_rights".format(self.id),
@@ -2496,7 +2496,7 @@ class Course(CanvasObject):
         return [
             QuizExtension(self._requester, extension) for extension in extension_list
         ]
-    
+
     def set_usage_rights(self, **kwargs):
         """
         Changes the usage rights for specified files that are under the current course scope
@@ -2506,7 +2506,7 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.usage_rights.UsageRights`
         """
-        
+
         response = self._requester.request(
             "PUT",
             "courses/{}/usage_rights".format(self.id),

@@ -8,15 +8,14 @@ from canvasapi.usage_rights import UsageRights
 from tests import settings
 from tests.util import register_uris
 
+
 @requests_mock.Mocker()
 class TestLicenses(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {
-                "user": ["get_by_id","list_licenses"]
-            }
+            requires = {"user": ["get_by_id", "list_licenses"]}
 
             register_uris(requires, m)
 

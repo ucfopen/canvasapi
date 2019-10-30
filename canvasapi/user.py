@@ -920,7 +920,7 @@ class User(CanvasObject):
 
         :rtype: dict
         """
-        
+
         response = self._requester.request(
             "DELETE",
             "users/{}/usage_rights".format(self.id),
@@ -928,7 +928,7 @@ class User(CanvasObject):
         )
 
         return response.json()
-        
+
     def set_usage_rights(self, **kwargs):
         """
         Changes the usage rights for specified files that are under the user scope
@@ -938,7 +938,7 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.usage_rights.UsageRights`
         """
-        
+
         response = self._requester.request(
             "PUT",
             "users/{}/usage_rights".format(self.id),

@@ -817,7 +817,6 @@ class Group(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-
     def list_memberships(self, **kwargs):
         """
         List users in a group.
@@ -977,7 +976,7 @@ class Group(CanvasObject):
 
         :rtype: :class:`canvasapi.usage_rights.UsageRights`
         """
-        
+
         response = self._requester.request(
             "PUT",
             "groups/{}/usage_rights".format(self.id),

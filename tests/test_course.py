@@ -1786,30 +1786,25 @@ class TestCourse(unittest.TestCase):
         register_uris({"course": ["set_usage_rights"]}, m)
 
         usage_rights = self.course.set_usage_rights(
-            file_ids = [1,2],
-            usage_rights ={
-                "use_justification": "fair_use",
-                "license": "private"
-            }
+            file_ids=[1, 2],
+            usage_rights={"use_justification": "fair_use", "license": "private"},
         )
 
         self.assertIsInstance(usage_rights, UsageRights)
         self.assertEqual(usage_rights.use_justification, "fair_use")
         self.assertEqual(usage_rights.message, "2 files updated")
         self.assertEqual(usage_rights.license, "private")
-        self.assertEqual(usage_rights.file_ids, [1,2])
+        self.assertEqual(usage_rights.file_ids, [1, 2])
 
     # remove_usage_rights()
     def test_remove_usage_rights(self, m):
         register_uris({"course": ["remove_usage_rights"]}, m)
 
-        retval = self.course.remove_usage_rights(
-            file_ids = [1,2]
-        )
+        retval = self.course.remove_usage_rights(file_ids=[1, 2])
 
         self.assertIsInstance(retval, dict)
         self.assertIn("message", retval)
-        self.assertEqual(retval["file_ids"], [1,2])
+        self.assertEqual(retval["file_ids"], [1, 2])
         self.assertEqual(retval["message"], "2 files updated")
 
     def test_list_licenses(self, m):
