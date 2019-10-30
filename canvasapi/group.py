@@ -901,6 +901,23 @@ class Group(CanvasObject):
         )
         return response.json().get("html", "")
 
+    def remove_usage_rights(self, **kwargs):
+        """
+        Removes the usage rights for specified files that are under the current group scope
+
+        :calls: `DELETE /api/v1/groups/:group_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
+
+        :rtype: dict
+        """
+        response = self._requester.request(
+            "DELETE",
+            "groups/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def remove_user(self, user):
         """
         Leave a group if allowed.
@@ -921,23 +938,6 @@ class Group(CanvasObject):
             "DELETE", "groups/{}/users/{}".format(self.id, user_id)
         )
         return User(self._requester, response.json())
-
-    def remove_usage_rights(self, **kwargs):
-        """
-        Removes the usage rights for specified files that are under the current group scope
-
-        :calls: `DELETE /api/v1/groups/:group_id/usage_rights \
-        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
-
-        :rtype: dict
-        """
-        response = self._requester.request(
-            "DELETE",
-            "groups/{}/usage_rights".format(self.id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        return response.json()
 
     def reorder_pinned_topics(self, order):
         """
