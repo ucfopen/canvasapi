@@ -14,7 +14,12 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.gradebook_history import Day, Grader, SubmissionVersion, SubmissionHistory
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionVersion,
+    SubmissionHistory,
+)
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.course_epub_export import CourseEpubExport
@@ -1019,12 +1024,7 @@ class TestCourse(unittest.TestCase):
 
     # get_submission_history
     def test_get_submission_history(self, m):
-        register_uris(
-            {
-                "course": ["get_submission_history"],
-            },
-            m,
-        )
+        register_uris({"course": ["get_submission_history"]}, m)
 
         submissions = self.course.get_submission_history("08-23-2019", 1, 1)
         sub_list = [sub for sub in submissions]
