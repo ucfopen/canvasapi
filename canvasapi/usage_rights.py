@@ -8,5 +8,4 @@ from canvasapi.util import combine_kwargs
 @python_2_unicode_compatible
 class UsageRights(CanvasObject):
     def __str__(self):
-        return "{} {}".format(self.use_justification, self.license)    
-        
+        return "{} {}".format(self.use_justification, self.license)

@@ -9,6 +9,7 @@ from canvasapi.collaboration import Collaboration
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
 from canvasapi.usage_rights import UsageRights
@@ -797,6 +798,26 @@ class Group(CanvasObject):
 
         return self.get_folders(**kwargs)
 
+    def list_licenses(self, **kwargs):
+        """
+        Returns a paginated list of the licenses that can be applied to the files under the group scope
+
+        :calls: `GET /api/v1/groups/:group_id/content_licenses \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.license.License`
+        """
+
+        return PaginatedList(
+            License,
+            self._requester,
+            "GET",
+            "groups/{}/content_licenses".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+
     def list_memberships(self, **kwargs):
         """
         List users in a group.
@@ -901,6 +922,23 @@ class Group(CanvasObject):
         )
         return User(self._requester, response.json())
 
+    def remove_usage_rights(self, **kwargs):
+        """
+        Removes the usage rights for specified files that are under the current group scope
+
+        :calls: `DELETE /api/v1/groups/:group_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
+
+        :rtype: dict
+        """
+        response = self._requester.request(
+            "DELETE",
+            "groups/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def reorder_pinned_topics(self, order):
         """
         Puts the pinned discussion topics in the specified order.
@@ -937,7 +975,7 @@ class Group(CanvasObject):
         :calls: `PUT /api/v1/groups/:group_id/usage_rights \
         <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.set_usage_rights>`_
 
-        :rtype: :class: `canvasapi.usage_rights.UsageRights`
+        :rtype: :class:`canvasapi.usage_rights.UsageRights`
         """
         
         response = self._requester.request(

@@ -14,6 +14,7 @@ from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.license import License
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
@@ -2148,6 +2149,25 @@ class Course(CanvasObject):
 
         return self.get_groups(**kwargs)
 
+    def list_licenses(self, **kwargs):
+        """
+        Returns a paginated list of the licenses that can be applied to the files under the group scope
+
+        :calls: `GET /api/v1/groups/:group_id/content_licenses \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.license.License`
+        """
+
+        return PaginatedList(
+            License,
+            self._requester,
+            "GET",
+            "courses/{}/content_licenses".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def list_multiple_submissions(self, **kwargs):
         """
         List submissions for multiple assignments.
@@ -2361,6 +2381,24 @@ class Course(CanvasObject):
         )
         return response.json().get("html", "")
 
+    def remove_usage_rights(self, **kwargs):
+        """
+        Removes the usage rights for specified files that are under the current course scope
+
+        :calls: `DELETE /api/v1/courses/:course_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
+
+        :rtype: dict
+        """
+        
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def reorder_pinned_topics(self, order):
         """
         Puts the pinned discussion topics in the specified order.
@@ -2461,12 +2499,12 @@ class Course(CanvasObject):
     
     def set_usage_rights(self, **kwargs):
         """
-        Changes the usage rights for specified files that are under the current group scope
+        Changes the usage rights for specified files that are under the current course scope
 
         :calls: `PUT /api/v1/courses/:course_id/usage_rights \
         <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.set_usage_rights>`_
 
-        :rtype: :class: `canvasapi.usage_rights.UsageRights`
+        :rtype: :class:`canvasapi.usage_rights.UsageRights`
         """
         
         response = self._requester.request(

@@ -946,5 +946,31 @@
 			"file_ids": [1,2]
 		},
 		"status_code": 200
+	},
+	"remove_usage_rights": {
+		"method": "DELETE",
+		"endpoint": "users/1/usage_rights",
+		"data": {
+			"message": "2 files updated",
+			"file_ids": [1,2]
+		},
+		"status_code": 200
+	},
+	"list_licenses": {
+		"method": "GET",
+		"endpoint": "users/1/content_licenses",
+		"data": [
+			{
+				"id": "private",
+				"name": "Private (Copyrighted)",
+				"url": "http://en.wikipedia.org/wiki/Copyright"
+			},
+			{
+				"id": "public_domain",
+				"name": "Public domain",
+				"url": "http://en.wikipedia.org/wiki/Public_domain"
+			}
+		],
+		"status_code": 200
 	}
 }

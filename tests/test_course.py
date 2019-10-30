@@ -25,6 +25,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.group import Group, GroupCategory
+from canvasapi.license import License
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
@@ -1797,6 +1798,34 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(usage_rights.message, "2 files updated")
         self.assertEqual(usage_rights.license, "private")
         self.assertEqual(usage_rights.file_ids, [1,2])
+
+    # remove_usage_rights()
+    def test_remove_usage_rights(self, m):
+        register_uris({"course": ["remove_usage_rights"]}, m)
+
+        retval = self.course.remove_usage_rights(
+            file_ids = [1,2]
+        )
+
+        self.assertIsInstance(retval, dict)
+        self.assertIn("message", retval)
+        self.assertEqual(retval["file_ids"], [1,2])
+        self.assertEqual(retval["message"], "2 files updated")
+
+    def test_list_licenses(self, m):
+        register_uris({"course": ["list_licenses"]}, m)
+
+        licenses = self.course.list_licenses()
+        self.assertIsInstance(licenses, PaginatedList)
+        licenses = list(licenses)
+
+        for l in licenses:
+            self.assertIsInstance(l, License)
+            self.assertTrue(hasattr(l, "id"))
+            self.assertTrue(hasattr(l, "name"))
+            self.assertTrue(hasattr(l, "url"))
+
+        self.assertEqual(2, len(licenses))
 
 
 @requests_mock.Mocker()

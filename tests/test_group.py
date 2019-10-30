@@ -16,6 +16,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
 from canvasapi.content_migration import ContentMigration, Migrator
@@ -621,6 +622,54 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(content_export, ContentExport)
         self.assertTrue(hasattr(content_export, "export_type"))
 
+     # set_usage_rights()
+    def test_set_usage_rights(self, m):
+        register_uris({"group": ["set_usage_rights"]}, m)
+
+        usage_rights = self.group.set_usage_rights(
+            file_ids = [1,2],
+            usage_rights ={
+                "use_justification": "fair_use",
+                "license": "private"
+            }
+        )
+
+        self.assertIsInstance(usage_rights, UsageRights)
+        self.assertEqual(usage_rights.use_justification, "fair_use")
+        self.assertEqual(usage_rights.message, "2 files updated")
+        self.assertEqual(usage_rights.license, "private")
+        self.assertEqual(usage_rights.file_ids, [1,2])
+
+    # remove_usage_rights()
+    def test_remove_usage_rights(self, m):
+        register_uris({"group": ["remove_usage_rights"]}, m)
+
+        retval = self.group.remove_usage_rights(
+            file_ids = [1,2]
+        )
+
+        self.assertIsInstance(retval, dict)
+        self.assertIn("message", retval)
+        self.assertEqual(retval["file_ids"], [1,2])
+        self.assertEqual(retval["message"], "2 files updated")
+
+    # list_licenses()
+    def test_list_licenses(self, m):
+        register_uris({"group": ["list_licenses"]}, m)
+
+        licenses = self.group.list_licenses()
+        self.assertIsInstance(licenses, PaginatedList)
+        licenses = list(licenses)
+
+        for l in licenses:
+            self.assertIsInstance(l, License)
+            self.assertTrue(hasattr(l, "id"))
+            self.assertTrue(hasattr(l, "name"))
+            self.assertTrue(hasattr(l, "url"))
+
+        self.assertEqual(2, len(licenses))
+
+
 
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):
@@ -666,25 +715,6 @@ class TestGroupMembership(unittest.TestCase):
 
         self.assertIsInstance(response, dict)
         self.assertEqual(len(response), 0)
-
-    # set_usage_rights()
-    def test_set_usage_rights(self, m):
-        register_uris({"group": ["set_usage_rights"]}, m)
-
-        usage_rights = self.group.set_usage_rights(
-            file_ids = [1,2],
-            usage_rights ={
-                "use_justification": "fair_use",
-                "license": "private"
-            }
-        )
-
-        self.assertIsInstance(usage_rights, UsageRights)
-        self.assertEqual(usage_rights.use_justification, "fair_use")
-        self.assertEqual(usage_rights.message, "2 files updated")
-        self.assertEqual(usage_rights.license, "private")
-        self.assertEqual(usage_rights.file_ids, [1,2])
-
 
 @requests_mock.Mocker()
 class TestGroupCategory(unittest.TestCase):

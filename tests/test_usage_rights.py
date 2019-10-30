@@ -15,9 +15,7 @@ class TestUsageRights(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                "group": ["get_by_id", "set_usage_rights"],
-                "course": ["get_by_id", "set_usage_rights"],
-                "user": ["get_by_id", "set_usage_rights"],
+                "user": ["get_by_id", "set_usage_rights"]
             }
 
             register_uris(requires, m)
