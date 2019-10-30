@@ -9,7 +9,12 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.gradebook_history import Day, Grader, SubmissionVersion
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionVersion,
+    SubmissionHistory,
+)
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
@@ -1242,9 +1247,7 @@ class Course(CanvasObject):
             Day,
             self._requester,
             "GET",
-            "courses/{}/gradebook_history/days".format(
-                self.id
-            ),
+            "courses/{}/gradebook_history/days".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -1259,6 +1262,9 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
         gradebook_history_api.day_details>`_
 
+        :param date: The date for which you would like to see detailed information.
+        :type date: int
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.gradebook_history.Grader`
         """
@@ -1267,12 +1273,9 @@ class Course(CanvasObject):
             Grader,
             self._requester,
             "GET",
-            "courses/{}/gradebook_history/{}".format(
-                self.id, date
-            ),
+            "courses/{}/gradebook_history/{}".format(self.id, date),
             kwargs=combine_kwargs(**kwargs),
         )
-
 
     def get_grading_period(self, grading_period, **kwargs):
         """
@@ -1810,6 +1813,36 @@ class Course(CanvasObject):
         )
         return GradingStandard(self._requester, response.json())
 
+    def get_submission_history(self, date, grader_id, assignment_id, **kwargs):
+        """
+        Gives a nested list of submission versions.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date/graders\
+        /:grader_id/assignments/:assignment_id/submissions\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
+        gradebook_history_api.submissions>`_
+
+        :param date: The date for which you would like to see submissions
+        :type grader_id: str
+        :param grader_id: The ID of the grader for which you want to see submissions.
+        :type grader_id: int
+        :param assignment_id: The ID of the assignment for which you want to see submissions
+        :type assignment_id: int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.SubmissionHistory`
+        """
+
+        return PaginatedList(
+            SubmissionHistory,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/{}/graders/{}/assignments/{}/submissions".format(
+                self.id, date, grader_id, assignment_id
+            ),
+            kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_submission(self, assignment, user, **kwargs):
         """
         Get a single submission, based on user id.
@@ -1866,9 +1899,9 @@ class Course(CanvasObject):
 
     def get_uncollated_submissions(self, **kwargs):
         """
-        Gives a paginated, uncollated list of submission versions for all matching 
-        submissions in the context. This SubmissionVersion objects will not include 
-        the new_grade or previous_grade keys, only the grade; same for graded_at 
+        Gives a paginated, uncollated list of submission versions for all matching
+        submissions in the context. This SubmissionVersion objects will not include
+        the new_grade or previous_grade keys, only the grade; same for graded_at
         and grader.
 
         :calls: `GET /api/v1/courses/:course_id/gradebook_history/feed\
@@ -1878,14 +1911,12 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.gradebook_history.SubmissionVersion`
         """
-    
+
         return PaginatedList(
             SubmissionVersion,
             self._requester,
             "GET",
-            "courses/{}/gradebook_history/feed".format(
-                self.id 
-            ),
+            "courses/{}/gradebook_history/feed".format(self.id),
             kwargs=combine_kwargs(**kwargs),
         )
 

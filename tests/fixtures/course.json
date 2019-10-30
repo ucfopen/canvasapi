@@ -514,6 +514,38 @@
 		],
 		"status_code": 200
 	},
+	"get_submission_history": {
+		"method": "GET",
+		"endpoint": "courses/1/gradebook_history/08-23-2019/graders/1/assignments/1/submissions",
+		"data": [
+			{
+                "submission_id": 4,
+                "versions": null
+            },
+            {
+                "submission_id": 7,
+                "versions": null
+            }
+        ]
+    },
+	"get_uncollated_submissions": {
+		"method": "GET",
+		"endpoint": "courses/1/gradebook_history/feed",
+		"data": [
+			{
+				"id": 1,
+				"assignment_id": 40,
+				"assignment_name": "assignment1",
+				"grader_id": 53
+			},
+			{
+				"id": 2,
+				"assignment_id": 22,
+				"assignment_name": "assignment2",
+				"grader_id": 67
+			}
+		]
+	},
 	"get_user": {
 		"method": "GET",
 		"endpoint": "courses/1/users/1",

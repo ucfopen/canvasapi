@@ -2,40 +2,92 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 import warnings
 
-import requests
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.course import Course
-from canvasapi.gradebook_history import SubmissionHistory
 from tests import settings
 from tests.util import register_uris
 
 
 @requests_mock.Mocker()
-class TestGradebookHistory(unittest.TestCase):
+class TestGrader(unittest.TestCase):
     def setUp(self):
         warnings.simplefilter("always", DeprecationWarning)
 
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {
-                "course": ["get_assignment_by_id", "get_by_id", "get_page"],
-                "quiz": ["get_by_id"],
-                "user": ["get_by_id"],
-            }
+            requires = {"course": ["get_by_id", "get_gradebook_history_details"]}
             register_uris(requires, m)
 
             self.course = self.canvas.get_course(1)
-            self.uncollated_submission = self.course.get_uncollated_submissions()
+            self.gradebook_history_details = self.course.get_gradebook_history_details(
+                "03-26-2019"
+            )[0]
 
-    #get_submissions
-    def test_get_submissions(self, m):
-        register_uris({"gradebook_history": ["get_submissions"]}, m)
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.gradebook_history_details)
+        self.assertIsInstance(string, str)
 
-        submissions = self.uncollated_submission.get_submissions(1, 1, "03-26-2019")
-        sub_list = [sub for sub in submissions]
-        self.assertEqual(len(sub_list), 2)
-        self.assertIsInstance(sub_list[0], SubmissionHistory)
-        self.assertIsInstance(sub_list[1], SubmissionHistory)
+
+@requests_mock.Mocker()
+class TestDay(unittest.TestCase):
+    def setUp(self):
+        warnings.simplefilter("always", DeprecationWarning)
+
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {"course": ["get_by_id", "get_gradebook_history_dates"]}
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.gradebook_history_dates = self.course.get_gradebook_history_dates()[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.gradebook_history_dates)
+        self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestSubmissionVersion(unittest.TestCase):
+    def setUp(self):
+        warnings.simplefilter("always", DeprecationWarning)
+
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {"course": ["get_by_id", "get_uncollated_submissions"]}
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.uncollated_submissions = self.course.get_uncollated_submissions()[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.uncollated_submissions)
+        self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestSubmissionHistory(unittest.TestCase):
+    def setUp(self):
+        warnings.simplefilter("always", DeprecationWarning)
+
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {"course": ["get_by_id", "get_submission_history"]}
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.submission_history = self.course.get_submission_history(
+                "08-23-2019", 1, 1
+            )[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.submission_history)
+        self.assertIsInstance(string, str)

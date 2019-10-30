@@ -14,7 +14,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.gradebook_history import Day, Grader, SubmissionVersion
+from canvasapi.gradebook_history import Day, Grader, SubmissionVersion, SubmissionHistory
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.course_epub_export import CourseEpubExport
@@ -137,6 +137,15 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(updated_list), 2)
         self.assertIsInstance(updated_list[0], AssignmentOverride)
         self.assertIsInstance(updated_list[1], AssignmentOverride)
+
+    def test_get_uncollated_submissions(self, m):
+        register_uris({"course": ["get_uncollated_submissions"]}, m)
+
+        u_submissions = self.course.get_uncollated_submissions()
+        u_sub_list = [sub for sub in u_submissions]
+        self.assertEqual(len(u_sub_list), 2)
+        self.assertIsInstance(u_sub_list[0], SubmissionVersion)
+        self.assertIsInstance(u_sub_list[1], SubmissionVersion)
 
     # get_user()
     def test_get_user(self, m):
@@ -563,11 +572,13 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(gh_list[0], Day)
         self.assertIsInstance(gh_list[1], Day)
 
-    #get_gradebook_history_details
+    # get_gradebook_history_details
     def test_get_gradebook_history_details(self, m):
         register_uris({"course": ["get_gradebook_history_details"]}, m)
 
-        gradebook_history_details = self.course.get_gradebook_history_details("03-26-2019")
+        gradebook_history_details = self.course.get_gradebook_history_details(
+            "03-26-2019"
+        )
         ghd_list = [ghd for ghd in gradebook_history_details]
         self.assertEqual(len(ghd_list), 2)
         self.assertIsInstance(ghd_list[0], Grader)
@@ -1004,6 +1015,21 @@ class TestCourse(unittest.TestCase):
 
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_submission_history
+    def test_get_submission_history(self, m):
+        register_uris(
+            {
+                "course": ["get_submission_history"],
+            },
+            m,
+        )
+
+        submissions = self.course.get_submission_history("08-23-2019", 1, 1)
+        sub_list = [sub for sub in submissions]
+        self.assertEqual(len(sub_list), 2)
+        self.assertIsInstance(sub_list[0], SubmissionHistory)
+        self.assertIsInstance(sub_list[1], SubmissionHistory)
 
     # update_submission()
     def test_update_submission(self, m):
