@@ -1813,36 +1813,6 @@ class Course(CanvasObject):
         )
         return GradingStandard(self._requester, response.json())
 
-    def get_submission_history(self, date, grader_id, assignment_id, **kwargs):
-        """
-        Gives a nested list of submission versions.
-
-        :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date/graders\
-        /:grader_id/assignments/:assignment_id/submissions\
-        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
-        gradebook_history_api.submissions>`_
-
-        :param date: The date for which you would like to see submissions
-        :type grader_id: str
-        :param grader_id: The ID of the grader for which you want to see submissions.
-        :type grader_id: int
-        :param assignment_id: The ID of the assignment for which you want to see submissions
-        :type assignment_id: int
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.gradebook_history.SubmissionHistory`
-        """
-
-        return PaginatedList(
-            SubmissionHistory,
-            self._requester,
-            "GET",
-            "courses/{}/gradebook_history/{}/graders/{}/assignments/{}/submissions".format(
-                self.id, date, grader_id, assignment_id
-            ),
-            kwargs=combine_kwargs(**kwargs),
-        )
-
     def get_submission(self, assignment, user, **kwargs):
         """
         Get a single submission, based on user id.
@@ -1876,6 +1846,36 @@ class Course(CanvasObject):
         )
 
         return assignment.get_submission(user, **kwargs)
+
+    def get_submission_history(self, date, grader_id, assignment_id, **kwargs):
+        """
+        Gives a nested list of submission versions.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date/graders\
+        /:grader_id/assignments/:assignment_id/submissions\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
+        gradebook_history_api.submissions>`_
+
+        :param date: The date for which you would like to see submissions
+        :type grader_id: str
+        :param grader_id: The ID of the grader for which you want to see submissions.
+        :type grader_id: int
+        :param assignment_id: The ID of the assignment for which you want to see submissions
+        :type assignment_id: int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.SubmissionHistory`
+        """
+
+        return PaginatedList(
+            SubmissionHistory,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/{}/graders/{}/assignments/{}/submissions".format(
+                self.id, date, grader_id, assignment_id
+            ),
+            kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_tabs(self, **kwargs):
         """

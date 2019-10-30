@@ -138,6 +138,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(updated_list[0], AssignmentOverride)
         self.assertIsInstance(updated_list[1], AssignmentOverride)
 
+    # get_uncollated_submissions()
     def test_get_uncollated_submissions(self, m):
         register_uris({"course": ["get_uncollated_submissions"]}, m)
 
