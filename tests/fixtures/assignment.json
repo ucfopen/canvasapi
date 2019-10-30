@@ -166,21 +166,28 @@
 		"method": "GET",
 		"endpoint": "audit/grade_change/assignments/1",
 		"data": {
+			"links": {
+				"events.assignment": "https://canvas.com/api/v1/assignment/test",
+				"events.course": "https://canvas.com/api/v1/assignment/course",
+				"events.student": {
+					"href": null,
+					"type": "user"
+				},
+				"events.grader": {
+					"href": null,
+					"type": "user"
+				},
+				"events.page_view": null
+			},
 			"events": [
 				{
-					"id": "842ca56a-1c8f-492e-bd46-540874c2cfee",
-					"created_at": "2019-10-25T14:28:16Z",
+					"id": "dd5-6a",
 					"event_type": "grade_change",
 					"grade_before": "5",
 					"grade_after": "2",
-					"excused_before": false,
-					"excused_after": false,
-					"graded_anonymously": false,
-					"points_possible_after": 10.0,
-					"points_possible_before": 10.0,
 					"version_number": 2,
 					"links": {
-						"assignment": 1,
+						"assignment": 10,
 						"course": 1,
 						"student": 100,
 						"grader": 200,
@@ -188,26 +195,51 @@
 					}
 				},
 				{
-					"id": "ace4dc7d-4477-4ff7-8350-20752ccc7cef",
+					"id": "fg-43",
 					"created_at": "2019-10-25T14:08:46Z",
 					"event_type": "grade_change",
 					"grade_before": null,
 					"grade_after": "5",
-					"excused_before": false,
-					"excused_after": false,
-					"graded_anonymously": false,
-					"points_possible_after": 10.0,
-					"points_possible_before": 10.0,
 					"version_number": 1,
 					"links": {
-						"assignment": 1,
+						"assignment": 10,
 						"course": 1,
 						"student": 100,
 						"grader": 200,
 						"page_view": null
 					}
 				}
-			]
+			],
+			"linked": {
+				"page_views": [],
+				"assignments": [
+					{
+						"id": 10,
+						"description": "This is a test assignment",
+						"points_possible": 10.0,
+						"grading_type": "points",
+						"course_id": 1,
+						"name": "Test assignment",
+						"submission_types": ["online_text_entry"]
+					}
+				],
+				"courses": [
+					{
+						"id": 10,
+						"name": "Dev Course"
+					}
+				],
+				"users": [
+					{
+						"id": 100,
+						"name": "John Smith"
+					},
+					{
+						"id": 200,
+						"name": "Billy Smith"
+					}
+				]
+			}
 		},
 		"status_code": 200
 	},

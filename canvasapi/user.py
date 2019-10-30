@@ -8,6 +8,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeLog
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, obj_or_id, obj_or_str
@@ -584,6 +585,50 @@ class User(CanvasObject):
             "users/{}/folders".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
+
+    def get_grade_change_log_for_grader(self, **kwargs):
+        """
+        Returns the grade change log for a grader.
+
+        :calls: `/api/v1/audit/grade_change/graders/:grader_id
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_grader>`
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_event.GradeChangeEvent`
+        """
+        response = self._requester.request(
+            "GET",
+            "audit/grade_change/graders/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        data = response.json()
+        data["context"] = "grader"
+        data["context_id"] = self.id
+
+        return GradeChangeLog(self._requester, data)
+
+    def get_grade_change_log_for_student(self, **kwargs):
+        """
+        Returns the grade change log for the current student.
+
+        :calls: `/api/v1/audit/grade_change/students/:student_id
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_student>`
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_event.GradeChangeEvent`
+        """
+        response = self._requester.request(
+            "GET",
+            "audit/grade_change/students/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        data = response.json()
+        data["context"] = "student"
+        data["context_id"] = self.id
+
+        return GradeChangeLog(self._requester, data)
 
     def get_migration_systems(self, **kwargs):
         """

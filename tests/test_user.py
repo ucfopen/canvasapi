@@ -18,6 +18,7 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent, GradeChangeLog
 from canvasapi.login import Login
 from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
@@ -71,6 +72,38 @@ class TestUser(unittest.TestCase):
 
         self.assertEqual(len(course_list), 4)
         self.assertIsInstance(course_list[0], Course)
+
+    # get_grade_change_log_for_student()
+    def test_get_grade_change_log_for_student(self, m):
+        register_uris({"user": ["get_grade_change_log_for_student"]}, m)
+
+        response = self.user.get_grade_change_log_for_student()
+
+        self.assertIsInstance(response, GradeChangeLog)
+        self.assertIsInstance(response.events, list)
+        self.assertEqual(len(response.events), 2)
+        self.assertTrue("for student" in str(response))
+
+        for event in response.events:
+            self.assertEqual(event.links["course"], self.user.id)
+            self.assertIsInstance(event, GradeChangeEvent)
+            self.assertEqual(event.event_type, "grade_change")
+
+    # get_grade_change_log_for_grader()
+    def test_get_grade_change_log_for_grader(self, m):
+        register_uris({"user": ["get_grade_change_log_for_grader"]}, m)
+
+        response = self.user.get_grade_change_log_for_grader()
+
+        self.assertIsInstance(response, GradeChangeLog)
+        self.assertIsInstance(response.events, list)
+        self.assertEqual(len(response.events), 2)
+        self.assertTrue("for grader" in str(response))
+
+        for event in response.events:
+            self.assertEqual(event.links["course"], self.user.id)
+            self.assertIsInstance(event, GradeChangeEvent)
+            self.assertEqual(event.event_type, "grade_change")
 
     # get_missing_submissions()
     def test_get_missing_submissions(self, m):
