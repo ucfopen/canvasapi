@@ -3,6 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
+
+
 @python_2_unicode_compatible
 class License(CanvasObject):
     def __str__(self):
