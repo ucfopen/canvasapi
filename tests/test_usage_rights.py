@@ -4,7 +4,6 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.usage_rights import UsageRights
 from tests import settings
 from tests.util import register_uris
 

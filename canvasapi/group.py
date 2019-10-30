@@ -800,7 +800,8 @@ class Group(CanvasObject):
 
     def list_licenses(self, **kwargs):
         """
-        Returns a paginated list of the licenses that can be applied to the files under the group scope
+        Returns a paginated list of the licenses that can be applied to the
+        files under the group scope
 
         :calls: `GET /api/v1/groups/:group_id/content_licenses \
         <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_

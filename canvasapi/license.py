@@ -3,9 +3,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.util import combine_kwargs
-
-
 @python_2_unicode_compatible
 class License(CanvasObject):
     def __str__(self):
