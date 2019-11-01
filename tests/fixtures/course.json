@@ -146,6 +146,25 @@
 		},
 		"status_code": 200
 	},
+	"get_assignments_for_group": {
+		"method": "GET",
+		"endpoint": "courses/1/assignment_groups/5/assignments",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
 	"get_blueprint": {
 		"method": "GET",
 		"endpoint": "courses/1/blueprint_templates/1",

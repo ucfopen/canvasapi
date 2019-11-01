@@ -721,6 +721,43 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(assignment_group_by_obj, "course_id"))
         self.assertEqual(assignment_group_by_obj.course_id, 1)
 
+    # get_assignments_for_group()
+    def test_get_assignments_for_group(self, m):
+        register_uris(
+            {
+                "course": ["get_assignments_for_group"],
+                "assignment": ["get_assignment_group"],
+            },
+            m,
+        )
+
+        assignment_group_obj = self.course.get_assignment_group(5)
+        response = self.course.get_assignments_for_group(5)
+        assignments = [assignment for assignment in response]
+
+        self.assertIsInstance(response, PaginatedList)
+
+        for assignment in assignments:
+            self.assertIsInstance(assignment, Assignment)
+            self.assertTrue(hasattr(assignment, "id"))
+            self.assertTrue(hasattr(assignment, "name"))
+            self.assertTrue(hasattr(assignment, "course_id"))
+            self.assertTrue(hasattr(assignment, "description"))
+            self.assertEqual(assignment.course_id, self.course.id)
+
+        response = self.course.get_assignments_for_group(assignment_group_obj)
+        assignments = [assignment for assignment in response]
+
+        self.assertIsInstance(response, PaginatedList)
+
+        for assignment in assignments:
+            self.assertIsInstance(assignment, Assignment)
+            self.assertTrue(hasattr(assignment, "id"))
+            self.assertTrue(hasattr(assignment, "name"))
+            self.assertTrue(hasattr(assignment, "course_id"))
+            self.assertTrue(hasattr(assignment, "description"))
+            self.assertEqual(assignment.course_id, self.course.id)
+
     # list_assignment_groups()
     def test_list_assignment_groups(self, m):
         register_uris(
