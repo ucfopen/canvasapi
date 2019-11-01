@@ -9,18 +9,13 @@ from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.util import combine_kwargs, obj_or_id
 
-warnings.simplefilter('always', DeprecationWarning)
+warnings.simplefilter("always", DeprecationWarning)
 
 
 @python_2_unicode_compatible
 class Section(CanvasObject):
-
     def __str__(self):
-        return '{} - {} ({})'.format(
-            self.name,
-            self.course_id,
-            self.id,
-        )
+        return "{} - {} ({})".format(self.name, self.course_id, self.id)
 
     def get_assignment_override(self, assignment, **kwargs):
         """
@@ -39,11 +34,10 @@ class Section(CanvasObject):
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
         response = self._requester.request(
-            'GET',
-            'sections/{}/assignments/{}/override'.format(self.id, assignment_id)
+            "GET", "sections/{}/assignments/{}/override".format(self.id, assignment_id)
         )
         response_json = response.json()
-        response_json.update({'course_id': self.course_id})
+        response_json.update({"course_id": self.course_id})
 
         return AssignmentOverride(self._requester, response_json)
 
@@ -62,9 +56,9 @@ class Section(CanvasObject):
         return PaginatedList(
             Enrollment,
             self._requester,
-            'GET',
-            'sections/{}/enrollments'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "sections/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def cross_list_section(self, new_course):
@@ -84,8 +78,7 @@ class Section(CanvasObject):
         new_course_id = obj_or_id(new_course, "new_course", (Course,))
 
         response = self._requester.request(
-            'POST',
-            'sections/{}/crosslist/{}'.format(self.id, new_course_id)
+            "POST", "sections/{}/crosslist/{}".format(self.id, new_course_id)
         )
         return Section(self._requester, response.json())
 
@@ -99,8 +92,7 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            'DELETE',
-            'sections/{}/crosslist'.format(self.id)
+            "DELETE", "sections/{}/crosslist".format(self.id)
         )
         return Section(self._requester, response.json())
 
@@ -114,12 +106,10 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            'PUT',
-            'sections/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT", "sections/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
-        if 'name' in response.json():
+        if "name" in response.json():
             super(Section, self).set_attributes(response.json())
 
         return self
@@ -133,10 +123,7 @@ class Section(CanvasObject):
 
         :rtype: :class:`canvasapi.section.Section`
         """
-        response = self._requester.request(
-            'DELETE',
-            'sections/{}'.format(self.id)
-        )
+        response = self._requester.request("DELETE", "sections/{}".format(self.id))
         return Section(self._requester, response.json())
 
     def submit_assignment(self, assignment, submission, **kwargs):
@@ -160,17 +147,16 @@ class Section(CanvasObject):
         from canvasapi.assignment import Assignment
 
         warnings.warn(
-            'Section.submit_assignment() is deprecated and will be removed '
-            'in the future. Use Assignment.submit() instead.',
-            DeprecationWarning
+            "Section.submit_assignment() is deprecated and will be removed "
+            "in the future. Use Assignment.submit() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
-        assignment = Assignment(self._requester, {
-            'course_id': self.course_id,
-            'section_id': self.id,
-            'id': assignment_id
-        })
+        assignment = Assignment(
+            self._requester,
+            {"course_id": self.course_id, "section_id": self.id, "id": assignment_id},
+        )
         return assignment.submit(submission, **kwargs)
 
     def list_submissions(self, assignment, **kwargs):
@@ -193,17 +179,16 @@ class Section(CanvasObject):
         from canvasapi.assignment import Assignment
 
         warnings.warn(
-            'Section.list_submissions() is deprecated and will be removed '
-            'in the future. Use Assignment.get_submissions() instead.',
-            DeprecationWarning
+            "Section.list_submissions() is deprecated and will be removed "
+            "in the future. Use Assignment.get_submissions() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
-        assignment = Assignment(self._requester, {
-            'course_id': self.course_id,
-            'section_id': self.id,
-            'id': assignment_id
-        })
+        assignment = Assignment(
+            self._requester,
+            {"course_id": self.course_id, "section_id": self.id, "id": assignment_id},
+        )
 
         return assignment.get_submissions(**kwargs)
 
@@ -226,7 +211,7 @@ class Section(CanvasObject):
             "`list_multiple_submissions`"
             " is being deprecated and will be removed in a future version."
             " Use `get_multiple_submissions` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_multiple_submissions(**kwargs)
@@ -242,17 +227,19 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.submission.Submission`
         """
-        if 'grouped' in kwargs:
-            warnings.warn('The `grouped` parameter must be empty. Removing kwarg `grouped`.')
-            del kwargs['grouped']
+        if "grouped" in kwargs:
+            warnings.warn(
+                "The `grouped` parameter must be empty. Removing kwarg `grouped`."
+            )
+            del kwargs["grouped"]
 
         return PaginatedList(
             Submission,
             self._requester,
-            'GET',
-            'sections/{}/students/submissions'.format(self.id),
-            {'section_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "sections/{}/students/submissions".format(self.id),
+            {"section_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_submission(self, assignment, user, **kwargs):
@@ -276,18 +263,17 @@ class Section(CanvasObject):
         from canvasapi.assignment import Assignment
 
         warnings.warn(
-            'Section.get_submission() is deprecated and will be removed '
-            'in the future. Use Assignment.get_submission() instead.',
-            DeprecationWarning
+            "Section.get_submission() is deprecated and will be removed "
+            "in the future. Use Assignment.get_submission() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
 
-        assignment = Assignment(self._requester, {
-            'course_id': self.course_id,
-            'section_id': self.id,
-            'id': assignment_id
-        })
+        assignment = Assignment(
+            self._requester,
+            {"course_id": self.course_id, "section_id": self.id, "id": assignment_id},
+        )
 
         return assignment.get_submission(user, **kwargs)
 
@@ -313,19 +299,22 @@ class Section(CanvasObject):
         from canvasapi.user import User
 
         warnings.warn(
-            'Section.update_submission() is deprecated and will be removed '
-            'in the future. Use Submission.edit() instead.',
-            DeprecationWarning
+            "Section.update_submission() is deprecated and will be removed "
+            "in the future. Use Submission.edit() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         user_id = obj_or_id(user, "user", (User,))
 
-        submission = Submission(self._requester, {
-            'course_id': self.course_id,
-            'assignment_id': assignment_id,
-            'user_id': user_id
-        })
+        submission = Submission(
+            self._requester,
+            {
+                "course_id": self.course_id,
+                "assignment_id": assignment_id,
+                "user_id": user_id,
+            },
+        )
 
         return submission.edit(**kwargs)
 
@@ -352,19 +341,22 @@ class Section(CanvasObject):
         from canvasapi.user import User
 
         warnings.warn(
-            'Section.mark_submission_as_read() is deprecated and will be '
-            'removed in the future. Use Submission.mark_read() instead.',
-            DeprecationWarning
+            "Section.mark_submission_as_read() is deprecated and will be "
+            "removed in the future. Use Submission.mark_read() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         user_id = obj_or_id(user, "user", (User,))
 
-        submission = Submission(self._requester, {
-            'course_id': self.course_id,
-            'assignment_id': assignment_id,
-            'user_id': user_id
-        })
+        submission = Submission(
+            self._requester,
+            {
+                "course_id": self.course_id,
+                "assignment_id": assignment_id,
+                "user_id": user_id,
+            },
+        )
         return submission.mark_read(**kwargs)
 
     def mark_submission_as_unread(self, assignment, user, **kwargs):
@@ -390,19 +382,22 @@ class Section(CanvasObject):
         from canvasapi.user import User
 
         warnings.warn(
-            'Section.mark_submission_as_unread() is deprecated and will be '
-            'removed in the future. Use Submission.mark_unread() instead.',
-            DeprecationWarning
+            "Section.mark_submission_as_unread() is deprecated and will be "
+            "removed in the future. Use Submission.mark_unread() instead.",
+            DeprecationWarning,
         )
 
         assignment_id = obj_or_id(assignment, "assignment", (Assignment,))
         user_id = obj_or_id(user, "user", (User,))
 
-        submission = Submission(self._requester, {
-            'course_id': self.course_id,
-            'assignment_id': assignment_id,
-            'user_id': user_id
-        })
+        submission = Submission(
+            self._requester,
+            {
+                "course_id": self.course_id,
+                "assignment_id": assignment_id,
+                "user_id": user_id,
+            },
+        )
         return submission.mark_unread(**kwargs)
 
     def submissions_bulk_update(self, **kwargs):
@@ -416,10 +411,8 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.progress.Progress`
         """
         response = self._requester.request(
-            'POST',
-            'sections/{}/submissions/update_grades'.format(
-                self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "sections/{}/submissions/update_grades".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Progress(self._requester, response.json())

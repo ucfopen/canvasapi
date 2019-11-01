@@ -7,7 +7,6 @@ from canvasapi.canvas_object import CanvasObject
 
 @python_2_unicode_compatible
 class File(CanvasObject):
-
     def __str__(self):
         return "{}".format(self.display_name)
 
@@ -20,10 +19,7 @@ class File(CanvasObject):
 
         :rtype: :class:`canvasapi.file.File`
         """
-        response = self._requester.request(
-            'DELETE',
-            'files/{}'.format(self.id)
-        )
+        response = self._requester.request("DELETE", "files/{}".format(self.id))
         return File(self._requester, response.json())
 
     def get_contents(self):
@@ -32,10 +28,7 @@ class File(CanvasObject):
 
         :rtype: str
         """
-        response = self._requester.request(
-            'GET',
-            _url=self.url
-        )
+        response = self._requester.request("GET", _url=self.url)
         return response.text
 
     def download(self, location):
@@ -45,10 +38,7 @@ class File(CanvasObject):
         :param location: The path to download to.
         :type location: str
         """
-        response = self._requester.request(
-            'GET',
-            _url=self.url
-        )
+        response = self._requester.request("GET", _url=self.url)
 
-        with open(location, 'wb') as file_out:
+        with open(location, "wb") as file_out:
             file_out.write(response.content)

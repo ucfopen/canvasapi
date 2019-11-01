@@ -9,9 +9,8 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class Submission(CanvasObject):
-
     def __str__(self):
-        return '{}-{}'.format(self.assignment_id, self.user_id)
+        return "{}-{}".format(self.assignment_id, self.user_id)
 
     def edit(self, **kwargs):
         """
@@ -23,13 +22,11 @@ class Submission(CanvasObject):
         :rtype: :class:`canvasapi.submission.Submission`
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/assignments/{}/submissions/{}'.format(
-                self.course_id,
-                self.assignment_id,
-                self.user_id
+            "PUT",
+            "courses/{}/assignments/{}/submissions/{}".format(
+                self.course_id, self.assignment_id, self.user_id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update(course_id=self.course_id)
@@ -49,12 +46,10 @@ class Submission(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            'courses/{}/assignments/{}/submissions/{}/read'.format(
-                self.course_id,
-                self.assignment_id,
-                self.user_id
-            )
+            "PUT",
+            "courses/{}/assignments/{}/submissions/{}/read".format(
+                self.course_id, self.assignment_id, self.user_id
+            ),
         )
         return response.status_code == 204
 
@@ -70,12 +65,10 @@ class Submission(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/assignments/{}/submissions/{}/read'.format(
-                self.course_id,
-                self.assignment_id,
-                self.user_id
-            )
+            "DELETE",
+            "courses/{}/assignments/{}/submissions/{}/read".format(
+                self.course_id, self.assignment_id, self.user_id
+            ),
         )
         return response.status_code == 204
 
@@ -95,20 +88,14 @@ class Submission(CanvasObject):
         """
         response = Uploader(
             self._requester,
-            'courses/{}/assignments/{}/submissions/{}/comments/files'.format(
-                self.course_id,
-                self.assignment_id,
-                self.user_id
+            "courses/{}/assignments/{}/submissions/{}/comments/files".format(
+                self.course_id, self.assignment_id, self.user_id
             ),
             file,
             **kwargs
         ).start()
 
         if response[0]:
-            self.edit(
-                comment={
-                    'file_ids': [response[1]['id']]
-                }
-            )
+            self.edit(comment={"file_ids": [response[1]["id"]]})
 
         return response

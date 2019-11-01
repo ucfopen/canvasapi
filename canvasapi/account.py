@@ -14,7 +14,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Account(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -39,8 +38,10 @@ class Account(CanvasObject):
         notif_id = obj_or_id(notification, "notification", (AccountNotification,))
 
         response = self._requester.request(
-            'DELETE',
-            'accounts/{}/users/{}/account_notifications/{}'.format(self.id, user_id, notif_id)
+            "DELETE",
+            "accounts/{}/users/{}/account_notifications/{}".format(
+                self.id, user_id, notif_id
+            ),
         )
         return AccountNotification(self._requester, response.json())
 
@@ -54,9 +55,9 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.account.Account`
         """
         response = self._requester.request(
-            'POST',
-            'accounts/{}/root_accounts'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/root_accounts".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Account(self._requester, response.json())
 
@@ -70,11 +71,12 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.course.Course`
         """
         from canvasapi.course import Course
+
         response = self._requester.request(
-            'POST',
-            'accounts/{}/courses'.format(self.id),
+            "POST",
+            "accounts/{}/courses".format(self.id),
             account_id=self.id,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Course(self._requester, response.json())
 
@@ -90,15 +92,15 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.Account`
         """
-        if isinstance(account, dict) and 'name' in account:
-            kwargs['account'] = account
+        if isinstance(account, dict) and "name" in account:
+            kwargs["account"] = account
         else:
             raise RequiredFieldMissing("Dictionary with key 'name' is required.")
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/sub_accounts'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/sub_accounts".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Account(self._requester, response.json())
 
@@ -115,15 +117,15 @@ class Account(CanvasObject):
         """
         from canvasapi.user import User
 
-        if isinstance(pseudonym, dict) and 'unique_id' in pseudonym:
-            kwargs['pseudonym'] = pseudonym
+        if isinstance(pseudonym, dict) and "unique_id" in pseudonym:
+            kwargs["pseudonym"] = pseudonym
         else:
             raise RequiredFieldMissing("Dictionary with key 'unique_id' is required.")
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/users'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/users".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
 
@@ -138,21 +140,25 @@ class Account(CanvasObject):
         :type account_notification: dict
         :rtype: :class:`canvasapi.account.AccountNotification`
         """
-        required_key_list = ['subject', 'message', 'start_at', 'end_at']
-        required_keys_present = all((x in account_notification for x in required_key_list))
+        required_key_list = ["subject", "message", "start_at", "end_at"]
+        required_keys_present = all(
+            (x in account_notification for x in required_key_list)
+        )
 
         if isinstance(account_notification, dict) and required_keys_present:
-            kwargs['account_notification'] = account_notification
+            kwargs["account_notification"] = account_notification
         else:
-            raise RequiredFieldMissing((
-                "account_notification must be a dictionary with keys "
-                "'subject', 'message', 'start_at', and 'end_at'."
-            ))
+            raise RequiredFieldMissing(
+                (
+                    "account_notification must be a dictionary with keys "
+                    "'subject', 'message', 'start_at', and 'end_at'."
+                )
+            )
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/account_notifications'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/account_notifications".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return AccountNotification(self._requester, response.json())
 
@@ -169,15 +175,15 @@ class Account(CanvasObject):
         :returns: True if successfully deleted; False otherwise.
         :rtype: bool
         """
-        if not hasattr(self, 'parent_account_id') or not self.parent_account_id:
+        if not hasattr(self, "parent_account_id") or not self.parent_account_id:
             raise CanvasException("Cannot delete a root account.")
 
         response = self._requester.request(
-            'DELETE',
-            'accounts/{}/sub_accounts/{}'.format(self.parent_account_id, self.id)
+            "DELETE",
+            "accounts/{}/sub_accounts/{}".format(self.parent_account_id, self.id),
         )
 
-        return response.json().get('workflow_state') == 'deleted'
+        return response.json().get("workflow_state") == "deleted"
 
     def delete_user(self, user):
         """
@@ -204,8 +210,7 @@ class Account(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            'DELETE',
-            'accounts/{}/users/{}'.format(self.id, user_id)
+            "DELETE", "accounts/{}/users/{}".format(self.id, user_id)
         )
         return User(self._requester, response.json())
 
@@ -224,9 +229,9 @@ class Account(CanvasObject):
         return PaginatedList(
             Course,
             self._requester,
-            'GET',
-            'accounts/{}/courses'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/courses".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_external_tool(self, tool):
@@ -244,11 +249,10 @@ class Account(CanvasObject):
         tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/external_tools/{}'.format(self.id, tool_id),
+            "GET", "accounts/{}/external_tools/{}".format(self.id, tool_id)
         )
         tool_json = response.json()
-        tool_json.update({'account_id': self.id})
+        tool_json.update({"account_id": self.id})
 
         return ExternalTool(self._requester, tool_json)
 
@@ -265,10 +269,10 @@ class Account(CanvasObject):
         return PaginatedList(
             ExternalTool,
             self._requester,
-            'GET',
-            'accounts/{}/external_tools'.format(self.id),
-            {'account_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/external_tools".format(self.id),
+            {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_index_of_reports(self, report_type):
@@ -286,8 +290,8 @@ class Account(CanvasObject):
         return PaginatedList(
             AccountReport,
             self._requester,
-            'GET',
-            'accounts/{}/reports/{}'.format(self.id, report_type)
+            "GET",
+            "accounts/{}/reports/{}".format(self.id, report_type),
         )
 
     def get_reports(self):
@@ -301,10 +305,7 @@ class Account(CanvasObject):
             :class:`canvasapi.account.AccountReport`
         """
         return PaginatedList(
-            AccountReport,
-            self._requester,
-            'GET',
-            'accounts/{}/reports'.format(self.id)
+            AccountReport, self._requester, "GET", "accounts/{}/reports".format(self.id)
         )
 
     def get_subaccounts(self, recursive=False):
@@ -323,9 +324,9 @@ class Account(CanvasObject):
         return PaginatedList(
             Account,
             self._requester,
-            'GET',
-            'accounts/{}/sub_accounts'.format(self.id),
-            recursive=recursive
+            "GET",
+            "accounts/{}/sub_accounts".format(self.id),
+            recursive=recursive,
         )
 
     def get_users(self, **kwargs):
@@ -342,9 +343,9 @@ class Account(CanvasObject):
         return PaginatedList(
             User,
             self._requester,
-            'GET',
-            'accounts/{}/users'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/users".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_user_notifications(self, user):
@@ -369,8 +370,8 @@ class Account(CanvasObject):
         return PaginatedList(
             AccountNotification,
             self._requester,
-            'GET',
-            'accounts/{}/users/{}/account_notifications'.format(self.id, user_id)
+            "GET",
+            "accounts/{}/users/{}/account_notifications".format(self.id, user_id),
         )
 
     def update(self, **kwargs):
@@ -384,12 +385,10 @@ class Account(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            'accounts/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT", "accounts/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
-        if 'name' in response.json():
+        if "name" in response.json():
             super(Account, self).set_attributes(response.json())
             return True
         else:
@@ -412,7 +411,7 @@ class Account(CanvasObject):
         warnings.warn(
             "`list_roles` is being deprecated and will be removed in a future version."
             " Use `get_roles` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_roles(**kwargs)
@@ -431,9 +430,9 @@ class Account(CanvasObject):
         return PaginatedList(
             Role,
             self._requester,
-            'GET',
-            'accounts/{}/roles'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/roles".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_role(self, role):
@@ -451,8 +450,7 @@ class Account(CanvasObject):
         role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/roles/{}'.format(self.id, role_id)
+            "GET", "accounts/{}/roles/{}".format(self.id, role_id)
         )
         return Role(self._requester, response.json())
 
@@ -468,10 +466,10 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.account.Role`
         """
         response = self._requester.request(
-            'POST',
-            'accounts/{}/roles'.format(self.id),
+            "POST",
+            "accounts/{}/roles".format(self.id),
             label=label,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Role(self._requester, response.json())
 
@@ -490,9 +488,9 @@ class Account(CanvasObject):
         role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
-            'DELETE',
-            'accounts/{}/roles/{}'.format(self.id, role_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "DELETE",
+            "accounts/{}/roles/{}".format(self.id, role_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Role(self._requester, response.json())
 
@@ -510,9 +508,9 @@ class Account(CanvasObject):
         role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/roles/{}/activate'.format(self.id, role_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/roles/{}/activate".format(self.id, role_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Role(self._requester, response.json())
 
@@ -531,9 +529,9 @@ class Account(CanvasObject):
         role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
-            'PUT',
-            'accounts/{}/roles/{}'.format(self.id, role_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "accounts/{}/roles/{}".format(self.id, role_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Role(self._requester, response.json())
 
@@ -554,9 +552,9 @@ class Account(CanvasObject):
         enrollment_id = obj_or_id(enrollment, "enrollment", (Enrollment,))
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/enrollments/{}'.format(self.id, enrollment_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/enrollments/{}".format(self.id, enrollment_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Enrollment(self._requester, response.json())
 
@@ -576,7 +574,7 @@ class Account(CanvasObject):
         warnings.warn(
             "`list_groups` is being deprecated and will be removed in a future version."
             " Use `get_groups` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_groups(**kwargs)
@@ -591,12 +589,13 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
         from canvasapi.group import Group
+
         return PaginatedList(
             Group,
             self._requester,
-            'GET',
-            'accounts/{}/groups'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/groups".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_group_category(self, name, **kwargs):
@@ -613,10 +612,10 @@ class Account(CanvasObject):
         from canvasapi.group import GroupCategory
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/group_categories'.format(self.id),
+            "POST",
+            "accounts/{}/group_categories".format(self.id),
             name=name,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GroupCategory(self._requester, response.json())
 
@@ -637,7 +636,7 @@ class Account(CanvasObject):
         warnings.warn(
             "`list_group_categories` is being deprecated and will be removed "
             "in a future version. Use `get_group_categories` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_group_categories(**kwargs)
@@ -657,12 +656,14 @@ class Account(CanvasObject):
         return PaginatedList(
             GroupCategory,
             self._requester,
-            'GET',
-            'accounts/{}/group_categories'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/group_categories".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-    def create_external_tool(self, name, privacy_level, consumer_key, shared_secret, **kwargs):
+    def create_external_tool(
+        self, name, privacy_level, consumer_key, shared_secret, **kwargs
+    ):
         """
         Create an external tool in the current account.
 
@@ -683,12 +684,12 @@ class Account(CanvasObject):
         from canvasapi.external_tool import ExternalTool
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/external_tools'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/external_tools".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({'account_id': self.id})
+        response_json.update({"account_id": self.id})
 
         return ExternalTool(self._requester, response_json)
 
@@ -704,12 +705,12 @@ class Account(CanvasObject):
         from canvasapi.enrollment_term import EnrollmentTerm
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/terms'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/terms".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         enrollment_term_json = response.json()
-        enrollment_term_json.update({'account_id': self.id})
+        enrollment_term_json.update({"account_id": self.id})
 
         return EnrollmentTerm(self._requester, enrollment_term_json)
 
@@ -730,7 +731,7 @@ class Account(CanvasObject):
         warnings.warn(
             "`list_enrollment_terms` is being deprecated and will be removed "
             "in a future version. Use `get_enrollment_terms` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_enrollment_terms(**kwargs)
@@ -750,11 +751,11 @@ class Account(CanvasObject):
         return PaginatedList(
             EnrollmentTerm,
             self._requester,
-            'GET',
-            'accounts/{}/terms'.format(self.id),
-            {'account_id': self.id},
-            _root='enrollment_terms',
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/terms".format(self.id),
+            {"account_id": self.id},
+            _root="enrollment_terms",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_user_logins(self, **kwargs):
@@ -774,7 +775,7 @@ class Account(CanvasObject):
         warnings.warn(
             "`list_user_logins` is being deprecated and will be removed in a "
             "future version. Use `get_user_logins` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_user_logins(**kwargs)
@@ -794,9 +795,9 @@ class Account(CanvasObject):
         return PaginatedList(
             Login,
             self._requester,
-            'GET',
-            'accounts/{}/logins'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/logins".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_user_login(self, user, login, **kwargs):
@@ -814,26 +815,22 @@ class Account(CanvasObject):
         """
         from canvasapi.login import Login
 
-        if isinstance(user, dict) and 'id' in user:
-            kwargs['user'] = user
+        if isinstance(user, dict) and "id" in user:
+            kwargs["user"] = user
         else:
-            raise RequiredFieldMissing((
-                "user must be a dictionary with keys "
-                "'id'."
-            ))
+            raise RequiredFieldMissing(("user must be a dictionary with keys " "'id'."))
 
-        if isinstance(login, dict) and 'unique_id' in login:
-            kwargs['login'] = login
+        if isinstance(login, dict) and "unique_id" in login:
+            kwargs["login"] = login
         else:
-            raise RequiredFieldMissing((
-                "login must be a dictionary with keys "
-                "'unique_id'."
-            ))
+            raise RequiredFieldMissing(
+                ("login must be a dictionary with keys " "'unique_id'.")
+            )
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/logins'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/logins".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Login(self._requester, response.json())
 
@@ -851,8 +848,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/terms/{}/activity'.format(self.id, term_id)
+            "GET", "accounts/{}/analytics/terms/{}/activity".format(self.id, term_id)
         )
         return response.json()
 
@@ -867,8 +863,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/current/activity'.format(self.id)
+            "GET", "accounts/{}/analytics/current/activity".format(self.id)
         )
         return response.json()
 
@@ -883,8 +878,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/completed/activity'.format(self.id)
+            "GET", "accounts/{}/analytics/completed/activity".format(self.id)
         )
         return response.json()
 
@@ -902,8 +896,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/terms/{}/grades'.format(self.id, term_id)
+            "GET", "accounts/{}/analytics/terms/{}/grades".format(self.id, term_id)
         )
         return response.json()
 
@@ -918,8 +911,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/current/grades'.format(self.id)
+            "GET", "accounts/{}/analytics/current/grades".format(self.id)
         )
         return response.json()
 
@@ -934,8 +926,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/completed/grades'.format(self.id)
+            "GET", "accounts/{}/analytics/completed/grades".format(self.id)
         )
         return response.json()
 
@@ -953,8 +944,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/terms/{}/statistics'.format(self.id, term_id)
+            "GET", "accounts/{}/analytics/terms/{}/statistics".format(self.id, term_id)
         )
         return response.json()
 
@@ -969,8 +959,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/current/statistics'.format(self.id)
+            "GET", "accounts/{}/analytics/current/statistics".format(self.id)
         )
         return response.json()
 
@@ -985,8 +974,7 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/analytics/completed/statistics'.format(self.id)
+            "GET", "accounts/{}/analytics/completed/statistics".format(self.id)
         )
         return response.json()
 
@@ -1002,12 +990,12 @@ class Account(CanvasObject):
         from canvasapi.authentication_provider import AuthenticationProvider
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/authentication_providers'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/authentication_providers".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         authentication_providers_json = response.json()
-        authentication_providers_json.update({'account_id': self.id})
+        authentication_providers_json.update({"account_id": self.id})
 
         return AuthenticationProvider(self._requester, authentication_providers_json)
 
@@ -1029,7 +1017,7 @@ class Account(CanvasObject):
             "`list_authentication_providers` is being deprecated and will be "
             "removed in a future version. Use `get_authentication_providers` "
             "instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_authentication_providers(**kwargs)
@@ -1049,10 +1037,10 @@ class Account(CanvasObject):
         return PaginatedList(
             AuthenticationProvider,
             self._requester,
-            'GET',
-            'accounts/{}/authentication_providers'.format(self.id),
-            {'account_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/authentication_providers".format(self.id),
+            {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_authentication_provider(self, authentication_provider, **kwargs):
@@ -1069,16 +1057,19 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
         from canvasapi.authentication_provider import AuthenticationProvider
+
         authentication_providers_id = obj_or_id(
-            authentication_provider, "authentication provider", (
-                AuthenticationProvider,
-            )
+            authentication_provider,
+            "authentication provider",
+            (AuthenticationProvider,),
         )
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/authentication_providers/{}'.format(self.id, authentication_providers_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/authentication_providers/{}".format(
+                self.id, authentication_providers_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return AuthenticationProvider(self._requester, response.json())
@@ -1094,9 +1085,9 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/sso_settings'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/sso_settings".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return SSOSettings(self._requester, response.json())
@@ -1112,9 +1103,9 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            'PUT',
-            'accounts/{}/sso_settings'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "accounts/{}/sso_settings".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return SSOSettings(self._requester, response.json())
@@ -1132,8 +1123,7 @@ class Account(CanvasObject):
         from canvasapi.outcome import OutcomeGroup
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/root_outcome_group'.format(self.id)
+            "GET", "accounts/{}/root_outcome_group".format(self.id)
         )
         return OutcomeGroup(self._requester, response.json())
 
@@ -1154,8 +1144,7 @@ class Account(CanvasObject):
 
         outcome_group_id = obj_or_id(group, "outcome group", (OutcomeGroup,))
         response = self._requester.request(
-            'GET',
-            'accounts/{}/outcome_groups/{}'.format(self.id, outcome_group_id)
+            "GET", "accounts/{}/outcome_groups/{}".format(self.id, outcome_group_id)
         )
 
         return OutcomeGroup(self._requester, response.json())
@@ -1176,8 +1165,8 @@ class Account(CanvasObject):
         return PaginatedList(
             OutcomeGroup,
             self._requester,
-            'GET',
-            'accounts/{}/outcome_groups'.format(self.id)
+            "GET",
+            "accounts/{}/outcome_groups".format(self.id),
         )
 
     def get_all_outcome_links_in_context(self):
@@ -1196,8 +1185,8 @@ class Account(CanvasObject):
         return PaginatedList(
             OutcomeLink,
             self._requester,
-            'GET',
-            'accounts/{}/outcome_group_links'.format(self.id)
+            "GET",
+            "accounts/{}/outcome_group_links".format(self.id),
         )
 
     def add_grading_standards(self, title, grading_scheme_entry, **kwargs):
@@ -1220,14 +1209,16 @@ class Account(CanvasObject):
             if not isinstance(entry, dict):
                 raise ValueError("grading_scheme_entry must consist of dictionaries.")
             if "name" not in entry or "value" not in entry:
-                raise ValueError("Dictionaries with keys 'name' and 'value' are required.")
+                raise ValueError(
+                    "Dictionaries with keys 'name' and 'value' are required."
+                )
         kwargs["grading_scheme_entry"] = grading_scheme_entry
 
         response = self._requester.request(
-            'POST',
-            'accounts/%s/grading_standards' % (self.id),
+            "POST",
+            "accounts/%s/grading_standards" % (self.id),
             title=title,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return GradingStandard(self._requester, response.json())
@@ -1246,9 +1237,9 @@ class Account(CanvasObject):
         return PaginatedList(
             GradingStandard,
             self._requester,
-            'GET',
-            'accounts/%s/grading_standards' % (self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/%s/grading_standards" % (self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_single_grading_standard(self, grading_standard_id, **kwargs):
@@ -1265,8 +1256,8 @@ class Account(CanvasObject):
 
         response = self._requester.request(
             "GET",
-            'accounts/%s/grading_standards/%d' % (self.id, grading_standard_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "accounts/%s/grading_standards/%d" % (self.id, grading_standard_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GradingStandard(self._requester, response.json())
 
@@ -1282,9 +1273,9 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.rubric.Rubric`
         """
         response = self._requester.request(
-            'GET',
-            'accounts/%s/rubrics/%s' % (self.id, rubric_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/%s/rubrics/%s" % (self.id, rubric_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return Rubric(self._requester, response.json())
@@ -1306,7 +1297,7 @@ class Account(CanvasObject):
         warnings.warn(
             "`list_rubrics` is being deprecated and will be removed in a "
             "future version. Use `get_rubrics` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_rubrics(**kwargs)
@@ -1324,9 +1315,9 @@ class Account(CanvasObject):
         return PaginatedList(
             Rubric,
             self._requester,
-            'GET',
-            'accounts/%s/rubrics' % (self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/%s/rubrics" % (self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_content_migration(self, migration_type, **kwargs):
@@ -1344,20 +1335,20 @@ class Account(CanvasObject):
         from canvasapi.content_migration import ContentMigration, Migrator
 
         if isinstance(migration_type, Migrator):
-            kwargs['migration_type'] = migration_type.type
+            kwargs["migration_type"] = migration_type.type
         elif isinstance(migration_type, string_types):
-            kwargs['migration_type'] = migration_type
+            kwargs["migration_type"] = migration_type
         else:
-            raise TypeError('Parameter migration_type must be of type Migrator or str')
+            raise TypeError("Parameter migration_type must be of type Migrator or str")
 
         response = self._requester.request(
-            'POST',
-            'accounts/{}/content_migrations'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "accounts/{}/content_migrations".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
-        response_json.update({'account_id': self.id})
+        response_json.update({"account_id": self.id})
 
         return ContentMigration(self._requester, response_json)
 
@@ -1375,16 +1366,18 @@ class Account(CanvasObject):
         """
         from canvasapi.content_migration import ContentMigration
 
-        migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+        migration_id = obj_or_id(
+            content_migration, "content_migration", (ContentMigration,)
+        )
 
         response = self._requester.request(
-            'GET',
-            'accounts/{}/content_migrations/{}'.format(self.id, migration_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/content_migrations/{}".format(self.id, migration_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
-        response_json.update({'account_id': self.id})
+        response_json.update({"account_id": self.id})
 
         return ContentMigration(self._requester, response_json)
 
@@ -1403,10 +1396,10 @@ class Account(CanvasObject):
         return PaginatedList(
             ContentMigration,
             self._requester,
-            'GET',
-            'accounts/{}/content_migrations'.format(self.id),
-            {'account_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/content_migrations".format(self.id),
+            {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_migration_systems(self, **kwargs):
@@ -1424,10 +1417,10 @@ class Account(CanvasObject):
         return PaginatedList(
             Migrator,
             self._requester,
-            'GET',
-            'accounts/{}/content_migrations/migrators'.format(self.id),
-            {'account_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/content_migrations/migrators".format(self.id),
+            {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_admins(self, **kwargs):
@@ -1444,42 +1437,37 @@ class Account(CanvasObject):
         return PaginatedList(
             Admin,
             self._requester,
-            'GET',
-            'accounts/{}/admins'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "accounts/{}/admins".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
 
 @python_2_unicode_compatible
 class AccountNotification(CanvasObject):
-
     def __str__(self):  # pragma: no cover
         return "{}".format(self.subject)
 
 
 @python_2_unicode_compatible
 class AccountReport(CanvasObject):
-
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.report, self.id)
 
 
 @python_2_unicode_compatible
 class Role(CanvasObject):
-
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
 
 
 @python_2_unicode_compatible
 class SSOSettings(CanvasObject):
-
     def __str__(self):  # pragma: no cover
-        return"{} ({})".format(self.login_handle_name, self.change_password_url)
+        return "{} ({})".format(self.login_handle_name, self.change_password_url)
 
 
 @python_2_unicode_compatible
 class Admin(CanvasObject):
-
     def __str__(self):  # pragma: no cover
-        return "{}".format(self.user['login_id'])
+        return "{}".format(self.user["login_id"])

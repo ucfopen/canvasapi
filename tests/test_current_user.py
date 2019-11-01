@@ -16,7 +16,7 @@ class TestCurrentUser(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
         with requests_mock.Mocker() as m:
-            register_uris({'current_user': ['get_by_id']}, m)
+            register_uris({"current_user": ["get_by_id"]}, m)
             self.user = self.canvas.get_current_user()
 
     # __str__()
@@ -26,7 +26,7 @@ class TestCurrentUser(unittest.TestCase):
 
     # list_groups()
     def test_list_groups(self, m):
-        register_uris({'current_user': ['list_groups', 'list_groups2']}, m)
+        register_uris({"current_user": ["list_groups", "list_groups2"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             groups = self.user.list_groups()
@@ -40,7 +40,7 @@ class TestCurrentUser(unittest.TestCase):
 
     # get_groups()
     def test_get_groups(self, m):
-        register_uris({'current_user': ['list_groups', 'list_groups2']}, m)
+        register_uris({"current_user": ["list_groups", "list_groups2"]}, m)
 
         groups = self.user.get_groups()
         group_list = [group for group in groups]
@@ -50,7 +50,7 @@ class TestCurrentUser(unittest.TestCase):
 
     # list_bookmarks()
     def test_list_bookmarks(self, m):
-        register_uris({'bookmark': ['list_bookmarks']}, m)
+        register_uris({"bookmark": ["list_bookmarks"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             bookmarks = self.user.list_bookmarks()
@@ -63,7 +63,7 @@ class TestCurrentUser(unittest.TestCase):
 
     # get_bookmarks()
     def test_get_bookmarks(self, m):
-        register_uris({'bookmark': ['list_bookmarks']}, m)
+        register_uris({"bookmark": ["list_bookmarks"]}, m)
 
         bookmarks = self.user.get_bookmarks()
         bookmark_list = [bookmark for bookmark in bookmarks]
@@ -72,7 +72,7 @@ class TestCurrentUser(unittest.TestCase):
 
     # get_bookmark()
     def test_get_bookmark(self, m):
-        register_uris({'bookmark': ['get_bookmark']}, m)
+        register_uris({"bookmark": ["get_bookmark"]}, m)
 
         bookmark_by_id = self.user.get_bookmark(45)
         self.assertIsInstance(bookmark_by_id, Bookmark)
@@ -83,10 +83,9 @@ class TestCurrentUser(unittest.TestCase):
 
     # create_bookmark()
     def test_create_bookmark(self, m):
-        register_uris({'bookmark': ['create_bookmark']}, m)
+        register_uris({"bookmark": ["create_bookmark"]}, m)
         evnt = self.user.create_bookmark(
-            name="Test Bookmark",
-            url="https://www.google.com"
+            name="Test Bookmark", url="https://www.google.com"
         )
         self.assertIsInstance(evnt, Bookmark)
         self.assertEqual(evnt.name, "Test Bookmark")

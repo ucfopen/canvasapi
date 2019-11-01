@@ -9,7 +9,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class QuizGroup(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -37,21 +36,21 @@ class QuizGroup(CanvasObject):
         if not isinstance(quiz_groups[0], dict):
             raise ValueError("Param `quiz_groups` must contain a dictionary")
 
-        param_list = ['name', 'pick_count', 'question_points']
+        param_list = ["name", "pick_count", "question_points"]
         if not any(param in quiz_groups[0] for param in param_list):
             raise RequiredFieldMissing("quiz_groups must contain at least 1 parameter.")
 
         kwargs["quiz_groups"] = quiz_groups
 
         response = self._requester.request(
-            'PUT',
-            'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.quiz_id, id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "courses/{}/quizzes/{}/groups/{}".format(self.course_id, self.quiz_id, id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-        successful = 'name' in response.json().get('quiz_groups')[0]
+        successful = "name" in response.json().get("quiz_groups")[0]
         if successful:
-            super(QuizGroup, self).set_attributes(response.json().get('quiz_groups')[0])
+            super(QuizGroup, self).set_attributes(response.json().get("quiz_groups")[0])
 
         return successful
 
@@ -69,10 +68,10 @@ class QuizGroup(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            'courses/{}/quizzes/{}/groups/{}'.format(self.course_id, self.quiz_id, id)
+            "DELETE",
+            "courses/{}/quizzes/{}/groups/{}".format(self.course_id, self.quiz_id, id),
         )
-        return (response.status_code == 204)
+        return response.status_code == 204
 
     def reorder_question_group(self, id, order, **kwargs):
         """
@@ -106,9 +105,11 @@ class QuizGroup(CanvasObject):
         kwargs["order"] = order
 
         response = self._requester.request(
-            'POST',
-            'courses/{}/quizzes/{}/groups/{}/reorder'.format(self.course_id, self.quiz_id, id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "courses/{}/quizzes/{}/groups/{}/reorder".format(
+                self.course_id, self.quiz_id, id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-        return (response.status_code == 204)
+        return response.status_code == 204

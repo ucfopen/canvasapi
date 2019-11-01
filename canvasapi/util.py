@@ -48,11 +48,11 @@ def combine_kwargs(**kwargs):
         if isinstance(arg, dict):
             for k, v in arg.items():
                 for tup in flatten_kwarg(k, v):
-                    combined_kwargs.append(('{}{}'.format(kw, tup[0]), tup[1]))
+                    combined_kwargs.append(("{}{}".format(kw, tup[0]), tup[1]))
         elif is_multivalued(arg):
             for i in arg:
-                for tup in flatten_kwarg('', i):
-                    combined_kwargs.append(('{}{}'.format(kw, tup[0]), tup[1]))
+                for tup in flatten_kwarg("", i):
+                    combined_kwargs.append(("{}{}".format(kw, tup[0]), tup[1]))
         else:
             combined_kwargs.append((text_type(kw), arg))
 
@@ -82,7 +82,7 @@ def flatten_kwarg(key, obj):
         new_list = []
         for k, v in obj.items():
             for tup in flatten_kwarg(k, v):
-                new_list.append(('[{}]{}'.format(key, tup[0]), tup[1]))
+                new_list.append(("[{}]{}".format(key, tup[0]), tup[1]))
         return new_list
 
     elif is_multivalued(obj):
@@ -90,11 +90,11 @@ def flatten_kwarg(key, obj):
         new_list = []
         for i in obj:
             for tup in flatten_kwarg(key, i):
-                new_list.append((tup[0] + '[]', tup[1]))
+                new_list.append((tup[0] + "[]", tup[1]))
         return new_list
     else:
         # Base case. Return list with tuple containing the value
-        return [('[{}]'.format(text_type(key)), obj)]
+        return [("[{}]".format(text_type(key)), obj)]
 
 
 def obj_or_id(parameter, param_name, object_types):
@@ -115,7 +115,7 @@ def obj_or_id(parameter, param_name, object_types):
         return int(parameter)
     except (ValueError, TypeError):
         # Special case where 'self' is a valid ID of a User object
-        if User in object_types and parameter == 'self':
+        if User in object_types and parameter == "self":
             return parameter
 
         for obj_type in object_types:
@@ -126,7 +126,9 @@ def obj_or_id(parameter, param_name, object_types):
                     break
 
         obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
-        message = 'Parameter {} must be of type {} or int.'.format(param_name, obj_type_list)
+        message = "Parameter {} must be of type {} or int.".format(
+            param_name, obj_type_list
+        )
         raise TypeError(message)
 
 
@@ -138,8 +140,8 @@ def get_institution_url(base_url):
     :type base_url: str
     :rtype: str
     """
-    base_url = base_url.rstrip('/')
-    index = base_url.find('/api/v1')
+    base_url = base_url.rstrip("/")
+    index = base_url.find("/api/v1")
 
     if index != -1:
         return base_url[0:index]

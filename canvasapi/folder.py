@@ -12,7 +12,6 @@ from canvasapi.upload import Uploader
 
 @python_2_unicode_compatible
 class Folder(CanvasObject):
-
     def __str__(self):
         return "{}".format(self.full_name)
 
@@ -33,7 +32,7 @@ class Folder(CanvasObject):
         warnings.warn(
             "`list_files` is being deprecated and will be removed in a future "
             "version. Use `get_files` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_files(**kwargs)
@@ -53,9 +52,9 @@ class Folder(CanvasObject):
         return PaginatedList(
             File,
             self._requester,
-            'GET',
-            'folders/{}/files'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "folders/{}/files".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def delete(self, **kwargs):
@@ -69,9 +68,7 @@ class Folder(CanvasObject):
         :rtype: :class:`canvasapi.folder.Folder`
         """
         response = self._requester.request(
-            'DELETE',
-            'folders/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "DELETE", "folders/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
         return Folder(self._requester, response.json())
 
@@ -92,7 +89,7 @@ class Folder(CanvasObject):
         warnings.warn(
             "`list_folders` is being deprecated and will be removed in a "
             "future version. Use `get_folders` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_folders(**kwargs)
@@ -108,10 +105,7 @@ class Folder(CanvasObject):
             :class:`canvasapi.folder.Folder`
         """
         return PaginatedList(
-            Folder,
-            self._requester,
-            'GET',
-            'folders/{}/folders'.format(self.id)
+            Folder, self._requester, "GET", "folders/{}/folders".format(self.id)
         )
 
     def create_folder(self, name, **kwargs):
@@ -126,10 +120,10 @@ class Folder(CanvasObject):
         :rtype: :class:`canvasapi.folder.Folder`
         """
         response = self._requester.request(
-            'POST',
-            'folders/{}/folders'.format(self.id),
+            "POST",
+            "folders/{}/folders".format(self.id),
             name=name,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Folder(self._requester, response.json())
 
@@ -146,13 +140,8 @@ class Folder(CanvasObject):
                     and the JSON response from the API.
         :rtype: tuple
         """
-        my_path = 'folders/{}/files'.format(self.id)
-        return Uploader(
-            self._requester,
-            my_path,
-            file,
-            **kwargs
-        ).start()
+        my_path = "folders/{}/files".format(self.id)
+        return Uploader(self._requester, my_path, file, **kwargs).start()
 
     def update(self, **kwargs):
         """
@@ -164,12 +153,10 @@ class Folder(CanvasObject):
         :rtype: :class:`canvasapi.folder.Folder`
         """
         response = self._requester.request(
-            'PUT',
-            'folders/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT", "folders/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
 
-        if 'name' in response.json():
+        if "name" in response.json():
             super(Folder, self).set_attributes(response.json())
 
         return Folder(self._requester, response.json())
@@ -189,12 +176,12 @@ class Folder(CanvasObject):
         from canvasapi.file import File
 
         file_id = obj_or_id(source_file, "source_file", (File,))
-        kwargs['source_file_id'] = file_id
+        kwargs["source_file_id"] = file_id
 
         response = self._requester.request(
-            'POST',
-            'folders/{}/copy_file'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "folders/{}/copy_file".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return File(self._requester, response.json())

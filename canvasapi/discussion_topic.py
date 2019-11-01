@@ -21,9 +21,9 @@ class DiscussionTopic(CanvasObject):
 
         :rtype: int
         """
-        if hasattr(self, 'course_id'):
+        if hasattr(self, "course_id"):
             return self.course_id
-        elif hasattr(self, 'group_id'):
+        elif hasattr(self, "group_id"):
             return self.group_id
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
@@ -35,10 +35,10 @@ class DiscussionTopic(CanvasObject):
 
         :rtype: str
         """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
 
@@ -52,13 +52,12 @@ class DiscussionTopic(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}'.format(self._parent_type, self._parent_id)
+            "GET", "{}s/{}".format(self._parent_type, self._parent_id)
         )
 
-        if self._parent_type == 'group':
+        if self._parent_type == "group":
             return Group(self._requester, response.json())
-        elif self._parent_type == 'course':
+        elif self._parent_type == "course":
             return Course(self._requester, response.json())
 
     def delete(self):
@@ -75,14 +74,12 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "DELETE",
+            "{}s/{}/discussion_topics/{}".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
-        return 'deleted_at' in response.json()
+        return "deleted_at" in response.json()
 
     def update(self, **kwargs):
         """
@@ -97,13 +94,11 @@ class DiscussionTopic(CanvasObject):
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "PUT",
+            "{}s/{}/discussion_topics/{}".format(
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return DiscussionTopic(self._requester, response.json())
 
@@ -120,19 +115,19 @@ class DiscussionTopic(CanvasObject):
         :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
         response = self._requester.request(
-            'POST',
-            '{}s/{}/discussion_topics/{}/entries'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "POST",
+            "{}s/{}/discussion_topics/{}/entries".format(
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({
-            'discussion_id': self.id,
-            '{}_id'.format(self._parent_type): self._parent_id
-        })
+        response_json.update(
+            {
+                "discussion_id": self.id,
+                "{}_id".format(self._parent_type): self._parent_id,
+            }
+        )
         return DiscussionEntry(self._requester, response_json)
 
     def list_topic_entries(self, **kwargs):
@@ -155,7 +150,7 @@ class DiscussionTopic(CanvasObject):
         warnings.warn(
             "`list_topic_entries` is being deprecated and will be removed in "
             "a future version. Use `get_topic_entries` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_topic_entries(**kwargs)
@@ -176,17 +171,15 @@ class DiscussionTopic(CanvasObject):
         return PaginatedList(
             DiscussionEntry,
             self._requester,
-            'GET',
-            '{}s/{}/discussion_topics/{}/entries'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "GET",
+            "{}s/{}/discussion_topics/{}/entries".format(
+                self._parent_type, self._parent_id, self.id
             ),
             {
-                'discussion_id': self.id,
-                '{}_id'.format(self._parent_type): self._parent_id
+                "discussion_id": self.id,
+                "{}_id".format(self._parent_type): self._parent_id,
             },
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_entries(self, ids, **kwargs):
@@ -213,7 +206,7 @@ class DiscussionTopic(CanvasObject):
         warnings.warn(
             "`list_entries` is being deprecated and will be removed in a "
             "future version. Use `get_entries` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_entries(ids, **kwargs)
@@ -236,21 +229,19 @@ class DiscussionTopic(CanvasObject):
             :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
 
-        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry, )) for item in ids]
+        entry_ids = [obj_or_id(item, "ids", (DiscussionEntry,)) for item in ids]
 
         kwargs.update(ids=entry_ids)
         return PaginatedList(
             DiscussionEntry,
             self._requester,
-            'GET',
-            '{}s/{}/discussion_topics/{}/entry_list'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "GET",
+            "{}s/{}/discussion_topics/{}/entry_list".format(
+                self._parent_type, self._parent_id, self.id
             ),
             {
-                'discussion_id': self.id,
-                '{}_id'.format(self._parent_type): self._parent_id
+                "discussion_id": self.id,
+                "{}_id".format(self._parent_type): self._parent_id,
             },
             _kwargs=combine_kwargs(**kwargs),
         )
@@ -268,12 +259,10 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/read'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "PUT",
+            "{}s/{}/discussion_topics/{}/read".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -290,12 +279,10 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/read'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/read".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -312,13 +299,11 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/read_all'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "PUT",
+            "{}s/{}/discussion_topics/{}/read_all".format(
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -335,13 +320,11 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/read_all'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/read_all".format(
+                self._parent_type, self._parent_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -358,12 +341,10 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/subscribed'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "PUT",
+            "{}s/{}/discussion_topics/{}/subscribed".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -380,12 +361,10 @@ class DiscussionTopic(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/subscribed'.format(
-                self._parent_type,
-                self._parent_id,
-                self.id
-            )
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/subscribed".format(
+                self._parent_type, self._parent_id, self.id
+            ),
         )
         return response.status_code == 204
 
@@ -402,9 +381,9 @@ class DiscussionEntry(CanvasObject):
 
         :rtype: int
         """
-        if hasattr(self, 'course_id'):
+        if hasattr(self, "course_id"):
             return self.course_id
-        elif hasattr(self, 'group_id'):
+        elif hasattr(self, "group_id"):
             return self.group_id
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
@@ -416,10 +395,10 @@ class DiscussionEntry(CanvasObject):
 
         :rtype: str
         """
-        if hasattr(self, 'course_id'):
-            return 'course'
-        elif hasattr(self, 'group_id'):
-            return 'group'
+        if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "group_id"):
+            return "group"
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
 
@@ -431,17 +410,17 @@ class DiscussionEntry(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            '{}s/{}/discussion_topics/{}'.format(
+            "GET",
+            "{}s/{}/discussion_topics/{}".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
-                self.discussion_id
-            )
+                self.discussion_id,
+            ),
         )
 
         response_json = response.json()
         response_json.update(
-            {'{}_id'.format(self._discussion_parent_type): self._discussion_parent_id}
+            {"{}_id".format(self._discussion_parent_type): self._discussion_parent_id}
         )
 
         return DiscussionTopic(self._requester, response.json())
@@ -459,20 +438,20 @@ class DiscussionEntry(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/entries/{}'.format(
+            "PUT",
+            "{}s/{}/discussion_topics/{}/entries/{}".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-        if response.json().get('updated_at'):
+        if response.json().get("updated_at"):
             super(DiscussionEntry, self).set_attributes(response.json())
 
-        return 'updated_at' in response.json()
+        return "updated_at" in response.json()
 
     def delete(self, **kwargs):
         """
@@ -487,16 +466,16 @@ class DiscussionEntry(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/entries/{}'.format(
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/entries/{}".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
-        return 'deleted_at' in response.json()
+        return "deleted_at" in response.json()
 
     def post_reply(self, **kwargs):
         """
@@ -512,14 +491,14 @@ class DiscussionEntry(CanvasObject):
         :rtype: :class:`canvasapi.discussion_topic.DiscussionEntry`
         """
         response = self._requester.request(
-            'POST',
-            '{}s/{}/discussion_topics/{}/entries/{}/replies'.format(
+            "POST",
+            "{}s/{}/discussion_topics/{}/entries/{}/replies".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
         response_json.update(discussion_id=self.discussion_id)
@@ -547,7 +526,7 @@ class DiscussionEntry(CanvasObject):
         warnings.warn(
             "`list_replies` is being deprecated and will be removed in a "
             "future version. Use `get_replies` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_replies(**kwargs)
@@ -570,18 +549,20 @@ class DiscussionEntry(CanvasObject):
         return PaginatedList(
             DiscussionEntry,
             self._requester,
-            'GET',
-            '{}s/{}/discussion_topics/{}/entries/{}/replies'.format(
+            "GET",
+            "{}s/{}/discussion_topics/{}/entries/{}/replies".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
             {
-                'discussion_id': self.discussion_id,
-                '{}_id'.format(self._discussion_parent_type): self._discussion_parent_id
+                "discussion_id": self.discussion_id,
+                "{}_id".format(
+                    self._discussion_parent_type
+                ): self._discussion_parent_id,
             },
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     # TODO: update to use correct class
@@ -598,13 +579,13 @@ class DiscussionEntry(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'PUT',
-            '{}s/{}/discussion_topics/{}/entries/{}/read'.format(
+            "PUT",
+            "{}s/{}/discussion_topics/{}/entries/{}/read".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
-            )
+                self.id,
+            ),
         )
         return response.status_code == 204
 
@@ -624,13 +605,13 @@ class DiscussionEntry(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            'DELETE',
-            '{}s/{}/discussion_topics/{}/entries/{}/read'.format(
+            "DELETE",
+            "{}s/{}/discussion_topics/{}/entries/{}/read".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
-            )
+                self.id,
+            ),
         )
         return response.status_code == 204
 
@@ -654,14 +635,14 @@ class DiscussionEntry(CanvasObject):
             raise ValueError("`rating` must be 0 or 1.")
 
         response = self._requester.request(
-            'POST',
-            '{}s/{}/discussion_topics/{}/entries/{}/rating'.format(
+            "POST",
+            "{}s/{}/discussion_topics/{}/entries/{}/rating".format(
                 self._discussion_parent_type,
                 self._discussion_parent_id,
                 self.discussion_id,
-                self.id
+                self.id,
             ),
             rating=rating,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204

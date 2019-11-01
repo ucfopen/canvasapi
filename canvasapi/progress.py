@@ -7,7 +7,6 @@ from canvasapi.canvas_object import CanvasObject
 
 @python_2_unicode_compatible
 class Progress(CanvasObject):
-
     def __str__(self):
         return "{} - {} ({})".format(self.tag, self.workflow_state, self.id)
 
@@ -20,10 +19,7 @@ class Progress(CanvasObject):
 
         :rtype: :class:`canvasapi.progress.Progress`
         """
-        response = self._requester.request(
-            'GET',
-            'progress/{}'.format(self.id)
-        )
+        response = self._requester.request("GET", "progress/{}".format(self.id))
         response_json = response.json()
 
         super(Progress, self).set_attributes(response_json)

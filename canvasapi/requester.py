@@ -4,8 +4,13 @@ from datetime import datetime
 import requests
 
 from canvasapi.exceptions import (
-    BadRequest, CanvasException, Conflict, Forbidden, InvalidAccessToken,
-    ResourceDoesNotExist, Unauthorized
+    BadRequest,
+    CanvasException,
+    Conflict,
+    Forbidden,
+    InvalidAccessToken,
+    ResourceDoesNotExist,
+    Unauthorized,
 )
 
 
@@ -27,8 +32,15 @@ class Requester(object):
         self._cache = []
 
     def request(
-            self, method, endpoint=None, headers=None, use_auth=True,
-            _url=None, _kwargs=None, **kwargs):
+        self,
+        method,
+        endpoint=None,
+        headers=None,
+        use_auth=True,
+        _url=None,
+        _kwargs=None,
+        **kwargs
+    ):
         """
         Make a request to the Canvas API and return the response.
 
@@ -57,7 +69,7 @@ class Requester(object):
             headers = {}
 
         if use_auth:
-            auth_header = {'Authorization': 'Bearer {}'.format(self.access_token)}
+            auth_header = {"Authorization": "Bearer {}".format(self.access_token)}
             headers.update(auth_header)
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
@@ -77,13 +89,13 @@ class Requester(object):
                 _kwargs[i] = (kw, arg.isoformat())
 
         # Determine the appropriate request method.
-        if method == 'GET':
+        if method == "GET":
             req_method = self._get_request
-        elif method == 'POST':
+        elif method == "POST":
             req_method = self._post_request
-        elif method == 'DELETE':
+        elif method == "DELETE":
             req_method = self._delete_request
-        elif method == 'PUT':
+        elif method == "PUT":
             req_method = self._put_request
 
         # Call the request method
@@ -99,14 +111,14 @@ class Requester(object):
         if response.status_code == 400:
             raise BadRequest(response.text)
         elif response.status_code == 401:
-            if 'WWW-Authenticate' in response.headers:
+            if "WWW-Authenticate" in response.headers:
                 raise InvalidAccessToken(response.json())
             else:
                 raise Unauthorized(response.json())
         elif response.status_code == 403:
             raise Forbidden(response.text)
         elif response.status_code == 404:
-            raise ResourceDoesNotExist('Not Found')
+            raise ResourceDoesNotExist("Not Found")
         elif response.status_code == 409:
             raise Conflict(response.text)
         elif response.status_code == 500:
@@ -136,12 +148,12 @@ class Requester(object):
         # Grab file from data.
         file = None
         for tup in data:
-            if tup[0] == 'file':
-                file = {'file': tup[1]}
+            if tup[0] == "file":
+                file = {"file": tup[1]}
                 break
 
         # Remove file entry from data.
-        data[:] = [tup for tup in data if tup[0] != 'file']
+        data[:] = [tup for tup in data if tup[0] != "file"]
 
         return self._session.post(url, headers=headers, data=data, files=file)
 

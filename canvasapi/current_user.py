@@ -15,10 +15,7 @@ class CurrentUser(User):
     def __init__(self, _requester):
         self._requester = _requester
 
-        response = self._requester.request(
-            'GET',
-            'users/self'
-        )
+        response = self._requester.request("GET", "users/self")
 
         super(CurrentUser, self).__init__(self._requester, response.json())
 
@@ -41,7 +38,7 @@ class CurrentUser(User):
         warnings.warn(
             "`list_groups` is being deprecated and will be removed in a "
             "future version. Use `get_groups` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_groups(**kwargs)
@@ -60,9 +57,9 @@ class CurrentUser(User):
         return PaginatedList(
             Group,
             self._requester,
-            'GET',
-            'users/self/groups',
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/self/groups",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_bookmarks(self, **kwargs):
@@ -82,7 +79,7 @@ class CurrentUser(User):
         warnings.warn(
             "`list_bookmarks` is being deprecated and will be removed in a "
             "future version. Use `get_bookmarks` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_bookmarks(**kwargs)
@@ -97,12 +94,7 @@ class CurrentUser(User):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.bookmark.Bookmark`
         """
-        return PaginatedList(
-            Bookmark,
-            self._requester,
-            'GET',
-            'users/self/bookmarks'
-        )
+        return PaginatedList(Bookmark, self._requester, "GET", "users/self/bookmarks")
 
     def create_bookmark(self, name, url, **kwargs):
         """
@@ -120,11 +112,11 @@ class CurrentUser(User):
         from canvasapi.bookmark import Bookmark
 
         response = self._requester.request(
-            'POST',
-            'users/self/bookmarks',
+            "POST",
+            "users/self/bookmarks",
             name=name,
             url=url,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return Bookmark(self._requester, response.json())
@@ -146,7 +138,6 @@ class CurrentUser(User):
         bookmark_id = obj_or_id(bookmark, "bookmark", (Bookmark,))
 
         response = self._requester.request(
-            'GET',
-            'users/self/bookmarks/{}'.format(bookmark_id)
+            "GET", "users/self/bookmarks/{}".format(bookmark_id)
         )
         return Bookmark(self._requester, response.json())

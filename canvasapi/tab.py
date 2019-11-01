@@ -8,7 +8,6 @@ from canvasapi.util import combine_kwargs
 
 @python_2_unicode_compatible
 class Tab(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.label, self.id)
 
@@ -24,16 +23,16 @@ class Tab(CanvasObject):
 
         :rtype: :class:`canvasapi.tab.Tab`
         """
-        if not hasattr(self, 'course_id'):
-            raise ValueError('Can only update tabs from a Course.')
+        if not hasattr(self, "course_id"):
+            raise ValueError("Can only update tabs from a Course.")
 
         response = self._requester.request(
-            'PUT',
-            'courses/{}/tabs/{}'.format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT",
+            "courses/{}/tabs/{}".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
-        response_json.update({'course_id': self.course_id})
+        response_json.update({"course_id": self.course_id})
 
         super(Tab, self).set_attributes(response.json())
 

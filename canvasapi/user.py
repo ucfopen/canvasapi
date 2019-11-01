@@ -14,7 +14,6 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class User(CanvasObject):
-
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -27,10 +26,7 @@ class User(CanvasObject):
 
         :rtype: dict
         """
-        response = self._requester.request(
-            'GET',
-            'users/{}/profile'.format(self.id)
-        )
+        response = self._requester.request("GET", "users/{}/profile".format(self.id))
         return response.json()
 
     def get_page_views(self, **kwargs):
@@ -48,9 +44,9 @@ class User(CanvasObject):
         return PaginatedList(
             PageView,
             self._requester,
-            'GET',
-            'users/{}/page_views'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/page_views".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_courses(self, **kwargs):
@@ -68,9 +64,9 @@ class User(CanvasObject):
         return PaginatedList(
             Course,
             self._requester,
-            'GET',
-            'users/{}/courses'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/courses".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_missing_submissions(self):
@@ -89,8 +85,8 @@ class User(CanvasObject):
         return PaginatedList(
             Assignment,
             self._requester,
-            'GET',
-            'users/{}/missing_submissions'.format(self.id)
+            "GET",
+            "users/{}/missing_submissions".format(self.id),
         )
 
     def update_settings(self, **kwargs):
@@ -103,9 +99,7 @@ class User(CanvasObject):
         :rtype: dict
         """
         response = self._requester.request(
-            'PUT',
-            'users/{}/settings'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT", "users/{}/settings".format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
 
@@ -123,8 +117,7 @@ class User(CanvasObject):
         :rtype: dict
         """
         response = self._requester.request(
-            'GET',
-            'users/{}/colors/{}'.format(self.id, asset_string)
+            "GET", "users/{}/colors/{}".format(self.id, asset_string)
         )
         return response.json()
 
@@ -137,10 +130,7 @@ class User(CanvasObject):
 
         :rtype: dict
         """
-        response = self._requester.request(
-            'GET',
-            'users/{}/colors'.format(self.id)
-        )
+        response = self._requester.request("GET", "users/{}/colors".format(self.id))
         return response.json()
 
     def update_color(self, asset_string, hexcode):
@@ -162,9 +152,7 @@ class User(CanvasObject):
         :rtype: dict
         """
         response = self._requester.request(
-            'PUT',
-            'users/{}/colors/{}'.format(self.id, asset_string),
-            hexcode=hexcode
+            "PUT", "users/{}/colors/{}".format(self.id, asset_string), hexcode=hexcode
         )
         return response.json()
 
@@ -178,9 +166,7 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.user.User`
         """
         response = self._requester.request(
-            'PUT',
-            'users/{}'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "PUT", "users/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
         )
         super(User, self).set_attributes(response.json())
         return self
@@ -197,11 +183,10 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.user.User`
         """
-        dest_user_id = obj_or_id(destination_user, 'destination_user', (User, ))
+        dest_user_id = obj_or_id(destination_user, "destination_user", (User,))
 
         response = self._requester.request(
-            'PUT',
-            'users/{}/merge_into/{}'.format(self.id, dest_user_id),
+            "PUT", "users/{}/merge_into/{}".format(self.id, dest_user_id)
         )
         super(User, self).set_attributes(response.json())
         return self
@@ -219,10 +204,7 @@ class User(CanvasObject):
         from canvasapi.avatar import Avatar
 
         return PaginatedList(
-            Avatar,
-            self._requester,
-            'GET',
-            'users/{}/avatars'.format(self.id)
+            Avatar, self._requester, "GET", "users/{}/avatars".format(self.id)
         )
 
     def get_assignments(self, course, **kwargs):
@@ -247,9 +229,9 @@ class User(CanvasObject):
         return PaginatedList(
             Assignment,
             self._requester,
-            'GET',
-            'users/{}/courses/{}/assignments'.format(self.id, course_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/courses/{}/assignments".format(self.id, course_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_enrollments(self, **kwargs):
@@ -267,9 +249,9 @@ class User(CanvasObject):
         return PaginatedList(
             Enrollment,
             self._requester,
-            'GET',
-            'users/{}/enrollments'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def upload(self, file, **kwargs):
@@ -290,10 +272,7 @@ class User(CanvasObject):
         :rtype: tuple
         """
         return Uploader(
-            self._requester,
-            'users/{}/files'.format(self.id),
-            file,
-            **kwargs
+            self._requester, "users/{}/files".format(self.id), file, **kwargs
         ).start()
 
     def list_calendar_events_for_user(self, **kwargs):
@@ -314,7 +293,7 @@ class User(CanvasObject):
             "`list_calendar_events_for_user`"
             " is being deprecated and will be removed in a future version."
             " Use `get_calendar_events_for_user` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_calendar_events_for_user(**kwargs)
@@ -332,9 +311,9 @@ class User(CanvasObject):
         return PaginatedList(
             CalendarEvent,
             self._requester,
-            'GET',
-            'users/{}/calendar_events'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/calendar_events".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_communication_channels(self, **kwargs):
@@ -356,7 +335,7 @@ class User(CanvasObject):
             "`list_communication_channels`"
             " is being deprecated and will be removed in a future version."
             " Use `get_communication_channels` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_communication_channels(**kwargs)
@@ -375,9 +354,9 @@ class User(CanvasObject):
         return PaginatedList(
             CommunicationChannel,
             self._requester,
-            'GET',
-            'users/{}/communication_channels'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/communication_channels".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_files(self, **kwargs):
@@ -397,7 +376,7 @@ class User(CanvasObject):
         warnings.warn(
             "`list_files` is being deprecated and will be removed in a future "
             "version. Use `get_files` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_files(**kwargs)
@@ -417,9 +396,9 @@ class User(CanvasObject):
         return PaginatedList(
             File,
             self._requester,
-            'GET',
-            'users/{}/files'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/files".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_file(self, file, **kwargs):
@@ -439,9 +418,9 @@ class User(CanvasObject):
         file_id = obj_or_id(file, "file", (File,))
 
         response = self._requester.request(
-            'GET',
-            'users/{}/files/{}'.format(self.id, file_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/files/{}".format(self.id, file_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return File(self._requester, response.json())
 
@@ -462,8 +441,7 @@ class User(CanvasObject):
         folder_id = obj_or_id(folder, "folder", (Folder,))
 
         response = self._requester.request(
-            'GET',
-            'users/{}/folders/{}'.format(self.id, folder_id)
+            "GET", "users/{}/folders/{}".format(self.id, folder_id)
         )
         return Folder(self._requester, response.json())
 
@@ -485,7 +463,7 @@ class User(CanvasObject):
         warnings.warn(
             "`list_folders` is being deprecated and will be removed in a "
             "future version. Use `get_folders` instead.",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_folders(**kwargs)
@@ -504,9 +482,9 @@ class User(CanvasObject):
         return PaginatedList(
             Folder,
             self._requester,
-            'GET',
-            'users/{}/folders'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/folders".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def create_folder(self, name, **kwargs):
@@ -521,10 +499,10 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.folder.Folder`
         """
         response = self._requester.request(
-            'POST',
-            'users/{}/folders'.format(self.id),
+            "POST",
+            "users/{}/folders".format(self.id),
             name=name,
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Folder(self._requester, response.json())
 
@@ -545,10 +523,10 @@ class User(CanvasObject):
         warnings.warn(
             "`list_user_logins` is being deprecated and will be removed in a future version."
             " Use `get_user_logins` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
-        return self. get_user_logins(**kwargs)
+        return self.get_user_logins(**kwargs)
 
     def get_user_logins(self, **kwargs):
         """
@@ -565,9 +543,9 @@ class User(CanvasObject):
         return PaginatedList(
             Login,
             self._requester,
-            'GET',
-            'users/{}/logins'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/logins".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_observees(self, **kwargs):
@@ -587,7 +565,7 @@ class User(CanvasObject):
         warnings.warn(
             "`list_observees` is being deprecated and will be removed in a "
             "future version. Use `get_observees` instead",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         return self.get_observees(**kwargs)
@@ -606,9 +584,9 @@ class User(CanvasObject):
         return PaginatedList(
             User,
             self._requester,
-            'GET',
-            'users/{}/observees'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/observees".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def add_observee_with_credentials(self, **kwargs):
@@ -622,9 +600,9 @@ class User(CanvasObject):
         """
 
         response = self._requester.request(
-            'POST',
-            'users/{}/observees'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "users/{}/observees".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
 
@@ -641,8 +619,7 @@ class User(CanvasObject):
         """
 
         response = self._requester.request(
-            'GET',
-            'users/{}/observees/{}'.format(self.id, observee_id)
+            "GET", "users/{}/observees/{}".format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 
@@ -659,8 +636,7 @@ class User(CanvasObject):
         """
 
         response = self._requester.request(
-            'PUT',
-            'users/{}/observees/{}'.format(self.id, observee_id)
+            "PUT", "users/{}/observees/{}".format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 
@@ -677,8 +653,7 @@ class User(CanvasObject):
         """
 
         response = self._requester.request(
-            'DELETE',
-            'users/{}/observees/{}'.format(self.id, observee_id)
+            "DELETE", "users/{}/observees/{}".format(self.id, observee_id)
         )
         return User(self._requester, response.json())
 
@@ -697,20 +672,20 @@ class User(CanvasObject):
         from canvasapi.content_migration import ContentMigration, Migrator
 
         if isinstance(migration_type, Migrator):
-            kwargs['migration_type'] = migration_type.type
+            kwargs["migration_type"] = migration_type.type
         elif isinstance(migration_type, string_types):
-            kwargs['migration_type'] = migration_type
+            kwargs["migration_type"] = migration_type
         else:
-            raise TypeError('Parameter migration_type must be of type Migrator or str')
+            raise TypeError("Parameter migration_type must be of type Migrator or str")
 
         response = self._requester.request(
-            'POST',
-            'users/{}/content_migrations'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "POST",
+            "users/{}/content_migrations".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
-        response_json.update({'user_id': self.id})
+        response_json.update({"user_id": self.id})
 
         return ContentMigration(self._requester, response_json)
 
@@ -728,16 +703,18 @@ class User(CanvasObject):
         """
         from canvasapi.content_migration import ContentMigration
 
-        migration_id = obj_or_id(content_migration, "content_migration", (ContentMigration,))
+        migration_id = obj_or_id(
+            content_migration, "content_migration", (ContentMigration,)
+        )
 
         response = self._requester.request(
-            'GET',
-            'users/{}/content_migrations/{}'.format(self.id, migration_id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/content_migrations/{}".format(self.id, migration_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
-        response_json.update({'user_id': self.id})
+        response_json.update({"user_id": self.id})
 
         return ContentMigration(self._requester, response_json)
 
@@ -756,10 +733,10 @@ class User(CanvasObject):
         return PaginatedList(
             ContentMigration,
             self._requester,
-            'GET',
-            'users/{}/content_migrations'.format(self.id),
-            {'user_id': self.id},
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/content_migrations".format(self.id),
+            {"user_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_migration_systems(self, **kwargs):
@@ -777,14 +754,13 @@ class User(CanvasObject):
         return PaginatedList(
             Migrator,
             self._requester,
-            'GET',
-            'users/{}/content_migrations/migrators'.format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            "GET",
+            "users/{}/content_migrations/migrators".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
 
 @python_2_unicode_compatible
 class UserDisplay(CanvasObject):
-
     def __str__(self):
         return "{}".format(self.display_name)

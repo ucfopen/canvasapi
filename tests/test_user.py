@@ -24,12 +24,11 @@ from tests.util import cleanup_file, register_uris
 
 @requests_mock.Mocker()
 class TestUser(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({'user': ['get_by_id']}, m)
+            register_uris({"user": ["get_by_id"]}, m)
 
             self.user = self.canvas.get_user(1)
 
@@ -40,16 +39,16 @@ class TestUser(unittest.TestCase):
 
     # get_profile()
     def test_get_profile(self, m):
-        register_uris({'user': ['profile']}, m)
+        register_uris({"user": ["profile"]}, m)
 
         profile = self.user.get_profile()
 
         self.assertIsInstance(profile, dict)
-        self.assertIn('name', profile)
+        self.assertIn("name", profile)
 
     # get_page_views()
     def test_get_page_views(self, m):
-        register_uris({'user': ['page_views', 'page_views_p2']}, m)
+        register_uris({"user": ["page_views", "page_views_p2"]}, m)
 
         page_views = self.user.get_page_views()
         page_view_list = [view for view in page_views]
@@ -59,7 +58,7 @@ class TestUser(unittest.TestCase):
 
     # get_courses()
     def test_get_courses(self, m):
-        register_uris({'user': ['courses', 'courses_p2']}, m)
+        register_uris({"user": ["courses", "courses_p2"]}, m)
 
         courses = self.user.get_courses()
         course_list = [course for course in courses]
@@ -69,7 +68,7 @@ class TestUser(unittest.TestCase):
 
     # get_missing_submissions()
     def test_get_missing_submissions(self, m):
-        register_uris({'user': ['missing_sub', 'missing_sub_p2']}, m)
+        register_uris({"user": ["missing_sub", "missing_sub_p2"]}, m)
 
         missing_assigments = self.user.get_missing_submissions()
         assignment_list = [assignment for assignment in missing_assigments]
@@ -79,89 +78,89 @@ class TestUser(unittest.TestCase):
 
     # update_settings()
     def test_update_settings(self, m):
-        register_uris({'user': ['update_settings']}, m)
+        register_uris({"user": ["update_settings"]}, m)
 
         settings = self.user.update_settings(manual_mark_as_read=True)
 
         self.assertIsInstance(settings, dict)
-        self.assertIn('manual_mark_as_read', settings)
-        self.assertTrue(settings['manual_mark_as_read'])
+        self.assertIn("manual_mark_as_read", settings)
+        self.assertTrue(settings["manual_mark_as_read"])
 
     # get_color()
     def test_get_color(self, m):
-        register_uris({'user': ['color']}, m)
+        register_uris({"user": ["color"]}, m)
 
         color = self.user.get_color("course_1")
 
         self.assertIsInstance(color, dict)
-        self.assertIn('hexcode', color)
-        self.assertEqual(color['hexcode'], "#abc123")
+        self.assertIn("hexcode", color)
+        self.assertEqual(color["hexcode"], "#abc123")
 
     # get_colors()
     def test_get_colors(self, m):
-        register_uris({'user': ['colors']}, m)
+        register_uris({"user": ["colors"]}, m)
 
         colors = self.user.get_colors()
 
         self.assertIsInstance(colors, dict)
-        self.assertIn('custom_colors', colors)
-        self.assertIsInstance(colors['custom_colors'], dict)
+        self.assertIn("custom_colors", colors)
+        self.assertIsInstance(colors["custom_colors"], dict)
 
     # update_color()
     def test_update_color(self, m):
-        register_uris({'user': ['color_update']}, m)
+        register_uris({"user": ["color_update"]}, m)
 
         new_hexcode = "#f00f00"
         color = self.user.update_color("course_1", new_hexcode)
 
         self.assertIsInstance(color, dict)
-        self.assertIn('hexcode', color)
-        self.assertEqual(color['hexcode'], new_hexcode)
+        self.assertIn("hexcode", color)
+        self.assertEqual(color["hexcode"], new_hexcode)
 
     def test_update_color_no_hashtag(self, m):
-        register_uris({'user': ['color_update']}, m)
+        register_uris({"user": ["color_update"]}, m)
 
         new_hexcode = "f00f00"
         color = self.user.update_color("course_1", new_hexcode)
 
         self.assertIsInstance(color, dict)
-        self.assertIn('hexcode', color)
-        self.assertEqual(color['hexcode'], "#" + new_hexcode)
+        self.assertIn("hexcode", color)
+        self.assertEqual(color["hexcode"], "#" + new_hexcode)
 
     # edit()
     def test_edit(self, m):
-        register_uris({'user': ['edit']}, m)
+        register_uris({"user": ["edit"]}, m)
 
         new_name = "New User Name"
-        self.user.edit(user={'name': new_name})
+        self.user.edit(user={"name": new_name})
 
         self.assertIsInstance(self.user, User)
-        self.assertTrue(hasattr(self.user, 'name'))
+        self.assertTrue(hasattr(self.user, "name"))
         self.assertEqual(self.user.name, new_name)
 
     # merge_into()
     def test_merge_into_id(self, m):
-        register_uris({'user': ['merge']}, m)
+        register_uris({"user": ["merge"]}, m)
 
         self.user.merge_into(2)
 
         self.assertIsInstance(self.user, User)
-        self.assertTrue(hasattr(self.user, 'name'))
-        self.assertEqual(self.user.name, 'John Smith')
+        self.assertTrue(hasattr(self.user, "name"))
+        self.assertEqual(self.user.name, "John Smith")
 
     def test_merge_into_user(self, m):
-        register_uris({'user': ['get_by_id_2', 'merge']}, m)
+        register_uris({"user": ["get_by_id_2", "merge"]}, m)
 
         other_user = self.canvas.get_user(2)
         self.user.merge_into(other_user)
 
         self.assertIsInstance(self.user, User)
-        self.assertTrue(hasattr(self.user, 'name'))
-        self.assertEqual(self.user.name, 'John Smith')
+        self.assertTrue(hasattr(self.user, "name"))
+        self.assertEqual(self.user.name, "John Smith")
 
     # get_avatars()
     def test_get_avatars(self, m):
-        register_uris({'user': ['avatars', 'avatars_p2']}, m)
+        register_uris({"user": ["avatars", "avatars_p2"]}, m)
 
         avatars = self.user.get_avatars()
         avatar_list = [avatar for avatar in avatars]
@@ -173,9 +172,11 @@ class TestUser(unittest.TestCase):
     def test_user_get_assignments(self, m):
         register_uris(
             {
-                'course': ['get_by_id'],
-                'user': ['get_user_assignments', 'get_user_assignments2']
-            }, m)
+                "course": ["get_by_id"],
+                "user": ["get_user_assignments", "get_user_assignments2"],
+            },
+            m,
+        )
 
         assignments_by_id = self.user.get_assignments(1)
         assignment_list = [assignment for assignment in assignments_by_id]
@@ -190,7 +191,7 @@ class TestUser(unittest.TestCase):
 
     # get_enrollments()
     def test_get_enrollments(self, m):
-        register_uris({'user': ['list_enrollments', 'list_enrollments_2']}, m)
+        register_uris({"user": ["list_enrollments", "list_enrollments_2"]}, m)
 
         enrollments = self.user.get_enrollments()
         enrollment_list = [enrollment for enrollment in enrollments]
@@ -200,23 +201,23 @@ class TestUser(unittest.TestCase):
 
     # upload()
     def test_upload(self, m):
-        register_uris({'user': ['upload', 'upload_final']}, m)
+        register_uris({"user": ["upload", "upload_final"]}, m)
 
-        filename = 'testfile_user_{}'.format(uuid.uuid4().hex)
+        filename = "testfile_user_{}".format(uuid.uuid4().hex)
 
         try:
-            with open(filename, 'w+') as file:
+            with open(filename, "w+") as file:
                 response = self.user.upload(file)
 
             self.assertTrue(response[0])
             self.assertIsInstance(response[1], dict)
-            self.assertIn('url', response[1])
+            self.assertIn("url", response[1])
         finally:
             cleanup_file(filename)
 
     # list_calendar_events_for_user()
     def test_list_calendar_events_for_user(self, m):
-        register_uris({'user': ['list_calendar_events_for_user']}, m)
+        register_uris({"user": ["list_calendar_events_for_user"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             cal_events = self.user.list_calendar_events_for_user()
@@ -229,7 +230,7 @@ class TestUser(unittest.TestCase):
 
     # get_calendar_events_for_user()
     def test_get_calendar_events_for_user(self, m):
-        register_uris({'user': ['list_calendar_events_for_user']}, m)
+        register_uris({"user": ["list_calendar_events_for_user"]}, m)
 
         cal_events = self.user.get_calendar_events_for_user()
         cal_event_list = [cal_event for cal_event in cal_events]
@@ -238,7 +239,7 @@ class TestUser(unittest.TestCase):
 
     # list_communication_channels()
     def test_list_communication_channels(self, m):
-        register_uris({'user': ['list_comm_channels', 'list_comm_channels2']}, m)
+        register_uris({"user": ["list_comm_channels", "list_comm_channels2"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             comm_channels = self.user.list_communication_channels()
@@ -251,7 +252,7 @@ class TestUser(unittest.TestCase):
 
     # get_communication_channels()
     def test_get_communication_channels(self, m):
-        register_uris({'user': ['list_comm_channels', 'list_comm_channels2']}, m)
+        register_uris({"user": ["list_comm_channels", "list_comm_channels2"]}, m)
 
         comm_channels = self.user.get_communication_channels()
         channel_list = [channel for channel in comm_channels]
@@ -260,7 +261,7 @@ class TestUser(unittest.TestCase):
 
     # list_files()
     def test_list_files(self, m):
-        register_uris({'user': ['get_user_files', 'get_user_files2']}, m)
+        register_uris({"user": ["get_user_files", "get_user_files2"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             files = self.user.list_files()
@@ -273,7 +274,7 @@ class TestUser(unittest.TestCase):
 
     # get_files()
     def test_get_files(self, m):
-        register_uris({'user': ['get_user_files', 'get_user_files2']}, m)
+        register_uris({"user": ["get_user_files", "get_user_files2"]}, m)
 
         files = self.user.get_files()
         file_list = [file for file in files]
@@ -282,21 +283,21 @@ class TestUser(unittest.TestCase):
 
     # get_file()
     def test_get_file(self, m):
-        register_uris({'user': ['get_file']}, m)
+        register_uris({"user": ["get_file"]}, m)
 
         file_by_id = self.user.get_file(1)
         self.assertIsInstance(file_by_id, File)
-        self.assertEqual(file_by_id.display_name, 'User_File.docx')
+        self.assertEqual(file_by_id.display_name, "User_File.docx")
         self.assertEqual(file_by_id.size, 1024)
 
         file_by_obj = self.user.get_file(file_by_id)
         self.assertIsInstance(file_by_obj, File)
-        self.assertEqual(file_by_obj.display_name, 'User_File.docx')
+        self.assertEqual(file_by_obj.display_name, "User_File.docx")
         self.assertEqual(file_by_obj.size, 1024)
 
     # get_folder()
     def test_get_folder(self, m):
-        register_uris({'user': ['get_folder']}, m)
+        register_uris({"user": ["get_folder"]}, m)
 
         folder_by_id = self.user.get_folder(1)
         self.assertEqual(folder_by_id.name, "Folder 1")
@@ -308,7 +309,7 @@ class TestUser(unittest.TestCase):
 
     # list_folders()
     def test_list_folders(self, m):
-        register_uris({'user': ['list_folders']}, m)
+        register_uris({"user": ["list_folders"]}, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
             folders = self.user.list_folders()
@@ -321,7 +322,7 @@ class TestUser(unittest.TestCase):
 
     # get_folders()
     def test_get_folders(self, m):
-        register_uris({'user': ['list_folders']}, m)
+        register_uris({"user": ["list_folders"]}, m)
 
         folders = self.user.get_folders()
         folder_list = [folder for folder in folders]
@@ -330,7 +331,7 @@ class TestUser(unittest.TestCase):
 
     # create_folder()
     def test_create_folder(self, m):
-        register_uris({'user': ['create_folder']}, m)
+        register_uris({"user": ["create_folder"]}, m)
 
         name_str = "Test String"
         response = self.user.create_folder(name=name_str)
@@ -338,7 +339,7 @@ class TestUser(unittest.TestCase):
 
     # list_user_logins()
     def test_list_user_logins(self, m):
-        requires = {'user': ['list_user_logins', 'list_user_logins_2']}
+        requires = {"user": ["list_user_logins", "list_user_logins_2"]}
         register_uris(requires, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
@@ -353,7 +354,7 @@ class TestUser(unittest.TestCase):
 
     # get_user_logins()
     def test_get_user_logins(self, m):
-        requires = {'user': ['list_user_logins', 'list_user_logins_2']}
+        requires = {"user": ["list_user_logins", "list_user_logins_2"]}
         register_uris(requires, m)
 
         response = self.user.get_user_logins()
@@ -364,7 +365,7 @@ class TestUser(unittest.TestCase):
 
     # list_observees()
     def test_list_observees(self, m):
-        requires = {'user': ['list_observees', 'list_observees_2']}
+        requires = {"user": ["list_observees", "list_observees_2"]}
         register_uris(requires, m)
 
         with warnings.catch_warnings(record=True) as warning_list:
@@ -379,7 +380,7 @@ class TestUser(unittest.TestCase):
 
     # get_observees()
     def test_get_observees(self, m):
-        requires = {'user': ['list_observees', 'list_observees_2']}
+        requires = {"user": ["list_observees", "list_observees_2"]}
         register_uris(requires, m)
 
         response = self.user.get_observees()
@@ -390,7 +391,7 @@ class TestUser(unittest.TestCase):
 
     # add_observee_with_credentials()
     def test_add_observee_with_credentials(self, m):
-        register_uris({'user': ['add_observee_with_credentials']}, m)
+        register_uris({"user": ["add_observee_with_credentials"]}, m)
 
         response = self.user.add_observee_with_credentials()
 
@@ -398,7 +399,7 @@ class TestUser(unittest.TestCase):
 
     # show_observee()
     def test_show_observee(self, m):
-        register_uris({'user': ['show_observee']}, m)
+        register_uris({"user": ["show_observee"]}, m)
 
         response = self.user.show_observee(6)
 
@@ -406,7 +407,7 @@ class TestUser(unittest.TestCase):
 
     # add_observee()
     def test_add_observee(self, m):
-        register_uris({'user': ['add_observee']}, m)
+        register_uris({"user": ["add_observee"]}, m)
 
         response = self.user.add_observee(7)
 
@@ -414,7 +415,7 @@ class TestUser(unittest.TestCase):
 
     # remove_observee()
     def test_remove_observee(self, m):
-        register_uris({'user': ['remove_observee']}, m)
+        register_uris({"user": ["remove_observee"]}, m)
 
         response = self.user.remove_observee(8)
 
@@ -422,41 +423,42 @@ class TestUser(unittest.TestCase):
 
     # create_content_migration
     def test_create_content_migration(self, m):
-        register_uris({'user': ['create_content_migration']}, m)
+        register_uris({"user": ["create_content_migration"]}, m)
 
-        content_migration = self.user.create_content_migration('dummy_importer')
+        content_migration = self.user.create_content_migration("dummy_importer")
 
         self.assertIsInstance(content_migration, ContentMigration)
-        self.assertTrue(hasattr(content_migration, 'migration_type'))
+        self.assertTrue(hasattr(content_migration, "migration_type"))
 
     def test_create_content_migration_migrator(self, m):
-        register_uris({'user': ['create_content_migration',
-                                'get_migration_systems_multiple']}, m)
+        register_uris(
+            {"user": ["create_content_migration", "get_migration_systems_multiple"]}, m
+        )
 
         migrators = self.user.get_migration_systems()
         content_migration = self.user.create_content_migration(migrators[0])
 
         self.assertIsInstance(content_migration, ContentMigration)
-        self.assertTrue(hasattr(content_migration, 'migration_type'))
+        self.assertTrue(hasattr(content_migration, "migration_type"))
 
     def test_create_content_migration_bad_migration_type(self, m):
-        register_uris({'user': ['create_content_migration']}, m)
+        register_uris({"user": ["create_content_migration"]}, m)
 
         with self.assertRaises(TypeError):
             self.user.create_content_migration(1)
 
     # get_content_migration
     def test_get_content_migration(self, m):
-        register_uris({'user': ['get_content_migration_single']}, m)
+        register_uris({"user": ["get_content_migration_single"]}, m)
 
         content_migration = self.user.get_content_migration(1)
 
         self.assertIsInstance(content_migration, ContentMigration)
-        self.assertTrue(hasattr(content_migration, 'migration_type'))
+        self.assertTrue(hasattr(content_migration, "migration_type"))
 
     # get_content_migrations
     def test_get_content_migrations(self, m):
-        register_uris({'user': ['get_content_migration_multiple']}, m)
+        register_uris({"user": ["get_content_migration_multiple"]}, m)
 
         content_migrations = self.user.get_content_migrations()
 
@@ -471,7 +473,7 @@ class TestUser(unittest.TestCase):
 
     # get_migration_systems
     def test_get_migration_systems(self, m):
-        register_uris({'user': ['get_migration_systems_multiple']}, m)
+        register_uris({"user": ["get_migration_systems_multiple"]}, m)
 
         migration_systems = self.user.get_migration_systems()
 
@@ -489,14 +491,20 @@ class TestUser(unittest.TestCase):
 
 @requests_mock.Mocker()
 class TestUserDisplay(unittest.TestCase):
-
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({
-                'course': ['get_by_id', 'get_assignment_by_id', 'list_gradeable_students']
-            }, m)
+            register_uris(
+                {
+                    "course": [
+                        "get_by_id",
+                        "get_assignment_by_id",
+                        "list_gradeable_students",
+                    ]
+                },
+                m,
+            )
 
             self.course = self.canvas.get_course(1)
             self.assignment = self.course.get_assignment(1)
