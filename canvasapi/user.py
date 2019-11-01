@@ -590,8 +590,8 @@ class User(CanvasObject):
         """
         Returns the grade change log for a grader.
 
-        :calls: `/api/v1/audit/grade_change/graders/:grader_id
-        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_grader>`
+        :calls: `/api/v1/audit/grade_change/graders/:grader_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_grader>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.grade_change_event.GradeChangeEvent`
@@ -612,8 +612,8 @@ class User(CanvasObject):
         """
         Returns the grade change log for the current student.
 
-        :calls: `/api/v1/audit/grade_change/students/:student_id
-        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_student>`
+        :calls: `/api/v1/audit/grade_change/students/:student_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_student>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.grade_change_event.GradeChangeEvent`

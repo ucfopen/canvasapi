@@ -1232,7 +1232,7 @@ class Course(CanvasObject):
         Returns the grade change log for the course.
 
         :calls: `GET /api/v1/audit/grade_change/courses/:course_id \
-        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_course>`
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_course>`_
 
         :rtype: :class:`canvasapi.grade_change_log.GradeChangeLog`
         """
