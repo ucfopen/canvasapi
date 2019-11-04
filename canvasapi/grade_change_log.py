@@ -16,7 +16,6 @@ class GradeChangeLog(CanvasObject):
         """
         super(GradeChangeLog, self).__init__(requester, attributes)
 
-        # NOTE: canvas's api paginates these events so this probably needs to be paginated
         self.events = [
             GradeChangeEvent(self._requester, event) for event in self.events
         ]
