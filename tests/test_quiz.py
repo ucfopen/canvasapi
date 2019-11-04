@@ -14,6 +14,7 @@ from canvasapi.quiz import (
     QuizQuestion,
     QuizExtension,
     QuizSubmissionEvent,
+    QuizReport,
 )
 from canvasapi.quiz_group import QuizGroup
 from canvasapi.paginated_list import PaginatedList
@@ -204,6 +205,19 @@ class TestQuiz(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.quiz.set_extensions([{"extra_time": 60, "extra_attempts": 3}])
 
+    # get_all_quiz_reports
+    def test_get_all_quiz_reports(self, m):
+        register_uris({"quiz": ["get_all_quiz_reports"]}, m)
+
+        reports = self.quiz.get_all_quiz_reports()
+
+        self.assertIsInstance(reports, PaginatedList)
+
+        for r in reports:
+            self.assertIsInstance(r, QuizReport)
+            self.assertTrue(hasattr(r, "report_type"))
+            self.assertTrue(hasattr(r, "includes_all_versions"))
+
     # get_all_quiz_submissions()
     def test_get_all_quiz_submissions(self, m):
         register_uris({"quiz": ["get_all_quiz_submissions"]}, m)
@@ -278,6 +292,10 @@ class TestQuiz(unittest.TestCase):
 
         self.assertIsInstance(submission, QuizSubmission)
 
+@requests_mock.Mocker()
+class TestQuizReport(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
 @requests_mock.Mocker()
 class TestQuizSubmission(unittest.TestCase):

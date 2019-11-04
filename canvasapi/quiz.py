@@ -16,6 +16,9 @@ class Quiz(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
+    def abort_or_remove_quiz_report(self, **kwargs):
+        pass
+
     def create_question(self, **kwargs):
         """
         Create a new quiz question for this quiz.
@@ -82,6 +85,9 @@ class Quiz(CanvasObject):
 
         return QuizGroup(self._requester, response_json.get("quiz_groups")[0])
 
+    def create_quiz_report(self, **kwargs):
+        pass
+
     def create_submission(self, **kwargs):
         """
         Start taking a Quiz by creating a QuizSubmission can be used to answer
@@ -141,6 +147,24 @@ class Quiz(CanvasObject):
         quiz_json.update({"course_id": self.course_id})
 
         return Quiz(self._requester, quiz_json)
+
+    def get_all_quiz_reports(self, **kwargs):
+        """
+        Get a list of all quiz reports for this quiz
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/reports \
+        <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizReport`
+        """
+        return PaginatedList(
+            QuizReport,
+            self._requester,
+            "GET",
+            "courses/{}/quizzes/{}/reports".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_all_quiz_submissions(self, **kwargs):
         """
@@ -231,6 +255,9 @@ class Quiz(CanvasObject):
         response_json.update({"course_id": self.id})
 
         return QuizGroup(self._requester, response_json)
+
+    def get_quiz_report(self, **kwargs):
+        pass
 
     def get_quiz_submission(self, quiz_submission, **kwargs):
         """
@@ -597,12 +624,15 @@ class QuizQuestion(CanvasObject):
         super(QuizQuestion, self).set_attributes(response_json)
         return self
 
+@python_2_unicode_compatible
+class QuizReport(CanvasObject):
+    def __str__(self):
+        return "{}".format(self.report_type)
 
 @python_2_unicode_compatible
 class QuizSubmissionEvent(CanvasObject):
     def __str__(self):
         return "{}".format(self.event_type)
-
 
 @python_2_unicode_compatible
 class QuizSubmissionQuestion(CanvasObject):
