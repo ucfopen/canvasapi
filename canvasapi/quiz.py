@@ -256,8 +256,29 @@ class Quiz(CanvasObject):
 
         return QuizGroup(self._requester, response_json)
 
-    def get_quiz_report(self, **kwargs):
-        pass
+    def get_quiz_report(self, quiz_report, **kwargs):
+        """
+        Returns the data for a single quiz report.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/reports/:id \
+        <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.show>`_
+
+        :rtype: :class:`canvasapi.quiz.QuizReport`
+        """
+
+        quiz_report_id = obj_or_id(
+            quiz_report, "quiz_report", (QuizReport,)
+        )
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/quizzes/{}/reports/{}".format(
+                self.course_id, self.id, quiz_report_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return QuizReport(self._requester, response.json())
 
     def get_quiz_submission(self, quiz_submission, **kwargs):
         """

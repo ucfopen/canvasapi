@@ -271,5 +271,16 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_quiz_report": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/reports/1",
+		"data": {
+			"id": 1,
+			"quiz_id": 1,
+			"report_type": 1,
+			"includes_all_versions": true
+		},
+		"status_code": 200
 	}
 }
