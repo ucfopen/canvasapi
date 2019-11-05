@@ -4,6 +4,7 @@
 
 ### New Endpoint Coverage
 
+- Assignment Extensions (Thanks, [@ljoks](https://github.com/ljoks))
 - Authentications Log (Thanks, [@weining-li](https://github.com/weining-li))
 - Brand Configs (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Comm Messages (Thanks, [@ljoks](https://github.com/ljoks))
