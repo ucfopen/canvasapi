@@ -14,12 +14,12 @@ class TestLicenses(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {"user": ["get_by_id", "list_licenses"]}
+            requires = {"user": ["get_by_id", "get_licenses"]}
 
             register_uris(requires, m)
 
             self.user = self.canvas.get_user(1)
-            self.licenses = list(self.user.list_licenses())
+            self.licenses = list(self.user.get_licenses())
 
     # __str__()
     def test__str__(self, m):

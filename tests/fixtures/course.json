@@ -1940,7 +1940,7 @@
 		},
 		"status_code": 200
 	},
-	"list_licenses": {
+	"get_licenses": {
 		"method": "GET",
 		"endpoint": "courses/1/content_licenses",
 		"data": [

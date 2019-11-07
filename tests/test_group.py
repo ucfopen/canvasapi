@@ -648,11 +648,11 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(retval["file_ids"], [1, 2])
         self.assertEqual(retval["message"], "2 files updated")
 
-    # list_licenses()
-    def test_list_licenses(self, m):
-        register_uris({"group": ["list_licenses"]}, m)
+    # get_licenses()
+    def test_get_licenses(self, m):
+        register_uris({"group": ["get_licenses"]}, m)
 
-        licenses = self.group.list_licenses()
+        licenses = self.group.get_licenses()
         self.assertIsInstance(licenses, PaginatedList)
         licenses = list(licenses)
 

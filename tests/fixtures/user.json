@@ -956,7 +956,7 @@
 		},
 		"status_code": 200
 	},
-	"list_licenses": {
+	"get_licenses": {
 		"method": "GET",
 		"endpoint": "users/1/content_licenses",
 		"data": [

@@ -609,11 +609,11 @@ class TestUser(unittest.TestCase):
         self.assertEqual(retval["file_ids"], [1, 2])
         self.assertEqual(retval["message"], "2 files updated")
 
-    # list_licenses()
-    def test_list_licenses(self, m):
-        register_uris({"user": ["list_licenses"]}, m)
+    # get_licenses()
+    def test_get_licenses(self, m):
+        register_uris({"user": ["get_licenses"]}, m)
 
-        licenses = self.user.list_licenses()
+        licenses = self.user.get_licenses()
         self.assertIsInstance(licenses, PaginatedList)
         licenses = list(licenses)
 

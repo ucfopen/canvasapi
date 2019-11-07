@@ -1807,10 +1807,11 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(retval["file_ids"], [1, 2])
         self.assertEqual(retval["message"], "2 files updated")
 
-    def test_list_licenses(self, m):
-        register_uris({"course": ["list_licenses"]}, m)
+    # get_licenses()
+    def test_get_licenses(self, m):
+        register_uris({"course": ["get_licenses"]}, m)
 
-        licenses = self.course.list_licenses()
+        licenses = self.course.get_licenses()
         self.assertIsInstance(licenses, PaginatedList)
         licenses = list(licenses)
 
