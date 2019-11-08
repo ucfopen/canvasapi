@@ -9,7 +9,9 @@ from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.license import License
 from canvasapi.upload import Uploader
+from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, obj_or_id, obj_or_str
 
 
@@ -585,6 +587,26 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_licenses(self, **kwargs):
+        """
+        Returns a paginated list of the licenses that can be applied to the
+        files under the user scope
+
+        :calls: `GET /api/v1/users/:user_id/content_licenses \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.license.License`
+        """
+
+        return PaginatedList(
+            License,
+            self._requester,
+            "GET",
+            "users/{}/content_licenses".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_migration_systems(self, **kwargs):
         """
         Return a list of migration systems.
@@ -889,6 +911,42 @@ class User(CanvasObject):
             "DELETE", "users/{}/observees/{}".format(self.id, observee_id)
         )
         return User(self._requester, response.json())
+
+    def remove_usage_rights(self, **kwargs):
+        """
+        Changes the usage rights for specified files that are under the user scope
+
+        :calls: `DELETE /api/v1/users/:user_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "DELETE",
+            "users/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
+    def set_usage_rights(self, **kwargs):
+        """
+        Changes the usage rights for specified files that are under the user scope
+
+        :calls: `PUT /api/v1/users/:user_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.set_usage_rights>`_
+
+        :rtype: :class:`canvasapi.usage_rights.UsageRights`
+        """
+
+        response = self._requester.request(
+            "PUT",
+            "users/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return UsageRights(self._requester, response.json())
 
     def show_observee(self, observee_id):
         """
