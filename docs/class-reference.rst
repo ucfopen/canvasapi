@@ -34,6 +34,7 @@ Class Reference
     grading-period-ref
     group-ref
     login-ref
+    license-ref
     module-ref
     outcome-ref
     outcome-import-ref
@@ -54,3 +55,4 @@ Class Reference
     tab-ref
     upload-ref
     user-ref
+    usage-rights-ref
