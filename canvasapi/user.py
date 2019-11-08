@@ -590,7 +590,7 @@ class User(CanvasObject):
     def get_licenses(self, **kwargs):
         """
         Returns a paginated list of the licenses that can be applied to the
-        files under the group scope
+        files under the user scope
 
         :calls: `GET /api/v1/users/:user_id/content_licenses \
         <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_
