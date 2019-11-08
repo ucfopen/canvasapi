@@ -202,6 +202,55 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def set_extensions(self, assignment_extensions, **kwargs):
+        """
+        Set extensions for student assignment submissions
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/extensions \
+        <https://canvas.instructure.com/doc/api/assignment_extensions.html#method.assignment_extensions.create>`_
+
+        :param assignment_extensions: list of dictionaries representing extensions
+        :type assignment_extensions: list
+
+        :rtype: list of :class:`canvasapi.assignment.AssignmentExtension`
+
+        Example Usage:
+
+        >>> assignment.set_extensions([
+        ...     {
+        ...         'user_id': 3,
+        ...         'extra_attempts: 2
+        ...     },
+        ...     {
+        ...         'user_id': 2,
+        ...         'extra_attempts: 2
+        ...     }
+        ... ])
+        """
+        if not isinstance(assignment_extensions, list) or not assignment_extensions:
+            raise ValueError("Param `assignment_extensions` must be a non-empty list.")
+
+        if any(not isinstance(extension, dict) for extension in assignment_extensions):
+            raise ValueError(
+                "Param `assignment_extensions` must only contain dictionaries"
+            )
+
+        if any("user_id" not in extension for extension in assignment_extensions):
+            raise RequiredFieldMissing(
+                "Dictionaries in `assignment_extensions` must contain key `user_id`"
+            )
+        kwargs["assignment_extensions"] = assignment_extensions
+        response = self._requester.request(
+            "POST",
+            "courses/{}/assignments/{}/extensions".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        extension_list = response.json()["assignment_extensions"]
+        return [
+            AssignmentExtension(self._requester, extension)
+            for extension in extension_list
+        ]
+
     def submissions_bulk_update(self, **kwargs):
         """
         Update the grading and comments on multiple student's assignment
@@ -294,6 +343,12 @@ class Assignment(CanvasObject):
             file,
             **kwargs
         ).start()
+
+
+@python_2_unicode_compatible
+class AssignmentExtension(CanvasObject):
+    def __str__(self):
+        return "{} ({})".format(self.assignment_id, self.user_id)
 
 
 @python_2_unicode_compatible

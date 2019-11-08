@@ -1938,5 +1938,42 @@
 			"association_type": "Course"
 		},
 		"status_code": 200
+	},
+	"set_usage_rights": {
+		"method": "PUT",
+		"endpoint": "courses/1/usage_rights",
+		"data": {
+			"use_justification": "fair_use",
+			"license": "private",
+			"message": "2 files updated",
+			"file_ids": [1,2]
+		},
+		"status_code": 200
+	},
+	"remove_usage_rights": {
+		"method": "DELETE",
+		"endpoint": "courses/1/usage_rights",
+		"data": {
+			"message": "2 files updated",
+			"file_ids": [1,2]
+		},
+		"status_code": 200
+	},
+	"get_licenses": {
+		"method": "GET",
+		"endpoint": "courses/1/content_licenses",
+		"data": [
+			{
+				"id": "private",
+				"name": "Private (Copyrighted)",
+				"url": "http://en.wikipedia.org/wiki/Copyright"
+			},
+			{
+				"id": "public_domain",
+				"name": "Public domain",
+				"url": "http://en.wikipedia.org/wiki/Public_domain"
+			}
+		],
+		"status_code": 200
 	}
 }

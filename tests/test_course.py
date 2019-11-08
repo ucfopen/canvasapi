@@ -25,6 +25,7 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.group import Group, GroupCategory
+from canvasapi.license import License
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
@@ -37,6 +38,7 @@ from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
+from canvasapi.usage_rights import UsageRights
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.content_export import ContentExport
 from tests import settings
@@ -1815,6 +1817,48 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(rubric_association, RubricAssociation)
         self.assertEqual(rubric_association.id, 4)
         self.assertEqual(rubric_association.association_type, "Course")
+
+    # set_usage_rights()
+    def test_set_usage_rights(self, m):
+        register_uris({"course": ["set_usage_rights"]}, m)
+
+        usage_rights = self.course.set_usage_rights(
+            file_ids=[1, 2],
+            usage_rights={"use_justification": "fair_use", "license": "private"},
+        )
+
+        self.assertIsInstance(usage_rights, UsageRights)
+        self.assertEqual(usage_rights.use_justification, "fair_use")
+        self.assertEqual(usage_rights.message, "2 files updated")
+        self.assertEqual(usage_rights.license, "private")
+        self.assertEqual(usage_rights.file_ids, [1, 2])
+
+    # remove_usage_rights()
+    def test_remove_usage_rights(self, m):
+        register_uris({"course": ["remove_usage_rights"]}, m)
+
+        retval = self.course.remove_usage_rights(file_ids=[1, 2])
+
+        self.assertIsInstance(retval, dict)
+        self.assertIn("message", retval)
+        self.assertEqual(retval["file_ids"], [1, 2])
+        self.assertEqual(retval["message"], "2 files updated")
+
+    # get_licenses()
+    def test_get_licenses(self, m):
+        register_uris({"course": ["get_licenses"]}, m)
+
+        licenses = self.course.get_licenses()
+        self.assertIsInstance(licenses, PaginatedList)
+        licenses = list(licenses)
+
+        for l in licenses:
+            self.assertIsInstance(l, License)
+            self.assertTrue(hasattr(l, "id"))
+            self.assertTrue(hasattr(l, "name"))
+            self.assertTrue(hasattr(l, "url"))
+
+        self.assertEqual(2, len(licenses))
 
 
 @requests_mock.Mocker()
