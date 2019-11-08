@@ -737,13 +737,13 @@ class Course(CanvasObject):
         Returns a paginated list of assignments for the given assignment group
 
         :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id/assignments\
-        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`_
 
         :param assignment_group: The object or id of the assignment group
         :type assignment_group: :class: `canvasapi.assignment.AssignmentGroup` or int
 
-        :rtype: :class: `canvasapi.paginated_list.PaginatedList` of
-            :class: `canvasapi.assignment.Assignment`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.Assignment`
         """
 
         assignment_group_id = obj_or_id(
