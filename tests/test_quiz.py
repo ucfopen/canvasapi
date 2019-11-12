@@ -306,7 +306,7 @@ class TestQuiz(unittest.TestCase):
 
     def test_create_report(self, m):
         register_uris({'quiz': ['create_report']}, m)
-        
+
         report = self.quiz.create_report('student_analysis')
 
         self.assertIsInstance(report, QuizReport)
@@ -318,11 +318,12 @@ class TestQuiz(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.quiz.create_report('super_cool_fake_report')
 
+
 @requests_mock.Mocker()
 class TestQuizReport(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
-        
+
         with requests_mock.Mocker() as m:
             requires = {
                 "course": ["get_by_id"],

@@ -97,7 +97,8 @@ class Quiz(CanvasObject):
         list = ['student_analysis', 'item_analysis']
 
         if(report_type not in list):
-            raise ValueError("Param `report_type` must be a either 'student_analysis' or 'item_analysis'")
+            raise ValueError("Param `report_type` must be a either 'student_analysis' \
+            or 'item_analysis'")
 
         response = self._requester.request(
             "POST",
@@ -695,7 +696,6 @@ class QuizReport(CanvasObject):
         )
 
         return response.status_code == 204
-
 
 
 @python_2_unicode_compatible
