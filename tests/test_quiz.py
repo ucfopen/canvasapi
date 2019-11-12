@@ -305,18 +305,18 @@ class TestQuiz(unittest.TestCase):
         self.assertIsInstance(submission, QuizSubmission)
 
     def test_create_report(self, m):
-        register_uris({'quiz': ['create_report']}, m)
+        register_uris({"quiz": ["create_report"]}, m)
 
-        report = self.quiz.create_report('student_analysis')
+        report = self.quiz.create_report("student_analysis")
 
         self.assertIsInstance(report, QuizReport)
-        self.assertEqual(report.report_type, 'student_analysis')
+        self.assertEqual(report.report_type, "student_analysis")
 
     def test_create_report_failure(self, m):
-        register_uris({'quiz': ["create_report"]}, m)
+        register_uris({"quiz": ["create_report"]}, m)
 
         with self.assertRaises(ValueError):
-            self.quiz.create_report('super_cool_fake_report')
+            self.quiz.create_report("super_cool_fake_report")
 
 
 @requests_mock.Mocker()
@@ -327,7 +327,7 @@ class TestQuizReport(unittest.TestCase):
         with requests_mock.Mocker() as m:
             requires = {
                 "course": ["get_by_id"],
-                "quiz": ["get_by_id", "get_quiz_report"]
+                "quiz": ["get_by_id", "get_quiz_report"],
             }
             register_uris(requires, m)
 

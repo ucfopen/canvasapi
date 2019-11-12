@@ -94,11 +94,13 @@ class Quiz(CanvasObject):
 
         :rtype: :class:`canvasapi.quiz.QuizReport`
         """
-        list = ['student_analysis', 'item_analysis']
+        list = ["student_analysis", "item_analysis"]
 
-        if(report_type not in list):
-            raise ValueError("Param `report_type` must be a either 'student_analysis' \
-            or 'item_analysis'")
+        if report_type not in list:
+            raise ValueError(
+                "Param `report_type` must be a either 'student_analysis' \
+            or 'item_analysis'"
+            )
 
         response = self._requester.request(
             "POST",
@@ -290,15 +292,11 @@ class Quiz(CanvasObject):
 
         :rtype: :class:`canvasapi.quiz.QuizReport`
         """
-        id = obj_or_id(
-            id, "id", (QuizReport,)
-        )
+        id = obj_or_id(id, "id", (QuizReport,))
 
         response = self._requester.request(
             "GET",
-            "courses/{}/quizzes/{}/reports/{}".format(
-                self.course_id, self.id, id
-            ),
+            "courses/{}/quizzes/{}/reports/{}".format(self.course_id, self.id, id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -691,7 +689,9 @@ class QuizReport(CanvasObject):
         """
         response = self._requester.request(
             "DELETE",
-            "courses/{}/quizzes/{}/reports/{}".format(self.course_id, self.quiz_id, self.id),
+            "courses/{}/quizzes/{}/reports/{}".format(
+                self.course_id, self.quiz_id, self.id
+            ),
             _kwargs=combine_kwargs(**kwargs),
         )
 
