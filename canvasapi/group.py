@@ -9,8 +9,10 @@ from canvasapi.collaboration import Collaboration
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
+from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 
 
@@ -563,6 +565,26 @@ class Group(CanvasObject):
         )
         return response.json()
 
+    def get_licenses(self, **kwargs):
+        """
+        Returns a paginated list of the licenses that can be applied to the
+        files under the group scope
+
+        :calls: `GET /api/v1/groups/:group_id/content_licenses \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.license.License`
+        """
+
+        return PaginatedList(
+            License,
+            self._requester,
+            "GET",
+            "groups/{}/content_licenses".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_membership(self, user, membership_type):
         """
         List users in a group.
@@ -879,6 +901,23 @@ class Group(CanvasObject):
         )
         return response.json().get("html", "")
 
+    def remove_usage_rights(self, **kwargs):
+        """
+        Removes the usage rights for specified files that are under the current group scope
+
+        :calls: `DELETE /api/v1/groups/:group_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
+
+        :rtype: dict
+        """
+        response = self._requester.request(
+            "DELETE",
+            "groups/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def remove_user(self, user):
         """
         Leave a group if allowed.
@@ -928,6 +967,24 @@ class Group(CanvasObject):
         )
 
         return response.json().get("reorder")
+
+    def set_usage_rights(self, **kwargs):
+        """
+        Changes the usage rights for specified files that are under the current group scope
+
+        :calls: `PUT /api/v1/groups/:group_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.set_usage_rights>`_
+
+        :rtype: :class:`canvasapi.usage_rights.UsageRights`
+        """
+
+        response = self._requester.request(
+            "PUT",
+            "groups/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return UsageRights(self._requester, response.json())
 
     def show_front_page(self):
         """

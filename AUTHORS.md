@@ -36,7 +36,7 @@ Patches and Suggestions
 - John Raible [@rebelaide](https://github.com/rebelaide)
 - Jose Silveti [@jrsilveti](https://github.com/jrsilveti)
 - [@kensler](https://github.com/kensler)
-- LJ Oks [@ljoks](https://github.com/ljoks)
+- Lawrence Oks [@ljoks](https://github.com/ljoks)
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
 - Markus [@elec3647](https://github.com/elec3647)
 - Matthew Fedder [@matthewf-ucsd](https://github.com/matthewf-ucsd)
