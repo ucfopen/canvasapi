@@ -219,7 +219,7 @@ class TestQuiz(unittest.TestCase):
             self.assertTrue(hasattr(r, "report_type"))
             self.assertTrue(hasattr(r, "includes_all_versions"))
             len += 1
-        
+
         self.assertEqual(len, 2)
 
     # get_all_quiz_submissions()
@@ -268,7 +268,7 @@ class TestQuiz(unittest.TestCase):
         self.assertEqual(submission_list[1].id, 2)
         self.assertTrue(hasattr(submission_list[1], "score"))
         self.assertEqual(submission_list[1].score, 5)
-    
+
     # get_quiz_report
     def test_get_quiz_report(self, m):
         register_uris({"quiz": ["get_quiz_report"]}, m)
@@ -304,10 +304,57 @@ class TestQuiz(unittest.TestCase):
 
         self.assertIsInstance(submission, QuizSubmission)
 
+    def test_create_report(self, m):
+        register_uris({'quiz': ['create_report']}, m)
+        
+        report = self.quiz.create_report('student_analysis')
+
+        self.assertIsInstance(report, QuizReport)
+        self.assertEqual(report.report_type, 'student_analysis')
+
+    def test_create_report_failure(self, m):
+        register_uris({'quiz': ["create_report"]}, m)
+
+        with self.assertRaises(ValueError):
+            self.quiz.create_report('super_cool_fake_report')
+
 @requests_mock.Mocker()
 class TestQuizReport(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+        
+        with requests_mock.Mocker() as m:
+            requires = {
+                "course": ["get_by_id"],
+                "quiz": ["get_by_id", "get_quiz_report"]
+            }
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.quiz = self.course.get_quiz(1)
+            self.quiz_report = self.quiz.get_quiz_report(1)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.quiz_report)
+        self.assertIsInstance(string, str)
+
+    # abort_or_delete
+    def test_abort_or_delete(self, m):
+        register_uris({"quiz": ["abort_or_delete_report"]}, m)
+
+        resp = self.quiz_report.abort_or_delete()
+
+        self.assertEqual(resp, True)
+
+    # abort_or_delete
+    def test_abort_or_delete_failure(self, m):
+        register_uris({"quiz": ["abort_or_delete_report_failure"]}, m)
+
+        resp = self.quiz_report.abort_or_delete()
+
+        self.assertEqual(resp, False)
+
 
 @requests_mock.Mocker()
 class TestQuizSubmission(unittest.TestCase):

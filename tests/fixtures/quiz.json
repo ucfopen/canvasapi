@@ -1,4 +1,16 @@
-{
+{	
+	"abort_or_delete_report": {
+		"method": "DELETE",
+		"endpoint": "courses/1/quizzes/1/reports/1",
+		"data": "True",
+		"status_code": 204
+	},
+	"abort_or_delete_report_failure": {
+		"method": "DELETE",
+		"endpoint": "courses/1/quizzes/1/reports/1",
+		"data": "False",
+		"status_code": 200
+	},
 	"delete": {
 		"method":"DELETE",
 		"endpoint": "courses/1/quizzes/1",
@@ -278,8 +290,19 @@
 		"data": {
 			"id": 1,
 			"quiz_id": 1,
-			"report_type": 1,
+			"report_type": "student_analysis",
 			"includes_all_versions": true
+		},
+		"status_code": 200
+	},
+	"create_report": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/reports",
+		"data": {
+			"id": 1,
+			"quiz_id": 1,
+			"report_type": "student_analysis",
+			"includes_all_paramaters": true
 		},
 		"status_code": 200
 	}
