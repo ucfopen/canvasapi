@@ -251,6 +251,26 @@ class Assignment(CanvasObject):
             for extension in extension_list
         ]
 
+    def submissions_bulk_update(self, **kwargs):
+        """
+        Update the grading and comments on multiple student's assignment
+        submissions in an asynchronous job.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/update_grades \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+        response = self._requester.request(
+            "POST",
+            "courses/{}/assignments/{}/submissions/update_grades".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return Progress(self._requester, response.json())
+
     def submit(self, submission, file=None, **kwargs):
         """
         Makes a submission for an assignment.
@@ -295,26 +315,6 @@ class Assignment(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def submissions_bulk_update(self, **kwargs):
-        """
-        Update the grading and comments on multiple student's assignment
-        submissions in an asynchronous job.
-
-        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/ \
-            submissions/update_grades \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.bulk_update>`_
-
-        :rtype: :class:`canvasapi.progress.Progress`
-        """
-        response = self._requester.request(
-            "POST",
-            "courses/{}/assignments/{}/submissions/update_grades".format(
-                self.course_id, self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-        return Progress(self._requester, response.json())
-
     def upload_to_submission(self, file, user="self", **kwargs):
         """
         Upload a file to a submission.
@@ -356,6 +356,22 @@ class AssignmentGroup(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
+    def delete(self, **kwargs):
+        """
+        Delete this assignment.
+
+        :calls: `DELETE /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
+        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.destroy>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentGroup`
+        """
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/assignment_groups/{}".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return AssignmentGroup(self._requester, response.json())
+
     def edit(self, **kwargs):
         """
         Modify this assignment group.
@@ -374,22 +390,6 @@ class AssignmentGroup(CanvasObject):
         if "name" in response.json():
             super(AssignmentGroup, self).set_attributes(response.json())
 
-        return AssignmentGroup(self._requester, response.json())
-
-    def delete(self, **kwargs):
-        """
-        Delete this assignment.
-
-        :calls: `DELETE /api/v1/courses/:course_id/assignment_groups/:assignment_group_id \
-        <https://canvas.instructure.com/doc/api/assignment_groups.html#method.assignment_groups_api.destroy>`_
-
-        :rtype: :class:`canvasapi.assignment.AssignmentGroup`
-        """
-        response = self._requester.request(
-            "DELETE",
-            "courses/{}/assignment_groups/{}".format(self.course_id, self.id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
         return AssignmentGroup(self._requester, response.json())
 
 

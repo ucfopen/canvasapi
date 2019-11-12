@@ -4,6 +4,7 @@ import warnings
 
 from six import python_2_unicode_compatible, text_type, string_types
 
+from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
@@ -730,6 +731,34 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/assignments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_assignments_for_group(self, assignment_group, **kwargs):
+        """
+        Returns a paginated list of assignments for the given assignment group
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id/assignments\
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`_
+
+        :param assignment_group: The object or id of the assignment group
+        :type assignment_group: :class: `canvasapi.assignment.AssignmentGroup` or int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.Assignment`
+        """
+
+        assignment_group_id = obj_or_id(
+            assignment_group, "assignment_group", (AssignmentGroup,)
+        )
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            "GET",
+            "courses/{}/assignment_groups/{}/assignments".format(
+                self.id, assignment_group_id
+            ),
             _kwargs=combine_kwargs(**kwargs),
         )
 
