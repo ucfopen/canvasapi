@@ -4,6 +4,7 @@ import warnings
 
 from six import python_2_unicode_compatible, text_type, string_types
 
+from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
@@ -20,6 +21,7 @@ from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.license import License
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
@@ -29,6 +31,7 @@ from canvasapi.tab import Tab
 from canvasapi.rubric import RubricAssociation, Rubric
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.upload import Uploader
+from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
     combine_kwargs,
     is_multivalued,
@@ -737,6 +740,34 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_assignments_for_group(self, assignment_group, **kwargs):
+        """
+        Returns a paginated list of assignments for the given assignment group
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id/assignments\
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`_
+
+        :param assignment_group: The object or id of the assignment group
+        :type assignment_group: :class: `canvasapi.assignment.AssignmentGroup` or int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.Assignment`
+        """
+
+        assignment_group_id = obj_or_id(
+            assignment_group, "assignment_group", (AssignmentGroup,)
+        )
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            "GET",
+            "courses/{}/assignment_groups/{}/assignments".format(
+                self.id, assignment_group_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_blueprint(self, template="default", **kwargs):
         """
         Return the blueprint of a given ID.
@@ -1376,6 +1407,26 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/groups".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_licenses(self, **kwargs):
+        """
+        Returns a paginated list of the licenses that can be applied to the
+        files under the course scope
+
+        :calls: `GET /api/v1/course/:course_id/content_licenses \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.license.License`
+        """
+
+        return PaginatedList(
+            License,
+            self._requester,
+            "GET",
+            "courses/{}/content_licenses".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -2464,6 +2515,24 @@ class Course(CanvasObject):
         )
         return response.json().get("html", "")
 
+    def remove_usage_rights(self, **kwargs):
+        """
+        Removes the usage rights for specified files that are under the current course scope
+
+        :calls: `DELETE /api/v1/courses/:course_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def reorder_pinned_topics(self, order):
         """
         Puts the pinned discussion topics in the specified order.
@@ -2561,6 +2630,24 @@ class Course(CanvasObject):
         return [
             QuizExtension(self._requester, extension) for extension in extension_list
         ]
+
+    def set_usage_rights(self, **kwargs):
+        """
+        Changes the usage rights for specified files that are under the current course scope
+
+        :calls: `PUT /api/v1/courses/:course_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.set_usage_rights>`_
+
+        :rtype: :class:`canvasapi.usage_rights.UsageRights`
+        """
+
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return UsageRights(self._requester, response.json())
 
     def show_front_page(self):
         """

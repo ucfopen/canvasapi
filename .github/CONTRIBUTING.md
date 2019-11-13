@@ -14,7 +14,7 @@ Below you'll find guidelines for contributing that will keep our codebase clean 
         * [Writing tests](#writing-tests)
             * [API Coverage Tests](#api-coverage-tests)
             * [Engine tests](#engine-tests)
-        * [Running tests / coverage reports](#running-tests-coverage-reports)
+        * [Running tests / coverage reports](#running-tests--coverage-reports)
         * [Making a Pull Request](#making-a-pull-request)
 * [Code style guidelines](#code-style-guidelines)
     * [Foolish consistency](#foolish-consistency)
