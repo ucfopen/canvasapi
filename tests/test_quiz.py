@@ -37,6 +37,21 @@ class TestQuiz(unittest.TestCase):
         string = str(self.quiz)
         self.assertIsInstance(string, str)
 
+    # broadcast_message()
+    def test_broadcast_message(self, m):
+        register_uris({"quiz": ["broadcast_message"]}, m)
+
+        response = self.quiz.broadcast_message(
+            conversations={
+                "body": "please take the quiz",
+                "recipients": "submitted",
+                "subject": "ATTN: Quiz 101 Students",
+            }
+        )
+        response = response.json()
+
+        self.assertEqual(response["status"], "created")
+
     # edit()
     def test_edit(self, m):
         register_uris({"quiz": ["edit"]}, m)

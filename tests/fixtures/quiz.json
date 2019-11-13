@@ -1,4 +1,12 @@
 {
+	"broadcast_message": {
+		"method":"POST",
+		"endpoint": "courses/1/quizzes/1/submission_users/message",
+		"data": {
+			"status": "created"
+		},
+		"status_code": 200
+	},
 	"delete": {
 		"method":"DELETE",
 		"endpoint": "courses/1/quizzes/1",
