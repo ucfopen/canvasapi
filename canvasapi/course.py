@@ -1253,9 +1253,9 @@ class Course(CanvasObject):
 
     def get_gradebook_history_details(self, date, **kwargs):
         """
-        Returns the graders who worked on this day, along with the \
-        assignments they worked on. More details can be obtained by \
-        selecting a grader and assignment and calling the 'submissions' \
+        Returns the graders who worked on this day, along with the
+        assignments they worked on. More details can be obtained by
+        selecting a grader and assignment and calling the 'submissions'
         api endpoint for a given date.
 
         :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date\

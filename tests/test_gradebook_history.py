@@ -12,7 +12,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestDay(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
 
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -32,7 +31,6 @@ class TestDay(unittest.TestCase):
 @requests_mock.Mocker()
 class TestGrader(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
 
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -54,7 +52,6 @@ class TestGrader(unittest.TestCase):
 @requests_mock.Mocker()
 class TestSubmissionHistory(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
 
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -76,7 +73,6 @@ class TestSubmissionHistory(unittest.TestCase):
 @requests_mock.Mocker()
 class TestSubmissionVersion(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
 
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
