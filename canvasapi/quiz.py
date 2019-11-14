@@ -690,7 +690,8 @@ class QuizReport(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/quizzes/:quiz_id/reports/:id \
         <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.abort>`_
 
-        :rtype: :bool: True if attempt was successful, False otherwise
+        :returns: True if attempt was successful, False otherwise
+        :rtype: :bool: 
         """
         response = self._requester.request(
             "DELETE",
