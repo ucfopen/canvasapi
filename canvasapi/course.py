@@ -10,6 +10,12 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionVersion,
+    SubmissionHistory,
+)
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
@@ -1257,6 +1263,51 @@ class Course(CanvasObject):
         )
         return response.json()
 
+    def get_gradebook_history_dates(self, **kwargs):
+        """
+        Returns a map of dates to grader/assignment groups
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/days\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.gradebook_history_api.days>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_history.Day`
+        """
+
+        return PaginatedList(
+            Day,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/days".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_gradebook_history_details(self, date, **kwargs):
+        """
+        Returns the graders who worked on this day, along with the
+        assignments they worked on. More details can be obtained by
+        selecting a grader and assignment and calling the 'submissions'
+        api endpoint for a given date.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
+        gradebook_history_api.day_details>`_
+
+        :param date: The date for which you would like to see detailed information.
+        :type date: int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.Grader`
+        """
+
+        return PaginatedList(
+            Grader,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/{}".format(self.id, date),
+            kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_grading_period(self, grading_period, **kwargs):
         """
         Return a single grading period for the associated course and id.
@@ -1847,6 +1898,36 @@ class Course(CanvasObject):
 
         return assignment.get_submission(user, **kwargs)
 
+    def get_submission_history(self, date, grader_id, assignment_id, **kwargs):
+        """
+        Gives a nested list of submission versions.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date/graders\
+        /:grader_id/assignments/:assignment_id/submissions\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
+        gradebook_history_api.submissions>`_
+
+        :param date: The date for which you would like to see submissions
+        :type grader_id: str
+        :param grader_id: The ID of the grader for which you want to see submissions.
+        :type grader_id: int
+        :param assignment_id: The ID of the assignment for which you want to see submissions
+        :type assignment_id: int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.SubmissionHistory`
+        """
+
+        return PaginatedList(
+            SubmissionHistory,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/{}/graders/{}/assignments/{}/submissions".format(
+                self.id, date, grader_id, assignment_id
+            ),
+            kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_tabs(self, **kwargs):
         """
         List available tabs for a course.
@@ -1865,6 +1946,29 @@ class Course(CanvasObject):
             "courses/{}/tabs".format(self.id),
             {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_uncollated_submissions(self, **kwargs):
+        """
+        Gives a paginated, uncollated list of submission versions for all matching
+        submissions in the context. This SubmissionVersion objects will not include
+        the new_grade or previous_grade keys, only the grade; same for graded_at
+        and grader.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/feed\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method\
+        .gradebook_history_api.feed>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.SubmissionVersion`
+        """
+
+        return PaginatedList(
+            SubmissionVersion,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/feed".format(self.id),
+            kwargs=combine_kwargs(**kwargs),
         )
 
     def get_user(self, user, user_id_type=None):
