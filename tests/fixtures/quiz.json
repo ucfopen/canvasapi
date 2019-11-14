@@ -5,7 +5,7 @@
 		"data": {
 			"status": "created"
 		},
-		"status_code": 200
+		"status_code": 201
 	},
 	"delete": {
 		"method":"DELETE",

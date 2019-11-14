@@ -48,9 +48,8 @@ class TestQuiz(unittest.TestCase):
                 "subject": "ATTN: Quiz 101 Students",
             }
         )
-        response = response.json()
 
-        self.assertEqual(response["status"], "created")
+        self.assertTrue(response)
 
     # edit()
     def test_edit(self, m):

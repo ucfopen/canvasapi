@@ -19,22 +19,28 @@ class Quiz(CanvasObject):
     def broadcast_message(self, conversations, **kwargs):
         """
         Send a message to unsubmitted or submitted users for the quiz.
-        :calls: `POST /api/v1/courses/:course_id/quizzes/:id/submission_users/message\
-        <https://canvas.instructure.com/doc/api/quiz_submission_user_list.html#method.\
-        quizzes/quiz_submission_users.message>`_
-        :param conversations: Body and recipients to send the message to.
-        :type :class: `canvasapi.quiz.QuizUserConversation`
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:id/submission_users/message \
+        <https://canvas.instructure.com/doc/api/quiz_submission_user_list.html#method.quizzes/quiz_submission_users.message>`_
+
+        :param conversations: The ID of the question group.
+        :type conversations: :class:`canvasapi.quiz.QuizUserConversation`
+
+        :returns: True if the message was created, False otherwize
+        :rtype: bool
         """
 
         kwargs["conversations"] = conversations
 
-        return self._requester.request(
+        response = self._requester.request(
             "POST",
             "courses/{}/quizzes/{}/submission_users/message".format(
                 self.course_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
+
+        return response.status_code == 201
 
     def create_question(self, **kwargs):
         """
