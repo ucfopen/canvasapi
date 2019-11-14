@@ -14,6 +14,7 @@ from canvasapi.quiz import (
     QuizQuestion,
     QuizExtension,
     QuizSubmissionEvent,
+    QuizReport,
 )
 from canvasapi.quiz_group import QuizGroup
 from canvasapi.paginated_list import PaginatedList
@@ -204,6 +205,22 @@ class TestQuiz(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.quiz.set_extensions([{"extra_time": 60, "extra_attempts": 3}])
 
+    # get_all_quiz_reports
+    def test_get_all_quiz_reports(self, m):
+        register_uris({"quiz": ["get_all_quiz_reports"]}, m)
+
+        reports = self.quiz.get_all_quiz_reports()
+        self.assertIsInstance(reports, PaginatedList)
+
+        reports = list(reports)
+
+        for report in reports:
+            self.assertIsInstance(report, QuizReport)
+            self.assertTrue(hasattr(report, "report_type"))
+            self.assertTrue(hasattr(report, "includes_all_versions"))
+
+        self.assertEqual(len(reports), 2)
+
     # get_all_quiz_submissions()
     def test_get_all_quiz_submissions(self, m):
         register_uris({"quiz": ["get_all_quiz_submissions"]}, m)
@@ -251,6 +268,14 @@ class TestQuiz(unittest.TestCase):
         self.assertTrue(hasattr(submission_list[1], "score"))
         self.assertEqual(submission_list[1].score, 5)
 
+    # get_quiz_report
+    def test_get_quiz_report(self, m):
+        register_uris({"quiz": ["get_quiz_report"]}, m)
+
+        report = self.quiz.get_quiz_report(1)
+        self.assertIsInstance(report, QuizReport)
+        self.assertEqual(report.quiz_id, 1)
+
     # get_quiz_submission
     def test_get_quiz_submission(self, m):
         register_uris({"quiz": ["get_quiz_submission"]}, m)
@@ -277,6 +302,58 @@ class TestQuiz(unittest.TestCase):
         submission = self.quiz.create_submission()
 
         self.assertIsInstance(submission, QuizSubmission)
+
+    def test_create_report(self, m):
+        register_uris({"quiz": ["create_report"]}, m)
+
+        report = self.quiz.create_report("student_analysis")
+
+        self.assertIsInstance(report, QuizReport)
+        self.assertEqual(report.report_type, "student_analysis")
+
+    def test_create_report_failure(self, m):
+        register_uris({"quiz": ["create_report"]}, m)
+
+        with self.assertRaises(ValueError):
+            self.quiz.create_report("super_cool_fake_report")
+
+
+@requests_mock.Mocker()
+class TestQuizReport(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {
+                "course": ["get_by_id"],
+                "quiz": ["get_by_id", "get_quiz_report"],
+            }
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.quiz = self.course.get_quiz(1)
+            self.quiz_report = self.quiz.get_quiz_report(1)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.quiz_report)
+        self.assertIsInstance(string, str)
+
+    # abort_or_delete
+    def test_abort_or_delete(self, m):
+        register_uris({"quiz": ["abort_or_delete_report"]}, m)
+
+        resp = self.quiz_report.abort_or_delete()
+
+        self.assertEqual(resp, True)
+
+    # abort_or_delete
+    def test_abort_or_delete_failure(self, m):
+        register_uris({"quiz": ["abort_or_delete_report_failure"]}, m)
+
+        resp = self.quiz_report.abort_or_delete()
+
+        self.assertEqual(resp, False)
 
 
 @requests_mock.Mocker()

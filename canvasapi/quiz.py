@@ -31,6 +31,7 @@ class Quiz(CanvasObject):
             "courses/{}/quizzes/{}/questions".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
+
         response_json = response.json()
         response_json.update({"course_id": self.course_id})
 
@@ -81,6 +82,39 @@ class Quiz(CanvasObject):
         response_json["quiz_groups"][0].update({"course_id": self.id})
 
         return QuizGroup(self._requester, response_json.get("quiz_groups")[0])
+
+    def create_report(self, report_type, **kwargs):
+        """
+        Create and return a new report for this quiz. If a previously generated report
+        matches the arguments and is still current (i.e. there have been no new submissions),
+        it will be returned.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/reports \
+        <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.create>`_
+
+        :param report_type: The type of report, either student_analysis or item_analysis
+        :type report_type: str
+
+        :returns: `QuizReport` object
+        :rtype: :class:`canvasapi.quiz.QuizReport`
+        """
+        if report_type not in ["student_analysis", "item_analysis"]:
+            raise ValueError(
+                "Param `report_type` must be a either 'student_analysis' or 'item_analysis'"
+            )
+
+        kwargs["report_type"] = report_type
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/quizzes/{}/reports".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"course_id": self.course_id})
+
+        return QuizReport(self._requester, response_json)
 
     def create_submission(self, **kwargs):
         """
@@ -141,6 +175,24 @@ class Quiz(CanvasObject):
         quiz_json.update({"course_id": self.course_id})
 
         return Quiz(self._requester, quiz_json)
+
+    def get_all_quiz_reports(self, **kwargs):
+        """
+        Get a list of all quiz reports for this quiz
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/reports \
+        <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizReport`
+        """
+        return PaginatedList(
+            QuizReport,
+            self._requester,
+            "GET",
+            "courses/{}/quizzes/{}/reports".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_all_quiz_submissions(self, **kwargs):
         """
@@ -231,6 +283,32 @@ class Quiz(CanvasObject):
         response_json.update({"course_id": self.id})
 
         return QuizGroup(self._requester, response_json)
+
+    def get_quiz_report(self, id, **kwargs):
+        """
+        Returns the data for a single quiz report.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/reports/:id \
+        <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.show>`_
+
+        :param id: The ID of the quiz report you want to retrieve, or the report object
+        :type id: int or :class:`canvasapi.quiz.QuizReport`
+
+        :returns: `QuizReport` object
+        :rtype: :class:`canvasapi.quiz.QuizReport`
+        """
+        id = obj_or_id(id, "id", (QuizReport,))
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/quizzes/{}/reports/{}".format(self.course_id, self.id, id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        response_json.update({"course_id": self.course_id})
+
+        return QuizReport(self._requester, response_json)
 
     def get_quiz_submission(self, quiz_submission, **kwargs):
         """
@@ -596,6 +674,34 @@ class QuizQuestion(CanvasObject):
 
         super(QuizQuestion, self).set_attributes(response_json)
         return self
+
+
+@python_2_unicode_compatible
+class QuizReport(CanvasObject):
+    def __str__(self):
+        return "{} ({})".format(self.report_type, self.id)
+
+    def abort_or_delete(self, **kwargs):
+        """
+        This API allows you to cancel a previous request you issued for a report to be generated.
+        Or in the case of an already generated report, you'd like to remove it, perhaps to generate
+        it another time with an updated version that provides new features.
+
+        :calls: `DELETE /api/v1/courses/:course_id/quizzes/:quiz_id/reports/:id \
+        <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.abort>`_
+
+        :returns: True if attempt was successful; False otherwise
+        :rtype: bool
+        """
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/quizzes/{}/reports/{}".format(
+                self.course_id, self.quiz_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.status_code == 204
 
 
 @python_2_unicode_compatible
