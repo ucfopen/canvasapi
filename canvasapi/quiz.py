@@ -87,20 +87,23 @@ class Quiz(CanvasObject):
         """
         Create and return a new report for this quiz. If a previously generated report
         matches the arguments and is still current (i.e. there have been no new submissions),
-        it will be returned
+        it will be returned.
 
         :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/reports \
         <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.create>`_
 
+        :param report_type: The type of report, either student_analysis or item_analysis
+        :type report_type: str
+
+        :returns: `QuizReport` object
         :rtype: :class:`canvasapi.quiz.QuizReport`
         """
-        list = ["student_analysis", "item_analysis"]
-
-        if report_type not in list:
+        if report_type not in ["student_analysis", "item_analysis"]:
             raise ValueError(
-                "Param `report_type` must be a either 'student_analysis' \
-            or 'item_analysis'"
+                "Param `report_type` must be a either 'student_analysis' or 'item_analysis'"
             )
+
+        kwargs["report_type"] = report_type
 
         response = self._requester.request(
             "POST",
@@ -285,11 +288,13 @@ class Quiz(CanvasObject):
         """
         Returns the data for a single quiz report.
 
-        :param id: The ID of the quiz report you want to retrieve
-
         :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/reports/:id \
         <https://canvas.instructure.com/doc/api/quiz_reports.html#method.quizzes/quiz_reports.show>`_
 
+        :param id: The ID of the quiz report you want to retrieve, or the report object
+        :type id: int or :class:`canvasapi.quiz.QuizReport`
+
+        :returns: `QuizReport` object
         :rtype: :class:`canvasapi.quiz.QuizReport`
         """
         id = obj_or_id(id, "id", (QuizReport,))

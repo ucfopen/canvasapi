@@ -1,4 +1,4 @@
-{	
+{
 	"abort_or_delete_report": {
 		"method": "DELETE",
 		"endpoint": "courses/1/quizzes/1/reports/1",
@@ -270,16 +270,16 @@
 		"endpoint": "courses/1/quizzes/1/reports",
 		"data": [
 			{
-					"id": 1,
-					"quiz_id": 1,
-					"report_type": 1,
-					"includes_all_versions": true
+				"id": 1,
+				"quiz_id": 1,
+				"report_type": 1,
+				"includes_all_versions": true
 			},
 			{
-					"id": 2,
-					"quiz_id": 1,
-					"report_type": 1,
-					"includes_all_versions": false
+				"id": 2,
+				"quiz_id": 1,
+				"report_type": 1,
+				"includes_all_versions": false
 			}
 		],
 		"status_code": 200

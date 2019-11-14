@@ -210,17 +210,16 @@ class TestQuiz(unittest.TestCase):
         register_uris({"quiz": ["get_all_quiz_reports"]}, m)
 
         reports = self.quiz.get_all_quiz_reports()
-        len = 0
-
         self.assertIsInstance(reports, PaginatedList)
 
-        for r in reports:
-            self.assertIsInstance(r, QuizReport)
-            self.assertTrue(hasattr(r, "report_type"))
-            self.assertTrue(hasattr(r, "includes_all_versions"))
-            len += 1
+        reports = list(reports)
 
-        self.assertEqual(len, 2)
+        for report in reports:
+            self.assertIsInstance(report, QuizReport)
+            self.assertTrue(hasattr(report, "report_type"))
+            self.assertTrue(hasattr(report, "includes_all_versions"))
+
+        self.assertEqual(len(reports), 2)
 
     # get_all_quiz_submissions()
     def test_get_all_quiz_submissions(self, m):
