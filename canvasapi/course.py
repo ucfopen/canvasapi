@@ -1971,7 +1971,7 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_user(self, user, user_id_type=None):
+    def get_user(self, user, user_id_type=None, **kwargs):
         """
         Retrieve a user by their ID. `user_id_type` denotes which endpoint to try as there are
         several different ids that can pull the same user record from Canvas.
@@ -1994,7 +1994,7 @@ class Course(CanvasObject):
             user_id = obj_or_id(user, "user", (User,))
             uri = "courses/{}/users/{}".format(self.id, user_id)
 
-        response = self._requester.request("GET", uri)
+        response = self._requester.request("GET", uri, _kwargs=combine_kwargs(**kwargs))
         return User(self._requester, response.json())
 
     def get_user_in_a_course_level_assignment_data(self, user):

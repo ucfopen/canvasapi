@@ -1125,7 +1125,7 @@ class Canvas(object):
         response = self.__requester.request("GET", "users/self/upcoming_events")
         return response.json()
 
-    def get_user(self, user, id_type=None):
+    def get_user(self, user, id_type=None, **kwargs):
         """
         Retrieve a user by their ID. `id_type` denotes which endpoint to try as there are
         several different IDs that can pull the same user record from Canvas.
@@ -1152,7 +1152,9 @@ class Canvas(object):
             user_id = obj_or_id(user, "user", (User,))
             uri = "users/{}".format(user_id)
 
-        response = self.__requester.request("GET", uri)
+        response = self.__requester.request(
+            "GET", uri, _kwargs=combine_kwargs(**kwargs)
+        )
         return User(self.__requester, response.json())
 
     def get_user_participants(self, appointment_group, **kwargs):
