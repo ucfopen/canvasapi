@@ -16,6 +16,44 @@ class Quiz(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
+    def broadcast_message(self, conversations, **kwargs):
+        """
+        Send a message to unsubmitted or submitted users for the quiz.
+
+        :calls: `POST /api/v1/courses/:course_id/quizzes/:id/submission_users/message \
+        <https://canvas.instructure.com/doc/api/quiz_submission_user_list.html#method.quizzes/quiz_submission_users.message>`_
+
+        :param conversations: A dictionary representing a Conversation.
+            Requires `'body'`, `'recipients'`, and `'subject'` keys.
+        :type conversations: dict
+
+        :returns: True if the message was created, False otherwize
+        :rtype: bool
+        """
+
+        required_key_list = ["body", "recipients", "subject"]
+        required_keys_present = all((x in conversations for x in required_key_list))
+
+        if isinstance(conversations, dict) and required_keys_present:
+            kwargs["conversations"] = conversations
+        else:
+            raise RequiredFieldMissing(
+                (
+                    "conversations must be a dictionary with keys "
+                    "'body', 'recipients', and 'subject'."
+                )
+            )
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/quizzes/{}/submission_users/message".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.status_code == 201
+
     def create_question(self, **kwargs):
         """
         Create a new quiz question for this quiz.

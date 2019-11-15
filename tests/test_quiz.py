@@ -38,6 +38,26 @@ class TestQuiz(unittest.TestCase):
         string = str(self.quiz)
         self.assertIsInstance(string, str)
 
+    # broadcast_message()
+    def test_broadcast_message(self, m):
+        register_uris({"quiz": ["broadcast_message"]}, m)
+
+        response = self.quiz.broadcast_message(
+            conversations={
+                "body": "please take the quiz",
+                "recipients": "submitted",
+                "subject": "ATTN: Quiz 101 Students",
+            }
+        )
+
+        self.assertTrue(response)
+
+    def test_broadcast_message_invalid_params(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.quiz.broadcast_message(
+                conversations={"body": "no subject here", "recipients": "submitted"}
+            )
+
     # edit()
     def test_edit(self, m):
         register_uris({"quiz": ["edit"]}, m)

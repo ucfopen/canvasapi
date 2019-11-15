@@ -11,6 +11,14 @@
 		"data": "False",
 		"status_code": 200
 	},
+	"broadcast_message": {
+		"method":"POST",
+		"endpoint": "courses/1/quizzes/1/submission_users/message",
+		"data": {
+			"status": "created"
+		},
+		"status_code": 201
+	},
 	"delete": {
 		"method":"DELETE",
 		"endpoint": "courses/1/quizzes/1",
@@ -130,22 +138,22 @@
 		"data": {
 			"quiz_submissions": [
 				{
-						"id": 1,
-						"quiz_id": 1,
-						"user_id": 1,
-						"submission_id": 1,
-						"attempt": 3,
-						"manually_unlocked": null,
-						"score": 7
+					"id": 1,
+					"quiz_id": 1,
+					"user_id": 1,
+					"submission_id": 1,
+					"attempt": 3,
+					"manually_unlocked": null,
+					"score": 7
 				},
 				{
-						"id": 2,
-						"quiz_id": 1,
-						"user_id": 1,
-						"submission_id": 2,
-						"attempt": 3,
-						"manually_unlocked": null,
-						"score": 5
+					"id": 2,
+					"quiz_id": 1,
+					"user_id": 1,
+					"submission_id": 2,
+					"attempt": 3,
+					"manually_unlocked": null,
+					"score": 5
 				}
 			]
 		}
