@@ -23,14 +23,26 @@ class Quiz(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/quizzes/:id/submission_users/message \
         <https://canvas.instructure.com/doc/api/quiz_submission_user_list.html#method.quizzes/quiz_submission_users.message>`_
 
-        :param conversations: The ID of the question group.
-        :type conversations: :class:`canvasapi.quiz.QuizUserConversation`
+        :param conversations: A dictionary representing a Conversation.
+            Requires `'body'`, `'recipients'`, and `'subject'` keys.
+        :type conversations: dict
 
         :returns: True if the message was created, False otherwize
         :rtype: bool
         """
 
-        kwargs["conversations"] = conversations
+        required_key_list = ["body", "recipients", "subject"]
+        required_keys_present = all((x in conversations for x in required_key_list))
+
+        if isinstance(conversations, dict) and required_keys_present:
+            kwargs["conversations"] = conversations
+        else:
+            raise RequiredFieldMissing(
+                (
+                    "conversations must be a dictionary with keys "
+                    "'body', 'recipients', and 'subject'."
+                )
+            )
 
         response = self._requester.request(
             "POST",

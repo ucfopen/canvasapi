@@ -52,6 +52,12 @@ class TestQuiz(unittest.TestCase):
 
         self.assertTrue(response)
 
+    def test_broadcast_message_invalid_params(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.quiz.broadcast_message(
+                conversations={"body": "no subject here", "recipients": "submitted"}
+            )
+
     # edit()
     def test_edit(self, m):
         register_uris({"quiz": ["edit"]}, m)
