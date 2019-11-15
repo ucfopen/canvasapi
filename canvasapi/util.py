@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
-from collections import Iterable
 
 from six import binary_type, string_types, text_type
 
@@ -25,7 +24,11 @@ def is_multivalued(value):
         return False
 
     # general rule: multivalued if iterable
-    return isinstance(value, Iterable)
+    try:
+        iter(value)
+        return True
+    except TypeError:
+        return False
 
 
 def combine_kwargs(**kwargs):
