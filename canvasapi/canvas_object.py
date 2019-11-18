@@ -1,8 +1,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+
 from datetime import datetime
 import json
 import pytz
 import re
+import warnings
 
 from six import text_type
 
@@ -16,6 +18,14 @@ class CanvasObject(object):
     This makes a call to :func:`canvasapi.canvas_object.CanvasObject.set_attributes`
     to dynamically construct this object's attributes with a JSON object.
     """
+
+    def __getattribute__(self, name):
+        if name == "attributes":
+            warnings.warn(
+                "CanvasObject.attributes is deprecated and will be removed in a future version.",
+                DeprecationWarning,
+            )
+        return super().__getattribute__(name)
 
     def __init__(self, requester, attributes):
         """
@@ -77,5 +87,14 @@ class CanvasObject(object):
         """
         Return the original JSON response from the API that was used to
         construct the object.
+
+        .. warning::
+            .. deprecated:: 0.14.0
+                Use :func:`canvasapi.assignment.Assignment.get_submission` instead.
         """
+        warnings.warn(
+            "`CanvasObject.to_json()` is deprecated and will be removed in a future version. "
+            "To see the original responses, check Requester._cache",
+            DeprecationWarning,
+        )
         return json.dumps(self.attributes)
