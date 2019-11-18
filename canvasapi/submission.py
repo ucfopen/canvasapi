@@ -179,16 +179,15 @@ class Submission(CanvasObject):
 @python_2_unicode_compatible
 class GroupedSubmission(CanvasObject):
     def __init__(self, requester, attributes):
+        super(GroupedSubmission, self).__init__(requester, attributes)
+
         try:
             self.submissions = [
                 Submission(requester, submission)
                 for submission in attributes["submissions"]
             ]
-            del attributes["submissions"]
         except KeyError:
             self.submissions = list()
-
-        super(GroupedSubmission, self).__init__(requester, attributes)
 
     def __str__(self):
         return "{} submission(s) for User #{}".format(
