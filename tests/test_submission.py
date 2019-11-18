@@ -154,6 +154,29 @@ class TestGroupedSubmission(unittest.TestCase):
         self.assertIsInstance(grouped_submission.submissions, list)
         self.assertEqual(len(grouped_submission.submissions), 0)
 
+    def test__init__issue_303_regression(self):
+        """
+        Regression test for issue #303
+        https://github.com/ucfopen/canvasapi/issues/303
+        """
+        grouped_submission = GroupedSubmission(
+            self.canvas._Canvas__requester,
+            {
+                "user_id": 1,
+                "submissions": [
+                    {
+                        "id": 1,
+                        "assignments_id": 1,
+                        "user_id": 1,
+                        "html_url": "https://example.com/courses/1/assignments/1/submissions/1",
+                        "submission_type": "online_upload",
+                    }
+                ],
+            },
+        )
+        self.assertTrue(hasattr(grouped_submission, "submissions"))
+        self.assertIn("submissions", grouped_submission.attributes)
+
     # __str__()
     def test__str__(self):
         string = str(self.grouped_submission)
