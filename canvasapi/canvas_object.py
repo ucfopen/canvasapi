@@ -25,7 +25,7 @@ class CanvasObject(object):
                 "CanvasObject.attributes is deprecated and will be removed in a future version.",
                 DeprecationWarning,
             )
-        return super().__getattribute__(name)
+        return super(CanvasObject, self).__getattribute__(name)
 
     def __init__(self, requester, attributes):
         """
