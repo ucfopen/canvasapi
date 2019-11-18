@@ -94,7 +94,8 @@ class CanvasObject(object):
         """
         warnings.warn(
             "`CanvasObject.to_json()` is deprecated and will be removed in a future version. "
-            "To see the original responses, check Requester._cache",
+            "To view the original attributes sent by Canvas, enable logs from the "
+            "requests library",
             DeprecationWarning,
         )
         return json.dumps(self.attributes)
