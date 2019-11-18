@@ -9,6 +9,8 @@ class TestCanvasObject(unittest.TestCase):
 
     # to_json()
     def test_canvas_object_to_json(self):
+        warnings.simplefilter("always", DeprecationWarning)
+
         with warnings.catch_warnings(record=True) as warning_list:
             attributes = {"name": "Test Object", "id": 1}
             canvas_obj = CanvasObject(None, attributes)
@@ -21,6 +23,8 @@ class TestCanvasObject(unittest.TestCase):
 
             self.assertNotEqual(canvas_obj.to_json(), prev_json)
 
-        self.assertEqual(len(warning_list), 2)
+        self.assertEqual(len(warning_list), 4)
         self.assertEqual(warning_list[0].category, DeprecationWarning)
         self.assertEqual(warning_list[1].category, DeprecationWarning)
+        self.assertEqual(warning_list[2].category, DeprecationWarning)
+        self.assertEqual(warning_list[3].category, DeprecationWarning)
