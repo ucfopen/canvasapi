@@ -255,6 +255,27 @@
 		},
 		"status_code": 200
 	},
+	"get_assignment_with_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Do this assignment",
+			"overrides": [
+				{
+					"id": 1,
+					"assignment_id": 1,
+					"student_ids": [1],
+					"group_id": 1,
+					"course_section_id": 1,
+					"title": "Assignment Override 1"
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"override_group_alias": {
 		"method": "GET",
 		"endpoint": "groups/1/assignments/1/override",

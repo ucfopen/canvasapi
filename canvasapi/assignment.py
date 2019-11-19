@@ -16,6 +16,15 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 @python_2_unicode_compatible
 class Assignment(CanvasObject):
+    def __init__(self, requester, attributes):
+        super(Assignment, self).__init__(requester, attributes)
+
+        if "overrides" in attributes:
+            self.overrides = [
+                AssignmentOverride(requester, override)
+                for override in attributes["overrides"]
+            ]
+
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 

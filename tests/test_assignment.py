@@ -31,6 +31,16 @@ class TestAssignment(unittest.TestCase):
             self.course = self.canvas.get_course(1)
             self.assignment = self.course.get_assignment(1)
 
+    def test__init__overrides(self, m):
+        register_uris({"assignment": ["get_assignment_with_overrides"]}, m)
+
+        assignment = self.course.get_assignment(1)
+
+        self.assertTrue(hasattr(assignment, "overrides"))
+        self.assertIsInstance(assignment.overrides, list)
+        self.assertEqual(len(assignment.overrides), 1)
+        self.assertIsInstance(assignment.overrides[0], AssignmentOverride)
+
     # create_override()
     def test_create_override(self, m):
         register_uris({"assignment": ["create_override"]}, m)
