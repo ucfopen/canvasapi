@@ -15,6 +15,7 @@
 ### General
 
 - Throw `IndexError` when using negative indexes on `PaginatedList` objects (Thanks, [@UniversalSuperBox](https://github.com/UniversalSuperBox))
+- The `overrides` attribute of `Assignments` now creates `AssignmentOverride` objects.
 
 ### Bugfixes
 
