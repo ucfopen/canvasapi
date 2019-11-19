@@ -5,11 +5,16 @@
 ### New Endpoint Coverage
 
 - Assignment Extensions (Thanks, [@ljoks](https://github.com/ljoks))
+- AssignmentGroup (Thanks, [@ctcuff](https://github.com/ctcuff))
+    - List Assignments
 - Authentications Log (Thanks, [@weining-li](https://github.com/weining-li))
 - Brand Configs (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Comm Messages (Thanks, [@ljoks](https://github.com/ljoks))
-- File Usage (Thanks, [@atarisafari](https://github.com/atarisafari))
+- File Usage Rights (Thanks, [@atarisafari](https://github.com/atarisafari) and [@joonro](https://github.com/joonro))
+- Gradebook History (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
+- Quiz Reports (Thanks, [@atarisafari](https://github.com/atarisafari)
 - Quiz Submission Events (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
+- Quiz Submission User List (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
 - Rubric Associations (Thanks, [@weining-li](https://github.com/weining-li))
 
 ### General
@@ -21,6 +26,9 @@
 
 - Fixed an issue where `util.clean_headers()` would throw a `ValueError` if a user accidentally included a space in their API token. (Thanks, [@keeeeeegan](https://github.com/keeeeeegan))
 - Fixed an issue where `QuizSubmission` objects sometimes wouldn't have a course_id, making some methods unusable. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where `get_user()` did not accept arbitrary keyword arguments (Thanks, [@eriktews](https://github.com/eriktews))
+- Fixed an issue where an import was triggering a `DeprecationWarning` (Thanks, [@Screeeech](https://github.com/Screeeech))
+- Fixed an issue where a GroupedSubmission wasn't saving the `submissions` attribute properly
 
 ## [0.14.0] - 2019-08-20
 
