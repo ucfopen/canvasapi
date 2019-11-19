@@ -89,7 +89,7 @@ class CanvasObject(object):
         construct the object.
 
         .. warning::
-            .. deprecated:: 0.14.0
+            .. deprecated:: 0.15.0
                 To view the original attributes sent by Canvas, enable logs from the
                 requests library.
         """
