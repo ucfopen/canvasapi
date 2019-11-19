@@ -22,6 +22,11 @@
 - Throw `IndexError` when using negative indexes on `PaginatedList` objects (Thanks, [@UniversalSuperBox](https://github.com/UniversalSuperBox))
 - `Assignment.overrides` now returns a list of `AssignmentOverride` objects.
 
+### Deprecation Warnings
+
+- `CanvasObject.attributes` is now deprecated and will be removed in a future version.
+- `CanvasObject.to_json()` is now deprecated and will be removed in a future version. To view the original attributes sent by Canvas, enable logs from the requests library.
+
 ### Bugfixes
 
 - Fixed an issue where `util.clean_headers()` would throw a `ValueError` if a user accidentally included a space in their API token. (Thanks, [@keeeeeegan](https://github.com/keeeeeegan))
