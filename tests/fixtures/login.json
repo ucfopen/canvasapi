@@ -7,7 +7,7 @@
 			"id": 101,
 			"unique_id": "belieber@example.com",
 			"user_id": 1
-		}, 
+		},
 		"status_code": 200
 	},
 	"list_user_logins": {
@@ -62,5 +62,22 @@
 			"unique_id": "belieber@example.com",
 			"user_id": 1
 		}
+	},
+	"get_authentication_events": {
+		"method": "GET",
+		"endpoint": "audit/authentication/logins/101",
+		"data": [
+			{
+				"created_at": "2012-07-19T15:00:00-06:00",
+				"event_type": "login",
+				"pseudonym_id": 9478
+			},
+			{
+				"created_at": "2012-07-20T15:00:00-06:00",
+				"event_type": "logout",
+				"pseudonym_id": 9478
+			}
+		],
+		"status_code": 200
 	}
 }

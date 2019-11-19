@@ -370,3 +370,42 @@ Using :func:`canvasapi.assignment.Assignment.delete`:
 .. code-block:: python
 
     assignment.delete()
+
+
+Update (Edit) an Assignment Submission
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Using :func:`canvasapi.submission.Submission.edit`:
+
+Change a User's Assignment Score
+################################
+
+.. code-block:: python
+
+    # Set `score` to a Int value
+
+    submission = assignment.get_submission(student_id)
+    submission.edit(submission={'posted_grade':score})
+
+Add n Points to All Users' Assignments
+######################################
+
+.. code-block:: python
+
+    # Set added points as an Int variable
+    
+    added_points = 2
+
+    submissions = assignment.get_submissions()
+    
+    for submission in submissions:
+
+        # Handle an unscored assignment by checking the `score` value
+
+        if submission.score is not None:
+            score = submission.score + added_points
+        else:
+            # Treat no submission as 0 points
+            score = 0 + added_points
+        
+        submission.edit(submission={'posted_grade': score})

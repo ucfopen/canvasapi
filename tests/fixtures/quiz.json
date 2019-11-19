@@ -1,4 +1,24 @@
 {
+	"abort_or_delete_report": {
+		"method": "DELETE",
+		"endpoint": "courses/1/quizzes/1/reports/1",
+		"data": "True",
+		"status_code": 204
+	},
+	"abort_or_delete_report_failure": {
+		"method": "DELETE",
+		"endpoint": "courses/1/quizzes/1/reports/1",
+		"data": "False",
+		"status_code": 200
+	},
+	"broadcast_message": {
+		"method":"POST",
+		"endpoint": "courses/1/quizzes/1/submission_users/message",
+		"data": {
+			"status": "created"
+		},
+		"status_code": 201
+	},
 	"delete": {
 		"method":"DELETE",
 		"endpoint": "courses/1/quizzes/1",
@@ -118,22 +138,22 @@
 		"data": {
 			"quiz_submissions": [
 				{
-						"id": 1,
-						"quiz_id": 1,
-						"user_id": 1,
-						"submission_id": 1,
-						"attempt": 3,
-						"manually_unlocked": null,
-						"score": 7
+					"id": 1,
+					"quiz_id": 1,
+					"user_id": 1,
+					"submission_id": 1,
+					"attempt": 3,
+					"manually_unlocked": null,
+					"score": 7
 				},
 				{
-						"id": 2,
-						"quiz_id": 1,
-						"user_id": 1,
-						"submission_id": 2,
-						"attempt": 3,
-						"manually_unlocked": null,
-						"score": 5
+					"id": 2,
+					"quiz_id": 1,
+					"user_id": 1,
+					"submission_id": 2,
+					"attempt": 3,
+					"manually_unlocked": null,
+					"score": 5
 				}
 			]
 		}
@@ -203,6 +223,26 @@
 		},
 		"status_code": 200
 	},
+	"get_submission_events": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/submissions/1/events",
+		"data": {
+			"quiz_submission_events": [
+				{
+					"id": "3409",
+					"event_type": "page_blurred",
+					"event_data": null,
+					"created_at": "2014-11-16T13:37:21Z"
+				},
+				{
+					"id": "3410",
+					"event_type": "page_focused",
+					"event_data": null,
+					"created_at": "2014-11-16T13:37:27Z"
+				}
+			]
+		}
+	},
 	"set_extensions": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes/1/extensions",
@@ -226,5 +266,52 @@
 				}
 			]
 		}
+	},
+	"submit_events": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/submissions/1/events",
+		"data": {},
+		"status_code": 204
+	},
+	"get_all_quiz_reports": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/reports",
+		"data": [
+			{
+				"id": 1,
+				"quiz_id": 1,
+				"report_type": 1,
+				"includes_all_versions": true
+			},
+			{
+				"id": 2,
+				"quiz_id": 1,
+				"report_type": 1,
+				"includes_all_versions": false
+			}
+		],
+		"status_code": 200
+	},
+	"get_quiz_report": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/reports/1",
+		"data": {
+			"id": 1,
+			"quiz_id": 1,
+			"report_type": "student_analysis",
+			"includes_all_versions": true
+		},
+		"status_code": 200
+	},
+	"create_report": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/reports",
+		"data": {
+			"id": 1,
+			"quiz_id": 1,
+			"report_type": "student_analysis",
+			"includes_all_paramaters": true
+		},
+		"status_code": 200
 	}
 }

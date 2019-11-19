@@ -146,6 +146,25 @@
 		},
 		"status_code": 200
 	},
+	"get_assignments_for_group": {
+		"method": "GET",
+		"endpoint": "courses/1/assignment_groups/5/assignments",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
 	"get_blueprint": {
 		"method": "GET",
 		"endpoint": "courses/1/blueprint_templates/1",
@@ -513,6 +532,38 @@
 			}
 		],
 		"status_code": 200
+	},
+	"get_submission_history": {
+		"method": "GET",
+		"endpoint": "courses/1/gradebook_history/08-23-2019/graders/1/assignments/1/submissions",
+		"data": [
+			{
+                "submission_id": 4,
+                "versions": null
+            },
+            {
+                "submission_id": 7,
+                "versions": null
+            }
+        ]
+    },
+	"get_uncollated_submissions": {
+		"method": "GET",
+		"endpoint": "courses/1/gradebook_history/feed",
+		"data": [
+			{
+				"id": 1,
+				"assignment_id": 40,
+				"assignment_name": "assignment1",
+				"grader_id": 53
+			},
+			{
+				"id": 2,
+				"assignment_id": 22,
+				"assignment_name": "assignment2",
+				"grader_id": 67
+			}
+		]
 	},
 	"get_user": {
 		"method": "GET",
@@ -1652,6 +1703,59 @@
 		],
 		"status_code": 200
 	},
+	"get_gradebook_history_dates": {
+		"method": "GET",
+		"endpoint": "courses/1/gradebook_history/days",
+		"data": [
+			{
+				"date": "2018-08-09",
+				"graders": [
+					{
+						"name": "John Smith", 
+						"id": 49, 
+						"assignments":[
+							{
+								"id": 44, 
+								"description": "<p>homework1</p>"
+							}
+						]
+					}
+				]
+			},
+			{
+				"date": "2019-10-24",
+				"graders": [
+					{
+						"name": "Sara Hanks", 
+						"id": 32, 
+						"assignments":[
+							{
+								"id": 19, 
+								"description": "<p>homework2</p>"
+							}
+						]
+					}
+				]
+			}
+		]
+
+	},
+	"get_gradebook_history_details": {
+		"method": "GET",
+		"endpoint": "courses/1/gradebook_history/03-26-2019",
+		"data": [
+			{
+				"id": 27,
+				"name": "John Smith",
+				"assignments": [1, 2, 3]
+			},
+			{
+				"id": 30,
+				"name": "Jenny Parker",
+				"assignments": [4, 5, 6]
+			}
+		]
+	},
 	"get_single_grading_standard": {
 		"method": "GET",
 		"endpoint": "courses/1/grading_standards/1",
@@ -1909,6 +2013,52 @@
 				"hide_score_total": true
 			}
 		},
+		"status_code": 200
+	},
+	"create_rubric_association": {
+		"method": "POST",
+		"endpoint": "courses/1/rubric_associations",
+		"data": {
+			"id": 4,
+			"association_type": "Course"
+		},
+		"status_code": 200
+	},
+	"set_usage_rights": {
+		"method": "PUT",
+		"endpoint": "courses/1/usage_rights",
+		"data": {
+			"use_justification": "fair_use",
+			"license": "private",
+			"message": "2 files updated",
+			"file_ids": [1,2]
+		},
+		"status_code": 200
+	},
+	"remove_usage_rights": {
+		"method": "DELETE",
+		"endpoint": "courses/1/usage_rights",
+		"data": {
+			"message": "2 files updated",
+			"file_ids": [1,2]
+		},
+		"status_code": 200
+	},
+	"get_licenses": {
+		"method": "GET",
+		"endpoint": "courses/1/content_licenses",
+		"data": [
+			{
+				"id": "private",
+				"name": "Private (Copyrighted)",
+				"url": "http://en.wikipedia.org/wiki/Copyright"
+			},
+			{
+				"id": "public_domain",
+				"name": "Public domain",
+				"url": "http://en.wikipedia.org/wiki/Public_domain"
+			}
+		],
 		"status_code": 200
 	}
 }

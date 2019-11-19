@@ -14,6 +14,12 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionVersion,
+    SubmissionHistory,
+)
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.course_epub_export import CourseEpubExport
@@ -25,18 +31,20 @@ from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.group import Group, GroupCategory
+from canvasapi.license import License
 from canvasapi.module import Module
 from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizExtension
-from canvasapi.rubric import Rubric
+from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.user import User
 from canvasapi.user import UserDisplay
+from canvasapi.usage_rights import UsageRights
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.content_export import ContentExport
 from tests import settings
@@ -136,6 +144,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(updated_list), 2)
         self.assertIsInstance(updated_list[0], AssignmentOverride)
         self.assertIsInstance(updated_list[1], AssignmentOverride)
+
+    # get_uncollated_submissions()
+    def test_get_uncollated_submissions(self, m):
+        register_uris({"course": ["get_uncollated_submissions"]}, m)
+
+        u_submissions = self.course.get_uncollated_submissions()
+        u_sub_list = [sub for sub in u_submissions]
+        self.assertEqual(len(u_sub_list), 2)
+        self.assertIsInstance(u_sub_list[0], SubmissionVersion)
+        self.assertIsInstance(u_sub_list[1], SubmissionVersion)
 
     # get_user()
     def test_get_user(self, m):
@@ -552,6 +570,28 @@ class TestCourse(unittest.TestCase):
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
+    # get_gradebook_history_dates()
+    def test_get_gradebook_history_dates(self, m):
+        register_uris({"course": ["get_gradebook_history_dates"]}, m)
+
+        gradebook_history = self.course.get_gradebook_history_dates()
+        gh_list = [gh for gh in gradebook_history]
+        self.assertEqual(len(gh_list), 2)
+        self.assertIsInstance(gh_list[0], Day)
+        self.assertIsInstance(gh_list[1], Day)
+
+    # get_gradebook_history_details
+    def test_get_gradebook_history_details(self, m):
+        register_uris({"course": ["get_gradebook_history_details"]}, m)
+
+        gradebook_history_details = self.course.get_gradebook_history_details(
+            "03-26-2019"
+        )
+        ghd_list = [ghd for ghd in gradebook_history_details]
+        self.assertEqual(len(ghd_list), 2)
+        self.assertIsInstance(ghd_list[0], Grader)
+        self.assertIsInstance(ghd_list[1], Grader)
+
     # get_groups()
     def test_get_groups(self, m):
         requires = {"course": ["list_groups_context", "list_groups_context2"]}
@@ -720,6 +760,43 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(assignment_group_by_obj, "name"))
         self.assertTrue(hasattr(assignment_group_by_obj, "course_id"))
         self.assertEqual(assignment_group_by_obj.course_id, 1)
+
+    # get_assignments_for_group()
+    def test_get_assignments_for_group(self, m):
+        register_uris(
+            {
+                "course": ["get_assignments_for_group"],
+                "assignment": ["get_assignment_group"],
+            },
+            m,
+        )
+
+        assignment_group_obj = self.course.get_assignment_group(5)
+        response = self.course.get_assignments_for_group(5)
+        assignments = [assignment for assignment in response]
+
+        self.assertIsInstance(response, PaginatedList)
+
+        for assignment in assignments:
+            self.assertIsInstance(assignment, Assignment)
+            self.assertTrue(hasattr(assignment, "id"))
+            self.assertTrue(hasattr(assignment, "name"))
+            self.assertTrue(hasattr(assignment, "course_id"))
+            self.assertTrue(hasattr(assignment, "description"))
+            self.assertEqual(assignment.course_id, self.course.id)
+
+        response = self.course.get_assignments_for_group(assignment_group_obj)
+        assignments = [assignment for assignment in response]
+
+        self.assertIsInstance(response, PaginatedList)
+
+        for assignment in assignments:
+            self.assertIsInstance(assignment, Assignment)
+            self.assertTrue(hasattr(assignment, "id"))
+            self.assertTrue(hasattr(assignment, "name"))
+            self.assertTrue(hasattr(assignment, "course_id"))
+            self.assertTrue(hasattr(assignment, "description"))
+            self.assertEqual(assignment.course_id, self.course.id)
 
     # list_assignment_groups()
     def test_list_assignment_groups(self, m):
@@ -983,6 +1060,16 @@ class TestCourse(unittest.TestCase):
 
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_submission_history
+    def test_get_submission_history(self, m):
+        register_uris({"course": ["get_submission_history"]}, m)
+
+        submissions = self.course.get_submission_history("08-23-2019", 1, 1)
+        sub_list = [sub for sub in submissions]
+        self.assertEqual(len(sub_list), 2)
+        self.assertIsInstance(sub_list[0], SubmissionHistory)
+        self.assertIsInstance(sub_list[1], SubmissionHistory)
 
     # update_submission()
     def test_update_submission(self, m):
@@ -1768,6 +1855,58 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(rubric["rubric_association"].id, 1)
         self.assertEqual(rubric["rubric_association"].rubric_id, 1)
         self.assertEqual(rubric["rubric_association"].association_type, "Course")
+
+    # create_rubric_association()
+    def test_create_rubric_association(self, m):
+        register_uris({"course": ["create_rubric_association"]}, m)
+
+        rubric_association = self.course.create_rubric_association()
+
+        self.assertIsInstance(rubric_association, RubricAssociation)
+        self.assertEqual(rubric_association.id, 4)
+        self.assertEqual(rubric_association.association_type, "Course")
+
+    # set_usage_rights()
+    def test_set_usage_rights(self, m):
+        register_uris({"course": ["set_usage_rights"]}, m)
+
+        usage_rights = self.course.set_usage_rights(
+            file_ids=[1, 2],
+            usage_rights={"use_justification": "fair_use", "license": "private"},
+        )
+
+        self.assertIsInstance(usage_rights, UsageRights)
+        self.assertEqual(usage_rights.use_justification, "fair_use")
+        self.assertEqual(usage_rights.message, "2 files updated")
+        self.assertEqual(usage_rights.license, "private")
+        self.assertEqual(usage_rights.file_ids, [1, 2])
+
+    # remove_usage_rights()
+    def test_remove_usage_rights(self, m):
+        register_uris({"course": ["remove_usage_rights"]}, m)
+
+        retval = self.course.remove_usage_rights(file_ids=[1, 2])
+
+        self.assertIsInstance(retval, dict)
+        self.assertIn("message", retval)
+        self.assertEqual(retval["file_ids"], [1, 2])
+        self.assertEqual(retval["message"], "2 files updated")
+
+    # get_licenses()
+    def test_get_licenses(self, m):
+        register_uris({"course": ["get_licenses"]}, m)
+
+        licenses = self.course.get_licenses()
+        self.assertIsInstance(licenses, PaginatedList)
+        licenses = list(licenses)
+
+        for l in licenses:
+            self.assertIsInstance(l, License)
+            self.assertTrue(hasattr(l, "id"))
+            self.assertTrue(hasattr(l, "name"))
+            self.assertTrue(hasattr(l, "url"))
+
+        self.assertEqual(2, len(licenses))
 
 
 @requests_mock.Mocker()

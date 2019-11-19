@@ -7,12 +7,14 @@ Class Reference
     account-ref
     appointment-group-ref
     assignment-ref
+    authentication-event-ref
     authentication-provider-ref
     avatar-ref
     blueprint-ref
     bookmark-ref
     calendar-event-ref
     collaboration-ref
+    comm-message-ref
     communication-channel-ref
     content-export-ref
     content-migration-ref
@@ -32,6 +34,7 @@ Class Reference
     grading-period-ref
     group-ref
     login-ref
+    license-ref
     module-ref
     outcome-ref
     outcome-import-ref
@@ -52,3 +55,4 @@ Class Reference
     tab-ref
     upload-ref
     user-ref
+    usage-rights-ref

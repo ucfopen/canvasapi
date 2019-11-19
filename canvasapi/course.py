@@ -4,16 +4,24 @@ import warnings
 
 from six import python_2_unicode_compatible, text_type, string_types
 
+from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionVersion,
+    SubmissionHistory,
+)
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.license import License
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
@@ -23,6 +31,7 @@ from canvasapi.tab import Tab
 from canvasapi.rubric import RubricAssociation, Rubric
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.upload import Uploader
+from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
     combine_kwargs,
     is_multivalued,
@@ -467,6 +476,29 @@ class Course(CanvasObject):
 
         return rubric_dict
 
+    def create_rubric_association(self, **kwargs):
+        """
+        Create a new RubricAssociation.
+
+        :calls: `POST /api/v1/courses/:course_id/rubric_associations \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_associations.create>`_
+
+        :returns: Returns a RubricAssociation.
+        :rtype: :class:`canvasapi.rubric.RubricAssociation`
+        """
+        from canvasapi.rubric import RubricAssociation
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/rubric_associations".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        quiz_json = response.json()
+        quiz_json.update({"course_id": self.id})
+
+        return RubricAssociation(self._requester, quiz_json)
+
     def delete(self):
         """
         Permanently delete this course.
@@ -705,6 +737,34 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/assignments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_assignments_for_group(self, assignment_group, **kwargs):
+        """
+        Returns a paginated list of assignments for the given assignment group
+
+        :calls: `GET /api/v1/courses/:course_id/assignment_groups/:assignment_group_id/assignments\
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.index>`_
+
+        :param assignment_group: The object or id of the assignment group
+        :type assignment_group: :class: `canvasapi.assignment.AssignmentGroup` or int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.Assignment`
+        """
+
+        assignment_group_id = obj_or_id(
+            assignment_group, "assignment_group", (AssignmentGroup,)
+        )
+
+        return PaginatedList(
+            Assignment,
+            self._requester,
+            "GET",
+            "courses/{}/assignment_groups/{}/assignments".format(
+                self.id, assignment_group_id
+            ),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -1203,6 +1263,51 @@ class Course(CanvasObject):
         )
         return response.json()
 
+    def get_gradebook_history_dates(self, **kwargs):
+        """
+        Returns a map of dates to grader/assignment groups
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/days\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.gradebook_history_api.days>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grading_history.Day`
+        """
+
+        return PaginatedList(
+            Day,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/days".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_gradebook_history_details(self, date, **kwargs):
+        """
+        Returns the graders who worked on this day, along with the
+        assignments they worked on. More details can be obtained by
+        selecting a grader and assignment and calling the 'submissions'
+        api endpoint for a given date.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
+        gradebook_history_api.day_details>`_
+
+        :param date: The date for which you would like to see detailed information.
+        :type date: int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.Grader`
+        """
+
+        return PaginatedList(
+            Grader,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/{}".format(self.id, date),
+            kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_grading_period(self, grading_period, **kwargs):
         """
         Return a single grading period for the associated course and id.
@@ -1302,6 +1407,26 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/groups".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_licenses(self, **kwargs):
+        """
+        Returns a paginated list of the licenses that can be applied to the
+        files under the course scope
+
+        :calls: `GET /api/v1/course/:course_id/content_licenses \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.license.License`
+        """
+
+        return PaginatedList(
+            License,
+            self._requester,
+            "GET",
+            "courses/{}/content_licenses".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -1773,6 +1898,36 @@ class Course(CanvasObject):
 
         return assignment.get_submission(user, **kwargs)
 
+    def get_submission_history(self, date, grader_id, assignment_id, **kwargs):
+        """
+        Gives a nested list of submission versions.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/:date/graders\
+        /:grader_id/assignments/:assignment_id/submissions\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method.\
+        gradebook_history_api.submissions>`_
+
+        :param date: The date for which you would like to see submissions
+        :type grader_id: str
+        :param grader_id: The ID of the grader for which you want to see submissions.
+        :type grader_id: int
+        :param assignment_id: The ID of the assignment for which you want to see submissions
+        :type assignment_id: int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.SubmissionHistory`
+        """
+
+        return PaginatedList(
+            SubmissionHistory,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/{}/graders/{}/assignments/{}/submissions".format(
+                self.id, date, grader_id, assignment_id
+            ),
+            kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_tabs(self, **kwargs):
         """
         List available tabs for a course.
@@ -1793,7 +1948,30 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_user(self, user, user_id_type=None):
+    def get_uncollated_submissions(self, **kwargs):
+        """
+        Gives a paginated, uncollated list of submission versions for all matching
+        submissions in the context. This SubmissionVersion objects will not include
+        the new_grade or previous_grade keys, only the grade; same for graded_at
+        and grader.
+
+        :calls: `GET /api/v1/courses/:course_id/gradebook_history/feed\
+        <https://canvas.instructure.com/doc/api/gradebook_history.html#method\
+        .gradebook_history_api.feed>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.gradebook_history.SubmissionVersion`
+        """
+
+        return PaginatedList(
+            SubmissionVersion,
+            self._requester,
+            "GET",
+            "courses/{}/gradebook_history/feed".format(self.id),
+            kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_user(self, user, user_id_type=None, **kwargs):
         """
         Retrieve a user by their ID. `user_id_type` denotes which endpoint to try as there are
         several different ids that can pull the same user record from Canvas.
@@ -1816,7 +1994,7 @@ class Course(CanvasObject):
             user_id = obj_or_id(user, "user", (User,))
             uri = "courses/{}/users/{}".format(self.id, user_id)
 
-        response = self._requester.request("GET", uri)
+        response = self._requester.request("GET", uri, _kwargs=combine_kwargs(**kwargs))
         return User(self._requester, response.json())
 
     def get_user_in_a_course_level_assignment_data(self, user):
@@ -2337,6 +2515,24 @@ class Course(CanvasObject):
         )
         return response.json().get("html", "")
 
+    def remove_usage_rights(self, **kwargs):
+        """
+        Removes the usage rights for specified files that are under the current course scope
+
+        :calls: `DELETE /api/v1/courses/:course_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def reorder_pinned_topics(self, order):
         """
         Puts the pinned discussion topics in the specified order.
@@ -2434,6 +2630,24 @@ class Course(CanvasObject):
         return [
             QuizExtension(self._requester, extension) for extension in extension_list
         ]
+
+    def set_usage_rights(self, **kwargs):
+        """
+        Changes the usage rights for specified files that are under the current course scope
+
+        :calls: `PUT /api/v1/courses/:course_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.set_usage_rights>`_
+
+        :rtype: :class:`canvasapi.usage_rights.UsageRights`
+        """
+
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return UsageRights(self._requester, response.json())
 
     def show_front_page(self):
         """

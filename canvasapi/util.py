@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
-from collections import Iterable
 
 from six import binary_type, string_types, text_type
 
@@ -25,7 +24,11 @@ def is_multivalued(value):
         return False
 
     # general rule: multivalued if iterable
-    return isinstance(value, Iterable)
+    try:
+        iter(value)
+        return True
+    except TypeError:
+        return False
 
 
 def combine_kwargs(**kwargs):
@@ -244,12 +247,7 @@ def clean_headers(headers):
 
     authorization_header = headers.get("Authorization")
     if authorization_header:
-        # Grab the actual token (not the "Bearer" prefix)
-        _, token = authorization_header.split(" ")
-
-        # Trim all but the last four characters
-        sanitized = "****" + token[-4:]
-
+        sanitized = "****" + authorization_header[-4:]
         cleaned_headers["Authorization"] = sanitized
 
     return cleaned_headers

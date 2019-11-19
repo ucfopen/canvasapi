@@ -14,6 +14,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
 from canvasapi.section import Section
 from canvasapi.user import User
+from canvasapi.comm_message import CommMessage
 from canvasapi.util import combine_kwargs, get_institution_url, obj_or_id
 
 
@@ -57,6 +58,11 @@ class Canvas(object):
                 "Please provide a valid HTTP or HTTPS URL if possible.",
                 UserWarning,
             )
+
+        # Ensure that the user-supplied access token contains no leading or
+        # trailing spaces that may cause issues when communicating with
+        # the API.
+        access_token = access_token.strip()
 
         base_url = new_url + "/api/v1/"
 
@@ -491,6 +497,19 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_brand_variables(self):
+        """
+        Get account brand variables
+
+        :calls: `GET /api/v1/brand_variables \
+        <https://canvas.instructure.com/doc/api/brand_configs.html>`_
+
+        :returns: JSON with brand variables for the account.
+        :rtype: dict
+        """
+        response = self.__requester.request("GET", "brand_variables")
+        return response.json()
+
     def get_calendar_event(self, calendar_event):
         """
         Return single Calendar Event by id
@@ -531,6 +550,32 @@ class Canvas(object):
             self.__requester,
             "GET",
             "calendar_events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_comm_messages(self, user, **kwargs):
+        """
+        Retrieve a paginated list of messages sent to a user.
+
+        :calls: `GET /api/v1/comm_messages \
+        <https://canvas.instructure.com/doc/api/comm_messages.html#method.comm_messages_api.index>`_
+
+        :param user: The object or ID of the user.
+        :type user: :class: `canvasapi.user.User` or int
+
+        :returns: Paginated list containing messages sent to user
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.comm_message.CommMessage`
+
+        """
+
+        kwargs["user_id"] = obj_or_id(user, "user", (User,))
+
+        return PaginatedList(
+            CommMessage,
+            self.__requester,
+            "GET",
+            "comm_messages",
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -1080,7 +1125,7 @@ class Canvas(object):
         response = self.__requester.request("GET", "users/self/upcoming_events")
         return response.json()
 
-    def get_user(self, user, id_type=None):
+    def get_user(self, user, id_type=None, **kwargs):
         """
         Retrieve a user by their ID. `id_type` denotes which endpoint to try as there are
         several different IDs that can pull the same user record from Canvas.
@@ -1107,7 +1152,9 @@ class Canvas(object):
             user_id = obj_or_id(user, "user", (User,))
             uri = "users/{}".format(user_id)
 
-        response = self.__requester.request("GET", uri)
+        response = self.__requester.request(
+            "GET", uri, _kwargs=combine_kwargs(**kwargs)
+        )
         return User(self.__requester, response.json())
 
     def get_user_participants(self, appointment_group, **kwargs):

@@ -24,7 +24,9 @@ Steps to reproduce the behavior:
 
 A clear and concise description of what you expected to happen.
 
-# Environment information (please complete the following information)
+# Environment information
+
+<!--(please complete the following information)-->
 
 - Python version (`python --version`)
 - CanvasAPI version (`pip show canvasapi`)

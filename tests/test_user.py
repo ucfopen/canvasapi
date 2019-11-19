@@ -7,6 +7,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment
+from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.avatar import Avatar
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.communication_channel import CommunicationChannel
@@ -18,9 +19,11 @@ from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.login import Login
+from canvasapi.license import License
 from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.user import User
+from canvasapi.usage_rights import UsageRights
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -562,6 +565,65 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(feature_flag, FeatureFlag)
         self.assertEqual(feature_flag.feature, "high_contrast")
+
+    # get_authentication_events()
+    def test_get_authentication_events(self, m):
+        register_uris({"user": ["get_authentication_events"]}, m)
+
+        authentication_event = self.user.get_authentication_events()
+        event_list = [event for event in authentication_event]
+
+        self.assertEqual(len(event_list), 2)
+
+        self.assertIsInstance(event_list[0], AuthenticationEvent)
+        self.assertEqual(event_list[0].event_type, "login")
+        self.assertEqual(event_list[0].pseudonym_id, 9478)
+
+        self.assertIsInstance(event_list[1], AuthenticationEvent)
+        self.assertEqual(event_list[1].created_at, "2012-07-20T15:00:00-06:00")
+        self.assertEqual(event_list[1].event_type, "logout")
+
+    # set_usage_rights()
+    def test_set_usage_rights(self, m):
+        register_uris({"user": ["set_usage_rights"]}, m)
+
+        usage_rights = self.user.set_usage_rights(
+            file_ids=[1, 2],
+            usage_rights={"use_justification": "fair_use", "license": "private"},
+        )
+
+        self.assertIsInstance(usage_rights, UsageRights)
+        self.assertEqual(usage_rights.use_justification, "fair_use")
+        self.assertEqual(usage_rights.message, "2 files updated")
+        self.assertEqual(usage_rights.license, "private")
+        self.assertEqual(usage_rights.file_ids, [1, 2])
+
+    # remove_usage_rights()
+    def test_remove_usage_rights(self, m):
+        register_uris({"user": ["remove_usage_rights"]}, m)
+
+        retval = self.user.remove_usage_rights(file_ids=[1, 2])
+
+        self.assertIsInstance(retval, dict)
+        self.assertIn("message", retval)
+        self.assertEqual(retval["file_ids"], [1, 2])
+        self.assertEqual(retval["message"], "2 files updated")
+
+    # get_licenses()
+    def test_get_licenses(self, m):
+        register_uris({"user": ["get_licenses"]}, m)
+
+        licenses = self.user.get_licenses()
+        self.assertIsInstance(licenses, PaginatedList)
+        licenses = list(licenses)
+
+        for l in licenses:
+            self.assertIsInstance(l, License)
+            self.assertTrue(hasattr(l, "id"))
+            self.assertTrue(hasattr(l, "name"))
+            self.assertTrue(hasattr(l, "url"))
+
+        self.assertEqual(2, len(licenses))
 
 
 @requests_mock.Mocker()

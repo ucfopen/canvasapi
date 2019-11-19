@@ -25,6 +25,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.user import User
+from canvasapi.comm_message import CommMessage
 from tests import settings
 from tests.util import register_uris
 
@@ -69,6 +70,10 @@ class TestCanvas(unittest.TestCase):
                     "Please provide a valid HTTP or HTTPS URL if possible."
                 ),
             )
+
+    def test_init_strips_extra_spaces_in_api_key(self, m):
+        client = Canvas(settings.BASE_URL, " 12345 ")
+        self.assertEqual(client._Canvas__requester.access_token, "12345")
 
     # create_account()
     def test_create_account(self, m):
@@ -122,6 +127,13 @@ class TestCanvas(unittest.TestCase):
         accounts = self.canvas.get_course_accounts()
         account_list = [account for account in accounts]
         self.assertEqual(len(account_list), 2)
+
+    # get_brand_variables()
+    def test_get_brand_variables(self, m):
+        register_uris({"account": ["get_brand_variables"]}, m)
+
+        variables = self.canvas.get_brand_variables()
+        self.assertIsInstance(variables, dict)
 
     # get_course()
     def test_get_course(self, m):
@@ -802,3 +814,21 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(epub2["id"], 2)
         self.assertEqual(epub1["workflow_state"], "exported")
         self.assertEqual(epub2["workflow_state"], "exported")
+
+    # comm_messages()
+    def test_get_comm_messages(self, m):
+        register_uris({"comm_message": ["comm_messages"]}, m)
+
+        comm_messages = self.canvas.get_comm_messages(2)
+
+        self.assertIsInstance(comm_messages, PaginatedList)
+        self.assertIsInstance(comm_messages[0], CommMessage)
+        self.assertIsInstance(comm_messages[1], CommMessage)
+
+        self.assertTrue(hasattr(comm_messages[0], "id"))
+        self.assertTrue(hasattr(comm_messages[1], "body"))
+
+        self.assertEqual(comm_messages[0].id, 42)
+        self.assertEqual(comm_messages[0].subject, "example subject line")
+        self.assertEqual(comm_messages[1].id, 2)
+        self.assertEqual(comm_messages[1].subject, "My Subject")
