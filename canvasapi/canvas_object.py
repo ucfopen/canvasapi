@@ -90,7 +90,8 @@ class CanvasObject(object):
 
         .. warning::
             .. deprecated:: 0.14.0
-                Use :func:`canvasapi.assignment.Assignment.get_submission` instead.
+                To view the original attributes sent by Canvas, enable logs from the
+                requests library.
         """
         warnings.warn(
             "`CanvasObject.to_json()` is deprecated and will be removed in a future version. "
