@@ -9,6 +9,7 @@ from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.quiz import (
     Quiz,
+    QuizStatistic,
     QuizSubmission,
     QuizSubmissionQuestion,
     QuizQuestion,
@@ -295,6 +296,22 @@ class TestQuiz(unittest.TestCase):
         report = self.quiz.get_quiz_report(1)
         self.assertIsInstance(report, QuizReport)
         self.assertEqual(report.quiz_id, 1)
+
+    # get_quiz_report
+    def test_get_statistics(self, m):
+        register_uris({"quiz": ["get_statistics"]}, m)
+
+        statistics = self.quiz.get_statistics()
+
+        self.assertIsInstance(statistics, PaginatedList)
+
+        statistic_list = [statistic for statistic in statistics]
+
+        self.assertEqual(len(statistic_list), 1)
+        self.assertIsInstance(statistic_list[0], QuizStatistic)
+        self.assertEqual(statistic_list[0].id, "1")
+        self.assertTrue(hasattr(statistic_list[0], "question_statistics"))
+        self.assertEqual(len(statistic_list[0].question_statistics), 2)
 
     # get_quiz_submission
     def test_get_quiz_submission(self, m):
@@ -593,6 +610,27 @@ class TestQuizQuestion(unittest.TestCase):
         self.assertIsInstance(self.question, QuizQuestion)
         self.assertEqual(response.question_name, question_dict["question_name"])
         self.assertEqual(self.question.question_name, question_dict["question_name"])
+
+
+@requests_mock.Mocker()
+class TestQuizStatistic(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris(
+                {"course": ["get_by_id"], "quiz": ["get_by_id", "get_statistics"]}, m
+            )
+
+            self.course = self.canvas.get_course(1)
+            self.quiz = self.course.get_quiz(1)
+            self.quiz_statistics = self.quiz.get_statistics()
+            self.quiz_statistic = self.quiz_statistics[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.quiz_statistic)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()

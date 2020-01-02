@@ -377,6 +377,26 @@ class Quiz(CanvasObject):
 
         return QuizSubmission(self._requester, response_json)
 
+    def get_statistics(self, **kwargs):
+        """
+        Get statistics for for all quiz versions, or the latest quiz version.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/statistics \
+        <https://canvas.instructure.com/doc/api/quiz_statistics.html#method.quizzes/quiz_statistics.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizStatistic`
+        """
+        return PaginatedList(
+            QuizStatistic,
+            self._requester,
+            "GET",
+            "courses/{}/quizzes/{}/statistics".format(self.course_id, self.id),
+            {"course_id": self.course_id},
+            _root="quiz_statistics",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_submissions(self, **kwargs):
         """
         Get a list of all submissions for this quiz.
@@ -450,6 +470,12 @@ class Quiz(CanvasObject):
         return [
             QuizExtension(self._requester, extension) for extension in extension_list
         ]
+
+
+@python_2_unicode_compatible
+class QuizStatistic(CanvasObject):
+    def __str__(self):
+        return "Quiz Statistic {}".format(self.id)
 
 
 @python_2_unicode_compatible

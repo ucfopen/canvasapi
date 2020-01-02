@@ -303,6 +303,234 @@
 		},
 		"status_code": 200
 	},
+	"get_statistics": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1/statistics",
+		"data": {
+			"quiz_statistics": [
+                {
+                    "id": "1",
+                    "url": "http://localhost:3000/api/v1/courses/12/quizzes/43/statistics",
+                    "html_url": "http://localhost:3000/courses/12/quizzes/43/statistics",
+                    "multiple_attempts_exist": false,
+                    "generated_at": "2019-11-20T18:48:20Z",
+                    "includes_all_versions": false,
+                    "includes_sis_ids": true,
+                    "points_possible": null,
+                    "anonymous_survey": false,
+                    "speed_grader_url": null,
+                    "quiz_submissions_zip_url": "http://localhost:3000/courses/12/quizzes/43/submissions?zip=1",
+                    "question_statistics": [
+                        {
+                            "id": "47",
+                            "question_type": "multiple_dropdowns_question",
+                            "question_text": "\n<p>What is your year of study? [year]</p>\n                        <p>What is your program? [program]</p>\n                    ",
+                            "position": 1,
+                            "responses": 3,
+                            "answered": 3,
+                            "correct": 0,
+                            "partially_correct": 2,
+                            "incorrect": 1,
+                            "answer_sets": [
+                                {
+                                    "id": "84cdc76cabf41bd7c961f6ab12f117d8",
+                                    "text": "year",
+                                    "answers": [
+                                        {
+                                            "id": "6100",
+                                            "text": "1",
+                                            "correct": true,
+                                            "responses": 0,
+                                            "user_names": []
+                                        },
+                                        {
+                                            "id": "8629",
+                                            "text": "2",
+                                            "correct": false,
+                                            "responses": 1,
+                                            "user_names": [
+                                                "Student12 Student12"
+                                            ]
+                                        },
+                                        {
+                                            "id": "6110",
+                                            "text": "3",
+                                            "correct": false,
+                                            "responses": 2,
+                                            "user_names": [
+                                                "Student11 Student11",
+                                                "Student10 Student10"
+                                            ]
+                                        },
+                                        {
+                                            "id": "9262",
+                                            "text": "4",
+                                            "correct": false,
+                                            "responses": 0,
+                                            "user_names": []
+                                        },
+                                        {
+                                            "id": "279",
+                                            "text": "5",
+                                            "correct": false,
+                                            "responses": 0,
+                                            "user_names": []
+                                        },
+                                        {
+                                            "id": "5721",
+                                            "text": "6+",
+                                            "correct": false,
+                                            "responses": 0,
+                                            "user_names": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "a9c449d4fa44e9e5a41c574ae55ce4d9",
+                                    "text": "program",
+                                    "answers": [
+                                        {
+                                            "id": "7270",
+                                            "text": "CompSci",
+                                            "correct": true,
+                                            "responses": 2,
+                                            "user_names": [
+                                                "Student11 Student11",
+                                                "Student10 Student10"
+                                            ]
+                                        },
+                                        {
+                                            "id": "2688",
+                                            "text": "Other",
+                                            "correct": false,
+                                            "responses": 1,
+                                            "user_names": [
+                                                "Student12 Student12"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "48",
+                            "question_type": "multiple_choice_question",
+                            "question_text": "How good are you at programming?",
+                            "position": 2,
+                            "responses": 3,
+                            "answers": [
+                                {
+                                    "id": "1833",
+                                    "text": "Great",
+                                    "correct": true,
+                                    "responses": 0,
+                                    "user_names": []
+                                },
+                                {
+                                    "id": "7532",
+                                    "text": "Good",
+                                    "correct": false,
+                                    "responses": 2,
+                                    "user_names": [
+                                        "Student12 Student12",
+                                        "Student10 Student10"
+                                    ]
+                                },
+                                {
+                                    "id": "136",
+                                    "text": "Mediocre",
+                                    "correct": false,
+                                    "responses": 0,
+                                    "user_names": []
+                                },
+                                {
+                                    "id": "9694",
+                                    "text": "Bad",
+                                    "correct": false,
+                                    "responses": 1,
+                                    "user_names": [
+                                        "Student11 Student11"
+                                    ]
+                                },
+                                {
+                                    "id": "6452",
+                                    "text": "Terrible",
+                                    "correct": false,
+                                    "responses": 0,
+                                    "user_names": []
+                                }
+                            ],
+                            "answered_student_count": 3,
+                            "top_student_count": 2,
+                            "middle_student_count": 0,
+                            "bottom_student_count": 1,
+                            "correct_student_count": 0,
+                            "incorrect_student_count": 3,
+                            "correct_student_ratio": 0.0,
+                            "incorrect_student_ratio": 1.0,
+                            "correct_top_student_count": 0,
+                            "correct_middle_student_count": 0,
+                            "correct_bottom_student_count": 0,
+                            "variance": 0.0,
+                            "stdev": 0.0,
+                            "difficulty_index": 0.0,
+                            "alpha": null,
+                            "point_biserials": [
+                                {
+                                    "answer_id": 1833,
+                                    "point_biserial": null,
+                                    "correct": true,
+                                    "distractor": false
+                                },
+                                {
+                                    "answer_id": 7532,
+                                    "point_biserial": -0.49999999999999994,
+                                    "correct": false,
+                                    "distractor": true
+                                },
+                                {
+                                    "answer_id": 136,
+                                    "point_biserial": null,
+                                    "correct": false,
+                                    "distractor": true
+                                },
+                                {
+                                    "answer_id": 9694,
+                                    "point_biserial": 0.49999999999999994,
+                                    "correct": false,
+                                    "distractor": true
+                                },
+                                {
+                                    "answer_id": 6452,
+                                    "point_biserial": null,
+                                    "correct": false,
+                                    "distractor": true
+                                }
+                            ]
+                        }
+                    ],
+                    "submission_statistics": {
+                        "scores": {
+                            "0": 1,
+                            "25": 2
+                        },
+                        "score_average": 0.3333333333333333,
+                        "score_high": 0.5,
+                        "score_low": 0.0,
+                        "score_stdev": 0.2357022603955158,
+                        "correct_count_average": 0.0,
+                        "incorrect_count_average": 1.333333333333333,
+                        "duration_average": 6.0,
+                        "unique_count": 3
+                    },
+                    "links": {
+                        "quiz": "http://localhost:3000/api/v1/courses/12/quizzes/43"
+                    }
+                }
+			]
+		},
+		"status_code": 200
+	},
 	"create_report": {
 		"method": "POST",
 		"endpoint": "courses/1/quizzes/1/reports",
