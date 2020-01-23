@@ -868,3 +868,9 @@ class QuizSubmissionQuestion(CanvasObject):
         super(QuizSubmissionQuestion, self).set_attributes(question)
 
         return True
+
+
+@python_2_unicode_compatible
+class QuizAssignmentOverrideSet(CanvasObject):
+    def __str__(self):
+        return "Overrides for quiz_id {}".format(self.quiz_id)

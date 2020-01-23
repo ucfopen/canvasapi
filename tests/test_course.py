@@ -37,7 +37,7 @@ from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
-from canvasapi.quiz import Quiz, QuizExtension
+from canvasapi.quiz import Quiz, QuizExtension, QuizAssignmentOverrideSet
 from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
@@ -307,6 +307,33 @@ class TestCourse(unittest.TestCase):
 
         with self.assertRaises(ResourceDoesNotExist):
             self.course.get_quiz(settings.INVALID_ID)
+
+    # get_quiz_overrides()
+    def test_get_quiz_overrides(self, m):
+        register_uris({"course": ["get_quiz_overrides"]}, m)
+
+        overrides = self.course.get_quiz_overrides()
+        override_list = list(overrides)
+
+        self.assertEqual(len(override_list), 2)
+        self.assertIsInstance(override_list[0], QuizAssignmentOverrideSet)
+        self.assertTrue(hasattr(override_list[0], "quiz_id"))
+        self.assertTrue(hasattr(override_list[0], "due_dates"))
+        self.assertTrue(hasattr(override_list[0], "all_dates"))
+
+        self.assertTrue("id" in override_list[0].due_dates[0])
+        self.assertTrue("due_at" in override_list[0].due_dates[0])
+        self.assertTrue("unlock_at" in override_list[0].due_dates[0])
+        self.assertTrue("lock_at" in override_list[0].due_dates[0])
+        self.assertTrue("title" in override_list[0].due_dates[0])
+        self.assertTrue("base" in override_list[0].due_dates[0])
+
+        self.assertTrue("id" in override_list[0].all_dates[0])
+        self.assertTrue("due_at" in override_list[0].all_dates[0])
+        self.assertTrue("unlock_at" in override_list[0].all_dates[0])
+        self.assertTrue("lock_at" in override_list[0].all_dates[0])
+        self.assertTrue("title" in override_list[0].all_dates[0])
+        self.assertTrue("base" in override_list[0].all_dates[0])
 
     # get_quizzes()
     def test_get_quizzes(self, m):

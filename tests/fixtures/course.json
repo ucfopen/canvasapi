@@ -409,6 +409,50 @@
 		},
 		"status_code": 200
 	},
+	"get_quiz_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/assignment_overrides",
+		"data": {
+			"quiz_assignment_overrides": [{
+				"quiz_id": "1",
+				"due_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}],
+				"all_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}]
+			},{
+				"quiz_id": "2",
+				"due_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}],
+				"all_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}]
+			}]
+		},
+		"status_code": 200
+	},
 	"get_recent_students": {
 		"method": "GET",
 		"endpoint": "courses/1/recent_students",

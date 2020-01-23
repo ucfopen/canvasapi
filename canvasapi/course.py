@@ -1698,6 +1698,33 @@ class Course(CanvasObject):
 
         return Quiz(self._requester, quiz_json)
 
+    def get_quiz_overrides(self, **kwargs):
+        """
+        Retrieve the actual due-at, unlock-at, \
+        and available-at dates for quizzes based on \
+        the assignment overrides active for the current API user.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/assignment_overrides \
+        <https://canvas.instructure.com/doc/api/quiz_assignment_overrides.html#method.quizzes/quiz_assignment_overrides.index>`_
+
+        :param quiz_assignment_overrides: An array of quiz IDs. If omitted, overrides \
+        for all quizzes available to the operating user will be returned.
+        :type quiz: :class:`canvasapi.quiz.QuizAssignmentOverrideSet` or int
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizAssignmentOverrideSet`
+        """
+        from canvasapi.quiz import QuizAssignmentOverrideSet
+
+        return PaginatedList(
+            QuizAssignmentOverrideSet,
+            self._requester,
+            "GET",
+            "courses/{}/quizzes/assignment_overrides".format(self.id),
+            _root="quiz_assignment_overrides",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_quizzes(self, **kwargs):
         """
         Return a list of quizzes belonging to this course.
