@@ -8,6 +8,8 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.quiz_group import QuizGroup
+from canvasapi.submission import Submission
+from canvasapi.user import User
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
@@ -374,6 +376,12 @@ class Quiz(CanvasObject):
 
         response_json = response.json()["quiz_submissions"][0]
         response_json.update({"course_id": self.course_id})
+        if len(response.json().get("quizzes", [])) > 0:
+            response_json.update({"quiz": Quiz(self._requester, response.json()["quizzes"][0])})
+        if len(response.json().get("submissions", [])) > 0:
+            response_json.update({"submission": Submission(self._requester, response.json()["submissions"][0])})
+        if len(response.json().get("users", [])) > 0:
+            response_json.update({"user": User(self._requester, response.json()["users"][0])})
 
         return QuizSubmission(self._requester, response_json)
 
