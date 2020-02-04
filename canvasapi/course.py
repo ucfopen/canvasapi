@@ -1709,7 +1709,7 @@ class Course(CanvasObject):
 
         :param quiz_assignment_overrides: An array of quiz IDs. If omitted, overrides \
         for all quizzes available to the operating user will be returned.
-        :type quiz: :class:`canvasapi.quiz.QuizAssignmentOverrideSet` or int
+        :type quiz: :class:`canvasapi.quiz.Quiz` or int
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.quiz.QuizAssignmentOverrideSet`

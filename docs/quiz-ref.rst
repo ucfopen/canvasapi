@@ -32,3 +32,24 @@ QuizSubmission
 
 .. autoclass:: canvasapi.quiz.QuizSubmission
     :members:
+
+===================
+QuizSubmissionEvent
+===================
+
+.. autoclass:: canvasapi.quiz.QuizSubmissionEvent
+    :members:
+
+======================
+QuizSubmissionQuestion
+======================
+
+.. autoclass:: canvasapi.quiz.QuizSubmissionQuestion
+    :members:
+
+=========================
+QuizAssignmentOverrideSet
+=========================
+
+.. autoclass:: canvasapi.quiz.QuizAssignmentOverrideSet
+    :members:
