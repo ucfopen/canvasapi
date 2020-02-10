@@ -5,6 +5,13 @@ Quiz
 .. autoclass:: canvasapi.quiz.Quiz
     :members:
 
+=========================
+QuizAssignmentOverrideSet
+=========================
+
+.. autoclass:: canvasapi.quiz.QuizAssignmentOverrideSet
+    :members:
+
 =============
 QuizExtension
 =============
@@ -45,11 +52,4 @@ QuizSubmissionQuestion
 ======================
 
 .. autoclass:: canvasapi.quiz.QuizSubmissionQuestion
-    :members:
-
-=========================
-QuizAssignmentOverrideSet
-=========================
-
-.. autoclass:: canvasapi.quiz.QuizAssignmentOverrideSet
     :members:

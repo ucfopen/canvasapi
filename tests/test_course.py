@@ -321,19 +321,15 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(override_list[0], "due_dates"))
         self.assertTrue(hasattr(override_list[0], "all_dates"))
 
-        self.assertTrue("id" in override_list[0].due_dates[0])
-        self.assertTrue("due_at" in override_list[0].due_dates[0])
-        self.assertTrue("unlock_at" in override_list[0].due_dates[0])
-        self.assertTrue("lock_at" in override_list[0].due_dates[0])
-        self.assertTrue("title" in override_list[0].due_dates[0])
-        self.assertTrue("base" in override_list[0].due_dates[0])
+        attributes = ("id", "due_at", "unlock_at", "lock_at", "title", "base")
 
-        self.assertTrue("id" in override_list[0].all_dates[0])
-        self.assertTrue("due_at" in override_list[0].all_dates[0])
-        self.assertTrue("unlock_at" in override_list[0].all_dates[0])
-        self.assertTrue("lock_at" in override_list[0].all_dates[0])
-        self.assertTrue("title" in override_list[0].all_dates[0])
-        self.assertTrue("base" in override_list[0].all_dates[0])
+        self.assertTrue(
+            all(attribute in override_list[0].due_dates[0] for attribute in attributes)
+        )
+
+        self.assertTrue(
+            all(attribute in override_list[0].all_dates[0] for attribute in attributes)
+        )
 
     # get_quizzes()
     def test_get_quizzes(self, m):
