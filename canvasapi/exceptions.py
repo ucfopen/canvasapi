@@ -65,3 +65,8 @@ class Conflict(CanvasException):
     """Canvas had a conflict with an existing resource."""
 
     pass
+
+class UnprocessableEntity(CanvasException):
+    """Canvas was unable to process the entity."""
+
+    pass

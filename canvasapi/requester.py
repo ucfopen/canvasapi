@@ -13,6 +13,7 @@ from canvasapi.exceptions import (
     InvalidAccessToken,
     ResourceDoesNotExist,
     Unauthorized,
+    UnprocessableEntity
 )
 from canvasapi.util import clean_headers
 
@@ -90,16 +91,17 @@ class Requester(object):
 
         # Grab file from data.
         files = None
-        for field, value in data:
-            if field == "file":
-                if isinstance(value, dict):
-                    files = value
-                else:
-                    files = {"file": value}
-                break
+        if not isinstance(data, str):
+            for field, value in data:
+                if field == "file":
+                    if isinstance(value, dict):
+                        files = value
+                    else:
+                        files = {"file": value}
+                    break
 
-        # Remove file entry from data.
-        data[:] = [tup for tup in data if tup[0] != "file"]
+            # Remove file entry from data.
+            data[:] = [tup for tup in data if tup[0] != "file"]
 
         return self._session.post(url, headers=headers, data=data, files=files)
 
@@ -123,6 +125,7 @@ class Requester(object):
         headers=None,
         use_auth=True,
         _url=None,
+        _apiv='v1',
         _kwargs=None,
         **kwargs
     ):
@@ -143,12 +146,15 @@ class Requester(object):
             endpoint is provided, the endpoint will be ignored and
             only the _url argument will be used.
         :type _url: str
+        :param _apiv: Optional argument to specify which api version to use. Defaults to v1
+        :type _apiv: str
         :param _kwargs: A list of 2-tuples representing processed
             keyword arguments to be sent to Canvas as params or data.
         :type _kwargs: `list`
         :rtype: str
         """
-        full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
+        base_url = "{}/{}/".format(self.base_url, _apiv) if _apiv else self.base_url
+        full_url = _url if _url else "{}{}".format(base_url, endpoint)
 
         if not headers:
             headers = {}
@@ -159,21 +165,22 @@ class Requester(object):
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
         _kwargs = _kwargs or []
-        _kwargs.extend(kwargs.items())
+        if hasattr(_kwargs, 'extend'):
+            _kwargs.extend(kwargs.items())
 
-        # Do any final argument processing before sending to request method.
-        for i, kwarg in enumerate(_kwargs):
-            kw, arg = kwarg
+            # Do any final argument processing before sending to request method.
+            for i, kwarg in enumerate(_kwargs):
+                kw, arg = kwarg
 
-            # Convert boolean objects to a lowercase string.
-            if isinstance(arg, bool):
-                _kwargs[i] = (kw, str(arg).lower())
+                # Convert boolean objects to a lowercase string.
+                if isinstance(arg, bool):
+                    _kwargs[i] = (kw, str(arg).lower())
 
-            # Convert any datetime objects into ISO 8601 formatted strings.
-            elif isinstance(arg, datetime):
-                _kwargs[i] = (kw, arg.isoformat())
+                # Convert any datetime objects into ISO 8601 formatted strings.
+                elif isinstance(arg, datetime):
+                    _kwargs[i] = (kw, arg.isoformat())
 
-        # Determine the appropriate request method.
+            # Determine the appropriate request method.
         if method == "GET":
             req_method = self._get_request
         elif method == "POST":
@@ -231,6 +238,8 @@ class Requester(object):
             raise ResourceDoesNotExist("Not Found")
         elif response.status_code == 409:
             raise Conflict(response.text)
+        elif response.status_code == 422:
+            raise UnprocessableEntity(response.text)
         elif response.status_code > 400:
             # generic catch-all for error codes
             raise CanvasException(

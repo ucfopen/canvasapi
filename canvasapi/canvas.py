@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import warnings
+import json
 
 from canvasapi.account import Account
 from canvasapi.course import Course
@@ -64,7 +65,7 @@ class Canvas(object):
         # the API.
         access_token = access_token.strip()
 
-        base_url = new_url + "/api/v1/"
+        base_url = new_url + "/api/"
 
         self.__requester = Requester(base_url, access_token)
 
@@ -1382,3 +1383,27 @@ class Canvas(object):
             "PUT", "users/self/course_nicknames/{}".format(course_id), nickname=nickname
         )
         return CourseNickname(self.__requester, response.json())
+
+    def graphql(self, query, variables):
+        """
+        Makes a GraphQL formatted requeset to Canvas
+
+        :calls: `POST /api/graphql \
+        <https://canvas.instructure.com/doc/api/file.graphql.html>`_
+
+        :param query: The GraphQL query to execute
+        :type query: str
+
+        :param variables: Variable values as required by the supplied query
+        :type variables: dict
+
+        :rtype: dict
+        """
+        response = self.__requester.request(
+            "POST",
+            "graphql",
+            _apiv = '',
+            headers = {"Content-Type": "application/json"},
+            _kwargs= json.dumps({"query":query, "variables":variables})
+        )
+        return response.json()
