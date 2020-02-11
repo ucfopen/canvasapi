@@ -37,7 +37,7 @@ from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
-from canvasapi.quiz import Quiz, QuizExtension
+from canvasapi.quiz import Quiz, QuizExtension, QuizAssignmentOverrideSet
 from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
@@ -307,6 +307,29 @@ class TestCourse(unittest.TestCase):
 
         with self.assertRaises(ResourceDoesNotExist):
             self.course.get_quiz(settings.INVALID_ID)
+
+    # get_quiz_overrides()
+    def test_get_quiz_overrides(self, m):
+        register_uris({"course": ["get_quiz_overrides"]}, m)
+
+        overrides = self.course.get_quiz_overrides()
+        override_list = list(overrides)
+
+        self.assertEqual(len(override_list), 2)
+        self.assertIsInstance(override_list[0], QuizAssignmentOverrideSet)
+        self.assertTrue(hasattr(override_list[0], "quiz_id"))
+        self.assertTrue(hasattr(override_list[0], "due_dates"))
+        self.assertTrue(hasattr(override_list[0], "all_dates"))
+
+        attributes = ("id", "due_at", "unlock_at", "lock_at", "title", "base")
+
+        self.assertTrue(
+            all(attribute in override_list[0].due_dates[0] for attribute in attributes)
+        )
+
+        self.assertTrue(
+            all(attribute in override_list[0].all_dates[0] for attribute in attributes)
+        )
 
     # get_quizzes()
     def test_get_quizzes(self, m):

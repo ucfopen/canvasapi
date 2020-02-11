@@ -1,284 +1,589 @@
 {
-  "conclude": {
-    "method": "DELETE",
-    "endpoint": "courses/1",
-    "data": {
-      "conclude": true
-    },
-    "status_code": 200
-  },
-  "create_external_feed": {
-    "method": "POST",
-    "endpoint": "courses/1/external_feeds",
-    "data": {
-      "id": 1,
-      "display_name": "My Blog",
-      "url": "https://example.com/myblog.rss"
-    },
-    "status_code": 200
-  },
-  "create_folder": {
-    "method": "POST",
-    "endpoint": "courses/1/folders",
-    "data": {
-      "id": 2,
-      "name": "Test String",
-      "locked": false,
-      "hidden": false
-    },
-    "status_code": 200
-  },
-  "create_quiz": {
-    "method": "POST",
-    "endpoint": "courses/1/quizzes",
-    "data": {
-      "id": 1,
-      "title": "Newer Title"
-    },
-    "status_code": 200
-  },
-  "create_assignment": {
-    "method": "POST",
-    "endpoint": "courses/1/assignments",
-    "data": {
-      "id": 1,
-      "course_id": 1,
-      "name": "Newly Created Assignment",
-      "description": "Do this assignment"
-    },
-    "status_code": 200
-  },
-  "delete": {
-    "method": "DELETE",
-    "endpoint": "courses/1",
-    "data": {
-      "delete": true
-    },
-    "status_code": 200
-  },
-  "delete_external_feed": {
-    "method": "DELETE",
-    "endpoint": "courses/1/external_feeds/1",
-    "data": {
-      "id": 1,
-      "display_name": "My Blog",
-      "url": "https://example.com/myblog.rss"
-    },
-    "status_code": 200
-  },
-  "enroll_user": {
-    "method": "POST",
-    "endpoint": "courses/1/enrollments",
-    "data": {
-      "id": 1,
-      "course_id": 1,
-      "user_id": 1,
-      "type": "TeacherEnrollment"
-    },
-    "status_code": 200
-  },
-  "import_outcome": {
-    "method": "POST",
-    "endpoint": "courses/1/outcome_imports",
-    "data": {
-      "id": 1,
-      "created_at": "2013-12-01T23:59:00-06:00",
-      "ended_at": "2013-12-02T00:03:21-06:00",
-      "updated_at": "2013-12-02T00:03:21-06:00",
-      "workflow_state": "succeeded",
-      "data": {
-        "import_type": "instructure_csv"
-      },
-      "progress": "100",
-      "user": null
-    },
-    "status_code": 200
-  },
-  "get_all_assignments": {
-    "method": "GET",
-    "endpoint": "courses/1/assignments",
-    "data": [
-      {
-        "id": 1,
-        "course_id": 1,
-        "name": "Assignment 1",
-        "description": "Do this assignment"
-      },
-      {
-        "id": 2,
-        "course_id": 1,
-        "name": "Assignment 2",
-        "description": "Do this assignment too"
-      }
-    ],
-    "status_code": 200,
-    "headers": {
-      "Link": "<https://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
-    }
-  },
-  "get_all_assignments2": {
-    "method": "GET",
-    "endpoint": "courses/1/list_assignments?page=2&per_page=2",
-    "data": [
-      {
-        "id": 3,
-        "course_id": 1,
-        "name": "Assignment 1",
-        "description": "Do this assignment"
-      },
-      {
-        "id": 4,
-        "course_id": 1,
-        "name": "Assignment 2",
-        "description": "Do this assignment too"
-      }
-    ],
-    "status_code": 200
-  },
-  "get_assignment_by_id": {
-    "method": "GET",
-    "endpoint": "courses/1/assignments/1",
-    "data": {
-      "id": 1,
-      "course_id": 1,
-      "name": "Assignment 1",
-      "description": "Do this assignment"
-    },
-    "status_code": 200
-  },
-  "get_assignments_for_group": {
-    "method": "GET",
-    "endpoint": "courses/1/assignment_groups/5/assignments",
-    "data": [
-      {
-        "id": 3,
-        "course_id": 1,
-        "name": "Assignment 1",
-        "description": "Do this assignment"
-      },
-      {
-        "id": 4,
-        "course_id": 1,
-        "name": "Assignment 2",
-        "description": "Do this assignment too"
-      }
-    ],
-    "status_code": 200
-  },
-  "get_blueprint": {
-    "method": "GET",
-    "endpoint": "courses/1/blueprint_templates/1",
-    "data": {
-      "id": 1,
-      "course_id": 1,
-      "associated_course_count": 3,
-      "latest_migration": null
-    },
-    "status_code": 200
-  },
-  "get_blueprint_default": {
-    "method": "GET",
-    "endpoint": "courses/1/blueprint_templates/default",
-    "data": {
-      "id": 1,
-      "course_id": 1,
-      "associated_course_count": 3,
-      "latest_migration": null
-    },
-    "status_code": 200
-  },
-  "get_by_id": {
-    "method": "GET",
-    "endpoint": "courses/1",
-    "data": {
-      "id": 1,
-      "course_code": "TST1234",
-      "name": "Test Course 1234",
-      "workflow_state": "available",
-      "account_id": 1,
-      "root_account_id": 1,
-      "enrollment_term_id": 1,
-      "grading_standard_id": 1
-    },
-    "status_code": 200
-  },
-  "get_by_id_2": {
-    "method": "GET",
-    "endpoint": "courses/2",
-    "data": {
-      "id": 2,
-      "course_code": "TST5678",
-      "name": "Test Course 5678",
-      "workflow_state": "available",
-      "account_id": 1,
-      "root_account_id": 1,
-      "enrollment_term_id": 1,
-      "grading_standard_id": 1
-    },
-    "status_code": 200
-  },
-  "get_by_sis_id": {
-    "method": "GET",
-    "endpoint": "courses/sis_course_id:test-sis-id",
-    "data": {
-      "id": 1,
-      "sis_course_id": "test-sis-id",
-      "course_code": "SIS101",
-      "name": "SIS Course",
-      "workflow_state": "available",
-      "account_id": 1,
-      "root_account_id": 1,
-      "enrollment_term_id": 1,
-      "grading_standard_id": 1
-    },
-    "status_code": 200
-  },
-  "get_epub_export": {
-    "method": "GET",
-    "endpoint": "courses/1/epub_exports/1",
-    "data": {
-      "id": 1,
-      "name": "course1",
-      "epub_export": {
-        "id": 1,
-        "created_at": "2019-01-01T00:00:00Z",
-        "attachment": {
-          "url": "https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"
-        },
-        "progress_url": "https://dummyurl.com/api/v1/progress/4",
-        "user_id": 4,
-        "workflow_state": "exported"
-      }
-    },
-    "status_code": 200
-  },
-  "get_epub_exports": {
-    "method": "GET",
-    "endpoint": "epub_exports",
-    "data": {
-      "courses": [
-        {
-          "id": 1,
-          "name": "course1",
-          "epub_export": {
-            "id": 1,
-            "created_at": "2019-01-01T00:00:00Z",
-            "attachment": {
-              "url": "https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"
-            },
-            "progress_url": "https://dummyurl.com/api/v1/progress/4",
-            "user_id": 4,
-            "workflow_state": "exported"
-          }
-        },
-        {
-          "id": 2,
-          "name": "course2",
-          "epub_export": {
-            "id": 2,
-            "created_at": "2019-06-01T00:00:00Z",
-            "attachment": {
-              "url": "https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"
+	"conclude": {
+		"method": "DELETE",
+		"endpoint": "courses/1",
+		"data": {
+			"conclude": true
+		},
+		"status_code": 200
+	},
+	"create_external_feed": {
+		"method": "POST",
+		"endpoint": "courses/1/external_feeds",
+		"data": {
+			"id": 1,
+			"display_name": "My Blog",
+			"url": "https://example.com/myblog.rss"
+		},
+		"status_code": 200
+	},
+	"create_folder": {
+		"method": "POST",
+		"endpoint": "courses/1/folders",
+		"data": {
+			"id": 2,
+			"name": "Test String",
+			"locked": false,
+			"hidden": false
+		},
+		"status_code": 200
+	},
+	"create_quiz": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes",
+		"data": {
+			"id": 1,
+			"title": "Newer Title"
+		},
+		"status_code": 200
+	},
+	"create_assignment": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "Newly Created Assignment",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "courses/1",
+		"data": {
+			"delete": true
+		},
+		"status_code": 200
+	},
+	"delete_external_feed": {
+		"method": "DELETE",
+		"endpoint": "courses/1/external_feeds/1",
+		"data": {
+			"id": 1,
+			"display_name": "My Blog",
+			"url": "https://example.com/myblog.rss"
+		},
+		"status_code": 200
+	},
+	"enroll_user": {
+		"method": "POST",
+		"endpoint": "courses/1/enrollments",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"user_id": 1,
+			"type": "TeacherEnrollment"
+		},
+		"status_code": 200
+	},
+	"import_outcome": {
+		"method": "POST",
+		"endpoint": "courses/1/outcome_imports",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
+	"get_all_assignments": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments",
+		"data": [
+			{
+				"id": 1,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 2,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200,
+		"headers": {
+			"Link": "<https://example.com/api/v1/courses/1/list_assignments?page=2&per_page=2>; rel=\"next\""
+		}
+	},
+	"get_all_assignments2": {
+		"method": "GET",
+		"endpoint": "courses/1/list_assignments?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
+	"get_assignment_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Do this assignment"
+		},
+		"status_code": 200
+	},
+	"get_assignments_for_group": {
+		"method": "GET",
+		"endpoint": "courses/1/assignment_groups/5/assignments",
+		"data": [
+			{
+				"id": 3,
+				"course_id": 1,
+				"name": "Assignment 1",
+				"description": "Do this assignment"
+			},
+			{
+				"id": 4,
+				"course_id": 1,
+				"name": "Assignment 2",
+				"description": "Do this assignment too"
+			}
+		],
+		"status_code": 200
+	},
+	"get_blueprint": {
+		"method": "GET",
+		"endpoint": "courses/1/blueprint_templates/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"associated_course_count": 3,
+			"latest_migration": null
+		},
+		"status_code": 200
+	},
+	"get_blueprint_default": {
+		"method": "GET",
+		"endpoint": "courses/1/blueprint_templates/default",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"associated_course_count": 3,
+			"latest_migration": null
+		},
+		"status_code": 200
+	},
+	"get_by_id": {
+		"method": "GET",
+		"endpoint": "courses/1",
+		"data": {
+			"id": 1,
+			"course_code": "TST1234",
+			"name": "Test Course 1234",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"get_by_id_2": {
+		"method": "GET",
+		"endpoint": "courses/2",
+		"data": {
+			"id": 2,
+			"course_code": "TST5678",
+			"name": "Test Course 5678",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"get_by_sis_id": {
+		"method": "GET",
+		"endpoint": "courses/sis_course_id:test-sis-id",
+		"data": {
+			"id": 1,
+			"sis_course_id": "test-sis-id",
+			"course_code": "SIS101",
+			"name": "SIS Course",
+			"workflow_state": "available",
+			"account_id": 1,
+			"root_account_id": 1,
+			"enrollment_term_id": 1,
+			"grading_standard_id": 1
+		},
+		"status_code": 200
+	},
+	"get_epub_export": {
+		"method": "GET",
+		"endpoint": "courses/1/epub_exports/1",
+		"data": {
+				"id": 1,
+				"name": "course1",
+				"epub_export": {
+					"id": 1,
+					"created_at": "2019-01-01T00:00:00Z",
+					"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+					"progress_url": "https://dummyurl.com/api/v1/progress/4",
+					"user_id": 4,
+					"workflow_state": "exported"
+					}
+		},
+		"status_code": 200
+
+	},
+	"get_epub_exports": {
+		"method": "GET",
+		"endpoint": "epub_exports",
+		"data": {
+			"courses": [
+				{
+				"id": 1,
+				"name": "course1",
+				"epub_export": {
+					"id": 1,
+					"created_at": "2019-01-01T00:00:00Z",
+					"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+					"progress_url": "https://dummyurl.com/api/v1/progress/4",
+					"user_id": 4,
+					"workflow_state": "exported"
+					}
+				},
+				{
+				"id": 2,
+				"name": "course2",
+				"epub_export": {
+					"id": 2,
+					"created_at": "2019-06-01T00:00:00Z",
+					"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+					"progress_url": "https://dummyurl.com/api/v1/progress/4",
+					"user_id": 5,
+					"workflow_state": "exported"
+					}
+				}
+
+			]
+		},
+		"status_code": 200
+	},
+	"create_epub_export": {
+		"method": "POST",
+		"endpoint": "courses/1/epub_exports/",
+		"data": {
+				"id": 1,
+				"name": "course1",
+				"epub_export": {
+					"id": 1,
+					"created_at": "2019-01-01T00:00:00Z",
+					"attachment": {"url":"https://dummyurl.com/api/v1/attachments/789?download_frd=1&verifier=bG9sY2F0cyEh"},
+					"progress_url": "https://dummyurl.com/api/v1/progress/4",
+					"user_id": 4,
+					"workflow_state": "exported"
+					}
+		},
+		"status_code": 200
+	},
+	"get_external_tools": {
+		"method": "GET",
+		"endpoint": "courses/1/external_tools",
+		"data": [
+			{
+				"id": 1,
+				"name": "External Tool #1",
+				"description": "This is an external tool.",
+				"url": "http://www.example.com/ims/lti",
+				"privacy_level": "anonymous",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			},
+			{
+				"id": 2,
+				"name": "External Tool #2",
+				"description": "This is an external tool.",
+				"url": "http://www.example.com/ims/lti",
+				"privacy_level": "public",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			}
+		],
+		"headers": {
+			"Link": "<https://example.com/api/v1/courses/1/external_tools?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_external_tools_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/external_tools?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "External Tool #3",
+				"description": "This is an external tool.",
+				"domain": "example.com",
+				"privacy_level": "name_only",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			},
+			{
+				"id": 4,
+				"name": "External Tool #4",
+				"description": "This is an external tool.",
+				"domain": "example.com",
+				"privacy_level": "anonymous",
+				"created_at": "2015-01-01T01:01:01Z",
+				"updated_at": "2016-06-17T14:20:00Z"
+			}
+		],
+		"status_code": 200
+	},
+	"get_folder": {
+		"method": "GET",
+		"endpoint": "courses/1/folders/1",
+		"data": {
+			"id": 1,
+			"files_count": 10,
+			"folders_count": 2,
+			"name": "Folder 1",
+			"full_name": "Folder 1"
+		},
+		"status_code": 200
+	},
+	"get_outcome_import_status":{
+		"method" : "GET",
+		"endpoint" : "courses/1/outcome_imports/1",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
+	"get_outcome_import_status_latest":{
+		"method" : "GET",
+		"endpoint" : "courses/1/outcome_imports/latest",
+		"data": {
+			"id": 1,
+			"created_at": "2013-12-01T23:59:00-06:00",
+			"ended_at": "2013-12-02T00:03:21-06:00",
+			"updated_at": "2013-12-02T00:03:21-06:00",
+			"workflow_state": "succeeded",
+			"data": {
+				"import_type": "instructure_csv"
+			},
+			"progress": "100",
+			"user": null
+		},
+		"status_code": 200
+	},
+	"get_quiz": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1",
+		"data": {
+			"id": 1
+		},
+		"status_code": 200
+	},
+	"get_quiz_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/assignment_overrides",
+		"data": {
+			"quiz_assignment_overrides": [{
+				"quiz_id": "1",
+				"due_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}],
+				"all_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}]
+			},{
+				"quiz_id": "2",
+				"due_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}],
+				"all_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}]
+			}]
+		},
+		"status_code": 200
+	},
+	"get_recent_students": {
+		"method": "GET",
+		"endpoint": "courses/1/recent_students",
+		"data": [
+			{
+				"id": 1,
+				"name": "John Doe"
+			},
+			{
+				"id": 2,
+				"name": "John Smith"
+			}
+		],
+		"headers": {
+			"Link": "<https://example.com/api/v1/courses/1/recent_students?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_recent_students_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/recent_students?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Joe Smith"
+			},
+			{
+				"id": 4,
+				"name": "James Smith"
+			}
+		]
+	},
+	"get_rubric_single": {
+		"method": "GET",
+		"endpoint": "courses/1/rubrics/1",
+		"data": {
+			"id": 1,
+			"title": "Course Rubric 1",
+			"context_id": 1,
+			"context_type": "Course",
+			"points_possible": 10.0,
+			"reusable": false,
+			"read_only": true,
+			"free_form_critereon_comments": true,
+			"hide_score_total": true
+		},
+		"status_code": 200
+	},
+	"get_rubric_multiple": {
+		"method": "GET",
+		"endpoint": "courses/1/rubrics",
+		"data": [
+			{
+				"id": 1,
+				"title": "Course Rubric 1",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			},
+			{
+				"id": 2,
+				"title": "Course Rubric 2",
+				"context_id": 1,
+				"context_type": "Course",
+				"points_possible": 10.0,
+				"reusable": false,
+				"read_only": true,
+				"free_form_critereon_comments": true,
+				"hide_score_total": true
+			}
+		],
+		"status_code": 200
+	},
+	"get_section":{
+		"method": "GET",
+		"endpoint": "courses/1/sections/1",
+		"data": {
+			"id": 1,
+			"name": "Section 1",
+			"course_id": 1
+		},
+		"status_code": 200
+	},
+	"get_sections": {
+		"method": "GET",
+		"endpoint": "courses/1/sections",
+		"data": [
+			{
+				"id": 1,
+				"name": "Section 1",
+				"course_id": 1
+			},
+			{
+				"id": 2,
+				"name": "Section 2",
+				"course_id": 1
+			}
+		],
+		"headers": {
+			"Link": "<https://example.com/api/v1/courses/1/sections?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"get_sections_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/sections?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"name": "Section 3",
+				"course_id": 1
+			},
+			{
+				"id": 4,
+				"name": "Section 4",
+				"course_id": 1
+			}
+		],
+		"status_code": 200
+	},
+	"get_submission_history": {
+		"method": "GET",
+		"endpoint": "courses/1/gradebook_history/08-23-2019/graders/1/assignments/1/submissions",
+		"data": [
+			{
+                "submission_id": 4,
+                "versions": null
             },
             "progress_url": "https://dummyurl.com/api/v1/progress/4",
             "user_id": 5,
