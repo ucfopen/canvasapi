@@ -12,7 +12,7 @@ from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
-from canvasapi.course import Course, CourseNickname, Page
+from canvasapi.course import Course, CourseNickname, Page, LatePolicy
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.gradebook_history import (
     Day,
@@ -464,7 +464,7 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(front_page, "url"))
         self.assertTrue(hasattr(front_page, "title"))
 
-    # create_front_page()
+    # edit_front_page()
     def test_edit_front_page(self, m):
         register_uris({"course": ["edit_front_page"]}, m)
 
@@ -473,6 +473,75 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(new_front_page, Page)
         self.assertTrue(hasattr(new_front_page, "url"))
         self.assertTrue(hasattr(new_front_page, "title"))
+
+    # edit_late_policy()
+    def test_edit_late_policy(self, m):
+        register_uris({"course": ["edit_late_policy"]}, m)
+
+        late_policy_result = self.course.edit_late_policy(
+            late_policy={"missing_submission_deduction": 5}
+        )
+
+        self.assertTrue(late_policy_result)
+
+    # get_late_policy
+    def test_get_late_policy(self, m):
+        register_uris({"course": ["get_late_policy"]}, m)
+
+        late_policy = self.course.get_late_policy()
+
+        self.assertIsInstance(late_policy, LatePolicy)
+
+        attributes = (
+            "id",
+            "course_id",
+            "missing_submission_deduction_enabled",
+            "missing_submission_deduction",
+            "late_submission_deduction_enabled",
+            "late_submission_deduction",
+            "late_submission_interval",
+            "late_submission_minimum_percent_enabled",
+            "late_submission_minimum_percent",
+            "created_at",
+            "updated_at",
+        )
+
+        for attribute in attributes:
+            self.assertTrue(hasattr(late_policy, attribute))
+
+    def test_create_late_policy(self, m):
+        register_uris({"course": ["create_late_policy"]}, m)
+
+        late_policy = self.course.create_late_policy(
+            late_policy={
+                "missing_submission_deduction_enabled": True,
+                "missing_submission_deduction": 12.34,
+                "late_submission_deduction_enabled": True,
+                "late_submission_deduction": 12.34,
+                "late_submission_interval": "hour",
+                "late_submission_minimum_percent_enabled": True,
+                "late_submission_minimum_percent": 12.34,
+            }
+        )
+
+        self.assertIsInstance(late_policy, LatePolicy)
+
+        attributes = (
+            "id",
+            "course_id",
+            "missing_submission_deduction_enabled",
+            "missing_submission_deduction",
+            "late_submission_deduction_enabled",
+            "late_submission_deduction",
+            "late_submission_interval",
+            "late_submission_minimum_percent_enabled",
+            "late_submission_minimum_percent",
+            "created_at",
+            "updated_at",
+        )
+
+        for attribute in attributes:
+            self.assertTrue(hasattr(late_policy, attribute))
 
     # get_page()
     def test_get_page(self, m):
@@ -1931,3 +2000,31 @@ class TestCourseNickname(unittest.TestCase):
 
         self.assertIsInstance(deleted_nick, CourseNickname)
         self.assertTrue(hasattr(deleted_nick, "nickname"))
+
+
+@requests_mock.Mocker()
+class TestLatePolicy(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.late_policy = LatePolicy(
+            self.canvas._Canvas__requester,
+            {
+                "id": 123,
+                "course_id": 123,
+                "missing_submission_deduction_enabled": True,
+                "missing_submission_deduction": 12.34,
+                "late_submission_deduction_enabled": True,
+                "late_submission_deduction": 12.34,
+                "late_submission_interval": "hour",
+                "late_submission_minimum_percent_enabled": True,
+                "late_submission_minimum_percent": 12.34,
+                "created_at": "2012-07-01T23:59:00-06:00",
+                "updated_at": "2012-07-01T23:59:00-06:00",
+            },
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.late_policy)
+        self.assertIsInstance(string, str)
