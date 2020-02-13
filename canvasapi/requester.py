@@ -153,7 +153,7 @@ class Requester(object):
         :type _kwargs: `list`
         :rtype: str
         """
-        base_url = "{}/{}/".format(self.base_url, _apiv) if _apiv else self.base_url
+        base_url = "{}{}/".format(self.base_url, _apiv) if _apiv else self.base_url
         full_url = _url if _url else "{}{}".format(base_url, endpoint)
 
         if not headers:

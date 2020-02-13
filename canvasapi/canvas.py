@@ -1185,6 +1185,30 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def graphql(self, query, variables):
+        """
+        Makes a GraphQL formatted requeset to Canvas
+
+        :calls: `POST /api/graphql \
+        <https://canvas.instructure.com/doc/api/file.graphql.html>`_
+
+        :param query: The GraphQL query to execute
+        :type query: str
+
+        :param variables: Variable values as required by the supplied query
+        :type variables: dict
+
+        :rtype: dict
+        """
+        response = self.__requester.request(
+            "POST",
+            "graphql",
+            _apiv = '',
+            headers = {"Content-Type": "application/json"},
+            _kwargs= json.dumps({"query":query, "variables":variables})
+        )
+        return response.json()
+
     def list_appointment_groups(self, **kwargs):
         """
         List appointment groups.
@@ -1383,27 +1407,3 @@ class Canvas(object):
             "PUT", "users/self/course_nicknames/{}".format(course_id), nickname=nickname
         )
         return CourseNickname(self.__requester, response.json())
-
-    def graphql(self, query, variables):
-        """
-        Makes a GraphQL formatted requeset to Canvas
-
-        :calls: `POST /api/graphql \
-        <https://canvas.instructure.com/doc/api/file.graphql.html>`_
-
-        :param query: The GraphQL query to execute
-        :type query: str
-
-        :param variables: Variable values as required by the supplied query
-        :type variables: dict
-
-        :rtype: dict
-        """
-        response = self.__requester.request(
-            "POST",
-            "graphql",
-            _apiv = '',
-            headers = {"Content-Type": "application/json"},
-            _kwargs= json.dumps({"query":query, "variables":variables})
-        )
-        return response.json()

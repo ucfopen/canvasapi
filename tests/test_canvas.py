@@ -832,3 +832,34 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(comm_messages[0].subject, "example subject line")
         self.assertEqual(comm_messages[1].id, 2)
         self.assertEqual(comm_messages[1].subject, "My Subject")
+
+    def test_graphql(self, m):
+        register_uris({"graphql": ["graphql"]}, m, _apiv=None)
+        query = """
+        query MyQuery($termid: ID!) {
+            term(id: $termid) {
+                coursesConnection {
+                    nodes {
+                        _id
+                        assignmentsConnection {
+                        nodes {
+                            name
+                            _id
+                            expectsExternalSubmission
+                        }
+                        }
+                    }
+                    edges {
+                        node {
+                        id
+                        }
+                    }
+                }
+            }
+        }
+        """
+        variables = {"termid": 125}
+
+        graphql_response = self.canvas.graphql(query, variables)
+        # Just a super simple check right now that it gets back a dict respose
+        self.assertIsInstance(graphql_response, dict)
