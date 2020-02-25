@@ -2088,6 +2088,51 @@
 		},
 		"status_code": 200
 	},
+	"get_late_policy": {
+		"method": "GET",
+		"endpoint": "courses/1/late_policy",
+		"data": {
+			"late_policy": {
+				"id": 123,
+				"course_id": 123,
+				"missing_submission_deduction_enabled": true,
+				"missing_submission_deduction": 12.34,
+				"late_submission_deduction_enabled": true,
+				"late_submission_deduction": 12.34,
+				"late_submission_interval": "hour",
+				"late_submission_minimum_percent_enabled": true,
+				"late_submission_minimum_percent": 12.34,
+				"created_at": "2012-07-01T23:59:00-06:00",
+				"updated_at": "2012-07-01T23:59:00-06:00"
+			}
+		},
+		"status_code": 200
+	},
+	"edit_late_policy": {
+		"method": "PATCH",
+		"endpoint": "courses/1/late_policy",
+		"status_code": 204
+	},
+	"create_late_policy": {
+		"method": "POST",
+		"endpoint": "courses/1/late_policy",
+		"data": {
+			"late_policy": {
+				"id": 123,
+				"course_id": 123,
+				"missing_submission_deduction_enabled": true,
+				"missing_submission_deduction": 12.34,
+				"late_submission_deduction_enabled": true,
+				"late_submission_deduction": 12.34,
+				"late_submission_interval": "hour",
+				"late_submission_minimum_percent_enabled": true,
+				"late_submission_minimum_percent": 12.34,
+				"created_at": "2012-07-01T23:59:00-06:00",
+				"updated_at": "2012-07-01T23:59:00-06:00"
+			}
+		},
+		"status_code": 200
+	},
 	"get_licenses": {
 		"method": "GET",
 		"endpoint": "courses/1/content_licenses",
