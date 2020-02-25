@@ -321,7 +321,9 @@ class TestQuiz(unittest.TestCase):
         register_uris({"quiz": ["get_quiz_submission"]}, m)
 
         quiz_id = 1
-        quiz_submission = self.quiz.get_quiz_submission(quiz_id, include=['quiz', 'submission', 'user'])
+        quiz_submission = self.quiz.get_quiz_submission(
+            quiz_id, include=["quiz", "submission", "user"]
+        )
 
         self.assertIsInstance(quiz_submission, QuizSubmission)
         self.assertTrue(hasattr(quiz_submission, "id"))
