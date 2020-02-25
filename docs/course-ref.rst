@@ -10,4 +10,11 @@ CourseNickname
 ==============
 
 .. autoclass:: canvasapi.course.CourseNickname
-	:members:
+    :members:
+
+==========
+LatePolicy
+==========
+
+.. autoclass:: canvasapi.course.LatePolicy
+    :members:

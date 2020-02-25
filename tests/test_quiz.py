@@ -16,6 +16,7 @@ from canvasapi.quiz import (
     QuizExtension,
     QuizSubmissionEvent,
     QuizReport,
+    QuizAssignmentOverrideSet,
 )
 from canvasapi.quiz_group import QuizGroup
 from canvasapi.paginated_list import PaginatedList
@@ -735,3 +736,19 @@ class TestQuizSubmissionQuestion(unittest.TestCase):
         self.assertIsInstance(result, bool)
         self.assertTrue(result)
         self.assertFalse(self.submission_question.flagged)
+
+
+@requests_mock.Mocker()
+class TestQuizAssignmentOverrideSet(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.override_set = QuizAssignmentOverrideSet(
+            self.canvas._Canvas__requester,
+            {"quiz_id": "1", "due_dates": None, "all_dates": None},
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.override_set)
+        self.assertIsInstance(string, str)

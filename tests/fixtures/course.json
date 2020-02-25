@@ -409,6 +409,50 @@
 		},
 		"status_code": 200
 	},
+	"get_quiz_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/assignment_overrides",
+		"data": {
+			"quiz_assignment_overrides": [{
+				"quiz_id": "1",
+				"due_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}],
+				"all_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}]
+			},{
+				"quiz_id": "2",
+				"due_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}],
+				"all_dates": [{
+					"id": 1,
+					"due_at": "2014-02-21T06:59:59Z",
+					"unlock_at": null,
+					"lock_at": "2014-02-21T06:59:59Z",
+					"title": "Project X",
+					"base": true
+				}]
+			}]
+		},
+		"status_code": 200
+	},
 	"get_recent_students": {
 		"method": "GET",
 		"endpoint": "courses/1/recent_students",
@@ -2041,6 +2085,51 @@
 		"data": {
 			"message": "2 files updated",
 			"file_ids": [1,2]
+		},
+		"status_code": 200
+	},
+	"get_late_policy": {
+		"method": "GET",
+		"endpoint": "courses/1/late_policy",
+		"data": {
+			"late_policy": {
+				"id": 123,
+				"course_id": 123,
+				"missing_submission_deduction_enabled": true,
+				"missing_submission_deduction": 12.34,
+				"late_submission_deduction_enabled": true,
+				"late_submission_deduction": 12.34,
+				"late_submission_interval": "hour",
+				"late_submission_minimum_percent_enabled": true,
+				"late_submission_minimum_percent": 12.34,
+				"created_at": "2012-07-01T23:59:00-06:00",
+				"updated_at": "2012-07-01T23:59:00-06:00"
+			}
+		},
+		"status_code": 200
+	},
+	"edit_late_policy": {
+		"method": "PATCH",
+		"endpoint": "courses/1/late_policy",
+		"status_code": 204
+	},
+	"create_late_policy": {
+		"method": "POST",
+		"endpoint": "courses/1/late_policy",
+		"data": {
+			"late_policy": {
+				"id": 123,
+				"course_id": 123,
+				"missing_submission_deduction_enabled": true,
+				"missing_submission_deduction": 12.34,
+				"late_submission_deduction_enabled": true,
+				"late_submission_deduction": 12.34,
+				"late_submission_interval": "hour",
+				"late_submission_minimum_percent_enabled": true,
+				"late_submission_minimum_percent": 12.34,
+				"created_at": "2012-07-01T23:59:00-06:00",
+				"updated_at": "2012-07-01T23:59:00-06:00"
+			}
 		},
 		"status_code": 200
 	},
