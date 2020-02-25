@@ -366,7 +366,7 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:id/late_policy \
         <https://canvas.instructure.com/doc/api/late_policy.html#method.late_policy.create>`_
 
-        :rtype: :class:`:rtype: :class:`canvasapi.course.LatePolicy`
+        :rtype: :class:`canvasapi.course.LatePolicy`
         """
 
         response = self._requester.request(
@@ -581,7 +581,8 @@ class Course(CanvasObject):
         :calls: `PATCH /api/v1/courses/:id/late_policy \
         <https://canvas.instructure.com/doc/api/late_policy.html#method.late_policy.update>`_
 
-        :rtype: Boolean
+        :returns: True if Late Policy was updated successfully. False otherwise.
+        :rtype: bool
         """
 
         response = self._requester.request(
@@ -1459,7 +1460,9 @@ class Course(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "courses/{}/late_policy".format(self.id)
+            "GET",
+            "courses/{}/late_policy".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         late_policy_json = response.json()
 
@@ -2803,8 +2806,8 @@ class Course(CanvasObject):
         :calls: `PUT /api/v1/courses/:id \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`_
 
-        :returns: True if the course was updated, False otherwise.
-        :rtype: bool
+        :returns: `True` if the course was updated, `False` otherwise.
+        :rtype: `bool`
         """
         response = self._requester.request(
             "PUT", "courses/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
