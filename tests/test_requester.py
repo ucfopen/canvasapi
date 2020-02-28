@@ -14,6 +14,7 @@ from canvasapi.exceptions import (
     InvalidAccessToken,
     ResourceDoesNotExist,
     Unauthorized,
+    UnprocessableEntity
 )
 from tests import settings
 from tests.util import register_uris
@@ -144,6 +145,12 @@ class TestRequester(unittest.TestCase):
 
         with self.assertRaises(Conflict):
             self.requester.request("GET", "409")
+
+    def test_request_422(self, m):
+        register_uris({"requests": ["422"]}, m)
+
+        with self.assertRaises(UnprocessableEntity):
+            self.requester.request("GET", "422")
 
     def test_request_500(self, m):
         register_uris({"requests": ["500"]}, m)
