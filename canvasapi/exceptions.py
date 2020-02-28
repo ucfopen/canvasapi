@@ -66,6 +66,7 @@ class Conflict(CanvasException):
 
     pass
 
+
 class UnprocessableEntity(CanvasException):
     """Canvas was unable to process the entity."""
 
