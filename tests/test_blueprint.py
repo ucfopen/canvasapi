@@ -205,8 +205,8 @@ class TestChangeRecord(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                "course": ["get_blueprint", "get_by_id",],
-                "blueprint": ["get_unsynced_changes",],
+                "course": ["get_blueprint", "get_by_id"],
+                "blueprint": ["get_unsynced_changes"],
             }
             register_uris(requires, m)
 
