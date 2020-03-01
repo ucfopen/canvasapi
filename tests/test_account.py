@@ -286,6 +286,7 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(report, AccountReport)
         self.assertTrue(hasattr(report, "title"))
         self.assertEqual(report.title, "Zero Activity")
+        self.assertIsInstance(str(report), str)
 
     # get_index_of_reports()
     def test_get_index_of_reports(self, m):
@@ -310,6 +311,7 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(len(reports_list), 4)
         self.assertIsInstance(reports_list[0], AccountReport)
         self.assertTrue(hasattr(reports_list[0], "id"))
+        self.assertIsInstance(str(reports_list[0]), str)
 
     # get_subaccounts()
     def test_get_subaccounts(self, m):
