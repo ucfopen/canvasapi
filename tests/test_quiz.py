@@ -22,6 +22,8 @@ from canvasapi.quiz_group import QuizGroup
 from canvasapi.paginated_list import PaginatedList
 from tests import settings
 from tests.util import register_uris
+from canvasapi.user import User
+from canvasapi.submission import Submission
 
 
 @requests_mock.Mocker()
@@ -319,19 +321,24 @@ class TestQuiz(unittest.TestCase):
         register_uris({"quiz": ["get_quiz_submission"]}, m)
 
         quiz_id = 1
-        submission = self.quiz.get_quiz_submission(quiz_id)
+        quiz_submission = self.quiz.get_quiz_submission(
+            quiz_id, include=["quiz", "submission", "user"]
+        )
 
-        self.assertIsInstance(submission, QuizSubmission)
-        self.assertTrue(hasattr(submission, "id"))
-        self.assertEqual(submission.quiz_id, quiz_id)
-        self.assertTrue(hasattr(submission, "quiz_version"))
-        self.assertEqual(submission.quiz_version, 1)
-        self.assertTrue(hasattr(submission, "user_id"))
-        self.assertEqual(submission.user_id, 1)
-        self.assertTrue(hasattr(submission, "validation_token"))
-        self.assertEqual(submission.validation_token, "this is a validation token")
-        self.assertTrue(hasattr(submission, "score"))
-        self.assertEqual(submission.score, 0)
+        self.assertIsInstance(quiz_submission, QuizSubmission)
+        self.assertTrue(hasattr(quiz_submission, "id"))
+        self.assertEqual(quiz_submission.quiz_id, quiz_id)
+        self.assertTrue(hasattr(quiz_submission, "quiz_version"))
+        self.assertEqual(quiz_submission.quiz_version, 1)
+        self.assertTrue(hasattr(quiz_submission, "user_id"))
+        self.assertEqual(quiz_submission.user_id, 1)
+        self.assertTrue(hasattr(quiz_submission, "validation_token"))
+        self.assertEqual(quiz_submission.validation_token, "this is a validation token")
+        self.assertTrue(hasattr(quiz_submission, "score"))
+        self.assertEqual(quiz_submission.score, 0)
+        self.assertIsInstance(quiz_submission.quiz, Quiz)
+        self.assertIsInstance(quiz_submission.submission, Submission)
+        self.assertIsInstance(quiz_submission.user, User)
 
     # create_submission
     def test_create_submission(self, m):
