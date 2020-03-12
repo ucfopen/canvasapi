@@ -219,6 +219,30 @@
 					"validation_token": "this is a validation token",
 					"score": 0
 				}
+			],
+			"quizzes": [
+				{
+					"id": 1,
+					"title": "Test Quiz",
+					"quiz_type": "survey"
+				}
+			],
+			"submissions": [
+				{
+					"id": 1,
+					"body": "user: 1, quiz: 1, score: 1.0, time: 2020-01-01 00:00:00Z",
+					"grade": "1",
+					"score": 1,
+					"assignment_id": 1234,
+					"user_id": 1
+				}
+			],
+			"users": [
+				{
+					"id": 1,
+					"name": "Test User",
+					"login_id": "testuser@example.com"
+				}
 			]
 		},
 		"status_code": 200
