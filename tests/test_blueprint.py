@@ -196,3 +196,25 @@ class TestBlueprintMigration(unittest.TestCase):
         import_details = self.b_import.get_import_details()
         self.assertIsInstance(import_details, PaginatedList)
         self.assertIsInstance(import_details[0], ChangeRecord)
+
+
+@requests_mock.Mocker()
+class TestChangeRecord(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {
+                "course": ["get_blueprint", "get_by_id"],
+                "blueprint": ["get_unsynced_changes"],
+            }
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.blueprint = self.course.get_blueprint(1)
+            self.change_record = self.blueprint.get_unsynced_changes()[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.change_record)
+        self.assertIsInstance(string, str)
