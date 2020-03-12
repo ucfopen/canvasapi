@@ -1925,7 +1925,11 @@ class AccountNotification(CanvasObject):
 @python_2_unicode_compatible
 class AccountReport(CanvasObject):
     def __str__(self):
-        return "{} ({})".format(self.report, self.id)
+        try:
+            return "{} ({})".format(self.report, self.id)
+        except AttributeError:
+            # Print params if not a report instance
+            return "{} ({})".format(self.report, self.parameters)
 
     def delete_report(self, **kwargs):
         """

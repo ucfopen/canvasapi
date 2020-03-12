@@ -578,10 +578,12 @@
 		"endpoint": "accounts/1/reports",
 		"data": [
 			{
-				"id": 1
+				"id": 1,
+				"report": "sis_export_csv"
 			},
 			{
-				"id": 2
+				"id": 2,
+				"report": "grade_export_csv"
 			}
 		],
 		"headers": {
