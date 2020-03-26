@@ -66,7 +66,7 @@ class Requester(object):
         """
         return self._session.get(url, headers=headers, params=params)
 
-    def _patch_request(self, url, headers, data=None, json=False):
+    def _patch_request(self, url, headers, data=None, **kwargs):
         """
         Issue a PATCH request to the specified endpoint with the data provided.
 
@@ -76,11 +76,7 @@ class Requester(object):
         :type headers: dict
         :param data: The data to send with this request.
         :type data: dict
-        :param json: Whether or not to send the data as json
-        :type json: bool
         """
-        if json:
-            return self._session.patch(url, headers=headers, json=dict(data))
         return self._session.patch(url, headers=headers, data=data)
 
     def _post_request(self, url, headers, data=None, json=False):
@@ -114,7 +110,7 @@ class Requester(object):
 
         return self._session.post(url, headers=headers, data=data, files=files)
 
-    def _put_request(self, url, headers, data=None, json=False):
+    def _put_request(self, url, headers, data=None, **kwargs):
         """
         Issue a PUT request to the specified endpoint with the data provided.
 
@@ -124,11 +120,7 @@ class Requester(object):
         :type headers: dict
         :param data: The data to send with this request.
         :type data: dict
-        :param json: Whether or not to send the data as json
-        :type json: bool
         """
-        if json:
-            return self._session.put(url, headers=headers, json=dict(data))
         return self._session.put(url, headers=headers, data=data)
 
     def request(
@@ -165,7 +157,9 @@ class Requester(object):
         :param _kwargs: A list of 2-tuples representing processed
             keyword arguments to be sent to Canvas as params or data.
         :type _kwargs: `list`
-        :param json: Whether or not to treat the POST/PATCH as json instead of form data
+        :param json: Whether or not to treat the data as json instead of form data.
+            currently only the POST request of GraphQL is using this parameter.
+            For all other methods it's just passed and ignored.
         :type json: `bool`
         :rtype: str
         """
