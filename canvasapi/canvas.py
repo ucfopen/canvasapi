@@ -1202,10 +1202,10 @@ class Canvas(object):
         response = self.__requester.request(
             "POST",
             "graphql",
-            _apiv='',
+            _apiv="",
             headers={"Content-Type": "application/json"},
             _kwargs=[("query", query), ("variables", variables)],
-            json=True
+            json=True,
         )
 
         return response.json()

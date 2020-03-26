@@ -13,7 +13,7 @@ from canvasapi.exceptions import (
     InvalidAccessToken,
     ResourceDoesNotExist,
     Unauthorized,
-    UnprocessableEntity
+    UnprocessableEntity,
 )
 from canvasapi.util import clean_headers
 
@@ -138,7 +138,7 @@ class Requester(object):
         headers=None,
         use_auth=True,
         _url=None,
-        _apiv='v1',
+        _apiv="v1",
         _kwargs=None,
         json=False,
         **kwargs

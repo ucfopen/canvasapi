@@ -41,11 +41,7 @@ def register_uris(requirements, requests_mocker, _apiv="v1"):
                 url = requests_mock.ANY
             else:
                 api_v = "/api/" + _apiv + "/" if _apiv else "/api/"
-                url = (
-                    get_institution_url(settings.BASE_URL)
-                    + api_v
-                    + obj["endpoint"]
-                )
+                url = get_institution_url(settings.BASE_URL) + api_v + obj["endpoint"]
 
             try:
                 requests_mocker.register_uri(

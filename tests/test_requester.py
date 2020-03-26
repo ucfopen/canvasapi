@@ -14,7 +14,7 @@ from canvasapi.exceptions import (
     InvalidAccessToken,
     ResourceDoesNotExist,
     Unauthorized,
-    UnprocessableEntity
+    UnprocessableEntity,
 )
 from tests import settings
 from tests.util import register_uris
