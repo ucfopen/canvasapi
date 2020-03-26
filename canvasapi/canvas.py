@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import warnings
-import json
 
 from canvasapi.account import Account
 from canvasapi.course import Course
@@ -1205,8 +1204,10 @@ class Canvas(object):
             "graphql",
             _apiv='',
             headers={"Content-Type": "application/json"},
-            _kwargs=json.dumps({"query": query, "variables": variables})
+            _kwargs=[("query", query), ("variables", variables)],
+            json=True
         )
+
         return response.json()
 
     def list_appointment_groups(self, **kwargs):

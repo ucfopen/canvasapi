@@ -38,7 +38,7 @@ class Requester(object):
         self._session = requests.Session()
         self._cache = []
 
-    def _delete_request(self, url, headers, data=None):
+    def _delete_request(self, url, headers, data=None, **kwargs):
         """
         Issue a DELETE request to the specified endpoint with the data provided.
 
@@ -51,7 +51,7 @@ class Requester(object):
         """
         return self._session.delete(url, headers=headers, data=data)
 
-    def _get_request(self, url, headers, params=None):
+    def _get_request(self, url, headers, params=None, **kwargs):
         """
         Issue a GET request to the specified endpoint with the data provided.
 
@@ -61,10 +61,12 @@ class Requester(object):
         :type headers: dict
         :param params: The parameters to send with this request.
         :type params: dict
+        :param json: Whether or not to send the data as json
+        :type json: bool
         """
         return self._session.get(url, headers=headers, params=params)
 
-    def _patch_request(self, url, headers, data=None):
+    def _patch_request(self, url, headers, data=None, json=False):
         """
         Issue a PATCH request to the specified endpoint with the data provided.
 
@@ -74,10 +76,14 @@ class Requester(object):
         :type headers: dict
         :param data: The data to send with this request.
         :type data: dict
+        :param json: Whether or not to send the data as json
+        :type json: bool
         """
+        if json:
+            return self._session.patch(url, headers=headers, json=dict(data))
         return self._session.patch(url, headers=headers, data=data)
 
-    def _post_request(self, url, headers, data=None):
+    def _post_request(self, url, headers, data=None, json=False):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
@@ -87,25 +93,28 @@ class Requester(object):
         :type headers: dict
         :param data: The data to send with this request.
         :type data: dict
+        :param json: Whether or not to send the data as json
+        :type json: bool
         """
+        if json:
+            return self._session.post(url, headers=headers, json=dict(data))
 
         # Grab file from data.
         files = None
-        if not isinstance(data, str):
-            for field, value in data:
-                if field == "file":
-                    if isinstance(value, dict):
-                        files = value
-                    else:
-                        files = {"file": value}
-                    break
+        for field, value in data:
+            if field == "file":
+                if isinstance(value, dict):
+                    files = value
+                else:
+                    files = {"file": value}
+                break
 
-            # Remove file entry from data.
-            data[:] = [tup for tup in data if tup[0] != "file"]
+        # Remove file entry from data.
+        data[:] = [tup for tup in data if tup[0] != "file"]
 
         return self._session.post(url, headers=headers, data=data, files=files)
 
-    def _put_request(self, url, headers, data=None):
+    def _put_request(self, url, headers, data=None, json=False):
         """
         Issue a PUT request to the specified endpoint with the data provided.
 
@@ -115,7 +124,11 @@ class Requester(object):
         :type headers: dict
         :param data: The data to send with this request.
         :type data: dict
+        :param json: Whether or not to send the data as json
+        :type json: bool
         """
+        if json:
+            return self._session.put(url, headers=headers, json=dict(data))
         return self._session.put(url, headers=headers, data=data)
 
     def request(
@@ -127,6 +140,7 @@ class Requester(object):
         _url=None,
         _apiv='v1',
         _kwargs=None,
+        json=False,
         **kwargs
     ):
         """
@@ -151,6 +165,8 @@ class Requester(object):
         :param _kwargs: A list of 2-tuples representing processed
             keyword arguments to be sent to Canvas as params or data.
         :type _kwargs: `list`
+        :param json: Whether or not to treat the POST/PATCH as json instead of form data
+        :type json: `bool`
         :rtype: str
         """
         base_url = "{}{}/".format(self.base_url, _apiv) if _apiv else self.base_url
@@ -165,20 +181,19 @@ class Requester(object):
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
         _kwargs = _kwargs or []
-        if hasattr(_kwargs, 'extend'):
-            _kwargs.extend(kwargs.items())
+        _kwargs.extend(kwargs.items())
 
-            # Do any final argument processing before sending to request method.
-            for i, kwarg in enumerate(_kwargs):
-                kw, arg = kwarg
+        # Do any final argument processing before sending to request method.
+        for i, kwarg in enumerate(_kwargs):
+            kw, arg = kwarg
 
-                # Convert boolean objects to a lowercase string.
-                if isinstance(arg, bool):
-                    _kwargs[i] = (kw, str(arg).lower())
+            # Convert boolean objects to a lowercase string.
+            if isinstance(arg, bool):
+                _kwargs[i] = (kw, str(arg).lower())
 
-                # Convert any datetime objects into ISO 8601 formatted strings.
-                elif isinstance(arg, datetime):
-                    _kwargs[i] = (kw, arg.isoformat())
+            # Convert any datetime objects into ISO 8601 formatted strings.
+            elif isinstance(arg, datetime):
+                _kwargs[i] = (kw, arg.isoformat())
 
             # Determine the appropriate request method.
         if method == "GET":
@@ -201,7 +216,7 @@ class Requester(object):
         if _kwargs:
             logger.debug("Data: {data}".format(data=pformat(_kwargs)))
 
-        response = req_method(full_url, headers, _kwargs)
+        response = req_method(full_url, headers, _kwargs, json=json)
         logger.info(
             "Response: {method} {url} {status}".format(
                 method=method, url=full_url, status=response.status_code
