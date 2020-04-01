@@ -189,7 +189,7 @@ class Requester(object):
             elif isinstance(arg, datetime):
                 _kwargs[i] = (kw, arg.isoformat())
 
-            # Determine the appropriate request method.
+        # Determine the appropriate request method.
         if method == "GET":
             req_method = self._get_request
         elif method == "POST":
