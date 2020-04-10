@@ -31,7 +31,7 @@ def is_multivalued(value):
         return False
 
 
-def combine_kwargs(**kwargs):
+def combine_kwargs(flatten=True, **kwargs):
     """
     Flatten a series of keyword arguments from complex combinations of
     dictionaries and lists into a list of tuples representing
@@ -47,14 +47,16 @@ def combine_kwargs(**kwargs):
     :rtype: `list` of `tuple`
     """
     combined_kwargs = []
+    if "flatten" in kwargs:
+        kwargs.pop("flatten")
 
     # Loop through all kwargs provided
     for kw, arg in kwargs.items():
-        if isinstance(arg, dict):
+        if flatten and isinstance(arg, dict):
             for k, v in arg.items():
                 for tup in flatten_kwarg(k, v):
                     combined_kwargs.append(("{}{}".format(kw, tup[0]), tup[1]))
-        elif is_multivalued(arg):
+        elif flatten and is_multivalued(arg):
             for i in arg:
                 for tup in flatten_kwarg("", i):
                     combined_kwargs.append(("{}{}".format(kw, tup[0]), tup[1]))

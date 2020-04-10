@@ -1182,18 +1182,12 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def graphql(self, query, variables):
+    def graphql(self, **kwargs):
         """
         Makes a GraphQL formatted requeset to Canvas
 
         :calls: `POST /api/graphql \
         <https://canvas.instructure.com/doc/api/file.graphql.html>`_
-
-        :param query: The GraphQL query to execute
-        :type query: str
-
-        :param variables: Variable values as required by the supplied query
-        :type variables: dict
 
         :rtype: dict
         """
@@ -1201,7 +1195,7 @@ class Canvas(object):
             "POST",
             "graphql",
             headers={"Content-Type": "application/json"},
-            _kwargs=[("query", query), ("variables", variables)],
+            _kwargs=combine_kwargs(flatten=False, **kwargs),
             # Needs to call special endpoint without api/v1
             _url=self.__requester.original_url + "/api/graphql",
             json=True,

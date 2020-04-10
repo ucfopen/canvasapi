@@ -860,6 +860,6 @@ class TestCanvas(unittest.TestCase):
         """
         variables = {"termid": 125}
 
-        graphql_response = self.canvas.graphql(query, variables)
+        graphql_response = self.canvas.graphql(query=query, variables=variables)
         # Just a super simple check right now that it gets back a dict respose
         self.assertIsInstance(graphql_response, dict)
