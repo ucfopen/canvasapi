@@ -61,7 +61,7 @@ class PaginatedList(object):
         self._next_url = None
 
         next_link = response.links.get("next")
-        regex = r"{}(?:v1\/)?(.*)".format(re.escape(self._requester.base_url))
+        regex = r"{}(.*)".format(re.escape(self._requester.base_url))
 
         self._next_url = (
             re.search(regex, next_link["url"]).group(1) if next_link else None

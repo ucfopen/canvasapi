@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 BASE_URL = "https://example.com"
+BASE_URL_GRAPHQL = "https://example.com/api/"
 BASE_URL_WITH_VERSION = "https://example.com/api/v1/"
 BASE_URL_AS_HTTP = "http://example.com"
 BASE_URL_AS_BLANK = ""

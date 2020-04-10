@@ -33,7 +33,9 @@ class Requester(object):
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
         """
-        self.base_url = base_url
+        # Preserve the original base url and add "/api/v1" to it
+        self.original_url = base_url
+        self.base_url = base_url + "/api/v1/"
         self.access_token = access_token
         self._session = requests.Session()
         self._cache = []
@@ -61,8 +63,6 @@ class Requester(object):
         :type headers: dict
         :param params: The parameters to send with this request.
         :type params: dict
-        :param json: Whether or not to send the data as json
-        :type json: bool
         """
         return self._session.get(url, headers=headers, params=params)
 
@@ -130,7 +130,6 @@ class Requester(object):
         headers=None,
         use_auth=True,
         _url=None,
-        _apiv="v1",
         _kwargs=None,
         json=False,
         **kwargs
@@ -152,8 +151,6 @@ class Requester(object):
             endpoint is provided, the endpoint will be ignored and
             only the _url argument will be used.
         :type _url: str
-        :param _apiv: Optional argument to specify which api version to use. Defaults to v1
-        :type _apiv: str
         :param _kwargs: A list of 2-tuples representing processed
             keyword arguments to be sent to Canvas as params or data.
         :type _kwargs: `list`
@@ -163,8 +160,7 @@ class Requester(object):
         :type json: `bool`
         :rtype: str
         """
-        base_url = "{}{}/".format(self.base_url, _apiv) if _apiv else self.base_url
-        full_url = _url if _url else "{}{}".format(base_url, endpoint)
+        full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
 
         if not headers:
             headers = {}

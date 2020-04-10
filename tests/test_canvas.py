@@ -834,7 +834,7 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(comm_messages[1].subject, "My Subject")
 
     def test_graphql(self, m):
-        register_uris({"graphql": ["graphql"]}, m, _apiv=None)
+        register_uris({"graphql": ["graphql"]}, m, base_url=settings.BASE_URL_GRAPHQL)
         query = """
         query MyQuery($termid: ID!) {
             term(id: $termid) {

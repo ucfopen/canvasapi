@@ -8,7 +8,7 @@ from canvasapi.util import get_institution_url
 from tests import settings
 
 
-def register_uris(requirements, requests_mocker, _apiv="v1"):
+def register_uris(requirements, requests_mocker, base_url=None):
     """
     Given a list of required fixtures and an requests_mocker object,
     register each fixture as a uri with the mocker.
@@ -16,8 +16,9 @@ def register_uris(requirements, requests_mocker, _apiv="v1"):
     :param base_url: str
     :param requirements: dict
     :param requests_mocker: requests_mock.mocker.Mocker
-    :param _apiv: Optional API version or blank for none
     """
+    if base_url is None:
+        base_url = settings.BASE_URL_WITH_VERSION
     for fixture, objects in requirements.items():
         try:
             with open("tests/fixtures/{}.json".format(fixture)) as file:
@@ -40,8 +41,10 @@ def register_uris(requirements, requests_mocker, _apiv="v1"):
             if obj["endpoint"] == "ANY":
                 url = requests_mock.ANY
             else:
-                api_v = "/api/" + _apiv + "/" if _apiv else "/api/"
-                url = get_institution_url(settings.BASE_URL) + api_v + obj["endpoint"]
+                url = (
+                    base_url
+                    + obj["endpoint"]
+                )
 
             try:
                 requests_mocker.register_uri(

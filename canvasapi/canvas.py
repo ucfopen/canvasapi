@@ -64,8 +64,6 @@ class Canvas(object):
         # the API.
         access_token = access_token.strip()
 
-        base_url = new_url + "/api/"
-
         self.__requester = Requester(base_url, access_token)
 
     def clear_course_nicknames(self):
@@ -1202,9 +1200,10 @@ class Canvas(object):
         response = self.__requester.request(
             "POST",
             "graphql",
-            _apiv="",
             headers={"Content-Type": "application/json"},
             _kwargs=[("query", query), ("variables", variables)],
+            # Needs to call special endpoint without api/v1
+            _url=self.__requester.original_url + "/api/graphql",
             json=True,
         )
 
