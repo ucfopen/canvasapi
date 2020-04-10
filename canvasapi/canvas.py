@@ -1195,7 +1195,7 @@ class Canvas(object):
             "POST",
             "graphql",
             headers={"Content-Type": "application/json"},
-            _kwargs=combine_kwargs(flatten=False, **kwargs),
+            _kwargs=[("query", kwargs.pop("query")), ("variables", kwargs.pop("variables"))],
             # Needs to call special endpoint without api/v1
             _url=self.__requester.original_url + "/api/graphql",
             json=True,
