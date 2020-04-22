@@ -4,7 +4,6 @@ import os
 
 import requests_mock
 
-from canvasapi.util import get_institution_url
 from tests import settings
 
 
