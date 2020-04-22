@@ -40,10 +40,7 @@ def register_uris(requirements, requests_mocker, base_url=None):
             if obj["endpoint"] == "ANY":
                 url = requests_mock.ANY
             else:
-                url = (
-                    base_url
-                    + obj["endpoint"]
-                )
+                url = base_url + obj["endpoint"]
 
             try:
                 requests_mocker.register_uri(
