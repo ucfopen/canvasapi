@@ -1184,7 +1184,7 @@ class Canvas(object):
 
     def graphql(self, query, variables=None, **kwargs):
         """
-        Makes a GraphQL formatted requeset to Canvas
+        Makes a GraphQL formatted request to Canvas
 
         :calls: `POST /api/graphql \
         <https://canvas.instructure.com/doc/api/file.graphql.html>`_
