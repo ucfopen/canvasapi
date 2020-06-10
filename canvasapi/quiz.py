@@ -143,7 +143,7 @@ class Quiz(CanvasObject):
                 "Param `report_type` must be a either 'student_analysis' or 'item_analysis'"
             )
 
-        kwargs["report_type"] = report_type
+        kwargs["quiz_report"] = {"report_type": report_type}
 
         response = self._requester.request(
             "POST",
