@@ -414,10 +414,10 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.create>`_
 
-        :param title: The title for the page.
-        :type title: dict
+        :param wiki_page: The title for the page.
+        :type wiki_page: dict
         :returns: The created page.
-        :rtype: :class:`canvasapi.course.Course`
+        :rtype: :class:`canvasapi.page.Page`
         """
 
         if isinstance(wiki_page, dict) and "title" in wiki_page:
