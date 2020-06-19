@@ -1992,11 +1992,11 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(licenses, PaginatedList)
         licenses = list(licenses)
 
-        for l in licenses:
-            self.assertIsInstance(l, License)
-            self.assertTrue(hasattr(l, "id"))
-            self.assertTrue(hasattr(l, "name"))
-            self.assertTrue(hasattr(l, "url"))
+        for lic in licenses:
+            self.assertIsInstance(lic, License)
+            self.assertTrue(hasattr(lic, "id"))
+            self.assertTrue(hasattr(lic, "name"))
+            self.assertTrue(hasattr(lic, "url"))
 
         self.assertEqual(2, len(licenses))
 
