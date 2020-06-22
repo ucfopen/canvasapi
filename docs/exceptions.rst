@@ -21,6 +21,8 @@ Quick Guide
 +-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
 | :class:`~canvasapi.exceptions.Conflict`             | 409             | Canvas had a conflict with an existing resource.                                |
 +-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.UnprocessableEntity`  | 422             | Canvas was unable to process the request.                                       |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
 | :class:`~canvasapi.exceptions.RequiredFieldMissing` | N/A             | A required keyword argument was not included.                                   |
 +-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
 | :class:`~canvasapi.exceptions.CanvasException`      | N/A             | An unknown error was thrown.                                                    |
