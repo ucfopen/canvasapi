@@ -64,8 +64,6 @@ class Canvas(object):
         # the API.
         access_token = access_token.strip()
 
-        base_url = new_url + "/api/v1/"
-
         self.__requester = Requester(base_url, access_token)
 
     def clear_course_nicknames(self):
@@ -1183,6 +1181,33 @@ class Canvas(object):
             "appointment_groups/{}/users".format(appointment_group_id),
             _kwargs=combine_kwargs(**kwargs),
         )
+
+    def graphql(self, query, variables=None, **kwargs):
+        """
+        Makes a GraphQL formatted request to Canvas
+
+        :calls: `POST /api/graphql \
+        <https://canvas.instructure.com/doc/api/file.graphql.html>`_
+
+        :param query: The GraphQL query to execute as a String
+        :type query: str
+        :param variables: The variable values as required by the supplied query
+        :type variables: dict
+
+        :rtype: dict
+        """
+        response = self.__requester.request(
+            "POST",
+            "graphql",
+            headers={"Content-Type": "application/json"},
+            _kwargs=combine_kwargs(**kwargs)
+            + [("query", query), ("variables", variables)],
+            # Needs to call special endpoint without api/v1
+            _url=self.__requester.original_url + "/api/graphql",
+            json=True,
+        )
+
+        return response.json()
 
     def list_appointment_groups(self, **kwargs):
         """
