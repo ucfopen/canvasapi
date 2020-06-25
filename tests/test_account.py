@@ -576,6 +576,19 @@ class TestAccount(unittest.TestCase):
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
+    # get_enrollment_term()
+    def test_get_enrollment_term(self, m):
+        register_uris({"account": ["get_enrollment_term"]}, m)
+
+        enrollment_term = self.account.get_enrollment_term(1)
+
+        self.assertIsInstance(enrollment_term, EnrollmentTerm)
+
+        self.assertTrue(hasattr(enrollment_term, "id"))
+        self.assertEqual(enrollment_term.id, 1)
+        self.assertTrue(hasattr(enrollment_term, "name"))
+        self.assertEqual(enrollment_term.name, "Enrollment Term 1")
+
     # get_enrollment_terms()
     def test_get_enrollment_terms(self, m):
         register_uris({"account": ["get_enrollment_terms"]}, m)

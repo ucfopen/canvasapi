@@ -970,6 +970,27 @@ class Account(CanvasObject):
         )
         return Enrollment(self._requester, response.json())
 
+    def get_enrollment_term(self, term, **kwargs):
+        """
+        Retrieve the details for an enrollment term in the account. Includes overrides by default.
+
+        :calls: `GET /api/v1/accounts/:account_id/terms/:id \
+        <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.show>`_
+
+        :param term: The object or ID of the enrollment term to retrieve.
+        :type term: :class:`canvasapi.enrollment_term.EnrollmentTerm` or int
+
+        :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
+        """
+        from canvasapi.enrollment_term import EnrollmentTerm
+
+        term_id = obj_or_id(term, "term", (EnrollmentTerm,))
+
+        response = self._requester.request(
+            "GET", "accounts/{}/terms/{}".format(self.id, term_id)
+        )
+        return EnrollmentTerm(self._requester, response.json())
+
     def get_enrollment_terms(self, **kwargs):
         """
         List enrollment terms for a context.
