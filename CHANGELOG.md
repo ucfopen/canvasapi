@@ -19,6 +19,16 @@
 
 - Updated README to use updated parameters for getting a user's courses by enrollment state (Thanks,[@Vishvak365](https://github.com/Vishvak365))
 
+### Deprecation Warnings
+
+- :warning: **_This is the final release with support for Python 2.7_** :warning:
+    - [Python 2.7 is end-of-life as of January 2020](https://www.python.org/doc/sunset-python-2/)
+    - Future releases of CanvasAPI will *NOT* support any version of Python 2
+- :warning: **_This is the final release with support for Python 3.4_** :warning:
+    - [Python 3.4 is end-of-life as of March 2019](https://www.python.org/downloads/release/python-3410/)
+    - Future releases of CanvasAPI will *NOT* support Python 3.4 or below
+- This is the final deprecation warning for all methods marked as deprecated in this changelog or in our documentation. They will be removed in the next release.
+
 ### Bugfixes
 
 - Fixed an issue where `Quiz.get_submission()` ignored data added from using the `include` kwarg. (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
