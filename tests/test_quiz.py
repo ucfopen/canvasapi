@@ -9,17 +9,21 @@ from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.quiz import (
     Quiz,
+    QuizStatistic,
     QuizSubmission,
     QuizSubmissionQuestion,
     QuizQuestion,
     QuizExtension,
     QuizSubmissionEvent,
     QuizReport,
+    QuizAssignmentOverrideSet,
 )
 from canvasapi.quiz_group import QuizGroup
 from canvasapi.paginated_list import PaginatedList
 from tests import settings
 from tests.util import register_uris
+from canvasapi.user import User
+from canvasapi.submission import Submission
 
 
 @requests_mock.Mocker()
@@ -296,24 +300,45 @@ class TestQuiz(unittest.TestCase):
         self.assertIsInstance(report, QuizReport)
         self.assertEqual(report.quiz_id, 1)
 
+    # get_quiz_report
+    def test_get_statistics(self, m):
+        register_uris({"quiz": ["get_statistics"]}, m)
+
+        statistics = self.quiz.get_statistics()
+
+        self.assertIsInstance(statistics, PaginatedList)
+
+        statistic_list = [statistic for statistic in statistics]
+
+        self.assertEqual(len(statistic_list), 1)
+        self.assertIsInstance(statistic_list[0], QuizStatistic)
+        self.assertEqual(statistic_list[0].id, "1")
+        self.assertTrue(hasattr(statistic_list[0], "question_statistics"))
+        self.assertEqual(len(statistic_list[0].question_statistics), 2)
+
     # get_quiz_submission
     def test_get_quiz_submission(self, m):
         register_uris({"quiz": ["get_quiz_submission"]}, m)
 
         quiz_id = 1
-        submission = self.quiz.get_quiz_submission(quiz_id)
+        quiz_submission = self.quiz.get_quiz_submission(
+            quiz_id, include=["quiz", "submission", "user"]
+        )
 
-        self.assertIsInstance(submission, QuizSubmission)
-        self.assertTrue(hasattr(submission, "id"))
-        self.assertEqual(submission.quiz_id, quiz_id)
-        self.assertTrue(hasattr(submission, "quiz_version"))
-        self.assertEqual(submission.quiz_version, 1)
-        self.assertTrue(hasattr(submission, "user_id"))
-        self.assertEqual(submission.user_id, 1)
-        self.assertTrue(hasattr(submission, "validation_token"))
-        self.assertEqual(submission.validation_token, "this is a validation token")
-        self.assertTrue(hasattr(submission, "score"))
-        self.assertEqual(submission.score, 0)
+        self.assertIsInstance(quiz_submission, QuizSubmission)
+        self.assertTrue(hasattr(quiz_submission, "id"))
+        self.assertEqual(quiz_submission.quiz_id, quiz_id)
+        self.assertTrue(hasattr(quiz_submission, "quiz_version"))
+        self.assertEqual(quiz_submission.quiz_version, 1)
+        self.assertTrue(hasattr(quiz_submission, "user_id"))
+        self.assertEqual(quiz_submission.user_id, 1)
+        self.assertTrue(hasattr(quiz_submission, "validation_token"))
+        self.assertEqual(quiz_submission.validation_token, "this is a validation token")
+        self.assertTrue(hasattr(quiz_submission, "score"))
+        self.assertEqual(quiz_submission.score, 0)
+        self.assertIsInstance(quiz_submission.quiz, Quiz)
+        self.assertIsInstance(quiz_submission.submission, Submission)
+        self.assertIsInstance(quiz_submission.user, User)
 
     # create_submission
     def test_create_submission(self, m):
@@ -596,6 +621,27 @@ class TestQuizQuestion(unittest.TestCase):
 
 
 @requests_mock.Mocker()
+class TestQuizStatistic(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris(
+                {"course": ["get_by_id"], "quiz": ["get_by_id", "get_statistics"]}, m
+            )
+
+            self.course = self.canvas.get_course(1)
+            self.quiz = self.course.get_quiz(1)
+            self.quiz_statistics = self.quiz.get_statistics()
+            self.quiz_statistic = self.quiz_statistics[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.quiz_statistic)
+        self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
 class TestQuizSubmissionEvent(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
@@ -692,3 +738,19 @@ class TestQuizSubmissionQuestion(unittest.TestCase):
         self.assertIsInstance(result, bool)
         self.assertTrue(result)
         self.assertFalse(self.submission_question.flagged)
+
+
+@requests_mock.Mocker()
+class TestQuizAssignmentOverrideSet(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.override_set = QuizAssignmentOverrideSet(
+            self.canvas._Canvas__requester,
+            {"quiz_id": "1", "due_dates": None, "all_dates": None},
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.override_set)
+        self.assertIsInstance(string, str)

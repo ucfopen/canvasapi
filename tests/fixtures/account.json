@@ -315,6 +315,15 @@
 		],
 		"status_code": 200
 	},
+	"get_enrollment_term": {
+		"method": "GET",
+		"endpoint": "accounts/1/terms/1",
+		"data": {
+			"id": 1,
+			"name": "Enrollment Term 1"
+		},
+		"status_code": 200
+	},
 	"get_enrollment_terms": {
 		"method": "GET",
 		"endpoint": "accounts/1/terms",
@@ -578,10 +587,12 @@
 		"endpoint": "accounts/1/reports",
 		"data": [
 			{
-				"id": 1
+				"id": 1,
+				"report": "sis_export_csv"
 			},
 			{
-				"id": 2
+				"id": 2,
+				"report": "grade_export_csv"
 			}
 		],
 		"headers": {

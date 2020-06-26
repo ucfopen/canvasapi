@@ -286,6 +286,7 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(report, AccountReport)
         self.assertTrue(hasattr(report, "title"))
         self.assertEqual(report.title, "Zero Activity")
+        self.assertIsInstance(str(report), str)
 
     # get_index_of_reports()
     def test_get_index_of_reports(self, m):
@@ -310,6 +311,7 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(len(reports_list), 4)
         self.assertIsInstance(reports_list[0], AccountReport)
         self.assertTrue(hasattr(reports_list[0], "id"))
+        self.assertIsInstance(str(reports_list[0]), str)
 
     # get_subaccounts()
     def test_get_subaccounts(self, m):
@@ -573,6 +575,19 @@ class TestAccount(unittest.TestCase):
 
             self.assertEqual(len(warning_list), 1)
             self.assertEqual(warning_list[-1].category, DeprecationWarning)
+
+    # get_enrollment_term()
+    def test_get_enrollment_term(self, m):
+        register_uris({"account": ["get_enrollment_term"]}, m)
+
+        enrollment_term = self.account.get_enrollment_term(1)
+
+        self.assertIsInstance(enrollment_term, EnrollmentTerm)
+
+        self.assertTrue(hasattr(enrollment_term, "id"))
+        self.assertEqual(enrollment_term.id, 1)
+        self.assertTrue(hasattr(enrollment_term, "name"))
+        self.assertEqual(enrollment_term.name, "Enrollment Term 1")
 
     # get_enrollment_terms()
     def test_get_enrollment_terms(self, m):

@@ -8,6 +8,8 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.quiz_group import QuizGroup
+from canvasapi.submission import Submission
+from canvasapi.user import User
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
@@ -141,7 +143,7 @@ class Quiz(CanvasObject):
                 "Param `report_type` must be a either 'student_analysis' or 'item_analysis'"
             )
 
-        kwargs["report_type"] = report_type
+        kwargs["quiz_report"] = {"report_type": report_type}
 
         response = self._requester.request(
             "POST",
@@ -374,8 +376,44 @@ class Quiz(CanvasObject):
 
         response_json = response.json()["quiz_submissions"][0]
         response_json.update({"course_id": self.course_id})
+        if len(response.json().get("quizzes", [])) > 0:
+            response_json.update(
+                {"quiz": Quiz(self._requester, response.json()["quizzes"][0])}
+            )
+        if len(response.json().get("submissions", [])) > 0:
+            response_json.update(
+                {
+                    "submission": Submission(
+                        self._requester, response.json()["submissions"][0]
+                    )
+                }
+            )
+        if len(response.json().get("users", [])) > 0:
+            response_json.update(
+                {"user": User(self._requester, response.json()["users"][0])}
+            )
 
         return QuizSubmission(self._requester, response_json)
+
+    def get_statistics(self, **kwargs):
+        """
+        Get statistics for for all quiz versions, or the latest quiz version.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/statistics \
+        <https://canvas.instructure.com/doc/api/quiz_statistics.html#method.quizzes/quiz_statistics.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizStatistic`
+        """
+        return PaginatedList(
+            QuizStatistic,
+            self._requester,
+            "GET",
+            "courses/{}/quizzes/{}/statistics".format(self.course_id, self.id),
+            {"course_id": self.course_id},
+            _root="quiz_statistics",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_submissions(self, **kwargs):
         """
@@ -450,6 +488,12 @@ class Quiz(CanvasObject):
         return [
             QuizExtension(self._requester, extension) for extension in extension_list
         ]
+
+
+@python_2_unicode_compatible
+class QuizStatistic(CanvasObject):
+    def __str__(self):
+        return "Quiz Statistic {}".format(self.id)
 
 
 @python_2_unicode_compatible
@@ -842,3 +886,9 @@ class QuizSubmissionQuestion(CanvasObject):
         super(QuizSubmissionQuestion, self).set_attributes(question)
 
         return True
+
+
+@python_2_unicode_compatible
+class QuizAssignmentOverrideSet(CanvasObject):
+    def __str__(self):
+        return "Overrides for quiz_id {}".format(self.quiz_id)

@@ -12,7 +12,7 @@ from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
-from canvasapi.course import Course, CourseNickname, Page
+from canvasapi.course import Course, CourseNickname, Page, LatePolicy
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.gradebook_history import (
     Day,
@@ -37,7 +37,7 @@ from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
-from canvasapi.quiz import Quiz, QuizExtension
+from canvasapi.quiz import Quiz, QuizExtension, QuizAssignmentOverrideSet
 from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
@@ -308,6 +308,29 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(ResourceDoesNotExist):
             self.course.get_quiz(settings.INVALID_ID)
 
+    # get_quiz_overrides()
+    def test_get_quiz_overrides(self, m):
+        register_uris({"course": ["get_quiz_overrides"]}, m)
+
+        overrides = self.course.get_quiz_overrides()
+        override_list = list(overrides)
+
+        self.assertEqual(len(override_list), 2)
+        self.assertIsInstance(override_list[0], QuizAssignmentOverrideSet)
+        self.assertTrue(hasattr(override_list[0], "quiz_id"))
+        self.assertTrue(hasattr(override_list[0], "due_dates"))
+        self.assertTrue(hasattr(override_list[0], "all_dates"))
+
+        attributes = ("id", "due_at", "unlock_at", "lock_at", "title", "base")
+
+        self.assertTrue(
+            all(attribute in override_list[0].due_dates[0] for attribute in attributes)
+        )
+
+        self.assertTrue(
+            all(attribute in override_list[0].all_dates[0] for attribute in attributes)
+        )
+
     # get_quizzes()
     def test_get_quizzes(self, m):
         register_uris({"course": ["list_quizzes", "list_quizzes2"]}, m)
@@ -464,7 +487,7 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(front_page, "url"))
         self.assertTrue(hasattr(front_page, "title"))
 
-    # create_front_page()
+    # edit_front_page()
     def test_edit_front_page(self, m):
         register_uris({"course": ["edit_front_page"]}, m)
 
@@ -473,6 +496,75 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(new_front_page, Page)
         self.assertTrue(hasattr(new_front_page, "url"))
         self.assertTrue(hasattr(new_front_page, "title"))
+
+    # edit_late_policy()
+    def test_edit_late_policy(self, m):
+        register_uris({"course": ["edit_late_policy"]}, m)
+
+        late_policy_result = self.course.edit_late_policy(
+            late_policy={"missing_submission_deduction": 5}
+        )
+
+        self.assertTrue(late_policy_result)
+
+    # get_late_policy
+    def test_get_late_policy(self, m):
+        register_uris({"course": ["get_late_policy"]}, m)
+
+        late_policy = self.course.get_late_policy()
+
+        self.assertIsInstance(late_policy, LatePolicy)
+
+        attributes = (
+            "id",
+            "course_id",
+            "missing_submission_deduction_enabled",
+            "missing_submission_deduction",
+            "late_submission_deduction_enabled",
+            "late_submission_deduction",
+            "late_submission_interval",
+            "late_submission_minimum_percent_enabled",
+            "late_submission_minimum_percent",
+            "created_at",
+            "updated_at",
+        )
+
+        for attribute in attributes:
+            self.assertTrue(hasattr(late_policy, attribute))
+
+    def test_create_late_policy(self, m):
+        register_uris({"course": ["create_late_policy"]}, m)
+
+        late_policy = self.course.create_late_policy(
+            late_policy={
+                "missing_submission_deduction_enabled": True,
+                "missing_submission_deduction": 12.34,
+                "late_submission_deduction_enabled": True,
+                "late_submission_deduction": 12.34,
+                "late_submission_interval": "hour",
+                "late_submission_minimum_percent_enabled": True,
+                "late_submission_minimum_percent": 12.34,
+            }
+        )
+
+        self.assertIsInstance(late_policy, LatePolicy)
+
+        attributes = (
+            "id",
+            "course_id",
+            "missing_submission_deduction_enabled",
+            "missing_submission_deduction",
+            "late_submission_deduction_enabled",
+            "late_submission_deduction",
+            "late_submission_interval",
+            "late_submission_minimum_percent_enabled",
+            "late_submission_minimum_percent",
+            "created_at",
+            "updated_at",
+        )
+
+        for attribute in attributes:
+            self.assertTrue(hasattr(late_policy, attribute))
 
     # get_page()
     def test_get_page(self, m):
@@ -1900,13 +1992,27 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(licenses, PaginatedList)
         licenses = list(licenses)
 
-        for l in licenses:
-            self.assertIsInstance(l, License)
-            self.assertTrue(hasattr(l, "id"))
-            self.assertTrue(hasattr(l, "name"))
-            self.assertTrue(hasattr(l, "url"))
+        for lic in licenses:
+            self.assertIsInstance(lic, License)
+            self.assertTrue(hasattr(lic, "id"))
+            self.assertTrue(hasattr(lic, "name"))
+            self.assertTrue(hasattr(lic, "url"))
 
         self.assertEqual(2, len(licenses))
+
+    # resolve_path()
+    def test_resolve_path(self, m):
+        register_uris({"course": ["resolve_path"]}, m)
+
+        full_path = "Folder_Level_1/Folder_Level_2/Folder_Level_3"
+        folders = self.course.resolve_path(full_path)
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 4)
+        self.assertIsInstance(folder_list[0], Folder)
+        for folder_name, folder in zip(
+            ("course_files/" + full_path).split("/"), folders
+        ):
+            self.assertEqual(folder_name, folder.name)
 
 
 @requests_mock.Mocker()
@@ -1931,3 +2037,31 @@ class TestCourseNickname(unittest.TestCase):
 
         self.assertIsInstance(deleted_nick, CourseNickname)
         self.assertTrue(hasattr(deleted_nick, "nickname"))
+
+
+@requests_mock.Mocker()
+class TestLatePolicy(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.late_policy = LatePolicy(
+            self.canvas._Canvas__requester,
+            {
+                "id": 123,
+                "course_id": 123,
+                "missing_submission_deduction_enabled": True,
+                "missing_submission_deduction": 12.34,
+                "late_submission_deduction_enabled": True,
+                "late_submission_deduction": 12.34,
+                "late_submission_interval": "hour",
+                "late_submission_minimum_percent_enabled": True,
+                "late_submission_minimum_percent": 12.34,
+                "created_at": "2012-07-01T23:59:00-06:00",
+                "updated_at": "2012-07-01T23:59:00-06:00",
+            },
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.late_policy)
+        self.assertIsInstance(string, str)

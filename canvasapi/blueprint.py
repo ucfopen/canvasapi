@@ -236,8 +236,8 @@ class BlueprintMigration(CanvasObject):
 
 @python_2_unicode_compatible
 class ChangeRecord(CanvasObject):
-    def __str__(self):  # pragma: no cover
-        return "{} {}".format(self.id, self.template_id)
+    def __str__(self):
+        return "{} {}".format(self.asset_id, self.asset_name)
 
 
 @python_2_unicode_compatible

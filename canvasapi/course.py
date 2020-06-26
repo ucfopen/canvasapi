@@ -358,6 +358,26 @@ class Course(CanvasObject):
         )
         return GroupCategory(self._requester, response.json())
 
+    def create_late_policy(self, **kwargs):
+        """
+        Create a late policy. If the course already has a late policy, a bad_request
+        is returned since there can only be one late policy per course.
+
+        :calls: `POST /api/v1/courses/:id/late_policy \
+        <https://canvas.instructure.com/doc/api/late_policy.html#method.late_policy.create>`_
+
+        :rtype: :class:`canvasapi.course.LatePolicy`
+        """
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/late_policy".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        late_policy_json = response.json()
+
+        return LatePolicy(self._requester, late_policy_json["late_policy"])
+
     def create_module(self, module, **kwargs):
         """
         Create a new module.
@@ -394,10 +414,10 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/pages \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.create>`_
 
-        :param title: The title for the page.
-        :type title: dict
+        :param wiki_page: The title for the page.
+        :type wiki_page: dict
         :returns: The created page.
-        :rtype: :class:`canvasapi.course.Course`
+        :rtype: :class:`canvasapi.page.Page`
         """
 
         if isinstance(wiki_page, dict) and "title" in wiki_page:
@@ -553,6 +573,25 @@ class Course(CanvasObject):
         page_json.update({"course_id": self.id})
 
         return Page(self._requester, page_json)
+
+    def edit_late_policy(self, **kwargs):
+        """
+        Patch a late policy. No body is returned upon success.
+
+        :calls: `PATCH /api/v1/courses/:id/late_policy \
+        <https://canvas.instructure.com/doc/api/late_policy.html#method.late_policy.update>`_
+
+        :returns: True if Late Policy was updated successfully. False otherwise.
+        :rtype: bool
+        """
+
+        response = self._requester.request(
+            "PATCH",
+            "courses/{}/late_policy".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.status_code == 204
 
     def enroll_user(self, user, enrollment_type, **kwargs):
         """
@@ -1410,6 +1449,25 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_late_policy(self, **kwargs):
+        """
+        Returns the late policy for a course.
+
+        :calls: `GET /api/v1/courses/:id/late_policy \
+        <https://canvas.instructure.com/doc/api/late_policy.html#method.late_policy.show>`_
+
+        :rtype: :class:`canvasapi.course.LatePolicy`
+        """
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/late_policy".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        late_policy_json = response.json()
+
+        return LatePolicy(self._requester, late_policy_json["late_policy"])
+
     def get_licenses(self, **kwargs):
         """
         Returns a paginated list of the licenses that can be applied to the
@@ -1697,6 +1755,29 @@ class Course(CanvasObject):
         quiz_json.update({"course_id": self.id})
 
         return Quiz(self._requester, quiz_json)
+
+    def get_quiz_overrides(self, **kwargs):
+        """
+        Retrieve the actual due-at, unlock-at,
+        and available-at dates for quizzes based on
+        the assignment overrides active for the current API user.
+
+        :calls: `GET /api/v1/courses/:course_id/quizzes/assignment_overrides \
+        <https://canvas.instructure.com/doc/api/quiz_assignment_overrides.html#method.quizzes/quiz_assignment_overrides.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.quiz.QuizAssignmentOverrideSet`
+        """
+        from canvasapi.quiz import QuizAssignmentOverrideSet
+
+        return PaginatedList(
+            QuizAssignmentOverrideSet,
+            self._requester,
+            "GET",
+            "courses/{}/quizzes/assignment_overrides".format(self.id),
+            _root="quiz_assignment_overrides",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_quizzes(self, **kwargs):
         """
@@ -2577,6 +2658,28 @@ class Course(CanvasObject):
         )
         return Course(self._requester, response.json())
 
+    def resolve_path(self, full_path, **kwargs):
+        """
+        Returns the paginated list of all of the folders in the given
+        path starting at the course root folder.
+
+        :calls: `GET /api/v1/courses/:course_id/folders/by_path/*full_path \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.resolve_path>`_
+
+        :param full_path: Full path to resolve, relative to course root
+        :type full_path: string
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+        return PaginatedList(
+            Folder,
+            self._requester,
+            "GET",
+            "courses/{0}/folders/by_path/{1}".format(self.id, full_path),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def set_quiz_extensions(self, quiz_extensions, **kwargs):
         """
         Set extensions for student all quiz submissions in a course.
@@ -2725,8 +2828,8 @@ class Course(CanvasObject):
         :calls: `PUT /api/v1/courses/:id \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.update>`_
 
-        :returns: True if the course was updated, False otherwise.
-        :rtype: bool
+        :returns: `True` if the course was updated, `False` otherwise.
+        :rtype: `bool`
         """
         response = self._requester.request(
             "PUT", "courses/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
@@ -2878,3 +2981,9 @@ class CourseNickname(CanvasObject):
             "DELETE", "users/self/course_nicknames/{}".format(self.course_id)
         )
         return CourseNickname(self._requester, response.json())
+
+
+@python_2_unicode_compatible
+class LatePolicy(CanvasObject):
+    def __str__(self):
+        return "Late Policy {}".format(self.id)

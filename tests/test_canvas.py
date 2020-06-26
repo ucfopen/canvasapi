@@ -12,20 +12,19 @@ from canvasapi import Canvas
 from canvasapi.account import Account
 from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
+from canvasapi.comm_message import CommMessage
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
-from canvasapi.exceptions import ResourceDoesNotExist
 from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.section import Section
 from canvasapi.user import User
-from canvasapi.comm_message import CommMessage
 from tests import settings
 from tests.util import register_uris
 
@@ -74,6 +73,12 @@ class TestCanvas(unittest.TestCase):
     def test_init_strips_extra_spaces_in_api_key(self, m):
         client = Canvas(settings.BASE_URL, " 12345 ")
         self.assertEqual(client._Canvas__requester.access_token, "12345")
+
+    def test_init_strips_extra_spaces_in_base_url(self, m):
+        client = Canvas(settings.BASE_URL_WITH_EXTRA_SPACES, "12345")
+        self.assertEqual(
+            client._Canvas__requester.base_url, settings.BASE_URL_WITH_VERSION
+        )
 
     # create_account()
     def test_create_account(self, m):
@@ -832,3 +837,34 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(comm_messages[0].subject, "example subject line")
         self.assertEqual(comm_messages[1].id, 2)
         self.assertEqual(comm_messages[1].subject, "My Subject")
+
+    def test_graphql(self, m):
+        register_uris({"graphql": ["graphql"]}, m, base_url=settings.BASE_URL_GRAPHQL)
+        query = """
+        query MyQuery($termid: ID!) {
+            term(id: $termid) {
+                coursesConnection {
+                    nodes {
+                        _id
+                        assignmentsConnection {
+                        nodes {
+                            name
+                            _id
+                            expectsExternalSubmission
+                        }
+                        }
+                    }
+                    edges {
+                        node {
+                        id
+                        }
+                    }
+                }
+            }
+        }
+        """
+        variables = {"termid": 125}
+
+        graphql_response = self.canvas.graphql(query=query, variables=variables)
+        # Just a super simple check right now that it gets back a dict respose
+        self.assertIsInstance(graphql_response, dict)

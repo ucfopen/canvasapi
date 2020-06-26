@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import warnings
 
 from canvasapi.account import Account
+from canvasapi.comm_message import CommMessage
 from canvasapi.course import Course
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.current_user import CurrentUser
@@ -14,7 +15,6 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
 from canvasapi.section import Section
 from canvasapi.user import User
-from canvasapi.comm_message import CommMessage
 from canvasapi.util import combine_kwargs, get_institution_url, obj_or_id
 
 
@@ -59,12 +59,10 @@ class Canvas(object):
                 UserWarning,
             )
 
-        # Ensure that the user-supplied access token contains no leading or
-        # trailing spaces that may cause issues when communicating with
-        # the API.
+        # Ensure that the user-supplied access token and base_url contain no leading or
+        # trailing spaces that might cause issues when communicating with the API.
         access_token = access_token.strip()
-
-        base_url = new_url + "/api/v1/"
+        base_url = base_url.strip()
 
         self.__requester = Requester(base_url, access_token)
 
@@ -1183,6 +1181,33 @@ class Canvas(object):
             "appointment_groups/{}/users".format(appointment_group_id),
             _kwargs=combine_kwargs(**kwargs),
         )
+
+    def graphql(self, query, variables=None, **kwargs):
+        """
+        Makes a GraphQL formatted request to Canvas
+
+        :calls: `POST /api/graphql \
+        <https://canvas.instructure.com/doc/api/file.graphql.html>`_
+
+        :param query: The GraphQL query to execute as a String
+        :type query: str
+        :param variables: The variable values as required by the supplied query
+        :type variables: dict
+
+        :rtype: dict
+        """
+        response = self.__requester.request(
+            "POST",
+            "graphql",
+            headers={"Content-Type": "application/json"},
+            _kwargs=combine_kwargs(**kwargs)
+            + [("query", query), ("variables", variables)],
+            # Needs to call special endpoint without api/v1
+            _url=self.__requester.original_url + "/api/graphql",
+            json=True,
+        )
+
+        return response.json()
 
     def list_appointment_groups(self, **kwargs):
         """
