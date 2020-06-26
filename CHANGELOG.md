@@ -2,9 +2,32 @@
 
 ## [Unreleased]
 
+## [0.16.0] - 2020-06-26
+
 ### New Endpoint Coverage
 
+- Enrollment Terms
+    - Get a Single Enrollment Term (Thanks, [@lcamacho](https://github.com/lcamacho))
+- Files
+    - Resolve Path for Course (Thanks,[@dsavransky](https://github.com/dsavransky))
+- GraphQL (Thanks,[@jonespm](https://github.com/jonespm))
+- Late Policy (Thanks, [@kennygperez](https://github.com/kennygperez))
+- Quiz Assignment Overrides (Thanks, [@kennygperez](https://github.com/kennygperez))
 - Quiz Statistics (Thanks, [@andrew-gardener](https://github.com/andrew-gardener))
+
+### General
+
+- Updated README to use updated parameters for getting a user's courses by enrollment state (Thanks,[@Vishvak365](https://github.com/Vishvak365))
+
+### Bugfixes
+
+- Fixed an issue where `Quiz.get_submission()` ignored data added from using the `include` kwarg. (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed the broken `__str__` method on the `ChangeRecord` class (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed an issue where printing an `AccountReport` would fail due to not having an ID (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed an issue where `"report_type"` was passed improperly (Thanks,[@brucespang](https://github.com/brucespang))
+- Fixed some new `flake8` issues (Thanks,[@dsavransky](https://github.com/dsavransky) and [@jonespm](https://github.com/jonespm))
+- Fixed an incorrect docstring for `Course.create_page()` (Thanks,[@dsavransky](https://github.com/dsavransky))
+- Fixed an issue where extra whitespace in the user-supplied canvas URL would break `PaginatedList` (Thanks,[@amorqiu](https://github.com/amorqiu))
 
 ## [0.15.0] - 2019-11-19
 
@@ -409,7 +432,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.15.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.16.0...develop
+[0.16.0]: https://github.com/ucfopen/canvasapi/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/ucfopen/canvasapi/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/ucfopen/canvasapi/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/ucfopen/canvasapi/compare/v0.12.0...v0.13.0
