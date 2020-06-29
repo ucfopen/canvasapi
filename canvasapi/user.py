@@ -933,13 +933,13 @@ class User(CanvasObject):
     def resolve_path(self, full_path=None, **kwargs):
         """
         Returns the paginated list of all of the folders in the given
-        path starting at the course root folder. Returns root folder if called
+        path starting at the user root folder. Returns root folder if called
         with no arguments.
 
         :calls: `GET /api/v1/users/:user_id/folders/by_path/*full_path \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.resolve_path>`_
 
-        :param full_path: Full path to resolve, relative to course root.
+        :param full_path: Full path to resolve, relative to user root.
         :type full_path: string
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of

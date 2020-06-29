@@ -664,6 +664,25 @@ class TestGroup(unittest.TestCase):
 
         self.assertEqual(2, len(licenses))
 
+    # resolve_path()
+    def test_resolve_path(self, m):
+        register_uris({"group": ["resolve_path_null", "resolve_path"]}, m)
+
+        full_path = "Folder_Level_1/Folder_Level_2/Folder_Level_3"
+        folders = self.group.resolve_path(full_path)
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 4)
+        self.assertIsInstance(folder_list[0], Folder)
+        for folder_name, folder in zip(("files/" + full_path).split("/"), folders):
+            self.assertEqual(folder_name, folder.name)
+
+        # test with null input
+        root_folder = self.group.resolve_path()
+        root_folder_list = [folder for folder in root_folder]
+        self.assertEqual(len(root_folder_list), 1)
+        self.assertIsInstance(root_folder_list[0], Folder)
+        self.assertEqual("files", root_folder_list[0].name)
+
 
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):

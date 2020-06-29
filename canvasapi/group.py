@@ -968,6 +968,39 @@ class Group(CanvasObject):
 
         return response.json().get("reorder")
 
+    def resolve_path(self, full_path=None, **kwargs):
+        """
+        Returns the paginated list of all of the folders in the given
+        path starting at the group root folder. Returns root folder if called
+        with no arguments.
+
+        :calls: `GET /api/v1/groups/group_id/folders/by_path/*full_path \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.resolve_path>`_
+
+        :param full_path: Full path to resolve, relative to group root.
+        :type full_path: string
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+
+        if full_path:
+            return PaginatedList(
+                Folder,
+                self._requester,
+                "GET",
+                "groups/{0}/folders/by_path/{1}".format(self.id, full_path),
+                _kwargs=combine_kwargs(**kwargs),
+            )
+        else:
+            return PaginatedList(
+                Folder,
+                self._requester,
+                "GET",
+                "groups/{0}/folders/by_path".format(self.id),
+                _kwargs=combine_kwargs(**kwargs),
+            )
+
     def set_usage_rights(self, **kwargs):
         """
         Changes the usage rights for specified files that are under the current group scope
