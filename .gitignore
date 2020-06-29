@@ -20,3 +20,4 @@
 .vscode/settings.json
 setup.sh
 .python-version
+.*.swp
