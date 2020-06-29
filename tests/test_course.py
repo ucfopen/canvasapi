@@ -2002,7 +2002,7 @@ class TestCourse(unittest.TestCase):
 
     # resolve_path()
     def test_resolve_path(self, m):
-        register_uris({"course": ["resolve_path"]}, m)
+        register_uris({"course": ["resolve_path_null", "resolve_path"]}, m)
 
         full_path = "Folder_Level_1/Folder_Level_2/Folder_Level_3"
         folders = self.course.resolve_path(full_path)
@@ -2013,6 +2013,13 @@ class TestCourse(unittest.TestCase):
             ("course_files/" + full_path).split("/"), folders
         ):
             self.assertEqual(folder_name, folder.name)
+
+        # test with null input
+        root_folder = self.course.resolve_path()
+        root_folder_list = [folder for folder in root_folder]
+        self.assertEqual(len(root_folder_list), 1)
+        self.assertIsInstance(root_folder_list[0], Folder)
+        self.assertEqual("course_files", root_folder_list[0].name)
 
 
 @requests_mock.Mocker()
