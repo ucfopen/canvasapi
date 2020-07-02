@@ -1,8 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import warnings
-
-from six import python_2_unicode_compatible, text_type, string_types
 
 from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
@@ -42,7 +38,6 @@ from canvasapi.util import (
 )
 
 
-@python_2_unicode_compatible
 class Course(CanvasObject):
     def __str__(self):
         return "{} {} ({})".format(self.course_code, self.name, self.id)
@@ -187,7 +182,7 @@ class Course(CanvasObject):
 
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
-        elif isinstance(migration_type, string_types):
+        elif isinstance(migration_type, str):
             kwargs["migration_type"] = migration_type
         else:
             raise TypeError("Parameter migration_type must be of type Migrator or str")
@@ -2631,10 +2626,10 @@ class Course(CanvasObject):
         """
         # Convert iterable sequence to comma-separated string
         if is_multivalued(order):
-            order = ",".join([text_type(topic_id) for topic_id in order])
+            order = ",".join([str(topic_id) for topic_id in order])
 
         # Check if is a string with commas
-        if not isinstance(order, text_type) or "," not in order:
+        if not isinstance(order, str) or "," not in order:
             raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
@@ -2962,7 +2957,6 @@ class Course(CanvasObject):
         ).start()
 
 
-@python_2_unicode_compatible
 class CourseNickname(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.nickname, self.course_id)
@@ -2983,7 +2977,6 @@ class CourseNickname(CanvasObject):
         return CourseNickname(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class LatePolicy(CanvasObject):
     def __str__(self):
         return "Late Policy {}".format(self.id)

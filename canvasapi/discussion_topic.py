@@ -1,15 +1,10 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import warnings
-
-from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class DiscussionTopic(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
@@ -369,7 +364,6 @@ class DiscussionTopic(CanvasObject):
         return DiscussionTopic(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class DiscussionEntry(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.message, self.id)

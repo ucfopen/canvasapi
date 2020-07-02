@@ -1,7 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible, text_type, string_types
-
 import warnings
 
 from canvasapi.canvas_object import CanvasObject
@@ -16,7 +12,6 @@ from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 
 
-@python_2_unicode_compatible
 class Group(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
@@ -37,7 +32,7 @@ class Group(CanvasObject):
 
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
-        elif isinstance(migration_type, string_types):
+        elif isinstance(migration_type, str):
             kwargs["migration_type"] = migration_type
         else:
             raise TypeError("Parameter migration_type must be of type Migrator or str")
@@ -956,10 +951,10 @@ class Group(CanvasObject):
         """
         # Convert list or tuple to comma-separated string
         if is_multivalued(order):
-            order = ",".join([text_type(topic_id) for topic_id in order])
+            order = ",".join([str(topic_id) for topic_id in order])
 
         # Check if is a string with commas
-        if not isinstance(order, text_type) or "," not in order:
+        if not isinstance(order, str) or "," not in order:
             raise ValueError("Param `order` must be a list, tuple, or string.")
 
         response = self._requester.request(
@@ -1052,7 +1047,6 @@ class Group(CanvasObject):
         ).start()
 
 
-@python_2_unicode_compatible
 class GroupMembership(CanvasObject):
     def __str__(self):
         return "{} - {} ({})".format(self.user_id, self.group_id, self.id)
@@ -1112,7 +1106,6 @@ class GroupMembership(CanvasObject):
         return GroupMembership(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class GroupCategory(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)

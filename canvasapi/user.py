@@ -1,6 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible, string_types
 import warnings
 
 from canvasapi.calendar_event import CalendarEvent
@@ -15,7 +12,6 @@ from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, obj_or_id, obj_or_str
 
 
-@python_2_unicode_compatible
 class User(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
@@ -87,7 +83,7 @@ class User(CanvasObject):
 
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
-        elif isinstance(migration_type, string_types):
+        elif isinstance(migration_type, str):
             kwargs["migration_type"] = migration_type
         else:
             raise TypeError("Parameter migration_type must be of type Migrator or str")
@@ -1024,7 +1020,6 @@ class User(CanvasObject):
         ).start()
 
 
-@python_2_unicode_compatible
 class UserDisplay(CanvasObject):
     def __str__(self):
         return "{}".format(self.display_name)

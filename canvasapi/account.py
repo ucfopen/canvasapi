@@ -1,8 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import warnings
-
-from six import python_2_unicode_compatible, string_types
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
@@ -16,7 +12,6 @@ from canvasapi.sis_import import SisImport
 from canvasapi.util import combine_kwargs, file_or_path, obj_or_id, obj_or_str
 
 
-@python_2_unicode_compatible
 class Account(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
@@ -199,7 +194,7 @@ class Account(CanvasObject):
 
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
-        elif isinstance(migration_type, string_types):
+        elif isinstance(migration_type, str):
             kwargs["migration_type"] = migration_type
         else:
             raise TypeError("Parameter migration_type must be of type Migrator or str")
@@ -1902,7 +1897,6 @@ class Account(CanvasObject):
         return Role(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class AccountNotification(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.subject, self.id)
@@ -1943,7 +1937,6 @@ class AccountNotification(CanvasObject):
         return AccountNotification(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class AccountReport(CanvasObject):
     def __str__(self):
         try:
@@ -1970,19 +1963,16 @@ class AccountReport(CanvasObject):
         return AccountReport(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class Role(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
 
 
-@python_2_unicode_compatible
 class SSOSettings(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.login_handle_name, self.change_password_url)
 
 
-@python_2_unicode_compatible
 class Admin(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} {} ({})".format(self.user["name"], self.user["id"], self.id)

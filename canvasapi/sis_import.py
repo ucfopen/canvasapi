@@ -1,13 +1,8 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.progress import Progress
 from canvasapi.util import combine_kwargs
 
 
-@python_2_unicode_compatible
 class SisImport(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.workflow_state, self.id)

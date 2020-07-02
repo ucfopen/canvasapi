@@ -1,8 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import warnings
-
-from six import python_2_unicode_compatible
 
 from canvasapi.bookmark import Bookmark
 from canvasapi.course import Course
@@ -13,7 +9,6 @@ from canvasapi.user import User
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class CurrentUser(User):
     def __init__(self, _requester):
         self._requester = _requester

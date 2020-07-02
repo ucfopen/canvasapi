@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 import uuid
 
@@ -18,8 +17,6 @@ from canvasapi.util import (
     normalize_bool,
 )
 from itertools import chain
-from six import integer_types, iterkeys, itervalues, iteritems, string_types, text_type
-from six.moves import zip
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -33,9 +30,8 @@ class TestUtil(unittest.TestCase):
     def test_is_multivalued_bool(self, m):
         self.assertFalse(is_multivalued(False))
 
-    def test_is_multivalued_integer_types(self, m):
-        for type in integer_types:
-            self.assertFalse(is_multivalued(type(1)))
+    def test_is_multivalued_integer(self, m):
+        self.assertFalse(is_multivalued(int(1)))
 
     def test_is_multivalued_str(self, m):
         self.assertFalse(is_multivalued("string"))
@@ -71,13 +67,13 @@ class TestUtil(unittest.TestCase):
         self.assertTrue(is_multivalued(iter({"key": "value"})))
 
     def test_is_multivalued_dict_keys(self, m):
-        self.assertTrue(is_multivalued(iterkeys({"key": "value"})))
+        self.assertTrue(is_multivalued({"key": "value"}.keys()))
 
     def test_is_multivalued_dict_values(self, m):
-        self.assertTrue(is_multivalued(itervalues({"key": "value"})))
+        self.assertTrue(is_multivalued({"key": "value"}.values()))
 
     def test_is_multivalued_dict_items(self, m):
-        self.assertTrue(is_multivalued(iteritems({"key": "value"})))
+        self.assertTrue(is_multivalued({"key": "value"}.items()))
 
     def test_is_multivalued_generator_expr(self, m):
         self.assertTrue(is_multivalued(item for item in ("item",)))
@@ -428,7 +424,7 @@ class TestUtil(unittest.TestCase):
     def test_obj_or_id_user_self(self, m):
         user_id = obj_or_id("self", "user_id", (User,))
 
-        self.assertIsInstance(user_id, text_type)
+        self.assertIsInstance(user_id, str)
         self.assertEqual(user_id, "self")
 
     def test_obj_or_id_nonuser_self(self, m):
@@ -443,7 +439,7 @@ class TestUtil(unittest.TestCase):
 
         user_name = obj_or_str(user, "name", (User,))
 
-        self.assertIsInstance(user_name, string_types)
+        self.assertIsInstance(user_name, str)
         self.assertEqual(user_name, "John Doe")
 
     def test_obj_or_str_obj_no_attr(self, m):
@@ -461,7 +457,7 @@ class TestUtil(unittest.TestCase):
 
         user_name = obj_or_str(user, "name", (CourseNickname, User))
 
-        self.assertIsInstance(user_name, string_types)
+        self.assertIsInstance(user_name, str)
 
     def test_obj_or_str_invalid_attr_parameter(self, m):
         register_uris({"user": ["get_by_id"]}, m)

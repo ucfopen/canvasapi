@@ -1,11 +1,10 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+from urllib.parse import quote
 import uuid
 import warnings
 
 import requests
 import requests_mock
-from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.assignment import AssignmentOverride

@@ -1,12 +1,10 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
+from urllib.parse import quote
 import uuid
 import warnings
 
 import requests
 import requests_mock
-from six import text_type
-from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
@@ -42,8 +40,7 @@ from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
-from canvasapi.user import User
-from canvasapi.user import UserDisplay
+from canvasapi.user import User, UserDisplay
 from canvasapi.usage_rights import UsageRights
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.content_export import ContentExport
@@ -224,7 +221,7 @@ class TestCourse(unittest.TestCase):
         html_str = "<script></script><p>hello</p>"
         prev_html = self.course.preview_html(html_str)
 
-        self.assertIsInstance(prev_html, text_type)
+        self.assertIsInstance(prev_html, str)
         self.assertEqual(prev_html, "<p>hello</p>")
 
     # get_settings()

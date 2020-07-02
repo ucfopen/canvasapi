@@ -1,7 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import warnings
-
-from six import python_2_unicode_compatible
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
@@ -10,7 +7,6 @@ from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.util import combine_kwargs, obj_or_id, normalize_bool
 
 
-@python_2_unicode_compatible
 class Section(CanvasObject):
     def __str__(self):
         return "{} - {} ({})".format(self.name, self.course_id, self.id)
