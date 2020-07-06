@@ -1,5 +1,3 @@
-import warnings
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
@@ -66,28 +64,6 @@ class Module(CanvasObject):
         module_json.update({"course_id": self.course_id})
 
         return Module(self._requester, module_json)
-
-    def list_module_items(self, **kwargs):
-        """
-        List all of the items in this module.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.module.Modules.get_module_items` instead.
-
-        :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items \
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.module.ModuleItem`
-        """
-        warnings.warn(
-            "`list_module_items` is being deprecated and will be removed in a "
-            "future version. Use `get_module_items` instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_module_items(**kwargs)
 
     def get_module_items(self, **kwargs):
         """

@@ -1,5 +1,3 @@
-import warnings
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -102,50 +100,6 @@ class Folder(CanvasObject):
         return PaginatedList(
             Folder, self._requester, "GET", "folders/{}/folders".format(self.id)
         )
-
-    def list_files(self, **kwargs):
-        """
-        Returns the paginated list of files for the folder.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.folder.Folder.get_files` instead.
-
-        :calls: `GET /api/v1/folders/:id/files \
-        <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.file.File`
-        """
-        warnings.warn(
-            "`list_files` is being deprecated and will be removed in a future "
-            "version. Use `get_files` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_files(**kwargs)
-
-    def list_folders(self, **kwargs):
-        """
-        Returns the paginated list of folders in the folder.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.folder.Folder.get_folders` instead.
-
-        :calls: `GET /api/v1/folders/:id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.api_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.folder.Folder`
-        """
-        warnings.warn(
-            "`list_folders` is being deprecated and will be removed in a "
-            "future version. Use `get_folders` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_folders(**kwargs)
 
     def update(self, **kwargs):
         """
