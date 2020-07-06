@@ -4,8 +4,8 @@
 
 ### General
 
-- Added support for Python 3.8.
-- Dropped support for Python 3.4, 3.5, and 2.7.
+- Added support for Python 3.8
+- Dropped support for Python 3.4, 3.5, and 2.7
 - Removed all previously deprecated methods and attributes.
 
 ## [0.16.1] - 2020-07-06
