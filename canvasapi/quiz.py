@@ -1,5 +1,3 @@
-import warnings
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
@@ -228,27 +226,6 @@ class Quiz(CanvasObject):
             "courses/{}/quizzes/{}/reports".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
-
-    def get_all_quiz_submissions(self, **kwargs):
-        """
-        Get a list of all submissions for this quiz.
-
-        .. warning::
-            .. deprecated:: 0.13.0
-                Use :func:`canvasapi.quiz.Quiz.get_submissions` instead.
-
-        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
-        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
-
-        :rtype: list of :class:`canvasapi.quiz.QuizSubmission`
-        """
-        warnings.warn(
-            "`get_all_quiz_submissions` is being deprecated and will be removed in a "
-            "future version. Use `get_submissions` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_submissions(**kwargs)
 
     def get_question(self, question, **kwargs):
         """

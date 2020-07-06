@@ -1,6 +1,5 @@
 import unittest
 import uuid
-import warnings
 
 import requests_mock
 
@@ -30,7 +29,6 @@ from tests.util import cleanup_file, register_uris
 @requests_mock.Mocker()
 class TestUser(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
 
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -222,19 +220,6 @@ class TestUser(unittest.TestCase):
         finally:
             cleanup_file(filename)
 
-    # list_calendar_events_for_user()
-    def test_list_calendar_events_for_user(self, m):
-        register_uris({"user": ["list_calendar_events_for_user"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            cal_events = self.user.list_calendar_events_for_user()
-            cal_event_list = [cal_event for cal_event in cal_events]
-            self.assertEqual(len(cal_event_list), 2)
-            self.assertIsInstance(cal_event_list[0], CalendarEvent)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_calendar_events_for_user()
     def test_get_calendar_events_for_user(self, m):
         register_uris({"user": ["list_calendar_events_for_user"]}, m)
@@ -243,19 +228,6 @@ class TestUser(unittest.TestCase):
         cal_event_list = [cal_event for cal_event in cal_events]
         self.assertEqual(len(cal_event_list), 2)
         self.assertIsInstance(cal_event_list[0], CalendarEvent)
-
-    # list_communication_channels()
-    def test_list_communication_channels(self, m):
-        register_uris({"user": ["list_comm_channels", "list_comm_channels2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            comm_channels = self.user.list_communication_channels()
-            channel_list = [channel for channel in comm_channels]
-            self.assertEqual(len(channel_list), 4)
-            self.assertIsInstance(channel_list[0], CommunicationChannel)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_communication_channels()
     def test_get_communication_channels(self, m):
@@ -276,19 +248,6 @@ class TestUser(unittest.TestCase):
         )
 
         self.assertIsInstance(new_channel, CommunicationChannel)
-
-    # list_files()
-    def test_list_files(self, m):
-        register_uris({"user": ["get_user_files", "get_user_files2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            files = self.user.list_files()
-            file_list = [file for file in files]
-            self.assertEqual(len(file_list), 4)
-            self.assertIsInstance(file_list[0], File)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_files()
     def test_get_files(self, m):
@@ -325,19 +284,6 @@ class TestUser(unittest.TestCase):
         self.assertEqual(folder_by_obj.name, "Folder 1")
         self.assertIsInstance(folder_by_obj, Folder)
 
-    # list_folders()
-    def test_list_folders(self, m):
-        register_uris({"user": ["list_folders"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            folders = self.user.list_folders()
-            folder_list = [folder for folder in folders]
-            self.assertEqual(len(folder_list), 2)
-            self.assertIsInstance(folder_list[0], Folder)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_folders()
     def test_get_folders(self, m):
         register_uris({"user": ["list_folders"]}, m)
@@ -355,21 +301,6 @@ class TestUser(unittest.TestCase):
         response = self.user.create_folder(name=name_str)
         self.assertIsInstance(response, Folder)
 
-    # list_user_logins()
-    def test_list_user_logins(self, m):
-        requires = {"user": ["list_user_logins", "list_user_logins_2"]}
-        register_uris(requires, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.user.list_user_logins()
-            login_list = [login for login in response]
-
-            self.assertIsInstance(login_list[0], Login)
-            self.assertEqual(len(login_list), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_user_logins()
     def test_get_user_logins(self, m):
         requires = {"user": ["list_user_logins", "list_user_logins_2"]}
@@ -380,21 +311,6 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(login_list[0], Login)
         self.assertEqual(len(login_list), 2)
-
-    # list_observees()
-    def test_list_observees(self, m):
-        requires = {"user": ["list_observees", "list_observees_2"]}
-        register_uris(requires, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.user.list_observees()
-            observees_list = [observees for observees in response]
-
-            self.assertIsInstance(observees_list[0], User)
-            self.assertEqual(len(observees_list), 4)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_observees()
     def test_get_observees(self, m):

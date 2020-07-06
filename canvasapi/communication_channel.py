@@ -1,5 +1,3 @@
-import warnings
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.notification_preference import NotificationPreference
 from canvasapi.util import combine_kwargs
@@ -90,57 +88,6 @@ class CommunicationChannel(CanvasObject):
         )
 
         return response.json()["notification_preferences"]
-
-    def list_preference_categories(self, **kwargs):
-        """
-        Fetch all notification preference categories for the given communication
-        channel.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use
-                :func:`canvasapi.communication_channel.CommunicationChannel.get_preference_categories`
-                instead.
-
-        :calls: `GET
-            /api/v1/users/:user_id/communication_channels/ \
-                :communication_channel_id/notification_preference_categories \
-        <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.category_index>`_
-
-        :rtype: `list`
-        """
-        warnings.warn(
-            "`list_preference_categories`"
-            " is being deprecated and will be removed in a future version."
-            " Use `get_preference_categories` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_preference_categories(**kwargs)
-
-    def list_preferences(self, **kwargs):
-        """
-        Fetch all preferences for the given communication channel.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.communication_channel.CommunicationChannel.get_preferences`
-                instead.
-
-        :calls: `GET
-            /api/v1/users/:user_id/communication_channels/:communication_channel_id/ \
-                notification_preferences \
-        <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.index>`_
-
-        :rtype: `list`
-        """
-        warnings.warn(
-            "`list_preferences` is being deprecated and will be removed in a future version."
-            " Use `get_preferences` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_preferences(**kwargs)
 
     def update_multiple_preferences(self, notification_preferences, **kwargs):
         """

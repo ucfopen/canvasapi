@@ -1,8 +1,6 @@
 from datetime import datetime
-import json
 import pytz
 import re
-import warnings
 
 DATE_PATTERN = re.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z")
 
@@ -16,11 +14,6 @@ class CanvasObject(object):
     """
 
     def __getattribute__(self, name):
-        if name == "attributes":
-            warnings.warn(
-                "CanvasObject.attributes is deprecated and will be removed in a future version.",
-                DeprecationWarning,
-            )
         return super(CanvasObject, self).__getattribute__(name)
 
     def __init__(self, requester, attributes):
@@ -68,8 +61,6 @@ class CanvasObject(object):
         :param attributes: The JSON object to build this object with.
         :type attributes: dict
         """
-        self.attributes = attributes
-
         for attribute, value in attributes.items():
             self.__setattr__(attribute, value)
 
@@ -78,21 +69,3 @@ class CanvasObject(object):
                 naive = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
                 aware = naive.replace(tzinfo=pytz.utc)
                 self.__setattr__(attribute + "_date", aware)
-
-    def to_json(self):
-        """
-        Return the original JSON response from the API that was used to
-        construct the object.
-
-        .. warning::
-            .. deprecated:: 0.15.0
-                To view the original attributes sent by Canvas, enable logs from the
-                requests library.
-        """
-        warnings.warn(
-            "`CanvasObject.to_json()` is deprecated and will be removed in a future version. "
-            "To view the original attributes sent by Canvas, enable logs from the "
-            "requests library",
-            DeprecationWarning,
-        )
-        return json.dumps(self.attributes)
