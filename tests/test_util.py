@@ -475,25 +475,17 @@ class TestUtil(unittest.TestCase):
     def test_get_institution_url(self, m):
         correct_url = "https://my.canvas.edu"
 
+        # strip trailing slash
         self.assertEqual(get_institution_url("https://my.canvas.edu/"), correct_url)
-        self.assertEqual(
-            get_institution_url("https://my.canvas.edu/api/v1"), correct_url
-        )
-        self.assertEqual(
-            get_institution_url("https://my.canvas.edu/api/v1/"), correct_url
-        )
+        # strip trailing slash but keep path
         self.assertEqual(
             get_institution_url("https://my.canvas.edu/test/2/"),
             correct_url + "/test/2",
         )
-        self.assertEqual(
-            get_institution_url("https://my.canvas.edu/test/2/api/v1"),
-            correct_url + "/test/2",
-        )
-        self.assertEqual(
-            get_institution_url("https://my.canvas.edu/test/2/api/v1/"),
-            correct_url + "/test/2",
-        )
+        # strip whitespace
+        self.assertEqual(get_institution_url(" https://my.canvas.edu "), correct_url)
+        # strip whitespace and trailing slash
+        self.assertEqual(get_institution_url(" https://my.canvas.edu/ "), correct_url)
 
     # file_or_path()
     def test_file_or_path_file(self, m):

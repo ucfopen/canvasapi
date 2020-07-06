@@ -33,9 +33,11 @@ class TestCanvas(unittest.TestCase):
 
     # Canvas()
     def test_init_deprecate_url_contains_version(self, m):
-        with warnings.catch_warnings(record=True) as w:
+        with self.assertRaises(
+            ValueError,
+            msg="`base_url` should not specify an API version. Remove trailing /api/v1/",
+        ):
             Canvas(settings.BASE_URL_WITH_VERSION, settings.API_KEY)
-            self.assertTrue(issubclass(w[0].category, UserWarning))
 
     def test_init_warns_when_url_is_http(self, m):
         with warnings.catch_warnings(record=True):

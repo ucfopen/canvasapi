@@ -28,13 +28,9 @@ class Canvas(object):
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
         """
-        new_url = get_institution_url(base_url)
-
         if "api/v1" in base_url:
-            warnings.warn(
-                "`base_url` no longer requires an API version be specified. "
-                "Rewriting `base_url` to {}".format(new_url),
-                UserWarning,
+            raise ValueError(
+                "`base_url` should not specify an API version. Remove trailing /api/v1/"
             )
 
         if "http://" in base_url:
@@ -60,7 +56,7 @@ class Canvas(object):
         # Ensure that the user-supplied access token and base_url contain no leading or
         # trailing spaces that might cause issues when communicating with the API.
         access_token = access_token.strip()
-        base_url = base_url.strip()
+        base_url = get_institution_url(base_url)
 
         self.__requester = Requester(base_url, access_token)
 

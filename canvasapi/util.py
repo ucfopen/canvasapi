@@ -174,13 +174,8 @@ def get_institution_url(base_url):
     :type base_url: str
     :rtype: str
     """
-    base_url = base_url.rstrip("/")
-    index = base_url.find("/api/v1")
-
-    if index != -1:
-        return base_url[0:index]
-
-    return base_url
+    base_url = base_url.strip()
+    return base_url.rstrip("/")
 
 
 def file_or_path(file):
