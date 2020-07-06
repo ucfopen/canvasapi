@@ -34,7 +34,10 @@ class TestCanvas(unittest.TestCase):
     # Canvas()
     def test_init_deprecate_url_contains_version(self, m):
         with warnings.catch_warnings(record=True) as w:
-            Canvas(settings.BASE_URL_WITH_VERSION, settings.API_KEY)
+            client = Canvas(settings.BASE_URL_WITH_VERSION, settings.API_KEY)
+            self.assertEqual(
+                client._Canvas__requester.base_url, "https://example.com/api/v1/"
+            )
             self.assertTrue(issubclass(w[0].category, DeprecationWarning))
 
     def test_init_warns_when_url_is_http(self, m):
