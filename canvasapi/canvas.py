@@ -62,7 +62,7 @@ class Canvas(object):
         # Ensure that the user-supplied access token and base_url contain no leading or
         # trailing spaces that might cause issues when communicating with the API.
         access_token = access_token.strip()
-        base_url = base_url.strip()
+        base_url = new_url.strip()
 
         self.__requester = Requester(base_url, access_token)
 
