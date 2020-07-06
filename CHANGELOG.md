@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### General
+
+- Added support for Python 3.8
+- Dropped support for Python 3.4, 3.5, and 2.7
+
 ## [0.16.0] - 2020-06-26
 
 ### New Endpoint Coverage

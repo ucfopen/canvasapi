@@ -1,9 +1,7 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 import warnings
 
 import requests_mock
-from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
@@ -454,7 +452,7 @@ class TestQuizSubmission(unittest.TestCase):
         self.assertIn("end_at", submission)
         self.assertIn("time_left", submission)
         self.assertIsInstance(submission["time_left"], int)
-        self.assertIsInstance(submission["end_at"], text_type)
+        self.assertIsInstance(submission["end_at"], str)
 
     # update_score_and_comments
     def test_update_score_and_comments(self, m):

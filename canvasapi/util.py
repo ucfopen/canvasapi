@@ -1,8 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import os
-
-from six import binary_type, string_types, text_type
 
 
 def is_multivalued(value):
@@ -20,7 +16,7 @@ def is_multivalued(value):
     """
 
     # special cases: iterable, but not multivalued
-    if isinstance(value, (string_types, binary_type)):
+    if isinstance(value, (str, bytes)):
         return False
 
     # general rule: multivalued if iterable
@@ -59,7 +55,7 @@ def combine_kwargs(**kwargs):
                 for tup in flatten_kwarg("", i):
                     combined_kwargs.append(("{}{}".format(kw, tup[0]), tup[1]))
         else:
-            combined_kwargs.append((text_type(kw), arg))
+            combined_kwargs.append((str(kw), arg))
 
     return combined_kwargs
 
@@ -99,7 +95,7 @@ def flatten_kwarg(key, obj):
         return new_list
     else:
         # Base case. Return list with tuple containing the value
-        return [("[{}]".format(text_type(key)), obj)]
+        return [("[{}]".format(str(key)), obj)]
 
 
 def obj_or_id(parameter, param_name, object_types):
@@ -151,16 +147,16 @@ def obj_or_str(obj, attr, object_types):
     :rtype: str
     """
     try:
-        return text_type(getattr(obj, attr))
+        return str(getattr(obj, attr))
     except (AttributeError, TypeError):
-        if not isinstance(attr, string_types):
+        if not isinstance(attr, str):
             raise TypeError(
                 "Atttibute parameter {} must be of type string".format(attr)
             )
         for obj_type in object_types:
             if isinstance(obj, obj_type):
                 try:
-                    return text_type(getattr(obj, attr))
+                    return str(getattr(obj, attr))
                 except AttributeError:
                     raise AttributeError("{} object does not have {} attribute").format(
                         obj, attr
@@ -199,7 +195,7 @@ def file_or_path(file):
     """
 
     is_path = False
-    if isinstance(file, string_types):
+    if isinstance(file, str):
         if not os.path.exists(file):
             raise IOError("File at path " + file + " does not exist.")
         file = open(file, "rb")

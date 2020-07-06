@@ -1,12 +1,7 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.util import combine_kwargs
 
 
-@python_2_unicode_compatible
 class PlannerNote(CanvasObject):
     def __str__(self):
         return "{} {} ({})".format(self.title, self.todo_date, self.id)
@@ -44,7 +39,6 @@ class PlannerNote(CanvasObject):
         return PlannerNote(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class PlannerOverride(CanvasObject):
     def __str__(self):
         return "{} {} ({})".format(self.plannable_id, self.marked_complete, self.id)
