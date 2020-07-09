@@ -22,7 +22,7 @@
 ### Deprecation Warnings
 
 - Using `/api/v1/` in the API_URL has been deprecated since v0.8.0 and legacy support will be removed in the next release. Ensure your provided url doesn't contain `api/v1/`. See deprecation warning in changelog for v0.8.0.
-- :warning: **_This is the final release with support for Python 2.7_** :warning:
+- :warning: **_This is the final release with support for Python 3.5_** :warning:
 
 ## [0.16.0] - 2020-06-26
 
