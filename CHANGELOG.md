@@ -2,12 +2,16 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2020-07-09
+
 ### General
 
 - Added support for Python 3.8
 - Dropped support for Python 3.4, 3.5, and 2.7
 - Removed all previously deprecated methods and attributes.
+- Upgraded Ubuntu version for Travis (Thanks,[@jonespm](https://github.com/jonespm))
 - Set up automatic deployments to PyPI via Travis
+- Set up nightly build
 
 ## [0.16.1] - 2020-07-06
 
@@ -18,6 +22,7 @@
 ### Deprecation Warnings
 
 - Using `/api/v1/` in the API_URL has been deprecated since v0.8.0 and legacy support will be removed in the next release. Ensure your provided url doesn't contain `api/v1/`. See deprecation warning in changelog for v0.8.0.
+- :warning: **_This is the final release with support for Python 2.7_** :warning:
 
 ## [0.16.0] - 2020-06-26
 
@@ -459,7 +464,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.16.1...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...develop
+[1.0.0]: https://github.com/ucfopen/canvasapi/compare/v0.16.1...v1.0.0
 [0.16.1]: https://github.com/ucfopen/canvasapi/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/ucfopen/canvasapi/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/ucfopen/canvasapi/compare/v0.14.0...v0.15.0
