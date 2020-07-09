@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import warnings
 
 from canvasapi.account import Account
@@ -30,13 +28,9 @@ class Canvas(object):
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
         """
-        new_url = get_institution_url(base_url)
-
         if "api/v1" in base_url:
-            warnings.warn(
-                "`base_url` no longer requires an API version be specified. "
-                "Rewriting `base_url` to {}".format(new_url),
-                DeprecationWarning,
+            raise ValueError(
+                "`base_url` should not specify an API version. Remove trailing /api/v1/"
             )
 
         if "http://" in base_url:
@@ -62,7 +56,7 @@ class Canvas(object):
         # Ensure that the user-supplied access token and base_url contain no leading or
         # trailing spaces that might cause issues when communicating with the API.
         access_token = access_token.strip()
-        base_url = new_url.strip()
+        base_url = get_institution_url(base_url)
 
         self.__requester = Requester(base_url, access_token)
 
@@ -326,13 +320,12 @@ class Canvas(object):
         :rtype: :class:`canvasapi.planner.PlannerOverride`
         """
         from canvasapi.planner import PlannerOverride
-        from six import text_type, integer_types
 
-        if isinstance(plannable_type, text_type):
+        if isinstance(plannable_type, str):
             kwargs["plannable_type"] = plannable_type
         else:
             raise RequiredFieldMissing("plannable_type is required as a str.")
-        if isinstance(plannable_id, integer_types):
+        if isinstance(plannable_id, int):
             kwargs["plannable_id"] = plannable_id
         else:
             raise RequiredFieldMissing("plannable_id is required as an int.")
@@ -1208,98 +1201,6 @@ class Canvas(object):
         )
 
         return response.json()
-
-    def list_appointment_groups(self, **kwargs):
-        """
-        List appointment groups.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.canvas.Canvas.get_appointment_groups` instead.
-
-        :calls: `GET /api/v1/appointment_groups \
-        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.appointment_group.AppointmentGroup`
-        """
-        warnings.warn(
-            "`list_appointment_groups` is being deprecated and will be removed"
-            " in a future version. Use `get_appointment_groups` instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_appointment_groups(**kwargs)
-
-    def list_calendar_events(self, **kwargs):
-        """
-        List calendar events.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.canvas.Canvas.get_calendar_events` instead.
-
-        :calls: `GET /api/v1/calendar_events \
-        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.calendar_event.CalendarEvent`
-        """
-        warnings.warn(
-            "`list_calendar_events` is being deprecated and will be removed "
-            "in a future version. Use `get_calendar_events` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_calendar_events(**kwargs)
-
-    def list_group_participants(self, appointment_group, **kwargs):
-        """
-        List student group participants in this appointment group.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi. canvas.Canvas.get_group_participants` instead.
-
-        :calls: `GET /api/v1/appointment_groups/:id/groups \
-        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.groups>`_
-
-        :param appointment_group: The object or ID of the appointment group.
-        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
-        """
-        warnings.warn(
-            "`list_group_participants` is being deprecated and will be removed "
-            "in a future version. Use `get_group_participants` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_group_participants(appointment_group, **kwargs)
-
-    def list_user_participants(self, appointment_group, **kwargs):
-        """
-        List user participants in this appointment group.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi. canvas.Canvas.get_user_participants` instead.
-
-        :calls: `GET /api/v1/appointment_groups/:id/users \
-        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.users>`_
-
-        :param appointment_group: The object or ID of the appointment group.
-        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
-        """
-        warnings.warn(
-            "`list_user_participants` is being deprecated and will be removed in a future version."
-            " Use `get_user_participants` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_user_participants(appointment_group, **kwargs)
 
     def reserve_time_slot(self, calendar_event, participant_id=None, **kwargs):
         """

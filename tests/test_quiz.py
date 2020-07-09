@@ -1,9 +1,6 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
-import warnings
 
 import requests_mock
-from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
@@ -245,32 +242,6 @@ class TestQuiz(unittest.TestCase):
 
         self.assertEqual(len(reports), 2)
 
-    # get_all_quiz_submissions()
-    def test_get_all_quiz_submissions(self, m):
-        register_uris({"quiz": ["get_all_quiz_submissions"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            submissions = self.quiz.get_all_quiz_submissions()
-
-            self.assertIsInstance(submissions, PaginatedList)
-
-            submission_list = [sub for sub in submissions]
-
-            self.assertEqual(len(submission_list), 2)
-
-            self.assertIsInstance(submission_list[0], QuizSubmission)
-            self.assertEqual(submission_list[0].id, 1)
-            self.assertTrue(hasattr(submission_list[0], "attempt"))
-            self.assertEqual(submission_list[0].attempt, 3)
-
-            self.assertIsInstance(submission_list[1], QuizSubmission)
-            self.assertEqual(submission_list[1].id, 2)
-            self.assertTrue(hasattr(submission_list[1], "score"))
-            self.assertEqual(submission_list[1].score, 5)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_submissions()
     def test_get_submissions(self, m):
         register_uris({"quiz": ["get_all_quiz_submissions"]}, m)
@@ -454,7 +425,7 @@ class TestQuizSubmission(unittest.TestCase):
         self.assertIn("end_at", submission)
         self.assertIn("time_left", submission)
         self.assertIsInstance(submission["time_left"], int)
-        self.assertIsInstance(submission["end_at"], text_type)
+        self.assertIsInstance(submission["end_at"], str)
 
     # update_score_and_comments
     def test_update_score_and_comments(self, m):

@@ -1,8 +1,6 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
-import warnings
 
 from canvasapi import Canvas
 from canvasapi.outcome import Outcome, OutcomeGroup, OutcomeLink
@@ -13,8 +11,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestOutcome(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -205,52 +201,6 @@ class TestOutcomeGroup(unittest.TestCase):
         result = self.course_outcome_group.delete()
         self.assertTrue(result)
 
-    # list_linked_outcomes()
-    def test_list_linked_outcomes(self, m):
-        register_uris(
-            {
-                "outcome": [
-                    "outcome_group_list_linked_outcomes_account",
-                    "outcome_group_list_linked_outcomes_global",
-                    "outcome_group_list_linked_outcomes_courses",
-                ]
-            },
-            m,
-        )
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            result = self.account_outcome_group.list_linked_outcomes()
-            self.assertIsInstance(result[0], OutcomeLink)
-            self.assertEqual(result[0].outcome_group["id"], 2)
-            self.assertEqual(
-                result[0].outcome_group["title"], "Account Test Outcome Group"
-            )
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            result = self.canvas_outcome_group.list_linked_outcomes()
-            self.assertIsInstance(result[0], OutcomeLink)
-            self.assertEqual(result[0].outcome_group["id"], 2)
-            self.assertEqual(
-                result[0].outcome_group["title"], "Global Test Outcome Group"
-            )
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            result = self.course_outcome_group.list_linked_outcomes()
-            self.assertIsInstance(result[0], OutcomeLink)
-            self.assertEqual(result[0].outcome_group["id"], 2)
-            self.assertEqual(
-                result[0].outcome_group["title"], "Course Test Outcome Group"
-            )
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_linked_outcomes()
     def test_get_linked_outcomes(self, m):
         register_uris(
@@ -381,55 +331,6 @@ class TestOutcomeGroup(unittest.TestCase):
 
         result = self.course_outcome_group.unlink_outcome(3)
         self.assertTrue(result)
-
-    # list_subgroups()
-    def test_list_subgroups(self, m):
-        register_uris(
-            {
-                "outcome": [
-                    "outcome_group_list_subgroups_global",
-                    "outcome_group_list_subgroups_account",
-                    "outcome_group_list_subgroups_course",
-                ]
-            },
-            m,
-        )
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            result = self.canvas_outcome_group.list_subgroups()
-            self.assertIsInstance(result[0], OutcomeGroup)
-            self.assertEqual(result[0].id, 2)
-            self.assertEqual(result[0].title, "Global Listed Subgroup Title 1")
-            self.assertIsInstance(result[1], OutcomeGroup)
-            self.assertEqual(result[1].id, 3)
-            self.assertEqual(result[1].title, "Global Listed Subgroup Title 2")
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            result = self.account_outcome_group.list_subgroups()
-            self.assertIsInstance(result[0], OutcomeGroup)
-            self.assertEqual(result[0].id, 2)
-            self.assertEqual(result[0].title, "Account Listed Subgroup Title 1")
-            self.assertIsInstance(result[1], OutcomeGroup)
-            self.assertEqual(result[1].id, 3)
-            self.assertEqual(result[1].title, "Account Listed Subgroup Title 2")
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            result = self.course_outcome_group.list_subgroups()
-            self.assertIsInstance(result[0], OutcomeGroup)
-            self.assertEqual(result[0].id, 2)
-            self.assertEqual(result[0].title, "Course Listed Subgroup Title 1")
-            self.assertIsInstance(result[1], OutcomeGroup)
-            self.assertEqual(result[1].id, 3)
-            self.assertEqual(result[1].title, "Course Listed Subgroup Title 2")
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_subgroups()
     def test_get_subgroups(self, m):

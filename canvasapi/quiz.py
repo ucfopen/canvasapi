@@ -1,9 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import warnings
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
@@ -13,7 +7,6 @@ from canvasapi.user import User
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class Quiz(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
@@ -233,27 +226,6 @@ class Quiz(CanvasObject):
             "courses/{}/quizzes/{}/reports".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
-
-    def get_all_quiz_submissions(self, **kwargs):
-        """
-        Get a list of all submissions for this quiz.
-
-        .. warning::
-            .. deprecated:: 0.13.0
-                Use :func:`canvasapi.quiz.Quiz.get_submissions` instead.
-
-        :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions \
-        <https://canvas.instructure.com/doc/api/quiz_submissions.html#method.quizzes/quiz_submissions_api.index>`_
-
-        :rtype: list of :class:`canvasapi.quiz.QuizSubmission`
-        """
-        warnings.warn(
-            "`get_all_quiz_submissions` is being deprecated and will be removed in a "
-            "future version. Use `get_submissions` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_submissions(**kwargs)
 
     def get_question(self, question, **kwargs):
         """
@@ -490,13 +462,11 @@ class Quiz(CanvasObject):
         ]
 
 
-@python_2_unicode_compatible
 class QuizStatistic(CanvasObject):
     def __str__(self):
         return "Quiz Statistic {}".format(self.id)
 
 
-@python_2_unicode_compatible
 class QuizSubmission(CanvasObject):
     def __str__(self):
         return "Quiz {} - User {} ({})".format(self.quiz_id, self.user_id, self.id)
@@ -704,13 +674,11 @@ class QuizSubmission(CanvasObject):
         return QuizSubmission(self._requester, response_json)
 
 
-@python_2_unicode_compatible
 class QuizExtension(CanvasObject):
     def __str__(self):
         return "{}-{}".format(self.quiz_id, self.user_id)
 
 
-@python_2_unicode_compatible
 class QuizQuestion(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.question_name, self.id)
@@ -758,7 +726,6 @@ class QuizQuestion(CanvasObject):
         return self
 
 
-@python_2_unicode_compatible
 class QuizReport(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.report_type, self.id)
@@ -786,13 +753,11 @@ class QuizReport(CanvasObject):
         return response.status_code == 204
 
 
-@python_2_unicode_compatible
 class QuizSubmissionEvent(CanvasObject):
     def __str__(self):
         return "{}".format(self.event_type)
 
 
-@python_2_unicode_compatible
 class QuizSubmissionQuestion(CanvasObject):
     def __str__(self):
         return "QuizSubmissionQuestion #{}".format(self.id)
@@ -888,7 +853,6 @@ class QuizSubmissionQuestion(CanvasObject):
         return True
 
 
-@python_2_unicode_compatible
 class QuizAssignmentOverrideSet(CanvasObject):
     def __str__(self):
         return "Overrides for quiz_id {}".format(self.quiz_id)

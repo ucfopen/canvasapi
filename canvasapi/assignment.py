@@ -1,7 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
@@ -14,7 +10,6 @@ from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class Assignment(CanvasObject):
     def __init__(self, requester, attributes):
         super(Assignment, self).__init__(requester, attributes)
@@ -354,13 +349,11 @@ class Assignment(CanvasObject):
         ).start()
 
 
-@python_2_unicode_compatible
 class AssignmentExtension(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.assignment_id, self.user_id)
 
 
-@python_2_unicode_compatible
 class AssignmentGroup(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
@@ -402,7 +395,6 @@ class AssignmentGroup(CanvasObject):
         return AssignmentGroup(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class AssignmentOverride(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
