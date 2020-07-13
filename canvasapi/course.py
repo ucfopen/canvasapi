@@ -3,6 +3,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
+from canvasapi.custom_gradebook_columns import CustomGradebookColumns, ColumnData
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.gradebook_history import (
     Day,
@@ -215,7 +216,17 @@ class Course(CanvasObject):
         )
 
         return Section(self._requester, response.json())
+    
+    # NOT COMPLETE
+    def create_custom_column(self, column, **kwargs):
+        """
+        Create a custom gradebook column.
 
+        :calls: `POST /api/v1/courses/:course_id/custom_gradebook_columns \
+        <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.create>`_
+
+        :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumns`
+        """
     def create_discussion_topic(self, **kwargs):
         """
         Creates a new discussion topic for the course or group.
@@ -989,6 +1000,28 @@ class Course(CanvasObject):
         )
 
         return response.json()
+
+    # NOT COMPLETE
+    def get_custom_columns(self, **kwargs):
+        """
+        List of all the custom gradebook columns for a course.
+
+        :calls: `GET /api/v1/courses/:course_id/custom_gradebook_columns \
+        <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.index>`_
+        
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumns`
+        """
+        from canvasapi.custom_gradebook_columns import CustomGradebookColumns
+
+        return PaginatedList (
+            CustomGradebookColumns,
+            self._requester,
+            "GET",
+            "courses/{}/custom_gradebook_columns".format(self.id).
+            {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_discussion_topic(self, topic):
         """
