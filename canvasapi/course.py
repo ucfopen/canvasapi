@@ -453,7 +453,7 @@ class Course(CanvasObject):
         quiz_json = response.json()
         quiz_json.update({"course_id": self.id})
 
-        return Quiz(self._requester, quiz_json)
+        return Quiz(self._requester, quiz_json) 
 
     def create_rubric(self, **kwargs):
         """
