@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Bugfixes
+
+- Fixed an issue where Quiz.get_quiz_group incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
+
+
 ## [1.0.0] - 2020-07-09
 
 ### General
