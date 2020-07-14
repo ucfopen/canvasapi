@@ -87,12 +87,16 @@ class TestQuiz(unittest.TestCase):
 
     # get_quiz_group()
     def test_get_quiz_group(self, m):
-        register_uris({"quiz": ["get_quiz_group"]}, m)
+        register_uris({"quiz": ["get_by_id_5", "get_quiz_group"]}, m)
 
-        result = self.quiz.get_quiz_group(1)
+        quiz = self.course.get_quiz(5)
+
+        result = quiz.get_quiz_group(10)
         self.assertIsInstance(result, QuizGroup)
-        self.assertEqual(result.id, 1)
-        self.assertEqual(result.quiz_id, 1)
+        self.assertEqual(result.id, 10)
+        self.assertEqual(result.quiz_id, 5)
+        self.assertTrue(hasattr(result, "course_id"))
+        self.assertEqual(result.course_id, 1)
 
     # create_question_group()
     def test_create_question_group(self, m):
