@@ -71,6 +71,10 @@ class TestCourse(unittest.TestCase):
         string = str(self.course)
         self.assertIsInstance(string, str)
 
+    # column_data_bulk_update()
+    def test_column_data_bulk_update(self, m):
+        pass
+
     # conclude()
     def test_conclude(self, m):
         register_uris({"course": ["conclude"]}, m)
@@ -677,6 +681,10 @@ class TestCourse(unittest.TestCase):
         category_list = [category for category in response]
         self.assertIsInstance(category_list[0], GroupCategory)
 
+    # get_custom_columns()
+    def test_get_custom_columns(self, m):
+        pass
+
     # get_discussion_topic()
     def test_get_discussion_topic(self, m):
         register_uris({"course": ["get_discussion_topic"]}, m)
@@ -738,6 +746,10 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(discussion_list[0], "course_id"))
         self.assertEqual(2, len(discussion_list))
 
+    # create_custom_column()
+    def test_create_column(self, m):
+        pass
+    
     # create_discussion_topic()
     def test_create_discussion_topic(self, m):
         register_uris({"course": ["create_discussion_topic"]}, m)
