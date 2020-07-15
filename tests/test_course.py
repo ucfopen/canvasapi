@@ -10,6 +10,7 @@ from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page, LatePolicy
+from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.gradebook_history import (
     Day,
@@ -73,6 +74,7 @@ class TestCourse(unittest.TestCase):
 
     # column_data_bulk_update()
     def test_column_data_bulk_update(self, m):
+        register_uris({"custom_gradebook_columns": [""]}, m)
         pass
 
     # conclude()
@@ -681,8 +683,9 @@ class TestCourse(unittest.TestCase):
         category_list = [category for category in response]
         self.assertIsInstance(category_list[0], GroupCategory)
 
-    # get_custom_columns()
+    # get_custom_columns() - paginated 
     def test_get_custom_columns(self, m):
+        register_uris({"custom_gradebook_columns": ["get_custom_columns, get_custom_columns_p2"]}, m)
         pass
 
     # get_discussion_topic()
@@ -748,6 +751,11 @@ class TestCourse(unittest.TestCase):
 
     # create_custom_column()
     def test_create_column(self, m):
+        register_uris({"custom_gradebook_columns": [""]}, m)
+
+        title_str = "Test Title"
+        response = self.course.create_custom_column(title=title_str)
+        self.assertIsInstance(response, CustomGradebookColumn)
         pass
     
     # create_discussion_topic()
