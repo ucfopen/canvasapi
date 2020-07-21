@@ -249,7 +249,10 @@ class Course(CanvasObject):
         :type column[title]: str
         :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
-        kwargs["column"] = column
+        if isinstance(column, dict) and "title" in column:
+            kwargs["column"] = column
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'title' is required.")
 
         response = self._requester.request(
             "POST",
