@@ -37,7 +37,7 @@ class QuizGroup(CanvasObject):
         :type id: int
         :param order: A list of dictionaries containing the key 'id' of
             the question to be placed at order's index.
-        :type order: list[dict] 
+        :type order: list[dict]
 
         :returns: True if the result was successful (Status code of 204)
         :rtype: bool

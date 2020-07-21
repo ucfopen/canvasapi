@@ -87,8 +87,9 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.progress.Progress`
         """
         response = self._requester.request(
-            "PUT", "courses/{}/custom_gradebook_column_data".format(self.id),
-            column_data=column_data
+            "PUT",
+            "courses/{}/custom_gradebook_column_data".format(self.id),
+            column_data=column_data,
         )
 
         return Progress(self._requester, response.json())
@@ -249,7 +250,7 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
         kwargs["column"] = column
-        
+
         response = self._requester.request(
             "POST",
             "courses/{}/custom_gradebook_columns".format(self.id),
@@ -1038,7 +1039,7 @@ class Course(CanvasObject):
 
         :calls: `GET /api/v1/courses/:course_id/custom_gradebook_columns \
         <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.index>`_
-        
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
