@@ -10,6 +10,7 @@ from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page, LatePolicy
+
 # from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.gradebook_history import (
@@ -75,20 +76,17 @@ class TestCourse(unittest.TestCase):
 
     # column_data_bulk_update() - added
     def test_column_data_bulk_update(self, m):
-        register_uris({"custom_gradebook_columns": ["column_data_bulk_update"]}, m)
-        register_uris({"progress": ["course_progress"]}, m)
+        register_uris(
+            {
+                "course": ["column_data_bulk_update"],
+                "progress": ["course_progress"],
+            },
+            m,
+        )
         progress = self.course.column_data_bulk_update(
             column_data=[
-                {
-                    "column_id": 1,
-                    "user_id": 1,
-                    "content": "Test Content One"
-                },
-                {
-                    "column_id": 2,
-                    "user_id": 2,
-                    "content": "Test Content Two"
-                }
+                {"column_id": 1, "user_id": 1, "content": "Test Content One"},
+                {"column_id": 2, "user_id": 2, "content": "Test Content Two"},
             ]
         )
         self.assertIsInstance(progress, Progress)
@@ -704,7 +702,7 @@ class TestCourse(unittest.TestCase):
 
     # get_custom_columns() - paginated - added
     def test_get_custom_columns(self, m):
-        register_uris({"custom_gradebook_columns": ["get_custom_columns"]}, m)
+        register_uris({"course": ["get_custom_columns"]}, m)
 
         custom_columns = self.course.get_custom_columns()
 
@@ -741,7 +739,7 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(file_by_obj.size, 2048)
 
     def test_get_full_discussion_topic(self, m):
-    # get_full_discussion_topic()
+        # get_full_discussion_topic()
         register_uris(
             {"course": ["get_discussion_topics", "get_full_discussion_topic"]}, m
         )
@@ -774,11 +772,13 @@ class TestCourse(unittest.TestCase):
 
     # create_custom_column() - added
     def test_create_column(self, m):
-        register_uris({"custom_gradebook_columns": ["create_custom_column"]}, m)
+        register_uris({"course": ["create_custom_column"]}, m)
 
         title_str = "Test Title"
-        response = self.course.create_custom_column(title=title_str)
-        self.assertIsInstance(response, CustomGradebookColumn)
+        column = self.course.create_custom_column({"title": title_str})
+        self.assertIsInstance(column, CustomGradebookColumn)
+        self.assertTrue(hasattr(response, "title"))
+        self.assertEqual(column.title, title_str)
 
     # create_discussion_topic()
     def test_create_discussion_topic(self, m):
