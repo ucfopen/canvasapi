@@ -1,3 +1,4 @@
+"""
 import unittest
 from canvasapi import Canvas
 from canvasapi.course import Course
@@ -31,10 +32,11 @@ class TestCustomGradebookColumn(unittest.TestCase):
         self.assertTrue(success)
         pass
 
-    # get_column_entries() - paginated 
+    # get_column_entries() - paginated
     def test_get_column_entries(self, m):
-        register_uris({"custom_gradebook_columns": ["get_column_entries, get_column_entries_p2"]}, m)
-        
+        register_uris(
+            {"custom_gradebook_columns": ["get_column_entries, get_column_entries_p2"]}, m
+        )
         columns = self.gradebook.get_column_entries()
         column_entries = [col for col in columns]
         self.assertEqual(len(column_entries), 4)
@@ -44,7 +46,6 @@ class TestCustomGradebookColumn(unittest.TestCase):
     # reorder_custom_columns()
     def test_reorder_custom_columns(self, m):
         register_uris({"custom_gradebook_columns": ["reorder_custom_columns"]}, m)
-        
         order = [1, 2, 3]
         columns = self.course.reorder_custom_columns(order=order)
         self.assertTrue(columns)
@@ -53,7 +54,7 @@ class TestCustomGradebookColumn(unittest.TestCase):
     # update_custom_column()
     def test_update_custom_column(self, m):
         register_uris({"custom_gradebook_columns": ["update_custom_column"]}, m)
-        
+
         update_column = self.gradebook.update_custom_column()
         pass
 
@@ -62,7 +63,7 @@ class TestColumnData(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
-        with requests_mock.Mocker() as m: 
+        with requests_mock.Mocker() as m:
             register_uris({}, m)
 
     # __str__()
@@ -78,3 +79,4 @@ class TestColumnData(unittest.TestCase):
         new_content = "New Content"
         self.gradebook.update_column_data()
         pass
+"""
