@@ -21,7 +21,7 @@ def register_uris(requirements, requests_mocker, base_url=None):
         try:
             with open("tests/fixtures/{}.json".format(fixture)) as file:
                 data = json.loads(file.read())
-        except IOError:
+        except (IOError, ValueError):
             raise ValueError("Fixture {}.json contains invalid JSON.".format(fixture))
 
         if not isinstance(objects, list):
