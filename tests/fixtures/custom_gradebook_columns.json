@@ -1,0 +1,47 @@
+{
+	// done
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "courses/1/custom_gradebook_columns/1",
+		"data": {
+			"delete": true
+		},
+		"status_code": 200
+	},
+	// done - include paginated 
+	"get_column_entries": {
+		"method": "GET",
+		"endpoint": "courses/1/custom_gradebook_columns/2/data",
+		"data": {
+			"id": 2,
+			"content": "Example content",
+			"user_id": 1
+		},
+		"status_code": 200
+	},
+	"reorder_custom_columns": {
+		"method": "POST",
+		"endpoint": "courses/1/custom_gradebook_columns/reorder",
+		"data": {
+
+		},
+		"status_code": 200
+	},
+	"update_custom_column": {
+		"method": "PUT",
+		"endpoint": "courses/1/custom_gradebook_columns/2",
+		"data": {
+			"user_id": 2,
+		},
+		"status_code": 200
+	},
+	"update_column_data": {
+		"method": "PUT",
+		"endpoint": "courses/1/custom_gradebook_columns/2/data/1",
+		"data": {
+			"user_id": 2,
+			"id": 1
+		},
+		"status_code": 200
+	}
+}
