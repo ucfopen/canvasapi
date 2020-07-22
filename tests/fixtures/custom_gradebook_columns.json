@@ -30,7 +30,12 @@
 		"method": "PUT",
 		"endpoint": "courses/1/custom_gradebook_columns/2",
 		"data": {
-			"user_id": 2,
+			"id": 2,
+			"teacher_notes": false,
+			"title": "Example title",
+			"position": 1,
+			"hidden": false,
+			"read_only": true
 		},
 		"status_code": 200
 	}, 
@@ -38,8 +43,8 @@
 		"method": "PUT",
 		"endpoint": "courses/1/custom_gradebook_columns/2/data/1",
 		"data": {
-			"user_id": 2,
-			"id": 1
+			"content": "Updated content",
+			"user_id": 1
 		},
 		"status_code": 200
 	}

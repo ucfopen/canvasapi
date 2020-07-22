@@ -43,13 +43,39 @@ class TestCustomGradebookColumn(unittest.TestCase):
         self.assertIsInstance(column_entries[0], ColumnData)
         pass
 
-    # reorder_custom_columns()
+    # reorder_custom_columns() - done?
     def test_reorder_custom_columns(self, m):
-        register_uris({"custom_gradebook_columns": ["reorder_custom_columns"]}, m)
+        def custom_matcher(request):
+            match_test = "1,2,3"
+            if request.text == "order={}".format(quote(match_text)):
+                resp = requests.Response()
+                resp._content = b'{"reorder": true, "order": [1, 2, 3]}'
+                resp.status_code = 200
+                return resp
+        m.add_matcher(custom_matcher)
+
         order = [1, 2, 3]
-        columns = self.course.reorder_custom_columns(order=order)
+        columns = self.gradebooks.reorder_custom_columns(order=order)
+        self.assertTrue(columns) 
+
+    def test_reorder_custom_columns_tuple(self, m):
+        register_uris({"custom_gradebook_columns": ["reorder_custom_columns"]}, m)
+
+        order = (1, 2, 3)
+        columns = self.gradebooks.reorder_custom_columns(order=order)
         self.assertTrue(columns)
-        pass
+    
+    def test_reorder_custom_columns_comma_separated_string(self, m):
+        register_uris({"custom_gradebook_columns": ["reorder_custom_columns"]}, m)
+
+        order = "1,2,3"
+        gradebook = self.course.reorder_custom_columns(order=order)
+        self.assertTrue(gradebook)
+
+    def test_reorder_custom_columns_invalid_input(self, m):
+        order = "invalid string"
+        with self.assertRaises(ValueError):
+            self.course.reorder_custom_columns(order=order)
 
     # update_custom_column()
     def test_update_custom_column(self, m):

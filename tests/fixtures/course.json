@@ -24,17 +24,25 @@
 		"method": "PUT",
 		"endpoint": "courses/1/custom_gradebook_column_data",
 		"data": {
-			"content": "Example content",
-			"user_id": 2
+			"id": 3,
+			"context_id": 1,
+			"context_type": "Course",
+			"user_id": null,
+			"tag": "columns_update",
+			"completion": null,
+			"workflow_state": "queued",
+			"updated_at": "2013-01-15T15:04:00Z",
+			"message": null,
+			"url": "https://canvas.example.edu/api/v1/progress/3"
 		},
 		"status_code": 200
 	},
 	"create_custom_column": {
-		"method": "PUT",
+		"method": "POST",
 		"endpoint": "courses/1/custom_gradebook_columns",
 		"data": {
 			"id": 1,
-			"title": "Column 1",
+			"title": "Test Title",
 			"position": 1,
 			"hidden": false,
 			"read_only": true

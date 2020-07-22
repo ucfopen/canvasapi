@@ -75,7 +75,7 @@ class Course(CanvasObject):
         return GradingStandard(self._requester, response.json())
 
     # COMPLETE :) - I think
-    def column_data_bulk_update(self, column_data):
+    def column_data_bulk_update(self, column_data, **kwargs):
         """
         Set the content of custom columns.
 
@@ -86,10 +86,13 @@ class Course(CanvasObject):
         type column_data[]: array
         :rtype: :class:`canvasapi.progress.Progress`
         """
+
+        kwargs["column_data"] = column_data
+
         response = self._requester.request(
             "PUT",
             "courses/{}/custom_gradebook_column_data".format(self.id),
-            column_data=column_data,
+            # column_data=column_data,
         )
 
         return Progress(self._requester, response.json())
@@ -259,8 +262,9 @@ class Course(CanvasObject):
             "courses/{}/custom_gradebook_columns".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
+        column_json = response.json()
 
-        return CustomGradebookColumn(self._requester, response.json())
+        return CustomGradebookColumn(self._requester, column_json)
 
     def create_discussion_topic(self, **kwargs):
         """

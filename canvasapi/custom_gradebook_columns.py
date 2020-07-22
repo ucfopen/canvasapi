@@ -38,6 +38,7 @@ class CustomGradebookColumn(CanvasObject):
         """
         return PaginatedList(
             ColumnData,
+            self._requester,
             "GET",
             "courses/{}/custom_gradebook_columns/{}/data".format(
                 self.course_id, self.id
@@ -72,11 +73,11 @@ class CustomGradebookColumn(CanvasObject):
             order=order,
         )
 
-        return response.status_code == 200
+        return response.json().get("reorder")
 
     def update_custom_column(self, column, **kwargs):
         """
-        Return a CustomColumn object.
+        Update a CustomColumn object.
 
         :calls: `PUT /api/v1/courses/:course_id/custom_gradebook_columns/:id \
             <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.update>`_
@@ -114,7 +115,7 @@ class ColumnData(CanvasObject):
         :rtype: :class:`canvasapi.custom_gradebook_columns.ColumnData`
         """
 
-        kwargs["column_data[content]"] = content
+        kwargs["content"] = content
 
         response = self._requester.request(
             "PUT",
