@@ -66,7 +66,7 @@ version = __version__
 # The full version, including alpha/beta/rc tags.
 release = __version__
 
-# sphinx-version-warning configurtion
+# sphinx-version-warning configuration
 versionwarning_messages = {
     'develop': 'You are viewing a development build of the canvasapi docs. <a href="/en/stable">Visit the stable release docs here.</a>',
 }
