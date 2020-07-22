@@ -68,9 +68,7 @@ release = __version__
 
 # sphinx-version-warning configurtion
 versionwarning_messages = {
-    'issue/368-doc-version-warnings': 'You are viewing the development build of the canvasapi docs.',
-    'issue-368-doc-version-warnings': 'You are viewing a development build of the canvasapi docs. <a href="/en/stable">Visit the stable release docs here.</a>',
-    'develop': 'You are viewing the latest development build of the canvasapi docs. Visit <a href="/en/stable">stable</a> to view the latest stable release docs.',
+    'develop': 'You are viewing a development build of the canvasapi docs. <a href="/en/stable">Visit the stable release docs here.</a>',
 }
 versionwarning_body_selector = "ul.wy-breadcrumbs"
 
