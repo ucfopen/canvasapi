@@ -781,6 +781,10 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(new_column, "title"))
         self.assertEqual(new_column.title, title_str)
 
+    def test_create_column_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_custom_column(column={})
+
     # create_discussion_topic()
     def test_create_discussion_topic(self, m):
         register_uris({"course": ["create_discussion_topic"]}, m)
