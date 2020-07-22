@@ -1050,8 +1050,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
-        from canvasapi.custom_gradebook_columns import CustomGradebookColumn
-
         return PaginatedList(
             CustomGradebookColumn,
             self._requester,
