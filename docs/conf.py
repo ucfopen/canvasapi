@@ -15,16 +15,16 @@
 import os
 import sys
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-from canvasapi import __version__
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('../'))
+
+# The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+from canvasapi import __version__  # isort:skip
 
 # -- General configuration ------------------------------------------------
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -59,6 +59,7 @@ master_doc = 'index'
 project = u'canvasapi'
 copyright = u'2017, University of Central Florida (Center for Distributed Learning)'
 author = u'University of Central Florida (Center for Distributed Learning)'
+
 
 # The short X.Y version.
 version = __version__
