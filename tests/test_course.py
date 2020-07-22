@@ -11,7 +11,6 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page, LatePolicy
 
-# from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.gradebook_history import (
     Day,
@@ -48,7 +47,6 @@ from canvasapi.content_export import ContentExport
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from tests import settings
 from tests.util import cleanup_file, register_uris
-
 
 @requests_mock.Mocker()
 class TestCourse(unittest.TestCase):

@@ -1,47 +1,46 @@
-"""
 import unittest
+
+import requests
+import requests_mock
+
 from canvasapi import Canvas
 from canvasapi.course import Course
+from canvasapi.custom_gradebook_columns import CustomGradebookColumn, ColumnData
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.user import User
+from tests import settings
 from tests.util import register_uris
 
 @requests_mock.Mocker()
 class TestCustomGradebookColumn(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            requires = {"course": ["get_by_id"], "custom_gradebook_columns": [""]}
-            register_uris(requires, m)
+            register_uris({"course": ["get_by_id", "get_custom_columns"]}, m)
 
             self.course = self.canvas.get_course(1)
-            self.gradebook = self.course.get_custom_columns(1)
+            self.custom_gradebook_columns = self.course.get_custom_columns()
 
-    # __str__()
+    # __str__() 
     def test__str__(self, m):
-        string = str(self.gradebook)
+        string = str(self.custom_gradebook_columns)
         self.assertIsInstance(string, str)
-        pass
 
-    # delete()
+    # delete() 
     def test_delete(self, m):
         register_uris({"custom_gradebook_columns": ["delete"]}, m)
 
-        success = self.gradebook.delete()
+        success = self.custom_gradebook_columns.delete()
         self.assertTrue(success)
-        pass
 
-    # get_column_entries() - paginated
+    # get_column_entries() - paginated 
     def test_get_column_entries(self, m):
-        register_uris(
-            {"custom_gradebook_columns": ["get_column_entries, get_column_entries_p2"]}, m
-        )
-        columns = self.gradebook.get_column_entries()
-        column_entries = [col for col in columns]
-        self.assertEqual(len(column_entries), 4)
+        register_uris({"custom_gradebook_columns": ["get_column_entries"]}, m)
+        
+        column_entries = self.custom_gradebook_columns.get_column_entries()
+        self.assertIsInstance(column_entries, PaginatedList)
         self.assertIsInstance(column_entries[0], ColumnData)
-        pass
 
     # reorder_custom_columns() - done?
     def test_reorder_custom_columns(self, m):
@@ -55,54 +54,56 @@ class TestCustomGradebookColumn(unittest.TestCase):
         m.add_matcher(custom_matcher)
 
         order = [1, 2, 3]
-        columns = self.gradebooks.reorder_custom_columns(order=order)
+        columns = self.custom_gradebook_columns.reorder_custom_columns(order=order)
         self.assertTrue(columns) 
 
     def test_reorder_custom_columns_tuple(self, m):
         register_uris({"custom_gradebook_columns": ["reorder_custom_columns"]}, m)
 
         order = (1, 2, 3)
-        columns = self.gradebooks.reorder_custom_columns(order=order)
+        columns = self.custom_gradebook_columns.reorder_custom_columns(order=order)
         self.assertTrue(columns)
     
     def test_reorder_custom_columns_comma_separated_string(self, m):
         register_uris({"custom_gradebook_columns": ["reorder_custom_columns"]}, m)
 
         order = "1,2,3"
-        gradebook = self.course.reorder_custom_columns(order=order)
+        gradebook = self.custom_gradebook_columns.reorder_custom_columns(order=order)
         self.assertTrue(gradebook)
 
     def test_reorder_custom_columns_invalid_input(self, m):
         order = "invalid string"
         with self.assertRaises(ValueError):
-            self.course.reorder_custom_columns(order=order)
+            self.custom_gradebook_columns.reorder_custom_columns(order=order)
 
-    # update_custom_column()
+    # update_custom_column() - not sure
     def test_update_custom_column(self, m):
         register_uris({"custom_gradebook_columns": ["update_custom_column"]}, m)
 
-        update_column = self.gradebook.update_custom_column()
-        pass
+        new_title = "Example title"
+        self.custom_gradebook_columns.update_custom_column(column={"title": new_title})
+        self.assertEqual(self.custom_gradebook_columns.title, new_title)
 
+"""
 @requests_mock.Mocker()
 class TestColumnData(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({}, m)
+            requires_uris = ({"custom_gradebook_columns": ["get_custom_columns"]}, m)
+            self.content.get_column_entries(1) # course - not sure what to put there
 
     # __str__()
     def test__str__(self, m):
-        string = str(self.data)
+        string = str(self.content)
         self.assertIsInstance(string, str)
-        pass
 
-    # update_column_data()
+    # update_column_data() - done?
     def test_update_column_data(self, m):
         register_uris({"custom_gradebook_columns": ["update_column_data"]}, m)
 
-        new_content = "New Content"
-        self.gradebook.update_column_data()
-        pass
+        new_content = "Updated content"
+        self.custom_gradebook_columns.update_column_data(column_data={"content": new_content})
+        self.assertEqual(self.custom_gradebook_columns.content, new_content)
 """
