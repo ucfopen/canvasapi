@@ -1,5 +1,4 @@
 {
-	// done
 	"delete": {
 		"method": "DELETE",
 		"endpoint": "courses/1/custom_gradebook_columns/1",
@@ -8,7 +7,6 @@
 		},
 		"status_code": 200
 	},
-	// paginated 
 	"get_column_entries": {
 		"method": "GET",
 		"endpoint": "courses/1/custom_gradebook_columns/2/data",
@@ -19,16 +17,15 @@
 		},
 		"status_code": 200
 	},
-	// takes order[int]
 	"reorder_custom_columns": {
 		"method": "POST",
 		"endpoint": "courses/1/custom_gradebook_columns/reorder",
 		"data": {
-
+			"reorder": true,
+			"order": [1, 2, 3]
 		},
 		"status_code": 200
 	},
-	// returns customgradebookcolumn 
 	"update_custom_column": {
 		"method": "PUT",
 		"endpoint": "courses/1/custom_gradebook_columns/2",
@@ -36,8 +33,7 @@
 			"user_id": 2,
 		},
 		"status_code": 200
-	},
-	// returns columndata 
+	}, 
 	"update_column_data": {
 		"method": "PUT",
 		"endpoint": "courses/1/custom_gradebook_columns/2/data/1",
