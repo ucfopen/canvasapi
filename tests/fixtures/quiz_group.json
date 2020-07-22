@@ -1,11 +1,11 @@
 {
 	"update": {
 		"method": "PUT",
-		"endpoint": "courses/1/quizzes/1/groups/1",
+		"endpoint": "courses/1/quizzes/5/groups/10",
 		"data": {"quiz_groups": [
 			{
-				"id": 1,
-				"quiz_id": 1,
+				"id": 10,
+				"quiz_id": 5,
 				"name": "Test Group",
 				"pick_count": 1,
 				"question_points": 2,
@@ -16,12 +16,12 @@
 	},
 	"delete": {
 		"method": "DELETE",
-		"endpoint": "courses/1/quizzes/1/groups/1",
+		"endpoint": "courses/1/quizzes/5/groups/10",
 		"status_code": 204
 	},
 	"reorder_question_group": {
 		"method": "POST",
-		"endpoint": "courses/1/quizzes/1/groups/1/reorder",
+		"endpoint": "courses/1/quizzes/5/groups/10/reorder",
 		"status_code": 204
 	}
 }

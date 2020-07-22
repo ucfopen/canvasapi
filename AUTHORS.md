@@ -30,6 +30,7 @@ Patches and Suggestions
 - Erik Tews [@eriktews](https://github.com/eriktews)
 - Ethan Finlay [@atarisafari](https://github.com/atarisafari)
 - Gabriela Dijkhoffz [@gdijkhoffz](https://github.com/gdijkhoffz)
+- Harlan Colclough [@hcolclou](https://github.com/hcolclou)
 - Henry Acevedo [@Colombiangmr](https://github.com/Colombiangmr)
 - Ian Altgilbers [@altgilbers](https://github.com/altgilbers)
 - Ian Turgeon [@iturgeon](https://github.com/iturgeon)
