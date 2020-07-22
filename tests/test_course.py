@@ -775,10 +775,11 @@ class TestCourse(unittest.TestCase):
         register_uris({"course": ["create_custom_column"]}, m)
 
         title_str = "Test Title"
-        column = self.course.create_custom_column({"title": title_str})
-        self.assertIsInstance(column, CustomGradebookColumn)
-        self.assertTrue(hasattr(response, "title"))
-        self.assertEqual(column.title, title_str)
+        new_column = self.course.create_custom_column(column={"title": title_str})
+
+        self.assertIsInstance(new_column, CustomGradebookColumn)
+        self.assertTrue(hasattr(new_column, "title"))
+        self.assertEqual(new_column.title, title_str)
 
     # create_discussion_topic()
     def test_create_discussion_topic(self, m):
