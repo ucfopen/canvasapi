@@ -275,9 +275,7 @@ class Course(CanvasObject):
         )
         return ExternalFeed(self._requester, response.json())
 
-    def create_external_tool(
-        self, name, privacy_level, consumer_key, shared_secret, **kwargs
-    ):
+    def create_external_tool(self, **kwargs):
         """
         Create an external tool in the current course.
 
@@ -286,24 +284,21 @@ class Course(CanvasObject):
 
         :param name: The name of the tool
         :type name: str
-        :param privacy_level: What information to send to the external
-            tool. Options are "anonymous", "name_only", "public"
-        :type privacy_level: str
-        :param consumer_key: The consumer key for the external tool
-        :type consumer_key: str
-        :param shared_secret: The shared secret with the external tool
-        :type shared_secret: str
+
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
         from canvasapi.external_tool import ExternalTool
 
+        required_params = ["name", "privacy_level", "consumer_key", "shared_secret"]
+        if "client_id" not in kwargs and not all(x in kwargs for x in required_params):
+            raise RequiredFieldMissing(
+                "Must pass either `client_id` parameter or "
+                "`name`, `privacy_level`, `consumer_key`, and `shared_secret` parameters."
+            )
+
         response = self._requester.request(
             "POST",
             "courses/{}/external_tools".format(self.id),
-            name=name,
-            privacy_level=privacy_level,
-            consumer_key=consumer_key,
-            shared_secret=shared_secret,
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
