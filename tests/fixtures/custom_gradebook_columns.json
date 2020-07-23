@@ -1,20 +1,30 @@
 {
 	"delete": {
 		"method": "DELETE",
-		"endpoint": "courses/1/custom_gradebook_columns/1",
+		"endpoint": "courses/1/custom_gradebook_columns/2",
 		"data": {
-			"delete": true
+			"id": 2,
+			"teacher_notes": false,
+			"title": "Deleted Column",
+			"position": 1,
+			"hidden": false,
+			"read_only": true
 		},
 		"status_code": 200
 	},
 	"get_column_entries": {
 		"method": "GET",
 		"endpoint": "courses/1/custom_gradebook_columns/2/data",
-		"data": {
-			"id": 2,
-			"content": "Example content",
-			"user_id": 1
-		},
+		"data": [
+			{
+				"content": "Example content",
+				"user_id": 1
+			},
+			{
+				"content": "More example content",
+				"user_id": 1
+			}
+		],
 		"status_code": 200
 	},
 	"reorder_custom_columns": {
