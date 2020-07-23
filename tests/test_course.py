@@ -48,6 +48,7 @@ from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
+
 @requests_mock.Mocker()
 class TestCourse(unittest.TestCase):
     def setUp(self):
@@ -72,14 +73,10 @@ class TestCourse(unittest.TestCase):
         string = str(self.course)
         self.assertIsInstance(string, str)
 
-    # column_data_bulk_update() - added
+    # column_data_bulk_update()
     def test_column_data_bulk_update(self, m):
         register_uris(
-            {
-                "course": ["column_data_bulk_update"],
-                "progress": ["course_progress"],
-            },
-            m,
+            {"course": ["column_data_bulk_update"], "progress": ["course_progress"]}, m,
         )
         progress = self.course.column_data_bulk_update(
             column_data=[
@@ -698,7 +695,7 @@ class TestCourse(unittest.TestCase):
         category_list = [category for category in response]
         self.assertIsInstance(category_list[0], GroupCategory)
 
-    # get_custom_columns() - paginated - added
+    # get_custom_columns()
     def test_get_custom_columns(self, m):
         register_uris({"course": ["get_custom_columns"]}, m)
 
@@ -768,7 +765,7 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(discussion_list[0], "course_id"))
         self.assertEqual(2, len(discussion_list))
 
-    # create_custom_column() - added
+    # create_custom_column()
     def test_create_column(self, m):
         register_uris({"course": ["create_custom_column"]}, m)
 
@@ -778,6 +775,8 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(new_column, CustomGradebookColumn)
         self.assertTrue(hasattr(new_column, "title"))
         self.assertEqual(new_column.title, title_str)
+        self.assertTrue(hasattr(new_column, "course_id"))
+        self.assertEqual(new_column.course_id, self.course.id)
 
     def test_create_column_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
