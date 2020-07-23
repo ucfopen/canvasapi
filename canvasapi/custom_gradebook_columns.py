@@ -16,7 +16,7 @@ class CustomGradebookColumn(CanvasObject):
 
         :calls: `DELETE /api/v1/courses/:course_id/custom_gradebook_columns/:id \
             <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.destroy>`_
-        :rtype: nothing? check with Postman
+        :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
         response = self._requester.request(
             "DELETE",
@@ -24,7 +24,7 @@ class CustomGradebookColumn(CanvasObject):
             event="delete",
         )
 
-        return response.json().get("delete")
+        return CustomGradebookColumn(self._requester, response.json())
 
     def get_column_entries(self, **kwargs):
         """
@@ -43,6 +43,7 @@ class CustomGradebookColumn(CanvasObject):
             "courses/{}/custom_gradebook_columns/{}/data".format(
                 self.course_id, self.id
             ),
+            {"course_id": self.course_id, "gradebook_column_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -95,33 +96,40 @@ class CustomGradebookColumn(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return CustomGradebookColumn(self._requester, response.json())
+        if response.json().get("title"):
+            super(CustomGradebookColumn, self).set_attributes(response.json())
+
+        return self
 
 
 class ColumnData(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.user_id, self.content)
 
-    def update_column_data(self, content, **kwargs):
+    def update_column_data(self, column_data, **kwargs):
         """
         Sets the content of a custom column.
 
         :calls: `PUT /api/v1/courses/:course_id/custom_gradebook_columns/:id/data/:user_id \
             <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_column_data_api.update>`_
 
-        :param content: The content in the column.
-        :type content: str
+        :param column_data[content]: The content in the column.
+        :type column_data[content]: str
 
         :rtype: :class:`canvasapi.custom_gradebook_columns.ColumnData`
         """
 
-        kwargs["content"] = content
+        kwargs["column_data"] = column_data
 
         response = self._requester.request(
             "PUT",
             "courses/{}/custom_gradebook_columns/{}/data/{}".format(
-                self.course_id, self.id, self.user_id
+                self.course_id, self.gradebook_column_id, self.user_id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-        return ColumnData(self._requester, response.json())
+        if response.json().get("content"):
+            super(ColumnData, self).set_attributes(response.json())
+
+        return self

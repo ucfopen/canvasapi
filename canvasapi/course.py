@@ -74,7 +74,6 @@ class Course(CanvasObject):
         )
         return GradingStandard(self._requester, response.json())
 
-    # COMPLETE :) - I think
     def column_data_bulk_update(self, column_data, **kwargs):
         """
         Set the content of custom columns.
@@ -92,7 +91,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             "PUT",
             "courses/{}/custom_gradebook_column_data".format(self.id),
-            # column_data=column_data,
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return Progress(self._requester, response.json())
@@ -240,7 +239,6 @@ class Course(CanvasObject):
 
         return Section(self._requester, response.json())
 
-    # COMPLETE :) - review
     def create_custom_column(self, column, **kwargs):
         """
         Create a custom gradebook column.
@@ -263,6 +261,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         column_json = response.json()
+        column_json.update({"course_id": self.id})
 
         return CustomGradebookColumn(self._requester, column_json)
 
@@ -1039,7 +1038,6 @@ class Course(CanvasObject):
 
         return response.json()
 
-    # COMPLETE :) - review
     def get_custom_columns(self, **kwargs):
         """
         List of all the custom gradebook columns for a course.
