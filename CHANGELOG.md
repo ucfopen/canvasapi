@@ -4,7 +4,12 @@
 
 ### Bugfixes
 
-- Fixed an issue where Quiz.get_quiz_group incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
+- Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
+- Fixed an issue where `Course.create_external_tool` didn't accept `client_id` (LTI 1.3 support).
+
+### Breaking Changes
+
+- `Course.create_external_tool` no longer supports positional arguments for its required parameters. Use keyword arguments instead.
 
 ## [1.0.0] - 2020-07-09
 

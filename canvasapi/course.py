@@ -289,7 +289,7 @@ class Course(CanvasObject):
         """
         from canvasapi.external_tool import ExternalTool
 
-        required_params = ["name", "privacy_level", "consumer_key", "shared_secret"]
+        required_params = ("name", "privacy_level", "consumer_key", "shared_secret")
         if "client_id" not in kwargs and not all(x in kwargs for x in required_params):
             raise RequiredFieldMissing(
                 "Must pass either `client_id` parameter or "
