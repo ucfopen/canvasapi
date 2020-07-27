@@ -246,8 +246,8 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/custom_gradebook_columns \
         <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.create>`_
 
-        param column[title]: The title of the column.
-        :type column[title]: str
+        param column: The title of the column.
+        :type column: str
         :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
         if isinstance(column, dict) and "title" in column:
