@@ -1,9 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import warnings
-
-from six import python_2_unicode_compatible, string_types
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
@@ -16,7 +10,6 @@ from canvasapi.sis_import import SisImport
 from canvasapi.util import combine_kwargs, file_or_path, obj_or_id, obj_or_str
 
 
-@python_2_unicode_compatible
 class Account(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
@@ -199,7 +192,7 @@ class Account(CanvasObject):
 
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
-        elif isinstance(migration_type, string_types):
+        elif isinstance(migration_type, str):
             kwargs["migration_type"] = migration_type
         else:
             raise TypeError("Parameter migration_type must be of type Migrator or str")
@@ -1670,160 +1663,6 @@ class Account(CanvasObject):
             if is_path:
                 attachment.close()
 
-    def list_authentication_providers(self, **kwargs):
-        """
-        Return the list of authentication providers
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_authentication_providers` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/authentication_providers \
-        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.authentication_provider.AuthenticationProvider`
-        """
-        warnings.warn(
-            "`list_authentication_providers` is being deprecated and will be "
-            "removed in a future version. Use `get_authentication_providers` "
-            "instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_authentication_providers(**kwargs)
-
-    def list_enrollment_terms(self, **kwargs):
-        """
-        List enrollment terms for a context.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_enrollment_terms` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/terms \
-        <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.enrollment_term.EnrollmentTerm`
-        """
-        warnings.warn(
-            "`list_enrollment_terms` is being deprecated and will be removed "
-            "in a future version. Use `get_enrollment_terms` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_enrollment_terms(**kwargs)
-
-    def list_group_categories(self, **kwargs):
-        """
-        List group categories for a context.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_group_categories` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/group_categories \
-        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.group.GroupCategory`
-        """
-        warnings.warn(
-            "`list_group_categories` is being deprecated and will be removed "
-            "in a future version. Use `get_group_categories` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_group_categories(**kwargs)
-
-    def list_groups(self, **kwargs):
-        """
-        Return a list of active groups for the specified account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_groups` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/groups \
-        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
-        """
-        warnings.warn(
-            "`list_groups` is being deprecated and will be removed in a future version."
-            " Use `get_groups` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_groups(**kwargs)
-
-    def list_roles(self, **kwargs):
-        """
-        List the roles available to an account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_roles` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/roles \
-        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.account.Role`
-        """
-        warnings.warn(
-            "`list_roles` is being deprecated and will be removed in a future version."
-            " Use `get_roles` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_roles(**kwargs)
-
-    def list_rubrics(self, **kwargs):
-        """
-        Get the paginated list of active rubrics for the current account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_rubrics` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/rubrics \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.rubric.Rubric`
-        """
-        warnings.warn(
-            "`list_rubrics` is being deprecated and will be removed in a "
-            "future version. Use `get_rubrics` instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_rubrics(**kwargs)
-
-    def list_user_logins(self, **kwargs):
-        """
-        Given a user ID, return that user's logins for the given account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_user_logins` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/logins \
-        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.login.Login`
-        """
-        warnings.warn(
-            "`list_user_logins` is being deprecated and will be removed in a "
-            "future version. Use `get_user_logins` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_user_logins(**kwargs)
-
     def show_account_auth_settings(self, **kwargs):
         """
         Return the current state of each account level setting
@@ -1902,7 +1741,6 @@ class Account(CanvasObject):
         return Role(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class AccountNotification(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.subject, self.id)
@@ -1943,7 +1781,6 @@ class AccountNotification(CanvasObject):
         return AccountNotification(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class AccountReport(CanvasObject):
     def __str__(self):
         try:
@@ -1970,19 +1807,16 @@ class AccountReport(CanvasObject):
         return AccountReport(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class Role(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
 
 
-@python_2_unicode_compatible
 class SSOSettings(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.login_handle_name, self.change_password_url)
 
 
-@python_2_unicode_compatible
 class Admin(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} {} ({})".format(self.user["name"], self.user["id"], self.id)

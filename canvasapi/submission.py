@@ -1,7 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
@@ -9,7 +5,6 @@ from canvasapi.upload import Uploader
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class Submission(CanvasObject):
     def __str__(self):
         return "{}-{}".format(self.assignment_id, self.user_id)
@@ -176,7 +171,6 @@ class Submission(CanvasObject):
         return response
 
 
-@python_2_unicode_compatible
 class GroupedSubmission(CanvasObject):
     def __init__(self, requester, attributes):
         super(GroupedSubmission, self).__init__(requester, attributes)

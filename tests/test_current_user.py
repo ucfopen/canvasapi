@@ -1,8 +1,6 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
-import warnings
 
 from canvasapi import Canvas
 from canvasapi.bookmark import Bookmark
@@ -26,20 +24,6 @@ class TestCurrentUser(unittest.TestCase):
         string = str(self.user)
         self.assertIsInstance(string, str)
 
-    # list_groups()
-    def test_list_groups(self, m):
-        register_uris({"current_user": ["list_groups", "list_groups2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            groups = self.user.list_groups()
-            group_list = [group for group in groups]
-
-            self.assertEqual(len(group_list), 4)
-            self.assertIsInstance(group_list[0], Group)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_groups()
     def test_get_groups(self, m):
         register_uris({"current_user": ["list_groups", "list_groups2"]}, m)
@@ -49,19 +33,6 @@ class TestCurrentUser(unittest.TestCase):
 
         self.assertEqual(len(group_list), 4)
         self.assertIsInstance(group_list[0], Group)
-
-    # list_bookmarks()
-    def test_list_bookmarks(self, m):
-        register_uris({"bookmark": ["list_bookmarks"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            bookmarks = self.user.list_bookmarks()
-            bookmark_list = [bookmark for bookmark in bookmarks]
-            self.assertEqual(len(bookmark_list), 2)
-            self.assertIsInstance(bookmark_list[0], Bookmark)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_bookmarks()
     def test_get_bookmarks(self, m):

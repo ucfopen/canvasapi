@@ -1,8 +1,6 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import datetime
 import pytz
 import unittest
-import warnings
 
 import requests_mock
 
@@ -382,23 +380,6 @@ class TestAccount(unittest.TestCase):
 
         self.assertFalse(self.account.update(account=update_account_dict))
 
-    # list_roles()
-    def test_list_roles(self, m):
-        requires = {"account": ["get_roles", "get_roles_2"]}
-        register_uris(requires, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            roles = self.account.list_roles()
-            role_list = [role for role in roles]
-
-            self.assertEqual(len(role_list), 4)
-            self.assertIsInstance(role_list[0], Role)
-            self.assertTrue(hasattr(role_list[0], "role"))
-            self.assertTrue(hasattr(role_list[0], "label"))
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_roles()
     def test_get_roles(self, m):
         requires = {"account": ["get_roles", "get_roles_2"]}
@@ -482,21 +463,6 @@ class TestAccount(unittest.TestCase):
         enrollment_by_obj = self.account.get_enrollment(enrollment_by_id)
         self.assertIsInstance(enrollment_by_obj, Enrollment)
 
-    # list_groups()
-    def test_list_groups(self, m):
-        requires = {"account": ["get_groups_context", "get_groups_context2"]}
-        register_uris(requires, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            groups = self.account.list_groups()
-            group_list = [group for group in groups]
-
-            self.assertIsInstance(group_list[0], Group)
-            self.assertEqual(len(group_list), 4)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_groups()
     def test_get_groups(self, m):
         requires = {"account": ["get_groups_context", "get_groups_context2"]}
@@ -515,19 +481,6 @@ class TestAccount(unittest.TestCase):
         name_str = "Test String"
         response = self.account.create_group_category(name=name_str)
         self.assertIsInstance(response, GroupCategory)
-
-    # list_group_categories()
-    def test_list_group_categories(self, m):
-        register_uris({"account": ["get_group_categories"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.account.list_group_categories()
-            category_list = [category for category in response]
-
-            self.assertIsInstance(category_list[0], GroupCategory)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_group_categories()
     def test_get_group_categories(self, m):
@@ -563,19 +516,6 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(evnt.name, "Test Enrollment Term")
         self.assertEqual(evnt.id, 45)
 
-    # list_enrollment_terms()
-    def test_list_enrollment_terms(self, m):
-        register_uris({"account": ["get_enrollment_terms"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.account.list_enrollment_terms()
-            enrollment_terms_list = [category for category in response]
-
-            self.assertIsInstance(enrollment_terms_list[0], EnrollmentTerm)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_enrollment_term()
     def test_get_enrollment_term(self, m):
         register_uris({"account": ["get_enrollment_term"]}, m)
@@ -597,21 +537,6 @@ class TestAccount(unittest.TestCase):
         enrollment_terms_list = [category for category in response]
 
         self.assertIsInstance(enrollment_terms_list[0], EnrollmentTerm)
-
-    # list_user_logins()
-    def test_list_user_logins(self, m):
-        requires = {"account": ["get_user_logins", "get_user_logins_2"]}
-        register_uris(requires, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.account.list_user_logins()
-            login_list = [login for login in response]
-
-            self.assertIsInstance(login_list[0], Login)
-            self.assertEqual(len(login_list), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_user_logins()
     def test_get_user_logins(self, m):
@@ -731,33 +656,6 @@ class TestAccount(unittest.TestCase):
         response = self.account.get_department_level_statistics_completed()
 
         self.assertIsInstance(response, list)
-
-    # list_authentication_providers()
-    def test_list_authentication_providers(self, m):
-        requires = {
-            "account": [
-                "list_authentication_providers",
-                "list_authentication_providers_2",
-            ]
-        }
-        register_uris(requires, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            authentication_providers = self.account.list_authentication_providers()
-            authentication_providers_list = [
-                authentication_provider
-                for authentication_provider in authentication_providers
-            ]
-
-            self.assertEqual(len(authentication_providers_list), 4)
-            self.assertIsInstance(
-                authentication_providers_list[0], AuthenticationProvider
-            )
-            self.assertTrue(hasattr(authentication_providers_list[0], "auth_type"))
-            self.assertTrue(hasattr(authentication_providers_list[0], "position"))
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_authentication_providers()
     def test_get_authentication_providers(self, m):
@@ -937,25 +835,6 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(rubric, Rubric)
         self.assertEqual(rubric.id, rubric_id)
         self.assertEqual(rubric.title, "Account Rubric 1")
-
-    # list_rubrics
-    def test_list_rubrics(self, m):
-        register_uris({"account": ["get_rubric_multiple"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            rubrics = self.account.list_rubrics()
-
-            self.assertEqual(len(list(rubrics)), 2)
-
-            self.assertIsInstance(rubrics[0], Rubric)
-            self.assertEqual(rubrics[0].id, 1)
-            self.assertEqual(rubrics[0].title, "Account Rubric 1")
-            self.assertIsInstance(rubrics[1], Rubric)
-            self.assertEqual(rubrics[1].id, 2)
-            self.assertEqual(rubrics[1].title, "Account Rubric 2")
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_rubrics
     def test_get_rubrics(self, m):
