@@ -84,9 +84,6 @@ class CustomGradebookColumn(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/custom_gradebook_columns/:id \
             <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.update>`_
 
-        :param column: The header text of the column.
-        :type column: str
-
         :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
 
