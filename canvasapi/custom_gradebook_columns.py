@@ -77,7 +77,7 @@ class CustomGradebookColumn(CanvasObject):
 
         return response.json().get("reorder")
 
-    def update_custom_column(self, column, **kwargs):
+    def update_custom_column(self, **kwargs):
         """
         Update a CustomColumn object.
 
@@ -89,7 +89,6 @@ class CustomGradebookColumn(CanvasObject):
 
         :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
-        kwargs["column"] = column
 
         response = self._requester.request(
             "PUT",
