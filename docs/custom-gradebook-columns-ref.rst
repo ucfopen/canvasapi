@@ -1,8 +1,8 @@
 ========================
-Custom Gradebook Columns
+Custom Gradebook Column
 ========================
 
-.. autoclass:: canvasapi.custom_gradebook_columns.CustomGradebookColumns
+.. autoclass:: canvasapi.custom_gradebook_columns.CustomGradebookColumn
     :members:
 
 ==========
