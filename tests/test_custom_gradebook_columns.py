@@ -5,12 +5,8 @@ import requests
 import requests_mock
 
 from canvasapi import Canvas
-
-# from canvasapi.course import Course
 from canvasapi.custom_gradebook_columns import ColumnData
 from canvasapi.paginated_list import PaginatedList
-
-# from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
 

@@ -10,7 +10,6 @@ from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.blueprint import BlueprintTemplate
 from canvasapi.course import Course, CourseNickname, Page, LatePolicy
-
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.gradebook_history import (
     Day,
@@ -733,8 +732,8 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(file_by_obj.display_name, "Course_File.docx")
         self.assertEqual(file_by_obj.size, 2048)
 
+    # get_full_discussion_topic()
     def test_get_full_discussion_topic(self, m):
-        # get_full_discussion_topic()
         register_uris(
             {"course": ["get_discussion_topics", "get_full_discussion_topic"]}, m
         )
