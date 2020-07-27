@@ -55,7 +55,7 @@ class CustomGradebookColumn(CanvasObject):
             <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.reorder>`_
 
         :param order: The order the columns are supposed to be in.
-        :type order: list[int]
+        :type order: list of int
 
         :returns: True if successful (status code of 200)
         :rtype: bool
@@ -84,8 +84,8 @@ class CustomGradebookColumn(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/custom_gradebook_columns/:id \
             <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.update>`_
 
-        param column[title]: The header text of the column.
-        :type column[title]: str
+        :param column: The header text of the column.
+        :type column: str
 
         :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
