@@ -106,7 +106,7 @@ class ColumnData(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.user_id, self.content)
 
-    def update_column_data(self, **kwargs):
+    def update_column_data(self, column_data, **kwargs):
         """
         Sets the content of a custom column.
 
@@ -118,6 +118,8 @@ class ColumnData(CanvasObject):
 
         :rtype: :class:`canvasapi.custom_gradebook_columns.ColumnData`
         """
+
+        kwargs["column_data"] = column_data
 
         response = self._requester.request(
             "PUT",
