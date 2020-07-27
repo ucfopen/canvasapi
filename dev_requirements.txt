@@ -4,3 +4,4 @@ docutils==0.15.2
 pre-commit; python_version >= '3.6'
 Sphinx
 sphinx-rtd-theme
+sphinx-version-warning
