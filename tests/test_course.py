@@ -1694,17 +1694,20 @@ class TestCourse(unittest.TestCase):
 
     # resolve_path()
     def test_resolve_path(self, m):
-        register_uris({"course": ["resolve_path_null", "resolve_path"]}, m)
+        register_uris({"course": ["resolve_path"]}, m)
 
         full_path = "Folder_Level_1/Folder_Level_2/Folder_Level_3"
         folders = self.course.resolve_path(full_path)
         folder_list = [folder for folder in folders]
         self.assertEqual(len(folder_list), 4)
         self.assertIsInstance(folder_list[0], Folder)
-        for folder_name, folder in zip(
-            ("course_files/" + full_path).split("/"), folders
-        ):
+        folder_names = ("course_files/" + full_path).split("/")
+        for folder_name, folder in zip(folder_names, folders):
             self.assertEqual(folder_name, folder.name)
+
+    # resolve_path() with null input
+    def test_resolve_path_null(self, m):
+        register_uris({"course": ["resolve_path_null"]}, m)
 
         # test with null input
         root_folder = self.course.resolve_path()
