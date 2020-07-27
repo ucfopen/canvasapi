@@ -927,6 +927,25 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(response, "id"))
         self.assertEqual(response.id, 20)
 
+    def test_create_external_tool_client_id(self, m):
+        register_uris({"external_tool": ["create_tool_course"]}, m)
+
+        response = self.course.create_external_tool(client_id="10000000000001")
+
+        self.assertIsInstance(response, ExternalTool)
+        self.assertTrue(hasattr(response, "id"))
+        self.assertEqual(response.id, 20)
+
+    def test_create_external_tool_no_params(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_external_tool()
+
+    def test_create_external_tool_missing_params(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_external_tool(
+                consumer_key="key", shared_secret="secret",
+            )
+
     # get_collaborations
     def test_get_collaborations(self, m):
         register_uris({"course": ["get_collaborations"]}, m)
