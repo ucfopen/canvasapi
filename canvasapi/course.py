@@ -81,8 +81,8 @@ class Course(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/custom_gradebook_column_data \
         <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_column_data_api.bulk_update>`_
 
-        param column_data[]: Content to put into the column
-        type column_data[]: array
+        :param column_data: Content to put into the column
+        :type column_data: list
         :rtype: :class:`canvasapi.progress.Progress`
         """
 
