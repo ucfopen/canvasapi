@@ -4,7 +4,75 @@
 
 ### New Endpoint Coverage
 
+- Custom Gradebook Columns (Thanks,[@aileenpongnon](https://github.com/aileenpongnon))
+
+### Bugfixes
+
+- Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
+- Fixed an issue where `Course.create_external_tool` didn't accept `client_id` (LTI 1.3 support).
+
+### Breaking Changes
+
+- `Course.create_external_tool` no longer supports positional arguments for its required parameters. Use keyword arguments instead.
+
+## [1.0.0] - 2020-07-09
+
+### General
+
+- Added support for Python 3.8
+- Dropped support for Python 3.4, 3.5, and 2.7
+- Removed all previously deprecated methods and attributes.
+- Upgraded Ubuntu version for Travis (Thanks,[@jonespm](https://github.com/jonespm))
+- Set up automatic deployments to PyPI via Travis
+- Set up nightly build
+
+## [0.16.1] - 2020-07-06
+
+### Bugfixes
+
+- Fixed an issue where the user-provided API_URL/base_url wasn't run through cleanup.
+
+### Deprecation Warnings
+
+- Using `/api/v1/` in the API_URL has been deprecated since v0.8.0 and legacy support will be removed in the next release. Ensure your provided url doesn't contain `api/v1/`. See deprecation warning in changelog for v0.8.0.
+- :warning: **_This is the final release with support for Python 3.5_** :warning:
+
+## [0.16.0] - 2020-06-26
+
+### New Endpoint Coverage
+
+- Enrollment Terms
+    - Get a Single Enrollment Term (Thanks, [@lcamacho](https://github.com/lcamacho))
+- Files
+    - Resolve Path for Course (Thanks,[@dsavransky](https://github.com/dsavransky))
+- GraphQL (Thanks,[@jonespm](https://github.com/jonespm))
+- Late Policy (Thanks, [@kennygperez](https://github.com/kennygperez))
+- Quiz Assignment Overrides (Thanks, [@kennygperez](https://github.com/kennygperez))
 - Quiz Statistics (Thanks, [@andrew-gardener](https://github.com/andrew-gardener))
+
+### General
+
+- Updated README to use updated parameters for getting a user's courses by enrollment state (Thanks,[@Vishvak365](https://github.com/Vishvak365))
+
+### Deprecation Warnings
+
+- :warning: **_This is the final release with support for Python 2.7_** :warning:
+    - [Python 2.7 is end-of-life as of January 2020](https://www.python.org/doc/sunset-python-2/)
+    - Future releases of CanvasAPI will *NOT* support any version of Python 2
+- :warning: **_This is the final release with support for Python 3.4_** :warning:
+    - [Python 3.4 is end-of-life as of March 2019](https://www.python.org/downloads/release/python-3410/)
+    - Future releases of CanvasAPI will *NOT* support Python 3.4 or below
+- This is the final deprecation warning for all methods marked as deprecated in this changelog or in our documentation. They will be removed in the next release.
+
+### Bugfixes
+
+- Fixed an issue where `Quiz.get_submission()` ignored data added from using the `include` kwarg. (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed the broken `__str__` method on the `ChangeRecord` class (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed an issue where printing an `AccountReport` would fail due to not having an ID (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed an issue where `"report_type"` was passed improperly (Thanks,[@brucespang](https://github.com/brucespang))
+- Fixed some new `flake8` issues (Thanks,[@dsavransky](https://github.com/dsavransky) and [@jonespm](https://github.com/jonespm))
+- Fixed an incorrect docstring for `Course.create_page()` (Thanks,[@dsavransky](https://github.com/dsavransky))
+- Fixed an issue where extra whitespace in the user-supplied canvas URL would break `PaginatedList` (Thanks,[@amorqiu](https://github.com/amorqiu))
 
 ## [0.15.0] - 2019-11-19
 
@@ -409,7 +477,10 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.15.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...develop
+[1.0.0]: https://github.com/ucfopen/canvasapi/compare/v0.16.1...v1.0.0
+[0.16.1]: https://github.com/ucfopen/canvasapi/compare/v0.16.0...v0.16.1
+[0.16.0]: https://github.com/ucfopen/canvasapi/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/ucfopen/canvasapi/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/ucfopen/canvasapi/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/ucfopen/canvasapi/compare/v0.12.0...v0.13.0

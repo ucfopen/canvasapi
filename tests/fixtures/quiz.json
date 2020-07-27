@@ -68,12 +68,21 @@
 		},
 		"status_code": 200
 	},
+	"get_by_id_5": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/5",
+		"data": {
+			"id": 5,
+			"title": "Quiz Numbah Five"
+		},
+		"status_code": 200
+	},
 	"get_quiz_group": {
 		"method": "GET",
-		"endpoint": "courses/1/quizzes/1/groups/1",
+		"endpoint": "courses/1/quizzes/5/groups/10",
 		"data": {
-			"id": 1,
-			"quiz_id": 1,
+			"id": 10,
+			"quiz_id": 5,
 			"name": "Test Group",
 			"pick_count": 1,
 			"question_points": 2,

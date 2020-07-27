@@ -1,7 +1,7 @@
 [![CanvasAPI on PyPI](https://img.shields.io/pypi/v/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![License](https://img.shields.io/pypi/l/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![Python Versions](https://img.shields.io/pypi/pyversions/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
-[![Documentation Status](https://readthedocs.org/projects/canvasapi/badge/?version=latest)](http://canvasapi.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/canvasapi/badge/?version=stable)](http://canvasapi.readthedocs.io/en/stable/?badge=stable)
 [![Build Status](https://travis-ci.org/ucfopen/canvasapi.svg?branch=master)](https://travis-ci.org/ucfopen/canvasapi)
 [![Coverage Status](https://coveralls.io/repos/github/ucfopen/canvasapi/badge.svg?branch=master)](https://coveralls.io/github/ucfopen/canvasapi?branch=master)
 [![Join UCF Open Slack Discussions](https://ucf-open-slackin.herokuapp.com/badge.svg)](https://ucf-open-slackin.herokuapp.com/)
@@ -139,7 +139,7 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
 
 ```python
 # Get all of the active courses a user is currently enrolled in
->>> courses = user.get_courses(enrollment_status='active')
+>>> courses = user.get_courses(enrollment_state='active')
 
 
 # Fetch 50 objects per page when making calls that return a PaginatedList

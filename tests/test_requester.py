@@ -1,10 +1,9 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 from datetime import datetime
 import unittest
+from urllib.parse import quote
 
 import requests
 import requests_mock
-from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.exceptions import (
@@ -14,6 +13,7 @@ from canvasapi.exceptions import (
     InvalidAccessToken,
     ResourceDoesNotExist,
     Unauthorized,
+    UnprocessableEntity,
 )
 from tests import settings
 from tests.util import register_uris
@@ -144,6 +144,12 @@ class TestRequester(unittest.TestCase):
 
         with self.assertRaises(Conflict):
             self.requester.request("GET", "409")
+
+    def test_request_422(self, m):
+        register_uris({"requests": ["422"]}, m)
+
+        with self.assertRaises(UnprocessableEntity):
+            self.requester.request("GET", "422")
 
     def test_request_500(self, m):
         register_uris({"requests": ["500"]}, m)
