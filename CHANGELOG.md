@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Custom Gradebook Columns (Thanks,[@aileenpongnon](https://github.com/aileenpongnon))
+
 ### Bugfixes
 
 - Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))

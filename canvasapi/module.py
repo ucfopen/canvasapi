@@ -126,10 +126,9 @@ class Module(CanvasObject):
             if "content_id" in module_item:
                 kwargs["module_item"] = module_item
             else:
-                if "type" in module_item != ("ExternalUrl" or "Page" or "SubHeader"):
-                    raise RequiredFieldMissing(
-                        "Dictionary with key 'content_id' is required."
-                    )
+                raise RequiredFieldMissing(
+                    "Dictionary with key 'content_id' is required."
+                )
         else:
             raise RequiredFieldMissing("Dictionary with key 'type' is required.")
 

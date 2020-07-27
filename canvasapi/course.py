@@ -51,7 +51,7 @@ class Course(CanvasObject):
         :param title: The title for the Grading Standard
         :type title: str
         :param grading_scheme: A list of dictionaries containing keys for "name" and "value"
-        :type grading_scheme: list[dict]
+        :type grading_scheme: list of dict
         :rtype: :class:`canvasapi.grading_standards.GradingStandard`
         """
         if not isinstance(grading_scheme_entry, list) or len(grading_scheme_entry) <= 0:
@@ -246,8 +246,9 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/custom_gradebook_columns \
         <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.create>`_
 
-        param column: The title of the column.
-        :type column: str
+        :param column: A dictionary representing the Custom Gradebook Column to create
+        :type column: dict
+
         :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
         """
         if isinstance(column, dict) and "title" in column:
