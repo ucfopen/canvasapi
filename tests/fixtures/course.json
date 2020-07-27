@@ -1,4 +1,54 @@
 {
+	"get_custom_columns": {
+		"method": "GET",
+		"endpoint": "courses/1/custom_gradebook_columns",
+		"data": [
+			{
+				"id": 1,
+				"title": "Column One",
+				"position": 1,
+				"hidden": false,
+				"read_only": true
+			},
+			{
+				"id": 2,
+				"title": "Column Two",
+				"position": 2,
+				"hidden": false,
+				"read_only": true
+			}
+		],
+		"status_code": 200
+	},
+	"column_data_bulk_update": {
+		"method": "PUT",
+		"endpoint": "courses/1/custom_gradebook_column_data",
+		"data": {
+			"id": 3,
+			"context_id": 1,
+			"context_type": "Course",
+			"user_id": null,
+			"tag": "columns_update",
+			"completion": null,
+			"workflow_state": "queued",
+			"updated_at": "2013-01-15T15:04:00Z",
+			"message": null,
+			"url": "https://canvas.example.edu/api/v1/progress/3"
+		},
+		"status_code": 200
+	},
+	"create_custom_column": {
+		"method": "POST",
+		"endpoint": "courses/1/custom_gradebook_columns",
+		"data": {
+			"id": 1,
+			"title": "Test Title",
+			"position": 1,
+			"hidden": false,
+			"read_only": true
+		},
+		"status_code": 200
+	},
 	"conclude": {
 		"method": "DELETE",
 		"endpoint": "courses/1",

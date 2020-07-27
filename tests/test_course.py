@@ -43,6 +43,7 @@ from canvasapi.user import User
 from canvasapi.usage_rights import UsageRights
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.content_export import ContentExport
+from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -70,6 +71,22 @@ class TestCourse(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.course)
         self.assertIsInstance(string, str)
+
+    # column_data_bulk_update()
+    def test_column_data_bulk_update(self, m):
+        register_uris(
+            {"course": ["column_data_bulk_update"], "progress": ["course_progress"]}, m,
+        )
+        progress = self.course.column_data_bulk_update(
+            column_data=[
+                {"column_id": 1, "user_id": 1, "content": "Test Content One"},
+                {"column_id": 2, "user_id": 2, "content": "Test Content Two"},
+            ]
+        )
+        self.assertIsInstance(progress, Progress)
+        self.assertTrue(progress.context_type == "Course")
+        progress = progress.query()
+        self.assertTrue(progress.context_type == "Course")
 
     # conclude()
     def test_conclude(self, m):
@@ -677,6 +694,15 @@ class TestCourse(unittest.TestCase):
         category_list = [category for category in response]
         self.assertIsInstance(category_list[0], GroupCategory)
 
+    # get_custom_columns()
+    def test_get_custom_columns(self, m):
+        register_uris({"course": ["get_custom_columns"]}, m)
+
+        custom_columns = self.course.get_custom_columns()
+
+        self.assertIsInstance(custom_columns, PaginatedList)
+        self.assertIsInstance(custom_columns[0], CustomGradebookColumn)
+
     # get_discussion_topic()
     def test_get_discussion_topic(self, m):
         register_uris({"course": ["get_discussion_topic"]}, m)
@@ -737,6 +763,23 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(discussion_list[0], DiscussionTopic)
         self.assertTrue(hasattr(discussion_list[0], "course_id"))
         self.assertEqual(2, len(discussion_list))
+
+    # create_custom_column()
+    def test_create_column(self, m):
+        register_uris({"course": ["create_custom_column"]}, m)
+
+        title_str = "Test Title"
+        new_column = self.course.create_custom_column(column={"title": title_str})
+
+        self.assertIsInstance(new_column, CustomGradebookColumn)
+        self.assertTrue(hasattr(new_column, "title"))
+        self.assertEqual(new_column.title, title_str)
+        self.assertTrue(hasattr(new_column, "course_id"))
+        self.assertEqual(new_column.course_id, self.course.id)
+
+    def test_create_column_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_custom_column(column={})
 
     # create_discussion_topic()
     def test_create_discussion_topic(self, m):

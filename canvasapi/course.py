@@ -3,6 +3,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
+from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.gradebook_history import (
     Day,
@@ -50,7 +51,7 @@ class Course(CanvasObject):
         :param title: The title for the Grading Standard
         :type title: str
         :param grading_scheme: A list of dictionaries containing keys for "name" and "value"
-        :type grading_scheme: list[dict]
+        :type grading_scheme: list of dict
         :rtype: :class:`canvasapi.grading_standards.GradingStandard`
         """
         if not isinstance(grading_scheme_entry, list) or len(grading_scheme_entry) <= 0:
@@ -72,6 +73,28 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return GradingStandard(self._requester, response.json())
+
+    def column_data_bulk_update(self, column_data, **kwargs):
+        """
+        Set the content of custom columns.
+
+        :calls: `PUT /api/v1/courses/:course_id/custom_gradebook_column_data \
+        <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_column_data_api.bulk_update>`_
+
+        :param column_data: Content to put into the column
+        :type column_data: list
+        :rtype: :class:`canvasapi.progress.Progress`
+        """
+
+        kwargs["column_data"] = column_data
+
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/custom_gradebook_column_data".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return Progress(self._requester, response.json())
 
     def conclude(self):
         """
@@ -216,6 +239,33 @@ class Course(CanvasObject):
 
         return Section(self._requester, response.json())
 
+    def create_custom_column(self, column, **kwargs):
+        """
+        Create a custom gradebook column.
+
+        :calls: `POST /api/v1/courses/:course_id/custom_gradebook_columns \
+        <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.create>`_
+
+        :param column: A dictionary representing the Custom Gradebook Column to create
+        :type column: dict
+
+        :rtype: :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
+        """
+        if isinstance(column, dict) and "title" in column:
+            kwargs["column"] = column
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'title' is required.")
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/custom_gradebook_columns".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        column_json = response.json()
+        column_json.update({"course_id": self.id})
+
+        return CustomGradebookColumn(self._requester, column_json)
+
     def create_discussion_topic(self, **kwargs):
         """
         Creates a new discussion topic for the course or group.
@@ -245,7 +295,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.course_epub_export.CourseEpubExport`
         """
-
         response = self._requester.request(
             "POST",
             "courses/{}/epub_exports/".format(self.id),
@@ -984,6 +1033,25 @@ class Course(CanvasObject):
         )
 
         return response.json()
+
+    def get_custom_columns(self, **kwargs):
+        """
+        List of all the custom gradebook columns for a course.
+
+        :calls: `GET /api/v1/courses/:course_id/custom_gradebook_columns \
+        <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_columns_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.custom_gradebook_columns.CustomGradebookColumn`
+        """
+        return PaginatedList(
+            CustomGradebookColumn,
+            self._requester,
+            "GET",
+            "courses/{}/custom_gradebook_columns".format(self.id),
+            {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_discussion_topic(self, topic):
         """
