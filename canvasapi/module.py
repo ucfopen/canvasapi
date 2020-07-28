@@ -122,8 +122,13 @@ class Module(CanvasObject):
         :returns: The created module item.
         :rtype: :class:`canvasapi.module.ModuleItem`
         """
+
+        unrequired_types = ["ExternalUrl", "Page", "SubHeader"]
+
         if isinstance(module_item, dict) and "type" in module_item:
-            if "content_id" in module_item:
+            if "type" not in unrequired_types:
+                kwargs["module_item"] = module_item
+            elif "content_id" in module_item:
                 kwargs["module_item"] = module_item
             else:
                 raise RequiredFieldMissing(
