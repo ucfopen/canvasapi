@@ -86,8 +86,9 @@ class TestModule(unittest.TestCase):
         register_uris({"module": ["create_module_item"]}, m)
 
         module_item = self.module.create_module_item(
-            module_item={"type": "Page", "content_id": 1}
+            module_item={"type": "Assignment", "content_id": 1}
         )
+
         self.assertIsInstance(module_item, ModuleItem)
         self.assertTrue(hasattr(module_item, "course_id"))
         self.assertEqual(module_item.course_id, self.course.id)
@@ -98,7 +99,15 @@ class TestModule(unittest.TestCase):
 
     def test_create_module_item_fail2(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.module.create_module_item(module_item={"type": "Page"})
+            self.module.create_module_item(module_item={"type": "Assignment"})
+
+    def test_create_module_item_unrequired_success(self, m):
+        register_uris({"module": ["create_module_item"]}, m)
+
+        module_item = self.module.create_module_item(
+            module_item={"type": "SubHeader"}
+        )
+        self.assertIsInstance(module_item, ModuleItem)
 
     # __str__
     def test__str__(self, m):
