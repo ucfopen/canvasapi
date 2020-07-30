@@ -104,9 +104,7 @@ class TestModule(unittest.TestCase):
     def test_create_module_item_unrequired_success(self, m):
         register_uris({"module": ["create_module_item"]}, m)
 
-        module_item = self.module.create_module_item(
-            module_item={"type": "SubHeader"}
-        )
+        module_item = self.module.create_module_item(module_item={"type": "SubHeader"})
         self.assertIsInstance(module_item, ModuleItem)
 
     # __str__
