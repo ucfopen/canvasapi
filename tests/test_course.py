@@ -1701,10 +1701,20 @@ class TestCourse(unittest.TestCase):
         folder_list = [folder for folder in folders]
         self.assertEqual(len(folder_list), 4)
         self.assertIsInstance(folder_list[0], Folder)
-        for folder_name, folder in zip(
-            ("course_files/" + full_path).split("/"), folders
-        ):
+        folder_names = ("course_files/" + full_path).split("/")
+        for folder_name, folder in zip(folder_names, folders):
             self.assertEqual(folder_name, folder.name)
+
+    # resolve_path() with null input
+    def test_resolve_path_null(self, m):
+        register_uris({"course": ["resolve_path_null"]}, m)
+
+        # test with null input
+        root_folder = self.course.resolve_path()
+        root_folder_list = [folder for folder in root_folder]
+        self.assertEqual(len(root_folder_list), 1)
+        self.assertIsInstance(root_folder_list[0], Folder)
+        self.assertEqual("course_files", root_folder_list[0].name)
 
 
 @requests_mock.Mocker()

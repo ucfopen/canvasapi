@@ -2211,13 +2211,12 @@
 				"name": "course_files",
 				"full_name": "course_files"
 			},
-
 			{
 				"id": 3,
 				"files_count": 0,
 				"folders_count": 1,
 				"name": "Folder_Level_1",
-				"full_name": "course_files"
+				"full_name": "course_files/Folder_Level_1"
 			},
 			{
 				"id": 4,
@@ -2234,6 +2233,20 @@
 				"full_name": "course_files/Folder_Level_1/Folder_Level_2/Folder_Level_3"
 			}
 		],
+		"status_code": 200
+	},
+    "resolve_path_null": {
+		"method": "GET",
+		"endpoint": "courses/1/folders/by_path",
+		"data": [
+            {
+				"id": 2,
+				"files_count": 0,
+				"folders_count": 1,
+				"name": "course_files",
+				"full_name": "course_files"
+			}
+        ],
 		"status_code": 200
 	}
 }
