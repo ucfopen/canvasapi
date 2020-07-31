@@ -5,11 +5,14 @@
 ### New Endpoint Coverage
 
 - Custom Gradebook Columns (Thanks,[@aileenpongnon](https://github.com/aileenpongnon))
+- Files
+    - Resolve Path (Thanks,[@dsavransky](https://github.com/dsavransky))
 
 ### Bugfixes
 
 - Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
 - Fixed an issue where `Course.create_external_tool` didn't accept `client_id` (LTI 1.3 support).
+- Fixed an issue where `Module.create_module_item` didn't (Thanks,[@aileenpongnon](https://github.com/aileenpongnon) and [@onomou](https://github.com/onomou))
 
 ### Breaking Changes
 
