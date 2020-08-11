@@ -7,7 +7,7 @@ class Page(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this page.
 
@@ -17,7 +17,9 @@ class Page(CanvasObject):
         :rtype: :class:`canvasapi.page.Page`
         """
         response = self._requester.request(
-            "DELETE", "courses/{}/pages/{}".format(self.course_id, self.url)
+            "DELETE",
+            "courses/{}/pages/{}".format(self.course_id, self.url),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Page(self._requester, response.json())
 
@@ -43,7 +45,7 @@ class Page(CanvasObject):
 
         return self
 
-    def get_parent(self):
+    def get_parent(self, **kwargs):
         """
         Return the object that spawned this page.
 
@@ -58,7 +60,9 @@ class Page(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
+            "GET",
+            "{}s/{}".format(self.parent_type, self.parent_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if self.parent_type == "group":
@@ -144,7 +148,7 @@ class Page(CanvasObject):
         else:
             raise ValueError("ExternalTool does not have a course_id or group_id")
 
-    def revert_to_revision(self, revision):
+    def revert_to_revision(self, revision, **kwargs):
         """
         Revert the page back to a specified revision.
 
@@ -163,12 +167,10 @@ class Page(CanvasObject):
             "{}s/{}/pages/{}/revisions/{}".format(
                 self.parent_type, self.parent_id, self.url, revision_id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         pagerev_json = response.json()
-        if self.parent_type == "group":
-            pagerev_json.update({"group_id": self.id})
-        elif self.parent_type == "course":
-            pagerev_json.update({"group_id": self.id})
+        pagerev_json.update({"{self.parent_type}_id": self.parent_id})
 
         return PageRevision(self._requester, pagerev_json)
 
@@ -195,7 +197,7 @@ class PageRevision(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.updated_at, self.revision_id)
 
-    def get_parent(self):
+    def get_parent(self, **kwargs):
         """
         Return the object that spawned this page.
 
@@ -210,7 +212,9 @@ class PageRevision(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
+            "GET",
+            "{}s/{}".format(self.parent_type, self.parent_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if self.parent_type == "group":

@@ -6,7 +6,7 @@ class Bookmark(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this bookmark.
 
@@ -16,7 +16,9 @@ class Bookmark(CanvasObject):
         :rtype: :class:`canvasapi.bookmark.Bookmark`
         """
         response = self._requester.request(
-            "DELETE", "users/self/bookmarks/{}".format(self.id)
+            "DELETE",
+            "users/self/bookmarks/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Bookmark(self._requester, response.json())
 

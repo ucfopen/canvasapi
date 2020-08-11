@@ -7,7 +7,7 @@ class CommunicationChannel(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.address, self.id)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete the current communication_channel
 
@@ -19,12 +19,14 @@ class CommunicationChannel(CanvasObject):
         """
 
         response = self._requester.request(
-            "DELETE", "users/{}/communication_channels/{}".format(self.user_id, self.id)
+            "DELETE",
+            "users/{}/communication_channels/{}".format(self.user_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("workflow_state") == "deleted"
 
-    def get_preference(self, notification):
+    def get_preference(self, notification, **kwargs):
         """
         Fetch the preference for the given notification for the given
         communication channel.
@@ -43,6 +45,7 @@ class CommunicationChannel(CanvasObject):
             "users/{}/communication_channels/{}/notification_preferences/{}".format(
                 self.user_id, self.id, notification
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         data = response.json()["notification_preferences"][0]
         return NotificationPreference(self._requester, data)

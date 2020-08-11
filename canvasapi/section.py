@@ -9,7 +9,7 @@ class Section(CanvasObject):
     def __str__(self):
         return "{} - {} ({})".format(self.name, self.course_id, self.id)
 
-    def cross_list_section(self, new_course):
+    def cross_list_section(self, new_course, **kwargs):
         """
         Move the Section to another course.
 
@@ -26,11 +26,13 @@ class Section(CanvasObject):
         new_course_id = obj_or_id(new_course, "new_course", (Course,))
 
         response = self._requester.request(
-            "POST", "sections/{}/crosslist/{}".format(self.id, new_course_id)
+            "POST",
+            "sections/{}/crosslist/{}".format(self.id, new_course_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Section(self._requester, response.json())
 
-    def decross_list_section(self):
+    def decross_list_section(self, **kwargs):
         """
         Undo cross-listing of a section.
 
@@ -40,11 +42,13 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            "DELETE", "sections/{}/crosslist".format(self.id)
+            "DELETE",
+            "sections/{}/crosslist".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Section(self._requester, response.json())
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete a target section.
 
@@ -53,7 +57,9 @@ class Section(CanvasObject):
 
         :rtype: :class:`canvasapi.section.Section`
         """
-        response = self._requester.request("DELETE", "sections/{}".format(self.id))
+        response = self._requester.request(
+            "DELETE", "sections/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
+        )
         return Section(self._requester, response.json())
 
     def edit(self, **kwargs):

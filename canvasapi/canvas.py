@@ -60,7 +60,7 @@ class Canvas(object):
 
         self.__requester = Requester(base_url, access_token)
 
-    def clear_course_nicknames(self):
+    def clear_course_nicknames(self, **kwargs):
         """
         Remove all stored course nicknames.
 
@@ -72,7 +72,9 @@ class Canvas(object):
         :rtype: bool
         """
 
-        response = self.__requester.request("DELETE", "users/self/course_nicknames")
+        response = self.__requester.request(
+            "DELETE", "users/self/course_nicknames", _kwargs=combine_kwargs(**kwargs),
+        )
         return response.json().get("message") == "OK"
 
     def conversations_batch_update(self, conversation_ids, event):
@@ -118,7 +120,7 @@ class Canvas(object):
                 "PUT",
                 "conversations",
                 event=event,
-                **{"conversation_ids[]": conversation_ids}
+                **{"conversation_ids[]": conversation_ids},
             )
             return_progress = Progress(self.__requester, response.json())
             return return_progress
@@ -126,7 +128,7 @@ class Canvas(object):
         except ValueError as e:
             return e
 
-    def conversations_get_running_batches(self):
+    def conversations_get_running_batches(self, **kwargs):
         """
         Returns any currently running conversation batches for the current user.
         Conversation batches are created when a bulk private message is sent
@@ -139,11 +141,13 @@ class Canvas(object):
         :rtype: `dict`
         """
 
-        response = self.__requester.request("GET", "conversations/batches")
+        response = self.__requester.request(
+            "GET", "conversations/batches", _kwargs=combine_kwargs(**kwargs)
+        )
 
         return response.json()
 
-    def conversations_mark_all_as_read(self):
+    def conversations_mark_all_as_read(self, **kwargs):
         """
         Mark all conversations as read.
 
@@ -152,10 +156,12 @@ class Canvas(object):
 
         :rtype: `bool`
         """
-        response = self.__requester.request("POST", "conversations/mark_all_as_read")
+        response = self.__requester.request(
+            "POST", "conversations/mark_all_as_read", _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json() == {}
 
-    def conversations_unread_count(self):
+    def conversations_unread_count(self, **kwargs):
         """
         Get the number of unread conversations for the current user
 
@@ -165,7 +171,9 @@ class Canvas(object):
         :returns: simple object with unread_count, example: {'unread_count': '7'}
         :rtype: `dict`
         """
-        response = self.__requester.request("GET", "conversations/unread_count")
+        response = self.__requester.request(
+            "GET", "conversations/unread_count", _kwargs=combine_kwargs(**kwargs)
+        )
 
         return response.json()
 
@@ -413,7 +421,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_activity_stream_summary(self):
+    def get_activity_stream_summary(self, **kwargs):
         """
         Return a summary of the current user's global activity stream.
 
@@ -422,7 +430,11 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request("GET", "users/self/activity_stream/summary")
+        response = self.__requester.request(
+            "GET",
+            "users/self/activity_stream/summary",
+            _kwargs=combine_kwargs(**kwargs),
+        )
         return response.json()
 
     def get_announcements(self, **kwargs):
@@ -445,7 +457,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_appointment_group(self, appointment_group):
+    def get_appointment_group(self, appointment_group, **kwargs):
         """
         Return single Appointment Group by id
 
@@ -464,7 +476,9 @@ class Canvas(object):
         )
 
         response = self.__requester.request(
-            "GET", "appointment_groups/{}".format(appointment_group_id)
+            "GET",
+            "appointment_groups/{}".format(appointment_group_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return AppointmentGroup(self.__requester, response.json())
 
@@ -488,7 +502,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_brand_variables(self):
+    def get_brand_variables(self, **kwargs):
         """
         Get account brand variables
 
@@ -498,10 +512,12 @@ class Canvas(object):
         :returns: JSON with brand variables for the account.
         :rtype: dict
         """
-        response = self.__requester.request("GET", "brand_variables")
+        response = self.__requester.request(
+            "GET", "brand_variables", _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
-    def get_calendar_event(self, calendar_event):
+    def get_calendar_event(self, calendar_event, **kwargs):
         """
         Return single Calendar Event by id
 
@@ -520,7 +536,9 @@ class Canvas(object):
         )
 
         response = self.__requester.request(
-            "GET", "calendar_events/{}".format(calendar_event_id)
+            "GET",
+            "calendar_events/{}".format(calendar_event_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return CalendarEvent(self.__requester, response.json())
 
@@ -640,7 +658,7 @@ class Canvas(object):
         )
         return Course(self.__requester, response.json())
 
-    def get_course_accounts(self):
+    def get_course_accounts(self, **kwargs):
         """
         List accounts that the current user can view through their
         admin course enrollments (Teacher, TA or designer enrollments).
@@ -654,9 +672,15 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.Account`
         """
-        return PaginatedList(Account, self.__requester, "GET", "course_accounts")
+        return PaginatedList(
+            Account,
+            self.__requester,
+            "GET",
+            "course_accounts",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
-    def get_course_nickname(self, course):
+    def get_course_nickname(self, course, **kwargs):
         """
         Return the nickname for the given course.
 
@@ -673,11 +697,13 @@ class Canvas(object):
         course_id = obj_or_id(course, "course", (Course,))
 
         response = self.__requester.request(
-            "GET", "users/self/course_nicknames/{}".format(course_id)
+            "GET",
+            "users/self/course_nicknames/{}".format(course_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return CourseNickname(self.__requester, response.json())
 
-    def get_course_nicknames(self):
+    def get_course_nicknames(self, **kwargs):
         """
         Return all course nicknames set by the current account.
 
@@ -690,7 +716,11 @@ class Canvas(object):
         from canvasapi.course import CourseNickname
 
         return PaginatedList(
-            CourseNickname, self.__requester, "GET", "users/self/course_nicknames"
+            CourseNickname,
+            self.__requester,
+            "GET",
+            "users/self/course_nicknames",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_courses(self, **kwargs):
@@ -749,7 +779,7 @@ class Canvas(object):
         )
         return File(self.__requester, response.json())
 
-    def get_folder(self, folder):
+    def get_folder(self, folder, **kwargs):
         """
         Return the details for a folder
 
@@ -763,7 +793,9 @@ class Canvas(object):
         """
         folder_id = obj_or_id(folder, "folder", (Folder,))
 
-        response = self.__requester.request("GET", "folders/{}".format(folder_id))
+        response = self.__requester.request(
+            "GET", "folders/{}".format(folder_id), _kwargs=combine_kwargs(**kwargs)
+        )
         return Folder(self.__requester, response.json())
 
     def get_group(self, group, use_sis_id=False, **kwargs):
@@ -796,7 +828,7 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
-    def get_group_category(self, category):
+    def get_group_category(self, category, **kwargs):
         """
         Get a single group category.
 
@@ -811,7 +843,9 @@ class Canvas(object):
         category_id = obj_or_id(category, "category", (GroupCategory,))
 
         response = self.__requester.request(
-            "GET", "group_categories/{}".format(category_id)
+            "GET",
+            "group_categories/{}".format(category_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GroupCategory(self.__requester, response.json())
 
@@ -842,7 +876,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_outcome(self, outcome):
+    def get_outcome(self, outcome, **kwargs):
         """
         Returns the details of the outcome with the given id.
 
@@ -858,10 +892,12 @@ class Canvas(object):
         from canvasapi.outcome import Outcome
 
         outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
-        response = self.__requester.request("GET", "outcomes/{}".format(outcome_id))
+        response = self.__requester.request(
+            "GET", "outcomes/{}".format(outcome_id), _kwargs=combine_kwargs(**kwargs)
+        )
         return Outcome(self.__requester, response.json())
 
-    def get_outcome_group(self, group):
+    def get_outcome_group(self, group, **kwargs):
         """
         Returns the details of the Outcome Group with the given id.
 
@@ -879,7 +915,9 @@ class Canvas(object):
         outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
 
         response = self.__requester.request(
-            "GET", "global/outcome_groups/{}".format(outcome_group_id)
+            "GET",
+            "global/outcome_groups/{}".format(outcome_group_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self.__requester, response.json())
@@ -1049,7 +1087,7 @@ class Canvas(object):
         )
         return Progress(self.__requester, response.json())
 
-    def get_root_outcome_group(self):
+    def get_root_outcome_group(self, **kwargs):
         """
         Redirect to root outcome group for context
 
@@ -1061,7 +1099,9 @@ class Canvas(object):
         """
         from canvasapi.outcome import OutcomeGroup
 
-        response = self.__requester.request("GET", "global/root_outcome_group")
+        response = self.__requester.request(
+            "GET", "global/root_outcome_group", _kwargs=combine_kwargs(**kwargs)
+        )
         return OutcomeGroup(self.__requester, response.json())
 
     def get_section(self, section, use_sis_id=False, **kwargs):
@@ -1091,7 +1131,7 @@ class Canvas(object):
         )
         return Section(self.__requester, response.json())
 
-    def get_todo_items(self):
+    def get_todo_items(self, **kwargs):
         """
         Return the current user's list of todo items, as seen on the user dashboard.
 
@@ -1100,10 +1140,12 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request("GET", "users/self/todo")
+        response = self.__requester.request(
+            "GET", "users/self/todo", _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
-    def get_upcoming_events(self):
+    def get_upcoming_events(self, **kwargs):
         """
         Return the current user's upcoming events, i.e. the same things shown
         in the dashboard 'Coming Up' sidebar.
@@ -1113,7 +1155,9 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request("GET", "users/self/upcoming_events")
+        response = self.__requester.request(
+            "GET", "users/self/upcoming_events", _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
     def get_user(self, user, id_type=None, **kwargs):
@@ -1284,7 +1328,7 @@ class Canvas(object):
         )
         return response.json()
 
-    def set_course_nickname(self, course, nickname):
+    def set_course_nickname(self, course, nickname, **kwargs):
         """
         Set a nickname for the given course. This will replace the
         course's name in the output of subsequent API calls, as
@@ -1304,7 +1348,11 @@ class Canvas(object):
 
         course_id = obj_or_id(course, "course", (Course,))
 
+        kwargs["nickname"] = nickname
+
         response = self.__requester.request(
-            "PUT", "users/self/course_nicknames/{}".format(course_id), nickname=nickname
+            "PUT",
+            "users/self/course_nicknames/{}".format(course_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return CourseNickname(self.__requester, response.json())
