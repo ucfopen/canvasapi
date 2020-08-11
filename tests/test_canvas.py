@@ -469,18 +469,18 @@ class TestCanvas(unittest.TestCase):
     def test_conversations_batch_updated_fail_on_event(self, m):
         conversation_ids = [1, 2]
         this_event = "this doesn't work"
-        result = self.canvas.conversations_batch_update(
-            event=this_event, conversation_ids=conversation_ids
-        )
-        self.assertIsInstance(result, ValueError)
+        with self.assertRaises(ValueError):
+            self.canvas.conversations_batch_update(
+                event=this_event, conversation_ids=conversation_ids
+            )
 
     def test_conversations_batch_updated_fail_on_ids(self, m):
         conversation_ids = [None] * 501
         this_event = "mark_as_read"
-        result = self.canvas.conversations_batch_update(
-            event=this_event, conversation_ids=conversation_ids
-        )
-        self.assertIsInstance(result, ValueError)
+        with self.assertRaises(ValueError):
+            self.canvas.conversations_batch_update(
+                event=this_event, conversation_ids=conversation_ids
+            )
 
     # create_calendar_event()
     def test_create_calendar_event(self, m):

@@ -63,7 +63,7 @@ def accepts_kwargs(function):
 if __name__ == "__main__":
     missing_count = find_missing_kwargs()
     if missing_count:
-        print(f"---\nFound {missing_count} functions missing **kwargs")
+        print(f"---\nFound {missing_count} functions missing **kwargs. 💥")
     else:
         print("All functions have **kwargs! 👍")
     sys.exit(missing_count > 0)

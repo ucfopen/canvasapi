@@ -77,7 +77,7 @@ class Canvas(object):
         )
         return response.json().get("message") == "OK"
 
-    def conversations_batch_update(self, conversation_ids, event):
+    def conversations_batch_update(self, conversation_ids, event, **kwargs):
         """
 
         :calls: `PUT /api/v1/conversations \
@@ -101,32 +101,28 @@ class Canvas(object):
             "destroy",
         ]
 
-        try:
-            if event not in ALLOWED_EVENTS:
-                raise ValueError(
-                    "{} is not a valid action. Please use one of the following: {}".format(
-                        event, ",".join(ALLOWED_EVENTS)
-                    )
+        if event not in ALLOWED_EVENTS:
+            raise ValueError(
+                "{} is not a valid action. Please use one of the following: {}".format(
+                    event, ",".join(ALLOWED_EVENTS)
                 )
-
-            if len(conversation_ids) > 500:
-                raise ValueError(
-                    "You have requested {} updates, which exceeds the limit of 500".format(
-                        len(conversation_ids)
-                    )
-                )
-
-            response = self.__requester.request(
-                "PUT",
-                "conversations",
-                event=event,
-                **{"conversation_ids[]": conversation_ids},
             )
-            return_progress = Progress(self.__requester, response.json())
-            return return_progress
 
-        except ValueError as e:
-            return e
+        if len(conversation_ids) > 500:
+            raise ValueError(
+                "You have requested {} updates, which exceeds the limit of 500".format(
+                    len(conversation_ids)
+                )
+            )
+
+        kwargs["conversation_ids"] = conversation_ids
+        kwargs["event"] = event
+
+        response = self.__requester.request(
+            "PUT", "conversations", _kwargs=combine_kwargs(**kwargs),
+        )
+        return_progress = Progress(self.__requester, response.json())
+        return return_progress
 
     def conversations_get_running_batches(self, **kwargs):
         """
