@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General
+
+- Added support for arbitrary keyword arguments across the entire library
+
 ### New Endpoint Coverage
 
 - Custom Gradebook Columns (Thanks,[@aileenpongnon](https://github.com/aileenpongnon))
@@ -13,6 +17,7 @@
 - Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
 - Fixed an issue where `Course.create_external_tool` didn't accept `client_id` (LTI 1.3 support).
 - Fixed an issue where `Module.create_module_item` didn't (Thanks,[@aileenpongnon](https://github.com/aileenpongnon) and [@onomou](https://github.com/onomou))
+- Fixed an issue where `Page.revert_to_revision` would incorrectly always set `group_id` to the page ID. Now correctly sets `group_id` or `course_id` appropriately.
 
 ### Breaking Changes
 
