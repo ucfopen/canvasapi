@@ -3,7 +3,8 @@
 coverage run -m unittest discover
 coverage report
 coverage html
+black --check canvasapi tests
 flake8 canvasapi tests
 mdl . .github
-./scripts/run_black.sh
 python scripts/alphabetic.py
+python scripts/find_missing_kwargs.py
