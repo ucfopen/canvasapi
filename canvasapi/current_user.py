@@ -101,7 +101,7 @@ class CurrentUser(User):
 
         return Bookmark(self._requester, response.json())
 
-    def get_bookmark(self, bookmark):
+    def get_bookmark(self, bookmark, **kwargs):
         """
         Return single Bookmark by id
 
@@ -118,7 +118,9 @@ class CurrentUser(User):
         bookmark_id = obj_or_id(bookmark, "bookmark", (Bookmark,))
 
         response = self._requester.request(
-            "GET", "users/self/bookmarks/{}".format(bookmark_id)
+            "GET",
+            "users/self/bookmarks/{}".format(bookmark_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Bookmark(self._requester, response.json())
 
