@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2020-08-14
+
 ### General
 
 - Added support for arbitrary keyword arguments across the entire library
@@ -485,7 +487,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...develop
+[2.0.0]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/ucfopen/canvasapi/compare/v0.16.1...v1.0.0
 [0.16.1]: https://github.com/ucfopen/canvasapi/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/ucfopen/canvasapi/compare/v0.15.0...v0.16.0
