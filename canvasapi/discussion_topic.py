@@ -35,7 +35,7 @@ class DiscussionTopic(CanvasObject):
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Deletes the discussion topic. This will also delete the assignment.
 
@@ -53,6 +53,7 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return "deleted_at" in response.json()
 
@@ -91,7 +92,7 @@ class DiscussionTopic(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_parent(self):
+    def get_parent(self, **kwargs):
         """
         Return the object that spawned this discussion topic.
 
@@ -101,7 +102,9 @@ class DiscussionTopic(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            "GET", "{}s/{}".format(self._parent_type, self._parent_id)
+            "GET",
+            "{}s/{}".format(self._parent_type, self._parent_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if self._parent_type == "group":
@@ -136,7 +139,7 @@ class DiscussionTopic(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def mark_as_read(self):
+    def mark_as_read(self, **kwargs):
         """
         Mark the initial text of the discussion topic as read.
 
@@ -153,10 +156,11 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}/read".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
-    def mark_as_unread(self):
+    def mark_as_unread(self, **kwargs):
         """
         Mark the initial text of the discussion topic as unread.
 
@@ -173,6 +177,7 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}/read".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -246,7 +251,7 @@ class DiscussionTopic(CanvasObject):
         )
         return DiscussionEntry(self._requester, response_json)
 
-    def subscribe(self):
+    def subscribe(self, **kwargs):
         """
         Subscribe to a topic to receive notifications about new entries.
 
@@ -263,10 +268,11 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}/subscribed".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
-    def unsubscribe(self):
+    def unsubscribe(self, **kwargs):
         """
         Unsubscribe from a topic to stop receiving notifications about new entries.
 
@@ -283,6 +289,7 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}/subscribed".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -364,7 +371,7 @@ class DiscussionEntry(CanvasObject):
         )
         return "deleted_at" in response.json()
 
-    def get_discussion(self):
+    def get_discussion(self, **kwargs):
         """
         Return the discussion topic object this entry is related to
 
@@ -378,6 +385,7 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_id,
                 self.discussion_id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -421,7 +429,7 @@ class DiscussionEntry(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def mark_as_read(self):
+    def mark_as_read(self, **kwargs):
         """
         Mark a discussion entry as read.
 
@@ -441,10 +449,11 @@ class DiscussionEntry(CanvasObject):
                 self.discussion_id,
                 self.id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
-    def mark_as_unread(self):
+    def mark_as_unread(self, **kwargs):
         """
         Mark a discussion entry as unread.
 
@@ -466,6 +475,7 @@ class DiscussionEntry(CanvasObject):
                 self.discussion_id,
                 self.id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 

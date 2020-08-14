@@ -22,6 +22,7 @@ Class Reference
     course-ref
     course-epub-export-ref
     current-user-ref
+    custom-gradebook-columns-ref
     discussion-entry-ref
     discussion-topic-ref
     enrollment-ref
