@@ -24,8 +24,8 @@ class TestPollSubmission(unittest.TestCase):
 
             self.poll = self.canvas.get_poll(1)
             self.poll.poll_session = self.poll.get_session(1)
-            self.poll.poll_session.poll_submission = self.poll.poll_session.get_submission(
-                1
+            self.poll.poll_session.poll_submission = (
+                self.poll.poll_session.get_submission(1)
             )
 
     # __str__()
