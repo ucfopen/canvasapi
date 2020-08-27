@@ -109,7 +109,9 @@ class Course(CanvasObject):
         kwargs["event"] = "conclude"
 
         response = self._requester.request(
-            "DELETE", "courses/{}".format(self.id), _kwargs=combine_kwargs(**kwargs),
+            "DELETE",
+            "courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("conclude")
@@ -571,7 +573,9 @@ class Course(CanvasObject):
         kwargs["event"] = "delete"
 
         response = self._requester.request(
-            "DELETE", "courses/{}".format(self.id), _kwargs=combine_kwargs(**kwargs),
+            "DELETE",
+            "courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json().get("delete")
 

@@ -73,7 +73,9 @@ class Canvas(object):
         """
 
         response = self.__requester.request(
-            "DELETE", "users/self/course_nicknames", _kwargs=combine_kwargs(**kwargs),
+            "DELETE",
+            "users/self/course_nicknames",
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json().get("message") == "OK"
 
@@ -119,7 +121,9 @@ class Canvas(object):
         kwargs["event"] = event
 
         response = self.__requester.request(
-            "PUT", "conversations", _kwargs=combine_kwargs(**kwargs),
+            "PUT",
+            "conversations",
+            _kwargs=combine_kwargs(**kwargs),
         )
         return_progress = Progress(self.__requester, response.json())
         return return_progress

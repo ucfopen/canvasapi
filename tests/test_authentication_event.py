@@ -26,9 +26,9 @@ class TestAuthenticationEvent(unittest.TestCase):
             )
             self.user = self.canvas.get_user(1)
 
-            self.authentication_event_account = self.account.get_authentication_events()[
-                0
-            ]
+            self.authentication_event_account = (
+                self.account.get_authentication_events()[0]
+            )
             self.authentication_event_login = self.login.get_authentication_events()[0]
             self.authentication_event_user = self.user.get_authentication_events()[0]
 

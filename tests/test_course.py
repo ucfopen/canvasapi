@@ -75,7 +75,8 @@ class TestCourse(unittest.TestCase):
     # column_data_bulk_update()
     def test_column_data_bulk_update(self, m):
         register_uris(
-            {"course": ["column_data_bulk_update"], "progress": ["course_progress"]}, m,
+            {"course": ["column_data_bulk_update"], "progress": ["course_progress"]},
+            m,
         )
         progress = self.course.column_data_bulk_update(
             column_data=[
@@ -942,7 +943,8 @@ class TestCourse(unittest.TestCase):
     def test_create_external_tool_missing_params(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.course.create_external_tool(
-                consumer_key="key", shared_secret="secret",
+                consumer_key="key",
+                shared_secret="secret",
             )
 
     # get_collaborations
