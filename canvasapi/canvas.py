@@ -738,6 +738,17 @@ class Canvas(object):
         )
 
     def get_current_user(self):
+        """
+        Return a details of the current user.
+
+        :calls: `GET /api/v1/users/:user_id \
+        <https://canvas.instructure.com/doc/api/users.html#method.current_user.show>`_
+
+        :param user: The object or ID of the current user.
+        :type user: :class:`cavasapi.user.User` or int
+
+        :rtype: :class:`canvasapi.current_user.CurrentUser`
+        """
         return CurrentUser(self.__requester)
 
     def get_epub_exports(self, **kwargs):
