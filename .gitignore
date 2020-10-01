@@ -21,3 +21,4 @@
 setup.sh
 .python-version
 .*.swp
+venv/
