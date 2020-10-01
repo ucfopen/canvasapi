@@ -16,6 +16,9 @@ class DiscussionTopic(CanvasObject):
         """
         if hasattr(self, "course_id"):
             return self.course_id
+        elif hasattr(self, "context_code"):
+            course_id = self.context_code.split("_")[1]
+            return course_id
         elif hasattr(self, "group_id"):
             return self.group_id
         else:
@@ -29,6 +32,8 @@ class DiscussionTopic(CanvasObject):
         :rtype: str
         """
         if hasattr(self, "course_id"):
+            return "course"
+        elif hasattr(self, "context_code"):
             return "course"
         elif hasattr(self, "group_id"):
             return "group"
