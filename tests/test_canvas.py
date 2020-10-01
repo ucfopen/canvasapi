@@ -708,7 +708,8 @@ class TestCanvas(unittest.TestCase):
         announcement_list = [announcement for announcement in announcements]
         self.assertIsInstance(announcements, PaginatedList)
         self.assertIsInstance(announcement_list[0], DiscussionTopic)
-        self.assertEqual(len(announcement_list), 2)
+        self.assertEqual(len(announcement_list), 3)
+        self.assertEqual(announcement_list[2].context_code, "course_1")
 
     # get_epub_exports()
     def test_get_epub_exports(self, m):

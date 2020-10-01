@@ -21,6 +21,17 @@
         },
         "message": "Announcement Message #2",
         "subscription_hold": "topic_is_announcement"
+      },
+      {
+        "id": 3,
+        "title": "Annoucement 3",
+        "author": {
+          "id": 3,
+          "display_name": "John Wick"
+        },
+        "message": "Announcement Message #3",
+        "subscription_hold": "topic_is_announcement",
+        "context_code": "course_1"
       }
     ],
     "status_code": 200
