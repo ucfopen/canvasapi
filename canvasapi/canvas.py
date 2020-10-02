@@ -437,23 +437,29 @@ class Canvas(object):
         )
         return response.json()
 
-    def get_announcements(self, **kwargs):
+    def get_announcements(self, course_list, **kwargs):
         """
         List announcements.
 
         :calls: `GET /api/v1/announcements \
         <https://canvas.instructure.com/doc/api/announcements.html#method.announcements_api.index>`_
 
+        :param course_id: Course ID(s) to request announcements from.
+        :type course_ids: list
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         from canvasapi.discussion_topic import DiscussionTopic
+
+        course_ids = [f'course_{course_id}' for course_id in course_list]
 
         return PaginatedList(
             DiscussionTopic,
             self.__requester,
             "GET",
             "announcements",
+            context_codes=course_ids,
             _kwargs=combine_kwargs(**kwargs),
         )
 
