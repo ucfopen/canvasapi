@@ -704,12 +704,29 @@ class TestCanvas(unittest.TestCase):
     # get_announcements()
     def test_get_announcements(self, m):
         register_uris({"announcements": ["list_announcements"]}, m)
-        announcements = self.canvas.get_announcements()
+        announcements = self.canvas.get_announcements([1])
         announcement_list = [announcement for announcement in announcements]
+
         self.assertIsInstance(announcements, PaginatedList)
         self.assertIsInstance(announcement_list[0], DiscussionTopic)
-        self.assertEqual(len(announcement_list), 3)
-        self.assertEqual(announcement_list[2].context_code, "course_1")
+        self.assertEqual(len(announcement_list), 4)
+
+    def test_get_announcements_fail(self, m):
+        with self.assertRaises(TypeError):
+            self.canvas.get_announcements()
+
+    def test_context_codes(self, m):
+        register_uris({"announcements": ["list_announcements"]}, m)
+        announcements = self.canvas.get_announcements([1])
+        announcement_list = [announcement for announcement in announcements]
+
+        self.assertEqual(announcement_list[1].context_code, "course_1")
+        self.assertEqual(announcement_list[1]._parent_type, "course")
+        self.assertEqual(announcement_list[1]._parent_id, "1")
+
+        self.assertEqual(announcement_list[2].context_code, "group_1")
+        self.assertEqual(announcement_list[2]._parent_type, "group")
+        self.assertEqual(announcement_list[2]._parent_id, "1")
 
     # get_epub_exports()
     def test_get_epub_exports(self, m):
