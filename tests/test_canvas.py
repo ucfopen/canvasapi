@@ -702,7 +702,7 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(progress.id, 1)
 
     # get_announcements()
-    def test_get_announcements(self, m):
+    def test_get_single_course_announcements(self, m):
         register_uris({"announcements": ["list_announcements"]}, m)
         announcements = self.canvas.get_announcements([1])
         announcement_list = [announcement for announcement in announcements]
@@ -714,10 +714,12 @@ class TestCanvas(unittest.TestCase):
     def test_get_announcements_fail(self, m):
         with self.assertRaises(TypeError):
             self.canvas.get_announcements()
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.get_announcements(1)
 
-    def test_context_codes(self, m):
+    def test_multiple_course_announcements(self, m):
         register_uris({"announcements": ["list_announcements"]}, m)
-        announcements = self.canvas.get_announcements([1])
+        announcements = self.canvas.get_announcements([1, 2])
         announcement_list = [announcement for announcement in announcements]
 
         self.assertEqual(announcement_list[1].context_code, "course_1")

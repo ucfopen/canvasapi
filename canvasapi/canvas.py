@@ -444,15 +444,18 @@ class Canvas(object):
         :calls: `GET /api/v1/announcements \
         <https://canvas.instructure.com/doc/api/announcements.html#method.announcements_api.index>`_
 
-        :param course_id: Course ID(s) to request announcements from.
-        :type course_ids: list
+        :param course_list: Course ID(s) to request announcements from.
+        :type course_list: list
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         from canvasapi.discussion_topic import DiscussionTopic
 
-        course_ids = [f'course_{course_id}' for course_id in course_list]
+        if type(course_list) is not list:
+            raise RequiredFieldMissing("Course IDs need to be passed as a list")
+
+        course_ids = [f"course_{course_id}" for course_id in course_list]
 
         return PaginatedList(
             DiscussionTopic,
