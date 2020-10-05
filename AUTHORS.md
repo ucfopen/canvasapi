@@ -16,6 +16,7 @@ Patches and Suggestions
 - [@amorqiu](https://github.com/amorqiu)
 - Andrew Gardener [@andrew-gardener](https://github.com/andrew-gardener)
 - Anthony Rodriguez [@AnthonyRodriguez726](https://github.com/AnthonyRodriguez726)
+- Ashutosh Saxena [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX)
 - Ben Liblit [@liblit](https://github.com/liblit)
 - Bill Wrbican [@wjw27](https://github.com/wjw27)
 - Bradford Lynch [@bradfordlynch](https://github.com/bradfordlynch)
