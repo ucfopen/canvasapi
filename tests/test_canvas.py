@@ -710,10 +710,25 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(announcements, PaginatedList)
         self.assertIsInstance(announcement_list[0], DiscussionTopic)
         self.assertEqual(len(announcement_list), 4)
+    
+    def test_get_course_announcements_from_object(self, m):
+        register_uris({"course": ["get_by_id"], "announcements": ["list_announcements"]}, m)
+        course = self.canvas.get_course(1)
+        announcements = self.canvas.get_announcements([course])
+
+        self.assertIsInstance(announcements, PaginatedList)
+
+    def test_get_course_announcements_from_mixed_list(self, m):
+        register_uris({"course": ["get_by_id"], "announcements": ["list_announcements"]}, m)
+        course = self.canvas.get_course(1)
+        course_ids = [course, 2]
+        announcements = self.canvas.get_announcements(course_ids)
+
+        self.assertIsInstance(announcements, PaginatedList)
 
     def test_get_announcements_fail(self, m):
-        with self.assertRaises(TypeError):
-            self.canvas.get_announcements()
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.get_announcements([])
         with self.assertRaises(RequiredFieldMissing):
             self.canvas.get_announcements(1)
 
