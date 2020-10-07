@@ -641,6 +641,32 @@
             }
         ]
     },
+	"get_todo_items": {
+		"method": "GET",
+		"endpoint": "courses/1/todo",
+		"data": [
+			{
+				"type": "grading",
+				"assignment": {},
+				"ignore": ".. url ..",
+				"ignore_permanently": ".. url ..",
+				"html_url": ".. url ..",
+				"needs_grading_count": 3,
+				"context_type": "course",
+				"course_id": 1,
+				"group_id": null
+			},
+			{
+				"type": "submitting",
+				"assignment": {},
+				"ignore": ".. url ..",
+				"ignore_permanently": ".. url ..",
+				"html_url": ".. url ..",
+				"context_type": "course",
+				"course_id": 1
+			}
+		]
+	},
 	"get_uncollated_submissions": {
 		"method": "GET",
 		"endpoint": "courses/1/gradebook_history/feed",

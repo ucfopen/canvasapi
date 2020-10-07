@@ -1141,6 +1141,14 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(tab_list), 2)
         self.assertIsInstance(tab_list[0], Tab)
 
+	# get_todo_items()
+    def test_get_todo_items(self, m):
+        register_uris({"course": ["get_todo_items"]}, m)
+
+        todo_items = self.course.get_todo_items()
+
+        self.assertIsInstance(todo_items, list)
+
     # get_rubric
     def test_get_rubric(self, m):
         register_uris({"course": ["get_rubric_single"]}, m)

@@ -2087,6 +2087,21 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_todo_items(self):
+        """
+        Returns the current user's course-specific todo items.
+        
+        :calls: `GET /api/v1/courses/:course_id/todo \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.todo_items>`_
+        
+        :rtype: dict
+        """
+        response = self._requester.request(
+            "GET",
+            "courses/{}/todo".format(self.id)
+        )
+        return response.json()
+
     def get_uncollated_submissions(self, **kwargs):
         """
         Gives a paginated, uncollated list of submission versions for all matching
