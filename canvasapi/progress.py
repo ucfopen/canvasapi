@@ -16,7 +16,9 @@ class Progress(CanvasObject):
         :rtype: :class:`canvasapi.progress.Progress`
         """
         response = self._requester.request(
-            "GET", "progress/{}".format(self.id), _kwargs=combine_kwargs(**kwargs),
+            "GET",
+            "progress/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
 

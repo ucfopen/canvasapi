@@ -165,9 +165,9 @@ class TestBlueprintMigration(unittest.TestCase):
             self.blueprint = self.course.get_blueprint(1)
             self.blueprint_migration = self.blueprint.show_blueprint_migration(1)
             self.blueprint_subscription = self.course.list_blueprint_subscriptions()[0]
-            self.blueprint_imports = self.blueprint_subscription.list_blueprint_imports()[
-                0
-            ]
+            self.blueprint_imports = (
+                self.blueprint_subscription.list_blueprint_imports()[0]
+            )
             self.b_import = self.blueprint_subscription.show_blueprint_import(3)
 
     # __str__()

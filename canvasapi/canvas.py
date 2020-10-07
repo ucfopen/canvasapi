@@ -73,7 +73,9 @@ class Canvas(object):
         """
 
         response = self.__requester.request(
-            "DELETE", "users/self/course_nicknames", _kwargs=combine_kwargs(**kwargs),
+            "DELETE",
+            "users/self/course_nicknames",
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json().get("message") == "OK"
 
@@ -119,7 +121,9 @@ class Canvas(object):
         kwargs["event"] = event
 
         response = self.__requester.request(
-            "PUT", "conversations", _kwargs=combine_kwargs(**kwargs),
+            "PUT",
+            "conversations",
+            _kwargs=combine_kwargs(**kwargs),
         )
         return_progress = Progress(self.__requester, response.json())
         return return_progress
@@ -734,6 +738,14 @@ class Canvas(object):
         )
 
     def get_current_user(self):
+        """
+        Return a details of the current user.
+
+        :calls: `GET /api/v1/users/:user_id \
+        <https://canvas.instructure.com/doc/api/users.html#method.current_user.show>`_
+
+        :rtype: :class:`canvasapi.current_user.CurrentUser`
+        """
         return CurrentUser(self.__requester)
 
     def get_epub_exports(self, **kwargs):

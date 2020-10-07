@@ -292,7 +292,9 @@ class User(CanvasObject):
         :rtype: dict
         """
         response = self._requester.request(
-            "GET", "users/{}/colors".format(self.id), _kwargs=combine_kwargs(**kwargs),
+            "GET",
+            "users/{}/colors".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 

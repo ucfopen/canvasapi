@@ -58,7 +58,7 @@ You can now use `canvas` to begin making API calls.
 
 ### Working with Canvas Objects
 
-CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://canvasapi.readthedocs.io/en/latest/class-reference.html). Below, you’ll find a few examples of common CanvasAPI use cases.
+CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://canvasapi.readthedocs.io/en/stable/class-reference.html). Below, you’ll find a few examples of common CanvasAPI use cases.
 
 #### Course objects
 
@@ -146,7 +146,7 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
 >>> courses = user.get_courses(per_page=50)
 ```
 
-For a more detailed description of how CanvasAPI handles more complex keyword arguments, check out the [Keyword Argument Documentation](http://canvasapi.readthedocs.io/en/latest/keyword-args.html).
+For a more detailed description of how CanvasAPI handles more complex keyword arguments, check out the [Keyword Argument Documentation](http://canvasapi.readthedocs.io/en/stable/keyword-args.html).
 
 ## Contact Us
 
