@@ -2098,7 +2098,8 @@ class Course(CanvasObject):
         """
         response = self._requester.request(
             "GET",
-            "courses/{}/todo".format(self.id)
+            "courses/{}/todo".format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
         return response.json()
 
