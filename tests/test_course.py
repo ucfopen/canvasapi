@@ -1141,9 +1141,9 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(tab_list), 2)
         self.assertIsInstance(tab_list[0], Tab)
 
-	# get_todo_items()
+    # get_todo_items()
     def test_get_todo_items(self, m):
-        register_uris({"course": ["get_todo_items"]}, m)
+        register_uris({"course": ["todo_items"]}, m)
 
         todo_items = self.course.get_todo_items()
 
