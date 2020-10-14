@@ -583,7 +583,7 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/comm_messages.html#method.comm_messages_api.index>`_
 
         :param user: The object or ID of the user.
-        :type user: :class: `canvasapi.user.User` or int
+        :type user: :class:`canvasapi.user.User` or int
 
         :returns: Paginated list containing messages sent to user
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -751,6 +751,14 @@ class Canvas(object):
         )
 
     def get_current_user(self):
+        """
+        Return a details of the current user.
+
+        :calls: `GET /api/v1/users/:user_id \
+        <https://canvas.instructure.com/doc/api/users.html#method.current_user.show>`_
+
+        :rtype: :class:`canvasapi.current_user.CurrentUser`
+        """
         return CurrentUser(self.__requester)
 
     def get_epub_exports(self, **kwargs):
