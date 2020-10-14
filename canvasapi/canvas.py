@@ -457,10 +457,12 @@ class Canvas(object):
 
         # The type of object in `courses` is taken care of by obj_or_id, extracting the couse
         # ID from a <Course> object or by returning plain strings.
-        course_ids = [obj_or_id(course_id, "course_id", (Course,)) for course_id in courses]
+        course_ids = [
+            obj_or_id(course_id, "course_id", (Course,)) for course_id in courses
+        ]
 
         # Set the **kwargs object vaue so it can be combined with others passed by the user.
-        kwargs['context_codes'] = [f"course_{course_id}" for course_id in course_ids]
+        kwargs["context_codes"] = [f"course_{course_id}" for course_id in course_ids]
 
         return PaginatedList(
             DiscussionTopic,

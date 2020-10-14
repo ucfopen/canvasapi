@@ -1,5 +1,3 @@
-import re
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -21,10 +19,10 @@ class DiscussionTopic(CanvasObject):
         elif hasattr(self, "group_id"):
             return self.group_id
         elif hasattr(self, "context_code"):
-            if re.match("course", self.context_code):
+            if self.context_code.startswith("course_"):
                 self.course_id = self.context_code.split("_")[1]
                 return self.course_id
-            elif re.match("group", self.context_code):
+            elif self.context_code.startswith("group_"):
                 self.group_id = self.context_code.split("_")[1]
                 return self.group_id
         else:
@@ -42,9 +40,9 @@ class DiscussionTopic(CanvasObject):
         elif hasattr(self, "group_id"):
             return "group"
         elif hasattr(self, "context_code"):
-            if re.match("course", self.context_code):
+            if self.context_code.startswith("course"):
                 return "course"
-            elif re.match("group", self.context_code):
+            elif self.context_code.startswith("group"):
                 return "group"
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
