@@ -586,7 +586,7 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/comm_messages.html#method.comm_messages_api.index>`_
 
         :param user: The object or ID of the user.
-        :type user: :class: `canvasapi.user.User` or int
+        :type user: :class:`canvasapi.user.User` or int
 
         :returns: Paginated list containing messages sent to user
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of

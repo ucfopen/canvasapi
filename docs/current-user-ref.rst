@@ -2,12 +2,9 @@
 CurrentUser
 ===========
 
-The CurrentUser class being a subclass of the User class, and thus inherits all of the methods of User,
-i.e the User class is the parent class from which methods are inherited to the Child(CurrentUser) class.
+The :class:`canvasapi.current_user.CurrentUser` class is a subclass of :class:`canvasapi.user.User`, and thus also includes all of its methods.
 
-`Documentation for the User class <https://canvas.instructure.com/doc/api/users.html>`_
+`Documentation for the User class <user-ref.html>`_
 
 .. autoclass:: canvasapi.current_user.CurrentUser
     :members:
-
-
