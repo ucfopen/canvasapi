@@ -712,14 +712,18 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(len(announcement_list), 4)
 
     def test_get_course_announcements_from_object(self, m):
-        register_uris({"course": ["get_by_id"], "announcements": ["list_announcements"]}, m)
+        register_uris(
+            {"course": ["get_by_id"], "announcements": ["list_announcements"]}, m
+        )
         course = self.canvas.get_course(1)
         announcements = self.canvas.get_announcements([course])
 
         self.assertIsInstance(announcements, PaginatedList)
 
     def test_get_course_announcements_from_mixed_list(self, m):
-        register_uris({"course": ["get_by_id"], "announcements": ["list_announcements"]}, m)
+        register_uris(
+            {"course": ["get_by_id"], "announcements": ["list_announcements"]}, m
+        )
         course = self.canvas.get_course(1)
         course_ids = [course, 2]
         announcements = self.canvas.get_announcements(course_ids)
