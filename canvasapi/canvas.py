@@ -437,31 +437,21 @@ class Canvas(object):
         )
         return response.json()
 
-<<<<<<< HEAD
     def get_announcements(self, courses, **kwargs):
-=======
-    def get_announcements(self, course_list, **kwargs):
->>>>>>> 08504d5e3fed8c3dece047d79c8a798a2ddaa354
         """
         List announcements.
 
         :calls: `GET /api/v1/announcements \
         <https://canvas.instructure.com/doc/api/announcements.html#method.announcements_api.index>`_
 
-<<<<<<< HEAD
         :param courses: Course ID(s) or <Course> objects to request announcements from.
         :type courses: list
-=======
-        :param course_list: Course ID(s) to request announcements from.
-        :type course_list: list
->>>>>>> 08504d5e3fed8c3dece047d79c8a798a2ddaa354
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         from canvasapi.discussion_topic import DiscussionTopic
 
-<<<<<<< HEAD
         if type(courses) is not list or len(courses) == 0:
             raise RequiredFieldMissing("Course IDs need to be passed as a list")
 
@@ -473,12 +463,6 @@ class Canvas(object):
 
         # Set the **kwargs object vaue so it can be combined with others passed by the user.
         kwargs["context_codes"] = [f"course_{course_id}" for course_id in course_ids]
-=======
-        if type(course_list) is not list:
-            raise RequiredFieldMissing("Course IDs need to be passed as a list")
-
-        course_ids = [f"course_{course_id}" for course_id in course_list]
->>>>>>> 08504d5e3fed8c3dece047d79c8a798a2ddaa354
 
         return PaginatedList(
             DiscussionTopic,
