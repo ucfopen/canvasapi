@@ -6,27 +6,27 @@ Below you'll find guidelines for contributing that will keep our codebase clean 
 
 ## Table of Contents
 
-- [Contributing to CanvasAPI](#contributing-to-canvasapi)
-    - [Table of Contents](#table-of-contents)
-    - [How can I contribute?](#how-can-i-contribute)
-        - [Bug reports](#bug-reports)
-        - [Resolving issues](#resolving-issues)
-        - [Making your first contribution](#making-your-first-contribution)
-            - [Setting up the environment](#setting-up-the-environment)
-            - [Writing tests](#writing-tests)
-                - [API coverage tests](#api-coverage-tests)
-                - [Engine tests](#engine-tests)
-            - [Running tests / coverage reports](#running-tests--coverage-reports)
-            - [Making a pull request](#making-a-pull-request)
-    - [Code style guidelines](#code-style-guidelines)
-        - [Running code style checks](#running-code-style-checks)
-        - [Foolish consistency](#foolish-consistency)
-        - [Method docstrings](#method-docstrings)
-            - [Descriptions](#descriptions)
-            - [Links to related API endpoints](#links-to-related-api-endpoints)
-            - [Parameters](#parameters)
-            - [Returns](#returns)
-            - [Docstring Examples](#docstring-examples)
+* [Contributing to CanvasAPI](#contributing-to-canvasapi)
+    * [Table of Contents](#table-of-contents)
+    * [How can I contribute?](#how-can-i-contribute)
+        * [Bug reports](#bug-reports)
+        * [Resolving issues](#resolving-issues)
+        * [Making your first contribution](#making-your-first-contribution)
+            * [Setting up the environment](#setting-up-the-environment)
+            * [Writing tests](#writing-tests)
+                * [API coverage tests](#api-coverage-tests)
+                * [Engine tests](#engine-tests)
+            * [Running tests / coverage reports](#running-tests--coverage-reports)
+            * [Making a pull request](#making-a-pull-request)
+    * [Code style guidelines](#code-style-guidelines)
+        * [Running code style checks](#running-code-style-checks)
+        * [Foolish consistency](#foolish-consistency)
+        * [Method docstrings](#method-docstrings)
+            * [Descriptions](#descriptions)
+            * [Links to related API endpoints](#links-to-related-api-endpoints)
+            * [Parameters](#parameters)
+            * [Returns](#returns)
+            * [Docstring Examples](#docstring-examples)
 
 ## How can I contribute?
 
@@ -212,14 +212,14 @@ We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/) 
 * Lines should be around 80 characters long, but up to 99 is allowed. Once you get into the 85+ territory, consider breaking your code into separate lines.
 
 ### Running code style checks
+
 The following tools can help you check your code for style correctness. We run these tools in our CI pipeline, so running them locally is a great way to speed up acceptance of your pull requests.
 
 You can use [pre-commit](https://pre-commit.com/) to force each check to run before you create a commit locally:
 
-```
-$ cd /projects/canvasapi # or wherever you cloned your repository
-$ pip install pre-commit
-$ pre-commit install
+```sh
+pip install pre-commit
+pre-commit install
 ```
 
 Alternatively, each step can be run manually one-by-one, or all at once executing `./scripts/run_tests.sh`.
