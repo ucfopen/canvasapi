@@ -47,7 +47,6 @@ class TestDiscussionTopic(unittest.TestCase):
         discussion = self.discussion_topic.update()
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, "course_id"))
-        self.assertEqual(discussion.course_id, 1)
 
     # post_entry()
     def test_post_entry(self, m):
