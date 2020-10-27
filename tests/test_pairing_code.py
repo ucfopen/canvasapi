@@ -4,7 +4,6 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.pairing_code import PairingCode
-from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
 
@@ -26,6 +25,5 @@ class TestProgress(unittest.TestCase):
         register_uris({"user": ["observer_pairing_codes"]}, m)
 
         pairing_code = self.user.create_pairing_code()
-        string = str(pairing_code.__str__())
-        self.assertIsInstance(string, str)
+        self.assertIsInstance(pairing_code, PairingCode)
         self.assertEqual("1 - abc123", pairing_code.__str__())
