@@ -495,24 +495,18 @@ class Canvas():
 
 Often, a method can have multiple valid parameters. In `get_course`, the
 `course` param can be either an `int` or a `Course` object. The special `Union`
-type allows you to accept multiple types for a given parameter.
+type allows you to accept multiple types for a given parameter. Every method has
+an optional `**kwargs` argument which can be annotated by importing the
+`Optional` type from the `typing` package:
 
 ```python
-from typing import Union
+from typing import Optional, Union
 ```
 
-Every method has an optional `**kwargs` argument which can be annotated by
-importing the `Optional` type from the `typing` package:
+Both types accept a list of _other_ types which would be valid in the function:
 
 ```python
-from typing import Optional
-```
-
-The `Optional` type can take a list of other types which would be valid in the
-function:
-
-```python
-def my_function(param1: str, **kwargs: Optional[str, int]) -> Any: ...
+def my_function(param1: Union[str, int], **kwargs: Optional[str, int]) -> Any: ...
 ```
 
 #### Python 3.6 considerations
