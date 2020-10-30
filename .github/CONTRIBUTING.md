@@ -28,8 +28,8 @@ and happy.
     -   [Type hinting](#type-hinting)
         -   [Type hint fomatting](#type-hint-formatting)
         -   [Type hints in Classes](#type-hints-in-classes)
-        -   [Python 3.6](#python-3.6)
-        -   [Python 3.7+](#python-3.7)
+        -   [Python 3.6](#python-3.6-type-hints)
+        -   [Python 3.7+](#python-3.7+-type-hints)
 
 ## How can I contribute?
 
@@ -451,16 +451,16 @@ def clear_course_nicknames(self):
     """
 ```
 
-### Type Hinting
+### Type Annotations
 
-Type hint support was added in Python 3.6 and allows maintainers to run static
-checks on code to identify and fix bugs caused by dynamic typing in scripts.
+Type annotations were added in Python 3.6 and allow maintainers to run static
+checks on code to identify and fix potential `TypeError` bugs before runtime.
 Type annotations should be added to maintain consistency across modules.
 
 #### Type hint formatting
 
-Type hints follow the general format below to define expected types for method
-parameters and returns.
+Type annotations follow the general format below to define expected types for
+method parameters and returns.
 
 ```python
 def my_function(param1: str, param2: str) -> str:
@@ -469,7 +469,7 @@ def my_function(param1: str, param2: str) -> str:
 
 #### Type Hints in Classes
 
-Classes instantiated with an **init**() function are expected to return `None`.
+Classes instantiated with an `__init__()` method are expected to return `None`.
 
 ```python
 class MyClass():
@@ -509,60 +509,65 @@ Both types accept a list of _other_ types which would be valid in the function:
 def my_function(param1: Union[str, int], **kwargs: Optional[str, int]) -> Any: ...
 ```
 
-#### Python 3.6 considerations
+#### Python 3.6 type hints
 
-Modules are often imported when necessary in specific methods rather than at the
-top of the file. This can cause problems because the imports happen as the code
-is executed, not when the program is initialized. This will cause errors to show
-when the function is returning a valid value:
+Modules are often imported when necessary in specific class methods rather than
+at the top of the file. This can cause problems because the imports happen as
+the code is executed, not when the program is initialized. This will cause
+errors to show when the function is returning a valid value:
 
 ```python
 """
-In this example, CourseNickname would have an error in the static check because
-it has not been imported yet and is not defined when the check occurs. However,
-this is a valid function because it is instantiated by the time the function returns.
+In this example, <AppointmentGroup> would have an error in the static check because
+it has not been imported before the function definition. However, this is a valid
+function because it is instantiated by the time the function returns.
 """
-def get_course_nickname(
-        self,
-        course: Union[int, Course],
-        **kwargs: Optional[dict]
-    ) -> CourseNickname:
+def get_appointment_group(
+        self, appointment_group: Union[int, AppointmentGroup], **kwargs: Optional[dict]
+    ) -> AppointmentGroup:
 
-        from canvasapi.course import CourseNickname
+        from canvasapi.appointment_group import AppointmentGroup
 
-    #    ...
-        return CourseNickname(self.__requester, response.json())
+        appointment_group_id = obj_or_id(
+            appointment_group, "appointment_group", (AppointmentGroup,)
+        )
+
+        response = self.__requester.request(
+            "GET",
+            "appointment_groups/{}".format(appointment_group_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return AppointmentGroup(self.__requester, response.json())
 ```
 
 To get around this problem, the `typing` package has a `TYPE_CHECKING` module
 which allows you to define imports for static checks that will be ignored at
-runtime.
+runtime. Annotate the class name as a string and mypy will recognize it as a
+valid class.
 
 ```python
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from canvasapi.course import CourseNickname
+    from canvasapi.appointment_group import AppointmentGroup
 
 """
 The error in the above code block will no longer be displayed because the static checker
 does the import at the top of the file.
 """
-def get_course_nickname(
-        self,
-        course: Union[int, Course],
-        **kwargs: Optional[dict]
-    ) -> CourseNickname:
+def get_appointment_group(
+        self, appointment_group: Union[int, 'AppointmentGroup'], **kwargs: Optional[dict]
+    ) -> 'AppointmentGroup': ...
 ```
 
-#### Python 3.7
+#### Python 3.7+ type hints
 
-The above error was solved in Python 3.7 by adding the ability to defer module
-loading. Instead of adding a conditional check, import the new `annotations`
-module:
+Python 3.7 by added the ability to defer module loading. Instead of adding a
+conditional check, import the new `annotations` module:
 
 ```python
 from __future__ import annotations
 ```
 
-The `annotations` module is standard in Python 3.10.
+The `annotations` module is in the standard library in Python 3.10 and can be
+imported directly.
