@@ -1,3 +1,4 @@
+from typing import Union, Optional, List, TYPE_CHECKING
 import warnings
 
 from canvasapi.account import Account
@@ -15,13 +16,25 @@ from canvasapi.section import Section
 from canvasapi.user import User
 from canvasapi.util import combine_kwargs, get_institution_url, obj_or_id
 
+# Necessary to support type hinting in Python 3.6
+# Starting in 3.7, module deffered loading is available in __future__.annotations
+if TYPE_CHECKING:
+    from canvasapi.progress import Progress
+    from canvasapi.appointment_group import AppointmentGroup
+    from canvasapi.calendar_event import CalendarEvent
+    from canvasapi.conversation import Conversation
+    from canvasapi.planner import PlannerNote, PlannerOverride
+    from canvasapi.poll import Poll
+    from canvasapi.course import CourseNickname
+    from canvasapi.outcome import Outcome, OutcomeGroup
+
 
 class Canvas(object):
     """
     The main class to be instantiated to provide access to Canvas's API.
     """
 
-    def __init__(self, base_url, access_token):
+    def __init__(self, base_url: str, access_token: str) -> None:
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
@@ -60,7 +73,7 @@ class Canvas(object):
 
         self.__requester = Requester(base_url, access_token)
 
-    def clear_course_nicknames(self, **kwargs):
+    def clear_course_nicknames(self, **kwargs: Optional[dict]) -> bool:
         """
         Remove all stored course nicknames.
 
@@ -79,7 +92,12 @@ class Canvas(object):
         )
         return response.json().get("message") == "OK"
 
-    def conversations_batch_update(self, conversation_ids, event, **kwargs):
+    def conversations_batch_update(
+        self,
+        conversation_ids: List[str],
+        event: str,
+        **kwargs: Union[str, List[str], Optional[dict]],
+    ) -> "Progress":
         """
 
         :calls: `PUT /api/v1/conversations \
@@ -128,7 +146,7 @@ class Canvas(object):
         return_progress = Progress(self.__requester, response.json())
         return return_progress
 
-    def conversations_get_running_batches(self, **kwargs):
+    def conversations_get_running_batches(self, **kwargs: Optional[dict]) -> dict:
         """
         Returns any currently running conversation batches for the current user.
         Conversation batches are created when a bulk private message is sent
@@ -147,7 +165,7 @@ class Canvas(object):
 
         return response.json()
 
-    def conversations_mark_all_as_read(self, **kwargs):
+    def conversations_mark_all_as_read(self, **kwargs: Optional[dict]) -> bool:
         """
         Mark all conversations as read.
 
@@ -161,7 +179,7 @@ class Canvas(object):
         )
         return response.json() == {}
 
-    def conversations_unread_count(self, **kwargs):
+    def conversations_unread_count(self, **kwargs: Optional[dict]) -> dict:
         """
         Get the number of unread conversations for the current user
 
@@ -177,7 +195,7 @@ class Canvas(object):
 
         return response.json()
 
-    def create_account(self, **kwargs):
+    def create_account(self, **kwargs: Optional[dict]) -> Account:
         """
         Create a new root account.
 
@@ -191,7 +209,9 @@ class Canvas(object):
         )
         return Account(self.__requester, response.json())
 
-    def create_appointment_group(self, appointment_group, **kwargs):
+    def create_appointment_group(
+        self, appointment_group: dict, **kwargs: Optional[dict]
+    ) -> "AppointmentGroup":
         """
         Create a new Appointment Group.
 
@@ -230,7 +250,9 @@ class Canvas(object):
 
         return AppointmentGroup(self.__requester, response.json())
 
-    def create_calendar_event(self, calendar_event, **kwargs):
+    def create_calendar_event(
+        self, calendar_event: dict, **kwargs: Union[str, dict, Optional[dict]]
+    ) -> "CalendarEvent":
         """
         Create a new Calendar Event.
 
@@ -256,7 +278,12 @@ class Canvas(object):
 
         return CalendarEvent(self.__requester, response.json())
 
-    def create_conversation(self, recipients, body, **kwargs):
+    def create_conversation(
+        self,
+        recipients: List[str],
+        body: str,
+        **kwargs: Union[str, list, Optional[dict]],
+    ) -> List["Conversation"]:
         """
         Create a new Conversation.
 
@@ -282,7 +309,7 @@ class Canvas(object):
         )
         return [Conversation(self.__requester, convo) for convo in response.json()]
 
-    def create_group(self, **kwargs):
+    def create_group(self, **kwargs: Optional[dict]) -> Group:
         """
         Create a group
 
@@ -296,7 +323,7 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
-    def create_planner_note(self, **kwargs):
+    def create_planner_note(self, **kwargs: Optional[dict]) -> "PlannerNote":
         """
         Create a planner note for the current user
 
@@ -312,7 +339,12 @@ class Canvas(object):
         )
         return PlannerNote(self.__requester, response.json())
 
-    def create_planner_override(self, plannable_type, plannable_id, **kwargs):
+    def create_planner_override(
+        self,
+        plannable_type: str,
+        plannable_id: Union[int, "PlannerOverride"],
+        **kwargs: Union[str, int, Optional[dict]],
+    ) -> "PlannerOverride":
         """
         Create a planner override for the current user
 
@@ -343,7 +375,9 @@ class Canvas(object):
         )
         return PlannerOverride(self.__requester, response.json())
 
-    def create_poll(self, poll, **kwargs):
+    def create_poll(
+        self, poll: List[dict], **kwargs: Union[list, Optional[dict]]
+    ) -> "Poll":
         """
         Create a new poll for the current user.
 
@@ -372,7 +406,12 @@ class Canvas(object):
         )
         return Poll(self.__requester, response.json()["polls"][0])
 
-    def get_account(self, account, use_sis_id=False, **kwargs):
+    def get_account(
+        self,
+        account: Union[int, Account],
+        use_sis_id: bool = False,
+        **kwargs: Optional[dict],
+    ) -> Account:
         """
         Retrieve information on an individual account.
 
@@ -399,7 +438,7 @@ class Canvas(object):
         )
         return Account(self.__requester, response.json())
 
-    def get_accounts(self, **kwargs):
+    def get_accounts(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         List accounts that the current user can view or manage.
 
@@ -421,7 +460,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_activity_stream_summary(self, **kwargs):
+    def get_activity_stream_summary(self, **kwargs: Optional[dict]) -> dict:
         """
         Return a summary of the current user's global activity stream.
 
@@ -437,7 +476,11 @@ class Canvas(object):
         )
         return response.json()
 
-    def get_announcements(self, courses, **kwargs):
+    def get_announcements(
+        self,
+        courses: List[Union[int, Course]],
+        **kwargs: Union[List[str], Optional[dict]],
+    ) -> PaginatedList:
         """
         List announcements.
 
@@ -473,7 +516,11 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_appointment_group(self, appointment_group, **kwargs):
+    def get_appointment_group(
+        self,
+        appointment_group: Union[int, "AppointmentGroup"],
+        **kwargs: Optional[dict],
+    ) -> "AppointmentGroup":
         """
         Return single Appointment Group by id
 
@@ -498,7 +545,7 @@ class Canvas(object):
         )
         return AppointmentGroup(self.__requester, response.json())
 
-    def get_appointment_groups(self, **kwargs):
+    def get_appointment_groups(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         List appointment groups.
 
@@ -518,7 +565,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_brand_variables(self, **kwargs):
+    def get_brand_variables(self, **kwargs: Optional[dict]) -> dict:
         """
         Get account brand variables
 
@@ -533,7 +580,9 @@ class Canvas(object):
         )
         return response.json()
 
-    def get_calendar_event(self, calendar_event, **kwargs):
+    def get_calendar_event(
+        self, calendar_event: Union[int, "CalendarEvent"], **kwargs: Optional[dict]
+    ) -> "CalendarEvent":
         """
         Return single Calendar Event by id
 
@@ -558,7 +607,7 @@ class Canvas(object):
         )
         return CalendarEvent(self.__requester, response.json())
 
-    def get_calendar_events(self, **kwargs):
+    def get_calendar_events(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         List calendar events.
 
@@ -578,7 +627,9 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_comm_messages(self, user, **kwargs):
+    def get_comm_messages(
+        self, user: Union[int, User], **kwargs: Union[int, Optional[dict]]
+    ) -> PaginatedList:
         """
         Retrieve a paginated list of messages sent to a user.
 
@@ -604,7 +655,9 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_conversation(self, conversation, **kwargs):
+    def get_conversation(
+        self, conversation: Union[int, "Conversation"], **kwargs: Optional[dict]
+    ) -> "Conversation":
         """
         Return single Conversation
 
@@ -627,7 +680,7 @@ class Canvas(object):
         )
         return Conversation(self.__requester, response.json())
 
-    def get_conversations(self, **kwargs):
+    def get_conversations(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         Return list of conversations for the current user, most resent ones first.
 
@@ -647,7 +700,12 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_course(self, course, use_sis_id=False, **kwargs):
+    def get_course(
+        self,
+        course: Union[int, Course],
+        use_sis_id: bool = False,
+        **kwargs: Optional[dict],
+    ) -> Course:
         """
         Retrieve a course by its ID.
 
@@ -674,7 +732,7 @@ class Canvas(object):
         )
         return Course(self.__requester, response.json())
 
-    def get_course_accounts(self, **kwargs):
+    def get_course_accounts(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         List accounts that the current user can view through their
         admin course enrollments (Teacher, TA or designer enrollments).
@@ -696,7 +754,9 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_course_nickname(self, course, **kwargs):
+    def get_course_nickname(
+        self, course: Union[int, Course], **kwargs: Optional[dict]
+    ) -> "CourseNickname":
         """
         Return the nickname for the given course.
 
@@ -719,7 +779,7 @@ class Canvas(object):
         )
         return CourseNickname(self.__requester, response.json())
 
-    def get_course_nicknames(self, **kwargs):
+    def get_course_nicknames(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         Return all course nicknames set by the current account.
 
@@ -739,7 +799,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_courses(self, **kwargs):
+    def get_courses(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         Return a list of active courses for the current user.
 
@@ -753,7 +813,7 @@ class Canvas(object):
             Course, self.__requester, "GET", "courses", _kwargs=combine_kwargs(**kwargs)
         )
 
-    def get_current_user(self):
+    def get_current_user(self) -> CurrentUser:
         """
         Return a details of the current user.
 
@@ -764,7 +824,7 @@ class Canvas(object):
         """
         return CurrentUser(self.__requester)
 
-    def get_epub_exports(self, **kwargs):
+    def get_epub_exports(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         Return a list of epub exports for the associated course.
 
@@ -784,7 +844,7 @@ class Canvas(object):
             kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_file(self, file, **kwargs):
+    def get_file(self, file: Union[int, File], **kwargs: Optional[dict]) -> File:
         """
         Return the standard attachment json object for a file.
 
@@ -803,7 +863,9 @@ class Canvas(object):
         )
         return File(self.__requester, response.json())
 
-    def get_folder(self, folder, **kwargs):
+    def get_folder(
+        self, folder: Union[int, Folder], **kwargs: Optional[dict]
+    ) -> Folder:
         """
         Return the details for a folder
 
@@ -822,7 +884,12 @@ class Canvas(object):
         )
         return Folder(self.__requester, response.json())
 
-    def get_group(self, group, use_sis_id=False, **kwargs):
+    def get_group(
+        self,
+        group: Union[int, Group],
+        use_sis_id: bool = False,
+        **kwargs: Optional[dict],
+    ) -> Group:
         """
         Return the data for a single group. If the caller does not
         have permission to view the group a 401 will be returned.
@@ -852,7 +919,9 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
-    def get_group_category(self, category, **kwargs):
+    def get_group_category(
+        self, category: Union[int, GroupCategory], **kwargs: Optional[dict]
+    ) -> GroupCategory:
         """
         Get a single group category.
 
@@ -873,7 +942,11 @@ class Canvas(object):
         )
         return GroupCategory(self.__requester, response.json())
 
-    def get_group_participants(self, appointment_group, **kwargs):
+    def get_group_participants(
+        self,
+        appointment_group: Union[int, "AppointmentGroup"],
+        **kwargs: Optional[dict],
+    ) -> PaginatedList:
         """
         List student group participants in this appointment group.
 
@@ -900,7 +973,9 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_outcome(self, outcome, **kwargs):
+    def get_outcome(
+        self, outcome: Union[int, "Outcome"], **kwargs: Optional[dict]
+    ) -> "Outcome":
         """
         Returns the details of the outcome with the given id.
 
@@ -921,7 +996,9 @@ class Canvas(object):
         )
         return Outcome(self.__requester, response.json())
 
-    def get_outcome_group(self, group, **kwargs):
+    def get_outcome_group(
+        self, group: Union[int, "OutcomeGroup"], **kwargs: Optional[dict]
+    ) -> "OutcomeGroup":
         """
         Returns the details of the Outcome Group with the given id.
 
@@ -946,7 +1023,9 @@ class Canvas(object):
 
         return OutcomeGroup(self.__requester, response.json())
 
-    def get_planner_note(self, planner_note, **kwargs):
+    def get_planner_note(
+        self, planner_note: Union[int, "PlannerNote"], **kwargs: Optional[dict]
+    ) -> "PlannerNote":
         """
         Retrieve a planner note for the current user
 
@@ -975,7 +1054,7 @@ class Canvas(object):
 
         return PlannerNote(self.__requester, response.json())
 
-    def get_planner_notes(self, **kwargs):
+    def get_planner_notes(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         Retrieve the paginated list of planner notes
 
@@ -995,7 +1074,9 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_planner_override(self, planner_override, **kwargs):
+    def get_planner_override(
+        self, planner_override: Union[int, "PlannerOverride"], **kwargs: Optional[dict]
+    ) -> "PlannerOverride":
         """
         Retrieve a planner override for the current user
 
@@ -1028,7 +1109,7 @@ class Canvas(object):
 
         return PlannerOverride(self.__requester, response.json())
 
-    def get_planner_overrides(self, **kwargs):
+    def get_planner_overrides(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         Retrieve a planner override for the current user
 
@@ -1048,7 +1129,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_poll(self, poll, **kwargs):
+    def get_poll(self, poll: Union[int, "Poll"], **kwargs: Optional[dict]) -> "Poll":
         """
         Get a single poll, based on the poll id.
 
@@ -1068,7 +1149,7 @@ class Canvas(object):
         )
         return Poll(self.__requester, response.json()["polls"][0])
 
-    def get_polls(self, **kwargs):
+    def get_polls(self, **kwargs: Optional[dict]) -> PaginatedList:
         """
         Returns a paginated list of polls for the current user
 
@@ -1089,7 +1170,9 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_progress(self, progress, **kwargs):
+    def get_progress(
+        self, progress: Union[int, "Progress"], **kwargs: Optional[dict]
+    ) -> "Progress":
         """
         Get a specific progress.
 
@@ -1111,7 +1194,7 @@ class Canvas(object):
         )
         return Progress(self.__requester, response.json())
 
-    def get_root_outcome_group(self, **kwargs):
+    def get_root_outcome_group(self, **kwargs: Optional[dict]) -> "OutcomeGroup":
         """
         Redirect to root outcome group for context
 
@@ -1128,7 +1211,12 @@ class Canvas(object):
         )
         return OutcomeGroup(self.__requester, response.json())
 
-    def get_section(self, section, use_sis_id=False, **kwargs):
+    def get_section(
+        self,
+        section: Union[int, Section],
+        use_sis_id: bool = False,
+        **kwargs: Optional[dict],
+    ) -> Section:
         """
         Get details about a specific section.
 
@@ -1147,6 +1235,7 @@ class Canvas(object):
             section_id = section
             uri_str = "sections/sis_section_id:{}"
         else:
+            # TODO: Fix this with overloading?
             section_id = obj_or_id(section, "section", (Section,))
             uri_str = "sections/{}"
 
@@ -1155,7 +1244,7 @@ class Canvas(object):
         )
         return Section(self.__requester, response.json())
 
-    def get_todo_items(self, **kwargs):
+    def get_todo_items(self, **kwargs: Optional[dict]) -> dict:
         """
         Return the current user's list of todo items, as seen on the user dashboard.
 
@@ -1169,7 +1258,7 @@ class Canvas(object):
         )
         return response.json()
 
-    def get_upcoming_events(self, **kwargs):
+    def get_upcoming_events(self, **kwargs: Optional[dict]) -> dict:
         """
         Return the current user's upcoming events, i.e. the same things shown
         in the dashboard 'Coming Up' sidebar.
@@ -1184,7 +1273,9 @@ class Canvas(object):
         )
         return response.json()
 
-    def get_user(self, user, id_type=None, **kwargs):
+    def get_user(
+        self, user: Union[int, User], id_type: str = None, **kwargs: Optional[dict]
+    ) -> User:
         """
         Retrieve a user by their ID. `id_type` denotes which endpoint to try as there are
         several different IDs that can pull the same user record from Canvas.
@@ -1216,7 +1307,11 @@ class Canvas(object):
         )
         return User(self.__requester, response.json())
 
-    def get_user_participants(self, appointment_group, **kwargs):
+    def get_user_participants(
+        self,
+        appointment_group: Union[int, "AppointmentGroup"],
+        **kwargs: Optional[dict],
+    ) -> PaginatedList:
         """
         List user participants in this appointment group.
 
@@ -1243,7 +1338,9 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def graphql(self, query, variables=None, **kwargs):
+    def graphql(
+        self, query: str, variables: dict = None, **kwargs: Optional[dict]
+    ) -> dict:
         """
         Makes a GraphQL formatted request to Canvas
 
@@ -1270,7 +1367,12 @@ class Canvas(object):
 
         return response.json()
 
-    def reserve_time_slot(self, calendar_event, participant_id=None, **kwargs):
+    def reserve_time_slot(
+        self,
+        calendar_event: Union[int, "CalendarEvent"],
+        participant_id: int = None,
+        **kwargs: Optional[dict],
+    ) -> "CalendarEvent":
         """
         Return single Calendar Event by id
 
@@ -1303,7 +1405,7 @@ class Canvas(object):
         )
         return CalendarEvent(self.__requester, response.json())
 
-    def search_accounts(self, **kwargs):
+    def search_accounts(self, **kwargs: Optional[dict]) -> dict:
         """
         Return a list of up to 5 matching account domains. Partial matches on
         name and domain are supported.
@@ -1318,7 +1420,7 @@ class Canvas(object):
         )
         return response.json()
 
-    def search_all_courses(self, **kwargs):
+    def search_all_courses(self, **kwargs: Optional[dict]) -> List[dict]:
         """
         List all the courses visible in the public index.
         Returns a list of dicts, each containing a single course.
@@ -1333,7 +1435,7 @@ class Canvas(object):
         )
         return response.json()
 
-    def search_recipients(self, **kwargs):
+    def search_recipients(self, **kwargs: Union[Optional[str], Optional[dict]]) -> List:
         """
         Find valid recipients (users, courses and groups) that the current user
         can send messages to.
@@ -1352,7 +1454,12 @@ class Canvas(object):
         )
         return response.json()
 
-    def set_course_nickname(self, course, nickname, **kwargs):
+    def set_course_nickname(
+        self,
+        course: Union[int, Course],
+        nickname: str,
+        **kwargs: Union[str, Optional[dict]],
+    ) -> "CourseNickname":
         """
         Set a nickname for the given course. This will replace the
         course's name in the output of subsequent API calls, as

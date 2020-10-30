@@ -2,81 +2,132 @@
 
 Thanks for your interest in contributing!
 
-Below you'll find guidelines for contributing that will keep our codebase clean and happy.
+Below you'll find guidelines for contributing that will keep our codebase clean
+and happy.
 
 ## Table of Contents
 
-* [How can I contribute?](#how-can-i-contribute)
-    * [Bug reports](#bug-reports)
-    * [Resolving issues](#resolving-issues)
-    * [Making your first contribution](#making-your-first-contribution)
-        * [Setting up the environment](#setting-up-the-environment)
-        * [Writing tests](#writing-tests)
-            * [API Coverage Tests](#api-coverage-tests)
-            * [Engine tests](#engine-tests)
-        * [Running tests / coverage reports](#running-tests--coverage-reports)
-        * [Making a Pull Request](#making-a-pull-request)
-* [Code style guidelines](#code-style-guidelines)
-    * [Foolish consistency](#foolish-consistency)
-    * [Method docstrings](#method-docstrings)
-        * [Descriptions](#descriptions)
-        * [Links to related API endpoints](#links-to-related-api-endpoints)
-        * [Parameters](#parameters)
-        * [Returns](#returns)
-        * [Docstring examples](#docstring-examples)
+-   [How can I contribute?](#how-can-i-contribute)
+    -   [Bug reports](#bug-reports)
+    -   [Resolving issues](#resolving-issues)
+    -   [Making your first contribution](#making-your-first-contribution)
+        -   [Setting up the environment](#setting-up-the-environment)
+        -   [Writing tests](#writing-tests)
+            -   [API Coverage Tests](#api-coverage-tests)
+            -   [Engine tests](#engine-tests)
+        -   [Running tests / coverage reports](#running-tests--coverage-reports)
+        -   [Making a Pull Request](#making-a-pull-request)
+-   [Code style guidelines](#code-style-guidelines)
+    -   [Foolish consistency](#foolish-consistency)
+    -   [Method docstrings](#method-docstrings)
+        -   [Descriptions](#descriptions)
+        -   [Links to related API endpoints](#links-to-related-api-endpoints)
+        -   [Parameters](#parameters)
+        -   [Returns](#returns)
+        -   [Docstring examples](#docstring-examples)
+    -   [Type hinting](#type-hinting)
+        -   [Type hint fomatting](#type-hint-formatting)
+        -   [Type hints in Classes](#type-hints-in-classes)
+        -   [Python 3.6](#python-3.6-type-hints)
+        -   [Python 3.7+](#python-3.7+-type-hints)
 
 ## How can I contribute?
 
 ### Bug Reports
 
-Bug reports are awesome. Writing quality bug reports helps us identify issues and solve them even faster. You can submit bug reports directly to our [issue tracker](https://github.com/ucfopen/canvasapi/issues).
+Bug reports are awesome. Writing quality bug reports helps us identify issues
+and solve them even faster. You can submit bug reports directly to our
+[issue tracker](https://github.com/ucfopen/canvasapi/issues).
 
 Here are a few things worth mentioning when making a report:
 
-* What **version** of CanvasAPI are you running? (`pip show canvasapi`)
-* What **version** of Python are you using? (`python --version`)
-* What steps can be taken to **reproduce the issue**?
-* **Detail matters.** Try not to be too be verbose, but generally the more information, the better!
+-   What **version** of CanvasAPI are you running? (`pip show canvasapi`)
+-   What **version** of Python are you using? (`python --version`)
+-   What steps can be taken to **reproduce the issue**?
+-   **Detail matters.** Try not to be too be verbose, but generally the more
+    information, the better!
 
 ### Resolving issues
 
-We welcome pull requests for bug fixes and new features! Feel free to browse our open, unassigned issues and assign yourself to them. You can also filter by labels:
+We welcome pull requests for bug fixes and new features! Feel free to browse our
+open, unassigned issues and assign yourself to them. You can also filter by
+labels:
 
-* [simple](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Asimple) -- easier issues to start working on; great for getting familiar with the codebase.
-* [api coverage](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Aapi-coverage) -- covering new endpoints or updating existing ones.
-* [enhancement](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Aenhancement) -- updates to the engine to improve performance or add new functionality.
-* [major](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Amajor) -- difficult or major changes or additions that require familiarity with the library.
-* [bug](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Abug) -- happy little code accidents.
-* [fixed-in-develop](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Afixed-in-develop) -- issues that have been resolved but the changes are not in the latest release yet.
-* [canvas-bug](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Acanvas-bug) -- confirmed to be an issue with the Canvas LMS rather than the CanvasAPI library.
-* [help wanted](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3A"help%20wanted") -- we need *your* help to figure these out!
-* [documentation](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Adocumentation) -- issues relating to Documentation. Specifically, any of the `.md` files or our [class reference docs](http://canvasapi.readthedocs.io/en/latest/).
+-   [simple](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Asimple)
+    -- easier issues to start working on; great for getting familiar with the
+    codebase.
+-   [api coverage](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Aapi-coverage)
+    -- covering new endpoints or updating existing ones.
+-   [enhancement](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Aenhancement)
+    -- updates to the engine to improve performance or add new functionality.
+-   [major](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Amajor)
+    -- difficult or major changes or additions that require familiarity with the
+    library.
+-   [bug](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Abug)
+    -- happy little code accidents.
+-   [fixed-in-develop](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Afixed-in-develop)
+    -- issues that have been resolved but the changes are not in the latest
+    release yet.
+-   [canvas-bug](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Acanvas-bug)
+    -- confirmed to be an issue with the Canvas LMS rather than the CanvasAPI
+    library.
+-   [help wanted](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3A"help%20wanted")
+    -- we need _your_ help to figure these out!
+-   [documentation](https://github.com/ucfopen/canvasapi/issues?q=sort%3Aid_desc-desc+is%3Aopen+label%3Adocumentation)
+    -- issues relating to Documentation. Specifically, any of the `.md` files or
+    our [class reference docs](http://canvasapi.readthedocs.io/en/latest/).
 
-Once you've found an issue you're interested in tackling, take a look at our [first contribution tutorial](#making-your-first-contribution) for information on our pull request policy.
+Once you've found an issue you're interested in tackling, take a look at our
+[first contribution tutorial](#making-your-first-contribution) for information
+on our pull request policy.
 
 ### Making your first contribution
 
 #### Setting up the environment
 
-Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have pip, virtualenv, and git installed and are using a terminal. If not, please set those up before continuing.
+Now that you've selected an issue to work on, you'll need to set up an
+environment for writing code. We'll assume you already have pip, virtualenv, and
+git installed and are using a terminal. If not, please set those up before
+continuing.
 
-1. Clone our repository by executing `git clone git@github.com:ucfopen/canvasapi.git`
-2. Checkout (`git checkout develop`) and then pull the latest commit from the develop branch: `git pull origin develop`
-3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git checkout -b issue/1-test-issue-for-documentation`
-4. Set up a new virtual environment ( `virtualenv env` ) and activate it (`source env/bin/activate`)
+1. Clone our repository by executing
+   `git clone git@github.com:ucfopen/canvasapi.git`
+2. Checkout (`git checkout develop`) and then pull the latest commit from the
+   develop branch: `git pull origin develop`
+3. Create a new branch with the format **issue/[issue_number]-[issue-title]**:
+   `git checkout -b issue/1-test-issue-for-documentation`
+4. Set up a new virtual environment ( `virtualenv env` ) and activate it
+   (`source env/bin/activate`)
 5. Install the required dependencies with `pip install -r dev_requirements.txt`
 
-From here, you can go about working on your issue you normally would. Please make sure to adhere to our [style guidelines for both code and docstrings](#code-style-guidelines). Once you're satisfied with the result, it's time to write a unit test for it.
+From here, you can go about working on your issue you normally would. Please
+make sure to adhere to our
+[style guidelines for both code and docstrings](#code-style-guidelines). Once
+you're satisfied with the result, it's time to write a unit test for it.
 
 #### Writing tests
 
-Tests are a critical part of building applications, and we [pity the fool who doesn't write them](https://blog.codinghorror.com/i-pity-the-fool-who-doesnt-write-unit-tests/). Unit tests help us monitor the health of the code checked into the repository and they provide a nice overview at the progress we make. Due to the size and nature of the library, it's unrealistic for us to manually test each component. Because of this, we require pull requests to A) have tests associated with the changes being made and B) pass those and all other tests.
+Tests are a critical part of building applications, and we
+[pity the fool who doesn't write them](https://blog.codinghorror.com/i-pity-the-fool-who-doesnt-write-unit-tests/).
+Unit tests help us monitor the health of the code checked into the repository
+and they provide a nice overview at the progress we make. Due to the size and
+nature of the library, it's unrealistic for us to manually test each component.
+Because of this, we require pull requests to A) have tests associated with the
+changes being made and B) pass those and all other tests.
 
-You'll notice our tests live in the creatively named `tests` directory. Within that directory, you'll see several files in the form `test_[class].py` and another directory named `fixtures`. Depending on the scope of the issue you're solving, you'll be writing two different kinds of tests.
+You'll notice our tests live in the creatively named `tests` directory. Within
+that directory, you'll see several files in the form `test_[class].py` and
+another directory named `fixtures`. Depending on the scope of the issue you're
+solving, you'll be writing two different kinds of tests.
 
 ##### API Coverage Tests
 
-We use the [requests-mock](https://pypi.python.org/pypi/requests-mock) library to simulate API responses. Those mock responses live inside the `fixtures` directory in JSON files. Each file's name describes the endpoints that are contained within. For example, course endpoints live in `course.json`. These fixtures are loaded on demand in a given test. Let's look at `test_get_user` in `test_course.py` as an example:
+We use the [requests-mock](https://pypi.python.org/pypi/requests-mock) library
+to simulate API responses. Those mock responses live inside the `fixtures`
+directory in JSON files. Each file's name describes the endpoints that are
+contained within. For example, course endpoints live in `course.json`. These
+fixtures are loaded on demand in a given test. Let's look at `test_get_user` in
+`test_course.py` as an example:
 
 ```python
 # get_user()
@@ -95,7 +146,9 @@ Breakdown:
 # get_user()
 ```
 
-It is common to have multiple tests for a single method. All related tests should be grouped together under a single comment with the name of the method being tested.
+It is common to have multiple tests for a single method. All related tests
+should be grouped together under a single comment with the name of the method
+being tested.
 
 ---
 
@@ -103,7 +156,9 @@ It is common to have multiple tests for a single method. All related tests shoul
 def test_get_user(self, m):
 ```
 
-This is a standard Python `unittest` test method with one addition: the `m` variable is passed to all methods with names starting with `test`. `m` is a Mocker object that can be used to override the routing of HTTP requests.
+This is a standard Python `unittest` test method with one addition: the `m`
+variable is passed to all methods with names starting with `test`. `m` is a
+Mocker object that can be used to override the routing of HTTP requests.
 
 ---
 
@@ -111,7 +166,12 @@ This is a standard Python `unittest` test method with one addition: the `m` vari
 register_uris({'course': ['get_user']}, m)
 ```
 
-The `register_uris` function tells a mocker object which fixtures to load. It takes in two arguments: a dictionary describing which fixtures to load, and a mocker object.  The dictionary keys represent which file the desired fixtures are located in. The values are lists containing each desired fixture from that particular file. The example above will register the `get_user` fixture in `course.json`.
+The `register_uris` function tells a mocker object which fixtures to load. It
+takes in two arguments: a dictionary describing which fixtures to load, and a
+mocker object. The dictionary keys represent which file the desired fixtures are
+located in. The values are lists containing each desired fixture from that
+particular file. The example above will register the `get_user` fixture in
+`course.json`.
 
 Example Fixture:
 
@@ -127,7 +187,9 @@ Example Fixture:
 },
 ```
 
-When this fixture is loaded, all `GET` requests to a url matching `courses/1/users/1` will return a status code of 200 and the provided user data for John Doe.
+When this fixture is loaded, all `GET` requests to a url matching
+`courses/1/users/1` will return a status code of 200 and the provided user data
+for John Doe.
 
 ---
 
@@ -138,11 +200,16 @@ self.assertIsInstance(user, User)
 self.assertTrue(hasattr(user, 'name'))
 ```
 
-The rest is basic unit testing. Call the function to be tested, and assert various outcomes. If necessary, multiple tests can written for a single method. All related tests should appear together under the same comment, as described earlier.
+The rest is basic unit testing. Call the function to be tested, and assert
+various outcomes. If necessary, multiple tests can written for a single method.
+All related tests should appear together under the same comment, as described
+earlier.
 
 ---
 
-It is common to need certain object(s) for multiple tests. For example, most methods in `test_course.py` require a `Course` object. In this case, save a course to the class in `self.course` for later use.
+It is common to need certain object(s) for multiple tests. For example, most
+methods in `test_course.py` require a `Course` object. In this case, save a
+course to the class in `self.course` for later use.
 
 Do this in the `setUp` class method:
 
@@ -161,7 +228,9 @@ with requests_mock.Mocker() as m:
     self.user = self.canvas.get_user(1)
 ```
 
-Since `setUp` is not a test method, it does not automatically get passed a Mocker object `m`. To use the mocker, all relevant code needs to be inside a `with` statement:
+Since `setUp` is not a test method, it does not automatically get passed a
+Mocker object `m`. To use the mocker, all relevant code needs to be inside a
+`with` statement:
 
 ```python
 with requests_mock.Mocker() as m:
@@ -169,15 +238,26 @@ with requests_mock.Mocker() as m:
 
 ##### Engine tests
 
-Not all of CanvasAPI relies on networking. While these pieces are few and far between, we still need to verify that they're performing correctly. Writing tests for engine-level code is just as important as user-facing code and is a bit easier. You'll just need to follow the same process as you would for API tests, minus the fixtures.
+Not all of CanvasAPI relies on networking. While these pieces are few and far
+between, we still need to verify that they're performing correctly. Writing
+tests for engine-level code is just as important as user-facing code and is a
+bit easier. You'll just need to follow the same process as you would for API
+tests, minus the fixtures.
 
 #### Running tests / coverage reports
 
-Once you've written test case(s) for your issue, you'll need to run the test to verify that your changes are passing and haven't interfered with any other part of the library.
+Once you've written test case(s) for your issue, you'll need to run the test to
+verify that your changes are passing and haven't interfered with any other part
+of the library.
 
-You'll do this by running `coverage run -m unittest discover` from the main `canvasapi` directory. If your tests pass, you're ready to run a coverage report!
+You'll do this by running `coverage run -m unittest discover` from the main
+`canvasapi` directory. If your tests pass, you're ready to run a coverage
+report!
 
-Coverage reports tell us how much of our code is actually being tested. As of right now, we're happily maintaining 100% code coverage (🎉!) and our goal is to keep it there. Ensure you've covered your changes entirely by running `coverage report`. Your output should look something like this:
+Coverage reports tell us how much of our code is actually being tested. As of
+right now, we're happily maintaining 100% code coverage (🎉!) and our goal is to
+keep it there. Ensure you've covered your changes entirely by running
+`coverage report`. Your output should look something like this:
 
 ```Formatted
 Name                             Stmts   Miss  Cover
@@ -194,18 +274,25 @@ canvasapi/util.py                   29      0   100%
 TOTAL                             1586      0   100%
 ```
 
-Certain statements can be omitted from the coverage report by adding `# pragma: no cover` but this should be used conservatively. If your tests pass and your coverage is at 100%, you're ready to [submit a pull request](https://github.com/ucfopen/canvasapi/pulls)!
+Certain statements can be omitted from the coverage report by adding
+`# pragma: no cover` but this should be used conservatively. If your tests pass
+and your coverage is at 100%, you're ready to
+[submit a pull request](https://github.com/ucfopen/canvasapi/pulls)!
 
 #### Making a Pull Request
 
-Be sure to include the issue number in the title with a pound sign in front of it (#123) so we know which issue the code is addressing. Point the branch at `develop` and then submit it for review.
+Be sure to include the issue number in the title with a pound sign in front of
+it (#123) so we know which issue the code is addressing. Point the branch at
+`develop` and then submit it for review.
 
 ## Code Style Guidelines
 
-We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/) specification as much as possible. In short, that means:
+We try to adhere to Python's [PEP 8](https://www.python.org/dev/peps/pep-0008/)
+specification as much as possible. In short, that means:
 
-* We use four spaces for indentation.
-* Lines should be around 80 characters long, but up to 99 is allowed. Once you get into the 85+ territory, consider breaking your code into separate lines.
+-   We use four spaces for indentation.
+-   Lines should be around 80 characters long, but up to 99 is allowed. Once you
+    get into the 85+ territory, consider breaking your code into separate lines.
 
 We use `flake8` for linting:
 
@@ -213,13 +300,15 @@ We use `flake8` for linting:
 flake8 canvasapi tests
 ```
 
-We use `black` for auto-formatting. When you run the command below, `black` will automatically convert your code to our desired style.
+We use `black` for auto-formatting. When you run the command below, `black` will
+automatically convert your code to our desired style.
 
 ```sh
 black canvasapi tests
 ```
 
-We require methods to be in alphabetical order for ease of reading. Run this script to confirm order:
+We require methods to be in alphabetical order for ease of reading. Run this
+script to confirm order:
 
 ```sh
 python scripts/alphabetic.py
@@ -229,38 +318,53 @@ python scripts/alphabetic.py
 
 > A foolish consistency is the hobgoblin of little minds. -- Ralph Waldo Emerson
 
-An important tenet of PEP8 is to not get hung up on PEP8. While we try to be as PEP8 compliant as possible, maintaining the consistency of the project is more important than modifying an existing style choice.
+An important tenet of PEP8 is to not get hung up on PEP8. While we try to be as
+PEP8 compliant as possible, maintaining the consistency of the project is more
+important than modifying an existing style choice.
 
 Below you'll find several established styles that'll help you along the way.
 
 ### Method docstrings
 
-Method docstrings should include a description, a link to the related API endpoint (if available), parameter name, parameter description, and parameter type, return description (if available), and return type. They should be included in the following order:
+Method docstrings should include a description, a link to the related API
+endpoint (if available), parameter name, parameter description, and parameter
+type, return description (if available), and return type. They should be
+included in the following order:
 
 #### Descriptions
 
-A description should be a concise, *action* statement (use "*write* a good docstring" over "*writes* a good docstring") that describes the method. Generally, the official API documentation's description is usable (make sure it's an **action statement** though). Special functionality should be documented.
+A description should be a concise, _action_ statement (use "_write_ a good
+docstring" over "_writes_ a good docstring") that describes the method.
+Generally, the official API documentation's description is usable (make sure
+it's an **action statement** though). Special functionality should be
+documented.
 
 #### Links to related API endpoints
 
-A link to a related API endpoint is denoted with `:calls:`. CanvasAPI uses Sphinx to automatically generate documentation, so we can provide a link to an API endpoint with the reStructuredText syntax:
+A link to a related API endpoint is denoted with `:calls:`. CanvasAPI uses
+Sphinx to automatically generate documentation, so we can provide a link to an
+API endpoint with the reStructuredText syntax:
 
 ```rst
 :calls: `THE TEXT OF THE HYPERLINK \
     <https://the.url/to/use/>`_
 ```
 
-Hyperlink text should match the text underneath the endpoint in the official Canvas API documentation. Generally, that looks like this:
+Hyperlink text should match the text underneath the endpoint in the official
+Canvas API documentation. Generally, that looks like this:
 
 ```rst
 :calls: `HTTP_METHOD /api/v1/endpoint/:variable
 ```
 
-**Note**: It's okay to go over 80 characters for the URL, it can't be helped. Use a backslash to split the hyperlink text from the actual URL to limit line length.
+**Note**: It's okay to go over 80 characters for the URL, it can't be helped.
+Use a backslash to split the hyperlink text from the actual URL to limit line
+length.
 
 #### Parameters
 
-Parameters should be listed in the order that they appear in the method prototype. They should take on the following form:
+Parameters should be listed in the order that they appear in the method
+prototype. They should take on the following form:
 
 ```rst
 :param PARAMETER_NAME: PARAMETER_DESCRIPTION.
@@ -269,7 +373,8 @@ Parameters should be listed in the order that they appear in the method prototyp
 
 #### Returns
 
-**Return description** should be listed first, if available. This should be included to clarify a returned value, for example:
+**Return description** should be listed first, if available. This should be
+included to clarify a returned value, for example:
 
 ```python
 def uncheck_box(box_id):
@@ -281,9 +386,13 @@ def uncheck_box(box_id):
     """
 ```
 
-In most cases, the return value is easy to infer based on the type and the description given in the docstring. `:returns:` is only necessary to clarify ambiguous cases.
+In most cases, the return value is easy to infer based on the type and the
+description given in the docstring. `:returns:` is only necessary to clarify
+ambiguous cases.
 
-**Return type** should always be included when a value is returned. If it's not a primitive type (`int`, `str`, `bool`, `list`, etc.) a fully-qualified class name should be included:
+**Return type** should always be included when a value is returned. If it's not
+a primitive type (`int`, `str`, `bool`, `list`, etc.) a fully-qualified class
+name should be included:
 
 ```rst
 :rtype: :class:`canvasapi.user.User`
@@ -341,3 +450,124 @@ def clear_course_nicknames(self):
     :rtype: bool
     """
 ```
+
+### Type Annotations
+
+Type annotations were added in Python 3.6 and allow maintainers to run static
+checks on code to identify and fix potential `TypeError` bugs before runtime.
+Type annotations should be added to maintain consistency across modules.
+
+#### Type hint formatting
+
+Type annotations follow the general format below to define expected types for
+method parameters and returns.
+
+```python
+def my_function(param1: str, param2: str) -> str:
+    return f'You submitted {param1} and {param2}!"
+```
+
+#### Type Hints in Classes
+
+Classes instantiated with an `__init__()` method are expected to return `None`.
+
+```python
+class MyClass():
+
+    __init__(self, param1: str, param2: int) -> None:
+        self.param1: param1,
+        self.param2: param2
+```
+
+Class methods, on the other hand, can be annotated with a specific return type.
+In the example below, the `get_course()` method returns an instance of `Course`:
+
+```python
+class Canvas():
+
+    def get_course(
+        self,
+        course: Union[int, Course],
+        use_sis_id: bool = False,
+        **kwargs: Optional[dict],
+    ) -> Course: ...
+```
+
+Often, a method can have multiple valid parameters. In `get_course`, the
+`course` param can be either an `int` or a `Course` object. The special `Union`
+type allows you to accept multiple types for a given parameter. Every method has
+an optional `**kwargs` argument which can be annotated by importing the
+`Optional` type from the `typing` package:
+
+```python
+from typing import Optional, Union
+```
+
+Both types accept a list of _other_ types which would be valid in the function:
+
+```python
+def my_function(param1: Union[str, int], **kwargs: Optional[str, int]) -> Any: ...
+```
+
+#### Python 3.6 type hints
+
+Modules are often imported when necessary in specific class methods rather than
+at the top of the file. This can cause problems because the imports happen as
+the code is executed, not when the program is initialized. This will cause
+errors to show when the function is returning a valid value:
+
+```python
+"""
+In this example, <AppointmentGroup> would have an error in the static check because
+it has not been imported before the function definition. However, this is a valid
+function because it is instantiated by the time the function returns.
+"""
+def get_appointment_group(
+        self, appointment_group: Union[int, AppointmentGroup], **kwargs: Optional[dict]
+    ) -> AppointmentGroup:
+
+        from canvasapi.appointment_group import AppointmentGroup
+
+        appointment_group_id = obj_or_id(
+            appointment_group, "appointment_group", (AppointmentGroup,)
+        )
+
+        response = self.__requester.request(
+            "GET",
+            "appointment_groups/{}".format(appointment_group_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return AppointmentGroup(self.__requester, response.json())
+```
+
+To get around this problem, the `typing` package has a `TYPE_CHECKING` module
+which allows you to define imports for static checks that will be ignored at
+runtime. Annotate the class name as a string and mypy will recognize it as a
+valid class.
+
+```python
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from canvasapi.appointment_group import AppointmentGroup
+
+"""
+The error in the above code block will no longer be displayed because the static checker
+does the import at the top of the file.
+"""
+def get_appointment_group(
+        self, appointment_group: Union[int, 'AppointmentGroup'], **kwargs: Optional[dict]
+    ) -> 'AppointmentGroup': ...
+```
+
+#### Python 3.7+ type hints
+
+Python 3.7 by added the ability to defer module loading. Instead of adding a
+conditional check, import the new `annotations` module:
+
+```python
+from __future__ import annotations
+```
+
+The `annotations` module is in the standard library in Python 3.10 and can be
+imported directly.
