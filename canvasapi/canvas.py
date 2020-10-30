@@ -25,7 +25,6 @@ if TYPE_CHECKING:
     from canvasapi.conversation import Conversation
     from canvasapi.planner import PlannerNote, PlannerOverride
     from canvasapi.poll import Poll
-    from canvasapi.discussion_topic import DiscussionTopic
     from canvasapi.course import CourseNickname
     from canvasapi.outcome import Outcome, OutcomeGroup
 
@@ -98,7 +97,7 @@ class Canvas(object):
         conversation_ids: List[str],
         event: str,
         **kwargs: Union[str, List[str], Optional[dict]],
-    ) -> 'Progress':
+    ) -> "Progress":
         """
 
         :calls: `PUT /api/v1/conversations \
@@ -211,7 +210,8 @@ class Canvas(object):
         return Account(self.__requester, response.json())
 
     def create_appointment_group(
-        self, appointment_group: dict, **kwargs: Optional[dict]) -> 'AppointmentGroup':
+        self, appointment_group: dict, **kwargs: Optional[dict]
+    ) -> "AppointmentGroup":
         """
         Create a new Appointment Group.
 
@@ -252,7 +252,7 @@ class Canvas(object):
 
     def create_calendar_event(
         self, calendar_event: dict, **kwargs: Union[str, dict, Optional[dict]]
-    ) -> 'CalendarEvent':
+    ) -> "CalendarEvent":
         """
         Create a new Calendar Event.
 
@@ -283,7 +283,7 @@ class Canvas(object):
         recipients: List[str],
         body: str,
         **kwargs: Union[str, list, Optional[dict]],
-    ) -> List['Conversation']:
+    ) -> List["Conversation"]:
         """
         Create a new Conversation.
 
@@ -323,7 +323,7 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
-    def create_planner_note(self, **kwargs: Optional[dict]) -> 'PlannerNote':
+    def create_planner_note(self, **kwargs: Optional[dict]) -> "PlannerNote":
         """
         Create a planner note for the current user
 
@@ -342,9 +342,9 @@ class Canvas(object):
     def create_planner_override(
         self,
         plannable_type: str,
-        plannable_id: Union[int, 'PlannerOverride'],
+        plannable_id: Union[int, "PlannerOverride"],
         **kwargs: Union[str, int, Optional[dict]],
-    ) -> 'PlannerOverride':
+    ) -> "PlannerOverride":
         """
         Create a planner override for the current user
 
@@ -377,7 +377,7 @@ class Canvas(object):
 
     def create_poll(
         self, poll: List[dict], **kwargs: Union[list, Optional[dict]]
-    ) -> 'Poll':
+    ) -> "Poll":
         """
         Create a new poll for the current user.
 
@@ -477,7 +477,9 @@ class Canvas(object):
         return response.json()
 
     def get_announcements(
-        self, courses: List[Union[int, Course]], **kwargs: Union[List[str], Optional[dict]]
+        self,
+        courses: List[Union[int, Course]],
+        **kwargs: Union[List[str], Optional[dict]],
     ) -> PaginatedList:
         """
         List announcements.
@@ -515,8 +517,10 @@ class Canvas(object):
         )
 
     def get_appointment_group(
-        self, appointment_group: Union[int, 'AppointmentGroup'], **kwargs: Optional[dict]
-    ) -> 'AppointmentGroup':
+        self,
+        appointment_group: Union[int, "AppointmentGroup"],
+        **kwargs: Optional[dict],
+    ) -> "AppointmentGroup":
         """
         Return single Appointment Group by id
 
@@ -577,8 +581,8 @@ class Canvas(object):
         return response.json()
 
     def get_calendar_event(
-        self, calendar_event: Union[int, 'CalendarEvent'], **kwargs: Optional[dict]
-    ) -> 'CalendarEvent':
+        self, calendar_event: Union[int, "CalendarEvent"], **kwargs: Optional[dict]
+    ) -> "CalendarEvent":
         """
         Return single Calendar Event by id
 
@@ -652,8 +656,8 @@ class Canvas(object):
         )
 
     def get_conversation(
-        self, conversation: Union[int, 'Conversation'], **kwargs: Optional[dict]
-    ) -> 'Conversation':
+        self, conversation: Union[int, "Conversation"], **kwargs: Optional[dict]
+    ) -> "Conversation":
         """
         Return single Conversation
 
@@ -752,7 +756,7 @@ class Canvas(object):
 
     def get_course_nickname(
         self, course: Union[int, Course], **kwargs: Optional[dict]
-    ) -> 'CourseNickname':
+    ) -> "CourseNickname":
         """
         Return the nickname for the given course.
 
@@ -939,7 +943,9 @@ class Canvas(object):
         return GroupCategory(self.__requester, response.json())
 
     def get_group_participants(
-        self, appointment_group: Union[int, 'AppointmentGroup'], **kwargs: Optional[dict]
+        self,
+        appointment_group: Union[int, "AppointmentGroup"],
+        **kwargs: Optional[dict],
     ) -> PaginatedList:
         """
         List student group participants in this appointment group.
@@ -968,8 +974,8 @@ class Canvas(object):
         )
 
     def get_outcome(
-        self, outcome: Union[int, 'Outcome'], **kwargs: Optional[dict]
-    ) -> 'Outcome':
+        self, outcome: Union[int, "Outcome"], **kwargs: Optional[dict]
+    ) -> "Outcome":
         """
         Returns the details of the outcome with the given id.
 
@@ -991,8 +997,8 @@ class Canvas(object):
         return Outcome(self.__requester, response.json())
 
     def get_outcome_group(
-        self, group: Union[int, 'OutcomeGroup'], **kwargs: Optional[dict]
-    ) -> 'OutcomeGroup':
+        self, group: Union[int, "OutcomeGroup"], **kwargs: Optional[dict]
+    ) -> "OutcomeGroup":
         """
         Returns the details of the Outcome Group with the given id.
 
@@ -1018,8 +1024,8 @@ class Canvas(object):
         return OutcomeGroup(self.__requester, response.json())
 
     def get_planner_note(
-        self, planner_note: Union[int, 'PlannerNote'], **kwargs: Optional[dict]
-    ) -> 'PlannerNote':
+        self, planner_note: Union[int, "PlannerNote"], **kwargs: Optional[dict]
+    ) -> "PlannerNote":
         """
         Retrieve a planner note for the current user
 
@@ -1069,8 +1075,8 @@ class Canvas(object):
         )
 
     def get_planner_override(
-        self, planner_override: Union[int, 'PlannerOverride'], **kwargs: Optional[dict]
-    ) -> 'PlannerOverride':
+        self, planner_override: Union[int, "PlannerOverride"], **kwargs: Optional[dict]
+    ) -> "PlannerOverride":
         """
         Retrieve a planner override for the current user
 
@@ -1123,7 +1129,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_poll(self, poll: Union[int, 'Poll'], **kwargs: Optional[dict]) -> 'Poll':
+    def get_poll(self, poll: Union[int, "Poll"], **kwargs: Optional[dict]) -> "Poll":
         """
         Get a single poll, based on the poll id.
 
@@ -1165,8 +1171,8 @@ class Canvas(object):
         )
 
     def get_progress(
-        self, progress: Union[int, 'Progress'], **kwargs: Optional[dict]
-    ) -> 'Progress':
+        self, progress: Union[int, "Progress"], **kwargs: Optional[dict]
+    ) -> "Progress":
         """
         Get a specific progress.
 
@@ -1188,7 +1194,7 @@ class Canvas(object):
         )
         return Progress(self.__requester, response.json())
 
-    def get_root_outcome_group(self, **kwargs: Optional[dict]) -> 'OutcomeGroup':
+    def get_root_outcome_group(self, **kwargs: Optional[dict]) -> "OutcomeGroup":
         """
         Redirect to root outcome group for context
 
@@ -1302,7 +1308,9 @@ class Canvas(object):
         return User(self.__requester, response.json())
 
     def get_user_participants(
-        self, appointment_group: Union[int, 'AppointmentGroup'], **kwargs: Optional[dict]
+        self,
+        appointment_group: Union[int, "AppointmentGroup"],
+        **kwargs: Optional[dict],
     ) -> PaginatedList:
         """
         List user participants in this appointment group.
@@ -1361,10 +1369,10 @@ class Canvas(object):
 
     def reserve_time_slot(
         self,
-        calendar_event: Union[int, 'CalendarEvent'],
+        calendar_event: Union[int, "CalendarEvent"],
         participant_id: int = None,
         **kwargs: Optional[dict],
-    ) -> 'CalendarEvent':
+    ) -> "CalendarEvent":
         """
         Return single Calendar Event by id
 
@@ -1447,8 +1455,11 @@ class Canvas(object):
         return response.json()
 
     def set_course_nickname(
-        self, course: Union[int, Course], nickname: str, **kwargs: Union[str, Optional[dict]]
-    ) -> 'CourseNickname':
+        self,
+        course: Union[int, Course],
+        nickname: str,
+        **kwargs: Union[str, Optional[dict]],
+    ) -> "CourseNickname":
         """
         Set a nickname for the given course. This will replace the
         course's name in the output of subsequent API calls, as
