@@ -3,8 +3,8 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
-from canvasapi.paginated_list import PaginatedList
 from canvasapi.license import License
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.upload import Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, obj_or_id, obj_or_str

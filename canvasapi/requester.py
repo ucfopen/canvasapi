@@ -1,5 +1,5 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 from pprint import pformat
 
 import requests
@@ -15,7 +15,6 @@ from canvasapi.exceptions import (
     UnprocessableEntity,
 )
 from canvasapi.util import clean_headers
-
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 import datetime
-import pytz
 import unittest
 
+import pytz
 import requests_mock
 
 from canvasapi import Canvas
@@ -13,13 +13,14 @@ from canvasapi.account import (
     Role,
     SSOSettings,
 )
-from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.authentication_event import AuthenticationEvent
+from canvasapi.authentication_provider import AuthenticationProvider
+from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
-from canvasapi.external_tool import ExternalTool
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.external_tool import ExternalTool
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
@@ -32,7 +33,6 @@ from canvasapi.rubric import Rubric
 from canvasapi.scope import Scope
 from canvasapi.sis_import import SisImport
 from canvasapi.user import User
-from canvasapi.content_migration import ContentMigration, Migrator
 from tests import settings
 from tests.util import register_uris
 

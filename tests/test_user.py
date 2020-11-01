@@ -16,12 +16,12 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
-from canvasapi.login import Login
 from canvasapi.license import License
+from canvasapi.login import Login
 from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.user import User
 from canvasapi.usage_rights import UsageRights
+from canvasapi.user import User
 from tests import settings
 from tests.util import cleanup_file, register_uris
 

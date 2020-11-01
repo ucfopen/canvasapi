@@ -1,32 +1,34 @@
 import unittest
-from urllib.parse import quote
 import uuid
+from urllib.parse import quote
 
 import requests
 import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
-from canvasapi.blueprint import BlueprintSubscription
-from canvasapi.blueprint import BlueprintTemplate
-from canvasapi.course import Course, CourseNickname, Page, LatePolicy
-from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.gradebook_history import (
-    Day,
-    Grader,
-    SubmissionVersion,
-    SubmissionHistory,
-)
-from canvasapi.grading_standard import GradingStandard
-from canvasapi.enrollment import Enrollment
+from canvasapi.blueprint import BlueprintSubscription, BlueprintTemplate
+from canvasapi.content_export import ContentExport
+from canvasapi.content_migration import ContentMigration, Migrator
+from canvasapi.course import Course, CourseNickname, LatePolicy, Page
 from canvasapi.course_epub_export import CourseEpubExport
-from canvasapi.exceptions import ResourceDoesNotExist, RequiredFieldMissing
+from canvasapi.custom_gradebook_columns import CustomGradebookColumn
+from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.enrollment import Enrollment
+from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionHistory,
+    SubmissionVersion,
+)
 from canvasapi.grading_period import GradingPeriod
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.license import License
 from canvasapi.module import Module
@@ -34,16 +36,13 @@ from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
-from canvasapi.quiz import Quiz, QuizExtension, QuizAssignmentOverrideSet
+from canvasapi.quiz import Quiz, QuizAssignmentOverrideSet, QuizExtension
 from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
-from canvasapi.user import User
 from canvasapi.usage_rights import UsageRights
-from canvasapi.content_migration import ContentMigration, Migrator
-from canvasapi.content_export import ContentExport
-from canvasapi.custom_gradebook_columns import CustomGradebookColumn
+from canvasapi.user import User
 from tests import settings
 from tests.util import cleanup_file, register_uris
 

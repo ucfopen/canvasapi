@@ -1,24 +1,24 @@
 import unittest
-from urllib.parse import quote
 import uuid
+from urllib.parse import quote
 
 import requests
 import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.assignment import AssignmentOverride
-from canvasapi.group import Group, GroupMembership, GroupCategory
+from canvasapi.content_export import ContentExport
+from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.group import Group, GroupCategory, GroupMembership
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
-from canvasapi.content_migration import ContentMigration, Migrator
-from canvasapi.content_export import ContentExport
 from canvasapi.usage_rights import UsageRights
 from tests import settings
 from tests.util import cleanup_file, register_uris
@@ -715,8 +715,8 @@ class TestGroupCategory(unittest.TestCase):
 
     # assign_members()
     def test_assign_members(self, m):
-        from canvasapi.progress import Progress
         from canvasapi.paginated_list import PaginatedList
+        from canvasapi.progress import Progress
 
         requires = {
             "group": ["category_assign_members_true", "category_assign_members_false"]

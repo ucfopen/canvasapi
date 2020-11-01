@@ -110,8 +110,8 @@ class DiscussionTopic(CanvasObject):
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """
-        from canvasapi.group import Group
         from canvasapi.course import Course
+        from canvasapi.group import Group
 
         response = self._requester.request(
             "GET",

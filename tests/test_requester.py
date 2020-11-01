@@ -1,5 +1,5 @@
-from datetime import datetime
 import unittest
+from datetime import datetime
 from urllib.parse import quote
 
 import requests

@@ -1,9 +1,6 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import (
-    combine_kwargs,
-    is_multivalued,
-)
+from canvasapi.util import combine_kwargs, is_multivalued
 
 
 class CustomGradebookColumn(CanvasObject):
