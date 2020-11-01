@@ -6,6 +6,10 @@
 
 - Added missing documentation for the get_current_user method and clarifications to the CurrentUser class. (Thanks, [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX))
 
+### Deprecation Warnings
+
+- The `enrollment_type` argument on `Course.enroll_user` is now deprecated. Pass this information to `enrollment[type]` as a keyword argument instead. e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`
+
 ## [2.0.0] - 2020-08-14
 
 ### General
