@@ -5,6 +5,11 @@
 ### General
 
 - Added missing documentation for the get_current_user method and clarifications to the CurrentUser class. (Thanks, [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX))
+- `Canvas.get_announcement` now has a required parameter `context_codes`, which accepts a list of course IDs or `Course` objects.
+
+### Bugfixes
+
+- Fixed an issue where an `Announcement` object sometimes didn't have an associated course ID. (Thanks, [@bennettscience](https://github.com/bennettscience))
 
 ## [2.0.0] - 2020-08-14
 
