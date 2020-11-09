@@ -17,6 +17,7 @@ CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](htt
     * [Table of Contents](#table-of-contents)
     * [Installation](#installation)
     * [Documentation](#documentation)
+    * [Contributing](#contributing)
     * [Quickstart](#quickstart)
         * [Working with Canvas Objects](#working-with-canvas-objects)
             * [Course objects](#course-objects)
@@ -35,6 +36,7 @@ You can install CanvasAPI with pip:
 
 Full documentation is available at [Read the Docs](http://canvasapi.readthedocs.io/).
 
+## Contributing
 Want to help us improve CanvasAPI? Check out our [Contributing Guide](.github/CONTRIBUTING.md) to learn about running CanvasAPI as a developer, picking issues to work on, submitting bug reports, contributing patches, and more.
 
 ## Quickstart
