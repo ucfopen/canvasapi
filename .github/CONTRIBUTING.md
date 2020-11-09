@@ -62,12 +62,12 @@ Once you've found an issue you're interested in tackling, take a look at our [fi
 
 #### Setting up the environment
 
-Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have pip, virtualenv, and git installed and are using a terminal. If not, please set those up before continuing.
+Now that you've selected an issue to work on, you'll need to set up an environment for writing code. We'll assume you already have Python 3 (pip / venv) and git installed and are using a terminal. If not, please set those up before continuing.
 
 1. Fork CanvasAPI on GitHub ([see the docs here](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo))
 2. Checkout (`git checkout develop`) and then pull the latest commit from the develop branch: `git pull upstream develop`
 3. Create a new branch with the format **issue/[issue_number]-[issue-title]**: `git checkout -b issue/1-test-issue-for-documentation`
-4. Set up a new virtual environment ( `virtualenv env` ) and activate it (`source env/bin/activate`)
+4. Set up a new virtual environment ( `python3 -m venv ~/.virtualenvs/canvasapi` ) and activate it.
 5. Install the required dependencies with `pip install -r dev_requirements.txt`
 
 From here, you can go about working on your issue you normally would. Please make sure to adhere to our [style guidelines for both code and docstrings](#code-style-guidelines). Once you're satisfied with the result, it's time to write a unit test for it.
