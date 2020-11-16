@@ -9,7 +9,7 @@ from tests.util import register_uris
 
 
 @requests_mock.Mocker()
-class TestProgress(unittest.TestCase):
+class TestPairingCode(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
