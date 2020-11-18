@@ -54,3 +54,5 @@ class TestFile(unittest.TestCase):
         register_uris({"file": ["file_contents"]}, m)
         contents = self.file.get_contents()
         self.assertEqual(contents, '"Hello there"')
+        contents_binary = self.file.get_contents(binary=True)
+        self.assertEqual(contents_binary, b'"Hello there"')
