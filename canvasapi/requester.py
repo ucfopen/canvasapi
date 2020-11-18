@@ -218,9 +218,12 @@ class Requester(object):
         )
 
         try:
-            logger.debug("Data: {data}".format(data=pformat(response.json())))
-        except ValueError:
-            logger.debug("Data: {data}".format(data=pformat(response.text)))
+            logger.debug("Data: {data}".format(data=pformat(response.content.decode('utf-8'))))
+        except UnicodeDecodeError:
+            logger.debug("Data: {data}".format(data=pformat(response.content)))
+        except AttributeError:
+            # response.content is None
+            logger.debug("No data")
 
         # Add response to internal cache
         if len(self._cache) > 4:
