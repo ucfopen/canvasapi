@@ -218,7 +218,9 @@ class Requester(object):
         )
 
         try:
-            logger.debug("Data: {data}".format(data=pformat(response.content.decode('utf-8'))))
+            logger.debug(
+                "Data: {data}".format(data=pformat(response.content.decode("utf-8")))
+            )
         except UnicodeDecodeError:
             logger.debug("Data: {data}".format(data=pformat(response.content)))
         except AttributeError:
