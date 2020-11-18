@@ -157,7 +157,7 @@ class Requester(object):
             currently only the POST request of GraphQL is using this parameter.
             For all other methods it's just passed and ignored.
         :type json: `bool`
-        :rtype: str
+        :rtype: :class:`requests.Response`
         """
         full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
 
