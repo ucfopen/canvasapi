@@ -25,6 +25,7 @@ from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
 from canvasapi.rubric import RubricAssociation, Rubric
 from canvasapi.submission import GroupedSubmission, Submission
+from canvasapi.todo import Todo
 from canvasapi.upload import Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
@@ -2094,12 +2095,17 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/todo \
         <https://canvas.instructure.com/doc/api/courses.html#method.courses.todo_items>`_
 
-        :rtype: dict
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.todo.Todo`
         """
-        response = self._requester.request(
-            "GET", "courses/{}/todo".format(self.id), _kwargs=combine_kwargs(**kwargs)
+
+        return PaginatedList(
+            Todo,
+            self._requester,
+            "GET",
+            "courses/{}/todo".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
-        return response.json()
 
     def get_uncollated_submissions(self, **kwargs):
         """
