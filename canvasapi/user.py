@@ -4,6 +4,7 @@ from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.pairing_code import PairingCode
 from canvasapi.license import License
 from canvasapi.upload import Uploader
 from canvasapi.usage_rights import UsageRights
@@ -117,6 +118,24 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return Folder(self._requester, response.json())
+
+    def create_pairing_code(self, **kwargs):
+        """
+        Create a pairing code for this user.
+
+        :calls: `POST /api/v1/users/:user_id/observer_pairing_codes \
+            <https://canvas.instructure.com/doc/api/user_observees.html#method.observer_pairing_codes_api.create>`_
+
+        :rtype: :class:`canvasapi.pairing_code.PairingCode`
+        """
+
+        response = self._requester.request(
+            "POST",
+            "users/{}/observer_pairing_codes".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return PairingCode(self._requester, response.json())
 
     def edit(self, **kwargs):
         """
