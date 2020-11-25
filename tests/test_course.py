@@ -1,5 +1,6 @@
 import unittest
 import uuid
+import warnings
 from urllib.parse import quote
 
 import requests
@@ -41,6 +42,7 @@ from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
+from canvasapi.todo import Todo
 from canvasapi.usage_rights import UsageRights
 from canvasapi.user import User
 from tests import settings
@@ -202,19 +204,51 @@ class TestCourse(unittest.TestCase):
         register_uris(requires, m)
 
         enrollment_type = "TeacherEnrollment"
-        user_by_id = self.canvas.get_user(1)
-        enrollment_by_id = self.course.enroll_user(user_by_id, enrollment_type)
+
+        # by user ID
+        enrollment_by_id = self.course.enroll_user(
+            1, enrollment={"type": enrollment_type}
+        )
 
         self.assertIsInstance(enrollment_by_id, Enrollment)
         self.assertTrue(hasattr(enrollment_by_id, "type"))
         self.assertEqual(enrollment_by_id.type, enrollment_type)
 
-        user_by_obj = self.canvas.get_user(self.user)
-        enrollment_by_obj = self.course.enroll_user(user_by_obj, enrollment_type)
+        # by user object
+        enrollment_by_obj = self.course.enroll_user(
+            self.user, enrollment={"type": enrollment_type}
+        )
 
         self.assertIsInstance(enrollment_by_obj, Enrollment)
         self.assertTrue(hasattr(enrollment_by_obj, "type"))
         self.assertEqual(enrollment_by_obj.type, enrollment_type)
+
+    def test_enroll_user_legacy(self, m):
+        warnings.simplefilter("always", DeprecationWarning)
+
+        requires = {"course": ["enroll_user"], "user": ["get_by_id"]}
+        register_uris(requires, m)
+
+        enrollment_type = "TeacherEnrollment"
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            # by user ID
+            enrollment_by_id = self.course.enroll_user(1, enrollment_type)
+
+            self.assertIsInstance(enrollment_by_id, Enrollment)
+            self.assertTrue(hasattr(enrollment_by_id, "type"))
+            self.assertEqual(enrollment_by_id.type, enrollment_type)
+
+            # by user object
+            enrollment_by_obj = self.course.enroll_user(self.user, enrollment_type)
+
+            self.assertIsInstance(enrollment_by_obj, Enrollment)
+            self.assertTrue(hasattr(enrollment_by_obj, "type"))
+            self.assertEqual(enrollment_by_obj.type, enrollment_type)
+
+        self.assertEqual(len(warning_list), 2)
+        self.assertEqual(warning_list[0].category, DeprecationWarning)
+        self.assertEqual(warning_list[1].category, DeprecationWarning)
 
     # get_recent_students()
     def test_get_recent_students(self, m):
@@ -1139,6 +1173,15 @@ class TestCourse(unittest.TestCase):
         tab_list = [tab for tab in tabs]
         self.assertEqual(len(tab_list), 2)
         self.assertIsInstance(tab_list[0], Tab)
+
+    # get_todo_items()
+    def test_get_todo_items(self, m):
+        register_uris({"course": ["todo_items"]}, m)
+
+        todo_items = self.course.get_todo_items()
+        todo_list = [todo for todo in todo_items]
+
+        self.assertIsInstance(todo_list[0], Todo)
 
     # get_rubric
     def test_get_rubric(self, m):

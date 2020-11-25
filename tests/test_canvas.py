@@ -749,6 +749,14 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(announcement_list[2]._parent_type, "group")
         self.assertEqual(announcement_list[2]._parent_id, "1")
 
+    def test_course_announcements_legacy(self, m):
+        register_uris({"announcements": ["list_announcements"]}, m)
+        announcements = self.canvas.get_announcements(context_codes=["course_1"])
+
+        self.assertEqual(announcements[0].context_code, "course_1")
+        self.assertEqual(announcements[0]._parent_type, "course")
+        self.assertEqual(announcements[0]._parent_id, "1")
+
     # get_epub_exports()
     def test_get_epub_exports(self, m):
 

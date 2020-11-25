@@ -37,6 +37,7 @@ You can install CanvasAPI with pip:
 Full documentation is available at [Read the Docs](http://canvasapi.readthedocs.io/).
 
 ## Contributing
+
 Want to help us improve CanvasAPI? Check out our [Contributing Guide](.github/CONTRIBUTING.md) to learn about running CanvasAPI as a developer, picking issues to work on, submitting bug reports, contributing patches, and more.
 
 ## Quickstart

@@ -1,3 +1,5 @@
+import warnings
+
 from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
@@ -25,6 +27,7 @@ from canvasapi.quiz import QuizExtension
 from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
+from canvasapi.todo import Todo
 from canvasapi.upload import Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
@@ -640,7 +643,7 @@ class Course(CanvasObject):
 
         return response.status_code == 204
 
-    def enroll_user(self, user, enrollment_type, **kwargs):
+    def enroll_user(self, user, enrollment_type=None, **kwargs):
         """
         Create a new user enrollment for a course or a section.
 
@@ -650,14 +653,25 @@ class Course(CanvasObject):
         :param user: The object or ID of the user to enroll in this course.
         :type user: :class:`canvasapi.user.User` or int
         :param enrollment_type: The type of enrollment.
-        :type enrollment_type: str
+        :type enrollment_type: str, optional
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
         from canvasapi.enrollment import Enrollment
         from canvasapi.user import User
 
         kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
-        kwargs["enrollment[type]"] = enrollment_type
+
+        if enrollment_type:
+            warnings.warn(
+                (
+                    "The `enrollment_type` argument is deprecated and will be "
+                    "removed in a future version.\n"
+                    "Use `enrollment[type]` as a keyword argument instead. "
+                    "e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`"
+                ),
+                DeprecationWarning,
+            )
+            kwargs["enrollment[type]"] = enrollment_type
 
         response = self._requester.request(
             "POST",
@@ -2084,6 +2098,25 @@ class Course(CanvasObject):
             "GET",
             "courses/{}/tabs".format(self.id),
             {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_todo_items(self, **kwargs):
+        """
+        Returns the current user's course-specific todo items.
+
+        :calls: `GET /api/v1/courses/:course_id/todo \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.todo_items>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.todo.Todo`
+        """
+
+        return PaginatedList(
+            Todo,
+            self._requester,
+            "GET",
+            "courses/{}/todo".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
