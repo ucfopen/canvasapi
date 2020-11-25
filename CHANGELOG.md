@@ -16,6 +16,10 @@
 - Course TODO items (Thanks, [@onomou](https://github.com/onomou))
 - Create observer pairing code (Thanks, [@bennettscience](https://github.com/bennettscience))
 
+### Deprecation Warnings
+
+- The `enrollment_type` argument on `Course.enroll_user` is now deprecated. Pass this information to `enrollment[type]` as a keyword argument instead. e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`
+
 ## [2.0.0] - 2020-08-14
 
 ### General
