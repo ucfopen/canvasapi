@@ -6,6 +6,10 @@
 
 - Added missing documentation for the get_current_user method and clarifications to the CurrentUser class. (Thanks, [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX))
 
+### New Endpoint Coverage
+
+- Course TODO items (Thanks, [@onomou](https://github.com/onomou))
+
 ## [2.0.0] - 2020-08-14
 
 ### General
