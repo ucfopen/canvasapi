@@ -9,6 +9,7 @@
 ### New Endpoint Coverage
 
 - Course TODO items (Thanks, [@onomou](https://github.com/onomou))
+- Create observer pairing code (Thanks, [@bennettscience](https://github.com/bennettscience))
 
 ## [2.0.0] - 2020-08-14
 
