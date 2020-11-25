@@ -566,8 +566,8 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(root_folder_list[0], Folder)
         self.assertEqual("my_files", root_folder_list[0].name)
 
-    # get_pairing_code()
-    def test_get_pairing_code(self, m):
+    # create_pairing_code()
+    def test_create_pairing_code(self, m):
         register_uris({"user": ["observer_pairing_codes"]}, m)
 
         pairing_code = self.user.create_pairing_code()

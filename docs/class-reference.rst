@@ -40,6 +40,7 @@ Class Reference
     outcome-ref
     outcome-import-ref
     page-ref
+    pairing-code-ref
     planner-ref
     poll-ref
     poll-choice-ref

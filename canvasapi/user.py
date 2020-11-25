@@ -124,9 +124,9 @@ class User(CanvasObject):
         Create a pairing code for this user.
 
         :calls: `POST /api/v1/users/:user_id/observer_pairing_codes \
-            <https://canvas.instructure.com/doc/api/user_observees.html#method.observer_pairing_codes_api.create>`
+            <https://canvas.instructure.com/doc/api/user_observees.html#method.observer_pairing_codes_api.create>`_
 
-        :rtype: :class: `canvasapi.pairing_code.PairingCode`
+        :rtype: :class:`canvasapi.pairing_code.PairingCode`
         """
 
         response = self._requester.request(

@@ -15,7 +15,6 @@ class TestPairingCode(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {"user": ["get_by_id"]}
-
             register_uris(requires, m)
 
             self.user = self.canvas.get_user(1)
