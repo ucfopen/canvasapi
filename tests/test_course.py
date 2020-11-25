@@ -40,6 +40,7 @@ from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
+from canvasapi.todo import Todo
 from canvasapi.user import User
 from canvasapi.usage_rights import UsageRights
 from canvasapi.content_migration import ContentMigration, Migrator
@@ -1173,6 +1174,15 @@ class TestCourse(unittest.TestCase):
         tab_list = [tab for tab in tabs]
         self.assertEqual(len(tab_list), 2)
         self.assertIsInstance(tab_list[0], Tab)
+
+    # get_todo_items()
+    def test_get_todo_items(self, m):
+        register_uris({"course": ["todo_items"]}, m)
+
+        todo_items = self.course.get_todo_items()
+        todo_list = [todo for todo in todo_items]
+
+        self.assertIsInstance(todo_list[0], Todo)
 
     # get_rubric
     def test_get_rubric(self, m):
