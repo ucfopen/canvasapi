@@ -25,6 +25,7 @@ from canvasapi.quiz import QuizExtension
 from canvasapi.tab import Tab
 from canvasapi.rubric import RubricAssociation, Rubric
 from canvasapi.submission import GroupedSubmission, Submission
+from canvasapi.todo import Todo
 from canvasapi.upload import Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
@@ -2084,6 +2085,25 @@ class Course(CanvasObject):
             "GET",
             "courses/{}/tabs".format(self.id),
             {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_todo_items(self, **kwargs):
+        """
+        Returns the current user's course-specific todo items.
+
+        :calls: `GET /api/v1/courses/:course_id/todo \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.todo_items>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.todo.Todo`
+        """
+
+        return PaginatedList(
+            Todo,
+            self._requester,
+            "GET",
+            "courses/{}/todo".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
