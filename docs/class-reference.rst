@@ -54,6 +54,7 @@ Class Reference
     sis-import-ref
     submission-ref
     tab-ref
+    todo-ref
     upload-ref
     user-ref
     usage-rights-ref
