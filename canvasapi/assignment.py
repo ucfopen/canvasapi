@@ -5,8 +5,7 @@ from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.upload import Uploader
-from canvasapi.user import User
-from canvasapi.user import UserDisplay
+from canvasapi.user import User, UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
 
 

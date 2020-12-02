@@ -147,9 +147,9 @@ class ContentMigration(CanvasObject):
             or :class:`canvasapi.course.Group`,
             or :class:`canvasapi.course.User`
         """
-        from canvasapi.group import Group
-        from canvasapi.course import Course
         from canvasapi.account import Account
+        from canvasapi.course import Course
+        from canvasapi.group import Group
         from canvasapi.user import User
 
         response = self._requester.request(

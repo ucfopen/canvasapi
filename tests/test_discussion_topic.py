@@ -4,7 +4,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.course import Course
-from canvasapi.discussion_topic import DiscussionTopic, DiscussionEntry
+from canvasapi.discussion_topic import DiscussionEntry, DiscussionTopic
 from canvasapi.exceptions import Forbidden
 from canvasapi.group import Group
 from tests import settings

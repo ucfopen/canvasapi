@@ -267,7 +267,18 @@
             "full_name": "Folder 1"
         },
         "status_code": 200
-    },
+	},
+	"observer_pairing_codes": {
+		"method": "POST",
+		"endpoint": "users/1/observer_pairing_codes",
+		"data": {
+			"user_id": 1,
+			"code": "abc123",
+			"expires_at": "2020-10-30T17:00:00Z",
+			"workflow_state": "active"
+		},
+		"status_code": 200
+	},
 	"get_user_assignments": {
 		"method": "GET",
 		"endpoint": "users/1/courses/1/assignments",

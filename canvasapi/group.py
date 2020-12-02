@@ -1,8 +1,8 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.folder import Folder
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.folder import Folder
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
@@ -1049,8 +1049,8 @@ class GroupCategory(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
             or :class:`canvasapi.progress.Progress`
         """
-        from canvasapi.user import User
         from canvasapi.progress import Progress
+        from canvasapi.user import User
 
         if sync:
             return PaginatedList(

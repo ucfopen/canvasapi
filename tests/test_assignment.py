@@ -6,9 +6,9 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.assignment import (
     Assignment,
+    AssignmentExtension,
     AssignmentGroup,
     AssignmentOverride,
-    AssignmentExtension,
 )
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.peer_review import PeerReview
@@ -16,7 +16,7 @@ from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
 from tests import settings
-from tests.util import register_uris, cleanup_file
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
