@@ -7,36 +7,36 @@ from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.gradebook_history import (
-    Day,
-    Grader,
-    SubmissionVersion,
-    SubmissionHistory,
-)
-from canvasapi.grading_standard import GradingStandard
-from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionHistory,
+    SubmissionVersion,
+)
+from canvasapi.grading_period import GradingPeriod
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
-from canvasapi.tab import Tab
-from canvasapi.rubric import RubricAssociation, Rubric
+from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.submission import GroupedSubmission, Submission
+from canvasapi.tab import Tab
 from canvasapi.todo import Todo
 from canvasapi.upload import Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
     combine_kwargs,
-    is_multivalued,
     file_or_path,
+    is_multivalued,
+    normalize_bool,
     obj_or_id,
     obj_or_str,
-    normalize_bool,
 )
 
 

@@ -1,5 +1,5 @@
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.util import combine_kwargs
 
 

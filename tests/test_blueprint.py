@@ -3,8 +3,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.blueprint import BlueprintMigration
-from canvasapi.blueprint import ChangeRecord
+from canvasapi.blueprint import BlueprintMigration, ChangeRecord
 from canvasapi.course import Course
 from canvasapi.paginated_list import PaginatedList
 from tests import settings

@@ -1,7 +1,7 @@
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.poll_submission import PollSubmission
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
 class PollSession(CanvasObject):
