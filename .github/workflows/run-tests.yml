@@ -32,7 +32,7 @@ jobs:
       - name: Run tests
         run: coverage run -m unittest discover
       - name: Lint markdown files
-        run: mdl . .github
+        uses: bewuethr/mdl-action@v1
       - name: Check if methods are alphabetical
         run: python scripts/alphabetic.py
       - name: Check for missing kwargs
