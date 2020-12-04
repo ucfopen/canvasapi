@@ -1,14 +1,13 @@
-import re
 import io
+import re
+import unittest
+
+import requests_mock
 
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.folder import Folder
 from canvasapi.util import combine_kwargs, obj_or_id
 from scripts.validate_docstrings import validate_method
-
-import unittest
-
-import requests_mock
 
 
 # test_endpoint_docstrings

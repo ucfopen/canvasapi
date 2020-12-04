@@ -1,3 +1,5 @@
+import warnings
+
 from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
@@ -5,35 +7,36 @@ from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.gradebook_history import (
-    Day,
-    Grader,
-    SubmissionVersion,
-    SubmissionHistory,
-)
-from canvasapi.grading_standard import GradingStandard
-from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionHistory,
+    SubmissionVersion,
+)
+from canvasapi.grading_period import GradingPeriod
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
-from canvasapi.tab import Tab
-from canvasapi.rubric import RubricAssociation, Rubric
+from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.submission import GroupedSubmission, Submission
+from canvasapi.tab import Tab
+from canvasapi.todo import Todo
 from canvasapi.upload import Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
     combine_kwargs,
-    is_multivalued,
     file_or_path,
+    is_multivalued,
+    normalize_bool,
     obj_or_id,
     obj_or_str,
-    normalize_bool,
 )
 
 
@@ -109,7 +112,9 @@ class Course(CanvasObject):
         kwargs["event"] = "conclude"
 
         response = self._requester.request(
-            "DELETE", "courses/{}".format(self.id), _kwargs=combine_kwargs(**kwargs),
+            "DELETE",
+            "courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("conclude")
@@ -571,7 +576,9 @@ class Course(CanvasObject):
         kwargs["event"] = "delete"
 
         response = self._requester.request(
-            "DELETE", "courses/{}".format(self.id), _kwargs=combine_kwargs(**kwargs),
+            "DELETE",
+            "courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json().get("delete")
 
@@ -636,7 +643,7 @@ class Course(CanvasObject):
 
         return response.status_code == 204
 
-    def enroll_user(self, user, enrollment_type, **kwargs):
+    def enroll_user(self, user, enrollment_type=None, **kwargs):
         """
         Create a new user enrollment for a course or a section.
 
@@ -646,14 +653,25 @@ class Course(CanvasObject):
         :param user: The object or ID of the user to enroll in this course.
         :type user: :class:`canvasapi.user.User` or int
         :param enrollment_type: The type of enrollment.
-        :type enrollment_type: str
+        :type enrollment_type: str, optional
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
         from canvasapi.enrollment import Enrollment
         from canvasapi.user import User
 
         kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
-        kwargs["enrollment[type]"] = enrollment_type
+
+        if enrollment_type:
+            warnings.warn(
+                (
+                    "The `enrollment_type` argument is deprecated and will be "
+                    "removed in a future version.\n"
+                    "Use `enrollment[type]` as a keyword argument instead. "
+                    "e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`"
+                ),
+                DeprecationWarning,
+            )
+            kwargs["enrollment[type]"] = enrollment_type
 
         response = self._requester.request(
             "POST",
@@ -2080,6 +2098,25 @@ class Course(CanvasObject):
             "GET",
             "courses/{}/tabs".format(self.id),
             {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_todo_items(self, **kwargs):
+        """
+        Returns the current user's course-specific todo items.
+
+        :calls: `GET /api/v1/courses/:course_id/todo \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.todo_items>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.todo.Todo`
+        """
+
+        return PaginatedList(
+            Todo,
+            self._requester,
+            "GET",
+            "courses/{}/todo".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 

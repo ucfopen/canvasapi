@@ -1,5 +1,6 @@
 import unittest
 import uuid
+from itertools import chain
 
 import requests_mock
 
@@ -9,14 +10,13 @@ from canvasapi.user import User
 from canvasapi.util import (
     clean_headers,
     combine_kwargs,
+    file_or_path,
     get_institution_url,
     is_multivalued,
+    normalize_bool,
     obj_or_id,
     obj_or_str,
-    file_or_path,
-    normalize_bool,
 )
-from itertools import chain
 from tests import settings
 from tests.util import cleanup_file, register_uris
 

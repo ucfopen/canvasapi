@@ -702,13 +702,60 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(progress.id, 1)
 
     # get_announcements()
-    def test_get_announcements(self, m):
+    def test_get_single_course_announcements(self, m):
         register_uris({"announcements": ["list_announcements"]}, m)
-        announcements = self.canvas.get_announcements()
+        announcements = self.canvas.get_announcements([1])
         announcement_list = [announcement for announcement in announcements]
+
         self.assertIsInstance(announcements, PaginatedList)
         self.assertIsInstance(announcement_list[0], DiscussionTopic)
-        self.assertEqual(len(announcement_list), 2)
+        self.assertEqual(len(announcement_list), 4)
+
+    def test_get_course_announcements_from_object(self, m):
+        register_uris(
+            {"course": ["get_by_id"], "announcements": ["list_announcements"]}, m
+        )
+        course = self.canvas.get_course(1)
+        announcements = self.canvas.get_announcements([course])
+
+        self.assertIsInstance(announcements, PaginatedList)
+
+    def test_get_course_announcements_from_mixed_list(self, m):
+        register_uris(
+            {"course": ["get_by_id"], "announcements": ["list_announcements"]}, m
+        )
+        course = self.canvas.get_course(1)
+        course_ids = [course, 2]
+        announcements = self.canvas.get_announcements(course_ids)
+
+        self.assertIsInstance(announcements, PaginatedList)
+
+    def test_get_announcements_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.get_announcements([])
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.get_announcements(1)
+
+    def test_multiple_course_announcements(self, m):
+        register_uris({"announcements": ["list_announcements"]}, m)
+        announcements = self.canvas.get_announcements([1, 2])
+        announcement_list = [announcement for announcement in announcements]
+
+        self.assertEqual(announcement_list[1].context_code, "course_1")
+        self.assertEqual(announcement_list[1]._parent_type, "course")
+        self.assertEqual(announcement_list[1]._parent_id, "1")
+
+        self.assertEqual(announcement_list[2].context_code, "group_1")
+        self.assertEqual(announcement_list[2]._parent_type, "group")
+        self.assertEqual(announcement_list[2]._parent_id, "1")
+
+    def test_course_announcements_legacy(self, m):
+        register_uris({"announcements": ["list_announcements"]}, m)
+        announcements = self.canvas.get_announcements(context_codes=["course_1"])
+
+        self.assertEqual(announcements[0].context_code, "course_1")
+        self.assertEqual(announcements[0]._parent_type, "course")
+        self.assertEqual(announcements[0]._parent_id, "1")
 
     # get_epub_exports()
     def test_get_epub_exports(self, m):

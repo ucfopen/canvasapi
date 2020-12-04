@@ -15,6 +15,7 @@
 /docs/_build/
 /env/
 /env3/
+venv/
 /htmlcov/
 \#*#
 .vscode/settings.json

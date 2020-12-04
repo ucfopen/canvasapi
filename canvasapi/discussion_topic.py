@@ -18,6 +18,13 @@ class DiscussionTopic(CanvasObject):
             return self.course_id
         elif hasattr(self, "group_id"):
             return self.group_id
+        elif hasattr(self, "context_code"):
+            if self.context_code.startswith("course_"):
+                self.course_id = self.context_code.split("_")[1]
+                return self.course_id
+            elif self.context_code.startswith("group_"):
+                self.group_id = self.context_code.split("_")[1]
+                return self.group_id
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
 
@@ -32,6 +39,11 @@ class DiscussionTopic(CanvasObject):
             return "course"
         elif hasattr(self, "group_id"):
             return "group"
+        elif hasattr(self, "context_code"):
+            if self.context_code.startswith("course"):
+                return "course"
+            elif self.context_code.startswith("group"):
+                return "group"
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
 
@@ -98,8 +110,8 @@ class DiscussionTopic(CanvasObject):
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """
-        from canvasapi.group import Group
         from canvasapi.course import Course
+        from canvasapi.group import Group
 
         response = self._requester.request(
             "GET",

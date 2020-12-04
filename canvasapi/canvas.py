@@ -73,7 +73,9 @@ class Canvas(object):
         """
 
         response = self.__requester.request(
-            "DELETE", "users/self/course_nicknames", _kwargs=combine_kwargs(**kwargs),
+            "DELETE",
+            "users/self/course_nicknames",
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json().get("message") == "OK"
 
@@ -119,7 +121,9 @@ class Canvas(object):
         kwargs["event"] = event
 
         response = self.__requester.request(
-            "PUT", "conversations", _kwargs=combine_kwargs(**kwargs),
+            "PUT",
+            "conversations",
+            _kwargs=combine_kwargs(**kwargs),
         )
         return_progress = Progress(self.__requester, response.json())
         return return_progress
@@ -433,17 +437,39 @@ class Canvas(object):
         )
         return response.json()
 
-    def get_announcements(self, **kwargs):
+    def get_announcements(self, context_codes, **kwargs):
         """
         List announcements.
 
         :calls: `GET /api/v1/announcements \
         <https://canvas.instructure.com/doc/api/announcements.html#method.announcements_api.index>`_
 
+        :param context_codes: Course ID(s) or <Course> objects to request announcements from.
+        :type context_codes: list
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         from canvasapi.discussion_topic import DiscussionTopic
+
+        if type(context_codes) is not list or len(context_codes) == 0:
+            raise RequiredFieldMissing("context_codes need to be passed as a list")
+
+        if isinstance(context_codes[0], str) and "course_" in context_codes[0]:
+            # Legacy support for context codes passed as list of `course_123`-style strings
+            kwargs["context_codes"] = context_codes
+        else:
+            # The type of object in `context_codes` is taken care of by obj_or_id, extracting
+            # the course ID from a <Course> object or by returning plain strings.
+            course_ids = [
+                obj_or_id(course_id, "context_codes", (Course,))
+                for course_id in context_codes
+            ]
+
+            # Set the **kwargs object vaue so it can be combined with others passed by the user.
+            kwargs["context_codes"] = [
+                f"course_{course_id}" for course_id in course_ids
+            ]
 
         return PaginatedList(
             DiscussionTopic,
@@ -566,7 +592,7 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/comm_messages.html#method.comm_messages_api.index>`_
 
         :param user: The object or ID of the user.
-        :type user: :class: `canvasapi.user.User` or int
+        :type user: :class:`canvasapi.user.User` or int
 
         :returns: Paginated list containing messages sent to user
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -734,6 +760,14 @@ class Canvas(object):
         )
 
     def get_current_user(self):
+        """
+        Return a details of the current user.
+
+        :calls: `GET /api/v1/users/:user_id \
+        <https://canvas.instructure.com/doc/api/users.html#method.current_user.show>`_
+
+        :rtype: :class:`canvasapi.current_user.CurrentUser`
+        """
         return CurrentUser(self.__requester)
 
     def get_epub_exports(self, **kwargs):

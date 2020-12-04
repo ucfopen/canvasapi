@@ -1,5 +1,5 @@
-from datetime import datetime
 import unittest
+from datetime import datetime
 from urllib.parse import quote
 
 import requests
@@ -31,6 +31,18 @@ class TestRequester(unittest.TestCase):
 
         response = self.requester.request("GET", "fake_get_request")
         self.assertEqual(response.status_code, 200)
+
+    def test_request_get_binary(self, m):
+        m.register_uri(
+            "GET",
+            settings.BASE_URL_WITH_VERSION + "get_binary_data",
+            content=b"\xff\xff\xff",
+            status_code=200,
+            headers={},
+        )
+
+        response = self.requester.request("GET", "get_binary_data")
+        self.assertEqual(response.content, b"\xff\xff\xff")
 
     def test_request_get_datetime(self, m):
         date = datetime.today()

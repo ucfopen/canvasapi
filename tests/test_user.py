@@ -16,12 +16,13 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
-from canvasapi.login import Login
 from canvasapi.license import License
+from canvasapi.login import Login
 from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.user import User
+from canvasapi.pairing_code import PairingCode
 from canvasapi.usage_rights import UsageRights
+from canvasapi.user import User
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -564,6 +565,14 @@ class TestUser(unittest.TestCase):
         self.assertEqual(len(root_folder_list), 1)
         self.assertIsInstance(root_folder_list[0], Folder)
         self.assertEqual("my_files", root_folder_list[0].name)
+
+    # create_pairing_code()
+    def test_create_pairing_code(self, m):
+        register_uris({"user": ["observer_pairing_codes"]}, m)
+
+        pairing_code = self.user.create_pairing_code()
+        self.assertIsInstance(pairing_code, PairingCode)
+        self.assertEqual("abc123", pairing_code.code)
 
 
 @requests_mock.Mocker()
