@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.1.0] - 2020-12-04
+
 ### New Endpoint Coverage
 
 - Course TODO items (Thanks, [@onomou](https://github.com/onomou))
@@ -9,7 +11,7 @@
 
 ### General
 
-- Added missing documentation for the get_current_user method and clarifications to the CurrentUser class. (Thanks, [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX))
+- Added missing documentation for the get_current_user method and clarifications to the `CurrentUser` class. (Thanks, [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX))
 - `Canvas.get_announcement` now has a required parameter `context_codes`, which accepts a list of course IDs or `Course` objects.
 - Updated contributing guide
 - Added missing documentation for the "Smart DateTimes" feature
@@ -509,7 +511,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...develop
+[2.1.0]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/ucfopen/canvasapi/compare/v0.16.1...v1.0.0
 [0.16.1]: https://github.com/ucfopen/canvasapi/compare/v0.16.0...v0.16.1
