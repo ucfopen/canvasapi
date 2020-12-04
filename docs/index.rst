@@ -15,6 +15,7 @@ Contents:
    examples
    keyword-args
    exceptions
+   troubleshooting
    debugging
    class-reference
    internal-classes

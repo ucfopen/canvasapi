@@ -13,6 +13,7 @@
 - `Canvas.get_announcement` now has a required parameter `context_codes`, which accepts a list of course IDs or `Course` objects.
 - Updated contributing guide
 - Added missing documentation for the "Smart DateTimes" feature
+- Added basic troubleshooting guide to documentation
 
 ### Bugfixes
 
