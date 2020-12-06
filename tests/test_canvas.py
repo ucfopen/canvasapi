@@ -21,6 +21,7 @@ from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.section import Section
+from canvasapi.todo import Todo
 from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
@@ -240,8 +241,9 @@ class TestCanvas(unittest.TestCase):
         register_uris({"user": ["todo_items"]}, m)
 
         todo_items = self.canvas.get_todo_items()
+        todo_list = [todo for todo in todo_items]
 
-        self.assertIsInstance(todo_items, list)
+        self.assertIsInstance(todo_list[0], Todo)
 
     # get_upcoming_events()
     def test_get_upcoming_events(self, m):
