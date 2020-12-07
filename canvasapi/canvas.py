@@ -12,6 +12,7 @@ from canvasapi.group import Group, GroupCategory
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
 from canvasapi.section import Section
+from canvasapi.todo import Todo
 from canvasapi.user import User
 from canvasapi.util import combine_kwargs, get_institution_url, obj_or_id
 
@@ -1170,10 +1171,13 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request(
-            "GET", "users/self/todo", _kwargs=combine_kwargs(**kwargs)
+        return PaginatedList(
+            Todo,
+            self.__requester,
+            "GET",
+            "users/self/todo",
+            _kwargs=combine_kwargs(**kwargs),
         )
-        return response.json()
 
     def get_upcoming_events(self, **kwargs):
         """
