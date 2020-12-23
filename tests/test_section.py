@@ -1,4 +1,5 @@
 import unittest
+import warnings
 
 import requests_mock
 
@@ -18,9 +19,14 @@ class TestSection(unittest.TestCase):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
-            register_uris({"section": ["get_by_id"]}, m)
+            requires = {
+                "section": ["get_by_id"],
+                "user": ["get_by_id"],
+            }
+            register_uris(requires, m)
 
             self.section = self.canvas.get_section(1)
+            self.user = self.canvas.get_user(1)
 
     # __str__()
     def test__str__(self, m):
@@ -121,3 +127,54 @@ class TestSection(unittest.TestCase):
         self.assertTrue(progress.context_type == "Course")
         progress = progress.query()
         self.assertTrue(progress.context_type == "Course")
+
+    def test_enroll_user(self, m):
+        requires = {"section": ["enroll_user"], "user": ["get_by_id"]}
+        register_uris(requires, m)
+
+        enrollment_type = "TeacherEnrollment"
+
+        # by user ID
+        enrollment_by_id = self.section.enroll_user(
+            1, enrollment={"type": enrollment_type}
+        )
+
+        self.assertIsInstance(enrollment_by_id, Enrollment)
+        self.assertTrue(hasattr(enrollment_by_id, "type"))
+        self.assertEqual(enrollment_by_id.type, enrollment_type)
+
+        # by user object
+        enrollment_by_obj = self.section.enroll_user(
+            self.user, enrollment={"type": enrollment_type}
+        )
+
+        self.assertIsInstance(enrollment_by_obj, Enrollment)
+        self.assertTrue(hasattr(enrollment_by_obj, "type"))
+        self.assertEqual(enrollment_by_obj.type, enrollment_type)
+
+    def test_enroll_user_legacy(self, m):
+        warnings.simplefilter("always", DeprecationWarning)
+
+        requires = {"section": ["enroll_user"], "user": ["get_by_id"]}
+        register_uris(requires, m)
+
+        enrollment_type = "TeacherEnrollment"
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            # by user ID
+            enrollment_by_id = self.section.enroll_user(1, enrollment_type)
+
+            self.assertIsInstance(enrollment_by_id, Enrollment)
+            self.assertTrue(hasattr(enrollment_by_id, "type"))
+            self.assertEqual(enrollment_by_id.type, enrollment_type)
+
+            # by user object
+            enrollment_by_obj = self.section.enroll_user(self.user, enrollment_type)
+
+            self.assertIsInstance(enrollment_by_obj, Enrollment)
+            self.assertTrue(hasattr(enrollment_by_obj, "type"))
+            self.assertEqual(enrollment_by_obj.type, enrollment_type)
+
+        self.assertEqual(len(warning_list), 2)
+        self.assertEqual(warning_list[0].category, DeprecationWarning)
+        self.assertEqual(warning_list[1].category, DeprecationWarning)
