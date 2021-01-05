@@ -84,6 +84,42 @@ class Section(CanvasObject):
 
         return self
 
+    def enroll_user(self, user, enrollment_type=None, **kwargs):
+        """
+        Create a new user enrollment for a course or a section.
+
+        :calls: `POST /api/v1/section/:section_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`_
+
+        :param user: The object or ID of the user to enroll in this course.
+        :type user: :class:`canvasapi.user.User` or int
+        :param enrollment_type: The type of enrollment.
+        :type enrollment_type: str
+        :rtype: :class:`canvasapi.enrollment.Enrollment`
+        """
+
+        kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
+
+        if enrollment_type:
+            warnings.warn(
+                (
+                    "The `enrollment_type` argument is deprecated and will be "
+                    "removed in a future version.\n"
+                    "Use `enrollment[type]` as a keyword argument instead. "
+                    "e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`"
+                ),
+                DeprecationWarning,
+            )
+            kwargs["enrollment[type]"] = enrollment_type
+
+        response = self._requester.request(
+            "POST",
+            "sections/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return Enrollment(self._requester, response.json())
+
     def get_assignment_override(self, assignment, **kwargs):
         """
         Return override for the specified assignment for this section.
@@ -171,39 +207,3 @@ class Section(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return Progress(self._requester, response.json())
-
-    def enroll_user(self, user, enrollment_type=None, **kwargs):
-        """
-        Create a new user enrollment for a course or a section.
-
-        :calls: `POST /api/v1/section/:section_id/enrollments \
-        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`_
-
-        :param user: The object or ID of the user to enroll in this course.
-        :type user: :class:`canvasapi.user.User` or int
-        :param enrollment_type: The type of enrollment.
-        :type enrollment_type: str
-        :rtype: :class:`canvasapi.enrollment.Enrollment`
-        """
-
-        kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
-
-        if enrollment_type:
-            warnings.warn(
-                (
-                    "The `enrollment_type` argument is deprecated and will be "
-                    "removed in a future version.\n"
-                    "Use `enrollment[type]` as a keyword argument instead. "
-                    "e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`"
-                ),
-                DeprecationWarning,
-            )
-            kwargs["enrollment[type]"] = enrollment_type
-
-        response = self._requester.request(
-            "POST",
-            "sections/{}/enrollments".format(self.id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        return Enrollment(self._requester, response.json())
