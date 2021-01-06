@@ -1,11 +1,11 @@
 import warnings
 
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.enrollment import Enrollment
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.util import combine_kwargs, obj_or_id, normalize_bool
-from canvasapi.enrollment import Enrollment
 from canvasapi.user import User
 
 
