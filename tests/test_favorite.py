@@ -16,19 +16,12 @@ class TestFavorite(unittest.TestCase):
     # __str__()
     def test_uncapitalized___str__(self, m):
 
-        with requests_mock.Mocker() as m:
-            requires = {
-                "current_user": [
-                    "add_favorite_course",
-                    "add_favorite_group",
-                    "get_by_id",
-                ]
-            }
-            register_uris(requires, m)
+        register_uris({"current_user":
+            ["add_favorite_course", "get_by_id", "add_favorite_group"]}, m)
 
-            self.user = self.canvas.get_current_user()
-            self.favorite_course = self.user.add_favorite_course(1)
-            self.favorite_group = self.user.add_favorite_group(1)
+        self.user = self.canvas.get_current_user()
+        self.favorite_course = self.user.add_favorite_course(1)
+        self.favorite_group = self.user.add_favorite_group(1)
 
         string = str(self.favorite_course)
         self.assertIsInstance(string, str)
@@ -38,19 +31,12 @@ class TestFavorite(unittest.TestCase):
 
     def test_capitalized___str__(self, m):
 
-        with requests_mock.Mocker() as m:
-            requires = {
-                "current_user_capitalized_context_types": [
-                    "add_favorite_course",
-                    "add_favorite_group",
-                    "get_by_id",
-                ]
-            }
-            register_uris(requires, m)
+        register_uris({"current_user_capitalized_context_types":
+            ["add_favorite_course", "get_by_id", "add_favorite_group"]}, m)
 
-            self.user = self.canvas.get_current_user()
-            self.favorite_course = self.user.add_favorite_course(1)
-            self.favorite_group = self.user.add_favorite_group(1)
+        self.user = self.canvas.get_current_user()
+        self.favorite_course = self.user.add_favorite_course(1)
+        self.favorite_group = self.user.add_favorite_group(1)
 
 
         string = str(self.favorite_course)
