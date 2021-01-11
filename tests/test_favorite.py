@@ -36,7 +36,7 @@ class TestFavorite(unittest.TestCase):
         self.assertIsInstance(string, str)
 
     # remove()
-    def test_remove_lowercase_favorite_course(self, m):
+    def test_remove_uncapitalized_favorite_course(self, m):
         register_uris({"current_user": ["remove_favorite_course"]}, m)
 
         evnt = self.favorite_course.remove()
@@ -44,7 +44,7 @@ class TestFavorite(unittest.TestCase):
         self.assertEqual(evnt.context_type, "course")
         self.assertEqual(evnt.context_id, 1)
 
-    def test_remove_lowercase_favorite_group(self, m):
+    def test_remove_uncapitalized_favorite_group(self, m):
         register_uris({"current_user": ["remove_favorite_group"]}, m)
 
         evnt = self.favorite_group.remove()
@@ -52,7 +52,7 @@ class TestFavorite(unittest.TestCase):
         self.assertEqual(evnt.context_type, "group")
         self.assertEqual(evnt.context_id, 1)
 
-    def test_remove_uppercase_favorite_course(self, m):
+    def test_remove_capitalized_favorite_course(self, m):
         register_uris({"current_user_upper_favorite": ["remove_favorite_course"]}, m)
 
         evnt = self.favorite_course.remove()
@@ -60,7 +60,7 @@ class TestFavorite(unittest.TestCase):
         self.assertEqual(evnt.context_type, "Course")
         self.assertEqual(evnt.context_id, 1)
 
-    def test_remove_uppercase_favorite_group(self, m):
+    def test_remove_capitalized_favorite_group(self, m):
         register_uris({"current_user_upper_favorite": ["remove_favorite_group"]}, m)
 
         evnt = self.favorite_group.remove()
