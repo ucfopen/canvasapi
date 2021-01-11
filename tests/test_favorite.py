@@ -19,14 +19,14 @@ class TestFavorite(unittest.TestCase):
         register_uris({"current_user":
             ["add_favorite_course", "get_by_id", "add_favorite_group"]}, m)
 
-        self.user = self.canvas.get_current_user()
-        self.favorite_course = self.user.add_favorite_course(1)
-        self.favorite_group = self.user.add_favorite_group(1)
+        user = self.canvas.get_current_user()
+        favorite_course = user.add_favorite_course(1)
+        favorite_group = user.add_favorite_group(1)
 
-        string = str(self.favorite_course)
+        string = str(favorite_course)
         self.assertIsInstance(string, str)
 
-        string = str(self.favorite_group)
+        string = str(favorite_group)
         self.assertIsInstance(string, str)
 
     def test_capitalized___str__(self, m):
@@ -34,15 +34,15 @@ class TestFavorite(unittest.TestCase):
         register_uris({"current_user_capitalized_context_types":
             ["add_favorite_course", "get_by_id", "add_favorite_group"]}, m)
 
-        self.user = self.canvas.get_current_user()
-        self.favorite_course = self.user.add_favorite_course(1)
-        self.favorite_group = self.user.add_favorite_group(1)
+        user = self.canvas.get_current_user()
+        favorite_course = user.add_favorite_course(1)
+        favorite_group = user.add_favorite_group(1)
 
 
-        string = str(self.favorite_course)
+        string = str(favorite_course)
         self.assertIsInstance(string, str)
 
-        string = str(self.favorite_group)
+        string = str(favorite_group)
         self.assertIsInstance(string, str)
 
     # remove()
@@ -51,10 +51,10 @@ class TestFavorite(unittest.TestCase):
         register_uris({"current_user":
             ["add_favorite_course", "get_by_id", "remove_favorite_course"]}, m)
 
-        self.user = self.canvas.get_current_user()
-        self.favorite_course = self.user.add_favorite_course(1)
+        user = self.canvas.get_current_user()
+        favorite_course = user.add_favorite_course(1)
 
-        evnt = self.favorite_course.remove()
+        evnt = favorite_course.remove()
 
         self.assertIsInstance(evnt, Favorite)
         self.assertEqual(evnt.context_type, "course")
@@ -67,10 +67,10 @@ class TestFavorite(unittest.TestCase):
 
 
 
-        self.user = self.canvas.get_current_user()
-        self.favorite_group = self.user.add_favorite_group(1)
+        user = self.canvas.get_current_user()
+        favorite_group = user.add_favorite_group(1)
 
-        evnt = self.favorite_group.remove()
+        evnt = favorite_group.remove()
 
         self.assertIsInstance(evnt, Favorite)
         self.assertEqual(evnt.context_type, "group")
@@ -81,10 +81,10 @@ class TestFavorite(unittest.TestCase):
         register_uris({"current_user_capitalized_context_types":
             ["add_favorite_course", "get_by_id", "remove_favorite_course"]}, m)
 
-        self.user = self.canvas.get_current_user()
-        self.favorite_course = self.user.add_favorite_course(1)
+        user = self.canvas.get_current_user()
+        favorite_course = user.add_favorite_course(1)
 
-        evnt = self.favorite_course.remove()
+        evnt = favorite_course.remove()
 
         self.assertIsInstance(evnt, Favorite)
         self.assertEqual(evnt.context_type, "Course")
@@ -95,10 +95,10 @@ class TestFavorite(unittest.TestCase):
         register_uris({"current_user_capitalized_context_types":
             ["add_favorite_group", "get_by_id", "remove_favorite_group"]}, m)
 
-        self.user = self.canvas.get_current_user()
-        self.favorite_group = self.user.add_favorite_group(1)
+        user = self.canvas.get_current_user()
+        favorite_group = user.add_favorite_group(1)
 
-        evnt = self.favorite_group.remove()
+        evnt = favorite_group.remove()
 
         self.assertIsInstance(evnt, Favorite)
         self.assertEqual(evnt.context_type, "Group")
