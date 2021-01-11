@@ -513,6 +513,25 @@ class Group(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_file_quota(self, **kwargs):
+
+        """
+        Returns the total and used storage quota for the group.
+
+        :calls: `GET /api/v1/groups/:group_id/files/quota \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_quota>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "GET",
+            "groups/{}/files/quota".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def get_folder(self, folder, **kwargs):
         """
         Returns the details for a group's folder
