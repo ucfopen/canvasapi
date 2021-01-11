@@ -17,20 +17,14 @@ class Favorite(CanvasObject):
 
         :rtype: :class:`canvasapi.favorite.Favorite`
         """
-
         if self.context_type == "course":
-        if self.context_type.lower() == "course":
-            id = self.context_id
             id = self.context_id
             uri_str = "users/self/favorites/courses/{}"
-            uri_str = "users/self/favorites/courses/{}"
-
 
         elif self.context_type == "group":
-        elif self.context_type.lower() == "group":
-            id = self.context_id
             id = self.context_id
             uri_str = "users/self/favorites/groups/{}"
+
         response = self._requester.request(
             "DELETE", uri_str.format(id), _kwargs=combine_kwargs(**kwargs)
         )
