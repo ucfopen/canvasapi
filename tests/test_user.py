@@ -279,8 +279,8 @@ class TestUser(unittest.TestCase):
 
         file_quota = self.user.get_file_quota()
         self.assertIsInstance(file_quota, dict)
-        self.assertEqual(file_quota['quota'], 889234510)
-        self.assertEqual(file_quota['quota_used'], 476231098)
+        self.assertEqual(file_quota["quota"], 889234510)
+        self.assertEqual(file_quota["quota_used"], 476231098)
 
     # get_folder()
     def test_get_folder(self, m):

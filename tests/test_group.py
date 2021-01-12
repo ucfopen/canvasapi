@@ -261,8 +261,8 @@ class TestGroup(unittest.TestCase):
 
         file_quota = self.group.get_file_quota()
         self.assertIsInstance(file_quota, dict)
-        self.assertEqual(file_quota['quota'], 777648912)
-        self.assertEqual(file_quota['quota_used'], 567864213)
+        self.assertEqual(file_quota["quota"], 777648912)
+        self.assertEqual(file_quota["quota_used"], 567864213)
 
     # get_full_discussion_topic
     def test_get_full_discussion_topic(self, m):
