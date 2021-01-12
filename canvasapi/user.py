@@ -577,7 +577,7 @@ class User(CanvasObject):
         """
         Returns the total and used storage quota for the user.
 
-        :calls: `GET /api/v1/groups/:group_id/files/quota \
+        :calls: `GET /api/v1/users/:user_id/files/quota \
         <https://canvas.instructure.com/doc/api/files.html#method.files.api_quota>`_
 
         :rtype: dict
