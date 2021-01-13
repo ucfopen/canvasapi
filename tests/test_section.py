@@ -1,5 +1,4 @@
 import unittest
-import warnings
 
 import requests_mock
 
@@ -151,30 +150,3 @@ class TestSection(unittest.TestCase):
         self.assertIsInstance(enrollment_by_obj, Enrollment)
         self.assertTrue(hasattr(enrollment_by_obj, "type"))
         self.assertEqual(enrollment_by_obj.type, enrollment_type)
-
-    def test_enroll_user_legacy(self, m):
-        warnings.simplefilter("always", DeprecationWarning)
-
-        requires = {"section": ["enroll_user"], "user": ["get_by_id"]}
-        register_uris(requires, m)
-
-        enrollment_type = "TeacherEnrollment"
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            # by user ID
-            enrollment_by_id = self.section.enroll_user(1, enrollment_type)
-
-            self.assertIsInstance(enrollment_by_id, Enrollment)
-            self.assertTrue(hasattr(enrollment_by_id, "type"))
-            self.assertEqual(enrollment_by_id.type, enrollment_type)
-
-            # by user object
-            enrollment_by_obj = self.section.enroll_user(self.user, enrollment_type)
-
-            self.assertIsInstance(enrollment_by_obj, Enrollment)
-            self.assertTrue(hasattr(enrollment_by_obj, "type"))
-            self.assertEqual(enrollment_by_obj.type, enrollment_type)
-
-        self.assertEqual(len(warning_list), 2)
-        self.assertEqual(warning_list[0].category, DeprecationWarning)
-        self.assertEqual(warning_list[1].category, DeprecationWarning)

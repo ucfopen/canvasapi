@@ -1,5 +1,3 @@
-import warnings
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.enrollment import Enrollment
 from canvasapi.paginated_list import PaginatedList
@@ -84,7 +82,7 @@ class Section(CanvasObject):
 
         return self
 
-    def enroll_user(self, user, enrollment_type=None, **kwargs):
+    def enroll_user(self, user, **kwargs):
         """
         Create a new user enrollment for a course or a section.
 
@@ -93,24 +91,10 @@ class Section(CanvasObject):
 
         :param user: The object or ID of the user to enroll in this course.
         :type user: :class:`canvasapi.user.User` or int
-        :param enrollment_type: The type of enrollment.
-        :type enrollment_type: str
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
 
         kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
-
-        if enrollment_type:
-            warnings.warn(
-                (
-                    "The `enrollment_type` argument is deprecated and will be "
-                    "removed in a future version.\n"
-                    "Use `enrollment[type]` as a keyword argument instead. "
-                    "e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`"
-                ),
-                DeprecationWarning,
-            )
-            kwargs["enrollment[type]"] = enrollment_type
 
         response = self._requester.request(
             "POST",
