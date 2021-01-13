@@ -13,15 +13,31 @@ class TestFavorite(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
+        with requests_mock.Mocker() as m:
+            requires = {
+                "current_user": [
+                    "get_by_id",
+                ]
+            }
+            register_uris(requires, m)
+
+            self.user = self.canvas.get_current_user()
+
     # __str__()
     def test_uncapitalized___str__(self, m):
 
-        register_uris({"current_user":
-            ["add_favorite_course", "get_by_id", "add_favorite_group"]}, m)
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_course",
+                    "add_favorite_group",
+                ]
+            },
+            m,
+        )
 
-        user = self.canvas.get_current_user()
-        favorite_course = user.add_favorite_course(1)
-        favorite_group = user.add_favorite_group(1)
+        favorite_course = self.user.add_favorite_course(1)
+        favorite_group = self.user.add_favorite_group(1)
 
         string = str(favorite_course)
         self.assertIsInstance(string, str)
@@ -31,13 +47,18 @@ class TestFavorite(unittest.TestCase):
 
     def test_capitalized___str__(self, m):
 
-        register_uris({"current_user_capitalized_context_types":
-            ["add_favorite_course", "get_by_id", "add_favorite_group"]}, m)
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_course_cap_context_type",
+                    "add_favorite_group_cap_context_type",
+                ]
+            },
+            m,
+        )
 
-        user = self.canvas.get_current_user()
-        favorite_course = user.add_favorite_course(1)
-        favorite_group = user.add_favorite_group(1)
-
+        favorite_course = self.user.add_favorite_course(1)
+        favorite_group = self.user.add_favorite_group(1)
 
         string = str(favorite_course)
         self.assertIsInstance(string, str)
@@ -48,11 +69,17 @@ class TestFavorite(unittest.TestCase):
     # remove()
     def test_remove_uncapitalized_favorite_course(self, m):
 
-        register_uris({"current_user":
-            ["add_favorite_course", "get_by_id", "remove_favorite_course"]}, m)
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_course",
+                    "remove_favorite_course",
+                ]
+            },
+            m,
+        )
 
-        user = self.canvas.get_current_user()
-        favorite_course = user.add_favorite_course(1)
+        favorite_course = self.user.add_favorite_course(1)
 
         evnt = favorite_course.remove()
 
@@ -62,13 +89,17 @@ class TestFavorite(unittest.TestCase):
 
     def test_remove_uncapitalized_favorite_group(self, m):
 
-        register_uris({"current_user":
-            ["add_favorite_group", "get_by_id", "remove_favorite_group"]}, m)
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_group",
+                    "remove_favorite_group",
+                ]
+            },
+            m,
+        )
 
-
-
-        user = self.canvas.get_current_user()
-        favorite_group = user.add_favorite_group(1)
+        favorite_group = self.user.add_favorite_group(1)
 
         evnt = favorite_group.remove()
 
@@ -78,11 +109,17 @@ class TestFavorite(unittest.TestCase):
 
     def test_remove_capitalized_favorite_course(self, m):
 
-        register_uris({"current_user_capitalized_context_types":
-            ["add_favorite_course", "get_by_id", "remove_favorite_course"]}, m)
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_course_cap_context_type",
+                    "remove_favorite_course_cap_context_type",
+                ]
+            },
+            m,
+        )
 
-        user = self.canvas.get_current_user()
-        favorite_course = user.add_favorite_course(1)
+        favorite_course = self.user.add_favorite_course(1)
 
         evnt = favorite_course.remove()
 
@@ -92,11 +129,17 @@ class TestFavorite(unittest.TestCase):
 
     def test_remove_capitalized_favorite_group(self, m):
 
-        register_uris({"current_user_capitalized_context_types":
-            ["add_favorite_group", "get_by_id", "remove_favorite_group"]}, m)
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_group_cap_context_type",
+                    "remove_favorite_group_cap_context_type",
+                ]
+            },
+            m,
+        )
 
-        user = self.canvas.get_current_user()
-        favorite_group = user.add_favorite_group(1)
+        favorite_group = self.user.add_favorite_group(1)
 
         evnt = favorite_group.remove()
 
