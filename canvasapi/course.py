@@ -1313,7 +1313,6 @@ class Course(CanvasObject):
         return File(self._requester, response.json())
 
     def get_file_quota(self, **kwargs):
-
         """
         Returns the total and used storage quota for the course.
 
