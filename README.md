@@ -156,7 +156,7 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
 
 For a more detailed description of how CanvasAPI handles more complex keyword arguments, check out the [Keyword Argument Documentation](http://canvasapi.readthedocs.io/en/stable/keyword-args.html).
 
-## Projects Using CanvasAPI
+## CanvasAPI Projects
 
 Since its initial release in June 2016, CanvasAPI has amassed over 100 dependent repositories. Many of these include various tools used to enhance the Canvas experience for both instructors and students.
 
