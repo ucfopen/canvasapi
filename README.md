@@ -163,7 +163,7 @@ Since its initial release in June 2016, CanvasAPI has amassed over 100 dependent
 * [Canvas Grab](https://github.com/skyzh/canvas_grab)
     * Canvas Grab is the most popular project using CanvasAPI. This tool, with one click, copies all files from Canvas LMS to local directory. CanvasAPI is used in this project to connect to a course and grab its files.
 * [Clanvas](https://github.com/marklalor/clanvas)
-    * Clanvas is a command-line client for Canvas. It uses the already available bash commands plus some additional ones to interact with various features of Canvas from the commmand line. 
+    * Clanvas is a command-line client for Canvas. It uses the already available bash commands plus some additional ones to interact with various features of Canvas from the commmand line.
 * [CS221Bot](https://github.com/Person314159/cs221bot)
     * CS221Bot is a Discord bot for the CPCS 221 course at University of British Columbia. CanvasAPI is used in this project to connect to and synchronize with a course and get its data, such as announcements, new assignments, and more.
 
