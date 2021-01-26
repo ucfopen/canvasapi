@@ -1334,7 +1334,16 @@
 			"size": 2048
 		},
 		"status_code": 200
-	},
+    },
+    "get_file_quota": {
+        "method": "GET",
+        "endpoint": "courses/1/files/quota",
+        "data": {
+            "quota": 524288000,
+            "quota_used": 402653184
+        },
+        "status_code": 200
+    },
 	"get_full_discussion_topic": {
 		"method": "GET",
 		"endpoint": "courses/1/discussion_topics/1/view",
@@ -1831,11 +1840,11 @@
 				"date": "2018-08-09",
 				"graders": [
 					{
-						"name": "John Smith", 
-						"id": 49, 
+						"name": "John Smith",
+						"id": 49,
 						"assignments":[
 							{
-								"id": 44, 
+								"id": 44,
 								"description": "<p>homework1</p>"
 							}
 						]
@@ -1846,11 +1855,11 @@
 				"date": "2019-10-24",
 				"graders": [
 					{
-						"name": "Sara Hanks", 
-						"id": 32, 
+						"name": "Sara Hanks",
+						"id": 32,
 						"assignments":[
 							{
-								"id": 19, 
+								"id": 19,
 								"description": "<p>homework2</p>"
 							}
 						]
