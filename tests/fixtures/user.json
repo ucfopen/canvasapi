@@ -243,7 +243,16 @@
 			"size": 1024
 		},
 		"status_code": 200
-	},
+    },
+    "get_file_quota": {
+        "method": "GET",
+        "endpoint": "users/1/files/quota",
+        "data": {
+            "quota": 889234510,
+            "quota_used": 476231098
+        },
+        "status_code": 200
+    },
 	"get_folder": {
         "method": "GET",
         "endpoint": "users/1/folders/1",
