@@ -24,6 +24,7 @@ CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](htt
             * [User objects](#user-objects)
             * [Paginated Lists](#paginated-lists)
             * [Keyword arguments](#keyword-arguments)
+    * [CanvasAPI Projects](#canvasapi-projects)
     * [Contact Us](#contact-us)
 
 ## Installation
@@ -154,6 +155,19 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
 ```
 
 For a more detailed description of how CanvasAPI handles more complex keyword arguments, check out the [Keyword Argument Documentation](http://canvasapi.readthedocs.io/en/stable/keyword-args.html).
+
+## CanvasAPI Projects
+
+Since its initial release in June 2016, CanvasAPI has amassed over 100 [dependent repositories](https://github.com/ucfopen/canvasapi/network/dependents). Many of these include various tools used to enhance the Canvas experience for both instructors and students. Here are a few popular repositories that use CanvasAPI:
+
+* [Canvas Grab](https://github.com/skyzh/canvas_grab)
+    * Canvas Grab is the most popular project using CanvasAPI. This tool, with one click, copies all files from Canvas LMS to local directory. CanvasAPI is used in this project to connect to a course and grab its files.
+* [Clanvas](https://github.com/marklalor/clanvas)
+    * Clanvas is a command-line client for Canvas. It uses the already available bash commands plus some additional ones to interact with various features of Canvas from the commmand line.
+* [CS221Bot](https://github.com/Person314159/cs221bot)
+    * CS221Bot is a Discord bot for the CPCS 221 course at University of British Columbia. CanvasAPI is used in this project to connect to and synchronize with a course and get its data, such as announcements, new assignments, and more.
+
+If you have a project that uses CanvasAPI that you'd like to promote, please contact us!
 
 ## Contact Us
 
