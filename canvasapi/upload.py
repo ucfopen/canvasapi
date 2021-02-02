@@ -1,13 +1,14 @@
 import json
 import os
+import io
 
 from canvasapi.util import combine_kwargs
 
 from typing import Union
 
-PathLike = Union[os.PathLike, str]
+FileOrPathLike = Union[os.PathLike, str, io.IOBase, io.FileIO]
 """
-A path-like object. May be either a :class:`os.PathLike` or a `str`
+A path or file-like object. May be either a :class:`os.PathLike`, a `str`, or a file-like object
 """
 
 
@@ -16,7 +17,7 @@ class Uploader(object):
     Upload a file to Canvas.
     """
 
-    def __init__(self, requester, url, file: PathLike, **kwargs):
+    def __init__(self, requester, url, file: FileOrPathLike, **kwargs):
         """
         :param requester: The :class:`canvasapi.requester.Requester` to pass requests through.
         :type requester: :class:`canvasapi.requester.Requester`
