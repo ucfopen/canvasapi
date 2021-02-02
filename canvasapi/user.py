@@ -954,7 +954,7 @@ class User(CanvasObject):
         )
         return response.json()
 
-    def upload(self, file:FileOrPathLike, **kwargs):
+    def upload(self, file: FileOrPathLike, **kwargs):
         """
         Upload a file for a user.
 
