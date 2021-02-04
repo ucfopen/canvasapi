@@ -255,6 +255,15 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(file_by_obj.display_name, "Group_File.docx")
         self.assertEqual(file_by_obj.size, 4096)
 
+    # get_file_quota()
+    def test_get_file_quota(self, m):
+        register_uris({"group": ["get_file_quota"]}, m)
+
+        file_quota = self.group.get_file_quota()
+        self.assertIsInstance(file_quota, dict)
+        self.assertEqual(file_quota["quota"], 777648912)
+        self.assertEqual(file_quota["quota_used"], 567864213)
+
     # get_full_discussion_topic
     def test_get_full_discussion_topic(self, m):
         register_uris(

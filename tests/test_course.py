@@ -766,6 +766,15 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(file_by_obj.display_name, "Course_File.docx")
         self.assertEqual(file_by_obj.size, 2048)
 
+    # get_file_quota()
+    def test_get_file_quota(self, m):
+        register_uris({"course": ["get_file_quota"]}, m)
+
+        file_quota = self.course.get_file_quota()
+        self.assertIsInstance(file_quota, dict)
+        self.assertEqual(file_quota["quota"], 524288000)
+        self.assertEqual(file_quota["quota_used"], 402653184)
+
     # get_full_discussion_topic()
     def test_get_full_discussion_topic(self, m):
         register_uris(
