@@ -10,6 +10,7 @@ from canvasapi.exceptions import (
     Conflict,
     Forbidden,
     InvalidAccessToken,
+    RateLimitExceeded,
     ResourceDoesNotExist,
     Unauthorized,
     UnprocessableEntity,
@@ -241,7 +242,15 @@ class Requester(object):
             else:
                 raise Unauthorized(response.json())
         elif response.status_code == 403:
-            raise Forbidden(response.text)
+            if b"Rate Limit Exceeded" in response.content:
+                remaining = str(
+                    response.headers.get("X-Rate-Limit-Remaining", "Unknown")
+                )
+                raise RateLimitExceeded(
+                    "Rate Limit Exceeded. X-Rate-Limit-Remaining: {}".format(remaining)
+                )
+            else:
+                raise Forbidden(response.text)
         elif response.status_code == 404:
             raise ResourceDoesNotExist("Not Found")
         elif response.status_code == 409:
