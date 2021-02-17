@@ -79,6 +79,7 @@ class Submission(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
+        print(response_json)
         response_json.update(course_id=self.course_id)
 
         super(Submission, self).set_attributes(response_json)

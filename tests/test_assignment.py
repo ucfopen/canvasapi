@@ -287,6 +287,66 @@ class TestAssignment(unittest.TestCase):
         finally:
             cleanup_file(filename)
 
+    # provisional_grades_bulk_select
+    def test_provisional_grades_bulk_select(self, m):
+        register_uris({"assignment": ["provisional_grades_bulk_select"]}, m)
+        bulk_select = self.assignment.provisional_grades_bulk_select()
+        student_list = [select for student in bulk_select]
+
+        self.assertEqual(len(student_list), 2)
+        self.assertIsInstance(student_list[0], UserDisplay)
+        
+    # get_provisional_grades_status
+    def test_get_provisional_grades_status(self, m):
+        user_id = 1
+        status = self.assignment.get_provisional_grades_status(user_id)
+        register_uris({"assignment": ["get_provisional_grades_status"]}, m)
+        
+        self.assertIsInstance(status, Assignment)
+        self.assertTrue(hasattr(status, "needs_provisional_grade"))
+
+        user = self.canvas.get_user(user_id)
+        assignment_by_obj_status = self.assignment.get_provisional_grades_status(user)
+        self.assertIsInstance(assignment_by_obj_status, Assignment)
+        self.assertTrue(hasattr(assignment_by_obj_status, "needs_provisional_grade"))
+
+    # selected_provisional_grade
+    def test_selected_provisional_grade(self, m):
+        provisional_grade_id = 1
+        register_uris({"assignment": ["selected_provisional_grade"]})
+        edited_assignment = self.assignment.selected_provisional_grade(provisional_grade_id)
+        
+        self.assertIsInstance(edited_assignment, Assignment)
+        self.assertTrue(hasattr(edited_assignment, "name"))
+        self.assertEqual(edited_assignment.name, name)
+
+    # publish_provisional_grades
+    def test_publish_provisional_grades(self, m):
+        override = self.assignment.publish_provisional_grades(
+            assignment_override = {
+                "assignment_id": 1,
+                "student_id": 2,
+                "selected_provisional_grade_id": 3
+            }
+        )
+        
+        self.assertIsInstance(override, AssignmentOverride)
+        self.assertEqual(override.assignment_id, "selected_provisional_grade_id")
+
+    # show_provisional_grades_for_student
+    def test_show_provisonal_grades_for_student(self, m):
+        anonymous_id = 1
+        status = self.assignment.show_provisonal_grades_for_student(anonymous_id)
+        register_uris({"assignment": ["show_provisonal_grades_for_student"]}, m)
+        
+        self.assertIsInstance(status, Assignment)
+        self.assertTrue(hasattr(status, "needs_provisional_grade"))
+
+        user = self.canvas.get_user(anonymous_id)
+        assignment_by_obj_status = self.assignment.show_provisonal_grades_for_student(anonymous_id)
+        self.assertIsInstance(assignment_by_obj_status, Assignment)
+        self.assertTrue(hasattr(assignment_by_obj_status, "needs_provisional_grade"))
+        
 
 @requests_mock.Mocker()
 class TestAssignmentExtension(unittest.TestCase):

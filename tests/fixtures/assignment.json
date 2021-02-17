@@ -379,5 +379,31 @@
 		"data": {
 			"no_url": "bad_url_failure"
 		}
+	},
+	"provisional_grades_bulk_select" : {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1/assignments/1/provisional_grades/bulk_select"
+	},
+	"get_provisional_grades_status": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/assignments/1/provisional_grades/status/",
+		"data": {
+			"student_id": 1
+		}
+	},
+	"show_provisonal_grades_for_student": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/assignments/1/anonymous_provisional_grades/status",
+		"data": {
+			"anonymous_id": 1
+		}
+	},
+	"selected_provisional_grade": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1/assignments/1/provisional_grades/1/select",
+		"data": {
+			"provisional_grade_id": 1
+		}
 	}
+
 }
