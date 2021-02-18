@@ -386,8 +386,13 @@ class Assignment(CanvasObject):
                     _kwargs=combine_kwargs(**kwargs)
                 )
 
+        status_json = {}
+
         request_json = request.json()
-        return request_json
+        
+        status_json["needs_provisional_grade"] = request_json["needs_provisional_grade"]
+        
+        return status_json
     
     """
     Choose which provisional grade the student should receive for a submission. 
@@ -452,14 +457,20 @@ class Assignment(CanvasObject):
     def show_provisonal_grades_for_student(self, user, **kwargs):
         anonymous_id = obj_or_id(user, "user", (User,))
         response = self._requester.request(
-                "GET", "courses/{}/assignments/{}anonymous_provisional_grades/status?anonymous_id={}".format(
+                "GET", 
+                "courses/{}/assignments/{}anonymous_provisional_grades/status?anonymous_id={}".format(
                     self.course_id, self.id, anonymous_id
                     ),
                     _kwargs=combine_kwargs(**kwargs)
             )
 
-        response_json = response.json()
-        return response_json
+        status_json = {}
+
+        request_json = request.json()
+        
+        status_json["needs_provisional_grade"] = request_json["needs_provisional_grade"]
+        
+        return status_json
 
 
 class AssignmentExtension(CanvasObject):
