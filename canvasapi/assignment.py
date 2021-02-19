@@ -373,7 +373,7 @@ class Assignment(CanvasObject):
     <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.status>
     
     :param user: User that will be checked for provisional grades
-    :type course_id: canvasapi.user.User
+    :type user: :class:`canvasapi.user.User`
     :rtype: JSON
     """
     def get_provisional_grades_status(self, user, **kwargs):
@@ -401,10 +401,6 @@ class Assignment(CanvasObject):
     :calls: PUT /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/:provisonal_grade_id/select \
     <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.select>
 
-    :param course_id: ID of course
-    :type course_id: int
-    :param assignment_id: ID of assignment
-    :type assignment_id: int
     :param provisional_grade_id: ID of the provisional grade
     :type provisional_grade_id: int
     :rtype: JSON
@@ -451,14 +447,14 @@ class Assignment(CanvasObject):
     :call: GET /api/v1/courses/:course_id/assignments/:assignment_id/anonymous_provisional_grades/status \
     <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>
     :param user: The user that will be used
-    :type user: canvasapi.user.User
+    :type user: :class:`canvasapi.user.User`
     :rtype: dict
     """
     def show_provisonal_grades_for_student(self, user, **kwargs):
         anonymous_id = obj_or_id(user, "user", (User,))
         response = self._requester.request(
                 "GET", 
-                "courses/{}/assignments/{}anonymous_provisional_grades/status?anonymous_id={}".format(
+                "courses/{}/assignments/{}anonymous_provisional_grades/status/?anonymous_id={}".format(
                     self.course_id, self.id, anonymous_id
                     ),
                     _kwargs=combine_kwargs(**kwargs)

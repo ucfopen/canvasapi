@@ -294,7 +294,7 @@ class TestAssignment(unittest.TestCase):
         student_list = [select for student in bulk_select]
 
         self.assertEqual(len(student_list), 2)
-        self.assertIsInstance(student_list[0], UserDisplay)
+        self.assertIsInstance(student_list[0], Assignment)
         
     # get_provisional_grades_status
     def test_get_provisional_grades_status(self, m):
@@ -314,11 +314,11 @@ class TestAssignment(unittest.TestCase):
     def test_selected_provisional_grade(self, m):
         provisional_grade_id = 1
         register_uris({"assignment": ["selected_provisional_grade"]})
-        edited_assignment = self.assignment.selected_provisional_grade(provisional_grade_id)
+        selected_provisional_grade = self.assignment.selected_provisional_grade(provisional_grade_id)
         
-        self.assertIsInstance(edited_assignment, Assignment)
-        self.assertTrue(hasattr(edited_assignment, "name"))
-        self.assertEqual(edited_assignment.name, name)
+        self.assertIsInstance(selected_provisional_grade, Assignment)
+        self.assertTrue(hasattr(selected_provisional_grade, "selected_provisional_grade_id"))
+        self.assertEqual(provisional_grade_id, selected_provisional_grade["selected_provisional_grade_id"])
 
     # publish_provisional_grades
     def test_publish_provisional_grades(self, m):
@@ -331,7 +331,7 @@ class TestAssignment(unittest.TestCase):
         )
         
         self.assertIsInstance(override, AssignmentOverride)
-        self.assertEqual(override.assignment_id, "selected_provisional_grade_id")
+        self.assertEqual(assignment_override.selected_provisional_grade_id, "selected_provisional_grade_id")
 
     # show_provisional_grades_for_student
     def test_show_provisonal_grades_for_student(self, m):
