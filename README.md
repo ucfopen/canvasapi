@@ -148,10 +148,6 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
 ```python
 # Get all of the active courses a user is currently enrolled in
 >>> courses = user.get_courses(enrollment_state='active')
-
-
-# Fetch 50 objects per page when making calls that return a PaginatedList
->>> courses = user.get_courses(per_page=50)
 ```
 
 For a more detailed description of how CanvasAPI handles more complex keyword arguments, check out the [Keyword Argument Documentation](http://canvasapi.readthedocs.io/en/stable/keyword-args.html).
@@ -171,4 +167,4 @@ If you have a project that uses CanvasAPI that you'd like to promote, please con
 
 ## Contact Us
 
-Need help? Have an idea? Just want to say hi? Come join us on the [UCF Open Slack Channel](https://ucf-open-slackin.herokuapp.com) and join the `#canvasapi` channel!
+Need help? Have an idea? Feel free to check out our [Discussions](https://github.com/ucfopen/canvasapi/discussions) board. Just want to say hi or get extended spport? Come join us on the [UCF Open Slack Channel](https://ucf-open-slackin.herokuapp.com) and join the `#canvasapi` channel!
