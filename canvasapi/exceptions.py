@@ -55,6 +55,15 @@ class Forbidden(CanvasException):
     pass
 
 
+class RateLimitExceeded(Forbidden):
+    """
+    Canvas has recieved to many requests from this access token and is
+    throttling this request. Try again later.
+    """
+
+    pass
+
+
 class Conflict(CanvasException):
     """Canvas had a conflict with an existing resource."""
 

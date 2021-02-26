@@ -222,11 +222,11 @@ class Assignment(CanvasObject):
         >>> assignment.set_extensions([
         ...     {
         ...         'user_id': 3,
-        ...         'extra_attempts: 2
+        ...         'extra_attempts': 2
         ...     },
         ...     {
         ...         'user_id': 2,
-        ...         'extra_attempts: 2
+        ...         'extra_attempts': 2
         ...     }
         ... ])
         """
