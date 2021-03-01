@@ -291,7 +291,6 @@ class TestAssignment(unittest.TestCase):
     def test_provisional_grades_bulk_select(self, m):
         register_uris({"assignment": ["provisional_grades_bulk_select"]}, m)
         bulk_select = self.assignment.provisional_grades_bulk_select()
-        self.assertIsInstance(bulk_select, dict)
 
     # get_provisional_grades_status
     def test_get_provisional_grades_status(self, m):
@@ -308,7 +307,6 @@ class TestAssignment(unittest.TestCase):
         selected_provisional_grade = self.assignment.selected_provisional_grade(
             provisional_grade_id
         )
-
         self.assertIsInstance(selected_provisional_grade, dict)
         self.assertIn("assignment_id", selected_provisional_grade)
 
@@ -316,7 +314,6 @@ class TestAssignment(unittest.TestCase):
     def test_publish_provisional_grades(self, m):
         register_uris({"assignment": ["publish_provisional_grades"]}, m)
         publish = self.assignment.publish_provisional_grades()
-        self.assertIsInstance(publish, dict)
 
     # show_provisional_grades_for_student
     def test_show_provisonal_grades_for_student(self, m):

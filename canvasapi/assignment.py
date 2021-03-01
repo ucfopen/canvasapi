@@ -356,7 +356,8 @@ class Assignment(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/ \
         bulk_select \
         <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.bulk_select>`_
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.assignments.Assignment`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of 
+        :class:`canvasapi.assignments.Assignment`
         """
         request = self._requester.request(
             "PUT",
@@ -365,9 +366,6 @@ class Assignment(CanvasObject):
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
-
-        request_json = request.json()
-        return request_json
 
     def get_provisional_grades_status(self, **kwargs):
         """
@@ -443,8 +441,6 @@ class Assignment(CanvasObject):
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
-        response_json = response.json()
-        return response_json
 
     def show_provisonal_grades_for_student(self, **kwargs):
         """
