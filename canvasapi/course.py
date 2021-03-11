@@ -1312,6 +1312,24 @@ class Course(CanvasObject):
         )
         return File(self._requester, response.json())
 
+    def get_file_quota(self, **kwargs):
+        """
+        Returns the total and used storage quota for the course.
+
+        :calls: `GET /api/v1/courses/:course_id/files/quota \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_quota>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/files/quota".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def get_files(self, **kwargs):
         """
         Returns the paginated list of files for the course.
@@ -1794,7 +1812,7 @@ class Course(CanvasObject):
         :param url: The url for the page.
         :type url: str
         :returns: The specified page.
-        :rtype: :class:`canvasapi.course.Course`
+        :rtype: :class:`canvasapi.page.Page`
         """
 
         response = self._requester.request(
@@ -1815,7 +1833,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.course.Course`
+            :class:`canvasapi.page.Page`
         """
         return PaginatedList(
             Page,

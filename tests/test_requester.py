@@ -10,7 +10,9 @@ from canvasapi.exceptions import (
     BadRequest,
     CanvasException,
     Conflict,
+    Forbidden,
     InvalidAccessToken,
+    RateLimitExceeded,
     ResourceDoesNotExist,
     Unauthorized,
     UnprocessableEntity,
@@ -31,6 +33,18 @@ class TestRequester(unittest.TestCase):
 
         response = self.requester.request("GET", "fake_get_request")
         self.assertEqual(response.status_code, 200)
+
+    def test_request_get_binary(self, m):
+        m.register_uri(
+            "GET",
+            settings.BASE_URL_WITH_VERSION + "get_binary_data",
+            content=b"\xff\xff\xff",
+            status_code=200,
+            headers={},
+        )
+
+        response = self.requester.request("GET", "get_binary_data")
+        self.assertEqual(response.content, b"\xff\xff\xff")
 
     def test_request_get_datetime(self, m):
         date = datetime.today()
@@ -132,6 +146,34 @@ class TestRequester(unittest.TestCase):
 
         with self.assertRaises(Unauthorized):
             self.requester.request("GET", "401_unauthorized")
+
+    def test_request_403(self, m):
+        register_uris({"requests": ["403"]}, m)
+
+        with self.assertRaises(Forbidden):
+            self.requester.request("GET", "403")
+
+    def test_request_403_RateLimitExeeded(self, m):
+        register_uris({"requests": ["403_rate_limit"]}, m)
+
+        with self.assertRaises(RateLimitExceeded) as exc:
+            self.requester.request("GET", "403_rate_limit")
+
+        self.assertEqual(
+            exc.exception.message,
+            "Rate Limit Exceeded. X-Rate-Limit-Remaining: 3.14159265359",
+        )
+
+    def test_request_403_RateLimitExeeded_no_remaining_header(self, m):
+        register_uris({"requests": ["403_rate_limit_no_remaining_header"]}, m)
+
+        with self.assertRaises(RateLimitExceeded) as exc:
+            self.requester.request("GET", "403_rate_limit_no_remaining_header")
+
+        self.assertEqual(
+            exc.exception.message,
+            "Rate Limit Exceeded. X-Rate-Limit-Remaining: Unknown",
+        )
 
     def test_request_404(self, m):
         register_uris({"requests": ["404"]}, m)

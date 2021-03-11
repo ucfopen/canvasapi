@@ -633,7 +633,16 @@
 			"size": 4096
 		},
 		"status_code": 200
-	},
+    },
+    "get_file_quota": {
+        "method": "GET",
+        "endpoint": "groups/1/files/quota",
+        "data": {
+            "quota": 777648912,
+            "quota_used": 567864213
+        },
+        "status_code": 200
+    },
 	"get_full_discussion_topic": {
 		"method": "GET",
 		"endpoint": "groups/1/discussion_topics/1/view",
