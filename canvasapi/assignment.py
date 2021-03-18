@@ -366,6 +366,7 @@ class Assignment(CanvasObject):
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
+        return request.json()
 
     def get_provisional_grades_status(self, **kwargs):
         """
