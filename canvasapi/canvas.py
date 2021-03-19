@@ -344,28 +344,28 @@ class Canvas(object):
         )
         return PlannerOverride(self.__requester, response.json())
 
-    def create_poll(self, poll, **kwargs):
+    def create_poll(self, polls, **kwargs):
         """
         Create a new poll for the current user.
 
         :calls: `POST /api/v1/polls \
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.create>`_
 
-        :param poll: List of polls to create. `'question'` key is required.
-        :type poll: list of dict
+        :param polls: List of polls to create. `'question'` key is required.
+        :type polls: list of dict
         :rtype: :class:`canvasapi.poll.Poll`
         """
         from canvasapi.poll import Poll
 
         if (
-            isinstance(poll, list)
-            and isinstance(poll[0], dict)
-            and "question" in poll[0]
+            isinstance(polls, list)
+            and isinstance(polls[0], dict)
+            and "question" in polls[0]
         ):
-            kwargs["poll"] = poll
+            kwargs["polls"] = polls
         else:
             raise RequiredFieldMissing(
-                "Dictionary with key 'question' and is required."
+                "List of dictionaries each with key 'question' is required."
             )
 
         response = self.__requester.request(
