@@ -26,6 +26,7 @@ Patches and Suggestions
 - Catherine Abbruzzese [@cat0698](https://github.com/cat0698))
 - Cameron Cuff [@ctcuff](https://github.com/ctcuff)
 - Dalton Durst [@UniversalSuperBox](https://github.com/UniversalSuperBox)
+- Damian Sweeney [@damianfs](https://github.com/damianfs)
 - Daniel Brinkman [@DanBrink91](https://github.com/DanBrink91)
 - Daniel Grobani [@dgrobani](https://github.com/dgrobani)
 - David Warden [@dfwarden](https://github.com/dfwarden)
