@@ -281,27 +281,6 @@ class Assignment(CanvasObject):
         response_json = response.json()
         return response_json
 
-    def show_provisonal_grades_for_student(self, **kwargs):
-        """
-        :call: GET /api/v1/courses/:course_id/assignments/:assignment_id/
-        anonymous_provisional_grades/status \
-        <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>
-        :param user: The user that will be used
-        :type user: :class:`canvasapi.user.User`
-        :rtype: dict
-        """
-        request = self._requester.request(
-            "GET",
-            "courses/{}/assignments/{}/anonymous_provisional_grades/status".format(
-                self.course_id, self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        request_json = request.json()
-
-        return request_json.get("needs_provisional_grade")
-
     def set_extensions(self, assignment_extensions, **kwargs):
         """
         Set extensions for student assignment submissions
@@ -350,6 +329,27 @@ class Assignment(CanvasObject):
             AssignmentExtension(self._requester, extension)
             for extension in extension_list
         ]
+
+    def show_provisonal_grades_for_student(self, **kwargs):
+        """
+        :call: GET /api/v1/courses/:course_id/assignments/:assignment_id/
+        anonymous_provisional_grades/status \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>
+        :param user: The user that will be used
+        :type user: :class:`canvasapi.user.User`
+        :rtype: dict
+        """
+        request = self._requester.request(
+            "GET",
+            "courses/{}/assignments/{}/anonymous_provisional_grades/status".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        request_json = request.json()
+
+        return request_json.get("needs_provisional_grade")
 
     def submissions_bulk_update(self, **kwargs):
         """
