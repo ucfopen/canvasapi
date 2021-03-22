@@ -1,5 +1,4 @@
 import inspect
-import operator
 import os
 import sys
 
