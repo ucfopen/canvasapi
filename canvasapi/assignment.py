@@ -205,6 +205,58 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_provisional_grades_status(self, **kwargs):
+        """
+        Tell whether the student's submission needs one or more provisional grades.
+
+        :calls: `GET /api/v1/courses:course_id/provisional_grades/status \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.status>`_
+        :param user: User that will be checked for provisional grades
+        :type user: :class:`canvasapi.user.User`
+        :rtype: bool
+        """
+        request = self._requester.request(
+            "GET",
+            "courses/{}/assignments/{}/provisional_grades/status".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        request_json = request.json()
+
+        return request_json.get("needs_provisional_grade")
+
+    def publish_provisional_grades(self, **kwargs):
+        """
+        Publish the selected provisional grade for all submissions to an assignment.
+        Use the “Select provisional grade” endpoint to choose which provisional grade to publish
+        for a particular submission.
+
+        Students not in the moderation set will have their one
+        and only provisional grade published.
+
+        WARNING: This is irreversible. This will overwrite existing grades in the gradebook.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades
+        /publish \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.publish>`_
+        :param course_id: ID of specified course
+        :type course_id: int
+        :param assignment_id: ID of specified assignment
+        :type assignment_id: int
+        :rtype: dict
+        """
+        response = self._requester.request(
+            "POST",
+            "courses/{}/assignments/{}/provisional_grades/publish".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def set_extensions(self, assignment_extensions, **kwargs):
         """
         Set extensions for student assignment submissions
@@ -273,6 +325,52 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return Progress(self._requester, response.json())
+
+    def selected_provisional_grade(self, provisional_grade_id, **kwargs):
+        """
+        Choose which provisional grade the student should receive for a submission.
+        The caller must be the final grader for the assignment
+        or an admin with :select_final_grade rights.
+
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/
+        :provisonal_grade_id/select \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.select>`_
+
+        :param provisional_grade_id: ID of the provisional grade
+        :type provisional_grade_id: int
+        :rtype: dict
+        """
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/assignments/{}/provisional_grades/{}/select".format(
+                self.course_id, self.id, provisional_grade_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        response_json = response.json()
+        return response_json
+
+    def show_provisonal_grades_for_student(self, **kwargs):
+        """
+        :call: GET /api/v1/courses/:course_id/assignments/:assignment_id/
+        anonymous_provisional_grades/status \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>
+        :param user: The user that will be used
+        :type user: :class:`canvasapi.user.User`
+        :rtype: dict
+        """
+        request = self._requester.request(
+            "GET",
+            "courses/{}/assignments/{}/anonymous_provisional_grades/status".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        request_json = request.json()
+
+        return request_json.get("needs_provisional_grade")
 
     def submit(self, submission, file=None, **kwargs):
         """
@@ -346,122 +444,6 @@ class Assignment(CanvasObject):
             file,
             **kwargs
         ).start()
-
-    def provisional_grades_bulk_select(self, **kwargs):
-        """
-        Choose which provisional grades will be received by associated students for an assignment. 
-        The caller must be the final grader for the assignment 
-        or an admin with :select_final_grade rights.
-
-        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/ \
-        bulk_select \
-        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.bulk_select>`_
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of 
-        :class:`canvasapi.assignments.Assignment`
-        """
-        request = self._requester.request(
-            "PUT",
-            "courses/{}/assignments/{}/provisional_grades/bulk_select".format(
-                self.course_id, self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-        
-    def get_provisional_grades_status(self, **kwargs):
-        """
-        Tell whether the student's submission needs one or more provisional grades.
-
-        :calls: `GET /api/v1/courses:course_id/provisional_grades/status \
-        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.status>`_
-        :param user: User that will be checked for provisional grades
-        :type user: :class:`canvasapi.user.User`
-        :rtype: bool
-        """
-        request = self._requester.request(
-            "GET",
-            "courses/{}/assignments/{}/provisional_grades/status".format(
-                self.course_id, self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        request_json = request.json()
-
-        return request_json.get("needs_provisional_grade")
-
-    def selected_provisional_grade(self, provisional_grade_id, **kwargs):
-        """
-        Choose which provisional grade the student should receive for a submission. 
-        The caller must be the final grader for the assignment 
-        or an admin with :select_final_grade rights.
-
-        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/
-        :provisonal_grade_id/select \
-        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.select>`_
-
-        :param provisional_grade_id: ID of the provisional grade
-        :type provisional_grade_id: int
-        :rtype: JSON
-        """
-        response = self._requester.request(
-            "PUT",
-            "courses/{}/assignments/{}/provisional_grades/{}/select".format(
-                self.course_id, self.id, provisional_grade_id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        response_json = response.json()
-        return response_json
-
-    def publish_provisional_grades(self, **kwargs):
-        """
-        Publish the selected provisional grade for all submissions to an assignment. 
-        Use the “Select provisional grade” endpoint to choose which provisional grade to publish 
-        for a particular submission.
-
-        Students not in the moderation set will have their one 
-        and only provisional grade published.
-
-        WARNING: This is irreversible. This will overwrite existing grades in the gradebook.
-
-        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades
-        /publish \
-        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.publish>`_
-        :param course_id: ID of specified course
-        :type course_id: int
-        :param assignment_id: ID of specified assignment
-        :type assignment_id: int
-        :rtype: JSON
-        """
-        response = self._requester.request(
-            "POST",
-            "courses/{}/assignments/{}/provisional_grades/publish".format(
-                self.course_id, self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-    def show_provisonal_grades_for_student(self, **kwargs):
-        """
-        :call: GET /api/v1/courses/:course_id/assignments/:assignment_id/
-        anonymous_provisional_grades/status \
-        <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>
-        :param user: The user that will be used
-        :type user: :class:`canvasapi.user.User`
-        :rtype: JSON
-        """
-        request = self._requester.request(
-            "GET",
-            "courses/{}/assignments/{}/anonymous_provisional_grades/status".format(
-                self.course_id, self.id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        request_json = request.json()
-
-        return request_json.get("needs_provisional_grade")
 
 
 class AssignmentExtension(CanvasObject):

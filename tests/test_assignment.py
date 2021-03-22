@@ -287,11 +287,6 @@ class TestAssignment(unittest.TestCase):
         finally:
             cleanup_file(filename)
 
-    # provisional_grades_bulk_select
-    def test_provisional_grades_bulk_select(self, m):
-        register_uris({"assignment": ["provisional_grades_bulk_select"]}, m)
-        bulk_select = self.assignment.provisional_grades_bulk_select()
-
     # get_provisional_grades_status
     def test_get_provisional_grades_status(self, m):
         register_uris({"assignment": ["get_provisional_grades_status"]}, m)
@@ -314,6 +309,8 @@ class TestAssignment(unittest.TestCase):
     def test_publish_provisional_grades(self, m):
         register_uris({"assignment": ["publish_provisional_grades"]}, m)
         publish = self.assignment.publish_provisional_grades()
+        self.assertIsInstance(publish, dict)
+        self.assertIn("message", publish)
 
     # show_provisional_grades_for_student
     def test_show_provisonal_grades_for_student(self, m):

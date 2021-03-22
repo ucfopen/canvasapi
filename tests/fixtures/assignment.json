@@ -410,7 +410,10 @@
 	},
 	"publish_provisional_grades": {
 		"method": "POST",
-		"endpoint": "courses/1/assignments/1/provisional_grades/publish"
+		"endpoint": "courses/1/assignments/1/provisional_grades/publish",
+		"data": {
+			"message": "OK"
+		}
 	}
 
 }
