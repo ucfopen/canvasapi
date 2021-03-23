@@ -47,11 +47,8 @@ class Uploader(object):
             and the JSON response from the API.
         :rtype: tuple
         """
-        if isinstance(file, Path):
-            self.kwargs.update({"name": file.name, "size": file.stat().st_size})
-        else:
-            self.kwargs["name"] = os.path.basename(file.name)
-            self.kwargs["size"] = os.fstat(file.fileno()).st_size
+        self.kwargs["name"] = os.path.basename(file.name)
+        self.kwargs["size"] = os.fstat(file.fileno()).st_size
 
         response = self._requester.request(
             "POST", self.url, _kwargs=combine_kwargs(**self.kwargs)
