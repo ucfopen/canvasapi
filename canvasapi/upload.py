@@ -1,11 +1,10 @@
+import io
 import json
 import os
-import io
 from pathlib import Path
+from typing import Union
 
 from canvasapi.util import combine_kwargs
-
-from typing import Union
 
 FileOrPathLike = Union[os.PathLike, str, io.IOBase, io.FileIO]
 """

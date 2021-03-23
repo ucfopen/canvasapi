@@ -6,9 +6,9 @@ from canvasapi.folder import Folder
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
-from canvasapi.upload import Uploader, FileOrPathLike
 
 
 class Group(CanvasObject):

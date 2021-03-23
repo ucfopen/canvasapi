@@ -6,7 +6,7 @@ from canvasapi.folder import Folder
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.pairing_code import PairingCode
-from canvasapi.upload import Uploader, FileOrPathLike
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, obj_or_id, obj_or_str
 
