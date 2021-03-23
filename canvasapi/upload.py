@@ -1,7 +1,6 @@
 import io
 import json
 import os
-from pathlib import Path
 from typing import Union
 
 from canvasapi.util import combine_kwargs
