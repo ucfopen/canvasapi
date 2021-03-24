@@ -289,9 +289,10 @@ class TestAssignment(unittest.TestCase):
 
     # get_provisional_grades_status
     def test_get_provisional_grades_status(self, m):
-        register_uris({"assignment": ["get_provisional_grades_status"]}, m)
+        register_uris({"assignment": ["get_provisional_grades_status"], "user": ["get_by_id"]}, m)
         student_id = 1
-        status = self.assignment.get_provisional_grades_status(student_id=student_id)
+        user = self.canvas.get_user(student_id)
+        status = self.assignment.get_provisional_grades_status(user)
         self.assertIsInstance(status, bool)
         self.assertFalse(status)
 
@@ -317,7 +318,7 @@ class TestAssignment(unittest.TestCase):
         register_uris({"assignment": ["show_provisonal_grades_for_student"]}, m)
         anonymous_id = 1
         show_status = self.assignment.show_provisonal_grades_for_student(
-            anonymous_id=anonymous_id
+            anonymous_id
         )
 
         self.assertIsInstance(show_status, bool)

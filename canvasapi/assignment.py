@@ -160,20 +160,24 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_provisional_grades_status(self, **kwargs):
+    def get_provisional_grades_status(self, user, **kwargs):
         """
         Tell whether the student's submission needs one or more provisional grades.
 
-        :calls: `GET /api/v1/courses:course_id/provisional_grades/status \
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/
+            status \
         <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.status>`_
-        :param user: User that will be checked for provisional grades
-        :type user: :class:`canvasapi.user.User`
+
+        :param user: The object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: bool
         """
+        user_id = obj_or_id(user, "user", (User,))
         request = self._requester.request(
             "GET",
-            "courses/{}/assignments/{}/provisional_grades/status".format(
-                self.course_id, self.id
+            "courses/{}/assignments/{}/provisional_grades/status/{}".format(
+                self.course_id, self.id, user_id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
@@ -239,12 +243,8 @@ class Assignment(CanvasObject):
         WARNING: This is irreversible. This will overwrite existing grades in the gradebook.
 
         :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades
-        /publish \
+            /publish \
         <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.publish>`_
-        :param course_id: ID of specified course
-        :type course_id: int
-        :param assignment_id: ID of specified assignment
-        :type assignment_id: int
         :rtype: dict
         """
         response = self._requester.request(
@@ -263,7 +263,7 @@ class Assignment(CanvasObject):
         or an admin with :select_final_grade rights.
 
         :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/
-        :provisonal_grade_id/select \
+            :provisonal_grade_id/select \
         <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.select>`_
 
         :param provisional_grade_id: ID of the provisional grade
@@ -278,8 +278,7 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        response_json = response.json()
-        return response_json
+        return response.json()
 
     def set_extensions(self, assignment_extensions, **kwargs):
         """
@@ -330,19 +329,19 @@ class Assignment(CanvasObject):
             for extension in extension_list
         ]
 
-    def show_provisonal_grades_for_student(self, **kwargs):
+    def show_provisonal_grades_for_student(self, anonymous_id, **kwargs):
         """
-        :call: GET /api/v1/courses/:course_id/assignments/:assignment_id/
-        anonymous_provisional_grades/status \
-        <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>
-        :param user: The user that will be used
-        :type user: :class:`canvasapi.user.User`
+        :call: `GET /api/v1/courses/:course_id/assignments/:assignment_id/
+            anonymous_provisional_grades/status \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>`_
+        :param anonymous_id: The id of the student to show the status for
+        :type anonymous_id: string
         :rtype: dict
         """
         request = self._requester.request(
             "GET",
-            "courses/{}/assignments/{}/anonymous_provisional_grades/status".format(
-                self.course_id, self.id
+            "courses/{}/assignments/{}/anonymous_provisional_grades/status/{}".format(
+                self.course_id, self.id, anonymous_id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
