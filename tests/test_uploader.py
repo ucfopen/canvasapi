@@ -1,5 +1,6 @@
 import unittest
 import uuid
+from pathlib import Path
 
 import requests_mock
 
@@ -28,6 +29,17 @@ class TestUploader(unittest.TestCase):
         register_uris(requires, m)
 
         uploader = Uploader(self.requester, "upload_response", self.file)
+        result = uploader.start()
+
+        self.assertTrue(result[0])
+        self.assertIsInstance(result[1], dict)
+        self.assertIn("url", result[1])
+
+    def test_start_pathlib(self, m):
+        requires = {"uploader": ["upload_response", "upload_response_upload_url"]}
+        register_uris(requires, m)
+
+        uploader = Uploader(self.requester, "upload_response", Path(self.filename))
         result = uploader.start()
 
         self.assertTrue(result[0])

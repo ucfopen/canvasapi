@@ -1,5 +1,6 @@
 import re
 from os import path
+
 from setuptools import setup
 
 # get version number

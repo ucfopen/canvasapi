@@ -6,6 +6,7 @@ from canvasapi.folder import Folder
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, is_multivalued, obj_or_id
 
@@ -966,7 +967,7 @@ class Group(CanvasObject):
         )
         return GroupMembership(self._requester, response.json())
 
-    def upload(self, file, **kwargs):
+    def upload(self, file: FileOrPathLike, **kwargs):
         """
         Upload a file to the group.
         Only those with the 'Manage Files' permission on a group can upload files to the group.
@@ -983,7 +984,6 @@ class Group(CanvasObject):
                     and the JSON response from the API.
         :rtype: tuple
         """
-        from canvasapi.upload import Uploader
 
         return Uploader(
             self._requester, "groups/{}/files".format(self.id), file, **kwargs

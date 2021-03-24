@@ -4,7 +4,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
-from canvasapi.upload import Uploader
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.user import User, UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
 
@@ -318,7 +318,7 @@ class Assignment(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def upload_to_submission(self, file, user="self", **kwargs):
+    def upload_to_submission(self, file: FileOrPathLike, user="self", **kwargs):
         """
         Upload a file to a submission.
 
@@ -327,7 +327,7 @@ class Assignment(CanvasObject):
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.create_file>`_
 
         :param file: The file or path of the file to upload.
-        :type file: file or str
+        :type file: FileLike
         :param user: The object or ID of the related user, or 'self' for the
             current user. Defaults to 'self'.
         :type user: :class:`canvasapi.user.User`, int, or str
