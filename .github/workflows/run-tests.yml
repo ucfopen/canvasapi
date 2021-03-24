@@ -27,7 +27,7 @@ jobs:
         run: flake8
       - name: Check formatting
         run: black --check canvasapi tests
-      - name: Sort imports
+      - name: Check import sorting
         run: isort --check canvasapi tests
       - name: Run tests
         run: coverage run -m unittest discover
@@ -37,10 +37,14 @@ jobs:
         run: python scripts/alphabetic.py
       - name: Check for missing kwargs
         run: python scripts/find_missing_kwargs.py
+      - name: Install and run Coveralls
+        run: |
+          pip install coveralls
+          coveralls
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.github_token }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: py-${{ matrix.python-version }}
           parallel: true
 
@@ -51,5 +55,5 @@ jobs:
       - name: Coveralls Finished
         uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.github_token }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
