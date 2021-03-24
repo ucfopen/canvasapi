@@ -1,7 +1,9 @@
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.enrollment import Enrollment
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.submission import GroupedSubmission, Submission
+from canvasapi.user import User
 from canvasapi.util import combine_kwargs, normalize_bool, obj_or_id
 
 
@@ -79,6 +81,28 @@ class Section(CanvasObject):
             super(Section, self).set_attributes(response.json())
 
         return self
+
+    def enroll_user(self, user, **kwargs):
+        """
+        Create a new user enrollment for a course or a section.
+
+        :calls: `POST /api/v1/section/:section_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`_
+
+        :param user: The object or ID of the user to enroll in this course.
+        :type user: :class:`canvasapi.user.User` or int
+        :rtype: :class:`canvasapi.enrollment.Enrollment`
+        """
+
+        kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
+
+        response = self._requester.request(
+            "POST",
+            "sections/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return Enrollment(self._requester, response.json())
 
     def get_assignment_override(self, assignment, **kwargs):
         """

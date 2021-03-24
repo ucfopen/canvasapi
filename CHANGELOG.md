@@ -2,9 +2,14 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Enroll a user in a section (Thanks, [@damianfs](https://github.com/damianfs))
+
 ### General
 
 - Added `RateLimitExceeded` exception to distinguish between being rate limited and being otherwise forbidden from accesing a resource. It is a subclass of the `Forbidden` exception.
+- Set up GitHub Actions for running tests
 
 ### Bugfixes
 
