@@ -317,9 +317,16 @@ class TestAssignment(unittest.TestCase):
 
     # show_provisional_grades_for_student
     def test_show_provisonal_grades_for_student(self, m):
-        register_uris({"assignment": ["show_provisonal_grades_for_student"]}, m)
+        register_uris(
+            {
+                "assignment": ["show_provisonal_grades_for_student"],
+                "user": ["get_by_id"],
+            },
+            m,
+        )
         anonymous_id = 1
-        show_status = self.assignment.show_provisonal_grades_for_student(anonymous_id)
+        user = self.canvas.get_user(anonymous_id)
+        show_status = self.assignment.show_provisonal_grades_for_student(user)
 
         self.assertIsInstance(show_status, bool)
         self.assertFalse(show_status)

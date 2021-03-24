@@ -173,11 +173,11 @@ class Assignment(CanvasObject):
 
         :rtype: bool
         """
-        user_id = obj_or_id(user, "user", (User,))
+        kwargs["student_id"] = obj_or_id(user, "user", (User,))
         request = self._requester.request(
             "GET",
-            "courses/{}/assignments/{}/provisional_grades/status/{}".format(
-                self.course_id, self.id, user_id
+            "courses/{}/assignments/{}/provisional_grades/status".format(
+                self.course_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
@@ -329,19 +329,23 @@ class Assignment(CanvasObject):
             for extension in extension_list
         ]
 
-    def show_provisonal_grades_for_student(self, anonymous_id, **kwargs):
+    def show_provisonal_grades_for_student(self, user, **kwargs):
         """
         :call: `GET /api/v1/courses/:course_id/assignments/:assignment_id/
             anonymous_provisional_grades/status \
         <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>`_
-        :param anonymous_id: The id of the student to show the status for
-        :type anonymous_id: string
+
+        :param user: The object or ID of the related user
+        :type user: :class:`canvasapi.user.User` or int
+
         :rtype: dict
         """
+
+        kwargs["anonymous_id"] = obj_or_id(user, "user", (User,))
         request = self._requester.request(
             "GET",
-            "courses/{}/assignments/{}/anonymous_provisional_grades/status/{}".format(
-                self.course_id, self.id, anonymous_id
+            "courses/{}/assignments/{}/anonymous_provisional_grades/status".format(
+                self.course_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
