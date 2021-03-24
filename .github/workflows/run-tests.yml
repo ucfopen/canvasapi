@@ -38,6 +38,7 @@ jobs:
       - name: Check for missing kwargs
         run: python scripts/find_missing_kwargs.py
       - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
           flag-name: py-${{ matrix.python-version }}
