@@ -37,23 +37,8 @@ jobs:
         run: python scripts/alphabetic.py
       - name: Check for missing kwargs
         run: python scripts/find_missing_kwargs.py
-      - name: Install and run Coveralls
-        run: |
-          pip install coveralls
-          coveralls
-      - name: Coveralls Parallel
-        uses: coverallsapp/github-action@master
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: py-${{ matrix.python-version }}
-          parallel: true
-
-  finish:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
+          fail_ci_if_error: true
+          verbose: true
