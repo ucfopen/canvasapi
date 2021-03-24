@@ -1,6 +1,12 @@
 name: Run tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - [master, develop]
+  pull_request:
+    branches:
+      - [master, develop]
 
 jobs:
   build:
@@ -33,3 +39,18 @@ jobs:
         run: python scripts/alphabetic.py
       - name: Check for missing kwargs
         run: python scripts/find_missing_kwargs.py
+      - name: Coveralls Parallel
+        with:
+          github-token: ${{ secrets.github_token }}
+          flag-name: py-${{ matrix.python-version }}
+          parallel: true
+
+  finish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
