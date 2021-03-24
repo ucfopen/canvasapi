@@ -11,6 +11,10 @@
 - Added `RateLimitExceeded` exception to distinguish between being rate limited and being otherwise forbidden from accesing a resource. It is a subclass of the `Forbidden` exception.
 - Set up GitHub Actions for running tests
 
+### Bugfixes
+
+- Fixed an issue where `Canvas.create_poll()` did not work due to an incorrect parameter.
+
 ## [2.1.0] - 2020-12-04
 
 ### New Endpoint Coverage
