@@ -4,7 +4,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
-from canvasapi.upload import Uploader
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.user import User, UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
 
@@ -160,6 +160,32 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_provisional_grades_status(self, student_id, **kwargs):
+        """
+        Tell whether the student's submission needs one or more provisional grades.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/
+            status \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.status>`_
+
+        :param student_id: The object or ID of the related student
+        :type student_id: :class:`canvasapi.user.User` or int
+
+        :rtype: bool
+        """
+        kwargs["student_id"] = obj_or_id(student_id, "student_id", (User,))
+        request = self._requester.request(
+            "GET",
+            "courses/{}/assignments/{}/provisional_grades/status".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        request_json = request.json()
+
+        return request_json.get("needs_provisional_grade")
+
     def get_submission(self, user, **kwargs):
         """
         Get a single submission, based on user id.
@@ -205,6 +231,55 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def publish_provisional_grades(self, **kwargs):
+        """
+        Publish the selected provisional grade for all submissions to an assignment.
+        Use the “Select provisional grade” endpoint to choose which provisional grade to publish
+        for a particular submission.
+
+        Students not in the moderation set will have their one
+        and only provisional grade published.
+
+        WARNING: This is irreversible. This will overwrite existing grades in the gradebook.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades
+            /publish \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.publish>`_
+        :rtype: dict
+        """
+        response = self._requester.request(
+            "POST",
+            "courses/{}/assignments/{}/provisional_grades/publish".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.json()
+
+    def selected_provisional_grade(self, provisional_grade_id, **kwargs):
+        """
+        Choose which provisional grade the student should receive for a submission.
+        The caller must be the final grader for the assignment
+        or an admin with :select_final_grade rights.
+
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/provisional_grades/
+            :provisonal_grade_id/select \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.select>`_
+
+        :param provisional_grade_id: ID of the provisional grade
+        :type provisional_grade_id: int
+        :rtype: dict
+        """
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/assignments/{}/provisional_grades/{}/select".format(
+                self.course_id, self.id, provisional_grade_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def set_extensions(self, assignment_extensions, **kwargs):
         """
         Set extensions for student assignment submissions
@@ -222,11 +297,11 @@ class Assignment(CanvasObject):
         >>> assignment.set_extensions([
         ...     {
         ...         'user_id': 3,
-        ...         'extra_attempts: 2
+        ...         'extra_attempts': 2
         ...     },
         ...     {
         ...         'user_id': 2,
-        ...         'extra_attempts: 2
+        ...         'extra_attempts': 2
         ...     }
         ... ])
         """
@@ -253,6 +328,30 @@ class Assignment(CanvasObject):
             AssignmentExtension(self._requester, extension)
             for extension in extension_list
         ]
+
+    def show_provisonal_grades_for_student(self, anonymous_id, **kwargs):
+        """
+        :call: `GET /api/v1/courses/:course_id/assignments/:assignment_id/
+            anonymous_provisional_grades/status \
+        <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>`_
+
+        :param anonymous_id: The ID of the student to show the status for
+        :type anonymous_id: :class:`canvasapi.user.User` or int
+
+        :rtype: dict
+        """
+
+        kwargs["anonymous_id"] = obj_or_id(anonymous_id, "anonymous_id", (User,))
+
+        request = self._requester.request(
+            "GET",
+            "courses/{}/assignments/{}/anonymous_provisional_grades/status".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return request.json().get("needs_provisional_grade")
 
     def submissions_bulk_update(self, **kwargs):
         """
@@ -318,7 +417,7 @@ class Assignment(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def upload_to_submission(self, file, user="self", **kwargs):
+    def upload_to_submission(self, file: FileOrPathLike, user="self", **kwargs):
         """
         Upload a file to a submission.
 
@@ -327,7 +426,7 @@ class Assignment(CanvasObject):
         <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.create_file>`_
 
         :param file: The file or path of the file to upload.
-        :type file: file or str
+        :type file: FileLike
         :param user: The object or ID of the related user, or 'self' for the
             current user. Defaults to 'self'.
         :type user: :class:`canvasapi.user.User`, int, or str

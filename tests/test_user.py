@@ -273,6 +273,15 @@ class TestUser(unittest.TestCase):
         self.assertEqual(file_by_obj.display_name, "User_File.docx")
         self.assertEqual(file_by_obj.size, 1024)
 
+    # get_file_quota()
+    def test_get_file_quota(self, m):
+        register_uris({"user": ["get_file_quota"]}, m)
+
+        file_quota = self.user.get_file_quota()
+        self.assertIsInstance(file_quota, dict)
+        self.assertEqual(file_quota["quota"], 889234510)
+        self.assertEqual(file_quota["quota_used"], 476231098)
+
     # get_folder()
     def test_get_folder(self, m):
         register_uris({"user": ["get_folder"]}, m)

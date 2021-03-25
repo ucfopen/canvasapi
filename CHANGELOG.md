@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2021-03-25
+
+### New Endpoint Coverage
+
+- Enroll a user in a section (Thanks, [@damianfs](https://github.com/damianfs))
+- File quota for courses, groups, and users (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+- Provisional Grades (Thanks, [@zenith110](https://github.com/zenith110))
+
+### General
+
+- Added support for Python 3.9
+- Added `RateLimitExceeded` exception to distinguish between being rate limited and being otherwise forbidden from accesing a resource. It is a subclass of the `Forbidden` exception.
+- File uploads now accept path-like objects (Thanks, [@theunkn0wn1](https://github.com/theunkn0wn1))
+- Add list of CanvasAPI Projects to README (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+- PyPI Package Description now uses README (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Replaced Travis CI with GitHub Actions
+
+### Bugfixes
+
+- Fixed an issue where `Canvas.create_poll()` did not work due to an incorrect parameter.
+- Canvas.get_todo_items() now correctly returns a `PaginatedList` of `Todo` items (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where `Favorite.remove()` did not handle parameters properly. (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+
 ## [2.1.0] - 2020-12-04
 
 ### New Endpoint Coverage
@@ -511,7 +534,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...develop
+[2.2.0]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/ucfopen/canvasapi/compare/v0.16.1...v1.0.0

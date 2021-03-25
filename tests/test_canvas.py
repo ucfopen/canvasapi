@@ -19,8 +19,10 @@ from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
 from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.poll import Poll
 from canvasapi.progress import Progress
 from canvasapi.section import Section
+from canvasapi.todo import Todo
 from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
@@ -91,6 +93,25 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(account, Account)
         self.assertTrue(hasattr(account, "name"))
         self.assertEqual(account.name, name)
+
+    # create_poll()
+    def test_create_poll(self, m):
+        register_uris({"poll": ["create_poll"]}, m)
+
+        new_poll_q = self.canvas.create_poll([{"question": "Is this a question?"}])
+        self.assertIsInstance(new_poll_q, Poll)
+        self.assertTrue(hasattr(new_poll_q, "question"))
+
+        new_poll_q_d = self.canvas.create_poll(
+            [{"question": "Is this a question?"}, {"description": "This is a test."}]
+        )
+        self.assertIsInstance(new_poll_q_d, Poll)
+        self.assertTrue(hasattr(new_poll_q_d, "question"))
+        self.assertTrue(hasattr(new_poll_q_d, "description"))
+
+    def test_create_poll_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_poll(polls={})
 
     # get_account()
     def test_get_account(self, m):
@@ -240,8 +261,9 @@ class TestCanvas(unittest.TestCase):
         register_uris({"user": ["todo_items"]}, m)
 
         todo_items = self.canvas.get_todo_items()
+        todo_list = [todo for todo in todo_items]
 
-        self.assertIsInstance(todo_items, list)
+        self.assertIsInstance(todo_list[0], Todo)
 
     # get_upcoming_events()
     def test_get_upcoming_events(self, m):

@@ -6,7 +6,7 @@ from canvasapi.folder import Folder
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.pairing_code import PairingCode
-from canvasapi.upload import Uploader
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, obj_or_id, obj_or_str
 
@@ -552,6 +552,24 @@ class User(CanvasObject):
         )
         return File(self._requester, response.json())
 
+    def get_file_quota(self, **kwargs):
+        """
+        Returns the total and used storage quota for the user.
+
+        :calls: `GET /api/v1/users/:user_id/files/quota \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_quota>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "GET",
+            "users/{}/files/quota".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def get_files(self, **kwargs):
         """
         Returns the paginated list of files for the user.
@@ -936,7 +954,7 @@ class User(CanvasObject):
         )
         return response.json()
 
-    def upload(self, file, **kwargs):
+    def upload(self, file: FileOrPathLike, **kwargs):
         """
         Upload a file for a user.
 

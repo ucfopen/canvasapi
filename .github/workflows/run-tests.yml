@@ -1,0 +1,43 @@
+name: Run tests
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tests_requirements.txt
+      - name: Lint with flake8
+        run: flake8
+      - name: Check formatting
+        run: black --check canvasapi tests
+      - name: Check import sorting
+        run: isort --check canvasapi tests
+      - name: Run tests
+        run: coverage run -m unittest discover
+      - name: Lint markdown files
+        uses: bewuethr/mdl-action@v1
+      - name: Check if methods are alphabetical
+        run: python scripts/alphabetic.py
+      - name: Check for missing kwargs
+        run: python scripts/find_missing_kwargs.py
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
