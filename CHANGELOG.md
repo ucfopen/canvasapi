@@ -5,6 +5,7 @@
 ### New Endpoint Coverage
 
 - Enroll a user in a section (Thanks, [@damianfs](https://github.com/damianfs))
+- Provisional Grades (Thanks, [@zenith110](https://github.com/zenith110))
 
 ### General
 

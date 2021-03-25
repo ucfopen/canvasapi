@@ -10,6 +10,7 @@ Development Lead
 Patches and Suggestions
 -----------------------
 
+- Abrahan Nevarez [@zenith110](https://github.com/zenith110)
 - Adrian Goetz [@a-goetz](https://github.com/a-goetz)
 - Aileen Pongnon [@aileenpongnon](https://github.com/aileenpongnon)
 - Alyssa Davis [@allygator](https://github.com/allygator)
