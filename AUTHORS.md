@@ -10,6 +10,7 @@ Development Lead
 Patches and Suggestions
 -----------------------
 
+- Abrahan Nevarez [@zenith110](https://github.com/zenith110)
 - Adrian Goetz [@a-goetz](https://github.com/a-goetz)
 - Aileen Pongnon [@aileenpongnon](https://github.com/aileenpongnon)
 - Alyssa Davis [@allygator](https://github.com/allygator)
@@ -43,10 +44,11 @@ Patches and Suggestions
 - Ian Altgilbers [@altgilbers](https://github.com/altgilbers)
 - Ian Turgeon [@iturgeon](https://github.com/iturgeon)
 - [@jackrsteiner](https://github.com/jackrsteiner)
+- John Raible [@rebelaide](https://github.com/rebelaide)
 - Joon Ro [@joonro](https://github.com/joonro)
 - Jonathan Guilbe [@JonGuilbe](https://github.com/JonGuilbe)
-- John Raible [@rebelaide](https://github.com/rebelaide)
 - Jose Silveti [@jrsilveti](https://github.com/jrsilveti)
+- Joshua Salzedo [@theunkn0wn1](https://github.com/theunkn0wn1)
 - Keegan Berry [@keeeeeegan](https://github.com/keeeeeegan)
 - Kenny Perez [@kennygperez](https://github.com/kennygperez)
 - [@kensler](https://github.com/kensler)
