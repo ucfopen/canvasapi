@@ -28,6 +28,6 @@ Tag the merge commit with the version number: `git tag -s v0.0.0  -m "Release ve
 
 Push the tag: `git push upstream v0.0.0`
 
-Travis should automatically deploy the tagged code to PyPI.
+GitHub Actions should automatically deploy the tagged code to PyPI.
 
 Create release on GitHub for the new tag. Use the text from the changelog for content.
