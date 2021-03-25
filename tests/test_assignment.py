@@ -1,5 +1,6 @@
 import unittest
 import uuid
+from pathlib import Path
 
 import requests_mock
 
@@ -207,6 +208,24 @@ class TestAssignment(unittest.TestCase):
                 sub_type = "online_upload"
                 sub_dict = {"submission_type": sub_type}
                 submission = self.assignment.submit(sub_dict, file)
+
+            self.assertIsInstance(submission, Submission)
+            self.assertTrue(hasattr(submission, "submission_type"))
+            self.assertEqual(submission.submission_type, sub_type)
+
+        finally:
+            cleanup_file(filename)
+
+    def test_submit_file_pathlib(self, m):
+        register_uris({"assignment": ["submit", "upload", "upload_final"]}, m)
+
+        filename = Path("testfile_assignment_{}".format(uuid.uuid4().hex))
+        filename.write_bytes(b"test data")
+
+        try:
+            sub_type = "online_upload"
+            sub_dict = {"submission_type": sub_type}
+            submission = self.assignment.submit(sub_dict, filename)
 
             self.assertIsInstance(submission, Submission)
             self.assertTrue(hasattr(submission, "submission_type"))
