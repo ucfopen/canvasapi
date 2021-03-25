@@ -11,7 +11,7 @@
 
 - Added support for Python 3.9
 - Added `RateLimitExceeded` exception to distinguish between being rate limited and being otherwise forbidden from accesing a resource. It is a subclass of the `Forbidden` exception.
-- Set up GitHub Actions for running tests
+- Replaced Travis CI with GitHub Actions
 - File uploads now accept path-like objects (Thanks, [@theunkn0wn1](https://github.com/theunkn0wn1))
 
 ### Bugfixes
