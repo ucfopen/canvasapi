@@ -5,12 +5,14 @@
 ### New Endpoint Coverage
 
 - Enroll a user in a section (Thanks, [@damianfs](https://github.com/damianfs))
+- Provisional Grades (Thanks, [@zenith110](https://github.com/zenith110))
 
 ### General
 
 - Added support for Python 3.9
 - Added `RateLimitExceeded` exception to distinguish between being rate limited and being otherwise forbidden from accesing a resource. It is a subclass of the `Forbidden` exception.
 - Replaced Travis CI with GitHub Actions
+- File uploads now accept path-like objects (Thanks, [@theunkn0wn1](https://github.com/theunkn0wn1))
 
 ### Bugfixes
 

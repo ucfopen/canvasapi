@@ -306,6 +306,50 @@ class TestAssignment(unittest.TestCase):
         finally:
             cleanup_file(filename)
 
+    # get_provisional_grades_status
+    def test_get_provisional_grades_status(self, m):
+        register_uris(
+            {"assignment": ["get_provisional_grades_status"], "user": ["get_by_id"]}, m
+        )
+        student_id = 1
+        user = self.canvas.get_user(student_id)
+        status = self.assignment.get_provisional_grades_status(user)
+        self.assertIsInstance(status, bool)
+        self.assertFalse(status)
+
+    # selected_provisional_grade
+    def test_selected_provisional_grade(self, m):
+        register_uris({"assignment": ["selected_provisional_grade"]}, m)
+        provisional_grade_id = 1
+        selected_provisional_grade = self.assignment.selected_provisional_grade(
+            provisional_grade_id
+        )
+        self.assertIsInstance(selected_provisional_grade, dict)
+        self.assertIn("assignment_id", selected_provisional_grade)
+
+    # publish_provisional_grades
+    def test_publish_provisional_grades(self, m):
+        register_uris({"assignment": ["publish_provisional_grades"]}, m)
+        publish = self.assignment.publish_provisional_grades()
+        self.assertIsInstance(publish, dict)
+        self.assertIn("message", publish)
+
+    # show_provisional_grades_for_student
+    def test_show_provisonal_grades_for_student(self, m):
+        register_uris(
+            {
+                "assignment": ["show_provisonal_grades_for_student"],
+                "user": ["get_by_id"],
+            },
+            m,
+        )
+        anonymous_id = 1
+        user = self.canvas.get_user(anonymous_id)
+        show_status = self.assignment.show_provisonal_grades_for_student(user)
+
+        self.assertIsInstance(show_status, bool)
+        self.assertFalse(show_status)
+
 
 @requests_mock.Mocker()
 class TestAssignmentExtension(unittest.TestCase):

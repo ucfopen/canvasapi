@@ -1,6 +1,10 @@
 name: Run tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
 
 jobs:
   build:
@@ -23,7 +27,7 @@ jobs:
         run: flake8
       - name: Check formatting
         run: black --check canvasapi tests
-      - name: Sort imports
+      - name: Check import sorting
         run: isort --check canvasapi tests
       - name: Run tests
         run: coverage run -m unittest discover
@@ -33,3 +37,7 @@ jobs:
         run: python scripts/alphabetic.py
       - name: Check for missing kwargs
         run: python scripts/find_missing_kwargs.py
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
