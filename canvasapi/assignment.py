@@ -160,7 +160,7 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_provisional_grades_status(self, user, **kwargs):
+    def get_provisional_grades_status(self, student_id, **kwargs):
         """
         Tell whether the student's submission needs one or more provisional grades.
 
@@ -168,12 +168,12 @@ class Assignment(CanvasObject):
             status \
         <https://canvas.instructure.com/doc/api/all_resources.html#method.provisional_grades.status>`_
 
-        :param user: The object or ID of the related user
-        :type user: :class:`canvasapi.user.User` or int
+        :param student_id: The object or ID of the related student
+        :type student_id: :class:`canvasapi.user.User` or int
 
         :rtype: bool
         """
-        kwargs["student_id"] = obj_or_id(user, "user", (User,))
+        kwargs["student_id"] = obj_or_id(student_id, "student_id", (User,))
         request = self._requester.request(
             "GET",
             "courses/{}/assignments/{}/provisional_grades/status".format(
@@ -329,19 +329,20 @@ class Assignment(CanvasObject):
             for extension in extension_list
         ]
 
-    def show_provisonal_grades_for_student(self, user, **kwargs):
+    def show_provisonal_grades_for_student(self, anonymous_id, **kwargs):
         """
         :call: `GET /api/v1/courses/:course_id/assignments/:assignment_id/
             anonymous_provisional_grades/status \
         <https://canvas.instructure.com/doc/api/all_resources.html#method.anonymous_provisional_grades.status>`_
 
-        :param user: The object or ID of the related user
-        :type user: :class:`canvasapi.user.User` or int
+        :param anonymous_id: The ID of the student to show the status for
+        :type anonymous_id: :class:`canvasapi.user.User` or int
 
         :rtype: dict
         """
 
-        kwargs["anonymous_id"] = obj_or_id(user, "user", (User,))
+        kwargs["anonymous_id"] = obj_or_id(anonymous_id, "anonymous_id", (User,))
+
         request = self._requester.request(
             "GET",
             "courses/{}/assignments/{}/anonymous_provisional_grades/status".format(
@@ -350,9 +351,7 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        request_json = request.json()
-
-        return request_json.get("needs_provisional_grade")
+        return request.json().get("needs_provisional_grade")
 
     def submissions_bulk_update(self, **kwargs):
         """
