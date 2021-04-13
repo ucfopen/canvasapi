@@ -22,6 +22,71 @@ class Assignment(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
+    def bulk_submit(self, submission, files=None, **kwargs):
+        """
+        Makes a submission of multiple files for an assigment.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/submissions \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions.create>`_
+
+        :param submission: The attributes of the submission.
+        :type submission: dict
+        :param files: A list of files to upload with the submission. (Optional,
+            defaults to `None`. Submission type must be `online_upload`)
+        :type files: a list of files or str
+
+        :rtype: :class:`canvasapi.submission.Submission`
+        """
+        if isinstance(submission, dict) and "submission_type" in submission:
+            kwargs["submission"] = submission
+        else:
+            raise RequiredFieldMissing(
+                "Dictionary with key 'submission_type' is required."
+            )
+
+        if files:
+            if submission.get("submission_type") != "online_upload":
+                raise ValueError(
+                    "To upload files, 'submission['submission_type']' must be 'online_upload'."
+                )
+            file_ids = self.bulk_upload(files, **kwargs)
+            kwargs["submission"]["file_ids"] = file_ids
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/assignments/{}/submissions".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+
+        return Submission(self._requester, response_json)
+
+    def bulk_upload(self, files: list[FileOrPathLike], user="self", **kwargs):
+        """
+        Upload multiples files to a submission.
+
+        :param files: A list of files or path of files to upload
+        :type files: list of FileLike
+        param user: The object or ID of the related user, or 'self' for the
+            current user. Defaults to 'self'.
+        :type user: :class:`canvasapi.user.User`, int, or str
+
+        :returns: A list of file ids corresponding to files uploaded \
+            to the assigment.
+        :rtype: list
+        """
+        file_ids = []
+        for file in files:
+            upload_response = self.upload_to_submission(file, user, **kwargs)
+
+            if upload_response[0]:
+                file_ids.append(upload_response[1]["id"])
+            else:
+                raise CanvasException("File upload failed.")
+
+        return file_ids
+
     def create_override(self, **kwargs):
         """
         Create an override for this assignment.

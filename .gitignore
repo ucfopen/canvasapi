@@ -22,3 +22,4 @@ venv/
 setup.sh
 .python-version
 .*.swp
+.idea*
