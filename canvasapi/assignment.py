@@ -7,6 +7,7 @@ from canvasapi.submission import Submission
 from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.user import User, UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
+from typing import List
 
 
 class Assignment(CanvasObject):
@@ -62,7 +63,7 @@ class Assignment(CanvasObject):
 
         return Submission(self._requester, response_json)
 
-    def bulk_upload(self, files: list[FileOrPathLike], user="self", **kwargs):
+    def bulk_upload(self, files: List[FileOrPathLike], user="self", **kwargs):
         """
         Upload multiples files to a submission.
 
