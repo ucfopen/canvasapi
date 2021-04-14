@@ -85,7 +85,7 @@ class Assignment(CanvasObject):
             if upload_response[0]:
                 file_ids.append(upload_response[1]["id"])
             else:
-                raise CanvasException("File upload failed.")
+                raise CanvasException(f"File {file} upload failed.")
 
         return file_ids
 
@@ -510,7 +510,7 @@ class Assignment(CanvasObject):
                 self.course_id, self.id, user_id
             ),
             file,
-            **kwargs
+            **kwargs,
         ).start()
 
 

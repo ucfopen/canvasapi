@@ -121,6 +121,61 @@ class TestAssignment(unittest.TestCase):
             cleanup_file(filename_one)
             cleanup_file(filename_two)
 
+    # bulk_upload()
+    def test_bulk_upload_self(self, m):
+        register_uris({"assignment": ["upload", "upload_final"]}, m)
+
+        filename_one = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        filename_two = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        try:
+            with open(filename_one, "w+") as f1, open(filename_two, "w+") as f2:
+                files = [f1, f2]
+
+                file_ids = self.assignment.bulk_upload(files)
+
+            self.assertIsNotNone(file_ids)
+            self.assertIsInstance(file_ids, list)
+        finally:
+            cleanup_file(filename_one)
+            cleanup_file(filename_two)
+
+    def test_bulk_upload_failure(self, m):
+        register_uris({"assignment": ["upload", "upload_fail"]}, m)
+
+        filename_one = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        filename_two = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        try:
+            with open(filename_one, "w+") as f1, open(filename_two, "w+") as f2:
+                files = [f1, f2]
+
+                with self.assertRaises(CanvasException):
+                    self.assignment.bulk_upload(files)
+        finally:
+            cleanup_file(filename_one)
+            cleanup_file(filename_two)
+
+    def test_bulk_upload_user(self, m):
+        register_uris({"assignment": ["upload_by_id", "upload_final"]}, m)
+
+        filename_one = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        filename_two = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        user_id = 1
+
+        try:
+            with open(filename_one, "w+") as f1, open(filename_two, "w+") as f2:
+                files = [f1, f2]
+
+                file_ids = self.assignment.bulk_upload(files, user_id)
+
+            self.assertIsNotNone(file_ids)
+            self.assertIsInstance(file_ids, list)
+        finally:
+            cleanup_file(filename_one)
+            cleanup_file(filename_two)
+
     # create_override()
     def test_create_override(self, m):
         register_uris({"assignment": ["create_override"]}, m)
