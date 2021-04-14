@@ -1,3 +1,5 @@
+from typing import List
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
@@ -7,7 +9,6 @@ from canvasapi.submission import Submission
 from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.user import User, UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
-from typing import List
 
 
 class Assignment(CanvasObject):
