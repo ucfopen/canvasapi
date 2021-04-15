@@ -45,14 +45,13 @@ class TestCanvasObject(unittest.TestCase):
         self.assertEqual(self.canvas_object.end_at_date, end_date)
         self.assertTrue(hasattr(self.canvas_object, "offset_time_date"))
         self.assertEqual(self.canvas_object.offset_time_date, offset_time)
-
-        self.assertTrue(hasattr(self.canvas_object, "half_offset_date"))
-        self.assertEqual(self.canvas_object.half_offset_date, offset_time)
-
         self.assertTrue(hasattr(self.canvas_object, "big_offset_time_date"))
         self.assertEqual(self.canvas_object.big_offset_time_date, offset_time)
         self.assertTrue(hasattr(self.canvas_object, "big_offset_neg_date"))
         self.assertEqual(self.canvas_object.big_offset_neg_date, offset_time)
+
+        self.assertTrue(hasattr(self.canvas_object, "half_offset_date"))
+        self.assertEqual(self.canvas_object.half_offset_date, offset_time)
 
     def test_set_attributes_invalid_date(self, m):
         attributes = {"start_at": "2017-01-01T00:00+00:00:00", "end_at": "2012-08-0"}
