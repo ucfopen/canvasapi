@@ -80,15 +80,23 @@ class CanvasObject(object):
 
                     # using https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568
                     # to create string to localize the timezone
-                    local_string = f"Etc/GMT{timezone_offset[0]}"
+                    local_string = "Etc/GMT"
+
+                    # flip for GMT+/-
+                    if timezone_offset[0] == "+":
+                        local_string += "-"
+                    else:
+                        local_string += "+"
+
                     # if the first character is 1, then we need both hour digits
-                    if timezone_offset[1] == 1:
-                        local_string += timezone_offset[1:3]
+                    if timezone_offset[1] == "1":
+                        local_string = local_string + timezone_offset[1:3]
                     # otherwise, we only need the second hour digit
                     else:
                         local_string += timezone_offset[2]
 
                     local_time = pytz.timezone(local_string)
+                    naive = naive.replace(tzinfo=None)
                     local_datetime = local_time.localize(naive)
                     aware = local_datetime.astimezone(pytz.utc)
 
