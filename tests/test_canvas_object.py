@@ -1,8 +1,9 @@
 import unittest
-
-import requests_mock
-import pytz
 from datetime import datetime
+
+import pytz
+import requests_mock
+
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.requester import Requester
 from tests import settings
@@ -21,6 +22,9 @@ class TestCanvasObject(unittest.TestCase):
             "start_at": "2012-05-05T00:00:00Z",
             "end_at": "2012-08-05",
             "offset_time": "2018-05-21T10:22:25+01:00",
+            "half_offset": "2018-05-21T13:52:25+04:30",
+            "big_offset_time": "2018-05-21T23:22:25+14:00",
+            "big_offset_neg": "2018-05-20T23:22:25-10:00",
         }
 
         start_date = datetime.strptime(
@@ -41,6 +45,14 @@ class TestCanvasObject(unittest.TestCase):
         self.assertEqual(self.canvas_object.end_at_date, end_date)
         self.assertTrue(hasattr(self.canvas_object, "offset_time_date"))
         self.assertEqual(self.canvas_object.offset_time_date, offset_time)
+
+        self.assertTrue(hasattr(self.canvas_object, "half_offset_date"))
+        self.assertEqual(self.canvas_object.half_offset_date, offset_time)
+
+        self.assertTrue(hasattr(self.canvas_object, "big_offset_time_date"))
+        self.assertEqual(self.canvas_object.big_offset_time_date, offset_time)
+        self.assertTrue(hasattr(self.canvas_object, "big_offset_neg_date"))
+        self.assertEqual(self.canvas_object.big_offset_neg_date, offset_time)
 
     def test_set_attributes_invalid_date(self, m):
         attributes = {"start_at": "2017-01-01T00:00+00:00:00", "end_at": "2012-08-0"}
