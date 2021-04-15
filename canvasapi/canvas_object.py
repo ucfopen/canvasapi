@@ -1,7 +1,7 @@
 import re
-from datetime import datetime
 
 import pytz
+from dateutil import parser
 
 DATE_PATTERN = re.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z")
 
@@ -66,7 +66,9 @@ class CanvasObject(object):
             self.__setattr__(attribute, value)
 
             # datetime field
-            if DATE_PATTERN.match(str(value)):
-                naive = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+            try:
+                naive = parser.isoparse(str(value))
                 aware = naive.replace(tzinfo=pytz.utc)
                 self.__setattr__(attribute + "_date", aware)
+            except ValueError:
+                pass
