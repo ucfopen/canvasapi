@@ -7,8 +7,6 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.requester import Requester
 from tests import settings
 
-from dateutil import parser
-
 
 @requests_mock.Mocker()
 class TestCanvasObject(unittest.TestCase):
@@ -35,19 +33,13 @@ class TestCanvasObject(unittest.TestCase):
             "2018-05-21T09:22:25Z", "%Y-%m-%dT%H:%M:%SZ"
         ).replace(tzinfo=pytz.utc)
 
-        time_1 = parser.isoparse(attributes["offset_time"])
-        time_2 = parser.isoparse("2018-05-21T09:22:25Z")
-
-        print(time_1.utcoffset())
-        print(time_2)
-
         self.canvas_object.set_attributes(attributes)
 
         self.assertTrue(hasattr(self.canvas_object, "start_at_date"))
         self.assertEqual(self.canvas_object.start_at_date, start_date)
         self.assertTrue(hasattr(self.canvas_object, "end_at_date"))
         self.assertEqual(self.canvas_object.end_at_date, end_date)
-        self.assertTrue(hasattr(self.canvas_object, "offset_time"))
+        self.assertTrue(hasattr(self.canvas_object, "offset_time_date"))
         self.assertEqual(self.canvas_object.offset_time_date, offset_time)
 
     def test_set_attributes_invalid_date(self, m):

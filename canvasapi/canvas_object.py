@@ -68,7 +68,31 @@ class CanvasObject(object):
             # datetime field
             try:
                 naive = parser.isoparse(str(value))
-                aware = naive.replace(tzinfo=pytz.utc)
+                # UTC or no timezone offset, so set accordingly
+                if "Z" in str(value) or "T" not in str(value) or len(str(value)) <= 6:
+                    aware = naive.replace(tzinfo=pytz.utc)
+
+                # otherwise, localize and use astimezone to fix time to UTC
+                # credit to https://bit.ly/3abuvOf
+                else:
+                    # get timezone offset
+                    timezone_offset = str(value)[-6:]
+
+                    # using https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568
+                    # to create string to localize the timezone
+                    local_string = f"Etc/GMT{timezone_offset[0]}"
+                    # if the first character is 1, then we need both hour digits
+                    if timezone_offset[1] == 1:
+                        local_string += timezone_offset[1:3]
+                    # otherwise, we only need the second hour digit
+                    else:
+                        local_string += timezone_offset[2]
+
+                    local_time = pytz.timezone(local_string)
+                    local_datetime = local_time.localize(naive)
+                    aware = local_datetime.astimezone(pytz.utc)
+
                 self.__setattr__(attribute + "_date", aware)
+
             except ValueError:
                 pass
