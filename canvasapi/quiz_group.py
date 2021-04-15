@@ -14,9 +14,6 @@ class QuizGroup(CanvasObject):
         :calls: `DELETE /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.destroy>`_
 
-        :param id: The ID of the question group.
-        :type id: int
-
         :returns: True if the result was successful (Status code of 204)
         :rtype: bool
         """
