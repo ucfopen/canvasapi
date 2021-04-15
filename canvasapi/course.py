@@ -528,6 +528,7 @@ class Course(CanvasObject):
 
         if "rubric" in dictionary:
             r_dict = dictionary["rubric"]
+            r_dict.update({"course_id": self.id})
             rubric = Rubric(self._requester, r_dict)
 
             rubric_dict = {"rubric": rubric}

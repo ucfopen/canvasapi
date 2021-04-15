@@ -6,6 +6,25 @@ class Rubric(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
 
+    def delete(self, **kwargs):
+        """
+        Delete a Rubric.
+
+        :calls: `DELETE /api/v1/courses/:course_id/rubrics/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics.destroy>
+
+        :rtype: :class:`canvasapi.rubric.Rubric`
+        """
+        from canvasapi.rubric import Rubric
+
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/rubrics/{}".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return Rubric(self._requester, response.json())
+
 
 class RubricAssociation(CanvasObject):
     def __str__(self):
