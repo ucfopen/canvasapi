@@ -17,7 +17,7 @@ class TestRubric(unittest.TestCase):
             register_uris({"course": ["get_by_id", "create_rubric"]}, m)
 
             self.course = self.canvas.get_course(1)
-            self.rubric = self.course.get_rubric(1)
+            self.rubric = self.course.create_rubric()["rubric"]
 
     # delete
     def test_delete(self, m):
