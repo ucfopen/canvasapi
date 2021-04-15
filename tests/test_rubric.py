@@ -21,7 +21,7 @@ class TestRubric(unittest.TestCase):
 
     # delete
     def test_delete(self, m):
-        register_uris({"rubric": ["delete_rubric"]})
+        register_uris({"rubric": ["delete_rubric"]}, m)
 
         rubric = self.rubric.delete()
 
