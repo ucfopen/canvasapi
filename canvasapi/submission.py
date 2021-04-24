@@ -54,6 +54,9 @@ class Submission(CanvasObject):
             submissions/:user_id/comments/:id \
         <https://canvas.instructure.com/doc/api/submission_comments.html#method.submission_comments_api.destroy>`_
 
+        :param submission_comment: The comment to be deleted
+        :type user: :class:`canvasapi.submission.SubmissionComment` or int
+
         :rtype: :class:`canvasapi.submission.SubmissionComment`
         """
         submission_comment_id = obj_or_id(
@@ -124,6 +127,9 @@ class Submission(CanvasObject):
         :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/ \
             submissions/:user_id/comments/:id
         <https://canvas.instructure.com/doc/api/submission_comments.html#method.submission_comments_api.update>`_
+
+        :param submission_comment: The comment to be edited
+        :type user: :class:`canvasapi.submission.SubmissionComment` or int
 
         :rtype: :class:`canvasapi.submission.SubmissionComment`
         """
