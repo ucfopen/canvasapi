@@ -47,7 +47,17 @@
 			"assignment_id": 1,
 			"user_id": 1,
 			"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
-			"submission_type": "online_upload"
+			"submission_type": "online_upload",
+			"submission_comments": [
+				{
+					"id": 1,
+					"comment": "Good job!",
+					"author": {
+						"id": 1,
+						"display_name": "John Doe"
+					}
+				}
+			]
 		},
 		"status_code": 200
 	},
@@ -55,8 +65,8 @@
 		"method": "GET",
 		"endpoint": "courses/1/quizzes/1/submissions/1/time",
 		"data": {
-		    "end_at": "9999-99-99T59:59:59Z",
-		    "time_left": 0
+				"end_at": "9999-99-99T59:59:59Z",
+				"time_left": 0
 		},
 		"status_code": 200
 	},
@@ -204,6 +214,30 @@
 					"answers": null
 				}
 			]
+		}
+	},
+	"edit_comment": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1/submissions/1/comments/1",
+		"data": {
+			"id": 1,
+			"comment": "Nice work!",
+			"author": {
+				"id": 1,
+				"display_name": "John Doe"
+			}
+		}
+	},
+	"delete_comment": {
+		"method": "DELETE",
+		"endpoint": "courses/1/assignments/1/submissions/1/comments/1",
+		"data": {
+			"id": 1,
+			"comment": "Good job!",
+			"author": {
+				"id": 1,
+				"display_name": "John Doe"
+			}
 		}
 	}
 }
