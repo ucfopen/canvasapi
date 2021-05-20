@@ -89,8 +89,8 @@ def flatten_kwarg(key, obj):
     elif is_multivalued(obj):
         # Add empty brackets (i.e. "[]")
         new_list = []
-        for i in obj:
-            for tup in flatten_kwarg(key + "][", i):
+        for index, i in enumerate(obj):
+            for tup in flatten_kwarg(key + "][" + str(index), i):
                 new_list.append((tup[0], tup[1]))
         return new_list
     else:
