@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import inspect
 import operator
 import os
@@ -82,10 +80,10 @@ if __name__ == "__main__":
     error_count = main()
     if error_count:
         print(
-            "\nFound {error_count} method(s) not in alphabetical order.".format(
+            "\nFound {error_count} method(s) not in alphabetical order. 💥".format(
                 error_count=error_count
             )
         )
     else:
-        print("All methods are alphabetical!")
+        print("All methods are alphabetical! 👍")
     sys.exit(error_count > 0)

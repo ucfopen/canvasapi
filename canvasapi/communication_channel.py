@@ -1,20 +1,13 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import warnings
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.notification_preference import NotificationPreference
 from canvasapi.util import combine_kwargs
 
 
-@python_2_unicode_compatible
 class CommunicationChannel(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.address, self.id)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete the current communication_channel
 
@@ -26,12 +19,14 @@ class CommunicationChannel(CanvasObject):
         """
 
         response = self._requester.request(
-            "DELETE", "users/{}/communication_channels/{}".format(self.user_id, self.id)
+            "DELETE",
+            "users/{}/communication_channels/{}".format(self.user_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("workflow_state") == "deleted"
 
-    def get_preference(self, notification):
+    def get_preference(self, notification, **kwargs):
         """
         Fetch the preference for the given notification for the given
         communication channel.
@@ -50,6 +45,7 @@ class CommunicationChannel(CanvasObject):
             "users/{}/communication_channels/{}/notification_preferences/{}".format(
                 self.user_id, self.id, notification
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         data = response.json()["notification_preferences"][0]
         return NotificationPreference(self._requester, data)
@@ -95,57 +91,6 @@ class CommunicationChannel(CanvasObject):
         )
 
         return response.json()["notification_preferences"]
-
-    def list_preference_categories(self, **kwargs):
-        """
-        Fetch all notification preference categories for the given communication
-        channel.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use
-                :func:`canvasapi.communication_channel.CommunicationChannel.get_preference_categories`
-                instead.
-
-        :calls: `GET
-            /api/v1/users/:user_id/communication_channels/ \
-                :communication_channel_id/notification_preference_categories \
-        <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.category_index>`_
-
-        :rtype: `list`
-        """
-        warnings.warn(
-            "`list_preference_categories`"
-            " is being deprecated and will be removed in a future version."
-            " Use `get_preference_categories` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_preference_categories(**kwargs)
-
-    def list_preferences(self, **kwargs):
-        """
-        Fetch all preferences for the given communication channel.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.communication_channel.CommunicationChannel.get_preferences`
-                instead.
-
-        :calls: `GET
-            /api/v1/users/:user_id/communication_channels/:communication_channel_id/ \
-                notification_preferences \
-        <https://canvas.instructure.com/doc/api/notification_preferences.html#method.notification_preferences.index>`_
-
-        :rtype: `list`
-        """
-        warnings.warn(
-            "`list_preferences` is being deprecated and will be removed in a future version."
-            " Use `get_preferences` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_preferences(**kwargs)
 
     def update_multiple_preferences(self, notification_preferences, **kwargs):
         """

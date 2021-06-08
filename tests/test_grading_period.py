@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
@@ -6,8 +5,8 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.grading_period import GradingPeriod
-from tests.util import register_uris
 from tests import settings
+from tests.util import register_uris
 
 
 @requests_mock.Mocker()

@@ -3,8 +3,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.blueprint import BlueprintMigration
-from canvasapi.blueprint import ChangeRecord
+from canvasapi.blueprint import BlueprintMigration, ChangeRecord
 from canvasapi.course import Course
 from canvasapi.paginated_list import PaginatedList
 from tests import settings
@@ -165,9 +164,9 @@ class TestBlueprintMigration(unittest.TestCase):
             self.blueprint = self.course.get_blueprint(1)
             self.blueprint_migration = self.blueprint.show_blueprint_migration(1)
             self.blueprint_subscription = self.course.list_blueprint_subscriptions()[0]
-            self.blueprint_imports = self.blueprint_subscription.list_blueprint_imports()[
-                0
-            ]
+            self.blueprint_imports = (
+                self.blueprint_subscription.list_blueprint_imports()[0]
+            )
             self.b_import = self.blueprint_subscription.show_blueprint_import(3)
 
     # __str__()
@@ -196,3 +195,25 @@ class TestBlueprintMigration(unittest.TestCase):
         import_details = self.b_import.get_import_details()
         self.assertIsInstance(import_details, PaginatedList)
         self.assertIsInstance(import_details[0], ChangeRecord)
+
+
+@requests_mock.Mocker()
+class TestChangeRecord(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {
+                "course": ["get_blueprint", "get_by_id"],
+                "blueprint": ["get_unsynced_changes"],
+            }
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.blueprint = self.course.get_blueprint(1)
+            self.change_record = self.blueprint.get_unsynced_changes()[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.change_record)
+        self.assertIsInstance(string, str)

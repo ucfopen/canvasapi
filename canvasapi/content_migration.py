@@ -1,13 +1,8 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class ContentMigration(CanvasObject):
     def __str__(self):
         return "{} {}".format(self.migration_type_title, self.id)
@@ -152,9 +147,9 @@ class ContentMigration(CanvasObject):
             or :class:`canvasapi.course.Group`,
             or :class:`canvasapi.course.User`
         """
-        from canvasapi.group import Group
-        from canvasapi.course import Course
         from canvasapi.account import Account
+        from canvasapi.course import Course
+        from canvasapi.group import Group
         from canvasapi.user import User
 
         response = self._requester.request(
@@ -225,7 +220,6 @@ class ContentMigration(CanvasObject):
             return False
 
 
-@python_2_unicode_compatible
 class MigrationIssue(CanvasObject):
     def __str__(self):
         return "{}: {}".format(self.id, self.description)
@@ -265,7 +259,6 @@ class MigrationIssue(CanvasObject):
             return False
 
 
-@python_2_unicode_compatible
 class Migrator(CanvasObject):
     def __str__(self):
         return "{}".format(self.type)

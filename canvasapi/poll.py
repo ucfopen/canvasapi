@@ -1,16 +1,11 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.poll_choice import PollChoice
 from canvasapi.poll_session import PollSession
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class Poll(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.question, self.id)

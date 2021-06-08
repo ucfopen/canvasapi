@@ -1,14 +1,9 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
-from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.poll_submission import PollSubmission
+from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class PollSession(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.poll_id, self.id)

@@ -1,14 +1,12 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import json
 import os
 
 import requests_mock
 
-from canvasapi.util import get_institution_url
 from tests import settings
 
 
-def register_uris(requirements, requests_mocker):
+def register_uris(requirements, requests_mocker, base_url=None):
     """
     Given a list of required fixtures and an requests_mocker object,
     register each fixture as a uri with the mocker.
@@ -17,11 +15,13 @@ def register_uris(requirements, requests_mocker):
     :param requirements: dict
     :param requests_mocker: requests_mock.mocker.Mocker
     """
+    if base_url is None:
+        base_url = settings.BASE_URL_WITH_VERSION
     for fixture, objects in requirements.items():
         try:
             with open("tests/fixtures/{}.json".format(fixture)) as file:
                 data = json.loads(file.read())
-        except IOError:
+        except (IOError, ValueError):
             raise ValueError("Fixture {}.json contains invalid JSON.".format(fixture))
 
         if not isinstance(objects, list):
@@ -39,11 +39,7 @@ def register_uris(requirements, requests_mocker):
             if obj["endpoint"] == "ANY":
                 url = requests_mock.ANY
             else:
-                url = (
-                    get_institution_url(settings.BASE_URL)
-                    + "/api/v1/"
-                    + obj["endpoint"]
-                )
+                url = base_url + obj["endpoint"]
 
             try:
                 requests_mocker.register_uri(

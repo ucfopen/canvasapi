@@ -1,10 +1,9 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
 
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi import Canvas
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.planner import PlannerNote, PlannerOverride
 from tests import settings
 from tests.util import register_uris

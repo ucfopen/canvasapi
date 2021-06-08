@@ -1,15 +1,9 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-import warnings
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class Module(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
@@ -71,28 +65,6 @@ class Module(CanvasObject):
 
         return Module(self._requester, module_json)
 
-    def list_module_items(self, **kwargs):
-        """
-        List all of the items in this module.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.module.Modules.get_module_items` instead.
-
-        :calls: `GET /api/v1/courses/:course_id/modules/:module_id/items \
-        <https://canvas.instructure.com/doc/api/modules.html#method.context_module_items_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.module.ModuleItem`
-        """
-        warnings.warn(
-            "`list_module_items` is being deprecated and will be removed in a "
-            "future version. Use `get_module_items` instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_module_items(**kwargs)
-
     def get_module_items(self, **kwargs):
         """
         List all of the items in this module.
@@ -150,8 +122,12 @@ class Module(CanvasObject):
         :returns: The created module item.
         :rtype: :class:`canvasapi.module.ModuleItem`
         """
+
+        unrequired_types = ["ExternalUrl", "Page", "SubHeader"]
+
         if isinstance(module_item, dict) and "type" in module_item:
-            if "content_id" in module_item:
+            # content_id is not required for unrequired_types
+            if module_item["type"] in unrequired_types or "content_id" in module_item:
                 kwargs["module_item"] = module_item
             else:
                 raise RequiredFieldMissing(
@@ -171,7 +147,6 @@ class Module(CanvasObject):
         return ModuleItem(self._requester, module_item_json)
 
 
-@python_2_unicode_compatible
 class ModuleItem(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)

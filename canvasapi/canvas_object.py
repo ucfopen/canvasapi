@@ -1,10 +1,7 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-from datetime import datetime
-import json
-import pytz
 import re
+from datetime import datetime
 
-from six import text_type
+import pytz
 
 DATE_PATTERN = re.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z")
 
@@ -16,6 +13,9 @@ class CanvasObject(object):
     This makes a call to :func:`canvasapi.canvas_object.CanvasObject.set_attributes`
     to dynamically construct this object's attributes with a JSON object.
     """
+
+    def __getattribute__(self, name):
+        return super(CanvasObject, self).__getattribute__(name)
 
     def __init__(self, requester, attributes):
         """
@@ -62,20 +62,11 @@ class CanvasObject(object):
         :param attributes: The JSON object to build this object with.
         :type attributes: dict
         """
-        self.attributes = attributes
-
         for attribute, value in attributes.items():
             self.__setattr__(attribute, value)
 
             # datetime field
-            if DATE_PATTERN.match(text_type(value)):
+            if DATE_PATTERN.match(str(value)):
                 naive = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
                 aware = naive.replace(tzinfo=pytz.utc)
                 self.__setattr__(attribute + "_date", aware)
-
-    def to_json(self):
-        """
-        Return the original JSON response from the API that was used to
-        construct the object.
-        """
-        return json.dumps(self.attributes)

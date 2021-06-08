@@ -1,8 +1,6 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
-import warnings
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
@@ -55,22 +53,6 @@ class TestModule(unittest.TestCase):
         self.assertTrue(hasattr(relocked_module, "course_id"))
         self.assertEqual(relocked_module.course_id, self.course.id)
 
-    # list_module_items()
-    def test_list_module_items(self, m):
-        register_uris({"module": ["list_module_items", "list_module_items2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            module_items = self.module.list_module_items()
-            module_item_list = [module_item for module_item in module_items]
-
-            self.assertEqual(len(module_item_list), 4)
-            self.assertIsInstance(module_item_list[0], ModuleItem)
-            self.assertTrue(hasattr(module_item_list[0], "course_id"))
-            self.assertEqual(module_item_list[0].course_id, self.course.id)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_module_items()
     def test_get_module_items(self, m):
         register_uris({"module": ["list_module_items", "list_module_items2"]}, m)
@@ -104,8 +86,9 @@ class TestModule(unittest.TestCase):
         register_uris({"module": ["create_module_item"]}, m)
 
         module_item = self.module.create_module_item(
-            module_item={"type": "Page", "content_id": 1}
+            module_item={"type": "Assignment", "content_id": 1}
         )
+
         self.assertIsInstance(module_item, ModuleItem)
         self.assertTrue(hasattr(module_item, "course_id"))
         self.assertEqual(module_item.course_id, self.course.id)
@@ -116,7 +99,13 @@ class TestModule(unittest.TestCase):
 
     def test_create_module_item_fail2(self, m):
         with self.assertRaises(RequiredFieldMissing):
-            self.module.create_module_item(module_item={"type": "Page"})
+            self.module.create_module_item(module_item={"type": "Assignment"})
+
+    def test_create_module_item_unrequired_success(self, m):
+        register_uris({"module": ["create_module_item"]}, m)
+
+        module_item = self.module.create_module_item(module_item={"type": "SubHeader"})
+        self.assertIsInstance(module_item, ModuleItem)
 
     # __str__
     def test__str__(self, m):

@@ -336,6 +336,27 @@
 		},
 		"status_code": 200
 	},
+	"get_assignment_with_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "Assignment 1",
+			"description": "Do this assignment",
+			"overrides": [
+				{
+					"id": 1,
+					"assignment_id": 1,
+					"student_ids": [1],
+					"group_id": 1,
+					"course_section_id": 1,
+					"title": "Assignment Override 1"
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"override_group_alias": {
 		"method": "GET",
 		"endpoint": "groups/1/assignments/1/override",
@@ -354,6 +375,24 @@
 			"assignment_id": 1,
 			"course_section_id": 1,
 			"title": "Section Assignment Override"
+		}
+	},
+	"set_extensions":{
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/extensions",
+		"data": {
+			"assignment_extensions": [
+				{
+					"assignment_id": 2,
+					"user_id": 3,
+					"extra_attempts": 2
+				},
+				{
+					"assignment_id": 2,
+					"user_id": 2,
+					"extra_attempts": 2
+				}
+			]
 		}
 	},
 	"submit": {
@@ -420,6 +459,36 @@
 		"endpoint": "files/upload_response_upload_url",
 		"data": {
 			"no_url": "bad_url_failure"
+		}
+	},
+	"get_provisional_grades_status": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/provisional_grades/status",
+		"data": {
+			"needs_provisional_grade": false
+		}
+	},
+	"show_provisonal_grades_for_student": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/anonymous_provisional_grades/status",
+		"data": {
+			"needs_provisional_grade": false
+		}
+	},
+	"selected_provisional_grade": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1/provisional_grades/1/select",
+		"data": {
+			"assignment_id": 1,
+			"student_id": 2,
+			"provisional_grade_id": 3
+		}
+	},
+	"publish_provisional_grades": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/provisional_grades/publish",
+		"data": {
+			"message": "OK"
 		}
 	}
 }

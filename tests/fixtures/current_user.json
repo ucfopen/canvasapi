@@ -8,6 +8,16 @@
 				"context_type": "course"
 			},
 		"status_code": 200
+    },
+    "add_favorite_course_cap_context_type": {
+		"method": "POST",
+		"endpoint": "users/self/favorites/courses/1",
+		"data":
+			{
+				"context_id": 1,
+				"context_type": "Course"
+			},
+		"status_code": 200
 	},
 	"add_favorite_course_by_sis_id": {
 		"method": "POST",
@@ -26,6 +36,16 @@
 			{
 				"context_id": 1,
 				"context_type": "group"
+			},
+		"status_code": 200
+    },
+    "add_favorite_group_cap_context_type": {
+		"method": "POST",
+		"endpoint": "users/self/favorites/groups/1",
+		"data":
+			{
+				"context_id": 1,
+				"context_type": "Group"
 			},
 		"status_code": 200
 	},
@@ -122,6 +142,16 @@
 			"context_type": "course"
 		},
 		"status_code": 200
+    },
+    "remove_favorite_course_cap_context_type": {
+		"method": "DELETE",
+		"endpoint": "users/self/favorites/courses/1",
+		"data":
+		{
+			"context_id": 1,
+			"context_type": "Course"
+		},
+		"status_code": 200
 	},
 	"remove_favorite_group": {
 		"method": "DELETE",
@@ -130,6 +160,16 @@
 		{
 			"context_id": 1,
 			"context_type": "group"
+		},
+		"status_code": 200
+    },
+    "remove_favorite_group_cap_context_type": {
+		"method": "DELETE",
+		"endpoint": "users/self/favorites/groups/1",
+		"data":
+		{
+			"context_id": 1,
+			"context_type": "Group"
 		},
 		"status_code": 200
 	},

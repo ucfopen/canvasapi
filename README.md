@@ -1,7 +1,7 @@
 [![CanvasAPI on PyPI](https://img.shields.io/pypi/v/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![License](https://img.shields.io/pypi/l/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![Python Versions](https://img.shields.io/pypi/pyversions/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
-[![Documentation Status](https://readthedocs.org/projects/canvasapi/badge/?version=latest)](http://canvasapi.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/canvasapi/badge/?version=stable)](http://canvasapi.readthedocs.io/en/stable/?badge=stable)
 [![Build Status](https://travis-ci.org/ucfopen/canvasapi.svg?branch=master)](https://travis-ci.org/ucfopen/canvasapi)
 [![Coverage Status](https://coveralls.io/repos/github/ucfopen/canvasapi/badge.svg?branch=master)](https://coveralls.io/github/ucfopen/canvasapi?branch=master)
 [![Join UCF Open Slack Discussions](https://ucf-open-slackin.herokuapp.com/badge.svg)](https://ucf-open-slackin.herokuapp.com/)
@@ -13,15 +13,19 @@ CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](htt
 
 ## Table of Contents
 
-* [Installation](#installation)
-* [Documentation](#documentation)
-* [Quickstart](#quickstart)
-* [Working with Canvas Objects](#working-with-canvas-objects)
-    * [Course Objects](#course-objects)
-    * [User Objects](#user-objects)
-    * [Paginated Lists](#paginated-lists)
-    * [Keyword Arguments](#keyword-arguments)
-* [Contact Us](#contact-us)
+* [CanvasAPI](#canvasapi)
+    * [Table of Contents](#table-of-contents)
+    * [Installation](#installation)
+    * [Documentation](#documentation)
+    * [Contributing](#contributing)
+    * [Quickstart](#quickstart)
+        * [Working with Canvas Objects](#working-with-canvas-objects)
+            * [Course objects](#course-objects)
+            * [User objects](#user-objects)
+            * [Paginated Lists](#paginated-lists)
+            * [Keyword arguments](#keyword-arguments)
+    * [CanvasAPI Projects](#canvasapi-projects)
+    * [Contact Us](#contact-us)
 
 ## Installation
 
@@ -32,6 +36,10 @@ You can install CanvasAPI with pip:
 ## Documentation
 
 Full documentation is available at [Read the Docs](http://canvasapi.readthedocs.io/).
+
+## Contributing
+
+Want to help us improve CanvasAPI? Check out our [Contributing Guide](.github/CONTRIBUTING.md) to learn about running CanvasAPI as a developer, picking issues to work on, submitting bug reports, contributing patches, and more.
 
 ## Quickstart
 
@@ -58,7 +66,7 @@ You can now use `canvas` to begin making API calls.
 
 ### Working with Canvas Objects
 
-CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://canvasapi.readthedocs.io/en/latest/class-reference.html). Below, you’ll find a few examples of common CanvasAPI use cases.
+CanvasAPI converts the JSON responses from the Canvas API into Python objects. These objects provide further access to the Canvas API. You can find a full breakdown of the methods these classes provide in our [class documentation](http://canvasapi.readthedocs.io/en/stable/class-reference.html). Below, you’ll find a few examples of common CanvasAPI use cases.
 
 #### Course objects
 
@@ -139,15 +147,24 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
 
 ```python
 # Get all of the active courses a user is currently enrolled in
->>> courses = user.get_courses(enrollment_status='active')
-
-
-# Fetch 50 objects per page when making calls that return a PaginatedList
->>> courses = user.get_courses(per_page=50)
+>>> courses = user.get_courses(enrollment_state='active')
 ```
 
-For a more detailed description of how CanvasAPI handles more complex keyword arguments, check out the [Keyword Argument Documentation](http://canvasapi.readthedocs.io/en/latest/keyword-args.html).
+For a more detailed description of how CanvasAPI handles more complex keyword arguments, check out the [Keyword Argument Documentation](http://canvasapi.readthedocs.io/en/stable/keyword-args.html).
+
+## CanvasAPI Projects
+
+Since its initial release in June 2016, CanvasAPI has amassed over 100 [dependent repositories](https://github.com/ucfopen/canvasapi/network/dependents). Many of these include various tools used to enhance the Canvas experience for both instructors and students. Here are a few popular repositories that use CanvasAPI:
+
+* [Canvas Grab](https://github.com/skyzh/canvas_grab)
+    * Canvas Grab is the most popular project using CanvasAPI. This tool, with one click, copies all files from Canvas LMS to local directory. CanvasAPI is used in this project to connect to a course and grab its files.
+* [Clanvas](https://github.com/marklalor/clanvas)
+    * Clanvas is a command-line client for Canvas. It uses the already available bash commands plus some additional ones to interact with various features of Canvas from the commmand line.
+* [CS221Bot](https://github.com/Person314159/cs221bot)
+    * CS221Bot is a Discord bot for the CPCS 221 course at University of British Columbia. CanvasAPI is used in this project to connect to and synchronize with a course and get its data, such as announcements, new assignments, and more.
+
+If you have a project that uses CanvasAPI that you'd like to promote, please contact us!
 
 ## Contact Us
 
-Need help? Have an idea? Just want to say hi? Come join us on the [UCF Open Slack Channel](https://ucf-open-slackin.herokuapp.com) and join the `#canvasapi` channel!
+Need help? Have an idea? Feel free to check out our [Discussions](https://github.com/ucfopen/canvasapi/discussions) board. Just want to say hi or get extended spport? Come join us on the [UCF Open Slack Channel](https://ucf-open-slackin.herokuapp.com) and join the `#canvasapi` channel!

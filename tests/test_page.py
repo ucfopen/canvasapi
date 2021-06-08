@@ -1,8 +1,6 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
-import warnings
 
 from canvasapi.canvas import Canvas
 from canvasapi.course import Course
@@ -15,7 +13,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestPage(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
 
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -54,20 +51,6 @@ class TestPage(unittest.TestCase):
         deleted_page = page.delete()
 
         self.assertIsInstance(deleted_page, Page)
-
-    # list_revisions()
-    def test_list_revisions(self, m):
-        register_uris({"page": ["list_revisions", "list_revisions2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            revisions = self.page_course.list_revisions()
-            rev_list = [rev for rev in revisions]
-
-            self.assertEqual(len(rev_list), 4)
-            self.assertIsInstance(rev_list[0], PageRevision)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_revisions()
     def test_get_revisions(self, m):

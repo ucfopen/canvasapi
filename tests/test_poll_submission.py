@@ -1,10 +1,9 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
 
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi import Canvas
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.poll_submission import PollSubmission
 from tests import settings
 from tests.util import register_uris
@@ -25,8 +24,8 @@ class TestPollSubmission(unittest.TestCase):
 
             self.poll = self.canvas.get_poll(1)
             self.poll.poll_session = self.poll.get_session(1)
-            self.poll.poll_session.poll_submission = self.poll.poll_session.get_submission(
-                1
+            self.poll.poll_session.poll_submission = (
+                self.poll.poll_session.get_submission(1)
             )
 
     # __str__()

@@ -633,7 +633,16 @@
 			"size": 4096
 		},
 		"status_code": 200
-	},
+    },
+    "get_file_quota": {
+        "method": "GET",
+        "endpoint": "groups/1/files/quota",
+        "data": {
+            "quota": 777648912,
+            "quota_used": 567864213
+        },
+        "status_code": 200
+    },
 	"get_full_discussion_topic": {
 		"method": "GET",
 		"endpoint": "groups/1/discussion_topics/1/view",
@@ -945,6 +954,92 @@
 			"id": 111,
 			"export_type": "d"
 		},
+		"status_code": 200
+	},
+	"set_usage_rights": {
+		"method": "PUT",
+		"endpoint": "groups/1/usage_rights",
+		"data": {
+			"use_justification": "fair_use",
+			"license": "private",
+			"message": "2 files updated",
+			"file_ids": [1,2]
+		},
+		"status_code": 200
+	},
+	"remove_usage_rights": {
+		"method": "DELETE",
+		"endpoint": "groups/1/usage_rights",
+		"data": {
+			"message": "2 files updated",
+			"file_ids": [1,2]
+		},
+		"status_code": 200
+	},
+	"get_licenses": {
+		"method": "GET",
+		"endpoint": "groups/1/content_licenses",
+		"data": [
+			{
+				"id": "private",
+				"name": "Private (Copyrighted)",
+				"url": "http://en.wikipedia.org/wiki/Copyright"
+			},
+			{
+				"id": "public_domain",
+				"name": "Public domain",
+				"url": "http://en.wikipedia.org/wiki/Public_domain"
+			}
+		],
+		"status_code": 200
+	},
+    "resolve_path": {
+		"method": "GET",
+		"endpoint": "groups/1/folders/by_path/Folder_Level_1/Folder_Level_2/Folder_Level_3",
+		"data": [
+            {
+				"id": 2,
+				"files_count": 0,
+				"folders_count": 1,
+				"name": "files",
+				"full_name": "files"
+			},
+			{
+				"id": 3,
+				"files_count": 0,
+				"folders_count": 1,
+				"name": "Folder_Level_1",
+				"full_name": "files/Folder_Level_1"
+			},
+			{
+				"id": 4,
+				"files_count": 0,
+				"folders_count": 1,
+				"name": "Folder_Level_2",
+				"full_name": "files/Folder_Level_1/Folder_Level_2"
+			},
+			{
+				"id": 5,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder_Level_3",
+				"full_name": "files/Folder_Level_1/Folder_Level_2/Folder_Level_3"
+			}
+		],
+		"status_code": 200
+	},
+    "resolve_path_null": {
+		"method": "GET",
+		"endpoint": "groups/1/folders/by_path",
+		"data": [
+            {
+				"id": 2,
+				"files_count": 0,
+				"folders_count": 1,
+				"name": "files",
+				"full_name": "files"
+			}
+        ],
 		"status_code": 200
 	}
 }

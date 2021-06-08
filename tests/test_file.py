@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 from os.path import isfile
 
@@ -7,8 +6,7 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.file import File
 from tests import settings
-from tests.util import cleanup_file
-from tests.util import register_uris
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -55,3 +53,5 @@ class TestFile(unittest.TestCase):
         register_uris({"file": ["file_contents"]}, m)
         contents = self.file.get_contents()
         self.assertEqual(contents, '"Hello there"')
+        contents_binary = self.file.get_contents(binary=True)
+        self.assertEqual(contents_binary, b'"Hello there"')

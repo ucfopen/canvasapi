@@ -1,7 +1,5 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 import uuid
-import warnings
 
 import requests_mock
 
@@ -19,9 +17,12 @@ from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.grade_change_log import GradeChangeEvent, GradeChangeLog
+from canvasapi.license import License
 from canvasapi.login import Login
 from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.pairing_code import PairingCode
+from canvasapi.usage_rights import UsageRights
 from canvasapi.user import User
 from tests import settings
 from tests.util import cleanup_file, register_uris
@@ -30,7 +31,6 @@ from tests.util import cleanup_file, register_uris
 @requests_mock.Mocker()
 class TestUser(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
 
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
@@ -254,19 +254,6 @@ class TestUser(unittest.TestCase):
         finally:
             cleanup_file(filename)
 
-    # list_calendar_events_for_user()
-    def test_list_calendar_events_for_user(self, m):
-        register_uris({"user": ["list_calendar_events_for_user"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            cal_events = self.user.list_calendar_events_for_user()
-            cal_event_list = [cal_event for cal_event in cal_events]
-            self.assertEqual(len(cal_event_list), 2)
-            self.assertIsInstance(cal_event_list[0], CalendarEvent)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_calendar_events_for_user()
     def test_get_calendar_events_for_user(self, m):
         register_uris({"user": ["list_calendar_events_for_user"]}, m)
@@ -275,19 +262,6 @@ class TestUser(unittest.TestCase):
         cal_event_list = [cal_event for cal_event in cal_events]
         self.assertEqual(len(cal_event_list), 2)
         self.assertIsInstance(cal_event_list[0], CalendarEvent)
-
-    # list_communication_channels()
-    def test_list_communication_channels(self, m):
-        register_uris({"user": ["list_comm_channels", "list_comm_channels2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            comm_channels = self.user.list_communication_channels()
-            channel_list = [channel for channel in comm_channels]
-            self.assertEqual(len(channel_list), 4)
-            self.assertIsInstance(channel_list[0], CommunicationChannel)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_communication_channels()
     def test_get_communication_channels(self, m):
@@ -308,19 +282,6 @@ class TestUser(unittest.TestCase):
         )
 
         self.assertIsInstance(new_channel, CommunicationChannel)
-
-    # list_files()
-    def test_list_files(self, m):
-        register_uris({"user": ["get_user_files", "get_user_files2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            files = self.user.list_files()
-            file_list = [file for file in files]
-            self.assertEqual(len(file_list), 4)
-            self.assertIsInstance(file_list[0], File)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_files()
     def test_get_files(self, m):
@@ -345,6 +306,15 @@ class TestUser(unittest.TestCase):
         self.assertEqual(file_by_obj.display_name, "User_File.docx")
         self.assertEqual(file_by_obj.size, 1024)
 
+    # get_file_quota()
+    def test_get_file_quota(self, m):
+        register_uris({"user": ["get_file_quota"]}, m)
+
+        file_quota = self.user.get_file_quota()
+        self.assertIsInstance(file_quota, dict)
+        self.assertEqual(file_quota["quota"], 889234510)
+        self.assertEqual(file_quota["quota_used"], 476231098)
+
     # get_folder()
     def test_get_folder(self, m):
         register_uris({"user": ["get_folder"]}, m)
@@ -356,19 +326,6 @@ class TestUser(unittest.TestCase):
         folder_by_obj = self.user.get_folder(folder_by_id)
         self.assertEqual(folder_by_obj.name, "Folder 1")
         self.assertIsInstance(folder_by_obj, Folder)
-
-    # list_folders()
-    def test_list_folders(self, m):
-        register_uris({"user": ["list_folders"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            folders = self.user.list_folders()
-            folder_list = [folder for folder in folders]
-            self.assertEqual(len(folder_list), 2)
-            self.assertIsInstance(folder_list[0], Folder)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_folders()
     def test_get_folders(self, m):
@@ -387,21 +344,6 @@ class TestUser(unittest.TestCase):
         response = self.user.create_folder(name=name_str)
         self.assertIsInstance(response, Folder)
 
-    # list_user_logins()
-    def test_list_user_logins(self, m):
-        requires = {"user": ["list_user_logins", "list_user_logins_2"]}
-        register_uris(requires, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.user.list_user_logins()
-            login_list = [login for login in response]
-
-            self.assertIsInstance(login_list[0], Login)
-            self.assertEqual(len(login_list), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_user_logins()
     def test_get_user_logins(self, m):
         requires = {"user": ["list_user_logins", "list_user_logins_2"]}
@@ -412,21 +354,6 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(login_list[0], Login)
         self.assertEqual(len(login_list), 2)
-
-    # list_observees()
-    def test_list_observees(self, m):
-        requires = {"user": ["list_observees", "list_observees_2"]}
-        register_uris(requires, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.user.list_observees()
-            observees_list = [observees for observees in response]
-
-            self.assertIsInstance(observees_list[0], User)
-            self.assertEqual(len(observees_list), 4)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_observees()
     def test_get_observees(self, m):
@@ -613,6 +540,81 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(event_list[1], AuthenticationEvent)
         self.assertEqual(event_list[1].created_at, "2012-07-20T15:00:00-06:00")
         self.assertEqual(event_list[1].event_type, "logout")
+
+    # set_usage_rights()
+    def test_set_usage_rights(self, m):
+        register_uris({"user": ["set_usage_rights"]}, m)
+
+        usage_rights = self.user.set_usage_rights(
+            file_ids=[1, 2],
+            usage_rights={"use_justification": "fair_use", "license": "private"},
+        )
+
+        self.assertIsInstance(usage_rights, UsageRights)
+        self.assertEqual(usage_rights.use_justification, "fair_use")
+        self.assertEqual(usage_rights.message, "2 files updated")
+        self.assertEqual(usage_rights.license, "private")
+        self.assertEqual(usage_rights.file_ids, [1, 2])
+
+    # remove_usage_rights()
+    def test_remove_usage_rights(self, m):
+        register_uris({"user": ["remove_usage_rights"]}, m)
+
+        retval = self.user.remove_usage_rights(file_ids=[1, 2])
+
+        self.assertIsInstance(retval, dict)
+        self.assertIn("message", retval)
+        self.assertEqual(retval["file_ids"], [1, 2])
+        self.assertEqual(retval["message"], "2 files updated")
+
+    # get_licenses()
+    def test_get_licenses(self, m):
+        register_uris({"user": ["get_licenses"]}, m)
+
+        licenses = self.user.get_licenses()
+        self.assertIsInstance(licenses, PaginatedList)
+        licenses = list(licenses)
+
+        for lic in licenses:
+            self.assertIsInstance(lic, License)
+            self.assertTrue(hasattr(lic, "id"))
+            self.assertTrue(hasattr(lic, "name"))
+            self.assertTrue(hasattr(lic, "url"))
+
+        self.assertEqual(2, len(licenses))
+
+    # resolve_path()
+    def test_resolve_path(self, m):
+        register_uris({"user": ["resolve_path"]}, m)
+
+        full_path = "Folder_Level_1/Folder_Level_2/Folder_Level_3"
+        folders = self.user.resolve_path(full_path)
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 4)
+        self.assertIsInstance(folder_list[0], Folder)
+
+        folder_names = ("my_files/" + full_path).split("/")
+        for folder_name, folder in zip(folder_names, folders):
+            self.assertEqual(folder_name, folder.name)
+
+    # resolve_path() with null input
+    def test_resolve_path_null(self, m):
+        register_uris({"user": ["resolve_path_null"]}, m)
+
+        # test with null input
+        root_folder = self.user.resolve_path()
+        root_folder_list = [folder for folder in root_folder]
+        self.assertEqual(len(root_folder_list), 1)
+        self.assertIsInstance(root_folder_list[0], Folder)
+        self.assertEqual("my_files", root_folder_list[0].name)
+
+    # create_pairing_code()
+    def test_create_pairing_code(self, m):
+        register_uris({"user": ["observer_pairing_codes"]}, m)
+
+        pairing_code = self.user.create_pairing_code()
+        self.assertIsInstance(pairing_code, PairingCode)
+        self.assertEqual("abc123", pairing_code.code)
 
 
 @requests_mock.Mocker()

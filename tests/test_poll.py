@@ -1,10 +1,9 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
 
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi import Canvas
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.poll import Poll
 from tests import settings
 from tests.util import register_uris
@@ -48,26 +47,6 @@ class TestPoll(unittest.TestCase):
         self.assertEqual(poll_by_obj.question, "Is this a question?")
         self.assertEqual(poll_by_obj.description, "This is a test.")
         self.assertEqual(poll_by_obj.created_at, "2014-01-07T13:10:19Z")
-
-    # create_poll()
-    def test_create_poll(self, m):
-        register_uris({"poll": ["create_poll"]}, m)
-
-        new_poll_q = self.canvas.create_poll([{"question": "Is this a question?"}])
-        self.assertIsInstance(new_poll_q, Poll)
-        self.assertTrue(hasattr(new_poll_q, "question"))
-
-        new_poll_q_d = self.canvas.create_poll(
-            [{"question": "Is this a question?"}, {"description": "This is a test."}]
-        )
-        self.assertIsInstance(new_poll_q_d, Poll)
-        self.assertTrue(hasattr(new_poll_q_d, "question"))
-        self.assertTrue(hasattr(new_poll_q_d, "description"))
-
-    # create_poll()
-    def test_create_poll_fail(self, m):
-        with self.assertRaises(RequiredFieldMissing):
-            self.canvas.create_poll(poll={})
 
     # update()
     def test_update(self, m):

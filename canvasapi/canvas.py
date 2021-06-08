@@ -1,8 +1,7 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import warnings
 
 from canvasapi.account import Account
+from canvasapi.comm_message import CommMessage
 from canvasapi.course import Course
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.current_user import CurrentUser
@@ -13,8 +12,8 @@ from canvasapi.group import Group, GroupCategory
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
 from canvasapi.section import Section
+from canvasapi.todo import Todo
 from canvasapi.user import User
-from canvasapi.comm_message import CommMessage
 from canvasapi.util import combine_kwargs, get_institution_url, obj_or_id
 
 
@@ -30,13 +29,9 @@ class Canvas(object):
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
         """
-        new_url = get_institution_url(base_url)
-
         if "api/v1" in base_url:
-            warnings.warn(
-                "`base_url` no longer requires an API version be specified. "
-                "Rewriting `base_url` to {}".format(new_url),
-                DeprecationWarning,
+            raise ValueError(
+                "`base_url` should not specify an API version. Remove trailing /api/v1/"
             )
 
         if "http://" in base_url:
@@ -59,16 +54,14 @@ class Canvas(object):
                 UserWarning,
             )
 
-        # Ensure that the user-supplied access token contains no leading or
-        # trailing spaces that may cause issues when communicating with
-        # the API.
+        # Ensure that the user-supplied access token and base_url contain no leading or
+        # trailing spaces that might cause issues when communicating with the API.
         access_token = access_token.strip()
-
-        base_url = new_url + "/api/v1/"
+        base_url = get_institution_url(base_url)
 
         self.__requester = Requester(base_url, access_token)
 
-    def clear_course_nicknames(self):
+    def clear_course_nicknames(self, **kwargs):
         """
         Remove all stored course nicknames.
 
@@ -80,10 +73,14 @@ class Canvas(object):
         :rtype: bool
         """
 
-        response = self.__requester.request("DELETE", "users/self/course_nicknames")
+        response = self.__requester.request(
+            "DELETE",
+            "users/self/course_nicknames",
+            _kwargs=combine_kwargs(**kwargs),
+        )
         return response.json().get("message") == "OK"
 
-    def conversations_batch_update(self, conversation_ids, event):
+    def conversations_batch_update(self, conversation_ids, event, **kwargs):
         """
 
         :calls: `PUT /api/v1/conversations \
@@ -107,34 +104,32 @@ class Canvas(object):
             "destroy",
         ]
 
-        try:
-            if event not in ALLOWED_EVENTS:
-                raise ValueError(
-                    "{} is not a valid action. Please use one of the following: {}".format(
-                        event, ",".join(ALLOWED_EVENTS)
-                    )
+        if event not in ALLOWED_EVENTS:
+            raise ValueError(
+                "{} is not a valid action. Please use one of the following: {}".format(
+                    event, ",".join(ALLOWED_EVENTS)
                 )
-
-            if len(conversation_ids) > 500:
-                raise ValueError(
-                    "You have requested {} updates, which exceeds the limit of 500".format(
-                        len(conversation_ids)
-                    )
-                )
-
-            response = self.__requester.request(
-                "PUT",
-                "conversations",
-                event=event,
-                **{"conversation_ids[]": conversation_ids}
             )
-            return_progress = Progress(self.__requester, response.json())
-            return return_progress
 
-        except ValueError as e:
-            return e
+        if len(conversation_ids) > 500:
+            raise ValueError(
+                "You have requested {} updates, which exceeds the limit of 500".format(
+                    len(conversation_ids)
+                )
+            )
 
-    def conversations_get_running_batches(self):
+        kwargs["conversation_ids"] = conversation_ids
+        kwargs["event"] = event
+
+        response = self.__requester.request(
+            "PUT",
+            "conversations",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return_progress = Progress(self.__requester, response.json())
+        return return_progress
+
+    def conversations_get_running_batches(self, **kwargs):
         """
         Returns any currently running conversation batches for the current user.
         Conversation batches are created when a bulk private message is sent
@@ -147,11 +142,13 @@ class Canvas(object):
         :rtype: `dict`
         """
 
-        response = self.__requester.request("GET", "conversations/batches")
+        response = self.__requester.request(
+            "GET", "conversations/batches", _kwargs=combine_kwargs(**kwargs)
+        )
 
         return response.json()
 
-    def conversations_mark_all_as_read(self):
+    def conversations_mark_all_as_read(self, **kwargs):
         """
         Mark all conversations as read.
 
@@ -160,10 +157,12 @@ class Canvas(object):
 
         :rtype: `bool`
         """
-        response = self.__requester.request("POST", "conversations/mark_all_as_read")
+        response = self.__requester.request(
+            "POST", "conversations/mark_all_as_read", _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json() == {}
 
-    def conversations_unread_count(self):
+    def conversations_unread_count(self, **kwargs):
         """
         Get the number of unread conversations for the current user
 
@@ -173,7 +172,9 @@ class Canvas(object):
         :returns: simple object with unread_count, example: {'unread_count': '7'}
         :rtype: `dict`
         """
-        response = self.__requester.request("GET", "conversations/unread_count")
+        response = self.__requester.request(
+            "GET", "conversations/unread_count", _kwargs=combine_kwargs(**kwargs)
+        )
 
         return response.json()
 
@@ -328,13 +329,12 @@ class Canvas(object):
         :rtype: :class:`canvasapi.planner.PlannerOverride`
         """
         from canvasapi.planner import PlannerOverride
-        from six import text_type, integer_types
 
-        if isinstance(plannable_type, text_type):
+        if isinstance(plannable_type, str):
             kwargs["plannable_type"] = plannable_type
         else:
             raise RequiredFieldMissing("plannable_type is required as a str.")
-        if isinstance(plannable_id, integer_types):
+        if isinstance(plannable_id, int):
             kwargs["plannable_id"] = plannable_id
         else:
             raise RequiredFieldMissing("plannable_id is required as an int.")
@@ -344,28 +344,28 @@ class Canvas(object):
         )
         return PlannerOverride(self.__requester, response.json())
 
-    def create_poll(self, poll, **kwargs):
+    def create_poll(self, polls, **kwargs):
         """
         Create a new poll for the current user.
 
         :calls: `POST /api/v1/polls \
         <https://canvas.instructure.com/doc/api/polls.html#method.polling/polls.create>`_
 
-        :param poll: List of polls to create. `'question'` key is required.
-        :type poll: list of dict
+        :param polls: List of polls to create. `'question'` key is required.
+        :type polls: list of dict
         :rtype: :class:`canvasapi.poll.Poll`
         """
         from canvasapi.poll import Poll
 
         if (
-            isinstance(poll, list)
-            and isinstance(poll[0], dict)
-            and "question" in poll[0]
+            isinstance(polls, list)
+            and isinstance(polls[0], dict)
+            and "question" in polls[0]
         ):
-            kwargs["poll"] = poll
+            kwargs["polls"] = polls
         else:
             raise RequiredFieldMissing(
-                "Dictionary with key 'question' and is required."
+                "List of dictionaries each with key 'question' is required."
             )
 
         response = self.__requester.request(
@@ -422,7 +422,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_activity_stream_summary(self):
+    def get_activity_stream_summary(self, **kwargs):
         """
         Return a summary of the current user's global activity stream.
 
@@ -431,20 +431,46 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request("GET", "users/self/activity_stream/summary")
+        response = self.__requester.request(
+            "GET",
+            "users/self/activity_stream/summary",
+            _kwargs=combine_kwargs(**kwargs),
+        )
         return response.json()
 
-    def get_announcements(self, **kwargs):
+    def get_announcements(self, context_codes, **kwargs):
         """
         List announcements.
 
         :calls: `GET /api/v1/announcements \
         <https://canvas.instructure.com/doc/api/announcements.html#method.announcements_api.index>`_
 
+        :param context_codes: Course ID(s) or <Course> objects to request announcements from.
+        :type context_codes: list
+
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
         from canvasapi.discussion_topic import DiscussionTopic
+
+        if type(context_codes) is not list or len(context_codes) == 0:
+            raise RequiredFieldMissing("context_codes need to be passed as a list")
+
+        if isinstance(context_codes[0], str) and "course_" in context_codes[0]:
+            # Legacy support for context codes passed as list of `course_123`-style strings
+            kwargs["context_codes"] = context_codes
+        else:
+            # The type of object in `context_codes` is taken care of by obj_or_id, extracting
+            # the course ID from a <Course> object or by returning plain strings.
+            course_ids = [
+                obj_or_id(course_id, "context_codes", (Course,))
+                for course_id in context_codes
+            ]
+
+            # Set the **kwargs object vaue so it can be combined with others passed by the user.
+            kwargs["context_codes"] = [
+                f"course_{course_id}" for course_id in course_ids
+            ]
 
         return PaginatedList(
             DiscussionTopic,
@@ -454,7 +480,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_appointment_group(self, appointment_group):
+    def get_appointment_group(self, appointment_group, **kwargs):
         """
         Return single Appointment Group by id
 
@@ -473,7 +499,9 @@ class Canvas(object):
         )
 
         response = self.__requester.request(
-            "GET", "appointment_groups/{}".format(appointment_group_id)
+            "GET",
+            "appointment_groups/{}".format(appointment_group_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return AppointmentGroup(self.__requester, response.json())
 
@@ -497,7 +525,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_brand_variables(self):
+    def get_brand_variables(self, **kwargs):
         """
         Get account brand variables
 
@@ -507,10 +535,12 @@ class Canvas(object):
         :returns: JSON with brand variables for the account.
         :rtype: dict
         """
-        response = self.__requester.request("GET", "brand_variables")
+        response = self.__requester.request(
+            "GET", "brand_variables", _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
-    def get_calendar_event(self, calendar_event):
+    def get_calendar_event(self, calendar_event, **kwargs):
         """
         Return single Calendar Event by id
 
@@ -529,7 +559,9 @@ class Canvas(object):
         )
 
         response = self.__requester.request(
-            "GET", "calendar_events/{}".format(calendar_event_id)
+            "GET",
+            "calendar_events/{}".format(calendar_event_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return CalendarEvent(self.__requester, response.json())
 
@@ -561,7 +593,7 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/comm_messages.html#method.comm_messages_api.index>`_
 
         :param user: The object or ID of the user.
-        :type user: :class: `canvasapi.user.User` or int
+        :type user: :class:`canvasapi.user.User` or int
 
         :returns: Paginated list containing messages sent to user
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
@@ -649,7 +681,7 @@ class Canvas(object):
         )
         return Course(self.__requester, response.json())
 
-    def get_course_accounts(self):
+    def get_course_accounts(self, **kwargs):
         """
         List accounts that the current user can view through their
         admin course enrollments (Teacher, TA or designer enrollments).
@@ -663,9 +695,15 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.Account`
         """
-        return PaginatedList(Account, self.__requester, "GET", "course_accounts")
+        return PaginatedList(
+            Account,
+            self.__requester,
+            "GET",
+            "course_accounts",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
-    def get_course_nickname(self, course):
+    def get_course_nickname(self, course, **kwargs):
         """
         Return the nickname for the given course.
 
@@ -682,11 +720,13 @@ class Canvas(object):
         course_id = obj_or_id(course, "course", (Course,))
 
         response = self.__requester.request(
-            "GET", "users/self/course_nicknames/{}".format(course_id)
+            "GET",
+            "users/self/course_nicknames/{}".format(course_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return CourseNickname(self.__requester, response.json())
 
-    def get_course_nicknames(self):
+    def get_course_nicknames(self, **kwargs):
         """
         Return all course nicknames set by the current account.
 
@@ -699,7 +739,11 @@ class Canvas(object):
         from canvasapi.course import CourseNickname
 
         return PaginatedList(
-            CourseNickname, self.__requester, "GET", "users/self/course_nicknames"
+            CourseNickname,
+            self.__requester,
+            "GET",
+            "users/self/course_nicknames",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_courses(self, **kwargs):
@@ -717,6 +761,14 @@ class Canvas(object):
         )
 
     def get_current_user(self):
+        """
+        Return a details of the current user.
+
+        :calls: `GET /api/v1/users/:user_id \
+        <https://canvas.instructure.com/doc/api/users.html#method.current_user.show>`_
+
+        :rtype: :class:`canvasapi.current_user.CurrentUser`
+        """
         return CurrentUser(self.__requester)
 
     def get_epub_exports(self, **kwargs):
@@ -758,7 +810,7 @@ class Canvas(object):
         )
         return File(self.__requester, response.json())
 
-    def get_folder(self, folder):
+    def get_folder(self, folder, **kwargs):
         """
         Return the details for a folder
 
@@ -772,7 +824,9 @@ class Canvas(object):
         """
         folder_id = obj_or_id(folder, "folder", (Folder,))
 
-        response = self.__requester.request("GET", "folders/{}".format(folder_id))
+        response = self.__requester.request(
+            "GET", "folders/{}".format(folder_id), _kwargs=combine_kwargs(**kwargs)
+        )
         return Folder(self.__requester, response.json())
 
     def get_group(self, group, use_sis_id=False, **kwargs):
@@ -805,7 +859,7 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
-    def get_group_category(self, category):
+    def get_group_category(self, category, **kwargs):
         """
         Get a single group category.
 
@@ -820,7 +874,9 @@ class Canvas(object):
         category_id = obj_or_id(category, "category", (GroupCategory,))
 
         response = self.__requester.request(
-            "GET", "group_categories/{}".format(category_id)
+            "GET",
+            "group_categories/{}".format(category_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return GroupCategory(self.__requester, response.json())
 
@@ -851,7 +907,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_outcome(self, outcome):
+    def get_outcome(self, outcome, **kwargs):
         """
         Returns the details of the outcome with the given id.
 
@@ -867,10 +923,12 @@ class Canvas(object):
         from canvasapi.outcome import Outcome
 
         outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
-        response = self.__requester.request("GET", "outcomes/{}".format(outcome_id))
+        response = self.__requester.request(
+            "GET", "outcomes/{}".format(outcome_id), _kwargs=combine_kwargs(**kwargs)
+        )
         return Outcome(self.__requester, response.json())
 
-    def get_outcome_group(self, group):
+    def get_outcome_group(self, group, **kwargs):
         """
         Returns the details of the Outcome Group with the given id.
 
@@ -888,7 +946,9 @@ class Canvas(object):
         outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
 
         response = self.__requester.request(
-            "GET", "global/outcome_groups/{}".format(outcome_group_id)
+            "GET",
+            "global/outcome_groups/{}".format(outcome_group_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self.__requester, response.json())
@@ -1058,7 +1118,7 @@ class Canvas(object):
         )
         return Progress(self.__requester, response.json())
 
-    def get_root_outcome_group(self):
+    def get_root_outcome_group(self, **kwargs):
         """
         Redirect to root outcome group for context
 
@@ -1070,7 +1130,9 @@ class Canvas(object):
         """
         from canvasapi.outcome import OutcomeGroup
 
-        response = self.__requester.request("GET", "global/root_outcome_group")
+        response = self.__requester.request(
+            "GET", "global/root_outcome_group", _kwargs=combine_kwargs(**kwargs)
+        )
         return OutcomeGroup(self.__requester, response.json())
 
     def get_section(self, section, use_sis_id=False, **kwargs):
@@ -1100,7 +1162,7 @@ class Canvas(object):
         )
         return Section(self.__requester, response.json())
 
-    def get_todo_items(self):
+    def get_todo_items(self, **kwargs):
         """
         Return the current user's list of todo items, as seen on the user dashboard.
 
@@ -1109,10 +1171,15 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request("GET", "users/self/todo")
-        return response.json()
+        return PaginatedList(
+            Todo,
+            self.__requester,
+            "GET",
+            "users/self/todo",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
-    def get_upcoming_events(self):
+    def get_upcoming_events(self, **kwargs):
         """
         Return the current user's upcoming events, i.e. the same things shown
         in the dashboard 'Coming Up' sidebar.
@@ -1122,10 +1189,12 @@ class Canvas(object):
 
         :rtype: dict
         """
-        response = self.__requester.request("GET", "users/self/upcoming_events")
+        response = self.__requester.request(
+            "GET", "users/self/upcoming_events", _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
-    def get_user(self, user, id_type=None):
+    def get_user(self, user, id_type=None, **kwargs):
         """
         Retrieve a user by their ID. `id_type` denotes which endpoint to try as there are
         several different IDs that can pull the same user record from Canvas.
@@ -1152,7 +1221,9 @@ class Canvas(object):
             user_id = obj_or_id(user, "user", (User,))
             uri = "users/{}".format(user_id)
 
-        response = self.__requester.request("GET", uri)
+        response = self.__requester.request(
+            "GET", uri, _kwargs=combine_kwargs(**kwargs)
+        )
         return User(self.__requester, response.json())
 
     def get_user_participants(self, appointment_group, **kwargs):
@@ -1182,97 +1253,32 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def list_appointment_groups(self, **kwargs):
+    def graphql(self, query, variables=None, **kwargs):
         """
-        List appointment groups.
+        Makes a GraphQL formatted request to Canvas
 
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.canvas.Canvas.get_appointment_groups` instead.
+        :calls: `POST /api/graphql \
+        <https://canvas.instructure.com/doc/api/file.graphql.html>`_
 
-        :calls: `GET /api/v1/appointment_groups \
-        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.index>`_
+        :param query: The GraphQL query to execute as a String
+        :type query: str
+        :param variables: The variable values as required by the supplied query
+        :type variables: dict
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.appointment_group.AppointmentGroup`
+        :rtype: dict
         """
-        warnings.warn(
-            "`list_appointment_groups` is being deprecated and will be removed"
-            " in a future version. Use `get_appointment_groups` instead.",
-            DeprecationWarning,
+        response = self.__requester.request(
+            "POST",
+            "graphql",
+            headers={"Content-Type": "application/json"},
+            _kwargs=combine_kwargs(**kwargs)
+            + [("query", query), ("variables", variables)],
+            # Needs to call special endpoint without api/v1
+            _url=self.__requester.original_url + "/api/graphql",
+            json=True,
         )
 
-        return self.get_appointment_groups(**kwargs)
-
-    def list_calendar_events(self, **kwargs):
-        """
-        List calendar events.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.canvas.Canvas.get_calendar_events` instead.
-
-        :calls: `GET /api/v1/calendar_events \
-        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.calendar_event.CalendarEvent`
-        """
-        warnings.warn(
-            "`list_calendar_events` is being deprecated and will be removed "
-            "in a future version. Use `get_calendar_events` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_calendar_events(**kwargs)
-
-    def list_group_participants(self, appointment_group, **kwargs):
-        """
-        List student group participants in this appointment group.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi. canvas.Canvas.get_group_participants` instead.
-
-        :calls: `GET /api/v1/appointment_groups/:id/groups \
-        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.groups>`_
-
-        :param appointment_group: The object or ID of the appointment group.
-        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
-        """
-        warnings.warn(
-            "`list_group_participants` is being deprecated and will be removed "
-            "in a future version. Use `get_group_participants` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_group_participants(appointment_group, **kwargs)
-
-    def list_user_participants(self, appointment_group, **kwargs):
-        """
-        List user participants in this appointment group.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi. canvas.Canvas.get_user_participants` instead.
-
-        :calls: `GET /api/v1/appointment_groups/:id/users \
-        <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.users>`_
-
-        :param appointment_group: The object or ID of the appointment group.
-        :type appointment_group: :class:`canvasapi.appointment_group.AppointmentGroup` or int
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
-        """
-        warnings.warn(
-            "`list_user_participants` is being deprecated and will be removed in a future version."
-            " Use `get_user_participants` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_user_participants(appointment_group, **kwargs)
+        return response.json()
 
     def reserve_time_slot(self, calendar_event, participant_id=None, **kwargs):
         """
@@ -1356,7 +1362,7 @@ class Canvas(object):
         )
         return response.json()
 
-    def set_course_nickname(self, course, nickname):
+    def set_course_nickname(self, course, nickname, **kwargs):
         """
         Set a nickname for the given course. This will replace the
         course's name in the output of subsequent API calls, as
@@ -1376,7 +1382,11 @@ class Canvas(object):
 
         course_id = obj_or_id(course, "course", (Course,))
 
+        kwargs["nickname"] = nickname
+
         response = self.__requester.request(
-            "PUT", "users/self/course_nicknames/{}".format(course_id), nickname=nickname
+            "PUT",
+            "users/self/course_nicknames/{}".format(course_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return CourseNickname(self.__requester, response.json())

@@ -1,0 +1,61 @@
+{
+	"delete": {
+		"method": "DELETE",
+		"endpoint": "courses/1/custom_gradebook_columns/2",
+		"data": {
+			"id": 2,
+			"teacher_notes": false,
+			"title": "Deleted Column",
+			"position": 1,
+			"hidden": false,
+			"read_only": true
+		},
+		"status_code": 200
+	},
+	"get_column_entries": {
+		"method": "GET",
+		"endpoint": "courses/1/custom_gradebook_columns/2/data",
+		"data": [
+			{
+				"content": "Example content",
+				"user_id": 1
+			},
+			{
+				"content": "More example content",
+				"user_id": 1
+			}
+		],
+		"status_code": 200
+	},
+	"reorder_custom_columns": {
+		"method": "POST",
+		"endpoint": "courses/1/custom_gradebook_columns/reorder",
+		"data": {
+			"reorder": true,
+			"order": [1, 2, 3]
+		},
+		"status_code": 200
+	},
+	"update_custom_column": {
+		"method": "PUT",
+		"endpoint": "courses/1/custom_gradebook_columns/2",
+		"data": {
+			"id": 2,
+			"teacher_notes": false,
+			"title": "Example title",
+			"position": 1,
+			"hidden": false,
+			"read_only": true
+		},
+		"status_code": 200
+	}, 
+	"update_column_data": {
+		"method": "PUT",
+		"endpoint": "courses/1/custom_gradebook_columns/2/data/1",
+		"data": {
+			"content": "Updated content",
+			"user_id": 1
+		},
+		"status_code": 200
+	}
+}

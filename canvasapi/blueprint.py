@@ -1,13 +1,8 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class BlueprintTemplate(CanvasObject):
     def __str__(self):
         return "{}".format(self.id)
@@ -182,7 +177,6 @@ class BlueprintTemplate(CanvasObject):
         return response.json().get("success", False)
 
 
-@python_2_unicode_compatible
 class BlueprintMigration(CanvasObject):
     def __str__(self):
         return "{} {}".format(self.id, self.template_id)
@@ -234,13 +228,11 @@ class BlueprintMigration(CanvasObject):
         )
 
 
-@python_2_unicode_compatible
 class ChangeRecord(CanvasObject):
-    def __str__(self):  # pragma: no cover
-        return "{} {}".format(self.id, self.template_id)
+    def __str__(self):
+        return "{} {}".format(self.asset_id, self.asset_name)
 
 
-@python_2_unicode_compatible
 class BlueprintSubscription(CanvasObject):
     def __str__(self):
         return "{} {}".format(self.id, self.template_id)

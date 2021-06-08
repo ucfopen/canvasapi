@@ -1,22 +1,24 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
-import warnings
 
 import requests_mock
-from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.quiz import (
     Quiz,
-    QuizSubmission,
-    QuizSubmissionQuestion,
-    QuizQuestion,
+    QuizAssignmentOverrideSet,
     QuizExtension,
+    QuizQuestion,
+    QuizReport,
+    QuizStatistic,
+    QuizSubmission,
     QuizSubmissionEvent,
+    QuizSubmissionQuestion,
 )
 from canvasapi.quiz_group import QuizGroup
-from canvasapi.paginated_list import PaginatedList
+from canvasapi.submission import Submission
+from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
 
@@ -36,6 +38,26 @@ class TestQuiz(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.quiz)
         self.assertIsInstance(string, str)
+
+    # broadcast_message()
+    def test_broadcast_message(self, m):
+        register_uris({"quiz": ["broadcast_message"]}, m)
+
+        response = self.quiz.broadcast_message(
+            conversations={
+                "body": "please take the quiz",
+                "recipients": "submitted",
+                "subject": "ATTN: Quiz 101 Students",
+            }
+        )
+
+        self.assertTrue(response)
+
+    def test_broadcast_message_invalid_params(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.quiz.broadcast_message(
+                conversations={"body": "no subject here", "recipients": "submitted"}
+            )
 
     # edit()
     def test_edit(self, m):
@@ -65,12 +87,16 @@ class TestQuiz(unittest.TestCase):
 
     # get_quiz_group()
     def test_get_quiz_group(self, m):
-        register_uris({"quiz": ["get_quiz_group"]}, m)
+        register_uris({"quiz": ["get_by_id_5", "get_quiz_group"]}, m)
 
-        result = self.quiz.get_quiz_group(1)
+        quiz = self.course.get_quiz(5)
+
+        result = quiz.get_quiz_group(10)
         self.assertIsInstance(result, QuizGroup)
-        self.assertEqual(result.id, 1)
-        self.assertEqual(result.quiz_id, 1)
+        self.assertEqual(result.id, 10)
+        self.assertEqual(result.quiz_id, 5)
+        self.assertTrue(hasattr(result, "course_id"))
+        self.assertEqual(result.course_id, 1)
 
     # create_question_group()
     def test_create_question_group(self, m):
@@ -204,31 +230,21 @@ class TestQuiz(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.quiz.set_extensions([{"extra_time": 60, "extra_attempts": 3}])
 
-    # get_all_quiz_submissions()
-    def test_get_all_quiz_submissions(self, m):
-        register_uris({"quiz": ["get_all_quiz_submissions"]}, m)
+    # get_all_quiz_reports
+    def test_get_all_quiz_reports(self, m):
+        register_uris({"quiz": ["get_all_quiz_reports"]}, m)
 
-        with warnings.catch_warnings(record=True) as warning_list:
-            submissions = self.quiz.get_all_quiz_submissions()
+        reports = self.quiz.get_all_quiz_reports()
+        self.assertIsInstance(reports, PaginatedList)
 
-            self.assertIsInstance(submissions, PaginatedList)
+        reports = list(reports)
 
-            submission_list = [sub for sub in submissions]
+        for report in reports:
+            self.assertIsInstance(report, QuizReport)
+            self.assertTrue(hasattr(report, "report_type"))
+            self.assertTrue(hasattr(report, "includes_all_versions"))
 
-            self.assertEqual(len(submission_list), 2)
-
-            self.assertIsInstance(submission_list[0], QuizSubmission)
-            self.assertEqual(submission_list[0].id, 1)
-            self.assertTrue(hasattr(submission_list[0], "attempt"))
-            self.assertEqual(submission_list[0].attempt, 3)
-
-            self.assertIsInstance(submission_list[1], QuizSubmission)
-            self.assertEqual(submission_list[1].id, 2)
-            self.assertTrue(hasattr(submission_list[1], "score"))
-            self.assertEqual(submission_list[1].score, 5)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
+        self.assertEqual(len(reports), 2)
 
     # get_submissions()
     def test_get_submissions(self, m):
@@ -251,24 +267,53 @@ class TestQuiz(unittest.TestCase):
         self.assertTrue(hasattr(submission_list[1], "score"))
         self.assertEqual(submission_list[1].score, 5)
 
+    # get_quiz_report
+    def test_get_quiz_report(self, m):
+        register_uris({"quiz": ["get_quiz_report"]}, m)
+
+        report = self.quiz.get_quiz_report(1)
+        self.assertIsInstance(report, QuizReport)
+        self.assertEqual(report.quiz_id, 1)
+
+    # get_quiz_report
+    def test_get_statistics(self, m):
+        register_uris({"quiz": ["get_statistics"]}, m)
+
+        statistics = self.quiz.get_statistics()
+
+        self.assertIsInstance(statistics, PaginatedList)
+
+        statistic_list = [statistic for statistic in statistics]
+
+        self.assertEqual(len(statistic_list), 1)
+        self.assertIsInstance(statistic_list[0], QuizStatistic)
+        self.assertEqual(statistic_list[0].id, "1")
+        self.assertTrue(hasattr(statistic_list[0], "question_statistics"))
+        self.assertEqual(len(statistic_list[0].question_statistics), 2)
+
     # get_quiz_submission
     def test_get_quiz_submission(self, m):
         register_uris({"quiz": ["get_quiz_submission"]}, m)
 
         quiz_id = 1
-        submission = self.quiz.get_quiz_submission(quiz_id)
+        quiz_submission = self.quiz.get_quiz_submission(
+            quiz_id, include=["quiz", "submission", "user"]
+        )
 
-        self.assertIsInstance(submission, QuizSubmission)
-        self.assertTrue(hasattr(submission, "id"))
-        self.assertEqual(submission.quiz_id, quiz_id)
-        self.assertTrue(hasattr(submission, "quiz_version"))
-        self.assertEqual(submission.quiz_version, 1)
-        self.assertTrue(hasattr(submission, "user_id"))
-        self.assertEqual(submission.user_id, 1)
-        self.assertTrue(hasattr(submission, "validation_token"))
-        self.assertEqual(submission.validation_token, "this is a validation token")
-        self.assertTrue(hasattr(submission, "score"))
-        self.assertEqual(submission.score, 0)
+        self.assertIsInstance(quiz_submission, QuizSubmission)
+        self.assertTrue(hasattr(quiz_submission, "id"))
+        self.assertEqual(quiz_submission.quiz_id, quiz_id)
+        self.assertTrue(hasattr(quiz_submission, "quiz_version"))
+        self.assertEqual(quiz_submission.quiz_version, 1)
+        self.assertTrue(hasattr(quiz_submission, "user_id"))
+        self.assertEqual(quiz_submission.user_id, 1)
+        self.assertTrue(hasattr(quiz_submission, "validation_token"))
+        self.assertEqual(quiz_submission.validation_token, "this is a validation token")
+        self.assertTrue(hasattr(quiz_submission, "score"))
+        self.assertEqual(quiz_submission.score, 0)
+        self.assertIsInstance(quiz_submission.quiz, Quiz)
+        self.assertIsInstance(quiz_submission.submission, Submission)
+        self.assertIsInstance(quiz_submission.user, User)
 
     # create_submission
     def test_create_submission(self, m):
@@ -277,6 +322,58 @@ class TestQuiz(unittest.TestCase):
         submission = self.quiz.create_submission()
 
         self.assertIsInstance(submission, QuizSubmission)
+
+    def test_create_report(self, m):
+        register_uris({"quiz": ["create_report"]}, m)
+
+        report = self.quiz.create_report("student_analysis")
+
+        self.assertIsInstance(report, QuizReport)
+        self.assertEqual(report.report_type, "student_analysis")
+
+    def test_create_report_failure(self, m):
+        register_uris({"quiz": ["create_report"]}, m)
+
+        with self.assertRaises(ValueError):
+            self.quiz.create_report("super_cool_fake_report")
+
+
+@requests_mock.Mocker()
+class TestQuizReport(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {
+                "course": ["get_by_id"],
+                "quiz": ["get_by_id", "get_quiz_report"],
+            }
+            register_uris(requires, m)
+
+            self.course = self.canvas.get_course(1)
+            self.quiz = self.course.get_quiz(1)
+            self.quiz_report = self.quiz.get_quiz_report(1)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.quiz_report)
+        self.assertIsInstance(string, str)
+
+    # abort_or_delete
+    def test_abort_or_delete(self, m):
+        register_uris({"quiz": ["abort_or_delete_report"]}, m)
+
+        resp = self.quiz_report.abort_or_delete()
+
+        self.assertEqual(resp, True)
+
+    # abort_or_delete
+    def test_abort_or_delete_failure(self, m):
+        register_uris({"quiz": ["abort_or_delete_report_failure"]}, m)
+
+        resp = self.quiz_report.abort_or_delete()
+
+        self.assertEqual(resp, False)
 
 
 @requests_mock.Mocker()
@@ -332,7 +429,7 @@ class TestQuizSubmission(unittest.TestCase):
         self.assertIn("end_at", submission)
         self.assertIn("time_left", submission)
         self.assertIsInstance(submission["time_left"], int)
-        self.assertIsInstance(submission["end_at"], text_type)
+        self.assertIsInstance(submission["end_at"], str)
 
     # update_score_and_comments
     def test_update_score_and_comments(self, m):
@@ -499,6 +596,27 @@ class TestQuizQuestion(unittest.TestCase):
 
 
 @requests_mock.Mocker()
+class TestQuizStatistic(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris(
+                {"course": ["get_by_id"], "quiz": ["get_by_id", "get_statistics"]}, m
+            )
+
+            self.course = self.canvas.get_course(1)
+            self.quiz = self.course.get_quiz(1)
+            self.quiz_statistics = self.quiz.get_statistics()
+            self.quiz_statistic = self.quiz_statistics[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.quiz_statistic)
+        self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
 class TestQuizSubmissionEvent(unittest.TestCase):
     def setUp(self):
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
@@ -595,3 +713,19 @@ class TestQuizSubmissionQuestion(unittest.TestCase):
         self.assertIsInstance(result, bool)
         self.assertTrue(result)
         self.assertFalse(self.submission_question.flagged)
+
+
+@requests_mock.Mocker()
+class TestQuizAssignmentOverrideSet(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.override_set = QuizAssignmentOverrideSet(
+            self.canvas._Canvas__requester,
+            {"quiz_id": "1", "due_dates": None, "all_dates": None},
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.override_set)
+        self.assertIsInstance(string, str)

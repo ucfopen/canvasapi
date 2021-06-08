@@ -1,25 +1,25 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 import uuid
-import warnings
+from urllib.parse import quote
 
 import requests
 import requests_mock
-from six.moves.urllib.parse import quote
 
 from canvasapi import Canvas
 from canvasapi.assignment import AssignmentOverride
-from canvasapi.group import Group, GroupMembership, GroupCategory
+from canvasapi.content_export import ContentExport
+from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.group import Group, GroupCategory, GroupMembership
+from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
-from canvasapi.content_migration import ContentMigration, Migrator
-from canvasapi.content_export import ContentExport
+from canvasapi.usage_rights import UsageRights
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -27,8 +27,6 @@ from tests.util import cleanup_file, register_uris
 @requests_mock.Mocker()
 class TestGroup(unittest.TestCase):
     def setUp(self):
-        warnings.simplefilter("always", DeprecationWarning)
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -124,21 +122,6 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(gmembership_list[0], GroupMembership)
         self.assertEqual(len(gmembership_list), 2)
 
-    # list_users()
-    def test_list_users(self, m):
-        register_uris({"group": ["list_users", "list_users_p2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            from canvasapi.user import User
-
-            users = self.group.list_users()
-            user_list = [user for user in users]
-            self.assertIsInstance(user_list[0], User)
-            self.assertEqual(len(user_list), 4)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_users()
     def test_get_users(self, m):
         register_uris({"group": ["list_users", "list_users_p2"]}, m)
@@ -192,20 +175,6 @@ class TestGroup(unittest.TestCase):
         response = self.group.get_activity_stream_summary()
         self.assertEqual(len(response), 2)
         self.assertIn("type", response[0])
-
-    # list_memberships()
-    def test_list_memberships(self, m):
-        register_uris({"group": ["list_memberships", "list_memberships_p2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.group.list_memberships()
-            membership_list = [membership for membership in response]
-            self.assertEqual(len(membership_list), 4)
-            self.assertIsInstance(membership_list[0], GroupMembership)
-            self.assertTrue(hasattr(membership_list[0], "id"))
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_memberships()
     def test_get_memberships(self, m):
@@ -286,6 +255,15 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(file_by_obj.display_name, "Group_File.docx")
         self.assertEqual(file_by_obj.size, 4096)
 
+    # get_file_quota()
+    def test_get_file_quota(self, m):
+        register_uris({"group": ["get_file_quota"]}, m)
+
+        file_quota = self.group.get_file_quota()
+        self.assertIsInstance(file_quota, dict)
+        self.assertEqual(file_quota["quota"], 777648912)
+        self.assertEqual(file_quota["quota_used"], 567864213)
+
     # get_full_discussion_topic
     def test_get_full_discussion_topic(self, m):
         register_uris(
@@ -364,20 +342,6 @@ class TestGroup(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.group.reorder_pinned_topics(order=order)
 
-    # list_external_feeds()
-    def test_list_external_feeds(self, m):
-        register_uris({"group": ["list_external_feeds"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            feeds = self.group.list_external_feeds()
-            feed_list = [feed for feed in feeds]
-            self.assertEqual(len(feed_list), 2)
-            self.assertTrue(hasattr(feed_list[0], "url"))
-            self.assertIsInstance(feed_list[0], ExternalFeed)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_external_feeds()
     def test_get_external_feeds(self, m):
         register_uris({"group": ["list_external_feeds"]}, m)
@@ -412,19 +376,6 @@ class TestGroup(unittest.TestCase):
         self.assertTrue(hasattr(deleted_ef_by_obj, "url"))
         self.assertEqual(deleted_ef_by_obj.display_name, "My Blog")
 
-    # list_files()
-    def test_list_files(self, m):
-        register_uris({"group": ["list_group_files", "list_group_files2"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            files = self.group.list_files()
-            file_list = [file for file in files]
-            self.assertEqual(len(file_list), 4)
-            self.assertIsInstance(file_list[0], File)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_files()
     def test_get_files(self, m):
         register_uris({"group": ["list_group_files", "list_group_files2"]}, m)
@@ -446,19 +397,6 @@ class TestGroup(unittest.TestCase):
         self.assertEqual(folder_by_obj.name, "Folder 1")
         self.assertIsInstance(folder_by_obj, Folder)
 
-    # list_folders()
-    def test_list_folders(self, m):
-        register_uris({"group": ["list_folders"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            folders = self.group.list_folders()
-            folder_list = [folder for folder in folders]
-            self.assertEqual(len(folder_list), 2)
-            self.assertIsInstance(folder_list[0], Folder)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_folders()
     def test_get_folders(self, m):
         register_uris({"group": ["list_folders"]}, m)
@@ -475,19 +413,6 @@ class TestGroup(unittest.TestCase):
         name_str = "Test String"
         response = self.group.create_folder(name=name_str)
         self.assertIsInstance(response, Folder)
-
-    # list_tabs()
-    def test_list_tabs(self, m):
-        register_uris({"group": ["list_tabs"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            tabs = self.group.list_tabs()
-            tab_list = [tab for tab in tabs]
-            self.assertEqual(len(tab_list), 2)
-            self.assertIsInstance(tab_list[0], Tab)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_tabs()
     def test_get_tabs(self, m):
@@ -620,6 +545,72 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(content_export, ContentExport)
         self.assertTrue(hasattr(content_export, "export_type"))
 
+    # set_usage_rights()
+    def test_set_usage_rights(self, m):
+        register_uris({"group": ["set_usage_rights"]}, m)
+
+        usage_rights = self.group.set_usage_rights(
+            file_ids=[1, 2],
+            usage_rights={"use_justification": "fair_use", "license": "private"},
+        )
+
+        self.assertIsInstance(usage_rights, UsageRights)
+        self.assertEqual(usage_rights.use_justification, "fair_use")
+        self.assertEqual(usage_rights.message, "2 files updated")
+        self.assertEqual(usage_rights.license, "private")
+        self.assertEqual(usage_rights.file_ids, [1, 2])
+
+    # remove_usage_rights()
+    def test_remove_usage_rights(self, m):
+        register_uris({"group": ["remove_usage_rights"]}, m)
+
+        retval = self.group.remove_usage_rights(file_ids=[1, 2])
+
+        self.assertIsInstance(retval, dict)
+        self.assertIn("message", retval)
+        self.assertEqual(retval["file_ids"], [1, 2])
+        self.assertEqual(retval["message"], "2 files updated")
+
+    # get_licenses()
+    def test_get_licenses(self, m):
+        register_uris({"group": ["get_licenses"]}, m)
+
+        licenses = self.group.get_licenses()
+        self.assertIsInstance(licenses, PaginatedList)
+        licenses = list(licenses)
+
+        for lic in licenses:
+            self.assertIsInstance(lic, License)
+            self.assertTrue(hasattr(lic, "id"))
+            self.assertTrue(hasattr(lic, "name"))
+            self.assertTrue(hasattr(lic, "url"))
+
+        self.assertEqual(2, len(licenses))
+
+    # resolve_path()
+    def test_resolve_path(self, m):
+        register_uris({"group": ["resolve_path"]}, m)
+
+        full_path = "Folder_Level_1/Folder_Level_2/Folder_Level_3"
+        folders = self.group.resolve_path(full_path)
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 4)
+        self.assertIsInstance(folder_list[0], Folder)
+        folder_names = ("files/" + full_path).split("/")
+        for folder_name, folder in zip(folder_names, folders):
+            self.assertEqual(folder_name, folder.name)
+
+    # resolve_path() with null input
+    def test_resolve_path_null(self, m):
+        register_uris({"group": ["resolve_path_null"]}, m)
+
+        # test with null input
+        root_folder = self.group.resolve_path()
+        root_folder_list = [folder for folder in root_folder]
+        self.assertEqual(len(root_folder_list), 1)
+        self.assertIsInstance(root_folder_list[0], Folder)
+        self.assertEqual("files", root_folder_list[0].name)
+
 
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):
@@ -709,20 +700,6 @@ class TestGroupCategory(unittest.TestCase):
         self.assertIsInstance(response, dict)
         self.assertEqual(len(response), 0)
 
-    # list_groups()
-    def test_list_groups(self, m):
-        register_uris({"group": ["category_list_groups"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.group_category.list_groups()
-            group_list = [group for group in response]
-            self.assertEqual(len(group_list), 2)
-            self.assertIsInstance(group_list[0], Group)
-            self.assertTrue(hasattr(group_list[0], "id"))
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_groups()
     def test_get_groups(self, m):
         register_uris({"group": ["category_list_groups"]}, m)
@@ -732,22 +709,6 @@ class TestGroupCategory(unittest.TestCase):
         self.assertEqual(len(group_list), 2)
         self.assertIsInstance(group_list[0], Group)
         self.assertTrue(hasattr(group_list[0], "id"))
-
-    # list_users()
-    def test_list_users(self, m):
-        from canvasapi.user import User
-
-        register_uris({"group": ["category_list_users"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            response = self.group_category.list_users()
-            user_list = [user for user in response]
-            self.assertEqual(len(user_list), 4)
-            self.assertIsInstance(user_list[0], User)
-            self.assertTrue(hasattr(user_list[0], "user_id"))
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_users()
     def test_get_users(self, m):
@@ -763,8 +724,8 @@ class TestGroupCategory(unittest.TestCase):
 
     # assign_members()
     def test_assign_members(self, m):
-        from canvasapi.progress import Progress
         from canvasapi.paginated_list import PaginatedList
+        from canvasapi.progress import Progress
 
         requires = {
             "group": ["category_assign_members_true", "category_assign_members_false"]

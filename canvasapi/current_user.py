@@ -1,9 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import warnings
-
-from six import python_2_unicode_compatible
-
 from canvasapi.bookmark import Bookmark
 from canvasapi.course import Course
 from canvasapi.favorite import Favorite
@@ -13,7 +7,6 @@ from canvasapi.user import User
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class CurrentUser(User):
     def __init__(self, _requester):
         self._requester = _requester
@@ -108,7 +101,7 @@ class CurrentUser(User):
 
         return Bookmark(self._requester, response.json())
 
-    def get_bookmark(self, bookmark):
+    def get_bookmark(self, bookmark, **kwargs):
         """
         Return single Bookmark by id
 
@@ -125,7 +118,9 @@ class CurrentUser(User):
         bookmark_id = obj_or_id(bookmark, "bookmark", (Bookmark,))
 
         response = self._requester.request(
-            "GET", "users/self/bookmarks/{}".format(bookmark_id)
+            "GET",
+            "users/self/bookmarks/{}".format(bookmark_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Bookmark(self._requester, response.json())
 
@@ -201,49 +196,6 @@ class CurrentUser(User):
             "users/self/groups",
             _kwargs=combine_kwargs(**kwargs),
         )
-
-    def list_bookmarks(self, **kwargs):
-        """
-        List bookmarks that the current user can view or manage.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.current_user.CurrentUser.get_bookmarks` instead.
-
-        :calls: `GET /api/v1/users/self/bookmarks \
-        <https://canvas.instructure.com/doc/api/bookmarks.html#method.bookmarks/bookmarks.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.bookmark.Bookmark`
-        """
-        warnings.warn(
-            "`list_bookmarks` is being deprecated and will be removed in a "
-            "future version. Use `get_bookmarks` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_bookmarks(**kwargs)
-
-    def list_groups(self, **kwargs):
-        """
-        Return the list of active groups for the user.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.current_user.CurrentUser.get_groups` instead.
-
-        :calls: `GET /api/v1/users/self/groups \
-        <https://canvas.instructure.com/doc/api/groups.html#method.groups.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
-        """
-        warnings.warn(
-            "`list_groups` is being deprecated and will be removed in a "
-            "future version. Use `get_groups` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_groups(**kwargs)
 
     def reset_favorite_courses(self, **kwargs):
         """

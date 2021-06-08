@@ -1,0 +1,21 @@
+{
+	"graphql": {
+		"method": "POST",
+		"endpoint": "graphql",
+		"data": {
+			"term": {
+				"coursesConnection": {
+				  "nodes": [
+					{
+						"_id": "1",
+						"assignmentsConnection": {
+							"nodes": []
+						}
+					}
+					]
+				}
+			}
+		},
+		"status_code": 200
+	}
+}

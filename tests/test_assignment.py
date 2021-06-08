@@ -1,11 +1,16 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 import uuid
+from pathlib import Path
 
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.assignment import Assignment, AssignmentGroup, AssignmentOverride
+from canvasapi.assignment import (
+    Assignment,
+    AssignmentExtension,
+    AssignmentGroup,
+    AssignmentOverride,
+)
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.grade_change_log import GradeChangeEvent, GradeChangeLog
 from canvasapi.peer_review import PeerReview
@@ -13,7 +18,7 @@ from canvasapi.progress import Progress
 from canvasapi.submission import Submission
 from canvasapi.user import UserDisplay
 from tests import settings
-from tests.util import register_uris, cleanup_file
+from tests.util import cleanup_file, register_uris
 
 
 @requests_mock.Mocker()
@@ -26,6 +31,16 @@ class TestAssignment(unittest.TestCase):
 
             self.course = self.canvas.get_course(1)
             self.assignment = self.course.get_assignment(1)
+
+    def test__init__overrides(self, m):
+        register_uris({"assignment": ["get_assignment_with_overrides"]}, m)
+
+        assignment = self.course.get_assignment(1)
+
+        self.assertTrue(hasattr(assignment, "overrides"))
+        self.assertIsInstance(assignment.overrides, list)
+        self.assertEqual(len(assignment.overrides), 1)
+        self.assertIsInstance(assignment.overrides[0], AssignmentOverride)
 
     # create_override()
     def test_create_override(self, m):
@@ -147,6 +162,43 @@ class TestAssignment(unittest.TestCase):
         self.assertEqual(len(submission_list_by_id), 2)
         self.assertIsInstance(submission_list_by_id[0], Submission)
 
+    # set_extensions()
+    def test_set_extensions(self, m):
+        register_uris({"assignment": ["set_extensions"]}, m)
+
+        extension = self.assignment.set_extensions(
+            [{"user_id": 3, "extra_attempts": 2}, {"user_id": 2, "extra_attempts": 2}]
+        )
+
+        self.assertIsInstance(extension, list)
+        self.assertEqual(len(extension), 2)
+
+        self.assertIsInstance(extension[0], AssignmentExtension)
+        self.assertEqual(extension[0].user_id, 3)
+        self.assertTrue(hasattr(extension[0], "extra_attempts"))
+        self.assertEqual(extension[0].extra_attempts, 2)
+
+        self.assertIsInstance(extension[1], AssignmentExtension)
+        self.assertEqual(extension[1].user_id, 2)
+        self.assertTrue(hasattr(extension[1], "extra_attempts"))
+        self.assertEqual(extension[1].extra_attempts, 2)
+
+    def test_set_extensions_not_list(self, m):
+        with self.assertRaises(ValueError):
+            self.assignment.set_extensions({"user_id": 3, "exrra_attempts": 2})
+
+    def test_set_extensions_empty_list(self, m):
+        with self.assertRaises(ValueError):
+            self.assignment.set_extensions([])
+
+    def test_set_extensions_non_dicts(self, m):
+        with self.assertRaises(ValueError):
+            self.assignment.set_extensions([("user_id", 1), ("extra_attempts", 2)])
+
+    def test_set_extensions_missing_key(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.assignment.set_extensions([{"extra_attempts": 3}])
+
     # submit()
     def test_submit(self, m):
         register_uris({"assignment": ["submit"]}, m)
@@ -173,6 +225,24 @@ class TestAssignment(unittest.TestCase):
                 sub_type = "online_upload"
                 sub_dict = {"submission_type": sub_type}
                 submission = self.assignment.submit(sub_dict, file)
+
+            self.assertIsInstance(submission, Submission)
+            self.assertTrue(hasattr(submission, "submission_type"))
+            self.assertEqual(submission.submission_type, sub_type)
+
+        finally:
+            cleanup_file(filename)
+
+    def test_submit_file_pathlib(self, m):
+        register_uris({"assignment": ["submit", "upload", "upload_final"]}, m)
+
+        filename = Path("testfile_assignment_{}".format(uuid.uuid4().hex))
+        filename.write_bytes(b"test data")
+
+        try:
+            sub_type = "online_upload"
+            sub_dict = {"submission_type": sub_type}
+            submission = self.assignment.submit(sub_dict, filename)
 
             self.assertIsInstance(submission, Submission)
             self.assertTrue(hasattr(submission, "submission_type"))
@@ -252,6 +322,66 @@ class TestAssignment(unittest.TestCase):
             self.assertIn("url", response[1])
         finally:
             cleanup_file(filename)
+
+    # get_provisional_grades_status
+    def test_get_provisional_grades_status(self, m):
+        register_uris(
+            {"assignment": ["get_provisional_grades_status"], "user": ["get_by_id"]}, m
+        )
+        student_id = 1
+        user = self.canvas.get_user(student_id)
+        status = self.assignment.get_provisional_grades_status(user)
+        self.assertIsInstance(status, bool)
+        self.assertFalse(status)
+
+    # selected_provisional_grade
+    def test_selected_provisional_grade(self, m):
+        register_uris({"assignment": ["selected_provisional_grade"]}, m)
+        provisional_grade_id = 1
+        selected_provisional_grade = self.assignment.selected_provisional_grade(
+            provisional_grade_id
+        )
+        self.assertIsInstance(selected_provisional_grade, dict)
+        self.assertIn("assignment_id", selected_provisional_grade)
+
+    # publish_provisional_grades
+    def test_publish_provisional_grades(self, m):
+        register_uris({"assignment": ["publish_provisional_grades"]}, m)
+        publish = self.assignment.publish_provisional_grades()
+        self.assertIsInstance(publish, dict)
+        self.assertIn("message", publish)
+
+    # show_provisional_grades_for_student
+    def test_show_provisonal_grades_for_student(self, m):
+        register_uris(
+            {
+                "assignment": ["show_provisonal_grades_for_student"],
+                "user": ["get_by_id"],
+            },
+            m,
+        )
+        anonymous_id = 1
+        user = self.canvas.get_user(anonymous_id)
+        show_status = self.assignment.show_provisonal_grades_for_student(user)
+
+        self.assertIsInstance(show_status, bool)
+        self.assertFalse(show_status)
+
+
+@requests_mock.Mocker()
+class TestAssignmentExtension(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        self.extension = AssignmentExtension(
+            self.canvas._Canvas__requester,
+            {"assignment_id": 2, "user_id": 3, "extra_attempts": 2},
+        )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.extension)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()

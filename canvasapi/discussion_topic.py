@@ -1,15 +1,8 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import warnings
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class DiscussionTopic(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.id)
@@ -25,6 +18,13 @@ class DiscussionTopic(CanvasObject):
             return self.course_id
         elif hasattr(self, "group_id"):
             return self.group_id
+        elif hasattr(self, "context_code"):
+            if self.context_code.startswith("course_"):
+                self.course_id = self.context_code.split("_")[1]
+                return self.course_id
+            elif self.context_code.startswith("group_"):
+                self.group_id = self.context_code.split("_")[1]
+                return self.group_id
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
 
@@ -39,10 +39,15 @@ class DiscussionTopic(CanvasObject):
             return "course"
         elif hasattr(self, "group_id"):
             return "group"
+        elif hasattr(self, "context_code"):
+            if self.context_code.startswith("course"):
+                return "course"
+            elif self.context_code.startswith("group"):
+                return "group"
         else:
             raise ValueError("Discussion Topic does not have a course_id or group_id")
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Deletes the discussion topic. This will also delete the assignment.
 
@@ -60,6 +65,7 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return "deleted_at" in response.json()
 
@@ -98,17 +104,19 @@ class DiscussionTopic(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_parent(self):
+    def get_parent(self, **kwargs):
         """
         Return the object that spawned this discussion topic.
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """
-        from canvasapi.group import Group
         from canvasapi.course import Course
+        from canvasapi.group import Group
 
         response = self._requester.request(
-            "GET", "{}s/{}".format(self._parent_type, self._parent_id)
+            "GET",
+            "{}s/{}".format(self._parent_type, self._parent_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if self._parent_type == "group":
@@ -143,61 +151,7 @@ class DiscussionTopic(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def list_entries(self, ids, **kwargs):
-        """
-        Retrieve a paginated list of discussion entries, given a list
-        of ids. Entries will be returned in id order, smallest id first.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi. discussion_topic.DiscussionTopic.get_entries` instead.
-
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entry_list \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
-
-            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entry_list \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entry_list>`_
-
-        :param ids: A list of entry objects or IDs to retrieve.
-        :type ids: :class:`canvasapi.discussion_topic.DiscussionEntry`, or list or tuple of int
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.discussion_topic.DiscussionEntry`
-        """
-        warnings.warn(
-            "`list_entries` is being deprecated and will be removed in a "
-            "future version. Use `get_entries` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_entries(ids, **kwargs)
-
-    def list_topic_entries(self, **kwargs):
-        """
-        Retreive the top-level entries in a discussion topic.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.discussion_topic.DiscussionTopic.get_topic_entries` instead.
-
-        :calls: `GET /api/v1/courses/:course_id/discussion_topics/:topic_id/entries \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
-
-            or `GET /api/v1/groups/:group_id/discussion_topics/:topic_id/entries \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.entries>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.discussion_topic.DiscussionEntry`
-        """
-        warnings.warn(
-            "`list_topic_entries` is being deprecated and will be removed in "
-            "a future version. Use `get_topic_entries` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_topic_entries(**kwargs)
-
-    def mark_as_read(self):
+    def mark_as_read(self, **kwargs):
         """
         Mark the initial text of the discussion topic as read.
 
@@ -214,10 +168,11 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}/read".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
-    def mark_as_unread(self):
+    def mark_as_unread(self, **kwargs):
         """
         Mark the initial text of the discussion topic as unread.
 
@@ -234,6 +189,7 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}/read".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -307,7 +263,7 @@ class DiscussionTopic(CanvasObject):
         )
         return DiscussionEntry(self._requester, response_json)
 
-    def subscribe(self):
+    def subscribe(self, **kwargs):
         """
         Subscribe to a topic to receive notifications about new entries.
 
@@ -324,10 +280,11 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}/subscribed".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
-    def unsubscribe(self):
+    def unsubscribe(self, **kwargs):
         """
         Unsubscribe from a topic to stop receiving notifications about new entries.
 
@@ -344,6 +301,7 @@ class DiscussionTopic(CanvasObject):
             "{}s/{}/discussion_topics/{}/subscribed".format(
                 self._parent_type, self._parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -369,7 +327,6 @@ class DiscussionTopic(CanvasObject):
         return DiscussionTopic(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class DiscussionEntry(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.message, self.id)
@@ -426,7 +383,7 @@ class DiscussionEntry(CanvasObject):
         )
         return "deleted_at" in response.json()
 
-    def get_discussion(self):
+    def get_discussion(self, **kwargs):
         """
         Return the discussion topic object this entry is related to
 
@@ -440,6 +397,7 @@ class DiscussionEntry(CanvasObject):
                 self._discussion_parent_id,
                 self.discussion_id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -483,34 +441,7 @@ class DiscussionEntry(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def list_replies(self, **kwargs):
-        """
-        Retrieves the replies to a top-level entry in a discussion topic.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi. discussion_topic.DiscussionEntry.get_replies` instead.
-
-        :calls: `GET
-            /api/v1/courses/:course_id/discussion_topics/:topic_id/entries/:entry_id/replies \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
-
-            or `GET
-            /api/v1/groups/:group_id/discussion_topics/:topic_id/entries/:entry_id/replies \
-            <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics_api.replies>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.discussion_topic.DiscussionEntry`
-        """
-        warnings.warn(
-            "`list_replies` is being deprecated and will be removed in a "
-            "future version. Use `get_replies` instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_replies(**kwargs)
-
-    def mark_as_read(self):
+    def mark_as_read(self, **kwargs):
         """
         Mark a discussion entry as read.
 
@@ -530,10 +461,11 @@ class DiscussionEntry(CanvasObject):
                 self.discussion_id,
                 self.id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
-    def mark_as_unread(self):
+    def mark_as_unread(self, **kwargs):
         """
         Mark a discussion entry as unread.
 
@@ -555,6 +487,7 @@ class DiscussionEntry(CanvasObject):
                 self.discussion_id,
                 self.id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 

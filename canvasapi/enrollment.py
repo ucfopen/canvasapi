@@ -1,16 +1,12 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.util import combine_kwargs
 
 
-@python_2_unicode_compatible
 class Enrollment(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.type, self.id)
 
-    def deactivate(self, task):
+    def deactivate(self, task, **kwargs):
         """
         Delete, conclude, or deactivate an enrollment.
 
@@ -33,14 +29,16 @@ class Enrollment(CanvasObject):
                 )
             )
 
+        kwargs["task"] = task
+
         response = self._requester.request(
             "DELETE",
             "courses/{}/enrollments/{}".format(self.course_id, self.id),
-            task=task,
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Enrollment(self._requester, response.json())
 
-    def reactivate(self):
+    def reactivate(self, **kwargs):
         """
         Activate an inactive enrollment.
 
@@ -52,5 +50,6 @@ class Enrollment(CanvasObject):
         response = self._requester.request(
             "PUT",
             "courses/{}/enrollments/{}/reactivate".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Enrollment(self._requester, response.json())

@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
@@ -17,38 +16,133 @@ class TestFavorite(unittest.TestCase):
         with requests_mock.Mocker() as m:
             requires = {
                 "current_user": [
-                    "add_favorite_course",
-                    "add_favorite_group",
                     "get_by_id",
                 ]
             }
             register_uris(requires, m)
 
             self.user = self.canvas.get_current_user()
-            self.favorite_course = self.user.add_favorite_course(1)
-            self.favorite_group = self.user.add_favorite_group(1)
 
     # __str__()
-    def test__str__(self, m):
-        string = str(self.favorite_course)
+    def test_uncapitalized___str__(self, m):
+
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_course",
+                    "add_favorite_group",
+                ]
+            },
+            m,
+        )
+
+        favorite_course = self.user.add_favorite_course(1)
+        favorite_group = self.user.add_favorite_group(1)
+
+        string = str(favorite_course)
         self.assertIsInstance(string, str)
 
-        string = str(self.favorite_group)
+        string = str(favorite_group)
+        self.assertIsInstance(string, str)
+
+    def test_capitalized___str__(self, m):
+
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_course_cap_context_type",
+                    "add_favorite_group_cap_context_type",
+                ]
+            },
+            m,
+        )
+
+        favorite_course = self.user.add_favorite_course(1)
+        favorite_group = self.user.add_favorite_group(1)
+
+        string = str(favorite_course)
+        self.assertIsInstance(string, str)
+
+        string = str(favorite_group)
         self.assertIsInstance(string, str)
 
     # remove()
-    def test_remove_favorite_course(self, m):
-        register_uris({"current_user": ["remove_favorite_course"]}, m)
+    def test_remove_uncapitalized_favorite_course(self, m):
 
-        evnt = self.favorite_course.remove()
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_course",
+                    "remove_favorite_course",
+                ]
+            },
+            m,
+        )
+
+        favorite_course = self.user.add_favorite_course(1)
+
+        evnt = favorite_course.remove()
+
         self.assertIsInstance(evnt, Favorite)
         self.assertEqual(evnt.context_type, "course")
         self.assertEqual(evnt.context_id, 1)
 
-    def test_remove_favorite_group(self, m):
-        register_uris({"current_user": ["remove_favorite_group"]}, m)
+    def test_remove_uncapitalized_favorite_group(self, m):
 
-        evnt = self.favorite_group.remove()
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_group",
+                    "remove_favorite_group",
+                ]
+            },
+            m,
+        )
+
+        favorite_group = self.user.add_favorite_group(1)
+
+        evnt = favorite_group.remove()
+
         self.assertIsInstance(evnt, Favorite)
         self.assertEqual(evnt.context_type, "group")
+        self.assertEqual(evnt.context_id, 1)
+
+    def test_remove_capitalized_favorite_course(self, m):
+
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_course_cap_context_type",
+                    "remove_favorite_course_cap_context_type",
+                ]
+            },
+            m,
+        )
+
+        favorite_course = self.user.add_favorite_course(1)
+
+        evnt = favorite_course.remove()
+
+        self.assertIsInstance(evnt, Favorite)
+        self.assertEqual(evnt.context_type, "Course")
+        self.assertEqual(evnt.context_id, 1)
+
+    def test_remove_capitalized_favorite_group(self, m):
+
+        register_uris(
+            {
+                "current_user": [
+                    "add_favorite_group_cap_context_type",
+                    "remove_favorite_group_cap_context_type",
+                ]
+            },
+            m,
+        )
+
+        favorite_group = self.user.add_favorite_group(1)
+
+        evnt = favorite_group.remove()
+
+        self.assertIsInstance(evnt, Favorite)
+        self.assertEqual(evnt.context_type, "Group")
         self.assertEqual(evnt.context_id, 1)

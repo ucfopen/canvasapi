@@ -1,4 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
 
 import requests_mock
@@ -192,11 +191,11 @@ class TestMigrationIssue(unittest.TestCase):
             self.content_migration_user = self.user.get_content_migration(1)
 
             self.migration_issue = self.content_migration.get_migration_issue(1)
-            self.migration_issue_course = self.content_migration_course.get_migration_issue(
-                1
+            self.migration_issue_course = (
+                self.content_migration_course.get_migration_issue(1)
             )
-            self.migration_issue_group = self.content_migration_group.get_migration_issue(
-                1
+            self.migration_issue_group = (
+                self.content_migration_group.get_migration_issue(1)
             )
             self.migration_issue_user = self.content_migration_user.get_migration_issue(
                 1

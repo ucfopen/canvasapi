@@ -22,6 +22,7 @@ Class Reference
     course-ref
     course-epub-export-ref
     current-user-ref
+    custom-gradebook-columns-ref
     discussion-entry-ref
     discussion-topic-ref
     enrollment-ref
@@ -34,10 +35,12 @@ Class Reference
     grading-period-ref
     group-ref
     login-ref
+    license-ref
     module-ref
     outcome-ref
     outcome-import-ref
     page-ref
+    pairing-code-ref
     planner-ref
     poll-ref
     poll-choice-ref
@@ -52,5 +55,7 @@ Class Reference
     sis-import-ref
     submission-ref
     tab-ref
+    todo-ref
     upload-ref
     user-ref
+    usage-rights-ref

@@ -1,17 +1,12 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.util import combine_kwargs
 
 
-@python_2_unicode_compatible
 class Bookmark(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this bookmark.
 
@@ -21,7 +16,9 @@ class Bookmark(CanvasObject):
         :rtype: :class:`canvasapi.bookmark.Bookmark`
         """
         response = self._requester.request(
-            "DELETE", "users/self/bookmarks/{}".format(self.id)
+            "DELETE",
+            "users/self/bookmarks/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Bookmark(self._requester, response.json())
 

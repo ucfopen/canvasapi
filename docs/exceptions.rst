@@ -17,9 +17,13 @@ Quick Guide
 +-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
 | :class:`~canvasapi.exceptions.Forbidden`            | 403             | Canvas has denied access to the resource for this user.                         |
 +-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.RateLimitExceeded`    | 403             | Canvas is throttling this request. Try again later.                             |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
 | :class:`~canvasapi.exceptions.ResourceDoesNotExist` | 404             | Canvas could not locate the requested resource.                                 |
 +-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
 | :class:`~canvasapi.exceptions.Conflict`             | 409             | Canvas had a conflict with an existing resource.                                |
++-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
+| :class:`~canvasapi.exceptions.UnprocessableEntity`  | 422             | Canvas was unable to process the request.                                       |
 +-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
 | :class:`~canvasapi.exceptions.RequiredFieldMissing` | N/A             | A required keyword argument was not included.                                   |
 +-----------------------------------------------------+-----------------+---------------------------------------------------------------------------------+
@@ -79,7 +83,17 @@ Class Reference
 
     The :class:`~canvasapi.exceptions.Forbidden` exception is thrown when Canvas returns an HTTP 403 error.
 
+.. autoclass:: canvasapi.exceptions.RateLimitExceeded
+    :members:
+
+    The :class:`~canvasapi.exceptions.RateLimitExceeded` exception is thrown when Canvas returns an HTTP 403 error that includes the body "403 Forbidden (Rate Limit Exceeded)". It will include the value of the ``X-Rate-Limit-Remaining`` header (if available) for reference.
+
 .. autoclass:: canvasapi.exceptions.Conflict
     :members:
 
     The :class:`~canvasapi.exceptions.Conflict` exception is thrown when Canvas returns an HTTP 409 error.
+
+.. autoclass:: canvasapi.exceptions.UnprocessableEntity
+    :members:
+
+    The :class:`~canvasapi.exceptions.UnprocessableEntity` exception is thrown when Canvas returns an HTTP 422 error.

@@ -1,31 +1,29 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import unittest
 import warnings
 from datetime import datetime
 
 import pytz
 import requests_mock
-from six import text_type
 
 from canvasapi import Canvas
 from canvasapi.account import Account
 from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
+from canvasapi.comm_message import CommMessage
 from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
-from canvasapi.exceptions import ResourceDoesNotExist
 from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.poll import Poll
 from canvasapi.progress import Progress
 from canvasapi.section import Section
+from canvasapi.todo import Todo
 from canvasapi.user import User
-from canvasapi.comm_message import CommMessage
 from tests import settings
 from tests.util import register_uris
 
@@ -37,9 +35,11 @@ class TestCanvas(unittest.TestCase):
 
     # Canvas()
     def test_init_deprecate_url_contains_version(self, m):
-        with warnings.catch_warnings(record=True) as w:
+        with self.assertRaises(
+            ValueError,
+            msg="`base_url` should not specify an API version. Remove trailing /api/v1/",
+        ):
             Canvas(settings.BASE_URL_WITH_VERSION, settings.API_KEY)
-            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
 
     def test_init_warns_when_url_is_http(self, m):
         with warnings.catch_warnings(record=True):
@@ -75,6 +75,12 @@ class TestCanvas(unittest.TestCase):
         client = Canvas(settings.BASE_URL, " 12345 ")
         self.assertEqual(client._Canvas__requester.access_token, "12345")
 
+    def test_init_strips_extra_spaces_in_base_url(self, m):
+        client = Canvas(settings.BASE_URL_WITH_EXTRA_SPACES, "12345")
+        self.assertEqual(
+            client._Canvas__requester.base_url, settings.BASE_URL_WITH_VERSION
+        )
+
     # create_account()
     def test_create_account(self, m):
         register_uris({"account": ["create"]}, m)
@@ -87,6 +93,25 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(account, Account)
         self.assertTrue(hasattr(account, "name"))
         self.assertEqual(account.name, name)
+
+    # create_poll()
+    def test_create_poll(self, m):
+        register_uris({"poll": ["create_poll"]}, m)
+
+        new_poll_q = self.canvas.create_poll([{"question": "Is this a question?"}])
+        self.assertIsInstance(new_poll_q, Poll)
+        self.assertTrue(hasattr(new_poll_q, "question"))
+
+        new_poll_q_d = self.canvas.create_poll(
+            [{"question": "Is this a question?"}, {"description": "This is a test."}]
+        )
+        self.assertIsInstance(new_poll_q_d, Poll)
+        self.assertTrue(hasattr(new_poll_q_d, "question"))
+        self.assertTrue(hasattr(new_poll_q_d, "description"))
+
+    def test_create_poll_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.create_poll(polls={})
 
     # get_account()
     def test_get_account(self, m):
@@ -161,7 +186,7 @@ class TestCanvas(unittest.TestCase):
         course = self.canvas.get_course(2)
 
         self.assertTrue(hasattr(course, "start_at"))
-        self.assertIsInstance(course.start_at, text_type)
+        self.assertIsInstance(course.start_at, str)
         self.assertTrue(hasattr(course, "start_at_date"))
         self.assertIsInstance(course.start_at_date, datetime)
         self.assertEqual(course.start_at_date.tzinfo, pytz.utc)
@@ -236,8 +261,9 @@ class TestCanvas(unittest.TestCase):
         register_uris({"user": ["todo_items"]}, m)
 
         todo_items = self.canvas.get_todo_items()
+        todo_list = [todo for todo in todo_items]
 
-        self.assertIsInstance(todo_items, list)
+        self.assertIsInstance(todo_list[0], Todo)
 
     # get_upcoming_events()
     def test_get_upcoming_events(self, m):
@@ -465,18 +491,18 @@ class TestCanvas(unittest.TestCase):
     def test_conversations_batch_updated_fail_on_event(self, m):
         conversation_ids = [1, 2]
         this_event = "this doesn't work"
-        result = self.canvas.conversations_batch_update(
-            event=this_event, conversation_ids=conversation_ids
-        )
-        self.assertIsInstance(result, ValueError)
+        with self.assertRaises(ValueError):
+            self.canvas.conversations_batch_update(
+                event=this_event, conversation_ids=conversation_ids
+            )
 
     def test_conversations_batch_updated_fail_on_ids(self, m):
         conversation_ids = [None] * 501
         this_event = "mark_as_read"
-        result = self.canvas.conversations_batch_update(
-            event=this_event, conversation_ids=conversation_ids
-        )
-        self.assertIsInstance(result, ValueError)
+        with self.assertRaises(ValueError):
+            self.canvas.conversations_batch_update(
+                event=this_event, conversation_ids=conversation_ids
+            )
 
     # create_calendar_event()
     def test_create_calendar_event(self, m):
@@ -492,18 +518,6 @@ class TestCanvas(unittest.TestCase):
     def test_create_calendar_event_fail(self, m):
         with self.assertRaises(RequiredFieldMissing):
             self.canvas.create_calendar_event({})
-
-    # list_calendar_events()
-    def test_list_calendar_events(self, m):
-        register_uris({"calendar_event": ["list_calendar_events"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            cal_events = self.canvas.list_calendar_events()
-            cal_event_list = [cal_event for cal_event in cal_events]
-            self.assertEqual(len(cal_event_list), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_calendar_events()
     def test_get_calendar_events(self, m):
@@ -549,18 +563,6 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(cal_event.title, "Test Reservation")
         self.assertEqual(cal_event.user, 777)
 
-    # list_appointment_groups()
-    def test_list_appointment_groups(self, m):
-        register_uris({"appointment_group": ["list_appointment_groups"]}, m)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            appt_groups = self.canvas.list_appointment_groups()
-            appt_groups_list = [appt_group for appt_group in appt_groups]
-            self.assertEqual(len(appt_groups_list), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_appointment_groups()
     def test_get_appointment_groups(self, m):
         register_uris({"appointment_group": ["list_appointment_groups"]}, m)
@@ -603,35 +605,6 @@ class TestCanvas(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.canvas.create_appointment_group({"context_codes": "course_123"})
 
-    # list_user_participants()
-    def test_list_user_participants(self, m):
-        register_uris(
-            {
-                "appointment_group": [
-                    "get_appointment_group_222",
-                    "list_user_participants",
-                ]
-            },
-            m,
-        )
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            users_by_id = self.canvas.list_user_participants(222)
-            users_list_by_id = [user for user in users_by_id]
-            self.assertEqual(len(users_list_by_id), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            appointment_group_for_obj = self.canvas.get_appointment_group(222)
-            users_by_id = self.canvas.list_user_participants(appointment_group_for_obj)
-            users_list_by_id = [user for user in users_by_id]
-            self.assertEqual(len(users_list_by_id), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
     # get_user_participants()
     def test_get_user_participants(self, m):
         register_uris(
@@ -652,37 +625,6 @@ class TestCanvas(unittest.TestCase):
         users_by_id = self.canvas.get_user_participants(appointment_group_for_obj)
         users_get_by_id = [user for user in users_by_id]
         self.assertEqual(len(users_get_by_id), 2)
-
-    # list_group_participants()
-    def test_list_group_participants(self, m):
-        register_uris(
-            {
-                "appointment_group": [
-                    "get_appointment_group_222",
-                    "list_group_participants",
-                ]
-            },
-            m,
-        )
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            groups_by_id = self.canvas.list_group_participants(222)
-            groups_list_by_id = [group for group in groups_by_id]
-            self.assertEqual(len(groups_list_by_id), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
-
-        with warnings.catch_warnings(record=True) as warning_list:
-            appointment_group_for_obj = self.canvas.get_appointment_group(222)
-            groups_by_obj = self.canvas.list_group_participants(
-                appointment_group_for_obj
-            )
-            groups_list_by_obj = [group for group in groups_by_obj]
-            self.assertEqual(len(groups_list_by_obj), 2)
-
-            self.assertEqual(len(warning_list), 1)
-            self.assertEqual(warning_list[-1].category, DeprecationWarning)
 
     # get_group_participants()
     def test_get_group_participants(self, m):
@@ -782,13 +724,60 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(progress.id, 1)
 
     # get_announcements()
-    def test_get_announcements(self, m):
+    def test_get_single_course_announcements(self, m):
         register_uris({"announcements": ["list_announcements"]}, m)
-        announcements = self.canvas.get_announcements()
+        announcements = self.canvas.get_announcements([1])
         announcement_list = [announcement for announcement in announcements]
+
         self.assertIsInstance(announcements, PaginatedList)
         self.assertIsInstance(announcement_list[0], DiscussionTopic)
-        self.assertEqual(len(announcement_list), 2)
+        self.assertEqual(len(announcement_list), 4)
+
+    def test_get_course_announcements_from_object(self, m):
+        register_uris(
+            {"course": ["get_by_id"], "announcements": ["list_announcements"]}, m
+        )
+        course = self.canvas.get_course(1)
+        announcements = self.canvas.get_announcements([course])
+
+        self.assertIsInstance(announcements, PaginatedList)
+
+    def test_get_course_announcements_from_mixed_list(self, m):
+        register_uris(
+            {"course": ["get_by_id"], "announcements": ["list_announcements"]}, m
+        )
+        course = self.canvas.get_course(1)
+        course_ids = [course, 2]
+        announcements = self.canvas.get_announcements(course_ids)
+
+        self.assertIsInstance(announcements, PaginatedList)
+
+    def test_get_announcements_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.get_announcements([])
+        with self.assertRaises(RequiredFieldMissing):
+            self.canvas.get_announcements(1)
+
+    def test_multiple_course_announcements(self, m):
+        register_uris({"announcements": ["list_announcements"]}, m)
+        announcements = self.canvas.get_announcements([1, 2])
+        announcement_list = [announcement for announcement in announcements]
+
+        self.assertEqual(announcement_list[1].context_code, "course_1")
+        self.assertEqual(announcement_list[1]._parent_type, "course")
+        self.assertEqual(announcement_list[1]._parent_id, "1")
+
+        self.assertEqual(announcement_list[2].context_code, "group_1")
+        self.assertEqual(announcement_list[2]._parent_type, "group")
+        self.assertEqual(announcement_list[2]._parent_id, "1")
+
+    def test_course_announcements_legacy(self, m):
+        register_uris({"announcements": ["list_announcements"]}, m)
+        announcements = self.canvas.get_announcements(context_codes=["course_1"])
+
+        self.assertEqual(announcements[0].context_code, "course_1")
+        self.assertEqual(announcements[0]._parent_type, "course")
+        self.assertEqual(announcements[0]._parent_id, "1")
 
     # get_epub_exports()
     def test_get_epub_exports(self, m):
@@ -832,3 +821,34 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(comm_messages[0].subject, "example subject line")
         self.assertEqual(comm_messages[1].id, 2)
         self.assertEqual(comm_messages[1].subject, "My Subject")
+
+    def test_graphql(self, m):
+        register_uris({"graphql": ["graphql"]}, m, base_url=settings.BASE_URL_GRAPHQL)
+        query = """
+        query MyQuery($termid: ID!) {
+            term(id: $termid) {
+                coursesConnection {
+                    nodes {
+                        _id
+                        assignmentsConnection {
+                        nodes {
+                            name
+                            _id
+                            expectsExternalSubmission
+                        }
+                        }
+                    }
+                    edges {
+                        node {
+                        id
+                        }
+                    }
+                }
+            }
+        }
+        """
+        variables = {"termid": 125}
+
+        graphql_response = self.canvas.graphql(query=query, variables=variables)
+        # Just a super simple check right now that it gets back a dict respose
+        self.assertIsInstance(graphql_response, dict)

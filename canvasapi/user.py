@@ -1,25 +1,22 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible, string_types
-import warnings
-
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
 from canvasapi.grade_change_log import GradeChangeLog
+from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.upload import Uploader
+from canvasapi.pairing_code import PairingCode
+from canvasapi.upload import FileOrPathLike, Uploader
+from canvasapi.usage_rights import UsageRights
 from canvasapi.util import combine_kwargs, obj_or_id, obj_or_str
 
 
-@python_2_unicode_compatible
 class User(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
-    def add_observee(self, observee_id):
+    def add_observee(self, observee_id, **kwargs):
         """
         Registers a user as being observed by the given user.
 
@@ -32,7 +29,9 @@ class User(CanvasObject):
         """
 
         response = self._requester.request(
-            "PUT", "users/{}/observees/{}".format(self.id, observee_id)
+            "PUT",
+            "users/{}/observees/{}".format(self.id, observee_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
 
@@ -86,7 +85,7 @@ class User(CanvasObject):
 
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
-        elif isinstance(migration_type, string_types):
+        elif isinstance(migration_type, str):
             kwargs["migration_type"] = migration_type
         else:
             raise TypeError("Parameter migration_type must be of type Migrator or str")
@@ -120,6 +119,24 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return Folder(self._requester, response.json())
+
+    def create_pairing_code(self, **kwargs):
+        """
+        Create a pairing code for this user.
+
+        :calls: `POST /api/v1/users/:user_id/observer_pairing_codes \
+            <https://canvas.instructure.com/doc/api/user_observees.html#method.observer_pairing_codes_api.create>`_
+
+        :rtype: :class:`canvasapi.pairing_code.PairingCode`
+        """
+
+        response = self._requester.request(
+            "POST",
+            "users/{}/observer_pairing_codes".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return PairingCode(self._requester, response.json())
 
     def edit(self, **kwargs):
         """
@@ -206,7 +223,7 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_avatars(self):
+    def get_avatars(self, **kwargs):
         """
         Retrieve the possible user avatar options that can be set with the user update endpoint.
 
@@ -219,7 +236,11 @@ class User(CanvasObject):
         from canvasapi.avatar import Avatar
 
         return PaginatedList(
-            Avatar, self._requester, "GET", "users/{}/avatars".format(self.id)
+            Avatar,
+            self._requester,
+            "GET",
+            "users/{}/avatars".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_calendar_events_for_user(self, **kwargs):
@@ -261,7 +282,7 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_color(self, asset_string):
+    def get_color(self, asset_string, **kwargs):
         """
         Return the custom colors that have been saved by this user for a given context.
 
@@ -275,11 +296,13 @@ class User(CanvasObject):
         :rtype: dict
         """
         response = self._requester.request(
-            "GET", "users/{}/colors/{}".format(self.id, asset_string)
+            "GET",
+            "users/{}/colors/{}".format(self.id, asset_string),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_colors(self):
+    def get_colors(self, **kwargs):
         """
         Return all custom colors that have been saved by this user.
 
@@ -288,7 +311,11 @@ class User(CanvasObject):
 
         :rtype: dict
         """
-        response = self._requester.request("GET", "users/{}/colors".format(self.id))
+        response = self._requester.request(
+            "GET",
+            "users/{}/colors".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
         return response.json()
 
     def get_communication_channels(self, **kwargs):
@@ -526,6 +553,24 @@ class User(CanvasObject):
         )
         return File(self._requester, response.json())
 
+    def get_file_quota(self, **kwargs):
+        """
+        Returns the total and used storage quota for the user.
+
+        :calls: `GET /api/v1/users/:user_id/files/quota \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_quota>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "GET",
+            "users/{}/files/quota".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def get_files(self, **kwargs):
         """
         Returns the paginated list of files for the user.
@@ -546,7 +591,7 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_folder(self, folder):
+    def get_folder(self, folder, **kwargs):
         """
         Returns the details for a user's folder
 
@@ -563,7 +608,9 @@ class User(CanvasObject):
         folder_id = obj_or_id(folder, "folder", (Folder,))
 
         response = self._requester.request(
-            "GET", "users/{}/folders/{}".format(self.id, folder_id)
+            "GET",
+            "users/{}/folders/{}".format(self.id, folder_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Folder(self._requester, response.json())
 
@@ -628,6 +675,26 @@ class User(CanvasObject):
 
         return GradeChangeLog(self._requester, data)
 
+    def get_licenses(self, **kwargs):
+        """
+        Returns a paginated list of the licenses that can be applied to the
+        files under the user scope
+
+        :calls: `GET /api/v1/users/:user_id/content_licenses \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.licenses>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.license.License`
+        """
+
+        return PaginatedList(
+            License,
+            self._requester,
+            "GET",
+            "users/{}/content_licenses".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_migration_systems(self, **kwargs):
         """
         Return a list of migration systems.
@@ -648,7 +715,7 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_missing_submissions(self):
+    def get_missing_submissions(self, **kwargs):
         """
         Retrieve all past-due assignments for which the student does not
         have a submission.
@@ -666,6 +733,7 @@ class User(CanvasObject):
             self._requester,
             "GET",
             "users/{}/missing_submissions".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_observees(self, **kwargs):
@@ -760,143 +828,7 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def list_calendar_events_for_user(self, **kwargs):
-        """
-        List calendar events that the current user can view or manage.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.user.User.get_calendar_events_for_user` instead.
-
-        :calls: `GET /api/v1/users/:user_id/calendar_events \
-        <https://canvas.instructure.com/doc/api/calendar_events.html#method.calendar_events_api.user_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.calendar_event.CalendarEvent`
-        """
-        warnings.warn(
-            "`list_calendar_events_for_user`"
-            " is being deprecated and will be removed in a future version."
-            " Use `get_calendar_events_for_user` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_calendar_events_for_user(**kwargs)
-
-    def list_communication_channels(self, **kwargs):
-        """
-        List communication channels for the specified user, sorted by
-        position.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.user.User.get_communication_channels` instead.
-
-        :calls: `GET /api/v1/users/:user_id/communication_channels \
-        <https://canvas.instructure.com/doc/api/communication_channels.html#method.communication_channels.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.communication_channel.CommunicationChannel`
-        """
-        warnings.warn(
-            "`list_communication_channels`"
-            " is being deprecated and will be removed in a future version."
-            " Use `get_communication_channels` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_communication_channels(**kwargs)
-
-    def list_files(self, **kwargs):
-        """
-        Returns the paginated list of files for the user.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.user.User.get_files` instead.
-
-        :calls: `GET /api/v1/users/:user_id/files \
-            <https://canvas.instructure.com/doc/api/files.html#method.files.api_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.file.File`
-        """
-        warnings.warn(
-            "`list_files` is being deprecated and will be removed in a future "
-            "version. Use `get_files` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_files(**kwargs)
-
-    def list_folders(self, **kwargs):
-        """
-        Returns the paginated list of all folders for the given user. This will be returned as a
-        flat list containing all subfolders as well.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.user.User.get_folders` instead.
-
-        :calls: `GET /api/v1/users/:user_id/folders \
-        <https://canvas.instructure.com/doc/api/files.html#method.folders.list_all_folders>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.folder.Folder`
-        """
-        warnings.warn(
-            "`list_folders` is being deprecated and will be removed in a "
-            "future version. Use `get_folders` instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_folders(**kwargs)
-
-    def list_observees(self, **kwargs):
-        """
-        List the users that the given user is observing
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.user.User.get_observees` instead.
-
-        :calls:  `GET /api/v1/users/:user_id/observees \
-        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.user.User`
-        """
-        warnings.warn(
-            "`list_observees` is being deprecated and will be removed in a "
-            "future version. Use `get_observees` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_observees(**kwargs)
-
-    def list_user_logins(self, **kwargs):
-        """
-        Given a user ID, return that user's logins for the given account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.user.User.get_user_logins` instead.
-
-        :calls: `GET /api/v1/users/:user_id/logins \
-        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.login.Login`
-        """
-        warnings.warn(
-            "`list_user_logins` is being deprecated and will be removed in a future version."
-            " Use `get_user_logins` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_user_logins(**kwargs)
-
-    def merge_into(self, destination_user):
+    def merge_into(self, destination_user, **kwargs):
         """
         Merge this user into another user.
 
@@ -911,12 +843,14 @@ class User(CanvasObject):
         dest_user_id = obj_or_id(destination_user, "destination_user", (User,))
 
         response = self._requester.request(
-            "PUT", "users/{}/merge_into/{}".format(self.id, dest_user_id)
+            "PUT",
+            "users/{}/merge_into/{}".format(self.id, dest_user_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         super(User, self).set_attributes(response.json())
         return self
 
-    def remove_observee(self, observee_id):
+    def remove_observee(self, observee_id, **kwargs):
         """
         Unregisters a user as being observed by the given user.
 
@@ -929,11 +863,82 @@ class User(CanvasObject):
         """
 
         response = self._requester.request(
-            "DELETE", "users/{}/observees/{}".format(self.id, observee_id)
+            "DELETE",
+            "users/{}/observees/{}".format(self.id, observee_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
 
-    def show_observee(self, observee_id):
+    def remove_usage_rights(self, **kwargs):
+        """
+        Changes the usage rights for specified files that are under the user scope
+
+        :calls: `DELETE /api/v1/users/:user_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.remove_usage_rights>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "DELETE",
+            "users/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
+    def resolve_path(self, full_path=None, **kwargs):
+        """
+        Returns the paginated list of all of the folders in the given
+        path starting at the user root folder. Returns root folder if called
+        with no arguments.
+
+        :calls: `GET /api/v1/users/:user_id/folders/by_path/*full_path \
+        <https://canvas.instructure.com/doc/api/files.html#method.folders.resolve_path>`_
+
+        :param full_path: Full path to resolve, relative to user root.
+        :type full_path: string
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.folder.Folder`
+        """
+
+        if full_path:
+            return PaginatedList(
+                Folder,
+                self._requester,
+                "GET",
+                "users/{0}/folders/by_path/{1}".format(self.id, full_path),
+                _kwargs=combine_kwargs(**kwargs),
+            )
+        else:
+            return PaginatedList(
+                Folder,
+                self._requester,
+                "GET",
+                "users/{0}/folders/by_path".format(self.id),
+                _kwargs=combine_kwargs(**kwargs),
+            )
+
+    def set_usage_rights(self, **kwargs):
+        """
+        Changes the usage rights for specified files that are under the user scope
+
+        :calls: `PUT /api/v1/users/:user_id/usage_rights \
+        <https://canvas.instructure.com/doc/api/files.html#method.usage_rights.set_usage_rights>`_
+
+        :rtype: :class:`canvasapi.usage_rights.UsageRights`
+        """
+
+        response = self._requester.request(
+            "PUT",
+            "users/{}/usage_rights".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return UsageRights(self._requester, response.json())
+
+    def show_observee(self, observee_id, **kwargs):
         """
         Gets information about an observed user.
 
@@ -946,11 +951,13 @@ class User(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "users/{}/observees/{}".format(self.id, observee_id)
+            "GET",
+            "users/{}/observees/{}".format(self.id, observee_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
 
-    def update_color(self, asset_string, hexcode):
+    def update_color(self, asset_string, hexcode, **kwargs):
         """
         Update a custom color for this user for a given context.
 
@@ -968,8 +975,11 @@ class User(CanvasObject):
         :type hexcode: str
         :rtype: dict
         """
+        kwargs["hexcode"] = hexcode
         response = self._requester.request(
-            "PUT", "users/{}/colors/{}".format(self.id, asset_string), hexcode=hexcode
+            "PUT",
+            "users/{}/colors/{}".format(self.id, asset_string),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
@@ -987,7 +997,7 @@ class User(CanvasObject):
         )
         return response.json()
 
-    def upload(self, file, **kwargs):
+    def upload(self, file: FileOrPathLike, **kwargs):
         """
         Upload a file for a user.
 
@@ -1009,7 +1019,6 @@ class User(CanvasObject):
         ).start()
 
 
-@python_2_unicode_compatible
 class UserDisplay(CanvasObject):
     def __str__(self):
         return "{}".format(self.display_name)

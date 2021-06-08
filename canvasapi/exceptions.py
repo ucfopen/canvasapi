@@ -1,9 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible, text_type
-
-
-@python_2_unicode_compatible
 class CanvasException(Exception):  # pragma: no cover
     """
     Base class for all errors returned by the Canvas API.
@@ -22,7 +16,7 @@ class CanvasException(Exception):  # pragma: no cover
             self.message = message
 
     def __str__(self):
-        return text_type(self.message)
+        return str(self.message)
 
 
 class BadRequest(CanvasException):
@@ -61,7 +55,22 @@ class Forbidden(CanvasException):
     pass
 
 
+class RateLimitExceeded(Forbidden):
+    """
+    Canvas has recieved to many requests from this access token and is
+    throttling this request. Try again later.
+    """
+
+    pass
+
+
 class Conflict(CanvasException):
     """Canvas had a conflict with an existing resource."""
+
+    pass
+
+
+class UnprocessableEntity(CanvasException):
+    """Canvas was unable to process the entity."""
 
     pass

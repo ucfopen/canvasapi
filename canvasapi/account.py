@@ -1,14 +1,8 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-import warnings
-
-from six import python_2_unicode_compatible, string_types
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
-from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
@@ -16,7 +10,6 @@ from canvasapi.sis_import import SisImport
 from canvasapi.util import combine_kwargs, file_or_path, obj_or_id, obj_or_str
 
 
-@python_2_unicode_compatible
 class Account(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
@@ -115,7 +108,7 @@ class Account(CanvasObject):
 
         return GradingStandard(self._requester, response.json())
 
-    def close_notification_for_user(self, user, notification):
+    def close_notification_for_user(self, user, notification, **kwargs):
         """
         If the user no long wants to see a notification, it can be
         excused with this call.
@@ -140,6 +133,7 @@ class Account(CanvasObject):
             "accounts/{}/users/{}/account_notifications/{}".format(
                 self.id, user_id, notif_id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return AccountNotification(self._requester, response.json())
 
@@ -199,7 +193,7 @@ class Account(CanvasObject):
 
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
-        elif isinstance(migration_type, string_types):
+        elif isinstance(migration_type, str):
             kwargs["migration_type"] = migration_type
         else:
             raise TypeError("Parameter migration_type must be of type Migrator or str")
@@ -527,7 +521,7 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete the current account
 
@@ -546,11 +540,12 @@ class Account(CanvasObject):
         response = self._requester.request(
             "DELETE",
             "accounts/{}/sub_accounts/{}".format(self.parent_account_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("workflow_state") == "deleted"
 
-    def delete_grading_period(self, grading_period):
+    def delete_grading_period(self, grading_period, **kwargs):
         """
         Delete a grading period for an account.
 
@@ -571,11 +566,12 @@ class Account(CanvasObject):
         response = self._requester.request(
             "DELETE",
             "accounts/{}/grading_periods/{}".format(self.id, grading_period_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("delete")
 
-    def delete_user(self, user):
+    def delete_user(self, user, **kwargs):
         """
         Delete a user record from a Canvas root account.
 
@@ -600,7 +596,9 @@ class Account(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            "DELETE", "accounts/{}/users/{}".format(self.id, user_id)
+            "DELETE",
+            "accounts/{}/users/{}".format(self.id, user_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
 
@@ -622,7 +620,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_all_outcome_links_in_context(self):
+    def get_all_outcome_links_in_context(self, **kwargs):
         """
         Get all outcome links for context - BETA
 
@@ -640,6 +638,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/outcome_group_links".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_authentication_events(self, **kwargs):
@@ -784,7 +783,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_department_level_grade_data_completed(self):
+    def get_department_level_grade_data_completed(self, **kwargs):
         """
         Return the distribution of all concluded grades in the default term
 
@@ -795,11 +794,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/completed/grades".format(self.id)
+            "GET",
+            "accounts/{}/analytics/completed/grades".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_grade_data_current(self):
+    def get_department_level_grade_data_current(self, **kwargs):
         """
         Return the distribution of all available grades in the default term
 
@@ -810,11 +811,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/current/grades".format(self.id)
+            "GET",
+            "accounts/{}/analytics/current/grades".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_grade_data_with_given_term(self, term_id):
+    def get_department_level_grade_data_with_given_term(self, term_id, **kwargs):
         """
         Return the distribution of all available or concluded grades with the given term
 
@@ -828,11 +831,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/terms/{}/grades".format(self.id, term_id)
+            "GET",
+            "accounts/{}/analytics/terms/{}/grades".format(self.id, term_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_participation_data_completed(self):
+    def get_department_level_participation_data_completed(self, **kwargs):
         """
         Return page view hits all concluded courses in the default term
 
@@ -843,11 +848,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/completed/activity".format(self.id)
+            "GET",
+            "accounts/{}/analytics/completed/activity".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_participation_data_current(self):
+    def get_department_level_participation_data_current(self, **kwargs):
         """
         Return page view hits all available courses in the default term
 
@@ -858,11 +865,15 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/current/activity".format(self.id)
+            "GET",
+            "accounts/{}/analytics/current/activity".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_participation_data_with_given_term(self, term_id):
+    def get_department_level_participation_data_with_given_term(
+        self, term_id, **kwargs
+    ):
         """
         Return page view hits all available or concluded courses in the given term
 
@@ -876,11 +887,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/terms/{}/activity".format(self.id, term_id)
+            "GET",
+            "accounts/{}/analytics/terms/{}/activity".format(self.id, term_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_statistics_completed(self):
+    def get_department_level_statistics_completed(self, **kwargs):
         """
         Return all available numeric statistics about the department in the default term
 
@@ -891,11 +904,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/completed/statistics".format(self.id)
+            "GET",
+            "accounts/{}/analytics/completed/statistics".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_statistics_current(self):
+    def get_department_level_statistics_current(self, **kwargs):
         """
         Return all available numeric statistics about the department in the default term
 
@@ -906,11 +921,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/current/statistics".format(self.id)
+            "GET",
+            "accounts/{}/analytics/current/statistics".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_statistics_with_given_term(self, term_id):
+    def get_department_level_statistics_with_given_term(self, term_id, **kwargs):
         """
         Return numeric statistics about the department with the given term
 
@@ -924,7 +941,9 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/terms/{}/statistics".format(self.id, term_id)
+            "GET",
+            "accounts/{}/analytics/terms/{}/statistics".format(self.id, term_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
@@ -970,6 +989,27 @@ class Account(CanvasObject):
         )
         return Enrollment(self._requester, response.json())
 
+    def get_enrollment_term(self, term, **kwargs):
+        """
+        Retrieve the details for an enrollment term in the account. Includes overrides by default.
+
+        :calls: `GET /api/v1/accounts/:account_id/terms/:id \
+        <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.show>`_
+
+        :param term: The object or ID of the enrollment term to retrieve.
+        :type term: :class:`canvasapi.enrollment_term.EnrollmentTerm` or int
+
+        :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
+        """
+        from canvasapi.enrollment_term import EnrollmentTerm
+
+        term_id = obj_or_id(term, "term", (EnrollmentTerm,))
+
+        response = self._requester.request(
+            "GET", "accounts/{}/terms/{}".format(self.id, term_id)
+        )
+        return EnrollmentTerm(self._requester, response.json())
+
     def get_enrollment_terms(self, **kwargs):
         """
         List enrollment terms for a context.
@@ -992,7 +1032,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_external_tool(self, tool):
+    def get_external_tool(self, tool, **kwargs):
         """
         :calls: `GET /api/v1/accounts/:account_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
@@ -1007,7 +1047,9 @@ class Account(CanvasObject):
         tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
-            "GET", "accounts/{}/external_tools/{}".format(self.id, tool_id)
+            "GET",
+            "accounts/{}/external_tools/{}".format(self.id, tool_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         tool_json = response.json()
         tool_json.update({"account_id": self.id})
@@ -1176,7 +1218,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_index_of_reports(self, report_type):
+    def get_index_of_reports(self, report_type, **kwargs):
         """
         Retrieve all reports that have been run for the account of a specific type.
 
@@ -1194,6 +1236,7 @@ class Account(CanvasObject):
             "GET",
             "accounts/{}/reports/{}".format(self.id, report_type),
             {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_migration_systems(self, **kwargs):
@@ -1217,7 +1260,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_outcome_group(self, group):
+    def get_outcome_group(self, group, **kwargs):
         """
         Returns the details of the Outcome Group with the given id.
 
@@ -1234,12 +1277,14 @@ class Account(CanvasObject):
 
         outcome_group_id = obj_or_id(group, "outcome group", (OutcomeGroup,))
         response = self._requester.request(
-            "GET", "accounts/{}/outcome_groups/{}".format(self.id, outcome_group_id)
+            "GET",
+            "accounts/{}/outcome_groups/{}".format(self.id, outcome_group_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self._requester, response.json())
 
-    def get_outcome_groups_in_context(self):
+    def get_outcome_groups_in_context(self, **kwargs):
         """
         Get all outcome groups for context - BETA
 
@@ -1257,6 +1302,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/outcome_groups".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_outcome_import_status(self, outcome_import, **kwargs):
@@ -1317,7 +1363,7 @@ class Account(CanvasObject):
 
         return AccountReport(self._requester, response_json)
 
-    def get_reports(self):
+    def get_reports(self, **kwargs):
         """
         Return a list of reports for the current context.
 
@@ -1333,9 +1379,10 @@ class Account(CanvasObject):
             "GET",
             "accounts/{}/reports".format(self.id),
             {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_role(self, role):
+    def get_role(self, role, **kwargs):
         """
         Retrieve a role by ID.
 
@@ -1350,7 +1397,9 @@ class Account(CanvasObject):
         role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
-            "GET", "accounts/{}/roles/{}".format(self.id, role_id)
+            "GET",
+            "accounts/{}/roles/{}".format(self.id, role_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Role(self._requester, response.json())
 
@@ -1373,7 +1422,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_root_outcome_group(self):
+    def get_root_outcome_group(self, **kwargs):
         """
         Redirect to root outcome group for context
 
@@ -1386,7 +1435,9 @@ class Account(CanvasObject):
         from canvasapi.outcome import OutcomeGroup
 
         response = self._requester.request(
-            "GET", "accounts/{}/root_outcome_group".format(self.id)
+            "GET",
+            "accounts/{}/root_outcome_group".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return OutcomeGroup(self._requester, response.json())
 
@@ -1532,7 +1583,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_subaccounts(self, recursive=False):
+    def get_subaccounts(self, recursive=False, **kwargs):
         """
         List accounts that are sub-accounts of the given account.
 
@@ -1545,12 +1596,13 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.Account`
         """
+        kwargs["recursive"] = recursive
         return PaginatedList(
             Account,
             self._requester,
             "GET",
             "accounts/{}/sub_accounts".format(self.id),
-            recursive=recursive,
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_user_logins(self, **kwargs):
@@ -1573,7 +1625,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_user_notifications(self, user):
+    def get_user_notifications(self, user, **kwargs):
         """
         Return a list of all global notifications in the account for
         this user. Any notifications that have been closed by the user
@@ -1597,6 +1649,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/users/{}/account_notifications".format(self.id, user_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_users(self, **kwargs):
@@ -1648,160 +1701,6 @@ class Account(CanvasObject):
         finally:
             if is_path:
                 attachment.close()
-
-    def list_authentication_providers(self, **kwargs):
-        """
-        Return the list of authentication providers
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_authentication_providers` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/authentication_providers \
-        <https://canvas.instructure.com/doc/api/authentication_providers.html#method.account_authorization_configs.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.authentication_provider.AuthenticationProvider`
-        """
-        warnings.warn(
-            "`list_authentication_providers` is being deprecated and will be "
-            "removed in a future version. Use `get_authentication_providers` "
-            "instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_authentication_providers(**kwargs)
-
-    def list_enrollment_terms(self, **kwargs):
-        """
-        List enrollment terms for a context.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_enrollment_terms` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/terms \
-        <https://canvas.instructure.com/doc/api/enrollment_terms.html#method.terms_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.enrollment_term.EnrollmentTerm`
-        """
-        warnings.warn(
-            "`list_enrollment_terms` is being deprecated and will be removed "
-            "in a future version. Use `get_enrollment_terms` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_enrollment_terms(**kwargs)
-
-    def list_group_categories(self, **kwargs):
-        """
-        List group categories for a context.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_group_categories` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/group_categories \
-        <https://canvas.instructure.com/doc/api/group_categories.html#method.group_categories.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.group.GroupCategory`
-        """
-        warnings.warn(
-            "`list_group_categories` is being deprecated and will be removed "
-            "in a future version. Use `get_group_categories` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_group_categories(**kwargs)
-
-    def list_groups(self, **kwargs):
-        """
-        Return a list of active groups for the specified account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_groups` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/groups \
-        <https://canvas.instructure.com/doc/api/groups.html#method.groups.context_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
-        """
-        warnings.warn(
-            "`list_groups` is being deprecated and will be removed in a future version."
-            " Use `get_groups` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_groups(**kwargs)
-
-    def list_roles(self, **kwargs):
-        """
-        List the roles available to an account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_roles` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/roles \
-        <https://canvas.instructure.com/doc/api/roles.html#method.role_overrides.api_index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.account.Role`
-        """
-        warnings.warn(
-            "`list_roles` is being deprecated and will be removed in a future version."
-            " Use `get_roles` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_roles(**kwargs)
-
-    def list_rubrics(self, **kwargs):
-        """
-        Get the paginated list of active rubrics for the current account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_rubrics` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/rubrics \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics_api.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.rubric.Rubric`
-        """
-        warnings.warn(
-            "`list_rubrics` is being deprecated and will be removed in a "
-            "future version. Use `get_rubrics` instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_rubrics(**kwargs)
-
-    def list_user_logins(self, **kwargs):
-        """
-        Given a user ID, return that user's logins for the given account.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.account.Account.get_user_logins` instead.
-
-        :calls: `GET /api/v1/accounts/:account_id/logins \
-        <https://canvas.instructure.com/doc/api/logins.html#method.pseudonyms.index>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.login.Login`
-        """
-        warnings.warn(
-            "`list_user_logins` is being deprecated and will be removed in a "
-            "future version. Use `get_user_logins` instead",
-            DeprecationWarning,
-        )
-
-        return self.get_user_logins(**kwargs)
 
     def show_account_auth_settings(self, **kwargs):
         """
@@ -1881,7 +1780,6 @@ class Account(CanvasObject):
         return Role(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class AccountNotification(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.subject, self.id)
@@ -1922,10 +1820,13 @@ class AccountNotification(CanvasObject):
         return AccountNotification(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class AccountReport(CanvasObject):
     def __str__(self):
-        return "{} ({})".format(self.report, self.id)
+        try:
+            return "{} ({})".format(self.report, self.id)
+        except AttributeError:
+            # Print params if not a report instance
+            return "{} ({})".format(self.report, self.parameters)
 
     def delete_report(self, **kwargs):
         """
@@ -1945,19 +1846,16 @@ class AccountReport(CanvasObject):
         return AccountReport(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class Role(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.label, self.base_role_type)
 
 
-@python_2_unicode_compatible
 class SSOSettings(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} ({})".format(self.login_handle_name, self.change_password_url)
 
 
-@python_2_unicode_compatible
 class Admin(CanvasObject):
     def __str__(self):  # pragma: no cover
         return "{} {} ({})".format(self.user["name"], self.user["id"], self.id)

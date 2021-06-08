@@ -1,15 +1,10 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
-from canvasapi.upload import Uploader
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class Submission(CanvasObject):
     def __str__(self):
         return "{}-{}".format(self.assignment_id, self.user_id)
@@ -84,6 +79,7 @@ class Submission(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
+
         response_json.update(course_id=self.course_id)
 
         super(Submission, self).set_attributes(response_json)
@@ -148,7 +144,7 @@ class Submission(CanvasObject):
         )
         return response.status_code == 204
 
-    def upload_comment(self, file, **kwargs):
+    def upload_comment(self, file: FileOrPathLike, **kwargs):
         """
         Upload a file to attach to this submission as a comment.
 
@@ -176,19 +172,17 @@ class Submission(CanvasObject):
         return response
 
 
-@python_2_unicode_compatible
 class GroupedSubmission(CanvasObject):
     def __init__(self, requester, attributes):
+        super(GroupedSubmission, self).__init__(requester, attributes)
+
         try:
             self.submissions = [
                 Submission(requester, submission)
                 for submission in attributes["submissions"]
             ]
-            del attributes["submissions"]
         except KeyError:
             self.submissions = list()
-
-        super(GroupedSubmission, self).__init__(requester, attributes)
 
     def __str__(self):
         return "{} submission(s) for User #{}".format(

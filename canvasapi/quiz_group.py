@@ -1,18 +1,13 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.util import combine_kwargs
 
 
-@python_2_unicode_compatible
 class QuizGroup(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
-    def delete(self, id):
+    def delete(self, id, **kwargs):
         """
         Get details of the quiz group with the given id.
 
@@ -28,6 +23,7 @@ class QuizGroup(CanvasObject):
         response = self._requester.request(
             "DELETE",
             "courses/{}/quizzes/{}/groups/{}".format(self.course_id, self.quiz_id, id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
@@ -42,7 +38,7 @@ class QuizGroup(CanvasObject):
         :type id: int
         :param order: A list of dictionaries containing the key 'id' of
             the question to be placed at order's index.
-        :type id: list[dict]
+        :type order: list[dict]
 
         :returns: True if the result was successful (Status code of 204)
         :rtype: bool

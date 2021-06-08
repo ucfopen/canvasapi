@@ -2,21 +2,169 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2021-03-25
+
 ### New Endpoint Coverage
 
+- Enroll a user in a section (Thanks, [@damianfs](https://github.com/damianfs))
+- File quota for courses, groups, and users (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+- Provisional Grades (Thanks, [@zenith110](https://github.com/zenith110))
+
+### General
+
+- Added support for Python 3.9
+- Added `RateLimitExceeded` exception to distinguish between being rate limited and being otherwise forbidden from accesing a resource. It is a subclass of the `Forbidden` exception.
+- File uploads now accept path-like objects (Thanks, [@theunkn0wn1](https://github.com/theunkn0wn1))
+- Add list of CanvasAPI Projects to README (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+- PyPI Package Description now uses README (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Replaced Travis CI with GitHub Actions
+
+### Bugfixes
+
+- Fixed an issue where `Canvas.create_poll()` did not work due to an incorrect parameter.
+- Canvas.get_todo_items() now correctly returns a `PaginatedList` of `Todo` items (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where `Favorite.remove()` did not handle parameters properly. (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+
+## [2.1.0] - 2020-12-04
+
+### New Endpoint Coverage
+
+- Course TODO items (Thanks, [@onomou](https://github.com/onomou))
+- Create observer pairing code (Thanks, [@bennettscience](https://github.com/bennettscience))
+
+### General
+
+- Added missing documentation for the get_current_user method and clarifications to the `CurrentUser` class. (Thanks, [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX))
+- `Canvas.get_announcement` now has a required parameter `context_codes`, which accepts a list of course IDs or `Course` objects.
+- Updated contributing guide
+- Added missing documentation for the "Smart DateTimes" feature
+- Added basic troubleshooting guide to documentation
+
+### Bugfixes
+
+- Fixed an issue where an `Announcement` object sometimes didn't have an associated course ID. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where an encoding problem could lead to file downloads hanging indefinitely. (Thanks, [@blepabyte](https://github.com/blepabyte))
+
+### Deprecation Warnings
+
+- The `enrollment_type` argument on `Course.enroll_user` is now deprecated. Pass this information to `enrollment[type]` as a keyword argument instead. e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`
+
+## [2.0.0] - 2020-08-14
+
+### General
+
+- Added support for arbitrary keyword arguments across the entire library
+
+### New Endpoint Coverage
+
+- Custom Gradebook Columns (Thanks,[@aileenpongnon](https://github.com/aileenpongnon))
+- Files
+    - Resolve Path (Thanks,[@dsavransky](https://github.com/dsavransky))
+
+### Bugfixes
+
+- Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
+- Fixed an issue where `Course.create_external_tool` didn't accept `client_id` (LTI 1.3 support).
+- Fixed an issue where `Module.create_module_item` didn't (Thanks,[@aileenpongnon](https://github.com/aileenpongnon) and [@onomou](https://github.com/onomou))
+- Fixed an issue where `Page.revert_to_revision` would incorrectly always set `group_id` to the page ID. Now correctly sets `group_id` or `course_id` appropriately.
+
+### Breaking Changes
+
+- `Course.create_external_tool` no longer supports positional arguments for its required parameters. Use keyword arguments instead.
+
+## [1.0.0] - 2020-07-09
+
+### General
+
+- Added support for Python 3.8
+- Dropped support for Python 3.4, 3.5, and 2.7
+- Removed all previously deprecated methods and attributes.
+- Upgraded Ubuntu version for Travis (Thanks,[@jonespm](https://github.com/jonespm))
+- Set up automatic deployments to PyPI via Travis
+- Set up nightly build
+
+## [0.16.1] - 2020-07-06
+
+### Bugfixes
+
+- Fixed an issue where the user-provided API_URL/base_url wasn't run through cleanup.
+
+### Deprecation Warnings
+
+- Using `/api/v1/` in the API_URL has been deprecated since v0.8.0 and legacy support will be removed in the next release. Ensure your provided url doesn't contain `api/v1/`. See deprecation warning in changelog for v0.8.0.
+- :warning: **_This is the final release with support for Python 3.5_** :warning:
+
+## [0.16.0] - 2020-06-26
+
+### New Endpoint Coverage
+
+- Enrollment Terms
+    - Get a Single Enrollment Term (Thanks, [@lcamacho](https://github.com/lcamacho))
+- Files
+    - Resolve Path for Course (Thanks,[@dsavransky](https://github.com/dsavransky))
+- GraphQL (Thanks,[@jonespm](https://github.com/jonespm))
+- Late Policy (Thanks, [@kennygperez](https://github.com/kennygperez))
+- Quiz Assignment Overrides (Thanks, [@kennygperez](https://github.com/kennygperez))
+- Quiz Statistics (Thanks, [@andrew-gardener](https://github.com/andrew-gardener))
+
+### General
+
+- Updated README to use updated parameters for getting a user's courses by enrollment state (Thanks,[@Vishvak365](https://github.com/Vishvak365))
+
+### Deprecation Warnings
+
+- :warning: **_This is the final release with support for Python 2.7_** :warning:
+    - [Python 2.7 is end-of-life as of January 2020](https://www.python.org/doc/sunset-python-2/)
+    - Future releases of CanvasAPI will *NOT* support any version of Python 2
+- :warning: **_This is the final release with support for Python 3.4_** :warning:
+    - [Python 3.4 is end-of-life as of March 2019](https://www.python.org/downloads/release/python-3410/)
+    - Future releases of CanvasAPI will *NOT* support Python 3.4 or below
+- This is the final deprecation warning for all methods marked as deprecated in this changelog or in our documentation. They will be removed in the next release.
+
+### Bugfixes
+
+- Fixed an issue where `Quiz.get_submission()` ignored data added from using the `include` kwarg. (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed the broken `__str__` method on the `ChangeRecord` class (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed an issue where printing an `AccountReport` would fail due to not having an ID (Thanks,[@Mike-Nahmias](https://github.com/Mike-Nahmias))
+- Fixed an issue where `"report_type"` was passed improperly (Thanks,[@brucespang](https://github.com/brucespang))
+- Fixed some new `flake8` issues (Thanks,[@dsavransky](https://github.com/dsavransky) and [@jonespm](https://github.com/jonespm))
+- Fixed an incorrect docstring for `Course.create_page()` (Thanks,[@dsavransky](https://github.com/dsavransky))
+- Fixed an issue where extra whitespace in the user-supplied canvas URL would break `PaginatedList` (Thanks,[@amorqiu](https://github.com/amorqiu))
+
+## [0.15.0] - 2019-11-19
+
+### New Endpoint Coverage
+
+- Assignment Extensions (Thanks, [@ljoks](https://github.com/ljoks))
+- AssignmentGroup (Thanks, [@ctcuff](https://github.com/ctcuff))
+    - List Assignments
 - Authentications Log (Thanks, [@weining-li](https://github.com/weining-li))
 - Brand Configs (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Comm Messages (Thanks, [@ljoks](https://github.com/ljoks))
+- File Usage Rights (Thanks, [@atarisafari](https://github.com/atarisafari) and [@joonro](https://github.com/joonro))
+- Gradebook History (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
+- Quiz Reports (Thanks, [@atarisafari](https://github.com/atarisafari)
 - Quiz Submission Events (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
+- Quiz Submission User List (Thanks, [@gdijkhoffz](https://github.com/gdijkhoffz))
 - Rubric Associations (Thanks, [@weining-li](https://github.com/weining-li))
 
 ### General
 
 - Throw `IndexError` when using negative indexes on `PaginatedList` objects (Thanks, [@UniversalSuperBox](https://github.com/UniversalSuperBox))
+- `Assignment.overrides` now returns a list of `AssignmentOverride` objects.
+
+### Deprecation Warnings
+
+- `CanvasObject.attributes` is now deprecated and will be removed in a future version.
+- `CanvasObject.to_json()` is now deprecated and will be removed in a future version. To view the original attributes sent by Canvas, enable logs from the requests library.
 
 ### Bugfixes
 
 - Fixed an issue where `util.clean_headers()` would throw a `ValueError` if a user accidentally included a space in their API token. (Thanks, [@keeeeeegan](https://github.com/keeeeeegan))
 - Fixed an issue where `QuizSubmission` objects sometimes wouldn't have a course_id, making some methods unusable. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where `get_user()` did not accept arbitrary keyword arguments (Thanks, [@eriktews](https://github.com/eriktews))
+- Fixed an issue where an import was triggering a `DeprecationWarning` (Thanks, [@Screeeech](https://github.com/Screeeech))
+- Fixed an issue where a GroupedSubmission wasn't saving the `submissions` attribute properly
 
 ## [0.14.0] - 2019-08-20
 
@@ -386,7 +534,14 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v0.14.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...develop
+[2.2.0]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...v2.0.0
+[1.0.0]: https://github.com/ucfopen/canvasapi/compare/v0.16.1...v1.0.0
+[0.16.1]: https://github.com/ucfopen/canvasapi/compare/v0.16.0...v0.16.1
+[0.16.0]: https://github.com/ucfopen/canvasapi/compare/v0.15.0...v0.16.0
+[0.15.0]: https://github.com/ucfopen/canvasapi/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/ucfopen/canvasapi/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/ucfopen/canvasapi/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/ucfopen/canvasapi/compare/v0.11.0...v0.12.0

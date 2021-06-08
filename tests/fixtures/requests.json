@@ -20,6 +20,31 @@
 		"data": {},
 		"status_code": 401
 	},
+	"403": {
+		"method": "ANY",
+		"endpoint": "403",
+		"data": {},
+		"status_code": 403
+	},
+	"403_rate_limit": {
+		"method": "ANY",
+		"endpoint": "403_rate_limit",
+		"data": "403 Forbidden (Rate Limit Exceeded)",
+		"headers": {
+			"X-Rate-Limit-Remaining": "3.14159265359",
+			"X-Request-Cost": "1.61803398875"
+		},
+		"status_code": 403
+	},
+	"403_rate_limit_no_remaining_header": {
+		"method": "ANY",
+		"endpoint": "403_rate_limit_no_remaining_header",
+		"data": "403 Forbidden (Rate Limit Exceeded)",
+		"headers": {
+			"X-Request-Cost": "1.61803398875"
+		},
+		"status_code": 403
+	},
 	"404": {
 		"method": "ANY",
 		"endpoint": "404",
@@ -31,6 +56,12 @@
 		"endpoint": "409",
 		"data": {},
 		"status_code": 409
+	},
+	"422": {
+		"method": "ANY",
+		"endpoint": "422",
+		"data": {},
+		"status_code": 422
 	},
 	"500": {
 		"method": "ANY",

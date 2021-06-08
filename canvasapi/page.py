@@ -1,19 +1,13 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from six import python_2_unicode_compatible
-import warnings
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
-@python_2_unicode_compatible
 class Page(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.title, self.url)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this page.
 
@@ -23,7 +17,9 @@ class Page(CanvasObject):
         :rtype: :class:`canvasapi.page.Page`
         """
         response = self._requester.request(
-            "DELETE", "courses/{}/pages/{}".format(self.course_id, self.url)
+            "DELETE",
+            "courses/{}/pages/{}".format(self.course_id, self.url),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Page(self._requester, response.json())
 
@@ -49,7 +45,7 @@ class Page(CanvasObject):
 
         return self
 
-    def get_parent(self):
+    def get_parent(self, **kwargs):
         """
         Return the object that spawned this page.
 
@@ -60,11 +56,13 @@ class Page(CanvasObject):
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """
-        from canvasapi.group import Group
         from canvasapi.course import Course
+        from canvasapi.group import Group
 
         response = self._requester.request(
-            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
+            "GET",
+            "{}s/{}".format(self.parent_type, self.parent_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if self.parent_type == "group":
@@ -122,28 +120,6 @@ class Page(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def list_revisions(self, **kwargs):
-        """
-        List the revisions of a page.
-
-        .. warning::
-            .. deprecated:: 0.10.0
-                Use :func:`canvasapi.page.Page.get_revisions` instead.
-
-        :calls: `GET /api/v1/courses/:course_id/pages/:url/revisions \
-        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.revisions>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.pagerevision.PageRevision`
-        """
-        warnings.warn(
-            "`list_revisions` is being deprecated and will be removed in a "
-            "future version. Use `get_revisions` instead.",
-            DeprecationWarning,
-        )
-
-        return self.get_revisions(**kwargs)
-
     @property
     def parent_id(self):
         """
@@ -172,7 +148,7 @@ class Page(CanvasObject):
         else:
             raise ValueError("ExternalTool does not have a course_id or group_id")
 
-    def revert_to_revision(self, revision):
+    def revert_to_revision(self, revision, **kwargs):
         """
         Revert the page back to a specified revision.
 
@@ -191,12 +167,10 @@ class Page(CanvasObject):
             "{}s/{}/pages/{}/revisions/{}".format(
                 self.parent_type, self.parent_id, self.url, revision_id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         pagerev_json = response.json()
-        if self.parent_type == "group":
-            pagerev_json.update({"group_id": self.id})
-        elif self.parent_type == "course":
-            pagerev_json.update({"group_id": self.id})
+        pagerev_json.update({"{self.parent_type}_id": self.parent_id})
 
         return PageRevision(self._requester, pagerev_json)
 
@@ -219,12 +193,11 @@ class Page(CanvasObject):
         return PageRevision(self._requester, response.json())
 
 
-@python_2_unicode_compatible
 class PageRevision(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.updated_at, self.revision_id)
 
-    def get_parent(self):
+    def get_parent(self, **kwargs):
         """
         Return the object that spawned this page.
 
@@ -235,11 +208,13 @@ class PageRevision(CanvasObject):
 
         :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.course.Course`
         """
-        from canvasapi.group import Group
         from canvasapi.course import Course
+        from canvasapi.group import Group
 
         response = self._requester.request(
-            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
+            "GET",
+            "{}s/{}".format(self.parent_type, self.parent_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if self.parent_type == "group":

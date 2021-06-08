@@ -1,6 +1,5 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-from datetime import datetime
 import logging
+from datetime import datetime
 from pprint import pformat
 
 import requests
@@ -11,11 +10,12 @@ from canvasapi.exceptions import (
     Conflict,
     Forbidden,
     InvalidAccessToken,
+    RateLimitExceeded,
     ResourceDoesNotExist,
     Unauthorized,
+    UnprocessableEntity,
 )
 from canvasapi.util import clean_headers
-
 
 logger = logging.getLogger(__name__)
 
@@ -32,12 +32,14 @@ class Requester(object):
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
         """
-        self.base_url = base_url
+        # Preserve the original base url and add "/api/v1" to it
+        self.original_url = base_url
+        self.base_url = base_url + "/api/v1/"
         self.access_token = access_token
         self._session = requests.Session()
         self._cache = []
 
-    def _delete_request(self, url, headers, data=None):
+    def _delete_request(self, url, headers, data=None, **kwargs):
         """
         Issue a DELETE request to the specified endpoint with the data provided.
 
@@ -50,7 +52,7 @@ class Requester(object):
         """
         return self._session.delete(url, headers=headers, data=data)
 
-    def _get_request(self, url, headers, params=None):
+    def _get_request(self, url, headers, params=None, **kwargs):
         """
         Issue a GET request to the specified endpoint with the data provided.
 
@@ -63,7 +65,7 @@ class Requester(object):
         """
         return self._session.get(url, headers=headers, params=params)
 
-    def _patch_request(self, url, headers, data=None):
+    def _patch_request(self, url, headers, data=None, **kwargs):
         """
         Issue a PATCH request to the specified endpoint with the data provided.
 
@@ -76,7 +78,7 @@ class Requester(object):
         """
         return self._session.patch(url, headers=headers, data=data)
 
-    def _post_request(self, url, headers, data=None):
+    def _post_request(self, url, headers, data=None, json=False):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
@@ -86,7 +88,11 @@ class Requester(object):
         :type headers: dict
         :param data: The data to send with this request.
         :type data: dict
+        :param json: Whether or not to send the data as json
+        :type json: bool
         """
+        if json:
+            return self._session.post(url, headers=headers, json=dict(data))
 
         # Grab file from data.
         files = None
@@ -103,7 +109,7 @@ class Requester(object):
 
         return self._session.post(url, headers=headers, data=data, files=files)
 
-    def _put_request(self, url, headers, data=None):
+    def _put_request(self, url, headers, data=None, **kwargs):
         """
         Issue a PUT request to the specified endpoint with the data provided.
 
@@ -124,6 +130,7 @@ class Requester(object):
         use_auth=True,
         _url=None,
         _kwargs=None,
+        json=False,
         **kwargs
     ):
         """
@@ -146,7 +153,11 @@ class Requester(object):
         :param _kwargs: A list of 2-tuples representing processed
             keyword arguments to be sent to Canvas as params or data.
         :type _kwargs: `list`
-        :rtype: str
+        :param json: Whether or not to treat the data as json instead of form data.
+            currently only the POST request of GraphQL is using this parameter.
+            For all other methods it's just passed and ignored.
+        :type json: `bool`
+        :rtype: :class:`requests.Response`
         """
         full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
 
@@ -194,7 +205,7 @@ class Requester(object):
         if _kwargs:
             logger.debug("Data: {data}".format(data=pformat(_kwargs)))
 
-        response = req_method(full_url, headers, _kwargs)
+        response = req_method(full_url, headers, _kwargs, json=json)
         logger.info(
             "Response: {method} {url} {status}".format(
                 method=method, url=full_url, status=response.status_code
@@ -207,9 +218,14 @@ class Requester(object):
         )
 
         try:
-            logger.debug("Data: {data}".format(data=pformat(response.json())))
-        except ValueError:
-            logger.debug("Data: {data}".format(data=pformat(response.text)))
+            logger.debug(
+                "Data: {data}".format(data=pformat(response.content.decode("utf-8")))
+            )
+        except UnicodeDecodeError:
+            logger.debug("Data: {data}".format(data=pformat(response.content)))
+        except AttributeError:
+            # response.content is None
+            logger.debug("No data")
 
         # Add response to internal cache
         if len(self._cache) > 4:
@@ -226,11 +242,21 @@ class Requester(object):
             else:
                 raise Unauthorized(response.json())
         elif response.status_code == 403:
-            raise Forbidden(response.text)
+            if b"Rate Limit Exceeded" in response.content:
+                remaining = str(
+                    response.headers.get("X-Rate-Limit-Remaining", "Unknown")
+                )
+                raise RateLimitExceeded(
+                    "Rate Limit Exceeded. X-Rate-Limit-Remaining: {}".format(remaining)
+                )
+            else:
+                raise Forbidden(response.text)
         elif response.status_code == 404:
             raise ResourceDoesNotExist("Not Found")
         elif response.status_code == 409:
             raise Conflict(response.text)
+        elif response.status_code == 422:
+            raise UnprocessableEntity(response.text)
         elif response.status_code > 400:
             # generic catch-all for error codes
             raise CanvasException(
