@@ -95,6 +95,7 @@ class Canvas(object):
 
         from canvasapi.progress import Progress
 
+        allowed_conversations = 500
         ALLOWED_EVENTS = [
             "mark_as_read",
             "mark_as_unread",
@@ -111,7 +112,7 @@ class Canvas(object):
                 )
             )
 
-        if len(conversation_ids) > 500:
+        if len(conversation_ids) > allowed_conversations:
             raise ValueError(
                 "You have requested {} updates, which exceeds the limit of 500".format(
                     len(conversation_ids)

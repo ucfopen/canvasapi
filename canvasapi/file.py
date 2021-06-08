@@ -20,7 +20,7 @@ class File(CanvasObject):
         )
         return File(self._requester, response.json())
 
-    def download(self, location):
+    def download_at_specific_location(self, location):
         """
         Download the file to specified location.
 
@@ -32,7 +32,7 @@ class File(CanvasObject):
         with open(location, "wb") as file_out:
             file_out.write(response.content)
 
-    def get_contents(self, binary=False):
+    def download_file(self, binary=False):
         """
         Download the contents of this file.
         Pass binary=True to return a bytes object instead of a str.
