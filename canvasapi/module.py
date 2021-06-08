@@ -84,7 +84,7 @@ class Module(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_module_item(self, module_item, **kwargs):
+    def get_module_item_by_id(self, module_item, **kwargs):
         """
         Retrieve a module item by ID.
 
