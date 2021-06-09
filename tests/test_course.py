@@ -15,8 +15,6 @@ from canvasapi.course import Course, CourseNickname, LatePolicy, Page
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.grade_change_log import GradeChangeEvent
-from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
 from canvasapi.external_feed import ExternalFeed
@@ -24,6 +22,7 @@ from canvasapi.external_tool import ExternalTool
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.gradebook_history import (
     Day,
     Grader,

@@ -3,9 +3,9 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.grade_change_log import GradeChangeEvent
 from tests import settings
 from tests.util import register_uris
+
 
 @requests_mock.Mocker()
 class TestGradeChangeEvent(unittest.TestCase):

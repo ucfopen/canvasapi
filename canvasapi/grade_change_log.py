@@ -1,5 +1,6 @@
 from canvasapi.canvas_object import CanvasObject
 
+
 class GradeChangeEvent(CanvasObject):
     def __str__(self):
         return "{} {} - {} ({})".format(

@@ -77,27 +77,6 @@ class Assignment(CanvasObject):
 
         return Assignment(self._requester, response.json())
 
-    def get_gradeable_students(self, **kwargs):
-        """
-        List students eligible to submit the assignment.
-
-        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/gradeable_students  \
-        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.gradeable_students>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.user.UserDisplay`
-        """
-        return PaginatedList(
-            UserDisplay,
-            self._requester,
-            "GET",
-            "courses/{}/assignments/{}/gradeable_students".format(
-                self.course_id, self.id
-            ),
-            {"course_id": self.course_id},
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
     def get_grade_change_events(self, **kwargs):
         """
         Returns the grade change events for the assignment.
@@ -117,6 +96,27 @@ class Assignment(CanvasObject):
             None,
             "events",
             **kwargs
+        )
+
+    def get_gradeable_students(self, **kwargs):
+        """
+        List students eligible to submit the assignment.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/gradeable_students  \
+        <https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.gradeable_students>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.UserDisplay`
+        """
+        return PaginatedList(
+            UserDisplay,
+            self._requester,
+            "GET",
+            "courses/{}/assignments/{}/gradeable_students".format(
+                self.course_id, self.id
+            ),
+            {"course_id": self.course_id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_override(self, override, **kwargs):
