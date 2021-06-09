@@ -7,7 +7,7 @@ from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.grade_change_log import GradeChangeLog
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
@@ -1414,27 +1414,26 @@ class Course(CanvasObject):
         )
         return response.json()
 
-    def get_grade_change_log(self, **kwargs):
+    def get_grade_change_events(self, **kwargs):
         """
-        Returns the grade change log for the course.
+        Returns the grade change events for the course.
 
         :calls: `GET /api/v1/audit/grade_change/courses/:course_id \
         <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_course>`_
 
-        :rtype: :class:`canvasapi.grade_change_log.GradeChangeLog`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
         """
 
-        response = self._requester.request(
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
             "GET",
             "audit/grade_change/courses/{}".format(self.id),
-            _kwargs=combine_kwargs(**kwargs),
+            None,
+            "events",
+            **kwargs
         )
-
-        data = response.json()
-        data["context"] = "course"
-        data["context_id"] = self.id
-
-        return GradeChangeLog(self._requester, data)
 
     def get_gradebook_history_dates(self, **kwargs):
         """

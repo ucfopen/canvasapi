@@ -824,7 +824,7 @@
 		],
 		"status_code": 200
 	},
-	"get_grade_change_log_for_student": {
+	"get_grade_change_events_for_student": {
 		"method": "GET",
 		"endpoint": "audit/grade_change/students/1",
 		"data": {
@@ -905,7 +905,7 @@
 		},
 		"status_code": 200
 	},
-	"get_grade_change_log_for_grader": {
+	"get_grade_change_events_for_grader": {
 		"method": "GET",
 		"endpoint": "audit/grade_change/graders/1",
 		"data": {

@@ -417,7 +417,7 @@
 		},
 		"status_code": 200
 	},
-	"get_grade_change_log": {
+	"get_grade_change_events": {
 		"method": "GET",
 		"endpoint": "audit/grade_change/courses/1",
 		"data": {

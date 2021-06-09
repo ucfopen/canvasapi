@@ -15,7 +15,7 @@ from canvasapi.course import Course, CourseNickname, LatePolicy, Page
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.grade_change_log import GradeChangeEvent, GradeChangeLog
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
@@ -1602,18 +1602,16 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(response[0].title, "Grading period 1")
         self.assertEqual(response[1].title, "Grading period 2")
 
-    # get_grade_change_log()
-    def test_get_grade_change_log(self, m):
-        register_uris({"course": ["get_grade_change_log"]}, m)
+    # get_grade_change_events()
+    def test_get_grade_change_events(self, m):
+        register_uris({"course": ["get_grade_change_events"]}, m)
 
-        response = self.course.get_grade_change_log()
+        response = self.course.get_grade_change_events()
 
-        self.assertIsInstance(response, GradeChangeLog)
-        self.assertIsInstance(response.events, list)
-        self.assertEqual(len(response.events), 2)
-        self.assertTrue("for course" in str(response))
+        self.assertIsInstance(response, PaginatedList)
+        self.assertEqual(len([event for event in response]), 2)
 
-        for event in response.events:
+        for event in response:
             self.assertEqual(event.links["course"], self.course.id)
             self.assertIsInstance(event, GradeChangeEvent)
             self.assertEqual(event.event_type, "grade_change")
