@@ -1050,16 +1050,18 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/analytics/student_summaries \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_student_summaries>`_
 
-        :rtype: dict
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.CourseStudentSummary`
         """
 
-        response = self._requester.request(
+        return PaginatedList(
+            CourseStudentSummary,
+            self._requester,
             "GET",
             "courses/{}/analytics/student_summaries".format(self.id),
+            {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
-
-        return response.json()
 
     def get_custom_columns(self, **kwargs):
         """
@@ -2659,6 +2661,11 @@ class CourseNickname(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return CourseNickname(self._requester, response.json())
+
+
+class CourseStudentSummary(CanvasObject):
+    def __str__(self):
+        return "Course Student Summary {}".format(self.id)
 
 
 class LatePolicy(CanvasObject):
