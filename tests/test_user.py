@@ -333,6 +333,16 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(observees_list[0], User)
         self.assertEqual(len(observees_list), 4)
 
+    def test_get_observers(self, m):
+        requires = {"user": ["list_observers", "list_observers"]}
+        register_uris(requires, m)
+
+        response = self.user.get_observers()
+        observers_list = [observers for observers in response]
+
+        self.assertIsInstance(observers_list[0], User)
+        self.assertEqual(len(observers_list), 2)
+
     # add_observee_with_credentials()
     def test_add_observee_with_credentials(self, m):
         register_uris({"user": ["add_observee_with_credentials"]}, m)

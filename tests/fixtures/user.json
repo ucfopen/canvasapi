@@ -735,6 +735,21 @@
 		],
 		"status_code": 200
 	},
+	"list_observers": {
+		"method": "GET",
+		"endpoint": "users/1/observers",
+		"data": [
+			{
+				"id": 3,
+				"name": "User 3"
+			},
+			{
+				"id": 4,
+				"name": "User 4"
+			}
+		],
+		"status_code": 200
+	},
 	"add_observee_with_credentials": {
 		"method": "POST",
 		"endpoint": "users/1/observees",
