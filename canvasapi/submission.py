@@ -1,4 +1,5 @@
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.file import File
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
 from canvasapi.upload import FileOrPathLike, Uploader
@@ -10,11 +11,15 @@ class Submission(CanvasObject):
     def __init__(self, requester, attributes):
         super(Submission, self).__init__(requester, attributes)
 
-        if "submission_comments" in attributes:
-            self.submission_comments = [
-                SubmissionComment(self._requester, submission_comment)
-                for submission_comment in attributes["submission_comments"]
-            ]
+        self.submission_comments = [
+            SubmissionComment(self._requester, submission_comment)
+            for submission_comment in attributes.get("submission_comments", [])
+        ]
+
+        self.attachments = [
+            File(self._requester, attachment)
+            for attachment in attributes.get("attachments", [])
+        ]
 
     def __str__(self):
         return "{}-{}".format(self.assignment_id, self.user_id)
