@@ -563,7 +563,7 @@ class QuizSubmission(CanvasObject):
 
         :returns: PaginatedList of QuizSubmissionEvents.
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-          :class:`canvasapi.quiz.QuizSubmissionQuestion`
+          :class:`canvasapi.quiz.QuizSubmissionEvent`
         """
         return PaginatedList(
             QuizSubmissionEvent,
@@ -572,7 +572,7 @@ class QuizSubmission(CanvasObject):
             "courses/{}/quizzes/{}/submissions/{}/events".format(
                 self.course_id, self.quiz_id, self.id
             ),
-            _root='quiz_submission_events',
+            _root="quiz_submission_events",
             _kwargs=combine_kwargs(**kwargs),
         )
 
