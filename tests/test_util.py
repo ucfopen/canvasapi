@@ -16,6 +16,7 @@ from canvasapi.util import (
     normalize_bool,
     obj_or_id,
     obj_or_str,
+    obj_or_id_or_sis_str,
 )
 from tests import settings
 from tests.util import cleanup_file, register_uris
@@ -470,6 +471,72 @@ class TestUtil(unittest.TestCase):
     def test_obj_or_str_invalid_obj_type(self, m):
         with self.assertRaises(TypeError):
             obj_or_str("user", "name", (User,))
+
+    # obj_or_id_or_sis_str :
+    # same set of tests as used in the obj_or_id tests,
+    # added _sis_str_{valid,invalid} tests
+    def test_obj_or_id_or_sis_str_int(self, m):
+        user_id = obj_or_id_or_sis_str(1, "user_id", (User,))
+
+        self.assertIsInstance(user_id, int)
+        self.assertEqual(user_id, 1)
+
+    def test_obj_or_id_or_sis_str_str_valid(self, m):
+        user_id = obj_or_id_or_sis_str("1", "user_id", (User,))
+
+        self.assertIsInstance(user_id, int)
+        self.assertEqual(user_id, 1)
+
+    def test_obj_or_id_or_sis_str_str_invalid(self, m):
+        with self.assertRaises(TypeError):
+            obj_or_id_or_sis_str("1a", "user_id", (User,))
+
+    def test_obj_or_id_or_sis_str_sis_str_valid(self, m):
+        user_id = obj_or_id_or_sis_str("sis_login_id:a_login_id", "user_id", (User,))
+
+        self.assertEqual(user_id, "sis_login_id:a_login_id")
+
+    def test_obj_or_id_or_sis_str_sis_str_invalid(self, m):
+        with self.assertRaises(TypeError):
+            obj_or_id_or_sis_str("sys_login_id:a_login_id", "user_id", (User,))
+
+    def test_obj_or_id_or_sis_str_obj(self, m):
+        register_uris({"user": ["get_by_id"]}, m)
+
+        user = self.canvas.get_user(1)
+
+        user_id = obj_or_id_or_sis_str(user, "user_id", (User,))
+
+        self.assertIsInstance(user_id, int)
+        self.assertEqual(user_id, 1)
+
+    def test_obj_or_id_or_sis_str_obj_no_id(self, m):
+        register_uris({"user": ["course_nickname"]}, m)
+
+        nick = self.canvas.get_course_nickname(1)
+
+        with self.assertRaises(TypeError):
+            obj_or_id_or_sis_str(nick, "nickname_id", (CourseNickname,))
+
+    def test_obj_or_id_or_sis_str_multiple_objs(self, m):
+        register_uris({"user": ["get_by_id"]}, m)
+
+        user = self.canvas.get_user(1)
+
+        user_id = obj_or_id_or_sis_str(user, "user_id", (CourseNickname, User))
+
+        self.assertIsInstance(user_id, int)
+        self.assertEqual(user_id, 1)
+
+    def test_obj_or_id_or_sis_str_user_self(self, m):
+        user_id = obj_or_id_or_sis_str("self", "user_id", (User,))
+
+        self.assertIsInstance(user_id, str)
+        self.assertEqual(user_id, "self")
+
+    def test_obj_or_id_or_sis_str_nonuser_self(self, m):
+        with self.assertRaises(TypeError):
+            obj_or_id_or_sis_str("self", "user_id", (CourseNickname,))
 
     # get_institution_url()
     def test_get_institution_url(self, m):
