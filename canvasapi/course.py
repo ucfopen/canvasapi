@@ -37,7 +37,7 @@ from canvasapi.util import (
     normalize_bool,
     obj_or_id,
     obj_or_str,
-    obj_or_id_or_sis_str
+    obj_or_id_or_sis_str,
 )
 
 
