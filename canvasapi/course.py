@@ -1791,9 +1791,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/outcome_results \
         <https://canvas.instructure.com/doc/api/outcome_results.html#method.outcome_results.index>`_
 
-        
-
-        :returns: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.outcome.OutcomeResult`
+        :returns: :class:`canvasapi.paginated_list.PaginatedList`
+            of :class:`canvasapi.outcome.OutcomeResult`
         """
         from canvasapi.outcome import OutcomeResult
 
