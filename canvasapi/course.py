@@ -1791,16 +1791,20 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/outcome_results \
         <https://canvas.instructure.com/doc/api/outcome_results.html#method.outcome_results.index>`_
 
-        :returns: List of potential related outcome result dicts.
-        :rtype: dict
+        
+
+        :returns: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.outcome.OutcomeResult`
         """
-        response = self._requester.request(
+        from canvasapi.outcome import OutcomeResult
+
+        return PaginatedList(
+            OutcomeResult,
+            self._requester,
             "GET",
             "courses/{}/outcome_results".format(self.id),
+            _root="outcome_results",
             _kwargs=combine_kwargs(**kwargs),
         )
-
-        return response.json()
 
     def get_page(self, url, **kwargs):
         """

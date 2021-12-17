@@ -33,7 +33,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.license import License
 from canvasapi.module import Module
-from canvasapi.outcome import OutcomeGroup, OutcomeLink
+from canvasapi.outcome import OutcomeGroup, OutcomeLink, OutcomeResult
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
@@ -1267,9 +1267,10 @@ class TestCourse(unittest.TestCase):
         register_uris({"outcome": ["course_get_outcome_results"]}, m)
 
         result = self.course.get_outcome_results()
+        outcome_results = [item for item in result]
 
-        self.assertIsInstance(result, dict)
-        self.assertIsInstance(result["outcome_results"], list)
+        self.assertIsInstance(result, PaginatedList)
+        self.assertIsInstance(outcome_results[0], OutcomeResult)
 
     # get_outcome_result_rollups()
     def test_get_outcome_result_rollups(self, m):
