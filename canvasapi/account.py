@@ -545,6 +545,31 @@ class Account(CanvasObject):
 
         return response.json().get("workflow_state") == "deleted"
 
+    def delete_admin(self, user, **kwargs):
+        """
+        Remove an admin role from an existing user in the current account.
+
+        :calls: `DELETE /api/v1/accounts/:account_id/admins/:user_id \
+        <https://canvas.instructure.com/doc/api/admins.html#method.admins.destroy>`_
+
+        :param user: The user object or ID to remove as admin.
+        :type user: :class:`canvasapi.user.User` or int
+
+        :rtype: :class:`canvasapi.account.Admin`
+        """
+        from canvasapi.user import User
+
+        user_id = obj_or_id(user, "user", (User,))
+        kwargs["user_id"] = user_id
+
+        response = self._requester.request(
+            "DELETE",
+            "accounts/{}/admins/{}".format(self.id, user_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return Admin(self._requester, response.json())
+
     def delete_grading_period(self, grading_period, **kwargs):
         """
         Delete a grading period for an account.

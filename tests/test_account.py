@@ -152,6 +152,10 @@ class TestAccount(unittest.TestCase):
         with self.assertRaises(CanvasException):
             self.account.delete()
 
+    # delete_admin()
+    def test_delete_admin(self, m):
+        return
+
     # delete_user()
     def test_delete_user_id(self, m):
         register_uris({"account": ["delete_user"]}, m)
