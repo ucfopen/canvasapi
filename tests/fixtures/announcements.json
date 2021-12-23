@@ -10,7 +10,8 @@
           "display_name": "John Doe"
         },
         "message": "Announcement Message #1",
-        "subscription_hold": "topic_is_announcement"
+        "subscription_hold": "topic_is_announcement",
+        "context_code": "course_1"
       },
       {
         "id": 2,
@@ -20,7 +21,30 @@
           "display_name": "John Smith"
         },
         "message": "Announcement Message #2",
-        "subscription_hold": "topic_is_announcement"
+        "subscription_hold": "topic_is_announcement",
+        "context_code": "course_1"
+      },
+      {
+        "id": 3,
+        "title": "Annoucement 3",
+        "author": {
+          "id": 3,
+          "display_name": "John Wick"
+        },
+        "message": "Announcement Message #3",
+        "subscription_hold": "topic_is_announcement",
+        "context_code": "group_1"
+      },
+      {
+        "id": 4,
+        "title": "Annoucement 4",
+        "author": {
+          "id": 3,
+          "display_name": "Jon Voight"
+        },
+        "message": "Announcement Message #3",
+        "subscription_hold": "topic_is_announcement",
+        "context_code": "course_2"
       }
     ],
     "status_code": 200

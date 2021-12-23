@@ -1,8 +1,8 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
-from canvasapi.grading_standard import GradingStandard
 from canvasapi.grading_period import GradingPeriod
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
@@ -108,7 +108,7 @@ class Account(CanvasObject):
 
         return GradingStandard(self._requester, response.json())
 
-    def close_notification_for_user(self, user, notification):
+    def close_notification_for_user(self, user, notification, **kwargs):
         """
         If the user no long wants to see a notification, it can be
         excused with this call.
@@ -133,6 +133,7 @@ class Account(CanvasObject):
             "accounts/{}/users/{}/account_notifications/{}".format(
                 self.id, user_id, notif_id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return AccountNotification(self._requester, response.json())
 
@@ -520,7 +521,7 @@ class Account(CanvasObject):
         )
         return Role(self._requester, response.json())
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete the current account
 
@@ -539,11 +540,12 @@ class Account(CanvasObject):
         response = self._requester.request(
             "DELETE",
             "accounts/{}/sub_accounts/{}".format(self.parent_account_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("workflow_state") == "deleted"
 
-    def delete_grading_period(self, grading_period):
+    def delete_grading_period(self, grading_period, **kwargs):
         """
         Delete a grading period for an account.
 
@@ -564,11 +566,12 @@ class Account(CanvasObject):
         response = self._requester.request(
             "DELETE",
             "accounts/{}/grading_periods/{}".format(self.id, grading_period_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("delete")
 
-    def delete_user(self, user):
+    def delete_user(self, user, **kwargs):
         """
         Delete a user record from a Canvas root account.
 
@@ -593,7 +596,9 @@ class Account(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            "DELETE", "accounts/{}/users/{}".format(self.id, user_id)
+            "DELETE",
+            "accounts/{}/users/{}".format(self.id, user_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
 
@@ -615,7 +620,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_all_outcome_links_in_context(self):
+    def get_all_outcome_links_in_context(self, **kwargs):
         """
         Get all outcome links for context - BETA
 
@@ -633,6 +638,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/outcome_group_links".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_authentication_events(self, **kwargs):
@@ -777,7 +783,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_department_level_grade_data_completed(self):
+    def get_department_level_grade_data_completed(self, **kwargs):
         """
         Return the distribution of all concluded grades in the default term
 
@@ -788,11 +794,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/completed/grades".format(self.id)
+            "GET",
+            "accounts/{}/analytics/completed/grades".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_grade_data_current(self):
+    def get_department_level_grade_data_current(self, **kwargs):
         """
         Return the distribution of all available grades in the default term
 
@@ -803,11 +811,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/current/grades".format(self.id)
+            "GET",
+            "accounts/{}/analytics/current/grades".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_grade_data_with_given_term(self, term_id):
+    def get_department_level_grade_data_with_given_term(self, term_id, **kwargs):
         """
         Return the distribution of all available or concluded grades with the given term
 
@@ -821,11 +831,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/terms/{}/grades".format(self.id, term_id)
+            "GET",
+            "accounts/{}/analytics/terms/{}/grades".format(self.id, term_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_participation_data_completed(self):
+    def get_department_level_participation_data_completed(self, **kwargs):
         """
         Return page view hits all concluded courses in the default term
 
@@ -836,11 +848,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/completed/activity".format(self.id)
+            "GET",
+            "accounts/{}/analytics/completed/activity".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_participation_data_current(self):
+    def get_department_level_participation_data_current(self, **kwargs):
         """
         Return page view hits all available courses in the default term
 
@@ -851,11 +865,15 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/current/activity".format(self.id)
+            "GET",
+            "accounts/{}/analytics/current/activity".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_participation_data_with_given_term(self, term_id):
+    def get_department_level_participation_data_with_given_term(
+        self, term_id, **kwargs
+    ):
         """
         Return page view hits all available or concluded courses in the given term
 
@@ -869,11 +887,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/terms/{}/activity".format(self.id, term_id)
+            "GET",
+            "accounts/{}/analytics/terms/{}/activity".format(self.id, term_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_statistics_completed(self):
+    def get_department_level_statistics_completed(self, **kwargs):
         """
         Return all available numeric statistics about the department in the default term
 
@@ -884,11 +904,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/completed/statistics".format(self.id)
+            "GET",
+            "accounts/{}/analytics/completed/statistics".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_statistics_current(self):
+    def get_department_level_statistics_current(self, **kwargs):
         """
         Return all available numeric statistics about the department in the default term
 
@@ -899,11 +921,13 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/current/statistics".format(self.id)
+            "GET",
+            "accounts/{}/analytics/current/statistics".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
-    def get_department_level_statistics_with_given_term(self, term_id):
+    def get_department_level_statistics_with_given_term(self, term_id, **kwargs):
         """
         Return numeric statistics about the department with the given term
 
@@ -917,7 +941,9 @@ class Account(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "accounts/{}/analytics/terms/{}/statistics".format(self.id, term_id)
+            "GET",
+            "accounts/{}/analytics/terms/{}/statistics".format(self.id, term_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
@@ -1006,7 +1032,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_external_tool(self, tool):
+    def get_external_tool(self, tool, **kwargs):
         """
         :calls: `GET /api/v1/accounts/:account_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
@@ -1021,7 +1047,9 @@ class Account(CanvasObject):
         tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
-            "GET", "accounts/{}/external_tools/{}".format(self.id, tool_id)
+            "GET",
+            "accounts/{}/external_tools/{}".format(self.id, tool_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         tool_json = response.json()
         tool_json.update({"account_id": self.id})
@@ -1190,7 +1218,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_index_of_reports(self, report_type):
+    def get_index_of_reports(self, report_type, **kwargs):
         """
         Retrieve all reports that have been run for the account of a specific type.
 
@@ -1208,6 +1236,7 @@ class Account(CanvasObject):
             "GET",
             "accounts/{}/reports/{}".format(self.id, report_type),
             {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_migration_systems(self, **kwargs):
@@ -1231,7 +1260,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_outcome_group(self, group):
+    def get_outcome_group(self, group, **kwargs):
         """
         Returns the details of the Outcome Group with the given id.
 
@@ -1248,12 +1277,14 @@ class Account(CanvasObject):
 
         outcome_group_id = obj_or_id(group, "outcome group", (OutcomeGroup,))
         response = self._requester.request(
-            "GET", "accounts/{}/outcome_groups/{}".format(self.id, outcome_group_id)
+            "GET",
+            "accounts/{}/outcome_groups/{}".format(self.id, outcome_group_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self._requester, response.json())
 
-    def get_outcome_groups_in_context(self):
+    def get_outcome_groups_in_context(self, **kwargs):
         """
         Get all outcome groups for context - BETA
 
@@ -1271,6 +1302,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/outcome_groups".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_outcome_import_status(self, outcome_import, **kwargs):
@@ -1331,7 +1363,7 @@ class Account(CanvasObject):
 
         return AccountReport(self._requester, response_json)
 
-    def get_reports(self):
+    def get_reports(self, **kwargs):
         """
         Return a list of reports for the current context.
 
@@ -1347,9 +1379,10 @@ class Account(CanvasObject):
             "GET",
             "accounts/{}/reports".format(self.id),
             {"account_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_role(self, role):
+    def get_role(self, role, **kwargs):
         """
         Retrieve a role by ID.
 
@@ -1364,7 +1397,9 @@ class Account(CanvasObject):
         role_id = obj_or_id(role, "role", (Role,))
 
         response = self._requester.request(
-            "GET", "accounts/{}/roles/{}".format(self.id, role_id)
+            "GET",
+            "accounts/{}/roles/{}".format(self.id, role_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Role(self._requester, response.json())
 
@@ -1387,7 +1422,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_root_outcome_group(self):
+    def get_root_outcome_group(self, **kwargs):
         """
         Redirect to root outcome group for context
 
@@ -1400,7 +1435,9 @@ class Account(CanvasObject):
         from canvasapi.outcome import OutcomeGroup
 
         response = self._requester.request(
-            "GET", "accounts/{}/root_outcome_group".format(self.id)
+            "GET",
+            "accounts/{}/root_outcome_group".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return OutcomeGroup(self._requester, response.json())
 
@@ -1546,7 +1583,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_subaccounts(self, recursive=False):
+    def get_subaccounts(self, recursive=False, **kwargs):
         """
         List accounts that are sub-accounts of the given account.
 
@@ -1559,12 +1596,13 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.Account`
         """
+        kwargs["recursive"] = recursive
         return PaginatedList(
             Account,
             self._requester,
             "GET",
             "accounts/{}/sub_accounts".format(self.id),
-            recursive=recursive,
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_user_logins(self, **kwargs):
@@ -1587,7 +1625,7 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_user_notifications(self, user):
+    def get_user_notifications(self, user, **kwargs):
         """
         Return a list of all global notifications in the account for
         this user. Any notifications that have been closed by the user
@@ -1611,6 +1649,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/users/{}/account_notifications".format(self.id, user_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_users(self, **kwargs):

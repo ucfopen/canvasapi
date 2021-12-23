@@ -1,3 +1,5 @@
+import warnings
+
 from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
@@ -5,35 +7,36 @@ from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
-from canvasapi.gradebook_history import (
-    Day,
-    Grader,
-    SubmissionVersion,
-    SubmissionHistory,
-)
-from canvasapi.grading_standard import GradingStandard
-from canvasapi.grading_period import GradingPeriod
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.gradebook_history import (
+    Day,
+    Grader,
+    SubmissionHistory,
+    SubmissionVersion,
+)
+from canvasapi.grading_period import GradingPeriod
+from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
-from canvasapi.tab import Tab
-from canvasapi.rubric import RubricAssociation, Rubric
+from canvasapi.rubric import Rubric, RubricAssociation
 from canvasapi.submission import GroupedSubmission, Submission
-from canvasapi.upload import Uploader
+from canvasapi.tab import Tab
+from canvasapi.todo import Todo
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.usage_rights import UsageRights
 from canvasapi.util import (
     combine_kwargs,
-    is_multivalued,
     file_or_path,
+    is_multivalued,
+    normalize_bool,
     obj_or_id,
     obj_or_str,
-    normalize_bool,
 )
 
 
@@ -96,7 +99,7 @@ class Course(CanvasObject):
 
         return Progress(self._requester, response.json())
 
-    def conclude(self):
+    def conclude(self, **kwargs):
         """
         Mark this course as concluded.
 
@@ -106,8 +109,12 @@ class Course(CanvasObject):
         :returns: True if the course was concluded, False otherwise.
         :rtype: bool
         """
+        kwargs["event"] = "conclude"
+
         response = self._requester.request(
-            "DELETE", "courses/{}".format(self.id), event="conclude"
+            "DELETE",
+            "courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("conclude")
@@ -556,7 +563,7 @@ class Course(CanvasObject):
 
         return RubricAssociation(self._requester, quiz_json)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Permanently delete this course.
 
@@ -566,12 +573,16 @@ class Course(CanvasObject):
         :returns: True if the course was deleted, False otherwise.
         :rtype: bool
         """
+        kwargs["event"] = "delete"
+
         response = self._requester.request(
-            "DELETE", "courses/{}".format(self.id), event="delete"
+            "DELETE",
+            "courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json().get("delete")
 
-    def delete_external_feed(self, feed):
+    def delete_external_feed(self, feed, **kwargs):
         """
         Deletes the external feed.
 
@@ -588,7 +599,9 @@ class Course(CanvasObject):
         feed_id = obj_or_id(feed, "feed", (ExternalFeed,))
 
         response = self._requester.request(
-            "DELETE", "courses/{}/external_feeds/{}".format(self.id, feed_id)
+            "DELETE",
+            "courses/{}/external_feeds/{}".format(self.id, feed_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return ExternalFeed(self._requester, response.json())
 
@@ -630,7 +643,7 @@ class Course(CanvasObject):
 
         return response.status_code == 204
 
-    def enroll_user(self, user, enrollment_type, **kwargs):
+    def enroll_user(self, user, enrollment_type=None, **kwargs):
         """
         Create a new user enrollment for a course or a section.
 
@@ -640,14 +653,25 @@ class Course(CanvasObject):
         :param user: The object or ID of the user to enroll in this course.
         :type user: :class:`canvasapi.user.User` or int
         :param enrollment_type: The type of enrollment.
-        :type enrollment_type: str
+        :type enrollment_type: str, optional
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
         from canvasapi.enrollment import Enrollment
         from canvasapi.user import User
 
         kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
-        kwargs["enrollment[type]"] = enrollment_type
+
+        if enrollment_type:
+            warnings.warn(
+                (
+                    "The `enrollment_type` argument is deprecated and will be "
+                    "removed in a future version.\n"
+                    "Use `enrollment[type]` as a keyword argument instead. "
+                    "e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`"
+                ),
+                DeprecationWarning,
+            )
+            kwargs["enrollment[type]"] = enrollment_type
 
         response = self._requester.request(
             "POST",
@@ -680,7 +704,7 @@ class Course(CanvasObject):
         )
         return ContentExport(self._requester, response.json())
 
-    def get_all_outcome_links_in_context(self):
+    def get_all_outcome_links_in_context(self, **kwargs):
         """
         Get all outcome links for context - BETA
 
@@ -698,6 +722,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/outcome_group_links".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_assignment(self, assignment, **kwargs):
@@ -1000,7 +1025,7 @@ class Course(CanvasObject):
 
         return response.json()
 
-    def get_course_level_participation_data(self):
+    def get_course_level_participation_data(self, **kwargs):
         """
         Return page view hits and participation numbers grouped by day through the course's history
 
@@ -1011,7 +1036,9 @@ class Course(CanvasObject):
         """
 
         response = self._requester.request(
-            "GET", "courses/{}/analytics/activity".format(self.id)
+            "GET",
+            "courses/{}/analytics/activity".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
@@ -1053,7 +1080,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_discussion_topic(self, topic):
+    def get_discussion_topic(self, topic, **kwargs):
         """
         Return data on an individual discussion topic.
 
@@ -1068,7 +1095,9 @@ class Course(CanvasObject):
         topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
 
         response = self._requester.request(
-            "GET", "courses/{}/discussion_topics/{}".format(self.id, topic_id)
+            "GET",
+            "courses/{}/discussion_topics/{}".format(self.id, topic_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         response_json = response.json()
@@ -1177,7 +1206,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_external_tool(self, tool):
+    def get_external_tool(self, tool, **kwargs):
         """
         :calls: `GET /api/v1/courses/:course_id/external_tools/:external_tool_id \
         <https://canvas.instructure.com/doc/api/external_tools.html#method.external_tools.show>`_
@@ -1192,7 +1221,9 @@ class Course(CanvasObject):
         tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
-            "GET", "courses/{}/external_tools/{}".format(self.id, tool_id)
+            "GET",
+            "courses/{}/external_tools/{}".format(self.id, tool_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         tool_json = response.json()
         tool_json.update({"course_id": self.id})
@@ -1281,6 +1312,24 @@ class Course(CanvasObject):
         )
         return File(self._requester, response.json())
 
+    def get_file_quota(self, **kwargs):
+        """
+        Returns the total and used storage quota for the course.
+
+        :calls: `GET /api/v1/courses/:course_id/files/quota \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_quota>`_
+
+        :rtype: dict
+        """
+
+        response = self._requester.request(
+            "GET",
+            "courses/{}/files/quota".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return response.json()
+
     def get_files(self, **kwargs):
         """
         Returns the paginated list of files for the course.
@@ -1301,7 +1350,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_folder(self, folder):
+    def get_folder(self, folder, **kwargs):
         """
         Returns the details for a course folder
 
@@ -1316,7 +1365,9 @@ class Course(CanvasObject):
         folder_id = obj_or_id(folder, "folder", (Folder,))
 
         response = self._requester.request(
-            "GET", "courses/{}/folders/{}".format(self.id, folder_id)
+            "GET",
+            "courses/{}/folders/{}".format(self.id, folder_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Folder(self._requester, response.json())
 
@@ -1339,7 +1390,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_full_discussion_topic(self, topic):
+    def get_full_discussion_topic(self, topic, **kwargs):
         """
         Return a cached structure of the discussion topic.
 
@@ -1354,7 +1405,9 @@ class Course(CanvasObject):
         topic_id = obj_or_id(topic, "topic", (DiscussionTopic,))
 
         response = self._requester.request(
-            "GET", "courses/{}/discussion_topics/{}/view".format(self.id, topic_id)
+            "GET",
+            "courses/{}/discussion_topics/{}/view".format(self.id, topic_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
 
@@ -1637,7 +1690,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_outcome_group(self, group):
+    def get_outcome_group(self, group, **kwargs):
         """
         Returns the details of the Outcome Group with the given id.
 
@@ -1660,7 +1713,7 @@ class Course(CanvasObject):
 
         return OutcomeGroup(self._requester, response.json())
 
-    def get_outcome_groups_in_context(self):
+    def get_outcome_groups_in_context(self, **kwargs):
         """
         Get all outcome groups for context - BETA
 
@@ -1678,6 +1731,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/outcome_groups".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_outcome_import_status(self, outcome_import, **kwargs):
@@ -1748,7 +1802,7 @@ class Course(CanvasObject):
 
         return response.json()
 
-    def get_page(self, url):
+    def get_page(self, url, **kwargs):
         """
         Retrieve the contents of a wiki page.
 
@@ -1758,11 +1812,13 @@ class Course(CanvasObject):
         :param url: The url for the page.
         :type url: str
         :returns: The specified page.
-        :rtype: :class:`canvasapi.course.Course`
+        :rtype: :class:`canvasapi.page.Page`
         """
 
         response = self._requester.request(
-            "GET", "courses/{}/pages/{}".format(self.id, url)
+            "GET",
+            "courses/{}/pages/{}".format(self.id, url),
+            _kwargs=combine_kwargs(**kwargs),
         )
         page_json = response.json()
         page_json.update({"course_id": self.id})
@@ -1777,7 +1833,7 @@ class Course(CanvasObject):
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.course.Course`
+            :class:`canvasapi.page.Page`
         """
         return PaginatedList(
             Page,
@@ -1788,7 +1844,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_quiz(self, quiz):
+    def get_quiz(self, quiz, **kwargs):
         """
         Return the quiz with the given id.
 
@@ -1805,7 +1861,9 @@ class Course(CanvasObject):
         quiz_id = obj_or_id(quiz, "quiz", (Quiz,))
 
         response = self._requester.request(
-            "GET", "courses/{}/quizzes/{}".format(self.id, quiz_id)
+            "GET",
+            "courses/{}/quizzes/{}".format(self.id, quiz_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         quiz_json = response.json()
         quiz_json.update({"course_id": self.id})
@@ -1856,7 +1914,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_recent_students(self):
+    def get_recent_students(self, **kwargs):
         """
         Return a list of students in the course ordered by how recently they
         have logged in.
@@ -1870,10 +1928,14 @@ class Course(CanvasObject):
         from canvasapi.user import User
 
         return PaginatedList(
-            User, self._requester, "GET", "courses/{}/recent_students".format(self.id)
+            User,
+            self._requester,
+            "GET",
+            "courses/{}/recent_students".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_root_outcome_group(self):
+    def get_root_outcome_group(self, **kwargs):
         """
         Redirect to root outcome group for context
 
@@ -1886,7 +1948,9 @@ class Course(CanvasObject):
         from canvasapi.outcome import OutcomeGroup
 
         response = self._requester.request(
-            "GET", "courses/{}/root_outcome_group".format(self.id)
+            "GET",
+            "courses/{}/root_outcome_group".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return OutcomeGroup(self._requester, response.json())
 
@@ -1970,7 +2034,7 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_settings(self):
+    def get_settings(self, **kwargs):
         """
         Returns this course's settings.
 
@@ -1979,7 +2043,11 @@ class Course(CanvasObject):
 
         :rtype: dict
         """
-        response = self._requester.request("GET", "courses/{}/settings".format(self.id))
+        response = self._requester.request(
+            "GET",
+            "courses/{}/settings".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
         return response.json()
 
     def get_single_grading_standard(self, grading_standard_id, **kwargs):
@@ -2051,6 +2119,25 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_todo_items(self, **kwargs):
+        """
+        Returns the current user's course-specific todo items.
+
+        :calls: `GET /api/v1/courses/:course_id/todo \
+        <https://canvas.instructure.com/doc/api/courses.html#method.courses.todo_items>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.todo.Todo`
+        """
+
+        return PaginatedList(
+            Todo,
+            self._requester,
+            "GET",
+            "courses/{}/todo".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_uncollated_submissions(self, **kwargs):
         """
         Gives a paginated, uncollated list of submission versions for all matching
@@ -2100,7 +2187,7 @@ class Course(CanvasObject):
         response = self._requester.request("GET", uri, _kwargs=combine_kwargs(**kwargs))
         return User(self._requester, response.json())
 
-    def get_user_in_a_course_level_assignment_data(self, user):
+    def get_user_in_a_course_level_assignment_data(self, user, **kwargs):
         """
         Return a list of assignments for the course sorted by due date
 
@@ -2117,12 +2204,14 @@ class Course(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            "GET", "courses/{}/analytics/users/{}/assignments".format(self.id, user_id)
+            "GET",
+            "courses/{}/analytics/users/{}/assignments".format(self.id, user_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
 
-    def get_user_in_a_course_level_messaging_data(self, user):
+    def get_user_in_a_course_level_messaging_data(self, user, **kwargs):
         """
         Return messaging hits grouped by day through the entire history of the course
 
@@ -2141,11 +2230,12 @@ class Course(CanvasObject):
         response = self._requester.request(
             "GET",
             "courses/{}/analytics/users/{}/communication".format(self.id, user_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
 
-    def get_user_in_a_course_level_participation_data(self, user):
+    def get_user_in_a_course_level_participation_data(self, user, **kwargs):
         """
         Return page view hits grouped by hour and participation details through course's history
 
@@ -2162,7 +2252,9 @@ class Course(CanvasObject):
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
-            "GET", "courses/{}/analytics/users/{}/activity".format(self.id, user_id)
+            "GET",
+            "courses/{}/analytics/users/{}/activity".format(self.id, user_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json()
@@ -2239,7 +2331,7 @@ class Course(CanvasObject):
             kwargs=combine_kwargs(**kwargs),
         )
 
-    def preview_html(self, html):
+    def preview_html(self, html, **kwargs):
         """
         Preview HTML content processed for this course.
 
@@ -2250,8 +2342,12 @@ class Course(CanvasObject):
         :type html: str
         :rtype: str
         """
+        kwargs["html"] = html
+
         response = self._requester.request(
-            "POST", "courses/{}/preview_html".format(self.id), html=html
+            "POST",
+            "courses/{}/preview_html".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json().get("html", "")
 
@@ -2273,7 +2369,7 @@ class Course(CanvasObject):
 
         return response.json()
 
-    def reorder_pinned_topics(self, order):
+    def reorder_pinned_topics(self, order, **kwargs):
         """
         Puts the pinned discussion topics in the specified order.
         All pinned topics should be included.
@@ -2296,13 +2392,17 @@ class Course(CanvasObject):
         if not isinstance(order, str) or "," not in order:
             raise ValueError("Param `order` must be a list, tuple, or string.")
 
+        kwargs["order"] = order
+
         response = self._requester.request(
-            "POST", "courses/{}/discussion_topics/reorder".format(self.id), order=order
+            "POST",
+            "courses/{}/discussion_topics/reorder".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.json().get("reorder")
 
-    def reset(self):
+    def reset(self, **kwargs):
         """
         Delete the current course and create a new equivalent course
         with no content, but all sections and users moved over.
@@ -2313,31 +2413,44 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.course.Course`
         """
         response = self._requester.request(
-            "POST", "courses/{}/reset_content".format(self.id)
+            "POST",
+            "courses/{}/reset_content".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Course(self._requester, response.json())
 
-    def resolve_path(self, full_path, **kwargs):
+    def resolve_path(self, full_path=None, **kwargs):
         """
         Returns the paginated list of all of the folders in the given
-        path starting at the course root folder.
+        path starting at the course root folder. Returns root folder if called
+        with no arguments.
 
         :calls: `GET /api/v1/courses/:course_id/folders/by_path/*full_path \
         <https://canvas.instructure.com/doc/api/files.html#method.folders.resolve_path>`_
 
-        :param full_path: Full path to resolve, relative to course root
+        :param full_path: Full path to resolve, relative to course root.
         :type full_path: string
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.folder.Folder`
         """
-        return PaginatedList(
-            Folder,
-            self._requester,
-            "GET",
-            "courses/{0}/folders/by_path/{1}".format(self.id, full_path),
-            _kwargs=combine_kwargs(**kwargs),
-        )
+
+        if full_path:
+            return PaginatedList(
+                Folder,
+                self._requester,
+                "GET",
+                "courses/{0}/folders/by_path/{1}".format(self.id, full_path),
+                _kwargs=combine_kwargs(**kwargs),
+            )
+        else:
+            return PaginatedList(
+                Folder,
+                self._requester,
+                "GET",
+                "courses/{0}/folders/by_path".format(self.id),
+                _kwargs=combine_kwargs(**kwargs),
+            )
 
     def set_quiz_extensions(self, quiz_extensions, **kwargs):
         """
@@ -2411,7 +2524,7 @@ class Course(CanvasObject):
 
         return UsageRights(self._requester, response.json())
 
-    def show_front_page(self):
+    def show_front_page(self, **kwargs):
         """
         Retrieve the content of the front page.
 
@@ -2421,7 +2534,9 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.course.Course`
         """
         response = self._requester.request(
-            "GET", "courses/{}/front_page".format(self.id)
+            "GET",
+            "courses/{}/front_page".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         page_json = response.json()
         page_json.update({"course_id": self.id})
@@ -2506,7 +2621,7 @@ class Course(CanvasObject):
         )
         return response.json()
 
-    def upload(self, file, **kwargs):
+    def upload(self, file: FileOrPathLike, **kwargs):
         """
         Upload a file to this course.
 
@@ -2528,7 +2643,7 @@ class CourseNickname(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.nickname, self.course_id)
 
-    def remove(self):
+    def remove(self, **kwargs):
         """
         Remove the nickname for the given course. Subsequent course API
         calls will return the actual name for the course.
@@ -2539,7 +2654,9 @@ class CourseNickname(CanvasObject):
         :rtype: :class:`canvasapi.course.CourseNickname`
         """
         response = self._requester.request(
-            "DELETE", "users/self/course_nicknames/{}".format(self.course_id)
+            "DELETE",
+            "users/self/course_nicknames/{}".format(self.course_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return CourseNickname(self._requester, response.json())
 

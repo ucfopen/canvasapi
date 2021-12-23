@@ -1,7 +1,7 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
-from canvasapi.upload import Uploader
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
@@ -79,6 +79,7 @@ class Submission(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
+
         response_json.update(course_id=self.course_id)
 
         super(Submission, self).set_attributes(response_json)
@@ -143,7 +144,7 @@ class Submission(CanvasObject):
         )
         return response.status_code == 204
 
-    def upload_comment(self, file, **kwargs):
+    def upload_comment(self, file: FileOrPathLike, **kwargs):
         """
         Upload a file to attach to this submission as a comment.
 

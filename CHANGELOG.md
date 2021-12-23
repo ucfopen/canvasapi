@@ -2,14 +2,71 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2021-03-25
+
+### New Endpoint Coverage
+
+- Enroll a user in a section (Thanks, [@damianfs](https://github.com/damianfs))
+- File quota for courses, groups, and users (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+- Provisional Grades (Thanks, [@zenith110](https://github.com/zenith110))
+
+### General
+
+- Added support for Python 3.9
+- Added `RateLimitExceeded` exception to distinguish between being rate limited and being otherwise forbidden from accesing a resource. It is a subclass of the `Forbidden` exception.
+- File uploads now accept path-like objects (Thanks, [@theunkn0wn1](https://github.com/theunkn0wn1))
+- Add list of CanvasAPI Projects to README (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+- PyPI Package Description now uses README (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Replaced Travis CI with GitHub Actions
+
+### Bugfixes
+
+- Fixed an issue where `Canvas.create_poll()` did not work due to an incorrect parameter.
+- Canvas.get_todo_items() now correctly returns a `PaginatedList` of `Todo` items (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where `Favorite.remove()` did not handle parameters properly. (Thanks, [@deundrewilliams](https://github.com/deundrewilliams))
+
+## [2.1.0] - 2020-12-04
+
+### New Endpoint Coverage
+
+- Course TODO items (Thanks, [@onomou](https://github.com/onomou))
+- Create observer pairing code (Thanks, [@bennettscience](https://github.com/bennettscience))
+
+### General
+
+- Added missing documentation for the get_current_user method and clarifications to the `CurrentUser` class. (Thanks, [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX))
+- `Canvas.get_announcement` now has a required parameter `context_codes`, which accepts a list of course IDs or `Course` objects.
+- Updated contributing guide
+- Added missing documentation for the "Smart DateTimes" feature
+- Added basic troubleshooting guide to documentation
+
+### Bugfixes
+
+- Fixed an issue where an `Announcement` object sometimes didn't have an associated course ID. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where an encoding problem could lead to file downloads hanging indefinitely. (Thanks, [@blepabyte](https://github.com/blepabyte))
+
+### Deprecation Warnings
+
+- The `enrollment_type` argument on `Course.enroll_user` is now deprecated. Pass this information to `enrollment[type]` as a keyword argument instead. e.g. `enroll_user(enrollment={'type': 'StudentEnrollment'})`
+
+## [2.0.0] - 2020-08-14
+
+### General
+
+- Added support for arbitrary keyword arguments across the entire library
+
 ### New Endpoint Coverage
 
 - Custom Gradebook Columns (Thanks,[@aileenpongnon](https://github.com/aileenpongnon))
+- Files
+    - Resolve Path (Thanks,[@dsavransky](https://github.com/dsavransky))
 
 ### Bugfixes
 
 - Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
 - Fixed an issue where `Course.create_external_tool` didn't accept `client_id` (LTI 1.3 support).
+- Fixed an issue where `Module.create_module_item` didn't (Thanks,[@aileenpongnon](https://github.com/aileenpongnon) and [@onomou](https://github.com/onomou))
+- Fixed an issue where `Page.revert_to_revision` would incorrectly always set `group_id` to the page ID. Now correctly sets `group_id` or `course_id` appropriately.
 
 ### Breaking Changes
 
@@ -477,7 +534,10 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...develop
+[2.2.0]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...v2.2.0
+[2.1.0]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/ucfopen/canvasapi/compare/v0.16.1...v1.0.0
 [0.16.1]: https://github.com/ucfopen/canvasapi/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/ucfopen/canvasapi/compare/v0.15.0...v0.16.0

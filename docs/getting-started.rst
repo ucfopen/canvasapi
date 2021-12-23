@@ -14,7 +14,7 @@ Usage
 Before using CanvasAPI, you'll need to instantiate a new Canvas object:
 
 .. code:: python
-    
+
     # Import the Canvas class
     from canvasapi import Canvas
 
@@ -117,7 +117,38 @@ Most of Canvas’s API endpoints accept a variety of arguments. CanvasAPI allows
     # Get all of the active courses a user is currently enrolled in
     >>> courses = user.get_courses(enrollment_status='active')
 
-    # Fetch 50 objects per page when making calls that return a PaginatedList
-    >>> courses = user.get_courses(per_page=50)
-
 For a more detailed description of how CanvasAPI handles more complex keyword arguments, check out the `Keyword Argument Documentation <keyword-args.html>`_.
+
+Smart DateTimes
+~~~~~~~~~~~~~~~
+
+CanvasAPI is set up to make working with datetime strings a little bit easier.
+
+If Canvas's documentation calls for an ISO 8601 format datetime string, you can pass in a `Python datetime object <https://docs.python.org/3/library/datetime.html>`_ instead. For example, updating the :code:`start_at` and :code:`end_at` dates of a course:
+
+
+.. code-block:: python
+
+    from datetime import datetime
+
+    start_date = datetime(2018, 1, 1, 0, 1)  # '2018-01-01T00:01Z'
+    end_date = datetime(2018, 12, 31, 11, 59)  # '2018-12-31T11:59Z'
+
+    course.update(
+        course={
+            'start_at': start_date,
+            'end_at': end_date,
+        }
+    )
+
+If Canvas returns an ISO 8601 formatted datetime string, CanvasAPI will automatically create a :code:`datetime` object from that string. This new :code:`datetime` object will be a the string attribute as the same key with :code:`_date` appended. For example, :code:`start_at` becomes :code:`start_at_date`. The attribute with the original string representation of the date is retained.
+
+.. code-block:: python
+
+    >>> course = canvas.get_course(1)
+    >>> course.start_at
+    '2014-02-11T16:38:00Z'
+    >>> course.start_at_date
+    datetime.datetime(2014, 2, 11, 16, 38, tzinfo=<UTC>)
+
+**Note**: At this time, the automatic conversion to `datetime` objects only works on strings with no UTC offset (ending in "Z").

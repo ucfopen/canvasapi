@@ -1,5 +1,5 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 from pprint import pformat
 
 import requests
@@ -10,12 +10,12 @@ from canvasapi.exceptions import (
     Conflict,
     Forbidden,
     InvalidAccessToken,
+    RateLimitExceeded,
     ResourceDoesNotExist,
     Unauthorized,
     UnprocessableEntity,
 )
 from canvasapi.util import clean_headers
-
 
 logger = logging.getLogger(__name__)
 
@@ -157,7 +157,7 @@ class Requester(object):
             currently only the POST request of GraphQL is using this parameter.
             For all other methods it's just passed and ignored.
         :type json: `bool`
-        :rtype: str
+        :rtype: :class:`requests.Response`
         """
         full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
 
@@ -218,9 +218,14 @@ class Requester(object):
         )
 
         try:
-            logger.debug("Data: {data}".format(data=pformat(response.json())))
-        except ValueError:
-            logger.debug("Data: {data}".format(data=pformat(response.text)))
+            logger.debug(
+                "Data: {data}".format(data=pformat(response.content.decode("utf-8")))
+            )
+        except UnicodeDecodeError:
+            logger.debug("Data: {data}".format(data=pformat(response.content)))
+        except AttributeError:
+            # response.content is None
+            logger.debug("No data")
 
         # Add response to internal cache
         if len(self._cache) > 4:
@@ -237,7 +242,15 @@ class Requester(object):
             else:
                 raise Unauthorized(response.json())
         elif response.status_code == 403:
-            raise Forbidden(response.text)
+            if b"Rate Limit Exceeded" in response.content:
+                remaining = str(
+                    response.headers.get("X-Rate-Limit-Remaining", "Unknown")
+                )
+                raise RateLimitExceeded(
+                    "Rate Limit Exceeded. X-Rate-Limit-Remaining: {}".format(remaining)
+                )
+            else:
+                raise Forbidden(response.text)
         elif response.status_code == 404:
             raise ResourceDoesNotExist("Not Found")
         elif response.status_code == 409:

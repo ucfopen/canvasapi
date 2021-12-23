@@ -1,15 +1,17 @@
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.enrollment import Enrollment
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.submission import GroupedSubmission, Submission
-from canvasapi.util import combine_kwargs, obj_or_id, normalize_bool
+from canvasapi.user import User
+from canvasapi.util import combine_kwargs, normalize_bool, obj_or_id
 
 
 class Section(CanvasObject):
     def __str__(self):
         return "{} - {} ({})".format(self.name, self.course_id, self.id)
 
-    def cross_list_section(self, new_course):
+    def cross_list_section(self, new_course, **kwargs):
         """
         Move the Section to another course.
 
@@ -26,11 +28,13 @@ class Section(CanvasObject):
         new_course_id = obj_or_id(new_course, "new_course", (Course,))
 
         response = self._requester.request(
-            "POST", "sections/{}/crosslist/{}".format(self.id, new_course_id)
+            "POST",
+            "sections/{}/crosslist/{}".format(self.id, new_course_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Section(self._requester, response.json())
 
-    def decross_list_section(self):
+    def decross_list_section(self, **kwargs):
         """
         Undo cross-listing of a section.
 
@@ -40,11 +44,13 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.section.Section`
         """
         response = self._requester.request(
-            "DELETE", "sections/{}/crosslist".format(self.id)
+            "DELETE",
+            "sections/{}/crosslist".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Section(self._requester, response.json())
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete a target section.
 
@@ -53,7 +59,9 @@ class Section(CanvasObject):
 
         :rtype: :class:`canvasapi.section.Section`
         """
-        response = self._requester.request("DELETE", "sections/{}".format(self.id))
+        response = self._requester.request(
+            "DELETE", "sections/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
+        )
         return Section(self._requester, response.json())
 
     def edit(self, **kwargs):
@@ -73,6 +81,28 @@ class Section(CanvasObject):
             super(Section, self).set_attributes(response.json())
 
         return self
+
+    def enroll_user(self, user, **kwargs):
+        """
+        Create a new user enrollment for a course or a section.
+
+        :calls: `POST /api/v1/section/:section_id/enrollments \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.create>`_
+
+        :param user: The object or ID of the user to enroll in this course.
+        :type user: :class:`canvasapi.user.User` or int
+        :rtype: :class:`canvasapi.enrollment.Enrollment`
+        """
+
+        kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
+
+        response = self._requester.request(
+            "POST",
+            "sections/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return Enrollment(self._requester, response.json())
 
     def get_assignment_override(self, assignment, **kwargs):
         """

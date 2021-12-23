@@ -1,24 +1,24 @@
 import unittest
-from urllib.parse import quote
 import uuid
+from urllib.parse import quote
 
 import requests
 import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.assignment import AssignmentOverride
-from canvasapi.group import Group, GroupMembership, GroupCategory
+from canvasapi.content_export import ContentExport
+from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Page
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.group import Group, GroupCategory, GroupMembership
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.tab import Tab
-from canvasapi.content_migration import ContentMigration, Migrator
-from canvasapi.content_export import ContentExport
 from canvasapi.usage_rights import UsageRights
 from tests import settings
 from tests.util import cleanup_file, register_uris
@@ -254,6 +254,15 @@ class TestGroup(unittest.TestCase):
         self.assertIsInstance(file_by_obj, File)
         self.assertEqual(file_by_obj.display_name, "Group_File.docx")
         self.assertEqual(file_by_obj.size, 4096)
+
+    # get_file_quota()
+    def test_get_file_quota(self, m):
+        register_uris({"group": ["get_file_quota"]}, m)
+
+        file_quota = self.group.get_file_quota()
+        self.assertIsInstance(file_quota, dict)
+        self.assertEqual(file_quota["quota"], 777648912)
+        self.assertEqual(file_quota["quota_used"], 567864213)
 
     # get_full_discussion_topic
     def test_get_full_discussion_topic(self, m):
@@ -578,6 +587,30 @@ class TestGroup(unittest.TestCase):
 
         self.assertEqual(2, len(licenses))
 
+    # resolve_path()
+    def test_resolve_path(self, m):
+        register_uris({"group": ["resolve_path"]}, m)
+
+        full_path = "Folder_Level_1/Folder_Level_2/Folder_Level_3"
+        folders = self.group.resolve_path(full_path)
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 4)
+        self.assertIsInstance(folder_list[0], Folder)
+        folder_names = ("files/" + full_path).split("/")
+        for folder_name, folder in zip(folder_names, folders):
+            self.assertEqual(folder_name, folder.name)
+
+    # resolve_path() with null input
+    def test_resolve_path_null(self, m):
+        register_uris({"group": ["resolve_path_null"]}, m)
+
+        # test with null input
+        root_folder = self.group.resolve_path()
+        root_folder_list = [folder for folder in root_folder]
+        self.assertEqual(len(root_folder_list), 1)
+        self.assertIsInstance(root_folder_list[0], Folder)
+        self.assertEqual("files", root_folder_list[0].name)
+
 
 @requests_mock.Mocker()
 class TestGroupMembership(unittest.TestCase):
@@ -691,8 +724,8 @@ class TestGroupCategory(unittest.TestCase):
 
     # assign_members()
     def test_assign_members(self, m):
-        from canvasapi.progress import Progress
         from canvasapi.paginated_list import PaginatedList
+        from canvasapi.progress import Progress
 
         requires = {
             "group": ["category_assign_members_true", "category_assign_members_false"]

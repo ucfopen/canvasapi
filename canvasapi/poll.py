@@ -1,5 +1,5 @@
-from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.poll_choice import PollChoice
 from canvasapi.poll_session import PollSession

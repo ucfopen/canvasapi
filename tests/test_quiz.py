@@ -4,23 +4,23 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.quiz import (
     Quiz,
+    QuizAssignmentOverrideSet,
+    QuizExtension,
+    QuizQuestion,
+    QuizReport,
     QuizStatistic,
     QuizSubmission,
-    QuizSubmissionQuestion,
-    QuizQuestion,
-    QuizExtension,
     QuizSubmissionEvent,
-    QuizReport,
-    QuizAssignmentOverrideSet,
+    QuizSubmissionQuestion,
 )
 from canvasapi.quiz_group import QuizGroup
-from canvasapi.paginated_list import PaginatedList
+from canvasapi.submission import Submission
+from canvasapi.user import User
 from tests import settings
 from tests.util import register_uris
-from canvasapi.user import User
-from canvasapi.submission import Submission
 
 
 @requests_mock.Mocker()
@@ -461,7 +461,7 @@ class TestQuizSubmission(unittest.TestCase):
         register_uris({"quiz": ["get_submission_events"]}, m)
 
         events = self.submission.get_submission_events()
-        self.assertIsInstance(events, list)
+        self.assertIsInstance(events, PaginatedList)
         self.assertIsInstance(events[0], QuizSubmissionEvent)
         self.assertIsInstance(events[1], QuizSubmissionEvent)
         self.assertEqual(str(events[0]), "page_blurred")
@@ -515,7 +515,7 @@ class TestQuizSubmission(unittest.TestCase):
 
         test_events = self.submission.get_submission_events()
 
-        result = self.submission.submit_events(test_events)
+        result = self.submission.submit_events(list(test_events))
         self.assertTrue(result)
 
     def test_submit_events_fail(self, m):

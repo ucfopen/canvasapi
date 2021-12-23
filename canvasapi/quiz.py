@@ -561,19 +561,20 @@ class QuizSubmission(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/quizzes/:quiz_id/submissions/:id/events \
         <https://canvas.instructure.com/doc/api/quiz_submission_events.html#method.quizzes/quiz_submission_events_api.index>`_
 
-        :returns: list of QuizSubmissionEvents.
-        :rtype: list
+        :returns: PaginatedList of QuizSubmissionEvents.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+          :class:`canvasapi.quiz.QuizSubmissionEvent`
         """
-        response = self._requester.request(
+        return PaginatedList(
+            QuizSubmissionEvent,
+            self._requester,
             "GET",
             "courses/{}/quizzes/{}/submissions/{}/events".format(
                 self.course_id, self.quiz_id, self.id
             ),
+            _root="quiz_submission_events",
             _kwargs=combine_kwargs(**kwargs),
         )
-        events = response.json()["quiz_submission_events"]
-
-        return [QuizSubmissionEvent(self._requester, event) for event in events]
 
     def get_submission_questions(self, **kwargs):
         """

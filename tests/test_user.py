@@ -16,12 +16,13 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
-from canvasapi.login import Login
 from canvasapi.license import License
+from canvasapi.login import Login
 from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.user import User
+from canvasapi.pairing_code import PairingCode
 from canvasapi.usage_rights import UsageRights
+from canvasapi.user import User
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -271,6 +272,15 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(file_by_obj, File)
         self.assertEqual(file_by_obj.display_name, "User_File.docx")
         self.assertEqual(file_by_obj.size, 1024)
+
+    # get_file_quota()
+    def test_get_file_quota(self, m):
+        register_uris({"user": ["get_file_quota"]}, m)
+
+        file_quota = self.user.get_file_quota()
+        self.assertIsInstance(file_quota, dict)
+        self.assertEqual(file_quota["quota"], 889234510)
+        self.assertEqual(file_quota["quota_used"], 476231098)
 
     # get_folder()
     def test_get_folder(self, m):
@@ -539,6 +549,39 @@ class TestUser(unittest.TestCase):
             self.assertTrue(hasattr(lic, "url"))
 
         self.assertEqual(2, len(licenses))
+
+    # resolve_path()
+    def test_resolve_path(self, m):
+        register_uris({"user": ["resolve_path"]}, m)
+
+        full_path = "Folder_Level_1/Folder_Level_2/Folder_Level_3"
+        folders = self.user.resolve_path(full_path)
+        folder_list = [folder for folder in folders]
+        self.assertEqual(len(folder_list), 4)
+        self.assertIsInstance(folder_list[0], Folder)
+
+        folder_names = ("my_files/" + full_path).split("/")
+        for folder_name, folder in zip(folder_names, folders):
+            self.assertEqual(folder_name, folder.name)
+
+    # resolve_path() with null input
+    def test_resolve_path_null(self, m):
+        register_uris({"user": ["resolve_path_null"]}, m)
+
+        # test with null input
+        root_folder = self.user.resolve_path()
+        root_folder_list = [folder for folder in root_folder]
+        self.assertEqual(len(root_folder_list), 1)
+        self.assertIsInstance(root_folder_list[0], Folder)
+        self.assertEqual("my_files", root_folder_list[0].name)
+
+    # create_pairing_code()
+    def test_create_pairing_code(self, m):
+        register_uris({"user": ["observer_pairing_codes"]}, m)
+
+        pairing_code = self.user.create_pairing_code()
+        self.assertIsInstance(pairing_code, PairingCode)
+        self.assertEqual("abc123", pairing_code.code)
 
 
 @requests_mock.Mocker()

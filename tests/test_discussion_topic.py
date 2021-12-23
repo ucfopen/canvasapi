@@ -4,7 +4,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.course import Course
-from canvasapi.discussion_topic import DiscussionTopic, DiscussionEntry
+from canvasapi.discussion_topic import DiscussionEntry, DiscussionTopic
 from canvasapi.exceptions import Forbidden
 from canvasapi.group import Group
 from tests import settings
@@ -47,7 +47,6 @@ class TestDiscussionTopic(unittest.TestCase):
         discussion = self.discussion_topic.update()
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, "course_id"))
-        self.assertEqual(discussion.course_id, 1)
 
     # post_entry()
     def test_post_entry(self, m):

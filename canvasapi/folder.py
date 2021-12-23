@@ -1,7 +1,7 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.upload import FileOrPathLike, Uploader
 from canvasapi.util import combine_kwargs, obj_or_id
-from canvasapi.upload import Uploader
 
 
 class Folder(CanvasObject):
@@ -119,7 +119,7 @@ class Folder(CanvasObject):
 
         return Folder(self._requester, response.json())
 
-    def upload(self, file, **kwargs):
+    def upload(self, file: FileOrPathLike, **kwargs):
         """
         Upload a file to this folder.
 
