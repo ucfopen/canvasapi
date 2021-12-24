@@ -153,25 +153,11 @@ class TestAccount(unittest.TestCase):
             self.account.delete()
 
     # delete_admin()
-    def test_delete_admin_id(self, m):
+    def test_delete_admin(self, m):
         register_uris({"account": ["delete_admin"]}, m)
 
-        deleted_admin = self.account.delete_admin(self.user.id)
-
-        self.assertIsInstance(deleted_admin, Admin)
-        self.assertTrue(hasattr(deleted_admin, "id"))
-        self.assertTrue(hasattr(deleted_admin, "role"))
-        self.assertTrue(hasattr(deleted_admin, "role_id"))
-        self.assertTrue(hasattr(deleted_admin, "workflow_state"))
-        self.assertEqual(deleted_admin.user["login_id"], "jdoe")
-        self.assertEqual(deleted_admin.role, "AccountAdmin")
-        self.assertEqual(deleted_admin.role_id, 1)
-        self.assertEqual(deleted_admin.workflow_state, "deleted")
-
-    def test_delete_admin_obj(self, m):
-        register_uris({"account": ["delete_admin"]}, m)
-
-        deleted_admin = self.account.delete_admin(self.user)
+        user_id = 123
+        deleted_admin = self.account.delete_admin(user=user_id)
 
         self.assertIsInstance(deleted_admin, Admin)
         self.assertTrue(hasattr(deleted_admin, "id"))

@@ -1689,7 +1689,7 @@
 	},
 	"delete_admin": {
 		"method": "DELETE",
-		"endpoint": "accounts/:account_id/admins/:user_id",
+		"endpoint": "accounts/1/admins/123",
 		"data": {
 			"id": 100,
 			"role": "AccountAdmin",
