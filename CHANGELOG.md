@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Breaking Changes
+
+- Update `QuizSubmission.get_submission_events` to return a `PaginatedList`.
+- Remove unnecessary `id` parameter from `delete`, `reorder_question_group`, and `update` methods in `QuizGroup` class.
+
 ## [2.2.0] - 2021-03-25
 
 ### New Endpoint Coverage
