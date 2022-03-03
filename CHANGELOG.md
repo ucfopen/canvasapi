@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Delete a Rubric (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+
 ### Breaking Changes
 
 - Update `QuizSubmission.get_submission_events` to return a `PaginatedList`.
