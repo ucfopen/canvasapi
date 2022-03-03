@@ -11,7 +11,7 @@ class Rubric(CanvasObject):
         Delete a Rubric.
 
         :calls: `DELETE /api/v1/courses/:course_id/rubrics/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics.destroy>
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubrics.destroy>`_
 
         :rtype: :class:`canvasapi.rubric.Rubric`
         """
