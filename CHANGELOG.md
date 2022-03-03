@@ -5,6 +5,7 @@
 ### New Endpoint Coverage
 
 - Delete a Rubric (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+- Content Migrations: List items for selective import (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
 
 ### Breaking Changes
 
