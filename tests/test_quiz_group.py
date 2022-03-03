@@ -31,7 +31,7 @@ class TestQuizGroup(unittest.TestCase):
         register_uris({"quiz_group": ["update"]}, m)
 
         quiz_group = [{"name": "Test Group", "pick_count": 1, "question_points": 2}]
-        result = self.quiz_group.update(10, quiz_group)
+        result = self.quiz_group.update(quiz_group)
 
         self.assertIsInstance(result, bool)
         self.assertTrue(result)
@@ -50,7 +50,7 @@ class TestQuizGroup(unittest.TestCase):
         quiz_group = []
 
         with self.assertRaises(ValueError):
-            self.quiz_group.update(10, quiz_group)
+            self.quiz_group.update(quiz_group)
 
     def test_update_incorrect_param(self, m):
         register_uris({"quiz_group": ["update"]}, m)
@@ -58,7 +58,7 @@ class TestQuizGroup(unittest.TestCase):
         quiz_group = [1]
 
         with self.assertRaises(ValueError):
-            self.quiz_group.update(10, quiz_group)
+            self.quiz_group.update(quiz_group)
 
     def test_update_incorrect_dict(self, m):
         register_uris({"quiz_group": ["update"]}, m)
@@ -66,13 +66,13 @@ class TestQuizGroup(unittest.TestCase):
         quiz_group = [{}]
 
         with self.assertRaises(RequiredFieldMissing):
-            self.quiz_group.update(10, quiz_group)
+            self.quiz_group.update(quiz_group)
 
     # delete_question_group()
     def test_delete(self, m):
         register_uris({"quiz_group": ["delete"]}, m)
 
-        result = self.quiz_group.delete(10)
+        result = self.quiz_group.delete()
 
         self.assertTrue(result)
 
@@ -81,7 +81,7 @@ class TestQuizGroup(unittest.TestCase):
         register_uris({"quiz_group": ["reorder_question_group"]}, m)
 
         newOrdering = [{"id": 2}, {"id": 1, "type": "question"}]
-        result = self.quiz_group.reorder_question_group(10, newOrdering)
+        result = self.quiz_group.reorder_question_group(newOrdering)
 
         self.assertTrue(result)
 
@@ -91,7 +91,7 @@ class TestQuizGroup(unittest.TestCase):
         order = []
 
         with self.assertRaises(ValueError):
-            self.quiz_group.reorder_question_group(10, order)
+            self.quiz_group.reorder_question_group(order)
 
     def test_reorderquestion_group_incorrect_param(self, m):
         register_uris({"quiz_group": ["reorder_question_group"]}, m)
@@ -99,7 +99,7 @@ class TestQuizGroup(unittest.TestCase):
         order = [1]
 
         with self.assertRaises(ValueError):
-            self.quiz_group.reorder_question_group(10, order)
+            self.quiz_group.reorder_question_group(order)
 
     def test_reorderquestion_group_incorrect_dict(self, m):
         register_uris({"quiz_group": ["reorder_question_group"]}, m)
@@ -107,4 +107,4 @@ class TestQuizGroup(unittest.TestCase):
         order = [{"something": 2}]
 
         with self.assertRaises(ValueError):
-            self.quiz_group.reorder_question_group(10, order)
+            self.quiz_group.reorder_question_group(order)
