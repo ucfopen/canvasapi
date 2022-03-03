@@ -8,8 +8,8 @@
 
 ### Breaking Changes
 
-- Update `QuizSubmission.get_submission_events` to return a `PaginatedList`.
-- Remove unnecessary `id` parameter from `delete`, `reorder_question_group`, and `update` methods in `QuizGroup` class.
+- Update `QuizSubmission.get_submission_events` to return a `PaginatedList`. (Thanks, [@stevenbell](https://github.com/stevenbell))
+- Remove unnecessary `id` parameter from `delete`, `reorder_question_group`, and `update` methods in `QuizGroup` class. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
 
 ## [2.2.0] - 2021-03-25
 
