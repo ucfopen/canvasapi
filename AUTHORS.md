@@ -39,6 +39,7 @@ Patches and Suggestions
 - Elli Howard [@qwertynerd97](https://github.com/qwertynerd97)
 - Erik Tews [@eriktews](https://github.com/eriktews)
 - Ethan Finlay [@atarisafari](https://github.com/atarisafari)
+- Gabriel Garfinkel [@ggarfink](https://github.com/ggarfink)
 - Gabriela Dijkhoffz [@gdijkhoffz](https://github.com/gdijkhoffz)
 - Harlan Colclough [@hcolclou](https://github.com/hcolclou)
 - Henry Acevedo [@Colombiangmr](https://github.com/Colombiangmr)
