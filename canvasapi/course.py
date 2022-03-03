@@ -1972,7 +1972,10 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return Rubric(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return Rubric(self._requester, response_json)
 
     def get_rubrics(self, **kwargs):
         """
@@ -1989,6 +1992,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/%s/rubrics" % (self.id),
+            {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
