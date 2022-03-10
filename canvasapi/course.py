@@ -606,15 +606,23 @@ class Course(CanvasObject):
         )
         return ExternalFeed(self._requester, response.json())
 
-    def edit_front_page(self, **kwargs):
+    def edit_front_page(self, wiki_page, **kwargs):
         """
         Update the title or contents of the front page.
 
         :calls: `PUT /api/v1/courses/:course_id/front_page \
         <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.update_front_page>`_
 
-        :rtype: :class:`canvasapi.course.Course`
+        :param wiki_page: The page.
+        :type wiki_page: dict
+        :returns: The created page.
+        :rtype: :class:`canvasapi.page.Page`
         """
+        if isinstance(wiki_page, dict) and "title" in wiki_page:
+            kwargs["wiki_page"] = wiki_page
+        else:
+            raise RequiredFieldMissing("Dictionary with key 'title' is required.")
+
         response = self._requester.request(
             "PUT",
             "courses/{}/front_page".format(self.id),
