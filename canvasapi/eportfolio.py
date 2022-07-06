@@ -1,29 +1,29 @@
-import warnings
-
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
-from canvasapi.util import combine_kwargs, obj_or_id
+from canvasapi.util import combine_kwargs
 
 
 class EPortfolio(CanvasObject):
     def __str__(self):
         return "{}".format(self.name)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete an ePortfolio.
 
         :calls: `DELETE /api/v1/eportfolios/:id`_ \
             `<https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.delete>`
-        
+
         :returns: ePortfolio with deleted date set.
         :rtype: `canvasapi.eportfolio.EPortfolio`
         """
-        response = self._requester.request("DELETE", "eportfolios/{}".format(self.id))
+        response = self._requester.request(
+            "DELETE", "eportfolios/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
+        )
         return EPortfolio(self._requester, response.json())
 
     def get_eportfolio_pages(self, **kwargs):
-        """ 
+        """
         Return a list of pages for an ePortfolio.
 
         :calls: `GET /api/v1/eportfolios/:eportfolio_id/pages` \
@@ -44,7 +44,8 @@ class EPortfolio(CanvasObject):
 
     def moderate_eportfolio(self, **kwargs):
         """
-        Update the spam_status of an eportfolio. Only available to admins who can `moderate_user_content`.
+        Update the spam_status of an eportfolio.
+        Only available to admins who can `moderate_user_content`.
 
         :calls: `PUT /api/v1/eportfolios/:eportfolio_id/moderate` \
             `<https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.moderate>`_
@@ -62,7 +63,8 @@ class EPortfolio(CanvasObject):
 
     def restore(self, **kwargs):
         """
-        Restore an ePortfolio back to active that was previously deleted. Only available to admins who can moderate_user_content.
+        Restore an ePortfolio back to active that was previously deleted.
+        Only available to admins who can moderate_user_content.
 
         :calls: `PUT /api/v1/eportfolios/:eportfolio_id/restore` \
             `<https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.restore>`_

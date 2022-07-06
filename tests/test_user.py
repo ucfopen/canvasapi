@@ -1,4 +1,3 @@
-from atexit import register
 import unittest
 import uuid
 

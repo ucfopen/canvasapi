@@ -490,13 +490,12 @@ class User(CanvasObject):
         )
 
     def get_eportfolios(self, **kwargs):
-        """ 
+        """
         Returns a list of ePortfolios for a user.
 
         :calls: `GET /api/v1/users/:user_id/eportfolios` \
             <https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.index>`_
-        
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of 
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.eportfolio.EPortfolio`
         """
         from canvasapi.eportfolio import EPortfolio
@@ -829,7 +828,8 @@ class User(CanvasObject):
 
     def moderate_all_eportfolios(self, **kwargs):
         """
-        Update the spam_status for all active eportfolios of a user. Only available to admins who can moderate_user_content.
+        Update the spam_status for all active eportfolios of a user.
+        Only available to admins who can moderate_user_content.
 
          :param eportfolio: The object or ID of the ePortfolio to retrieve.
         :type eportfolio: :class: `canvasapi.eportfolio.EPortfolio` or int
