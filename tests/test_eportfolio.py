@@ -20,6 +20,10 @@ class TestEPortfolio(unittest.TestCase):
 
             self.eportfolio = self.canvas.get_eportfolio(1)
 
+    def test_str(self, m):
+        eportfolio_string = str(self.eportfolio)
+        self.assertEqual(eportfolio_string, "ePortfolio 1")
+
     def test_delete_eportfolio(self, m):
         register_uris({"eportfolio": ["delete_eportfolio"]}, m)
 
@@ -34,11 +38,14 @@ class TestEPortfolio(unittest.TestCase):
 
         pages = self.eportfolio.get_eportfolio_pages()
 
+        string_page = str(pages[0])
+
         self.assertIsInstance(pages, PaginatedList)
         self.assertIsInstance(pages[0], EPortfolioPage)
         self.assertIsInstance(pages[1], EPortfolioPage)
         self.assertEqual(pages[0].position, 1)
         self.assertEqual(pages[1].position, 2)
+        self.assertEqual(string_page, "1. ePortfolio 1")
 
     def test_moderate_eportfolio_as_spam(self, m):
         register_uris({"eportfolio": ["moderate_eportfolio_as_spam"]}, m)
