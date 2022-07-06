@@ -489,7 +489,6 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    # TODO: Write test
     def get_eportfolios(self, **kwargs):
         """ 
         Returns a list of ePortfolios for a user.
@@ -828,7 +827,6 @@ class User(CanvasObject):
         super(User, self).set_attributes(response.json())
         return self
 
-    # TODO: Write test
     def moderate_all_eportfolios(self, **kwargs):
         """
         Update the spam_status for all active eportfolios of a user. Only available to admins who can moderate_user_content.
