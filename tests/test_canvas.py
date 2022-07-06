@@ -1,3 +1,4 @@
+from atexit import register
 import unittest
 import warnings
 from datetime import datetime
@@ -14,6 +15,7 @@ from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.eportfolio import EPortfolio
 from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
@@ -778,6 +780,15 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(announcements[0].context_code, "course_1")
         self.assertEqual(announcements[0]._parent_type, "course")
         self.assertEqual(announcements[0]._parent_id, "1")
+
+    # get_eportfolio()
+    def test_get_eportfolio(self, m):
+        register_uris({"eportfolio": ["get_eportfolio_by_id"]}, m)
+
+        eportfolio = self.canvas.get_eportfolio(1)
+
+        self.assertIsInstance(eportfolio, EPortfolio)
+        self.assertEqual(eportfolio.name, "ePortfolio 1")
 
     # get_epub_exports()
     def test_get_epub_exports(self, m):
