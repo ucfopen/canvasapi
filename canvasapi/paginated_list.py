@@ -62,13 +62,17 @@ class PaginatedList(t.Generic[ContentClass]):
         ...
 
     def __getitem__(self, index: int | slice):
-        assert isinstance(index, (int, slice)), "`index` must be either an integer or a slice."
+        assert isinstance(
+            index, (int, slice)
+        ), "`index` must be either an integer or a slice."
         if isinstance(index, int):
             if index < 0:
                 return list(self)[index]
             return list(islice(self, index + 1))[index]
         # if no negatives, islice can be used
-        if not any(v is not None and v < 0 for v in (index.start, index.stop, index.step)):
+        if not any(
+            v is not None and v < 0 for v in (index.start, index.stop, index.step)
+        ):
             return list(islice(self, index.start, index.stop, index.step))
         return list(self)[index]
 
@@ -91,10 +95,16 @@ class PaginatedList(t.Generic[ContentClass]):
 
     def _init_content_class(self, attributes: t.Dict[str, t.Any]):
         """Instantiate a new content class."""
-        return self._content_class(self._requester, {**attributes, **self._extra_attribs})
+        return self._content_class(
+            self._requester, {**attributes, **self._extra_attribs}
+        )
 
     def _request_next_page(self):
-        response = self._requester.request(self._request_method, self._next_url, **self._next_params)  # type: ignore
+        response: t.Any = self._requester.request(
+            self._request_method,
+            self._next_url,
+            **self._next_params,
+        )
         self._next_params = {}
         self._set_next_url(response.links.get("next"))
         response_json: t.Any = response.json()

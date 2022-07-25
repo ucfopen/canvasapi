@@ -150,7 +150,13 @@ class TestPaginatedList(unittest.TestCase):
     def test_root_element_incorrect(self, m):
         register_uris({"account": ["get_enrollment_terms"]}, m)
 
-        pag_list = PaginatedList(EnrollmentTerm, self.requester, "GET", "accounts/1/terms", _root="wrong")
+        pag_list = PaginatedList(
+            EnrollmentTerm,
+            self.requester,
+            "GET",
+            "accounts/1/terms",
+            _root="wrong",
+        )
 
         with self.assertRaises(ValueError):
             pag_list[0]
