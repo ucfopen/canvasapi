@@ -150,9 +150,7 @@ class TestPaginatedList(unittest.TestCase):
     def test_root_element_incorrect(self, m):
         register_uris({"account": ["get_enrollment_terms"]}, m)
 
-        pag_list = PaginatedList(
-            EnrollmentTerm, self.requester, "GET", "accounts/1/terms", _root="wrong"
-        )
+        pag_list = PaginatedList(EnrollmentTerm, self.requester, "GET", "accounts/1/terms", _root="wrong")
 
         with self.assertRaises(ValueError):
             pag_list[0]
@@ -172,33 +170,27 @@ class TestPaginatedList(unittest.TestCase):
 
     def test_negative_index(self, m):
         # Regression test for https://github.com/ucfopen/canvasapi/issues/305
-        # Ensure that we can't use negative indexing, even after loading a page
+        # Ensure that we can use negative indexing, even after loading a page
 
         register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
         pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
         pag_list[0]
-
-        with self.assertRaises(IndexError):
-            pag_list[-1]
+        self.assertEqual(pag_list[-1].id, "4")
 
     def test_negative_index_for_slice_start(self, m):
         # Regression test for https://github.com/ucfopen/canvasapi/issues/305
-        # Ensure that we can't slice using a negative index as the start item
+        # Ensure that we can slice using a negative index as the start item
 
         register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
         pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
         pag_list[0]
-
-        with self.assertRaises(IndexError):
-            pag_list[-1:1]
+        self.assertEqual(pag_list[-1:1], [])
 
     def test_negative_index_for_slice_end(self, m):
         # Regression test for https://github.com/ucfopen/canvasapi/issues/305
-        # Ensure that we can't slice using a negative index as the end item
+        # Ensure that we can slice using a negative index as the end item
 
         register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
         pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
         pag_list[0]
-
-        with self.assertRaises(IndexError):
-            pag_list[:-1]
+        self.assertEqual([elem.id for elem in pag_list[:-1]], list("123"))
