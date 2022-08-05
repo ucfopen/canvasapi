@@ -10,6 +10,7 @@ from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.gradebook_history import (
     Day,
     Grader,
@@ -528,6 +529,7 @@ class Course(CanvasObject):
 
         if "rubric" in dictionary:
             r_dict = dictionary["rubric"]
+            r_dict.update({"course_id": self.id})
             rubric = Rubric(self._requester, r_dict)
 
             rubric_dict = {"rubric": rubric}
@@ -1413,6 +1415,26 @@ class Course(CanvasObject):
         )
         return response.json()
 
+    def get_grade_change_events(self, **kwargs):
+        """
+        Returns the grade change events for the course.
+
+        :calls: `GET /api/v1/audit/grade_change/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_course>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
+        """
+
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/courses/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_gradebook_history_dates(self, **kwargs):
         """
         Returns a map of dates to grader/assignment groups
@@ -1973,7 +1995,10 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return Rubric(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return Rubric(self._requester, response_json)
 
     def get_rubrics(self, **kwargs):
         """
@@ -1990,6 +2015,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/%s/rubrics" % (self.id),
+            {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 

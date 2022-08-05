@@ -7,35 +7,32 @@ class QuizGroup(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
-    def delete(self, id, **kwargs):
+    def delete(self, **kwargs):
         """
         Get details of the quiz group with the given id.
 
         :calls: `DELETE /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.destroy>`_
 
-        :param id: The ID of the question group.
-        :type id: int
-
         :returns: True if the result was successful (Status code of 204)
         :rtype: bool
         """
         response = self._requester.request(
             "DELETE",
-            "courses/{}/quizzes/{}/groups/{}".format(self.course_id, self.quiz_id, id),
+            "courses/{}/quizzes/{}/groups/{}".format(
+                self.course_id, self.quiz_id, self.id
+            ),
             _kwargs=combine_kwargs(**kwargs),
         )
         return response.status_code == 204
 
-    def reorder_question_group(self, id, order, **kwargs):
+    def reorder_question_group(self, order, **kwargs):
         """
         Update the order of questions within a given group
 
         :calls: `POST /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id/reorder \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.reorder>`_
 
-        :param id: The ID of the question group.
-        :type id: int
         :param order: A list of dictionaries containing the key 'id' of
             the question to be placed at order's index.
         :type order: list[dict]
@@ -61,22 +58,20 @@ class QuizGroup(CanvasObject):
         response = self._requester.request(
             "POST",
             "courses/{}/quizzes/{}/groups/{}/reorder".format(
-                self.course_id, self.quiz_id, id
+                self.course_id, self.quiz_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
         )
 
         return response.status_code == 204
 
-    def update(self, id, quiz_groups, **kwargs):
+    def update(self, quiz_groups, **kwargs):
         """
         Update a question group given by id.
 
         :calls: `PUT /api/v1/courses/:course_id/quizzes/:quiz_id/groups/:id \
         <https://canvas.instructure.com/doc/api/quiz_question_groups.html#method.quizzes/quiz_groups.update>`_
 
-        :param id: The ID of the question group.
-        :type id: int
         :param quiz_groups: The name, pick count, and/or question points.
             All of these parameters are optional, but at least one must exist
             (even if empty) to recieve a response.
@@ -100,7 +95,9 @@ class QuizGroup(CanvasObject):
 
         response = self._requester.request(
             "PUT",
-            "courses/{}/quizzes/{}/groups/{}".format(self.course_id, self.quiz_id, id),
+            "courses/{}/quizzes/{}/groups/{}".format(
+                self.course_id, self.quiz_id, self.id
+            ),
             _kwargs=combine_kwargs(**kwargs),
         )
 
