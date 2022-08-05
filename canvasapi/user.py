@@ -648,9 +648,8 @@ class User(CanvasObject):
             self._requester,
             "GET",
             "audit/grade_change/graders/{}".format(self.id),
-            None,
-            "events",
-            **kwargs
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_grade_change_events_for_student(self, **kwargs):
@@ -669,9 +668,8 @@ class User(CanvasObject):
             self._requester,
             "GET",
             "audit/grade_change/students/{}".format(self.id),
-            None,
-            "events",
-            **kwargs
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_licenses(self, **kwargs):

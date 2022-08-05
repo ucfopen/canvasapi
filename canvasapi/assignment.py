@@ -93,9 +93,8 @@ class Assignment(CanvasObject):
             self._requester,
             "GET",
             "audit/grade_change/assignments/{}".format(self.id),
-            None,
-            "events",
-            **kwargs
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_gradeable_students(self, **kwargs):

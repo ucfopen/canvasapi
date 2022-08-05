@@ -1429,9 +1429,8 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "audit/grade_change/courses/{}".format(self.id),
-            None,
-            "events",
-            **kwargs
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_gradebook_history_dates(self, **kwargs):
