@@ -4,7 +4,11 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.account import Account
-from canvasapi.content_migration import ContentMigration, MigrationIssue
+from canvasapi.content_migration import (
+    ContentMigration,
+    ContentMigrationSelectionNode,
+    MigrationIssue,
+)
 from canvasapi.course import Course
 from canvasapi.group import Group
 from canvasapi.progress import Progress
@@ -256,3 +260,50 @@ class TestMigrator(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.migrator)
         self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestSelectiveData(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            requires = {
+                "course": ["get_by_id"],
+                "group": ["get_by_id"],
+                "account": ["get_by_id"],
+                "user": ["get_by_id"],
+            }
+            register_uris(requires, m)
+
+            self.account = self.canvas.get_account(1)
+            self.course = self.canvas.get_course(1)
+            self.group = self.canvas.get_group(1)
+            self.user = self.canvas.get_user(1)
+
+    def test_get_selective_data(self, m):
+        register_uris(
+            {
+                "course": ["get_content_migration_single"],
+                "group": ["get_content_migration_single"],
+                "account": ["get_content_migration_single"],
+                "user": ["get_content_migration_single"],
+                "content_migration": [
+                    "get_selective_data_account",
+                    "get_selective_data_course",
+                    "get_selective_data_group",
+                    "get_selective_data_user",
+                ],
+            },
+            m,
+        )
+        for context_type in ["account", "course", "group", "user"]:
+            context = getattr(self, context_type)
+            migration = context.get_content_migration(1)
+            for node in migration.get_selective_data():
+                self.assertIsInstance(node, ContentMigrationSelectionNode)
+                self.assertIsInstance(str(node), str)
+
+            for node in migration.get_selective_data(type="assignments"):
+                self.assertIsInstance(node, ContentMigrationSelectionNode)
+                self.assertIsInstance(str(node), str)

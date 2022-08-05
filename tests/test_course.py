@@ -1202,6 +1202,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(rubric, Rubric)
         self.assertEqual(rubric.id, rubric_id)
         self.assertEqual(rubric.title, "Course Rubric 1")
+        self.assertTrue(hasattr(rubric, "course_id"))
 
     # get_rubrics
     def test_get_rubrics(self, m):
@@ -1214,9 +1215,12 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(rubrics[0], Rubric)
         self.assertEqual(rubrics[0].id, 1)
         self.assertEqual(rubrics[0].title, "Course Rubric 1")
+        self.assertTrue(hasattr(rubrics[0], "course_id"))
+
         self.assertIsInstance(rubrics[1], Rubric)
         self.assertEqual(rubrics[1].id, 2)
         self.assertEqual(rubrics[1].title, "Course Rubric 2")
+        self.assertTrue(hasattr(rubrics[1], "course_id"))
 
     # get_root_outcome_group()
     def test_get_root_outcome_group(self, m):
