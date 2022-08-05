@@ -1,9 +1,5 @@
-import re
-from datetime import datetime
-
+import arrow
 import pytz
-
-DATE_PATTERN = re.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z")
 
 
 class CanvasObject(object):
@@ -65,8 +61,11 @@ class CanvasObject(object):
         for attribute, value in attributes.items():
             self.__setattr__(attribute, value)
 
-            # datetime field
-            if DATE_PATTERN.match(str(value)):
-                naive = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
-                aware = naive.replace(tzinfo=pytz.utc)
+            try:
+                naive = arrow.get(str(value)).datetime
+                aware = naive.replace(tzinfo=pytz.utc) - naive.utcoffset()
                 self.__setattr__(attribute + "_date", aware)
+            except arrow.ParserError:
+                pass
+            except ValueError:
+                pass

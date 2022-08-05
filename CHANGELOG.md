@@ -7,6 +7,10 @@
 - Delete a Rubric (Thanks, [@ggarfink](https://github.com/ggarfink))
 - Content Migrations: List items for selective import (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
 
+### General
+
+- Smart DateTimes now support any ISO 8601 format, including time offsets. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+
 ### Breaking Changes
 
 - Update `QuizSubmission.get_submission_events` to return a `PaginatedList`. (Thanks, [@stevenbell](https://github.com/stevenbell))
