@@ -26,6 +26,7 @@ Patches and Suggestions
 - Bruce Spang [@brucespang](https://github.com/brucespang)
 - Catherine Abbruzzese [@cat0698](https://github.com/cat0698))
 - Cameron Cuff [@ctcuff](https://github.com/ctcuff)
+- Craig Thompson [@craigdsthompson](https://github.com/craigdsthompson)
 - Dalton Durst [@UniversalSuperBox](https://github.com/UniversalSuperBox)
 - Damian Sweeney [@damianfs](https://github.com/damianfs)
 - Daniel Brinkman [@DanBrink91](https://github.com/DanBrink91)

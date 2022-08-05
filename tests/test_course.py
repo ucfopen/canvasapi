@@ -1027,8 +1027,7 @@ class TestCourse(unittest.TestCase):
         register_uris({"course": ["get_course_level_student_summary_data"]}, m)
 
         response = self.course.get_course_level_student_summary_data()
-
-        self.assertIsInstance(response, list)
+        self.assertIsInstance(response, PaginatedList)
 
     # get_user_in_a_course_level_participation_data()
     def test_get_user_in_a_course_level_participation_data(self, m):
@@ -1811,6 +1810,27 @@ class TestCourseNickname(unittest.TestCase):
 
         self.assertIsInstance(deleted_nick, CourseNickname)
         self.assertTrue(hasattr(deleted_nick, "nickname"))
+
+
+@requests_mock.Mocker()
+class TestCourseStudentSummary(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris(
+                {"course": ["get_by_id", "get_course_level_student_summary_data"]}, m
+            )
+
+            self.course = self.canvas.get_course(1)
+            self.course_student_summary = (
+                self.course.get_course_level_student_summary_data()[0]
+            )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.course_student_summary)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()
