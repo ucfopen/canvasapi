@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Delete a Rubric (Thanks, [@ggarfink](https://github.com/ggarfink))
+- Content Migrations: List items for selective import (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+
+### General
+
+- Smart DateTimes now support any ISO 8601 format, including time offsets. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+
+### Breaking Changes
+
+- Update `QuizSubmission.get_submission_events` to return a `PaginatedList`. (Thanks, [@stevenbell](https://github.com/stevenbell))
+- Remove unnecessary `id` parameter from `delete`, `reorder_question_group`, and `update` methods in `QuizGroup` class. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+
 ## [2.2.0] - 2021-03-25
 
 ### New Endpoint Coverage
