@@ -322,3 +322,8 @@ class OutcomeGroup(CanvasObject):
         )
 
         return OutcomeGroup(self._requester, response.json())
+
+
+class OutcomeResult(CanvasObject):
+    def __str__(self):
+        return "{} ({})".format(self.id, self.score)
