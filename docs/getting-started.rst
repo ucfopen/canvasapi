@@ -150,5 +150,3 @@ If Canvas returns an ISO 8601 formatted datetime string, CanvasAPI will automati
     '2014-02-11T16:38:00Z'
     >>> course.start_at_date
     datetime.datetime(2014, 2, 11, 16, 38, tzinfo=<UTC>)
-
-**Note**: At this time, the automatic conversion to `datetime` objects only works on strings with no UTC offset (ending in "Z").

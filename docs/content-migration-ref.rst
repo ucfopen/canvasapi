@@ -5,6 +5,13 @@ ContentMigration
 .. autoclass:: canvasapi.content_migration.ContentMigration
     :members:
 
+=============================
+ContentMigrationSelectionNode
+=============================
+
+.. autoclass:: canvasapi.content_migration.ContentMigrationSelectionNode
+    :members:
+
 ==============
 MigrationIssue
 ==============

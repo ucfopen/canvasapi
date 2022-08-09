@@ -33,6 +33,7 @@ Class Reference
     file-ref
     folder-ref
     grading-period-ref
+    grade-change-log-ref
     group-ref
     login-ref
     license-ref
