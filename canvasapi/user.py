@@ -25,7 +25,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(
@@ -490,6 +490,25 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_eportfolios(self, **kwargs):
+        """
+        Returns a list of ePortfolios for a user.
+
+        :calls: `GET /api/v1/users/:user_id/eportfolios \
+            <https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.index>`_
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.eportfolio.EPortfolio`
+        """
+        from canvasapi.eportfolio import EPortfolio
+
+        return PaginatedList(
+            EPortfolio,
+            self._requester,
+            "GET",
+            "users/{}/eportfolios".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_feature_flag(self, feature, **kwargs):
         """
         Returns the feature flag that applies to the given user.
@@ -866,6 +885,31 @@ class User(CanvasObject):
         super(User, self).set_attributes(response.json())
         return self
 
+    def moderate_all_eportfolios(self, **kwargs):
+        """
+        Update the spam_status for all active eportfolios of a user.
+        Only available to admins who can moderate_user_content.
+
+        :param eportfolio: The object or ID of the ePortfolio to retrieve.
+        :type eportfolio: :class:`canvasapi.eportfolio.EPortfolio` or int
+
+        :calls: `PUT /api/v1/users/:user_id/eportfolios \
+            <https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.moderate_all>`_
+
+        :returns: A list of all user ePortfolios.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.eportfolio.EPortfolio`
+        """
+        from canvasapi.eportfolio import EPortfolio
+
+        return PaginatedList(
+            EPortfolio,
+            self._requester,
+            "PUT",
+            "users/{}/eportfolios".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def remove_observee(self, observee_id, **kwargs):
         """
         Unregisters a user as being observed by the given user.
@@ -875,7 +919,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(
@@ -963,7 +1007,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(

@@ -13,6 +13,7 @@ from canvasapi.content_export import ContentExport
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
+from canvasapi.eportfolio import EPortfolio
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
@@ -278,6 +279,40 @@ class TestUser(unittest.TestCase):
         )
 
         self.assertIsInstance(new_channel, CommunicationChannel)
+
+    # get_eportfolios()
+    def test_get_eportfolios(self, m):
+        register_uris({"user": ["get_eportfolios"]}, m)
+
+        eportfolios = self.user.get_eportfolios()
+        eportfolio_list = [portfolio for portfolio in eportfolios]
+        self.assertIsInstance(eportfolios, PaginatedList)
+        self.assertIsInstance(eportfolios[0], EPortfolio)
+        self.assertEqual(len(eportfolio_list), 2)
+        self.assertEqual(eportfolios[0].name, "ePortfolio 1")
+
+    def test_get_eportfolios_with_deleted(self, m):
+        register_uris({"user": ["get_eportfolios_include_deleted"]}, m)
+
+        eportfolios = self.user.get_eportfolios()
+        eportfolio_list = [portfolio for portfolio in eportfolios]
+        self.assertIsInstance(eportfolios, PaginatedList)
+        self.assertIsInstance(eportfolios[0], EPortfolio)
+        self.assertEqual(len(eportfolio_list), 3)
+        self.assertEqual(eportfolios[2].name, "ePortfolio 3")
+        self.assertEqual(eportfolios[2].workflow_state, "deleted")
+
+    def test_moderate_user_eportfolios(self, m):
+        register_uris({"user": ["moderate_user_eportfolios"]}, m)
+
+        spam_eportfolios = self.user.moderate_all_eportfolios(
+            spam_status="marked_as_spam"
+        )
+        eportfolio_list = [portfolio for portfolio in spam_eportfolios]
+        self.assertIsInstance(spam_eportfolios, PaginatedList)
+        self.assertIsInstance(spam_eportfolios[0], EPortfolio)
+        self.assertEqual(len(eportfolio_list), 2)
+        self.assertEqual(spam_eportfolios[0].spam_status, "marked_as_spam")
 
     # get_files()
     def test_get_files(self, m):

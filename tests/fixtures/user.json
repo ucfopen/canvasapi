@@ -544,6 +544,24 @@
 		],
 		"status_code": 200
 	},
+	"moderate_user_eportfolios": {
+		"method": "PUT",
+		"endpoint": "users/1/eportfolios",
+		"data": [
+			{
+				"name": "ePortfolio 1",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z",
+				"spam_status": "marked_as_spam"
+			},
+			{
+				"name": "ePortfolio 2",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z",
+				"spam_status": "marked_as_spam"
+			}
+		]
+	},
 	"page_views": {
 		"method": "GET",
 		"endpoint": "users/1/page_views",
@@ -1054,6 +1072,44 @@
 			"export_type": "d"
 		},
 		"status_code": 200
+	},
+	"get_eportfolios": {
+		"method": "GET",
+		"endpoint": "users/1/eportfolios",
+		"data": [
+			{
+				"name": "ePortfolio 1",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z"
+			},
+			{
+				"name": "ePortfolio 2",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z"
+			}
+		]
+	},
+	"get_eportfolios_include_deleted": {
+		"method": "GET",
+		"endpoint": "users/1/eportfolios",
+		"data": [
+			{
+				"name": "ePortfolio 1",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z"
+			},
+			{
+				"name": "ePortfolio 2",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z"
+			},
+			{
+				"name": "ePortfolio 3",
+				"workflow_state": "deleted",
+				"created_at": "2022-07-05T21:00:00Z",
+				"deleted_at": "2022-07-06T18:00:00Z"
+			}
+		]
 	},
 	"get_features": {
 		"method": "GET",
