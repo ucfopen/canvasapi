@@ -7,6 +7,7 @@
 - Delete a Rubric (Thanks, [@ggarfink](https://github.com/ggarfink))
 - Grade Change Log for Assignments, Courses, and Users (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
 - Content Migrations: List items for selective import (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+- List observers of a User (Thanks, [@bennettscience](https://github.com/bennettscience))
 
 ### General
 
