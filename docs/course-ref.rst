@@ -12,6 +12,13 @@ CourseNickname
 .. autoclass:: canvasapi.course.CourseNickname
     :members:
 
+====================
+CourseStudentSummary
+====================
+
+.. autoclass:: canvasapi.course.CourseStudentSummary
+    :members:
+
 ==========
 LatePolicy
 ==========
