@@ -752,6 +752,25 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_observers(self, **kwargs):
+        """
+        List the users that are observing the given user.
+
+        :calls:  `GET /api/v1/users/:user_id/observers \
+        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.observers>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+
+        return PaginatedList(
+            User,
+            self._requester,
+            "GET",
+            "users/{}/observers".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_open_poll_sessions(self, **kwargs):
         """
         Returns a paginated list of all opened poll sessions available to the current user.
