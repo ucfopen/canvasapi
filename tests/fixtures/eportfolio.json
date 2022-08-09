@@ -1,29 +1,29 @@
 {
     "delete_eportfolio": {
-		"method": "DELETE",
-		"endpoint": "eportfolios/1",
-		"data": {
-			"id": 1,
-			"name": "ePortfolio 1",
+        "method": "DELETE",
+        "endpoint": "eportfolios/1",
+        "data": {
+            "id": 1,
+            "name": "ePortfolio 1",
             "workflow_state": "deleted",
-			"description": "Delete this ePortfolio",
+            "description": "Delete this ePortfolio",
             "deleted_at": "2022-07-05T21:00:00Z"
-		},
-		"status_code": 200
-	},
+        },
+        "status_code": 200
+    },
     "get_eportfolio_by_id": {
-		"method": "GET",
-		"endpoint": "eportfolios/1",
-		"data": {
-			"id": 1,
+        "method": "GET",
+        "endpoint": "eportfolios/1",
+        "data": {
+            "id": 1,
             "user_id": 1,
             "workflow_state": "active",
-			"name": "ePortfolio 1",
+            "name": "ePortfolio 1",
             "deleted_at": "null",
             "spam_status": "null"
-		},
-		"status_code": 200
-	},
+        },
+        "status_code": 200
+    },
     "get_eportfolio_pages": {
         "method": "GET",
         "endpoint": "eportfolios/1/pages",
@@ -46,7 +46,6 @@
                 "created_at": "2022-07-02T18:00:00Z",
                 "updated_at": "2021-07-02T18:00:00Z"
             }
-
         ],
         "status_code": 200
     },
@@ -57,7 +56,7 @@
             "id": 1,
             "user_id": 1,
             "workflow_state": "active",
-			"name": "ePortfolio 1",
+            "name": "ePortfolio 1",
             "deleted_at": "null",
             "spam_status": "marked_as_spam"
         }

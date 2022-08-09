@@ -20,6 +20,7 @@ Patches and Suggestions
 - Ashutosh Saxena [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX)
 - Ben Liblit [@liblit](https://github.com/liblit)
 - Bill Wrbican [@wjw27](https://github.com/wjw27)
+- [@Birdmaaan4] (https://github.com/Birdmaaan4)
 - [@blepabyte](https://github.com/blepabyte)
 - Bradford Lynch [@bradfordlynch](https://github.com/bradfordlynch)
 - Brian Bennett [@bennettscience](https://github.com/bennettscience)
