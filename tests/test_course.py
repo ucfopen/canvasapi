@@ -22,6 +22,7 @@ from canvasapi.external_tool import ExternalTool
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.gradebook_history import (
     Day,
     Grader,
@@ -1026,8 +1027,7 @@ class TestCourse(unittest.TestCase):
         register_uris({"course": ["get_course_level_student_summary_data"]}, m)
 
         response = self.course.get_course_level_student_summary_data()
-
-        self.assertIsInstance(response, list)
+        self.assertIsInstance(response, PaginatedList)
 
     # get_user_in_a_course_level_participation_data()
     def test_get_user_in_a_course_level_participation_data(self, m):
@@ -1202,6 +1202,7 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(rubric, Rubric)
         self.assertEqual(rubric.id, rubric_id)
         self.assertEqual(rubric.title, "Course Rubric 1")
+        self.assertTrue(hasattr(rubric, "course_id"))
 
     # get_rubrics
     def test_get_rubrics(self, m):
@@ -1214,9 +1215,12 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(rubrics[0], Rubric)
         self.assertEqual(rubrics[0].id, 1)
         self.assertEqual(rubrics[0].title, "Course Rubric 1")
+        self.assertTrue(hasattr(rubrics[0], "course_id"))
+
         self.assertIsInstance(rubrics[1], Rubric)
         self.assertEqual(rubrics[1].id, 2)
         self.assertEqual(rubrics[1].title, "Course Rubric 2")
+        self.assertTrue(hasattr(rubrics[1], "course_id"))
 
     # get_root_outcome_group()
     def test_get_root_outcome_group(self, m):
@@ -1600,6 +1604,20 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(response[0].title, "Grading period 1")
         self.assertEqual(response[1].title, "Grading period 2")
 
+    # get_grade_change_events()
+    def test_get_grade_change_events(self, m):
+        register_uris({"course": ["get_grade_change_events"]}, m)
+
+        response = self.course.get_grade_change_events()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertEqual(len([event for event in response]), 2)
+
+        for event in response:
+            self.assertEqual(event.links["course"], self.course.id)
+            self.assertIsInstance(event, GradeChangeEvent)
+            self.assertEqual(event.event_type, "grade_change")
+
     # get_grading_period()
     def test_get_grading_period(self, m):
         register_uris({"course": ["get_grading_period"]}, m)
@@ -1792,6 +1810,27 @@ class TestCourseNickname(unittest.TestCase):
 
         self.assertIsInstance(deleted_nick, CourseNickname)
         self.assertTrue(hasattr(deleted_nick, "nickname"))
+
+
+@requests_mock.Mocker()
+class TestCourseStudentSummary(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris(
+                {"course": ["get_by_id", "get_course_level_student_summary_data"]}, m
+            )
+
+            self.course = self.canvas.get_course(1)
+            self.course_student_summary = (
+                self.course.get_course_level_student_summary_data()[0]
+            )
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.course_student_summary)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()
