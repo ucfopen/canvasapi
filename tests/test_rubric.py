@@ -3,9 +3,43 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.rubric import RubricAssociation
+from canvasapi.rubric import Rubric, RubricAssociation
 from tests import settings
 from tests.util import register_uris
+
+
+@requests_mock.Mocker()
+class TestRubric(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris({"course": ["get_by_id", "create_rubric"]}, m)
+
+            self.course = self.canvas.get_course(1)
+            self.rubric = self.course.create_rubric()["rubric"]
+
+    # delete
+    def test_delete(self, m):
+        register_uris({"rubric": ["delete_rubric"]}, m)
+
+        rubric = self.rubric.delete()
+
+        self.assertIsInstance(rubric, Rubric)
+        self.assertEqual(rubric.id, 1)
+        self.assertEqual(rubric.title, "Course Rubric 1")
+        self.assertEqual(rubric.context_id, 1)
+        self.assertEqual(rubric.context_type, "Course")
+        self.assertEqual(rubric.points_possible, 10.0)
+        self.assertFalse(rubric.reusable)
+        self.assertTrue(rubric.read_only)
+        self.assertTrue(rubric.free_form_critereon_comments)
+        self.assertTrue(rubric.hide_score_total)
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.rubric)
+        self.assertIsInstance(string, str)
 
 
 @requests_mock.Mocker()

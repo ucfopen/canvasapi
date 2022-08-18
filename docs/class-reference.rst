@@ -27,12 +27,14 @@ Class Reference
     discussion-topic-ref
     enrollment-ref
     enrollment-term-ref
+    eportfolio-ref
     external-tool-ref
     favorite-ref
     feature-ref
     file-ref
     folder-ref
     grading-period-ref
+    grade-change-log-ref
     group-ref
     login-ref
     license-ref

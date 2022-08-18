@@ -5,6 +5,7 @@ from canvasapi.comm_message import CommMessage
 from canvasapi.course import Course
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.current_user import CurrentUser
+from canvasapi.eportfolio import EPortfolio
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.folder import Folder
@@ -770,6 +771,27 @@ class Canvas(object):
         :rtype: :class:`canvasapi.current_user.CurrentUser`
         """
         return CurrentUser(self.__requester)
+
+    def get_eportfolio(self, eportfolio, **kwargs):
+        """
+        Get an eportfolio by ID.
+
+        :param eportfolio: The object or ID of the eportfolio to retrieve.
+        :type eportfolio: :class: `canvasapi.eportfolio.EPortfolio` or int
+
+        :calls: `GET /api/v1/eportfolios/:id` \
+            `<https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.show>`_
+
+        :rtype: :class:`canvasapi.eportfolio.EPortfolio`
+        """
+        eportfolio_id = obj_or_id(eportfolio, "eportfolio", (EPortfolio,))
+        response = self.__requester.request(
+            "GET",
+            "eportfolios/{}".format(eportfolio_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return EPortfolio(self.__requester, response.json())
 
     def get_epub_exports(self, **kwargs):
         """
