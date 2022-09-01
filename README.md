@@ -4,7 +4,7 @@
 [![Documentation Status](https://readthedocs.org/projects/canvasapi/badge/?version=stable)](http://canvasapi.readthedocs.io/en/stable/?badge=stable)
 [![Build Status](https://travis-ci.org/ucfopen/canvasapi.svg?branch=master)](https://travis-ci.org/ucfopen/canvasapi)
 [![Coverage Status](https://coveralls.io/repos/github/ucfopen/canvasapi/badge.svg?branch=master)](https://coveralls.io/github/ucfopen/canvasapi?branch=master)
-[![Join UCF Open Slack Discussions](https://ucf-open-slackin.herokuapp.com/badge.svg)](https://ucf-open-slackin.herokuapp.com/)
+[![Join UCF Open Slack Discussions](https://badgen.net/badge/icon/ucfopen?icon=slack&label=slack&color=pink)](https://dl.ucf.edu/join-ucfopen)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # CanvasAPI
@@ -167,4 +167,4 @@ If you have a project that uses CanvasAPI that you'd like to promote, please con
 
 ## Contact Us
 
-Need help? Have an idea? Feel free to check out our [Discussions](https://github.com/ucfopen/canvasapi/discussions) board. Just want to say hi or get extended spport? Come join us on the [UCF Open Slack Channel](https://ucf-open-slackin.herokuapp.com) and join the `#canvasapi` channel!
+Need help? Have an idea? Feel free to check out our [Discussions](https://github.com/ucfopen/canvasapi/discussions) board. Just want to say hi or get extended spport? Come join us on the [UCF Open Slack Channel](https://dl.ucf.edu/join-ucfopen) and join the `#canvasapi` channel!
