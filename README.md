@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/pypi/l/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![Python Versions](https://img.shields.io/pypi/pyversions/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![Documentation Status](https://readthedocs.org/projects/canvasapi/badge/?version=stable)](http://canvasapi.readthedocs.io/en/stable/?badge=stable)
-[![Build Status](https://travis-ci.org/ucfopen/canvasapi.svg?branch=master)](https://travis-ci.org/ucfopen/canvasapi)
+[![Build Status](https://github.com/ucfopen/canvasapi/actions/workflows/run-tests.yml/badge.svg?branch=develop)](https://github.com/ucfopen/canvasapi/actions)
 [![Coverage Status](https://coveralls.io/repos/github/ucfopen/canvasapi/badge.svg?branch=master)](https://coveralls.io/github/ucfopen/canvasapi?branch=master)
 [![Join UCF Open Slack Discussions](https://badgen.net/badge/icon/ucfopen?icon=slack&label=slack&color=pink)](https://dl.ucf.edu/join-ucfopen)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
