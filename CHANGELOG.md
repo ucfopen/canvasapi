@@ -12,10 +12,12 @@
 
 ### General
 
+- Added support for Python 3.10
 - Smart DateTimes now support any ISO 8601 format, including time offsets. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
 
 ### Breaking Changes
 
+- Dropped support for Python 3.6
 - Update `QuizSubmission.get_submission_events` to return a `PaginatedList`. (Thanks, [@stevenbell](https://github.com/stevenbell))
 - Update `Course.get_course_level_student_summary_data` to return a `PaginatedList` of `CourseStudentSummary` items instead of a dictionary. (Thanks, [@craigdsthompson](https://github.com/craigdsthompson))
 - Update `Course.get_outcome_results` to return a `PaginatedList` of `OutcomeResult` items instead of a dictionary. (Thanks, [@bennettscience](https://github.com/bennettscience))

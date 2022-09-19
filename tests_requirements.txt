@@ -1,6 +1,6 @@
 -r requirements.txt
 
-black; python_version >= '3.6'
+black
 coverage
 flake8
 isort
