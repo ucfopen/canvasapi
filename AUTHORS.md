@@ -19,6 +19,7 @@ Patches and Suggestions
 - Anthony Rodriguez [@AnthonyRodriguez726](https://github.com/AnthonyRodriguez726)
 - Ashutosh Saxena [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX)
 - Ben Liblit [@liblit](https://github.com/liblit)
+- Benjamin Reed [@breed](https://github.com/breed)
 - Bill Wrbican [@wjw27](https://github.com/wjw27)
 - [@Birdmaaan4](https://github.com/Birdmaaan4)
 - [@blepabyte](https://github.com/blepabyte)

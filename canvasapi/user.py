@@ -840,7 +840,9 @@ class User(CanvasObject):
 
         :rtype: dict
         """
-        response = self._requester.request("GET", "users/{}/profile".format(self.id))
+        response = self._requester.request(
+            "GET", "users/{}/profile".format(self.id), _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
     def get_user_logins(self, **kwargs):
