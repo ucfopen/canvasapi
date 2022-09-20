@@ -15,6 +15,10 @@
 - Added support for Python 3.10
 - Smart DateTimes now support any ISO 8601 format, including time offsets. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
 
+### Bugfixes
+
+- Fixed an issue where kwargs were not passed along to Canvas in `User.get_profile()`. (Thanks, [@breed](https://github.com/breed))
+
 ### Breaking Changes
 
 - Dropped support for Python 3.6
