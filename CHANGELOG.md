@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.0.0] - 2022-09-21
+
 ### New Endpoint Coverage
 
 - Delete a Rubric (Thanks, [@ggarfink](https://github.com/ggarfink))
@@ -561,7 +563,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.0.0...develop
+[3.0.0]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...v2.0.0
