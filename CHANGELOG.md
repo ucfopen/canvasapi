@@ -27,6 +27,7 @@
 - Update `Course.get_course_level_student_summary_data` to return a `PaginatedList` of `CourseStudentSummary` items instead of a dictionary. (Thanks, [@craigdsthompson](https://github.com/craigdsthompson))
 - Update `Course.get_outcome_results` to return a `PaginatedList` of `OutcomeResult` items instead of a dictionary. (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Remove unnecessary `id` parameter from `delete`, `reorder_question_group`, and `update` methods in `QuizGroup` class. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+- Update `Submission` to return attachments as `File` objects instead of dictionaries. (Thanks, [@laitingsheng](https://github.com/laitingsheng))
 
 ## [2.2.0] - 2021-03-25
 

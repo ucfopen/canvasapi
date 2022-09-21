@@ -1,4 +1,5 @@
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.file import File
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
 from canvasapi.upload import FileOrPathLike, Uploader
@@ -6,6 +7,14 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 
 class Submission(CanvasObject):
+    def __init__(self, requester, attributes):
+        super(Submission, self).__init__(requester, attributes)
+
+        self.attachments = [
+            File(requester, attachment)
+            for attachment in attributes.get("attachments", [])
+        ]
+
     def __str__(self):
         return "{}-{}".format(self.assignment_id, self.user_id)
 
