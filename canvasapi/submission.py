@@ -2,10 +2,19 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
 from canvasapi.upload import FileOrPathLike, Uploader
+from canvasapi.user import UserDisplay
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
 class Submission(CanvasObject):
+    def __init__(self, requester, attributes):
+        super(Submission, self).__init__(requester, attributes)
+
+        self.submission_comments = [
+            SubmissionComment(self._requester, submission_comment)
+            for submission_comment in attributes.get("submission_comments", [])
+        ]
+
     def __str__(self):
         return "{}-{}".format(self.assignment_id, self.user_id)
 
@@ -35,6 +44,31 @@ class Submission(CanvasObject):
         )
 
         return PeerReview(self._requester, response.json())
+
+    def delete_comment(self, submission_comment, **kwargs):
+        """
+        Delete a submission comment
+
+        :calls: `DELETE /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/:user_id/comments/:id \
+        <https://canvas.instructure.com/doc/api/submission_comments.html#method.submission_comments_api.destroy>`_
+
+        :param submission_comment: The comment to be deleted
+        :type user: :class:`canvasapi.submission.SubmissionComment` or int
+
+        :rtype: :class:`canvasapi.submission.SubmissionComment`
+        """
+        submission_comment_id = obj_or_id(
+            submission_comment, "submission_comment", (SubmissionComment,)
+        )
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/assignments/{}/submissions/{}/comments/{}".format(
+                self.course_id, self.assignment_id, self.user_id, submission_comment_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return SubmissionComment(self._requester, response.json())
 
     def delete_submission_peer_review(self, user, **kwargs):
         """
@@ -84,6 +118,31 @@ class Submission(CanvasObject):
 
         super(Submission, self).set_attributes(response_json)
         return self
+
+    def edit_comment(self, submission_comment, **kwargs):
+        """
+        Edit a submission comment
+
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/ \
+            submissions/:user_id/comments/:id
+        <https://canvas.instructure.com/doc/api/submission_comments.html#method.submission_comments_api.update>`_
+
+        :param submission_comment: The comment to be edited
+        :type user: :class:`canvasapi.submission.SubmissionComment` or int
+
+        :rtype: :class:`canvasapi.submission.SubmissionComment`
+        """
+        submission_comment_id = obj_or_id(
+            submission_comment, "submission_comment", (SubmissionComment,)
+        )
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/assignments/{}/submissions/{}/comments/{}".format(
+                self.course_id, self.assignment_id, self.user_id, submission_comment_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return SubmissionComment(self._requester, response.json())
 
     def get_submission_peer_reviews(self, **kwargs):
         """
@@ -164,7 +223,7 @@ class Submission(CanvasObject):
                 self.course_id, self.assignment_id, self.user_id
             ),
             file,
-            **kwargs
+            **kwargs,
         ).start()
 
         if response[0]:
@@ -188,3 +247,13 @@ class GroupedSubmission(CanvasObject):
         return "{} submission(s) for User #{}".format(
             len(self.submissions), self.user_id
         )
+
+
+class SubmissionComment(CanvasObject):
+    def __init__(self, requester, attributes):
+        super(SubmissionComment, self).__init__(requester, attributes)
+
+        self.author = UserDisplay(requester, self.author)
+
+    def __str__(self):
+        return f"{self.id} (by {self.author})"

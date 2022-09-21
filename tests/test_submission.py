@@ -5,7 +5,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.peer_review import PeerReview
-from canvasapi.submission import GroupedSubmission, Submission
+from canvasapi.submission import GroupedSubmission, Submission, SubmissionComment
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -52,6 +52,28 @@ class TestSubmission(unittest.TestCase):
 
         self.assertIsInstance(deleted_peer_review, PeerReview)
         self.assertEqual(deleted_peer_review.user_id, 7)
+
+    # edit_comment()
+    def test_edit_comment(self, m):
+        register_uris({"submission": ["edit_comment"]}, m)
+
+        submission_comment = self.submission.submission_comments[0]
+        edited_submission_comment = self.submission.edit_comment(
+            submission_comment, comment="Nice work!"
+        )
+
+        self.assertIsInstance(edited_submission_comment, SubmissionComment)
+        self.assertEqual(edited_submission_comment.comment, "Nice work!")
+
+    # delete_comment()
+    def test_delete_comment(self, m):
+        register_uris({"submission": ["delete_comment"]}, m)
+
+        submission_comment = self.submission.submission_comments[0]
+        edited_submission_comment = self.submission.delete_comment(submission_comment)
+
+        self.assertIsInstance(edited_submission_comment, SubmissionComment)
+        self.assertEqual(edited_submission_comment.comment, "Good job!")
 
     # edit()
     def test_edit(self, m):
@@ -146,3 +168,30 @@ class TestGroupedSubmission(unittest.TestCase):
         string = str(self.grouped_submission)
         self.assertIsInstance(string, str)
         self.assertEqual(string, "1 submission(s) for User #1")
+
+
+@requests_mock.Mocker()
+class TestSubmissionComment(unittest.TestCase):
+    def setUp(self):
+
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris(
+                {
+                    "course": ["get_by_id", "get_assignment_by_id"],
+                    "section": ["get_by_id"],
+                    "submission": ["get_by_id_course"],
+                },
+                m,
+            )
+
+            self.course = self.canvas.get_course(1)
+            self.assignment = self.course.get_assignment(1)
+            self.submission = self.assignment.get_submission(1)
+            self.submission_comment = self.submission.submission_comments[0]
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.submission_comment)
+        self.assertIsInstance(string, str)
