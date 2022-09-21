@@ -3,6 +3,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.pairing_code import PairingCode
@@ -24,7 +25,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(
@@ -489,6 +490,25 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_eportfolios(self, **kwargs):
+        """
+        Returns a list of ePortfolios for a user.
+
+        :calls: `GET /api/v1/users/:user_id/eportfolios \
+            <https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.index>`_
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.eportfolio.EPortfolio`
+        """
+        from canvasapi.eportfolio import EPortfolio
+
+        return PaginatedList(
+            EPortfolio,
+            self._requester,
+            "GET",
+            "users/{}/eportfolios".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_feature_flag(self, feature, **kwargs):
         """
         Returns the feature flag that applies to the given user.
@@ -632,6 +652,45 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_grade_change_events_for_grader(self, **kwargs):
+        """
+        Returns the grade change events for a grader.
+
+        :calls: `/api/v1/audit/grade_change/graders/:grader_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_grader>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
+        """
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/graders/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_grade_change_events_for_student(self, **kwargs):
+        """
+        Returns the grade change events for the current student.
+
+        :calls: `/api/v1/audit/grade_change/students/:student_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_student>`_
+
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
+        """
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/students/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_licenses(self, **kwargs):
         """
         Returns a paginated list of the licenses that can be applied to the
@@ -712,6 +771,25 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_observers(self, **kwargs):
+        """
+        List the users that are observing the given user.
+
+        :calls:  `GET /api/v1/users/:user_id/observers \
+        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.observers>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+
+        return PaginatedList(
+            User,
+            self._requester,
+            "GET",
+            "users/{}/observers".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_open_poll_sessions(self, **kwargs):
         """
         Returns a paginated list of all opened poll sessions available to the current user.
@@ -762,7 +840,9 @@ class User(CanvasObject):
 
         :rtype: dict
         """
-        response = self._requester.request("GET", "users/{}/profile".format(self.id))
+        response = self._requester.request(
+            "GET", "users/{}/profile".format(self.id), _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
     def get_user_logins(self, **kwargs):
@@ -807,6 +887,31 @@ class User(CanvasObject):
         super(User, self).set_attributes(response.json())
         return self
 
+    def moderate_all_eportfolios(self, **kwargs):
+        """
+        Update the spam_status for all active eportfolios of a user.
+        Only available to admins who can moderate_user_content.
+
+        :param eportfolio: The object or ID of the ePortfolio to retrieve.
+        :type eportfolio: :class:`canvasapi.eportfolio.EPortfolio` or int
+
+        :calls: `PUT /api/v1/users/:user_id/eportfolios \
+            <https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.moderate_all>`_
+
+        :returns: A list of all user ePortfolios.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.eportfolio.EPortfolio`
+        """
+        from canvasapi.eportfolio import EPortfolio
+
+        return PaginatedList(
+            EPortfolio,
+            self._requester,
+            "PUT",
+            "users/{}/eportfolios".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def remove_observee(self, observee_id, **kwargs):
         """
         Unregisters a user as being observed by the given user.
@@ -816,7 +921,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(
@@ -904,7 +1009,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(

@@ -1,5 +1,6 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
@@ -75,6 +76,26 @@ class Assignment(CanvasObject):
             super(Assignment, self).set_attributes(response.json())
 
         return Assignment(self._requester, response.json())
+
+    def get_grade_change_events(self, **kwargs):
+        """
+        Returns the grade change events for the assignment.
+
+        :calls: `/api/v1/audit/grade_change/assignments/:assignment_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_assignment>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
+        """
+
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/assignments/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_gradeable_students(self, **kwargs):
         """

@@ -18,3 +18,10 @@ OutcomeGroup
 
 .. autoclass:: canvasapi.outcome.OutcomeGroup
     :members:
+
+=============
+OutcomeResult
+=============
+
+.. autoclass:: canvasapi.outcome.OutcomeResult
+    :members:

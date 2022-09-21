@@ -461,7 +461,7 @@ class TestQuizSubmission(unittest.TestCase):
         register_uris({"quiz": ["get_submission_events"]}, m)
 
         events = self.submission.get_submission_events()
-        self.assertIsInstance(events, list)
+        self.assertIsInstance(events, PaginatedList)
         self.assertIsInstance(events[0], QuizSubmissionEvent)
         self.assertIsInstance(events[1], QuizSubmissionEvent)
         self.assertEqual(str(events[0]), "page_blurred")
@@ -515,7 +515,7 @@ class TestQuizSubmission(unittest.TestCase):
 
         test_events = self.submission.get_submission_events()
 
-        result = self.submission.submit_events(test_events)
+        result = self.submission.submit_events(list(test_events))
         self.assertTrue(result)
 
     def test_submit_events_fail(self, m):

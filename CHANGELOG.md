@@ -2,6 +2,32 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Delete a Rubric (Thanks, [@ggarfink](https://github.com/ggarfink))
+- Grade Change Log for Assignments, Courses, and Users (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+- Content Migrations: List items for selective import (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+- List observers of a User (Thanks, [@bennettscience](https://github.com/bennettscience))
+- ePortfolio endpoints (Thanks, [@Birdmaaan4](https://github.com/Birdmaaan4) and [@bennettscience](https://github.com/bennettscience))
+- Delete an Admin from an Account (Thanks, [@shaneros](https://github.com/shaneros))
+
+### General
+
+- Added support for Python 3.10
+- Smart DateTimes now support any ISO 8601 format, including time offsets. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+
+### Bugfixes
+
+- Fixed an issue where kwargs were not passed along to Canvas in `User.get_profile()`. (Thanks, [@breed](https://github.com/breed))
+
+### Breaking Changes
+
+- Dropped support for Python 3.6
+- Update `QuizSubmission.get_submission_events` to return a `PaginatedList`. (Thanks, [@stevenbell](https://github.com/stevenbell))
+- Update `Course.get_course_level_student_summary_data` to return a `PaginatedList` of `CourseStudentSummary` items instead of a dictionary. (Thanks, [@craigdsthompson](https://github.com/craigdsthompson))
+- Update `Course.get_outcome_results` to return a `PaginatedList` of `OutcomeResult` items instead of a dictionary. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Remove unnecessary `id` parameter from `delete`, `reorder_question_group`, and `update` methods in `QuizGroup` class. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+
 ## [2.2.0] - 2021-03-25
 
 ### New Endpoint Coverage
