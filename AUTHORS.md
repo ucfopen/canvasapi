@@ -73,6 +73,7 @@ Patches and Suggestions
 - Philip Carter [@phillyc](https://github.com/phillyc)
 - Ralph Baird [@rmanbaird](https://github.com/rmanbaird)
 - [@Screeeech](https://github.com/Screeeech)
+- Shane Rosenkrantz [@shaneros](https://github.com/shaneros)
 - Sigurður Baldursson [@sigurdurb](https://github.com/sigurdurb)
 - Spencer Rogers [@spencer1248](https://github.com/spencer1248)
 - Stephen Woosley [@stephenwoosley](https://github.com/stephenwoosley)
