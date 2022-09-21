@@ -9,6 +9,7 @@
 - Content Migrations: List items for selective import (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
 - List observers of a User (Thanks, [@bennettscience](https://github.com/bennettscience))
 - ePortfolio endpoints (Thanks, [@Birdmaaan4](https://github.com/Birdmaaan4) and [@bennettscience](https://github.com/bennettscience))
+- Delete an Admin from an Account (Thanks, [@shaneros](https://github.com/shaneros))
 
 ### General
 
