@@ -19,6 +19,13 @@ AccountReport
 .. autoclass:: canvasapi.account.AccountReport
     :members:
 
+=====
+Admin
+=====
+
+.. autoclass:: canvasapi.account.Admin
+    :members:
+
 ====
 Role
 ====

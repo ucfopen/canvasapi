@@ -141,6 +141,368 @@
 		},
 		"status_code": 200
 	},
+	"get_selective_data_account": {
+		"method": "GET",
+		"endpoint": "accounts/1/content_migrations/1/selective_data",
+		"data": [
+			{
+			"content_migration_id": 1,
+			"context_id": 1,
+			"context_type": "account",
+			"property": "copy[all_account_settings]",
+			"title": "Account Settings",
+			"type": "account_settings"
+			},
+			{
+			"content_migration_id": 1,
+			"context_id": 1,
+			"context_type": "account",
+			"count": 2,
+			"property": "copy[all_assignments]",
+			"sub_items_url": "https://example.com/api/v1/accounts/1/content_migrations/1/selective_data?type=assignments",
+			"title": "Assignments",
+			"type": "assignments"
+			}
+		],
+		"status_code": 200
+	},
+	"get_selective_data_course": {
+		"method": "GET",
+		"endpoint": "courses/1/content_migrations/1/selective_data",
+		"data": [
+			{
+			"content_migration_id": 1,
+			"context_id": 1,
+			"context_type": "course",
+			"property": "copy[all_course_settings]",
+			"title": "Course Settings",
+			"type": "course_settings"
+			},
+			{
+			"content_migration_id": 1,
+			"context_id": 1,
+			"context_type": "course",
+			"count": 2,
+			"property": "copy[all_assignments]",
+			"sub_items_url": "https://example.com/api/v1/courses/1/content_migrations/1/selective_data?type=assignments",
+			"title": "Assignments",
+			"type": "assignments"
+			}
+		],
+		"status_code": 200
+	},
+	"get_selective_data_group": {
+		"method": "GET",
+		"endpoint": "groups/1/content_migrations/1/selective_data",
+		"data": [
+			{
+			"content_migration_id": 1,
+			"context_id": 1,
+			"context_type": "group",
+			"property": "copy[all_group_settings]",
+			"title": "Group Settings",
+			"type": "group_settings"
+			},
+			{
+			"content_migration_id": 1,
+			"context_id": 1,
+			"context_type": "group",
+			"count": 2,
+			"property": "copy[all_assignments]",
+			"sub_items_url": "https://example.com/api/v1/groups/1/content_migrations/1/selective_data?type=assignments",
+			"title": "Assignments",
+			"type": "assignments"
+			}
+		],
+		"status_code": 200
+	},
+	"get_selective_data_user": {
+		"method": "GET",
+		"endpoint": "users/1/content_migrations/1/selective_data",
+		"data": [
+			{
+			"content_migration_id": 1,
+			"context_id": 1,
+			"context_type": "user",
+			"property": "copy[all_user_settings]",
+			"title": "user Settings",
+			"type": "user_settings"
+			},
+			{
+			"content_migration_id": 1,
+			"context_id": 1,
+			"context_type": "user",
+			"count": 2,
+			"property": "copy[all_assignments]",
+			"sub_items_url": "https://example.com/api/v1/users/1/content_migrations/1/selective_data?type=assignments",
+			"title": "Assignments",
+			"type": "assignments"
+			}
+		],
+		"status_code": 200
+	},
+	"get_selective_data_assignments_account": {
+		"method": "GET",
+		"endpoint": "accounts/1/content_migrations/1/selective_data?type=assignments",
+		"data": [
+			{
+				"content_migration_id": 1,
+				"context_id": 1,
+				"context_type": "account",
+				"migration_id": "g8b133a71f8693ea12f549743bf59d194",
+				"property": "copy[assignment_groups][id_ga1f85a92f38ea154ea78bdf34af5a945]",
+				"sub_items": [
+				{
+					"linked_resource": {
+					"message": "linked with Discussion \"Topic Week 1: Discussion\"",
+					"migration_id": "ge1a27af717d06a0782d708c9441be1f68",
+					"property": "copy[discussion_topics][id_g1e4eabe30567ae83bfa62d08b88e56f08]",
+					"type": "discussion_topics"
+					},
+					"migration_id": "g486ff8a1e91a1d9403125c838ea2a75c8",
+					"property": "copy[assignments][id_g4c51f316971e47ac786d5cc1b16d2b198]",
+					"title": "Week 1: Discussion",
+					"type": "assignments"
+				},
+				{
+					"linked_resource": {
+					"message": "linked with Discussion Topic \"Week 2: Discussion\"",
+					"migration_id": "g047d0ed5637242f5623cb932e347ec3c5",
+					"property": "copy[discussion_topics][id_ge517692a894ba8a3e95a2a18655e13905]",
+					"type": "discussion_topics"
+					},
+					"migration_id": "g0d58cddab9615f2226a44c0aa44bf33eb",
+					"property": "copy[assignments][id_g2777dc21adf38a770697313c7ca693e8b]",
+					"title": "Week 2: Discussion",
+					"type": "assignments"
+				}
+				],
+				"title": "Discussion",
+				"type": "assignment_groups"
+			},
+			{
+				"content_migration_id": 1,
+				"context_id": 1,
+				"context_type": "account",
+				"migration_id": "gaba50c7f7eb473769f7dfb649f8ae6bac",
+				"property": "copy[assignment_groups][id_ge9c31bec83eeeff8c33e539293b824c5c]",
+				"sub_items": [
+				{
+					"migration_id": "g2d182762c23c79eec72fdbfaf4e72f497",
+					"property": "copy[assignments][id_g7510f7e9257131eedbf456fa851ce2727]",
+					"title": "Week 1: Assignment",
+					"type": "assignments"
+				},
+				{
+					"migration_id": "g0d4b9570357bf08230b2b5def78513da0",
+					"property": "copy[assignments][id_g8ed8a7082b0884b2ed9d1adcb2b0610e0]",
+					"title": "Week 2: Assignment",
+					"type": "assignments"
+				}
+				],
+				"title": "Assignments",
+				"type": "assignment_groups"
+			}
+			],
+		"status_code": 200
+	},
+
+	"get_selective_data_assignments_course": {
+		"method": "GET",
+		"endpoint": "courses/1/content_migrations/1/selective_data?type=assignments",
+		"data": [
+			{
+				"content_migration_id": 1,
+				"context_id": 1,
+				"context_type": "course",
+				"migration_id": "g8b133a71f8693ea12f549743bf59d194",
+				"property": "copy[assignment_groups][id_ga1f85a92f38ea154ea78bdf34af5a945]",
+				"sub_items": [
+				{
+					"linked_resource": {
+					"message": "linked with Discussion \"Topic Week 1: Discussion\"",
+					"migration_id": "ge1a27af717d06a0782d708c9441be1f68",
+					"property": "copy[discussion_topics][id_g1e4eabe30567ae83bfa62d08b88e56f08]",
+					"type": "discussion_topics"
+					},
+					"migration_id": "g486ff8a1e91a1d9403125c838ea2a75c8",
+					"property": "copy[assignments][id_g4c51f316971e47ac786d5cc1b16d2b198]",
+					"title": "Week 1: Discussion",
+					"type": "assignments"
+				},
+				{
+					"linked_resource": {
+					"message": "linked with Discussion Topic \"Week 2: Discussion\"",
+					"migration_id": "g047d0ed5637242f5623cb932e347ec3c5",
+					"property": "copy[discussion_topics][id_ge517692a894ba8a3e95a2a18655e13905]",
+					"type": "discussion_topics"
+					},
+					"migration_id": "g0d58cddab9615f2226a44c0aa44bf33eb",
+					"property": "copy[assignments][id_g2777dc21adf38a770697313c7ca693e8b]",
+					"title": "Week 2: Discussion",
+					"type": "assignments"
+				}
+				],
+				"title": "Discussion",
+				"type": "assignment_groups"
+			},
+			{
+				"content_migration_id": 1,
+				"context_id": 1,
+				"context_type": "course",
+				"migration_id": "gaba50c7f7eb473769f7dfb649f8ae6bac",
+				"property": "copy[assignment_groups][id_ge9c31bec83eeeff8c33e539293b824c5c]",
+				"sub_items": [
+				{
+					"migration_id": "g2d182762c23c79eec72fdbfaf4e72f497",
+					"property": "copy[assignments][id_g7510f7e9257131eedbf456fa851ce2727]",
+					"title": "Week 1: Assignment",
+					"type": "assignments"
+				},
+				{
+					"migration_id": "g0d4b9570357bf08230b2b5def78513da0",
+					"property": "copy[assignments][id_g8ed8a7082b0884b2ed9d1adcb2b0610e0]",
+					"title": "Week 2: Assignment",
+					"type": "assignments"
+				}
+				],
+				"title": "Assignments",
+				"type": "assignment_groups"
+			}
+			],
+		"status_code": 200
+	},
+	"get_selective_data_assignments_user": {
+		"method": "GET",
+		"endpoint": "users/1/content_migrations/1/selective_data?type=assignments",
+		"data": [
+			{
+				"content_migration_id": 1,
+				"context_id": 1,
+				"context_type": "user",
+				"migration_id": "g8b133a71f8693ea12f549743bf59d194",
+				"property": "copy[assignment_groups][id_ga1f85a92f38ea154ea78bdf34af5a945]",
+				"sub_items": [
+				{
+					"linked_resource": {
+					"message": "linked with Discussion \"Topic Week 1: Discussion\"",
+					"migration_id": "ge1a27af717d06a0782d708c9441be1f68",
+					"property": "copy[discussion_topics][id_g1e4eabe30567ae83bfa62d08b88e56f08]",
+					"type": "discussion_topics"
+					},
+					"migration_id": "g486ff8a1e91a1d9403125c838ea2a75c8",
+					"property": "copy[assignments][id_g4c51f316971e47ac786d5cc1b16d2b198]",
+					"title": "Week 1: Discussion",
+					"type": "assignments"
+				},
+				{
+					"linked_resource": {
+					"message": "linked with Discussion Topic \"Week 2: Discussion\"",
+					"migration_id": "g047d0ed5637242f5623cb932e347ec3c5",
+					"property": "copy[discussion_topics][id_ge517692a894ba8a3e95a2a18655e13905]",
+					"type": "discussion_topics"
+					},
+					"migration_id": "g0d58cddab9615f2226a44c0aa44bf33eb",
+					"property": "copy[assignments][id_g2777dc21adf38a770697313c7ca693e8b]",
+					"title": "Week 2: Discussion",
+					"type": "assignments"
+				}
+				],
+				"title": "Discussion",
+				"type": "assignment_groups"
+			},
+			{
+				"content_migration_id": 1,
+				"context_id": 1,
+				"context_type": "user",
+				"migration_id": "gaba50c7f7eb473769f7dfb649f8ae6bac",
+				"property": "copy[assignment_groups][id_ge9c31bec83eeeff8c33e539293b824c5c]",
+				"sub_items": [
+				{
+					"migration_id": "g2d182762c23c79eec72fdbfaf4e72f497",
+					"property": "copy[assignments][id_g7510f7e9257131eedbf456fa851ce2727]",
+					"title": "Week 1: Assignment",
+					"type": "assignments"
+				},
+				{
+					"migration_id": "g0d4b9570357bf08230b2b5def78513da0",
+					"property": "copy[assignments][id_g8ed8a7082b0884b2ed9d1adcb2b0610e0]",
+					"title": "Week 2: Assignment",
+					"type": "assignments"
+				}
+				],
+				"title": "Assignments",
+				"type": "assignment_groups"
+			}
+			],
+		"status_code": 200
+	},
+
+	"get_selective_data_assignments_user": {
+		"method": "GET",
+		"endpoint": "users/1/content_migrations/1/selective_data?type=assignments",
+		"data": [
+			{
+				"content_migration_id": 1,
+				"context_id": 1,
+				"context_type": "user",
+				"migration_id": "g8b133a71f8693ea12f549743bf59d194",
+				"property": "copy[assignment_groups][id_ga1f85a92f38ea154ea78bdf34af5a945]",
+				"sub_items": [
+				{
+					"linked_resource": {
+					"message": "linked with Discussion \"Topic Week 1: Discussion\"",
+					"migration_id": "ge1a27af717d06a0782d708c9441be1f68",
+					"property": "copy[discussion_topics][id_g1e4eabe30567ae83bfa62d08b88e56f08]",
+					"type": "discussion_topics"
+					},
+					"migration_id": "g486ff8a1e91a1d9403125c838ea2a75c8",
+					"property": "copy[assignments][id_g4c51f316971e47ac786d5cc1b16d2b198]",
+					"title": "Week 1: Discussion",
+					"type": "assignments"
+				},
+				{
+					"linked_resource": {
+					"message": "linked with Discussion Topic \"Week 2: Discussion\"",
+					"migration_id": "g047d0ed5637242f5623cb932e347ec3c5",
+					"property": "copy[discussion_topics][id_ge517692a894ba8a3e95a2a18655e13905]",
+					"type": "discussion_topics"
+					},
+					"migration_id": "g0d58cddab9615f2226a44c0aa44bf33eb",
+					"property": "copy[assignments][id_g2777dc21adf38a770697313c7ca693e8b]",
+					"title": "Week 2: Discussion",
+					"type": "assignments"
+				}
+				],
+				"title": "Discussion",
+				"type": "assignment_groups"
+			},
+			{
+				"content_migration_id": 1,
+				"context_id": 1,
+				"context_type": "user",
+				"migration_id": "gaba50c7f7eb473769f7dfb649f8ae6bac",
+				"property": "copy[assignment_groups][id_ge9c31bec83eeeff8c33e539293b824c5c]",
+				"sub_items": [
+				{
+					"migration_id": "g2d182762c23c79eec72fdbfaf4e72f497",
+					"property": "copy[assignments][id_g7510f7e9257131eedbf456fa851ce2727]",
+					"title": "Week 1: Assignment",
+					"type": "assignments"
+				},
+				{
+					"migration_id": "g0d4b9570357bf08230b2b5def78513da0",
+					"property": "copy[assignments][id_g8ed8a7082b0884b2ed9d1adcb2b0610e0]",
+					"title": "Week 2: Assignment",
+					"type": "assignments"
+				}
+				],
+				"title": "Assignments",
+				"type": "assignment_groups"
+			}
+			],
+		"status_code": 200
+	},
 	"update_issue": {
 		"method": "PUT",
 		"endpoint": "accounts/1/content_migrations/1/migration_issues/1",

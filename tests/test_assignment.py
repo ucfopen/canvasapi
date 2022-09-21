@@ -12,6 +12,8 @@ from canvasapi.assignment import (
     AssignmentOverride,
 )
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.grade_change_log import GradeChangeEvent
+from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
@@ -83,6 +85,20 @@ class TestAssignment(unittest.TestCase):
 
         self.assertEqual(len(student_list), 2)
         self.assertIsInstance(student_list[0], UserDisplay)
+
+    # get_grade_change_events()
+    def test_get_grade_change_events(self, m):
+        register_uris({"assignment": ["get_grade_change_events"]}, m)
+
+        response = self.assignment.get_grade_change_events()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertEqual(len([event for event in response]), 2)
+
+        for event in response:
+            self.assertEqual(event.links["course"], self.assignment.id)
+            self.assertIsInstance(event, GradeChangeEvent)
+            self.assertEqual(event.event_type, "grade_change")
 
     # get_override()
     def test_get_override(self, m):

@@ -186,6 +186,48 @@ class ContentMigration(CanvasObject):
         )
         return Progress(self._requester, response.json())
 
+    def get_selective_data(self, **kwargs):
+        """
+        Return the selective data associated with this content migration. Use this to get a list
+        of available objects to import for a migration created with 'waiting_for_select=True'.
+
+        :calls:
+            `GET
+            /api/v1/accounts/:account_id/content_migrations/:content_migration_id/selective_data
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.content_list>`_
+
+            or `GET
+            /api/v1/courses/:course_id/content_migrations/:content_migration_id/selective_data
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.content_list>`_
+
+            or `GET
+            /api/v1/groups/:group_id/content_migrations/:content_migration_id/selective_data
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.content_list>`_
+
+            or `GET
+            /api/v1/users/:user_id/content_migrations/:content_migration_id/selective_data
+            <https://canvas.instructure.com/doc/api/content_migrations.html#method.content_migrations.content_list>`_
+
+        :returns: Paginated List of of nodes available for selection in this migration
+        :rtype: :class:`canvasapi.content_migration.ContentMigrationSelectionNode`
+        """
+        from canvasapi.content_migration import ContentMigrationSelectionNode
+
+        return PaginatedList(
+            ContentMigrationSelectionNode,
+            self._requester,
+            "GET",
+            "{}s/{}/content_migrations/{}/selective_data".format(
+                self._parent_type, self._parent_id, self.id
+            ),
+            {
+                "context_type": self._parent_type,
+                "context_id": self._parent_id,
+                "content_migration_id": self.id,
+            },
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def update(self, **kwargs):
         """
         Update an existing content migration.
@@ -218,6 +260,11 @@ class ContentMigration(CanvasObject):
             return True
         else:
             return False
+
+
+class ContentMigrationSelectionNode(CanvasObject):
+    def __str__(self):
+        return "{}".format(self.type)
 
 
 class MigrationIssue(CanvasObject):

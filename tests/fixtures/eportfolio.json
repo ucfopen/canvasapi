@@ -1,0 +1,75 @@
+{
+    "delete_eportfolio": {
+        "method": "DELETE",
+        "endpoint": "eportfolios/1",
+        "data": {
+            "id": 1,
+            "name": "ePortfolio 1",
+            "workflow_state": "deleted",
+            "description": "Delete this ePortfolio",
+            "deleted_at": "2022-07-05T21:00:00Z"
+        },
+        "status_code": 200
+    },
+    "get_eportfolio_by_id": {
+        "method": "GET",
+        "endpoint": "eportfolios/1",
+        "data": {
+            "id": 1,
+            "user_id": 1,
+            "workflow_state": "active",
+            "name": "ePortfolio 1",
+            "deleted_at": "null",
+            "spam_status": "null"
+        },
+        "status_code": 200
+    },
+    "get_eportfolio_pages": {
+        "method": "GET",
+        "endpoint": "eportfolios/1/pages",
+        "data": [
+            {
+                "id": 1,
+                "eportfolio_id": 1,
+                "position": 1,
+                "name": "ePortfolio 1",
+                "content": "This is the page of content",
+                "created_at": "2022-07-01T18:00:00Z",
+                "updated_at": "2021-07-04T18:00:00Z"
+            },
+            {
+                "id": 2,
+                "eportfolio_id": 1,
+                "position": 2,
+                "name": "ePortfolio 1",
+                "content": "This is the second page of content",
+                "created_at": "2022-07-02T18:00:00Z",
+                "updated_at": "2021-07-02T18:00:00Z"
+            }
+        ],
+        "status_code": 200
+    },
+    "moderate_eportfolio_as_spam": {
+        "method": "PUT",
+        "endpoint": "eportfolios/1/moderate",
+        "data": {
+            "id": 1,
+            "user_id": 1,
+            "workflow_state": "active",
+            "name": "ePortfolio 1",
+            "deleted_at": "null",
+            "spam_status": "marked_as_spam"
+        }
+    },
+    "restore_deleted_eportfolio": {
+        "method": "PUT",
+        "endpoint": "eportfolios/1/restore",
+        "data": {
+            "id": 1,
+            "user_id": 1,
+            "workflow_state": "active",
+            "name": "ePortfolio 1",
+            "deleted_at": "null"
+        }
+    }
+}
