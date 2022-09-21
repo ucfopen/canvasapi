@@ -10,6 +10,7 @@ from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.gradebook_history import (
     Day,
     Grader,
@@ -528,6 +529,7 @@ class Course(CanvasObject):
 
         if "rubric" in dictionary:
             r_dict = dictionary["rubric"]
+            r_dict.update({"course_id": self.id})
             rubric = Rubric(self._requester, r_dict)
 
             rubric_dict = {"rubric": rubric}
@@ -1050,16 +1052,18 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/analytics/student_summaries \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_student_summaries>`_
 
-        :rtype: dict
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.CourseStudentSummary`
         """
 
-        response = self._requester.request(
+        return PaginatedList(
+            CourseStudentSummary,
+            self._requester,
             "GET",
             "courses/{}/analytics/student_summaries".format(self.id),
+            {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
-
-        return response.json()
 
     def get_custom_columns(self, **kwargs):
         """
@@ -1410,6 +1414,26 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
+
+    def get_grade_change_events(self, **kwargs):
+        """
+        Returns the grade change events for the course.
+
+        :calls: `GET /api/v1/audit/grade_change/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_course>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
+        """
+
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/courses/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_gradebook_history_dates(self, **kwargs):
         """
@@ -1791,16 +1815,19 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/outcome_results \
         <https://canvas.instructure.com/doc/api/outcome_results.html#method.outcome_results.index>`_
 
-        :returns: List of potential related outcome result dicts.
-        :rtype: dict
+        :returns: :class:`canvasapi.paginated_list.PaginatedList`
+            of :class:`canvasapi.outcome.OutcomeResult`
         """
-        response = self._requester.request(
+        from canvasapi.outcome import OutcomeResult
+
+        return PaginatedList(
+            OutcomeResult,
+            self._requester,
             "GET",
             "courses/{}/outcome_results".format(self.id),
+            _root="outcome_results",
             _kwargs=combine_kwargs(**kwargs),
         )
-
-        return response.json()
 
     def get_page(self, url, **kwargs):
         """
@@ -1971,7 +1998,10 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return Rubric(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return Rubric(self._requester, response_json)
 
     def get_rubrics(self, **kwargs):
         """
@@ -1988,6 +2018,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/%s/rubrics" % (self.id),
+            {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -2659,6 +2690,11 @@ class CourseNickname(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return CourseNickname(self._requester, response.json())
+
+
+class CourseStudentSummary(CanvasObject):
+    def __str__(self):
+        return "Course Student Summary {}".format(self.id)
 
 
 class LatePolicy(CanvasObject):

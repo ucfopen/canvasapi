@@ -430,6 +430,23 @@
             "assessed": true
         }
     },
+    "outcome_result_example": {
+        "method": "GET",
+        "endpoint": "courses/1/outcome_results",
+        "data": {
+            "outcome_results": [{
+                "id": 1,
+                "score": 6,
+                "submitted_or_assessed_at": "2013-02-01T00:00:00-06:00",
+                "links": {
+                    "user":"1",
+                    "learning_outcome":"3",
+                    "alignment":"53"
+                },
+                "percent": 0.65
+            }]
+        }
+    },
     "outcome_group_example_account": {
         "method": "GET",
         "endpoint": "accounts/1/outcome_groups/2",
