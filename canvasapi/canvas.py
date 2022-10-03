@@ -23,12 +23,14 @@ class Canvas(object):
     The main class to be instantiated to provide access to Canvas's API.
     """
 
-    def __init__(self, base_url, access_token, requests_session=None):
+    def __init__(self, base_url, access_token, custom_session=None):
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
+        :param custom_session: A specialized requests session object, e.g. one with a custom http adapter with extra pool connections mounted.
+        :type requests.session
         """
         if "api/v1" in base_url:
             raise ValueError(
@@ -59,8 +61,8 @@ class Canvas(object):
         # trailing spaces that might cause issues when communicating with the API.
         access_token = access_token.strip()
         base_url = get_institution_url(base_url)
-        
-        self.__requester = Requester(base_url, access_token, requests_session)
+
+        self.__requester = Requester(base_url, access_token, custom_session)
 
     def clear_course_nicknames(self, **kwargs):
         """
