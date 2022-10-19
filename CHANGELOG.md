@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General
+
+- Updated Codecov action to v3
+
 ## [3.0.0] - 2022-09-21
 
 ### New Endpoint Coverage
