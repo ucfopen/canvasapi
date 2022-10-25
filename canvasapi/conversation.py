@@ -6,45 +6,25 @@ class Conversation(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.subject, self.id)
 
-    def edit(self, **kwargs):
+    def add_message(self, body, **kwargs):
         """
-        Update a conversation.
+        Add a message to a conversation.
 
-        :calls: `PUT /api/v1/conversations/:id \
-        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.update>`_
+        :calls: `POST /api/v1/conversations/:id/add_message \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.add_message>`_
 
-        :rtype: `bool`
-        """
-        response = self._requester.request(
-            "PUT", "conversations/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
-        )
-
-        if response.json().get("id"):
-            super(Conversation, self).set_attributes(response.json())
-            return True
-        else:
-            return False
-
-    def delete(self, **kwargs):
-        """
-        Delete a conversation.
-
-        :calls: `DELETE /api/v1/conversations/:id \
-        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.destroy>`_
-
-        :rtype: `bool`
+        :param body: The body of the conversation.
+        :type body: str
+        :returns: A conversation with only the most recent message.
+        :rtype: :class:`canvasapi.account.Conversation`
         """
         response = self._requester.request(
-            "DELETE",
-            "conversations/{}".format(self.id),
+            "POST",
+            "conversations/{}/add_message".format(self.id),
+            body=body,
             _kwargs=combine_kwargs(**kwargs),
         )
-
-        if response.json().get("id"):
-            super(Conversation, self).set_attributes(response.json())
-            return True
-        else:
-            return False
+        return Conversation(self._requester, response.json())
 
     def add_recipients(self, recipients, **kwargs):
         """
@@ -68,25 +48,26 @@ class Conversation(CanvasObject):
         )
         return Conversation(self._requester, response.json())
 
-    def add_message(self, body, **kwargs):
+    def delete(self, **kwargs):
         """
-        Add a message to a conversation.
+        Delete a conversation.
 
-        :calls: `POST /api/v1/conversations/:id/add_message \
-        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.add_message>`_
+        :calls: `DELETE /api/v1/conversations/:id \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.destroy>`_
 
-        :param body: The body of the conversation.
-        :type body: str
-        :returns: A conversation with only the most recent message.
-        :rtype: :class:`canvasapi.account.Conversation`
+        :rtype: `bool`
         """
         response = self._requester.request(
-            "POST",
-            "conversations/{}/add_message".format(self.id),
-            body=body,
+            "DELETE",
+            "conversations/{}".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
-        return Conversation(self._requester, response.json())
+
+        if response.json().get("id"):
+            super(Conversation, self).set_attributes(response.json())
+            return True
+        else:
+            return False
 
     def delete_messages(self, remove, **kwargs):
         """
@@ -109,3 +90,22 @@ class Conversation(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
+
+    def edit(self, **kwargs):
+        """
+        Update a conversation.
+
+        :calls: `PUT /api/v1/conversations/:id \
+        <https://canvas.instructure.com/doc/api/conversations.html#method.conversations.update>`_
+
+        :rtype: `bool`
+        """
+        response = self._requester.request(
+            "PUT", "conversations/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
+        )
+
+        if response.json().get("id"):
+            super(Conversation, self).set_attributes(response.json())
+            return True
+        else:
+            return False

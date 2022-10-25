@@ -7,6 +7,24 @@ class PollChoice(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.text, self.id)
 
+    def delete(self, **kwargs):
+        """
+        Delete a single poll, based on the poll id.
+
+        :calls: `DELETE /api/v1/polls/:poll_id/poll_choices/:id \
+        <https://canvas.instructure.com/doc/api/poll_choices.html#method.polling/poll_choices.destroy>`_
+
+        :returns: True if the deletion was successful, false otherwise.
+
+        :rtype: bool
+        """
+        response = self._requester.request(
+            "DELETE",
+            "polls/{}/poll_choices/{}".format(self.poll_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.status_code == 204
+
     def update(self, poll_choice, **kwargs):
         """
         Update an existing choice for this poll.
@@ -34,21 +52,3 @@ class PollChoice(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return PollChoice(self._requester, response.json()["poll_choices"][0])
-
-    def delete(self, **kwargs):
-        """
-        Delete a single poll, based on the poll id.
-
-        :calls: `DELETE /api/v1/polls/:poll_id/poll_choices/:id \
-        <https://canvas.instructure.com/doc/api/poll_choices.html#method.polling/poll_choices.destroy>`_
-
-        :returns: True if the deletion was successful, false otherwise.
-
-        :rtype: bool
-        """
-        response = self._requester.request(
-            "DELETE",
-            "polls/{}/poll_choices/{}".format(self.poll_id, self.id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-        return response.status_code == 204
