@@ -26,7 +26,7 @@ class AuthenticationProvider(CanvasObject):
 
         return response.json().get("auth_type")
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete the config
 
@@ -38,5 +38,6 @@ class AuthenticationProvider(CanvasObject):
         response = self._requester.request(
             "DELETE",
             "accounts/{}/authentication_providers/{}".format(self.account_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return AuthenticationProvider(self._requester, response.json())

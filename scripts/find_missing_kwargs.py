@@ -15,6 +15,8 @@ WHITELIST = (
     "Uploader.request_upload_token",
     "Uploader.start",
     "Uploader.upload",
+    "OutcomeGroup.context_ref",
+    "OutcomeLink.context_ref",
 )
 
 

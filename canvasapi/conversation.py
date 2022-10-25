@@ -25,7 +25,7 @@ class Conversation(CanvasObject):
         else:
             return False
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete a conversation.
 
@@ -34,7 +34,11 @@ class Conversation(CanvasObject):
 
         :rtype: `bool`
         """
-        response = self._requester.request("DELETE", "conversations/{}".format(self.id))
+        response = self._requester.request(
+            "DELETE",
+            "conversations/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
         if response.json().get("id"):
             super(Conversation, self).set_attributes(response.json())
@@ -42,7 +46,7 @@ class Conversation(CanvasObject):
         else:
             return False
 
-    def add_recipients(self, recipients):
+    def add_recipients(self, recipients, **kwargs):
         """
         Add a recipient to a conversation.
 
@@ -60,6 +64,7 @@ class Conversation(CanvasObject):
             "POST",
             "conversations/{}/add_recipients".format(self.id),
             recipients=recipients,
+            _kwargs=combine_kwargs(**kwargs),
         )
         return Conversation(self._requester, response.json())
 
@@ -83,7 +88,7 @@ class Conversation(CanvasObject):
         )
         return Conversation(self._requester, response.json())
 
-    def delete_messages(self, remove):
+    def delete_messages(self, remove, **kwargs):
         """
         Delete messages from this conversation.
 
@@ -98,6 +103,9 @@ class Conversation(CanvasObject):
         :rtype: `dict`
         """
         response = self._requester.request(
-            "POST", "conversations/{}/remove_messages".format(self.id), remove=remove
+            "POST",
+            "conversations/{}/remove_messages".format(self.id),
+            remove=remove,
+            _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()

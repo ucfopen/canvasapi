@@ -39,7 +39,7 @@ class OutcomeLink(CanvasObject):
         elif self.context_type == "Account":
             return "accounts/{}".format(self.context_id)
 
-    def get_outcome(self):
+    def get_outcome(self, **kwargs):
         """
         Return the linked outcome
 
@@ -50,11 +50,13 @@ class OutcomeLink(CanvasObject):
         :rtype: :class:`canvasapi.outcome.Outcome`
         """
         oid = self.outcome["id"]
-        response = self._requester.request("GET", "outcomes/{}".format(oid))
+        response = self._requester.request(
+            "GET", "outcomes/{}".format(oid), _kwargs=combine_kwargs(**kwargs)
+        )
 
         return Outcome(self._requester, response.json())
 
-    def get_outcome_group(self):
+    def get_outcome_group(self, **kwargs):
         """
         Return the linked outcome group
 
@@ -70,7 +72,9 @@ class OutcomeLink(CanvasObject):
         """
         ogid = self.outcome_group["id"]
         response = self._requester.request(
-            "GET", "{}/outcome_groups/{}".format(self.context_ref(), ogid)
+            "GET",
+            "{}/outcome_groups/{}".format(self.context_ref(), ogid),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self._requester, response.json())
@@ -113,7 +117,7 @@ class OutcomeGroup(CanvasObject):
 
         return "id" in response.json()
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete an outcome group.
 
@@ -128,7 +132,9 @@ class OutcomeGroup(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            "DELETE", "{}/outcome_groups/{}".format(self.context_ref(), self.id)
+            "DELETE",
+            "{}/outcome_groups/{}".format(self.context_ref(), self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if "id" in response.json():
@@ -159,7 +165,7 @@ class OutcomeGroup(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def link_existing(self, outcome):
+    def link_existing(self, outcome, **kwargs):
         """
         Link to an existing Outcome.
 
@@ -181,8 +187,11 @@ class OutcomeGroup(CanvasObject):
         response = self._requester.request(
             "PUT",
             "{}/outcome_groups/{}/outcomes/{}".format(
-                self.context_ref(), self.id, outcome_id
+                self.context_ref(),
+                self.id,
+                outcome_id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeLink(self._requester, response.json())
@@ -213,7 +222,7 @@ class OutcomeGroup(CanvasObject):
 
         return OutcomeLink(self._requester, response.json())
 
-    def unlink_outcome(self, outcome):
+    def unlink_outcome(self, outcome, **kwargs):
         """
         Remove an Outcome from and OutcomeLink
 
@@ -235,8 +244,11 @@ class OutcomeGroup(CanvasObject):
         response = self._requester.request(
             "DELETE",
             "{}/outcome_groups/{}/outcomes/{}".format(
-                self.context_ref(), self.id, outcome_id
+                self.context_ref(),
+                self.id,
+                outcome_id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if "context_id" in response.json():
@@ -294,7 +306,7 @@ class OutcomeGroup(CanvasObject):
 
         return OutcomeGroup(self._requester, response.json())
 
-    def import_outcome_group(self, outcome_group):
+    def import_outcome_group(self, outcome_group, **kwargs):
         """
         Import an outcome group as a subgroup into the current outcome group
 
@@ -319,6 +331,7 @@ class OutcomeGroup(CanvasObject):
             "POST",
             "{}/outcome_groups/{}/import".format(self.context_ref(), self.id),
             source_outcome_group_id=source_outcome_group_id,
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self._requester, response.json())

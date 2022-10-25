@@ -35,7 +35,7 @@ class ExternalTool(CanvasObject):
         else:
             raise ValueError("ExternalTool does not have a course_id or account_id")
 
-    def get_parent(self):
+    def get_parent(self, **kwargs):
         """
         Return the object that spawned this tool.
 
@@ -45,7 +45,9 @@ class ExternalTool(CanvasObject):
         from canvasapi.course import Course
 
         response = self._requester.request(
-            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
+            "GET",
+            "{}s/{}".format(self.parent_type, self.parent_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if self.parent_type == "account":
@@ -53,7 +55,7 @@ class ExternalTool(CanvasObject):
         elif self.parent_type == "course":
             return Course(self._requester, response.json())
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Remove the specified external tool.
 
@@ -69,6 +71,7 @@ class ExternalTool(CanvasObject):
             "{}s/{}/external_tools/{}".format(
                 self.parent_type, self.parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return ExternalTool(self._requester, response.json())

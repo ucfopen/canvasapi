@@ -27,7 +27,7 @@ class Module(CanvasObject):
 
         return Module(self._requester, module_json)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this module.
 
@@ -37,14 +37,16 @@ class Module(CanvasObject):
         :rtype: :class:`canvasapi.module.Module`
         """
         response = self._requester.request(
-            "DELETE", "courses/{}/modules/{}".format(self.course_id, self.id)
+            "DELETE",
+            "courses/{}/modules/{}".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_json = response.json()
         module_json.update({"course_id": self.course_id})
 
         return Module(self._requester, module_json)
 
-    def relock(self):
+    def relock(self, **kwargs):
         """
         Reset module progressions to their default locked state and recalculates
         them based on the current requirements.
@@ -58,7 +60,9 @@ class Module(CanvasObject):
         :rtype: :class:`canvasapi.module.Module`
         """
         response = self._requester.request(
-            "PUT", "courses/{}/modules/{}/relock".format(self.course_id, self.id)
+            "PUT",
+            "courses/{}/modules/{}/relock".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_json = response.json()
         module_json.update({"course_id": self.course_id})
@@ -173,7 +177,7 @@ class ModuleItem(CanvasObject):
 
         return ModuleItem(self._requester, module_item_json)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this module item.
 
@@ -187,13 +191,14 @@ class ModuleItem(CanvasObject):
             "courses/{}/modules/{}/items/{}".format(
                 self.course_id, self.module_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_item_json = response.json()
         module_item_json.update({"course_id": self.course_id})
 
         return ModuleItem(self._requester, module_item_json)
 
-    def complete(self):
+    def complete(self, **kwargs):
         """
         Mark this module item as done.
 
@@ -207,13 +212,14 @@ class ModuleItem(CanvasObject):
             "courses/{}/modules/{}/items/{}/done".format(
                 self.course_id, self.module_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_item_json = response.json()
         module_item_json.update({"course_id": self.course_id})
 
         return ModuleItem(self._requester, module_item_json)
 
-    def uncomplete(self):
+    def uncomplete(self, **kwargs):
         """
         Mark this module item as not done.
 
@@ -227,6 +233,7 @@ class ModuleItem(CanvasObject):
             "courses/{}/modules/{}/items/{}/done".format(
                 self.course_id, self.module_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
         module_item_json = response.json()
         module_item_json.update({"course_id": self.course_id})
