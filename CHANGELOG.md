@@ -6,6 +6,10 @@
 
 - Updated Codecov action to v3
 
+### Bugfixes
+
+- Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
+
 ## [3.0.0] - 2022-09-21
 
 ### New Endpoint Coverage
