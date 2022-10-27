@@ -249,7 +249,7 @@ class Canvas(object):
             kwargs["calendar_event"] = calendar_event
         else:
             raise RequiredFieldMissing(
-                "Dictionary with key 'context_codes' is required."
+                "Dictionary with key 'context_code' is required."
             )
 
         response = self.__requester.request(
