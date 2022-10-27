@@ -68,6 +68,7 @@ Patches and Suggestions
 - Matthew Jones [@jonespm](https://github.com/jonespm)
 - Michael Phelps [@nottheswimmer](https://github.com/nottheswimmer)
 - Mike Nahmias [@Mike-Nahmias](https://github.com/Mike-Nahmias)
+- Mike Suhan [@mikesuhan](https://github.com/mikesuhan)
 - Nathan Dabu [@nathaned](https://github.com/nathaned)
 - Petar Nikolovski [@petarGitNik](https://github.com/petarGitNik)
 - Philip Austin [@phaustin](https://github.com/phaustin)
