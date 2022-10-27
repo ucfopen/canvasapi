@@ -33,6 +33,7 @@ Patches and Suggestions
 - Damian Sweeney [@damianfs](https://github.com/damianfs)
 - Daniel Brinkman [@DanBrink91](https://github.com/DanBrink91)
 - Daniel Grobani [@dgrobani](https://github.com/dgrobani)
+- Daniel Molares [@dmols](https://github.com/dmols)
 - David Warden [@dfwarden](https://github.com/dfwarden)
 - Davis Goff [@Goff-Davis](https://github.com/Goff-Davis)
 - Deundre Williams [@deundrewilliams](https://github.com/deundrewilliams)
