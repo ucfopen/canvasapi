@@ -25,7 +25,7 @@
 ### Bugfixes
 
 - Fixed an issue where kwargs were not passed along to Canvas in `User.get_profile()`. (Thanks, [@breed](https://github.com/breed))
-- Fixed typo in `Canvas().create_calendar_event()` where a raise statement listed 'context_codes' as the proper key, instead of 'context_code'. (Thanks, [@dmols](https://github.com/dmols))
+- Fixed a typo in `Canvas.create_calendar_event()` where an error message improperly listed the missing key as 'context_codes' instead of 'context_code'. (Thanks, [@dmols](https://github.com/dmols) and [@mikesuhan](https://github.com/mikesuhan))
 
 ### Breaking Changes
 
