@@ -24,19 +24,24 @@ class Requester(object):
     """
     Responsible for handling HTTP requests.
     """
-
-    def __init__(self, base_url, access_token):
+ 
+    def __init__(self, base_url, access_token, custom_session=None):
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
+        :param custom_session: A specialized requests session object, e.g. one with a custom http adapter with extra pool connections mounted.
+        :type requests.session
         """
         # Preserve the original base url and add "/api/v1" to it
         self.original_url = base_url
         self.base_url = base_url + "/api/v1/"
         self.access_token = access_token
-        self._session = requests.Session()
+        if custom_session is None:
+            self._session = requests.Session()
+        else:
+            self._session = custom_session
         self._cache = []
 
     def _delete_request(self, url, headers, data=None, **kwargs):
