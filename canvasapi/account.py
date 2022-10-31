@@ -1742,6 +1742,8 @@ class Account(CanvasObject):
             "course/accounts/{}".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
+
+        return response.json()
         
     def show_account_auth_settings(self, **kwargs):
         """

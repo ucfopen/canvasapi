@@ -2398,6 +2398,8 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+        return response.json()
+
     def remove_usage_rights(self, **kwargs):
         """
         Removes the usage rights for specified files that are under the current course scope
