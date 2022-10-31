@@ -1727,6 +1727,22 @@ class Account(CanvasObject):
             if is_path:
                 attachment.close()
 
+    def query_by_account(self, **kwargs):
+        """
+        List course change events for a specific account.
+
+        :calls: `GET /api/v1/audit/course/accounts/:account_id \
+        <https://canvas.instructure.com/doc/api/course_audit_log.html#method.course_audit_api.for_account>`_
+
+        :rtype: list of :class:`canvasapi.course.CourseEvent`
+        """
+
+        response = self._requester.request(
+            "GET",
+            "course/accounts/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        
     def show_account_auth_settings(self, **kwargs):
         """
         Return the current state of each account level setting

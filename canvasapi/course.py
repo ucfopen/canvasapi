@@ -2382,6 +2382,22 @@ class Course(CanvasObject):
         )
         return response.json().get("html", "")
 
+    def query_by_course(self, **kwargs):
+        """
+        Lists course change events for a specific course.
+
+        :calls: `GET /api/v1/audit/course/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/course_audit_log.html#method.course_audit_api.for_course>`_
+
+        :rtype: list of :class:`canvasapi.course.CourseEvent`
+        """
+
+        response = self._requester.request(
+            "GET",
+            "course/courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def remove_usage_rights(self, **kwargs):
         """
         Removes the usage rights for specified files that are under the current course scope
