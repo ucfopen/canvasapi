@@ -653,6 +653,8 @@ class Account(CanvasObject):
         <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.all_calendars>`_
 
         :returns: Paginated list of all account calendars for the provided account.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+        :class: `canvasapi.account.AccountCalendar`
         """
         return PaginatedList(
             AccountCalendar,
@@ -1809,6 +1811,13 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.accountCalendar`
         """
+        response = self._requester.request(
+            "PUT",
+            "accounts/{}/account_calendars".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
 
     def update_role(self, role, **kwargs):
         """

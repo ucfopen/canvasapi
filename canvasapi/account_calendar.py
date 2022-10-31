@@ -2,4 +2,4 @@ from canvasapi import CanvasObject
 
 class AccountCalendar(CanvasObject):
     def __str__(self):
-        return calendar_event_url
+        return self.calendar_event_url
