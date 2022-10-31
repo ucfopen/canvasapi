@@ -645,6 +645,23 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_all_account_calendars(self, **kwargs):
+        """
+        Lists all account calendars available to the account given.
+
+        :calls: `GET /api/v1/accounts/:account_id/account_calendars \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.all_calendars>`_
+
+        :returns: Paginated list of all account calendars for the provided account.
+        """
+        return PaginatedList(
+            AccountCalendar,
+            self._requester,
+            "GET",
+            "accounts/{}/account_calendars".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_all_outcome_links_in_context(self, **kwargs):
         """
         Get all outcome links for context - BETA
@@ -1782,6 +1799,16 @@ class Account(CanvasObject):
         )
 
         return SSOSettings(self._requester, response.json())
+
+    def update_account_calendars_visibility(self, **kwargs):
+        """
+        Update many account calendars visibility at once.
+
+        :calls: `PUT /api/v1/accounts/:account_id/account_calendars \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.account.accountCalendar`
+        """
 
     def update_role(self, role, **kwargs):
         """
