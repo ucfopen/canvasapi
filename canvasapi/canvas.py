@@ -10,6 +10,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
+from jwt import JWT
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.requester import Requester
 from canvasapi.section import Section
@@ -297,6 +298,21 @@ class Canvas(object):
             "POST", "groups", _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
+
+    def create_jwt(self, **kwargs):
+        """
+        Creates a unique JWT to use with other Canvas services.
+
+        :calls: `POST /api/v1/jwts \
+        <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.create>`_
+
+        :rtype: JWT object
+        """
+        response = self.__requester.request(
+            "POST", "JWTs", _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return response.json()
 
     def create_planner_note(self, **kwargs):
         """
@@ -1300,6 +1316,21 @@ class Canvas(object):
             json=True,
         )
 
+        return response.json()
+
+    def refresh_jwt(self, **kwargs):
+        """
+        Refreshes a JWT for reuse with other canvas services. It generates a
+        different JWT each time it's called; expires after one hour.
+
+        :calls: `POST /api/v1/jwts/refresh \
+        <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.refresh>`_
+
+        :rtype: JWT object
+        """
+        response = self.__requester.request(
+            "POST", "jwts/refresh", _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
     def reserve_time_slot(self, calendar_event, participant_id=None, **kwargs):
