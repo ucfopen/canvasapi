@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Moderation Grading (Moderation Set)
+    - List students selected for moderation
+    - Select students for moderation
+
 ### General
 
 - Updated Codecov action to v3

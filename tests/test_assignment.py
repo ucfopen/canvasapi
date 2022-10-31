@@ -17,7 +17,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.peer_review import PeerReview
 from canvasapi.progress import Progress
 from canvasapi.submission import Submission
-from canvasapi.user import UserDisplay
+from canvasapi.user import User, UserDisplay
 from tests import settings
 from tests.util import cleanup_file, register_uris
 
@@ -136,6 +136,16 @@ class TestAssignment(unittest.TestCase):
 
         self.assertEqual(len(peer_review_list), 2)
         self.assertIsInstance(peer_review_list[0], PeerReview)
+
+    # get_students_selected_for_moderation()
+    def test_get_students_selected_for_moderation(self, m):
+        register_uris({"assignment": ["get_students_selected_moderation"]}, m)
+
+        selected_students = self.assignment.get_students_selected_for_moderation()
+        selected_student_list = list(selected_students)
+
+        self.assertEqual(len(selected_student_list), 2)
+        self.assertIsInstance(selected_student_list[0], User)
 
     # get_submission()
     def test_get_submission(self, m):
@@ -332,6 +342,18 @@ class TestAssignment(unittest.TestCase):
         status = self.assignment.get_provisional_grades_status(user)
         self.assertIsInstance(status, bool)
         self.assertFalse(status)
+
+    # select_students_for_moderation()
+    def test_select_students_for_moderation(self, m):
+        register_uris({"assignment": ["select_students_for_moderation"]}, m)
+
+        selected_students = self.assignment.select_students_for_moderation(
+            student_ids=[11, 12]
+        )
+        selected_student_list = list(selected_students)
+
+        self.assertEqual(len(selected_student_list), 2)
+        self.assertIsInstance(selected_student_list[0], User)
 
     # selected_provisional_grade
     def test_selected_provisional_grade(self, m):
