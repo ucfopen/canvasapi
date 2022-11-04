@@ -39,7 +39,7 @@ class AppointmentGroup(CanvasObject):
             kwargs["appointment_group"] = appointment_group
         else:
             raise RequiredFieldMissing(
-                "Dictionary with key 'context_codes' is required."
+                "Dictionary with key 'context_code' is required."
             )
 
         response = self._requester.request(
