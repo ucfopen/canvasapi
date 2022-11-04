@@ -16,6 +16,7 @@ from canvasapi.account import (
 from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.content_migration import ContentMigration, Migrator
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
@@ -185,6 +186,15 @@ class TestAccount(unittest.TestCase):
 
         self.assertIsInstance(deleted_user, User)
         self.assertTrue(hasattr(deleted_user, "name"))
+
+    def test_get_account_calendars(self, m):
+        register_uris({"account": ["get_account_calendars"]}, m)
+
+        account_calendars = self.account.get_account_calendars()
+        account_calendars_list = list(account_calendars)
+
+        self.assertEqual(len(account_calendars_list), 2)
+        self.assertIsInstance(account_calendars_list[0], AccountCalendar)
 
     # get_courses()
     def test_get_courses(self, m):

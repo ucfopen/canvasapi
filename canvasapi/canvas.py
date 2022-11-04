@@ -1,6 +1,6 @@
 import warnings
 
-from account_calendar import AccountCalendar
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.account import Account
 from canvasapi.comm_message import CommMessage
 from canvasapi.course import Course
@@ -435,7 +435,7 @@ class Canvas(object):
             :class:`canvasapi.account.AccountCalendar`
         """
         account_calendar_id = obj_or_id(
-            account_calendar, "account_calendar", (AccountCalendar,)
+            AccountCalendar, "account_calendar", (AccountCalendar,)
         )
 
         response = self.__requester.request(
@@ -443,6 +443,8 @@ class Canvas(object):
             "account_calendar/{}".format(account_calendar_id),
             _kwargs=combine_kwargs(**kwargs),
         )
+
+        return AccountCalendar(self._requester, response.json())
 
     def get_account_calendars(self, **kwargs):
         """

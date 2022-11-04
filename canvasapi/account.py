@@ -1,3 +1,4 @@
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
