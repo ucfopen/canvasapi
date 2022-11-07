@@ -424,28 +424,6 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def get_account_calendar(self, **kwargs):
-        """
-        Returns information about a single account calendar.
-
-        :calls: `GET /api/v1/account_calendars/:account_id \
-        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.show>`_
-
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.account.AccountCalendar`
-        """
-        account_calendar_id = obj_or_id(
-            AccountCalendar, "account_calendar", (AccountCalendar,)
-        )
-
-        response = self.__requester.request(
-            "GET",
-            "account_calendar/{}".format(account_calendar_id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        return AccountCalendar(self._requester, response.json())
-
     def get_account_calendars(self, **kwargs):
         """
         Returns a paginated list of account calendars available to the user.

@@ -1,4 +1,4 @@
-from canvasapi import CanvasObject
+from canvasapi.canvas_object import CanvasObject
 
 class AccountCalendar(CanvasObject):
     def __str__(self):

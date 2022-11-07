@@ -628,6 +628,24 @@ class Account(CanvasObject):
         )
         return User(self._requester, response.json())
 
+    def get_account_calendar(self, **kwargs):
+        """
+        Returns information about a single account calendar.
+
+        :calls: `GET /api/v1/account_calendars/:account_id \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.show>`_
+
+        :rtype: :class:`canvasapi.account.AccountCalendar`
+        """
+
+        response = self._requester.request(
+            "GET",
+            "account_calendars/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
+
     def get_admins(self, **kwargs):
         """
         Get the paginated list of admins for the current account.
@@ -645,6 +663,7 @@ class Account(CanvasObject):
             "accounts/{}/admins".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
+
 
     def get_all_account_calendars(self, **kwargs):
         """

@@ -157,11 +157,15 @@
 		"data": [
 			{
 				"id": 1,
-				"name": "Johnny Baedo"
+				"name": "CDL",
+				"calendar_event_url": "calendarURL",
+				"visible": true
 			},
 			{
 				"id": 2,
-				"name": "Lou Santos"
+				"name": "DDL",
+				"calendar_event_url": "calendarURL2",
+				"visible": true
 			}
 		]
 	},
@@ -169,12 +173,13 @@
 	"get_account_calendar": {
 		"method": "GET",
 		"endpoint": "account_calendars/1",
-		"data": [
+		"data":
 			{
-				"id": 1,
-				"name": "Joey Longbottom"
+				"id": 10,
+				"name": "Department of Computer Science",
+				"calendar_event_url": "calendarURL",
+				"visible": true
 			}
-		]
 	},
 
 	"get_all_account_calendars": {
@@ -734,7 +739,20 @@
 		"data": [
 			{
 				"id": 1,
-				"name": "Jamie Peterden"
+				"name": "Jamie Peterden",
+				"visible": true
+			}
+		]
+	},
+
+	"update_account_calendars_visibility_false": {
+		"method": "PUT",
+		"endpoint": "account_calendars/1",
+		"data": [
+			{
+				"id": 1,
+				"name": "Sue Peterden",
+				"visible": false
 			}
 		]
 	},

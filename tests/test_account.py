@@ -13,10 +13,11 @@ from canvasapi.account import (
     Role,
     SSOSettings,
 )
+
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.content_migration import ContentMigration, Migrator
-from canvasapi.account_calendar import AccountCalendar
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
@@ -187,15 +188,6 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(deleted_user, User)
         self.assertTrue(hasattr(deleted_user, "name"))
 
-    def test_get_account_calendars(self, m):
-        register_uris({"account": ["get_account_calendars"]}, m)
-
-        account_calendars = self.account.get_account_calendars()
-        account_calendars_list = list(account_calendars)
-
-        self.assertEqual(len(account_calendars_list), 2)
-        self.assertIsInstance(account_calendars_list[0], AccountCalendar)
-
     # get_courses()
     def test_get_courses(self, m):
         required = {"account": ["get_courses", "get_courses_page_2"]}
@@ -300,6 +292,18 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(report, AccountReport)
         self.assertTrue(hasattr(report, "status"))
         self.assertEqual(report.status, "deleted")
+
+    def test_get_account_calendar(self, m):
+        register_uris({"account": ["get_account_calendar"]}, m)
+
+        # Check object is of type AccountCalendar
+        account_calendar = self.account.get_account_calendar()
+        self.assertIsInstance(account_calendar, AccountCalendar)
+
+        # Verify contents of object
+        self.assertEqual(account_calendar.id, 10)
+        self.assertEqual(account_calendar.name, "Department of Computer Science")
+        self.assertTrue(account_calendar.visible)
 
     # get_report
     def test_get_report(self, m):

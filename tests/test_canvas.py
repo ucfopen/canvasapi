@@ -8,6 +8,7 @@ import requests_mock
 from canvasapi import Canvas
 from canvasapi.account import Account
 from canvasapi.appointment_group import AppointmentGroup
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.comm_message import CommMessage
 from canvasapi.conversation import Conversation
@@ -123,6 +124,21 @@ class TestCanvas(unittest.TestCase):
 
         account_by_obj = self.canvas.get_account(account_by_id)
         self.assertIsInstance(account_by_obj, Account)
+
+    def test_get_account_calendars(self, m):
+        register_uris({"account": ["get_account_calendars"]}, m)
+
+        account_calendars = self.canvas.get_account_calendars()
+        account_calendars_list = list(account_calendars)
+
+        self.assertEqual(len(account_calendars_list), 2)
+        self.assertIsInstance(account_calendars_list[0], AccountCalendar)
+
+        self.assertEqual(account_calendars_list[0].id, 1)
+        self.assertEqual(account_calendars_list[0].name, "CDL")
+
+        self.assertEqual(account_calendars_list[1].id, 2)
+        self.assertEqual(account_calendars_list[1].name, "DDL")
 
     def test_get_account_sis_id(self, m):
         register_uris({"account": ["get_by_sis_id"]}, m)
