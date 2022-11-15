@@ -188,7 +188,11 @@
 		"data": [
 			{
 				"id": 1,
-				"name": "Don Smith"
+				"name": "FSU"
+			},
+			{
+				"id": 2,
+				"name": "Full Sail"
 			}
 		]
 	},
@@ -211,7 +215,7 @@
 		"data":
 		{
 			"id": 1,
-			"name": "Biology",
+			"name": "Biology Department",
 			"calendar_event_url": "calendarURL",
 			"visible": true
 		}

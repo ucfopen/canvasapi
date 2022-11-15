@@ -125,6 +125,7 @@ class TestCanvas(unittest.TestCase):
         account_by_obj = self.canvas.get_account(account_by_id)
         self.assertIsInstance(account_by_obj, Account)
 
+    # get account calendars 
     def test_get_account_calendars(self, m):
         register_uris({"account": ["get_account_calendars"]}, m)
 
@@ -140,7 +141,7 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(account_calendars_list[0].id, 1)
         self.assertEqual(account_calendars_list[0].name, "CDL")
 
-        # Verify contents of second object 
+        # Verify contents of second object
         self.assertEqual(account_calendars_list[1].id, 2)
         self.assertEqual(account_calendars_list[1].name, "DDL")
 
