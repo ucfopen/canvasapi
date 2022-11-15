@@ -10,6 +10,7 @@
     - Update a calendar's visibility
     - Update many calendar's visibility
     - List all account calendars
+    
 ### General
 
 - Updated Codecov action to v3
