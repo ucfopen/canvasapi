@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Account Calendars (Thanks, [@dmols](https://github.com/dmols))
+    - List available account calendars
+    - List single account calendar
+    - Update a calendar's visibility
+    - Update many calendar's visibility
+    - List all account calendars
 ### General
 
 - Updated Codecov action to v3
@@ -16,13 +24,6 @@
 - List observers of a User (Thanks, [@bennettscience](https://github.com/bennettscience))
 - ePortfolio endpoints (Thanks, [@Birdmaaan4](https://github.com/Birdmaaan4) and [@bennettscience](https://github.com/bennettscience))
 - Delete an Admin from an Account (Thanks, [@shaneros](https://github.com/shaneros))
-
-- Account Calendars
-  - List available account calendars
-  - List single account calendar
-  - Update a calendar's visibility
-  - Update many calendar's visibility
-  - List all account calendars
 
 ### General
 
