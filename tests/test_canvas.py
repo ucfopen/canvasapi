@@ -128,15 +128,19 @@ class TestCanvas(unittest.TestCase):
     def test_get_account_calendars(self, m):
         register_uris({"account": ["get_account_calendars"]}, m)
 
+        # Convert to list for further testing
         account_calendars = self.canvas.get_account_calendars()
         account_calendars_list = list(account_calendars)
 
+        # Check that list contains objects of type AccountCalendar
         self.assertEqual(len(account_calendars_list), 2)
         self.assertIsInstance(account_calendars_list[0], AccountCalendar)
 
+        # Verify contents of first object
         self.assertEqual(account_calendars_list[0].id, 1)
         self.assertEqual(account_calendars_list[0].name, "CDL")
 
+        # Verify contents of second object 
         self.assertEqual(account_calendars_list[1].id, 2)
         self.assertEqual(account_calendars_list[1].name, "DDL")
 

@@ -1822,7 +1822,24 @@ class Account(CanvasObject):
 
         return SSOSettings(self._requester, response.json())
 
-    def update_account_calendars_visibility(self, **kwargs):
+    def update_account_calendar_visibility(self, **kwargs):
+        """
+        Update one account calendar's visibility at once.
+
+        :calls: `PUT /api/v1/account_calendars/:account_id \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.update>`_
+
+        :rtype: :class:`canvasapi.account.accountCalendar`
+        """
+        response = self._requester.request(
+            "PUT",
+            "account_calendars/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
+
+    def update_many_account_calendars_visibility(self, **kwargs):
         """
         Update many account calendars visibility at once.
 

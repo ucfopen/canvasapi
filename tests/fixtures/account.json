@@ -193,6 +193,31 @@
 		]
 	},
 
+	"update_account_calendar_visibility": {
+		"method": "PUT",
+		"endpoint": "account_calendars/1",
+		"data":
+		{
+			"id": 102,
+			"name": "Department of Aerospace Engineering",
+			"calendar_event_url": "calendarURL",
+			"visible": true
+		}
+	},
+
+	"update_many_account_calendars_visibility": {
+		"method": "PUT",
+		"endpoint": "accounts/1/account_calendars",
+		"data":
+		{
+			"id": 1,
+			"name": "Biology",
+			"calendar_event_url": "calendarURL",
+			"visible": true
+		}
+	},
+
+
 	"get_by_id": {
 		"method": "GET",
 		"endpoint": "accounts/1",
@@ -731,45 +756,6 @@
 			"label": "Student"
 		},
 		"status_code": 200
-	},
-
-	"update_account_calendars_visibility": {
-		"method": "PUT",
-		"endpoint": "account_calendars/1",
-		"data": [
-			{
-				"id": 1,
-				"name": "Jamie Peterden",
-				"visible": true
-			}
-		]
-	},
-
-	"update_account_calendars_visibility_false": {
-		"method": "PUT",
-		"endpoint": "account_calendars/1",
-		"data": [
-			{
-				"id": 1,
-				"name": "Sue Peterden",
-				"visible": false
-			}
-		]
-	},
-
-	"update_many_account_calendars_visibility": {
-		"method": "PUT",
-		"endpoint": "accounts/1/account_calendars",
-		"data": [
-			{
-				"id": 1,
-				"name": "Jamie Peterden"
-			},
-			{
-				"id": 2,
-				"name": "Jack Smack"
-			}
-		]
 	},
 
 	"users": {

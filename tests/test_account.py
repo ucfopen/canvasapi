@@ -303,7 +303,6 @@ class TestAccount(unittest.TestCase):
         # Verify contents of object
         self.assertEqual(account_calendar.id, 10)
         self.assertEqual(account_calendar.name, "Department of Computer Science")
-        self.assertTrue(account_calendar.visible)
 
     # get_report
     def test_get_report(self, m):
@@ -1237,6 +1236,28 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(updated_notif, AccountNotification)
         self.assertTrue(hasattr(updated_notif, "subject"))
         self.assertEqual(updated_notif.subject, "subject")
+
+    def test_update_account_calendar_visibility(self, m):
+        register_uris({"account": ["update_account_calendar_visibility"]}, m)
+
+        account_calendar = self.account.update_account_calendar_visibility()
+        self.assertIsInstance(account_calendar, AccountCalendar)
+
+        # Verify contents of object
+        self.assertEqual(account_calendar.id, 102)
+        self.assertEqual(account_calendar.name, "Department of Aerospace Engineering")
+        self.assertTrue(account_calendar.visible)
+
+    def test_update_many_account_calendars_visibility(self, m):
+        register_uris({"account": ["update_many_account_calendars_visibility"]}, m)
+
+        account_calendar = self.account.update_many_account_calendars_visibility()
+        self.assertIsInstance(account_calendar, AccountCalendar)
+
+        # Verify contents of object
+        # self.assertEqual(account_calendar.id, 102)
+        # self.assertEqual(account_calendar.name, "Department of Aerospace Engineering")
+        # self.assertTrue(account_calendar.visible)
 
     def test_update_global_notification_missing_field(self, m):
         register_uris({"account": ["update_notification"]}, m)
