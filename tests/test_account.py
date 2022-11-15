@@ -13,7 +13,6 @@ from canvasapi.account import (
     Role,
     SSOSettings,
 )
-
 from canvasapi.account_calendar import AccountCalendar
 from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.authentication_provider import AuthenticationProvider

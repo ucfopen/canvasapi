@@ -664,7 +664,6 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-
     def get_all_account_calendars(self, **kwargs):
         """
         Lists all account calendars available to the account given.
