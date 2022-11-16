@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- JWTs (Thanks [@dmols](https://github.com/dmols))
+    - Create JWTs
+    - Refresh JWTs
+
 ### General
 
 - Updated Codecov action to v3
