@@ -76,25 +76,6 @@ class RubricAssociation(CanvasObject):
     def __str__(self):
         return "{}, {}".format(self.id, self.association_type)
 
-    def create(self, **kwargs):
-        """
-        Create asingle RubricAssociation.
-
-        :calls: `POST /api/v1/courses/:course_id/rubric_associations \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_associations.create>`_
-
-        :rtype: :class: `canvasapi.rubric.Rubric`
-        """
-        from canvasapi.rubric import Rubric
-
-        response = self._requester.request(
-            "POST",
-            "courses/{}/rubric_associations".format(self.course_id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        return Rubric(self._requester, response.json())
-
     def create_rubric_assessment(self, **kwargs):
         """
         Create a single RubricAssessment.
