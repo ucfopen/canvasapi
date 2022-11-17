@@ -2398,7 +2398,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "audit/course/courses/{}".format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def remove_usage_rights(self, **kwargs):

@@ -1743,7 +1743,7 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "audit/course/accounts/{}".format(self.id),
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def show_account_auth_settings(self, **kwargs):
