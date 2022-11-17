@@ -35,7 +35,7 @@ class RubricAssessment(CanvasObject):
         Create a single RubricAssessment.
 
         :calls: `POST /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.create>`
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.create>`_
 
         :rtype: :class:`canvasapi.rubric.RubricAssessment`
         """
@@ -55,8 +55,8 @@ class RubricAssessment(CanvasObject):
         """
         Update a single RubricAssessment.
 
-        :calls: `/api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.update>`
+        :calls: `PUT /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.update>`_
 
         :rtype: :class: `canvasapi.rubric.RubricAssessment`
         """
@@ -76,8 +76,8 @@ class RubricAssessment(CanvasObject):
         """
         Delete a single RubricAssessment.
 
-        :calls: /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.destroy>`
+        :calls: `DELETE /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.destroy>`_
 
        :rtype: :class: `canvasapi.rubric.RubricAssessment`
         """
@@ -96,6 +96,25 @@ class RubricAssessment(CanvasObject):
 class RubricAssociation(CanvasObject):
     def __str__(self):
         return "{}, {}".format(self.id, self.association_type)
+
+    def create(self, **kwargs):
+        """
+        Create asingle RubricAssociation.
+
+        :calls: `POST /api/v1/courses/:course_id/rubric_associations \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_associations.create>`_
+
+        :rtype: :class: `canvasapi.rubric.Rubric`
+        """
+        from canvasapi.rubric import Rubric
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/rubric_associations".format(self.course_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return Rubric(self._requester, response.json())
 
     def delete(self, **kwargs):
         """

@@ -1,4 +1,13 @@
 {
+	"create_rubric_association": {
+		"method": "POST",
+		"endpoint": "courses/1/rubric_associations/",
+		"data": {
+			"id": 5,
+			"association_type": "Assignment"
+		},
+		"status_code": 200
+	},
 	"update_rubric_association": {
 		"method": "PUT",
 		"endpoint": "courses/1/rubric_associations/4",
