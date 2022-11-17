@@ -35,7 +35,7 @@ class RubricAssessment(CanvasObject):
         Update a single RubricAssessment.
 
         :calls: `PUT /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.update>`_
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.update>`_ # noqa
 
         :rtype: :class: `canvasapi.rubric.RubricAssessment`
         """
@@ -56,7 +56,7 @@ class RubricAssessment(CanvasObject):
         Delete a single RubricAssessment.
 
         :calls: `DELETE /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.destroy>`_
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.destroy>`_ # noqa
 
        :rtype: :class: `canvasapi.rubric.RubricAssessment`
         """
@@ -81,7 +81,7 @@ class RubricAssociation(CanvasObject):
         Create a single RubricAssessment.
 
         :calls: `POST /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.create>`_
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.create>`_ # noqa
 
         :rtype: :class:`canvasapi.rubric.RubricAssessment`
         """
