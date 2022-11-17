@@ -19,7 +19,7 @@ class Rubric(CanvasObject):
 
         response = self._requester.request(
             "DELETE",
-            "courses/{}/rubrics/{}".format(self.course_id, self.rubric_association_id),
+            "courses/{}/rubrics/{}".format(self.course_id, self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -29,27 +29,6 @@ class Rubric(CanvasObject):
 class RubricAssessment(CanvasObject):
     def __str__(self):
         return "{}, {}".format(self.id, self.artifact_type)
-
-    def create(self, **kwargs):
-        """
-        Create a single RubricAssessment.
-
-        :calls: `POST /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.create>`_
-
-        :rtype: :class:`canvasapi.rubric.RubricAssessment`
-        """
-        from canvasapi.rubric import RubricAssessment
-
-        response = self._requester.request(
-            "POST",
-            "courses/{}/rubric_associations/{}/rubric_assessments".format(
-                self.course_id, self.rubric_association_id
-            ),
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        return RubricAssessment(self._requester, response.json())
 
     def update(self, **kwargs):
         """
@@ -115,6 +94,30 @@ class RubricAssociation(CanvasObject):
         )
 
         return Rubric(self._requester, response.json())
+
+    def create_rubric_assessment(self, **kwargs):
+        """
+        Create a single RubricAssessment.
+
+        :calls: `POST /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.create>`_
+
+        :rtype: :class:`canvasapi.rubric.RubricAssessment`
+        """
+        from canvasapi.rubric import RubricAssessment
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/rubric_associations/{}/rubric_assessments".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        assessment_json = response.json()
+        assessment_json.update({"course_id": self.id})
+
+        return RubricAssessment(self._requester, assessment_json)
 
     def delete(self, **kwargs):
         """
