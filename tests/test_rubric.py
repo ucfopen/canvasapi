@@ -86,7 +86,7 @@ class TestRubricAssessment(unittest.TestCase):
         string = str(self.assessment)
         self.assertIsInstance(string, str)
 
-    def test_update_rubric_assessment(self, m):
+    def test_update(self, m):
         register_uris({"rubric": ["update_rubric_assessment"]}, m)
 
         self.assertEqual(self.assessment.provisional, "false")
@@ -96,7 +96,7 @@ class TestRubricAssessment(unittest.TestCase):
         self.assertEqual(updated_assessment.id, 1)
         self.assertEqual(updated_assessment.provisional, "true")
 
-    def test_dete_rubric_assessment(self, m):
+    def test_delete(self, m):
         register_uris({"rubric": ["delete_rubric_assessment"]}, m)
 
         deleted_assessment = self.assessment.delete()
