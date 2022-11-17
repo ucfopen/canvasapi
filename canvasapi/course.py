@@ -5,6 +5,7 @@ from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.course_epub_export import CourseEpubExport
+from canvasapi.course_event import CourseEvent
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
@@ -2392,13 +2393,13 @@ class Course(CanvasObject):
         :rtype: list of :class:`canvasapi.course.CourseEvent`
         """
 
-        response = self._requester.request(
+        return PaginatedList(
+            CourseEvent,
+            self._requester,
             "GET",
-            "course/courses/{}".format(self.id),
-            _kwargs=combine_kwargs(**kwargs),
+            "audit/course/courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
-
-        return response.json()
 
     def remove_usage_rights(self, **kwargs):
         """

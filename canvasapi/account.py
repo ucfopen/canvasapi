@@ -1,4 +1,5 @@
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.course_event import CourseEvent
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.grading_period import GradingPeriod
@@ -1737,14 +1738,14 @@ class Account(CanvasObject):
         :rtype: list of :class:`canvasapi.course.CourseEvent`
         """
 
-        response = self._requester.request(
+        return PaginatedList(
+            CourseEvent,
+            self._requester,
             "GET",
-            "course/accounts/{}".format(self.id),
-            _kwargs=combine_kwargs(**kwargs),
+            "audit/course/accounts/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs)
         )
 
-        return response.json()
-        
     def show_account_auth_settings(self, **kwargs):
         """
         Return the current state of each account level setting

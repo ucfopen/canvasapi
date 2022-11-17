@@ -1689,6 +1689,26 @@
 			}
 		]
 	},
+
+	"query_by_course": {
+			"method": "GET",
+			"endpoint": "audit/course/courses/1",
+			"data": [
+				{
+					"id": 1,
+					"name": "FIU",
+					"start_at": "2022-11-18T15:00:00-06:00",
+					"conclude_at": "2022-11-18T15:00:00-08:00"
+				},
+				{
+					"id": 2,
+					"name": "UNF",
+					"start_at": "2022-11-18T15:00:00-06:00",
+					"conclude_at": "2022-11-18T15:00:00-08:00"
+				}
+			]
+	},
+
 	"list_tabs": {
 		"method": "GET",
 		"endpoint": "courses/1/tabs",

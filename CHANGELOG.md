@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Query Course Events (Thanks, [damols](https://github.com/dmols))
+    - Query by course
+    - Query by account
+
 ### General
 
 - Updated Codecov action to v3

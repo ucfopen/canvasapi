@@ -17,6 +17,7 @@ from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course
+from canvasapi.course_event import CourseEvent
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
@@ -327,6 +328,27 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(reports_list[0], AccountReport)
         self.assertTrue(hasattr(reports_list[0], "id"))
         self.assertIsInstance(str(reports_list[0]), str)
+
+    # get query by account
+    def test_query_by_account(self, m):
+        register_uris({"account": ["query_by_account"]}, m)
+
+        # Get paginated list and convert to list
+        query = self.account.query_by_account()
+        query_list = list(query)
+
+        # Check that list contains objects of type CourseEvent
+        self.assertEqual(len(query_list), 2)
+        self.assertIsInstance(query_list[0], CourseEvent)
+        self.assertIsInstance(query_list[1], CourseEvent)
+
+        # Verify contents of first object
+        self.assertEqual(query_list[0].id, 1)
+        self.assertEqual(query_list[0].name, "UCF")
+
+        # Verify contents of second object
+        self.assertEqual(query_list[1].id, 2)
+        self.assertEqual(query_list[1].name, "FSU")
 
     # get_subaccounts()
     def test_get_subaccounts(self, m):
