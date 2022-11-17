@@ -30,6 +30,26 @@ class RubricAssessment(CanvasObject):
     def __str__(self):
         return "{}, {}".format(self.id, self.artifact_type)
 
+    def delete(self, **kwargs):
+        """
+        Delete a single RubricAssessment.
+
+        :calls: `DELETE /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.destroy>`_ # noqa
+
+       :rtype: :class: `canvasapi.rubric.RubricAssessment`
+        """
+        from canvasapi.rubric import RubricAssessment
+
+        response = self._requester.request(
+            "DELETE",
+            "courses/{}/rubric_associations/{}/rubric_assessments/{}".format(
+                self.course_id, self.rubric_association_id, self.id
+            ),
+        )
+
+        return RubricAssessment(self._requester, response.json())
+
     def update(self, **kwargs):
         """
         Update a single RubricAssessment.
@@ -47,26 +67,6 @@ class RubricAssessment(CanvasObject):
                 self.course_id, self.rubric_association_id, self.id
             ),
             _kwargs=combine_kwargs(**kwargs),
-        )
-
-        return RubricAssessment(self._requester, response.json())
-
-    def delete(self):
-        """
-        Delete a single RubricAssessment.
-
-        :calls: `DELETE /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.destroy>`_ # noqa
-
-       :rtype: :class: `canvasapi.rubric.RubricAssessment`
-        """
-        from canvasapi.rubric import RubricAssessment
-
-        response = self._requester.request(
-            "DELETE",
-            "courses/{}/rubric_associations/{}/rubric_assessments/{}".format(
-                self.course_id, self.rubric_association_id, self.id
-            ),
         )
 
         return RubricAssessment(self._requester, response.json())
