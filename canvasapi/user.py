@@ -1,10 +1,15 @@
+from canvasapi.authentication_event import AuthenticationEvent
+from canvasapi.avatar import Avatar
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
+from canvasapi.content_export import ContentExport
+from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
 from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.license import License
+from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.pairing_code import PairingCode
 from canvasapi.upload import FileOrPathLike, Uploader
@@ -81,8 +86,6 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.content_migration.ContentMigration`
         """
-        from canvasapi.content_migration import ContentMigration, Migrator
-
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
         elif isinstance(migration_type, str):
@@ -165,8 +168,6 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         kwargs["export_type"] = export_type
 
         response = self._requester.request(
@@ -213,8 +214,6 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.authentication_event.AuthenticationEvent`
         """
-        from canvasapi.authentication_event import AuthenticationEvent
-
         return PaginatedList(
             AuthenticationEvent,
             self._requester,
@@ -233,8 +232,6 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.avatar.Avatar`
         """
-        from canvasapi.avatar import Avatar
-
         return PaginatedList(
             Avatar,
             self._requester,
@@ -349,8 +346,6 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         export_id = obj_or_id(content_export, "content_export", (ContentExport,))
 
         response = self._requester.request(
@@ -371,8 +366,6 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         return PaginatedList(
             ContentExport,
             self._requester,
@@ -821,8 +814,6 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.course.PageView`
         """
-        from canvasapi.page_view import PageView
-
         return PaginatedList(
             PageView,
             self._requester,
