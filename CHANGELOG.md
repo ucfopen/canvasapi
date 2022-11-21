@@ -6,6 +6,10 @@
 
 - Updated Codecov action to v3
 
+### Bugfixes
+
+- Fixed an issue where kwargs were not passed along to Canvas in `Course.get_module()`. (Thanks, [@bennettscience](https://github.com/bennettscience))
+
 ## [3.0.0] - 2022-09-21
 
 ### New Endpoint Coverage
