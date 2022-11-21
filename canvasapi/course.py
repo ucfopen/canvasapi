@@ -1645,8 +1645,11 @@ class Course(CanvasObject):
         module_id = obj_or_id(module, "module", (Module,))
 
         response = self._requester.request(
-            "GET", "courses/{}/modules/{}".format(self.id, module_id)
+            "GET",
+            "courses/{}/modules/{}".format(self.id, module_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
+
         module_json = response.json()
         module_json.update({"course_id": self.id})
 
