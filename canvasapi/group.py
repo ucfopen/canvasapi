@@ -2,6 +2,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.external_feed import ExternalFeed
 from canvasapi.folder import Folder
 from canvasapi.license import License
 from canvasapi.paginated_list import PaginatedList
@@ -78,8 +79,6 @@ class Group(CanvasObject):
         :type url: str
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
-        from canvasapi.external_feed import ExternalFeed
-
         response = self._requester.request(
             "POST",
             "groups/{}/external_feeds".format(self.id),

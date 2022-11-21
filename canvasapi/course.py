@@ -4,10 +4,12 @@ from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
+from canvasapi.content_export import ContentExport
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.external_feed import ExternalFeed
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
 from canvasapi.grade_change_log import GradeChangeEvent
@@ -20,6 +22,7 @@ from canvasapi.gradebook_history import (
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
+from canvasapi.module import Module
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
@@ -322,8 +325,6 @@ class Course(CanvasObject):
         :type url: str
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
-        from canvasapi.external_feed import ExternalFeed
-
         response = self._requester.request(
             "POST",
             "courses/{}/external_feeds".format(self.id),
@@ -435,8 +436,6 @@ class Course(CanvasObject):
         :returns: The created module.
         :rtype: :class:`canvasapi.module.Module`
         """
-        from canvasapi.module import Module
-
         if isinstance(module, dict) and "name" in module:
             kwargs["module"] = module
         else:
@@ -596,8 +595,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
-        from canvasapi.external_feed import ExternalFeed
-
         feed_id = obj_or_id(feed, "feed", (ExternalFeed,))
 
         response = self._requester.request(
@@ -695,8 +692,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         kwargs["export_type"] = export_type
 
         response = self._requester.request(
@@ -927,8 +922,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         export_id = obj_or_id(content_export, "content_export", (ContentExport,))
 
         response = self._requester.request(
@@ -949,8 +942,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         return PaginatedList(
             ContentExport,
             self._requester,
@@ -1200,8 +1191,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.external_feed.ExternalFeed`
         """
-        from canvasapi.external_feed import ExternalFeed
-
         return PaginatedList(
             ExternalFeed,
             self._requester,
@@ -1653,8 +1642,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.module.Module`
         """
-        from canvasapi.module import Module
-
         module_id = obj_or_id(module, "module", (Module,))
 
         response = self._requester.request(
@@ -1678,8 +1665,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.module.Module`
         """
-        from canvasapi.module import Module
-
         return PaginatedList(
             Module,
             self._requester,

@@ -9,6 +9,7 @@
 ### Bugfixes
 
 - Fixed an issue where kwargs were not passed along to Canvas in `Course.get_module()`. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
 
 ## [3.0.0] - 2022-09-21
 
