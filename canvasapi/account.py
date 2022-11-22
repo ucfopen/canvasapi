@@ -1,12 +1,25 @@
+from canvasapi.account_calendar import AccountCalendar
+from canvasapi.authentication_event import AuthenticationEvent
+from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.canvas_object import CanvasObject
+from canvasapi.content_migration import ContentMigration, Migrator
+from canvasapi.course import Course
+from canvasapi.enrollment import Enrollment
+from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
+from canvasapi.external_tool import ExternalTool
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
+from canvasapi.group import Group, GroupCategory
+from canvasapi.login import Login
+from canvasapi.outcome import OutcomeGroup, OutcomeLink
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.rubric import Rubric
+from canvasapi.scope import Scope
 from canvasapi.sis_import import SisImport
+from canvasapi.user import User
 from canvasapi.util import combine_kwargs, file_or_path, obj_or_id, obj_or_str
 
 
@@ -62,8 +75,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
-        from canvasapi.authentication_provider import AuthenticationProvider
-
         response = self._requester.request(
             "POST",
             "accounts/{}/authentication_providers".format(self.id),
@@ -123,8 +134,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.AccountNotification`
         """
-        from canvasapi.user import User
-
         user_id = obj_or_id(user, "user", (User,))
         notif_id = obj_or_id(notification, "notification", (AccountNotification,))
 
@@ -165,8 +174,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.Admin`
         """
-        from canvasapi.user import User
-
         user_id = obj_or_id(user, "user", (User,))
         kwargs["user_id"] = user_id
 
@@ -189,8 +196,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.content_migration.ContentMigration`
         """
-        from canvasapi.content_migration import ContentMigration, Migrator
-
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
         elif isinstance(migration_type, str):
@@ -218,8 +223,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.course.Course`
         """
-        from canvasapi.course import Course
-
         response = self._requester.request(
             "POST",
             "accounts/{}/courses".format(self.id),
@@ -237,8 +240,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
-        from canvasapi.enrollment_term import EnrollmentTerm
-
         response = self._requester.request(
             "POST",
             "accounts/{}/terms".format(self.id),
@@ -269,8 +270,6 @@ class Account(CanvasObject):
         :type shared_secret: str
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
-        from canvasapi.external_tool import ExternalTool
-
         response = self._requester.request(
             "POST",
             "accounts/{}/external_tools".format(self.id),
@@ -296,8 +295,6 @@ class Account(CanvasObject):
         :type name: str
         :rtype: :class:`canvasapi.group.GroupCategory`
         """
-        from canvasapi.group import GroupCategory
-
         response = self._requester.request(
             "POST",
             "accounts/{}/group_categories".format(self.id),
@@ -326,10 +323,8 @@ class Account(CanvasObject):
             kwargs["account_notification"] = account_notification
         else:
             raise RequiredFieldMissing(
-                (
-                    "account_notification must be a dictionary with keys "
-                    "'subject', 'message', 'start_at', and 'end_at'."
-                )
+                "account_notification must be a dictionary with keys "
+                "'subject', 'message', 'start_at', and 'end_at'."
             )
 
         response = self._requester.request(
@@ -355,7 +350,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.AccountReport`
         """
-
         response = self._requester.request(
             "POST",
             "accounts/{}/reports/{}".format(self.id, report_type),
@@ -398,7 +392,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.sis_import.SisImport`
         """
-
         attachment, is_path = file_or_path(attachment)
 
         try:
@@ -452,8 +445,6 @@ class Account(CanvasObject):
         :type pseudonym: dict
         :rtype: :class:`canvasapi.user.User`
         """
-        from canvasapi.user import User
-
         if isinstance(pseudonym, dict) and "unique_id" in pseudonym:
             kwargs["pseudonym"] = pseudonym
         else:
@@ -479,18 +470,16 @@ class Account(CanvasObject):
         :type login: `dict`
         :rtype: :class:`canvasapi.login.Login`
         """
-        from canvasapi.login import Login
-
         if isinstance(user, dict) and "id" in user:
             kwargs["user"] = user
         else:
-            raise RequiredFieldMissing(("user must be a dictionary with keys " "'id'."))
+            raise RequiredFieldMissing("user must be a dictionary with keys 'id'.")
 
         if isinstance(login, dict) and "unique_id" in login:
             kwargs["login"] = login
         else:
             raise RequiredFieldMissing(
-                ("login must be a dictionary with keys " "'unique_id'.")
+                "login must be a dictionary with keys 'unique_id'."
             )
 
         response = self._requester.request(
@@ -557,8 +546,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.Admin`
         """
-        from canvasapi.user import User
-
         user_id = obj_or_id(user, "user", (User,))
         kwargs["user_id"] = user_id
 
@@ -616,8 +603,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.user.User`
         """
-        from canvasapi.user import User
-
         user_id = obj_or_id(user, "user", (User,))
 
         response = self._requester.request(
@@ -626,6 +611,24 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
+
+    def get_account_calendar(self, **kwargs):
+        """
+        Returns information about a single account calendar.
+
+        :calls: `GET /api/v1/account_calendars/:account_id \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.show>`_
+
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+
+        response = self._requester.request(
+            "GET",
+            "account_calendars/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
 
     def get_admins(self, **kwargs):
         """
@@ -645,6 +648,25 @@ class Account(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_all_account_calendars(self, **kwargs):
+        """
+        Lists all account calendars available to the account given.
+
+        :calls: `GET /api/v1/accounts/:account_id/account_calendars \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.all_calendars>`_
+
+        :returns: Paginated list of all account calendars for the provided account.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+        return PaginatedList(
+            AccountCalendar,
+            self._requester,
+            "GET",
+            "accounts/{}/account_calendars".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_all_outcome_links_in_context(self, **kwargs):
         """
         Get all outcome links for context - BETA
@@ -656,8 +678,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.outcome.OutcomeLink`
         """
-        from canvasapi.outcome import OutcomeLink
-
         return PaginatedList(
             OutcomeLink,
             self._requester,
@@ -676,8 +696,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.authentication_event.AuthenticationEvent`
         """
-        from canvasapi.authentication_event import AuthenticationEvent
-
         return PaginatedList(
             AuthenticationEvent,
             self._requester,
@@ -699,8 +717,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
-        from canvasapi.authentication_provider import AuthenticationProvider
-
         authentication_providers_id = obj_or_id(
             authentication_provider,
             "authentication provider",
@@ -727,8 +743,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.authentication_provider.AuthenticationProvider`
         """
-        from canvasapi.authentication_provider import AuthenticationProvider
-
         return PaginatedList(
             AuthenticationProvider,
             self._requester,
@@ -750,8 +764,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.content_migration.ContentMigration`
         """
-        from canvasapi.content_migration import ContentMigration
-
         migration_id = obj_or_id(
             content_migration, "content_migration", (ContentMigration,)
         )
@@ -777,8 +789,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.content_migration.ContentMigration`
         """
-        from canvasapi.content_migration import ContentMigration
-
         return PaginatedList(
             ContentMigration,
             self._requester,
@@ -798,8 +808,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.course.Course`
         """
-        from canvasapi.course import Course
-
         return PaginatedList(
             Course,
             self._requester,
@@ -817,7 +825,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/completed/grades".format(self.id),
@@ -834,7 +841,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/current/grades".format(self.id),
@@ -854,7 +860,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/terms/{}/grades".format(self.id, term_id),
@@ -871,7 +876,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/completed/activity".format(self.id),
@@ -888,7 +892,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/current/activity".format(self.id),
@@ -910,7 +913,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/terms/{}/activity".format(self.id, term_id),
@@ -927,7 +929,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/completed/statistics".format(self.id),
@@ -944,7 +945,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/current/statistics".format(self.id),
@@ -964,7 +964,6 @@ class Account(CanvasObject):
 
         :rtype: dict
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/analytics/terms/{}/statistics".format(self.id, term_id),
@@ -1003,8 +1002,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
-        from canvasapi.enrollment import Enrollment
-
         enrollment_id = obj_or_id(enrollment, "enrollment", (Enrollment,))
 
         response = self._requester.request(
@@ -1026,8 +1023,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
-        from canvasapi.enrollment_term import EnrollmentTerm
-
         term_id = obj_or_id(term, "term", (EnrollmentTerm,))
 
         response = self._requester.request(
@@ -1045,8 +1040,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
-        from canvasapi.enrollment_term import EnrollmentTerm
-
         return PaginatedList(
             EnrollmentTerm,
             self._requester,
@@ -1067,8 +1060,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.external_tool.ExternalTool`
         """
-        from canvasapi.external_tool import ExternalTool
-
         tool_id = obj_or_id(tool, "tool", (ExternalTool,))
 
         response = self._requester.request(
@@ -1089,8 +1080,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.external_tool.ExternalTool`
         """
-        from canvasapi.external_tool import ExternalTool
-
         return PaginatedList(
             ExternalTool,
             self._requester,
@@ -1152,7 +1141,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.AccountNotification`
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/account_notifications/{}".format(self.id, notification_id),
@@ -1174,7 +1162,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.grading_period.GradingPeriod`
         """
-
         return PaginatedList(
             GradingPeriod,
             self._requester,
@@ -1195,7 +1182,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.grading_standards.GradingStandard`
         """
-
         return PaginatedList(
             GradingStandard,
             self._requester,
@@ -1214,8 +1200,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.group.GroupCategory`
         """
-        from canvasapi.group import GroupCategory
-
         return PaginatedList(
             GroupCategory,
             self._requester,
@@ -1233,8 +1217,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
-        from canvasapi.group import Group
-
         return PaginatedList(
             Group,
             self._requester,
@@ -1274,8 +1256,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.content_migration.Migrator`
         """
-        from canvasapi.content_migration import Migrator
-
         return PaginatedList(
             Migrator,
             self._requester,
@@ -1298,8 +1278,6 @@ class Account(CanvasObject):
         :returns: An outcome group object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        from canvasapi.outcome import OutcomeGroup
-
         outcome_group_id = obj_or_id(group, "outcome group", (OutcomeGroup,))
         response = self._requester.request(
             "GET",
@@ -1320,8 +1298,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.outcome.OutcomeGroups`
         """
-        from canvasapi.outcome import OutcomeGroup
-
         return PaginatedList(
             OutcomeGroup,
             self._requester,
@@ -1438,7 +1414,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.Role`
         """
-
         return PaginatedList(
             Role,
             self._requester,
@@ -1457,8 +1432,6 @@ class Account(CanvasObject):
         :returns: The OutcomeGroup of the context.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        from canvasapi.outcome import OutcomeGroup
-
         response = self._requester.request(
             "GET",
             "accounts/{}/root_outcome_group".format(self.id),
@@ -1512,8 +1485,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.scope.Scope`
         """
-        from canvasapi.scope import Scope
-
         return PaginatedList(
             Scope,
             self._requester,
@@ -1533,7 +1504,6 @@ class Account(CanvasObject):
         :type grading_standard_id: int
         :rtype: :class:`canvasapi.grading_standards.GradingStandard`
         """
-
         response = self._requester.request(
             "GET",
             "accounts/%s/grading_standards/%d" % (self.id, grading_standard_id),
@@ -1576,7 +1546,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.sis_import.SisImport`
         """
-
         return PaginatedList(
             SisImport,
             self._requester,
@@ -1597,7 +1566,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList`
             of :class:`canvasapi.sis_import.SisImport`
         """
-
         return PaginatedList(
             SisImport,
             self._requester,
@@ -1640,8 +1608,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.login.Login`
         """
-        from canvasapi.login import Login
-
         return PaginatedList(
             Login,
             self._requester,
@@ -1665,8 +1631,6 @@ class Account(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.account.AccountNotification`
         """
-        from canvasapi.user import User
-
         user_id = obj_or_id(user, "user", (User,))
 
         return PaginatedList(
@@ -1686,8 +1650,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
         """
-        from canvasapi.user import User
-
         return PaginatedList(
             User,
             self._requester,
@@ -1708,7 +1670,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.outcome_import.OutcomeImport`
         """
-
         attachment, is_path = file_or_path(attachment)
 
         try:
@@ -1736,7 +1697,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.SSOSettings`
         """
-
         response = self._requester.request(
             "GET",
             "accounts/{}/sso_settings".format(self.id),
@@ -1774,7 +1734,6 @@ class Account(CanvasObject):
 
         :rtype: :class:`canvasapi.account.SSOSettings`
         """
-
         response = self._requester.request(
             "PUT",
             "accounts/{}/sso_settings".format(self.id),
@@ -1782,6 +1741,40 @@ class Account(CanvasObject):
         )
 
         return SSOSettings(self._requester, response.json())
+
+    def update_account_calendar_visibility(self, **kwargs):
+        """
+        Update one account calendar's visibility.
+
+        :calls: `PUT /api/v1/account_calendars/:account_id \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.update>`_
+
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+        response = self._requester.request(
+            "PUT",
+            "account_calendars/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
+
+    def update_many_account_calendars_visibility(self, **kwargs):
+        """
+        Update many account calendars visibility at once.
+
+        :calls: `PUT /api/v1/accounts/:account_id/account_calendars \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+        response = self._requester.request(
+            "PUT",
+            "accounts/{}/account_calendars".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
 
     def update_role(self, role, **kwargs):
         """
@@ -1830,10 +1823,8 @@ class AccountNotification(CanvasObject):
             kwargs["account_notification"] = account_notification
         else:
             raise RequiredFieldMissing(
-                (
-                    "account_notification must be a dictionary with keys "
-                    "'subject', 'message', 'start_at', and 'end_at'."
-                )
+                "account_notification must be a dictionary with keys "
+                "'subject', 'message', 'start_at', and 'end_at'."
             )
 
         response = self._requester.request(
