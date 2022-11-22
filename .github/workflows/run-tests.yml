@@ -33,6 +33,8 @@ jobs:
         run: coverage run -m unittest discover
       - name: Lint markdown files
         uses: bewuethr/mdl-action@v1
+      - name: Check if all modules are visible to inspect
+        run: python scripts/find_missing_modules.py
       - name: Check if methods are alphabetical
         run: python scripts/alphabetic.py
       - name: Check for missing kwargs
