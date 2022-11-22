@@ -1,6 +1,7 @@
 import warnings
 
 from canvasapi.account import Account
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.comm_message import CommMessage
@@ -393,6 +394,24 @@ class Canvas(object):
             "GET", uri_str.format(account_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self.__requester, response.json())
+
+    def get_account_calendars(self, **kwargs):
+        """
+        Returns a paginated list of account calendars available to the user.
+
+        :calls: `GET /api/v1/account_calendars \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+        return PaginatedList(
+            AccountCalendar,
+            self.__requester,
+            "GET",
+            "account_calendars",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_accounts(self, **kwargs):
         """

@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Account Calendars (Thanks, [@dmols](https://github.com/dmols))
+    - List available account calendars
+    - Get a single account calendar
+    - Update a calendar's visibility
+    - Update many calendars' visibility
+    - List all account calendars
+
 ### General
 
 - Updated Codecov action to v3

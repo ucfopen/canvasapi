@@ -5,6 +5,7 @@ Class Reference
 
     canvas-ref
     account-ref
+    account-calendar-ref
     appointment-group-ref
     assignment-ref
     authentication-event-ref

@@ -1,3 +1,4 @@
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.canvas_object import CanvasObject
@@ -611,6 +612,24 @@ class Account(CanvasObject):
         )
         return User(self._requester, response.json())
 
+    def get_account_calendar(self, **kwargs):
+        """
+        Returns information about a single account calendar.
+
+        :calls: `GET /api/v1/account_calendars/:account_id \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.show>`_
+
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+
+        response = self._requester.request(
+            "GET",
+            "account_calendars/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
+
     def get_admins(self, **kwargs):
         """
         Get the paginated list of admins for the current account.
@@ -626,6 +645,25 @@ class Account(CanvasObject):
             self._requester,
             "GET",
             "accounts/{}/admins".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_all_account_calendars(self, **kwargs):
+        """
+        Lists all account calendars available to the account given.
+
+        :calls: `GET /api/v1/accounts/:account_id/account_calendars \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.all_calendars>`_
+
+        :returns: Paginated list of all account calendars for the provided account.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+        return PaginatedList(
+            AccountCalendar,
+            self._requester,
+            "GET",
+            "accounts/{}/account_calendars".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -1703,6 +1741,40 @@ class Account(CanvasObject):
         )
 
         return SSOSettings(self._requester, response.json())
+
+    def update_account_calendar_visibility(self, **kwargs):
+        """
+        Update one account calendar's visibility.
+
+        :calls: `PUT /api/v1/account_calendars/:account_id \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.update>`_
+
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+        response = self._requester.request(
+            "PUT",
+            "account_calendars/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
+
+    def update_many_account_calendars_visibility(self, **kwargs):
+        """
+        Update many account calendars visibility at once.
+
+        :calls: `PUT /api/v1/accounts/:account_id/account_calendars \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.bulk_update>`_
+
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+        response = self._requester.request(
+            "PUT",
+            "accounts/{}/account_calendars".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return AccountCalendar(self._requester, response.json())
 
     def update_role(self, role, **kwargs):
         """
