@@ -2,9 +2,26 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- Account Calendars (Thanks, [@dmols](https://github.com/dmols))
+    - List available account calendars
+    - Get a single account calendar
+    - Update a calendar's visibility
+    - Update many calendars' visibility
+    - List all account calendars
+- Moderation Grading (Moderation Set)
+    - List students selected for moderation
+    - Select students for moderation
+
 ### General
 
 - Updated Codecov action to v3
+
+### Bugfixes
+
+- Fixed an issue where kwargs were not passed along to Canvas in `Course.get_module()`. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
 
 ## [3.0.0] - 2022-09-21
 
