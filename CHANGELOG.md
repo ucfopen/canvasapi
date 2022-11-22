@@ -10,6 +10,9 @@
     - Update a calendar's visibility
     - Update many calendars' visibility
     - List all account calendars
+- Moderation Grading (Moderation Set)
+    - List students selected for moderation
+    - Select students for moderation
 
 ### General
 
