@@ -619,7 +619,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/account_calendars/:account_id \
         <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.show>`_
 
-        :rtype: :class:`canvasapi.account.AccountCalendar`
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
         """
 
         response = self._requester.request(
@@ -657,7 +657,7 @@ class Account(CanvasObject):
 
         :returns: Paginated list of all account calendars for the provided account.
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-        :class: `canvasapi.account.AccountCalendar`
+            :class:`canvasapi.account_calendar.AccountCalendar`
         """
         return PaginatedList(
             AccountCalendar,
@@ -1744,12 +1744,12 @@ class Account(CanvasObject):
 
     def update_account_calendar_visibility(self, **kwargs):
         """
-        Update one account calendar's visibility at once.
+        Update one account calendar's visibility.
 
         :calls: `PUT /api/v1/account_calendars/:account_id \
         <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.update>`_
 
-        :rtype: :class:`canvasapi.account.accountCalendar`
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
         """
         response = self._requester.request(
             "PUT",
@@ -1766,7 +1766,7 @@ class Account(CanvasObject):
         :calls: `PUT /api/v1/accounts/:account_id/account_calendars \
         <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.bulk_update>`_
 
-        :rtype: :class:`canvasapi.account.accountCalendar`
+        :rtype: :class:`canvasapi.account_calendar.AccountCalendar`
         """
         response = self._requester.request(
             "PUT",

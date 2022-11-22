@@ -6,9 +6,9 @@
 
 - Account Calendars (Thanks, [@dmols](https://github.com/dmols))
     - List available account calendars
-    - List single account calendar
+    - Get a single account calendar
     - Update a calendar's visibility
-    - Update many calendar's visibility
+    - Update many calendars' visibility
     - List all account calendars
 
 ### General

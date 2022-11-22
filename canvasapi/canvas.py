@@ -403,7 +403,7 @@ class Canvas(object):
         <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.index>`_
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.account.AccountCalendar`
+            :class:`canvasapi.account_calendar.AccountCalendar`
         """
         return PaginatedList(
             AccountCalendar,
