@@ -8,13 +8,28 @@
 
 ### New Endpoint Coverage
 
+<<<<<<< HEAD
 - Query Course Events (Thanks, [dmols](https://github.com/dmols))
+=======
+- Account Calendars (Thanks, [@dmols](https://github.com/dmols))
+    - List available account calendars
+    - Get a single account calendar
+    - Update a calendar's visibility
+    - Update many calendars' visibility
+    - List all account calendars
+- Query Course Events (Thanks, [damols](https://github.com/dmols))
+>>>>>>> 7c874fab65dd992e16074b999251f2accec200f1
     - Query by course
     - Query by account
 
 ### General
 
 - Updated Codecov action to v3
+
+### Bugfixes
+
+- Fixed an issue where kwargs were not passed along to Canvas in `Course.get_module()`. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
 
 ## [3.0.0] - 2022-09-21
 
@@ -35,6 +50,7 @@
 ### Bugfixes
 
 - Fixed an issue where kwargs were not passed along to Canvas in `User.get_profile()`. (Thanks, [@breed](https://github.com/breed))
+- Fixed a typo in `Canvas.create_calendar_event()` where an error message improperly listed the missing key as 'context_codes' instead of 'context_code'. (Thanks, [@dmols](https://github.com/dmols) and [@mikesuhan](https://github.com/mikesuhan))
 
 ### Breaking Changes
 

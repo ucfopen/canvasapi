@@ -35,25 +35,7 @@ class ExternalTool(CanvasObject):
         else:
             raise ValueError("ExternalTool does not have a course_id or account_id")
 
-    def get_parent(self):
-        """
-        Return the object that spawned this tool.
-
-        :rtype: :class:`canvasapi.account.Account` or :class:`canvasapi.account.Course`
-        """
-        from canvasapi.account import Account
-        from canvasapi.course import Course
-
-        response = self._requester.request(
-            "GET", "{}s/{}".format(self.parent_type, self.parent_id)
-        )
-
-        if self.parent_type == "account":
-            return Account(self._requester, response.json())
-        elif self.parent_type == "course":
-            return Course(self._requester, response.json())
-
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Remove the specified external tool.
 
@@ -69,6 +51,7 @@ class ExternalTool(CanvasObject):
             "{}s/{}/external_tools/{}".format(
                 self.parent_type, self.parent_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return ExternalTool(self._requester, response.json())
@@ -97,6 +80,26 @@ class ExternalTool(CanvasObject):
             super(ExternalTool, self).set_attributes(response_json)
 
         return ExternalTool(self._requester, response_json)
+
+    def get_parent(self, **kwargs):
+        """
+        Return the object that spawned this tool.
+
+        :rtype: :class:`canvasapi.account.Account` or :class:`canvasapi.account.Course`
+        """
+        from canvasapi.account import Account
+        from canvasapi.course import Course
+
+        response = self._requester.request(
+            "GET",
+            "{}s/{}".format(self.parent_type, self.parent_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        if self.parent_type == "account":
+            return Account(self._requester, response.json())
+        elif self.parent_type == "course":
+            return Course(self._requester, response.json())
 
     def get_sessionless_launch_url(self, **kwargs):
         """
