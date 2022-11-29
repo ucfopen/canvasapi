@@ -14,17 +14,17 @@ class TestCourseEvent(unittest.TestCase):
 
         with requests_mock.Mocker() as m:
             requires = {
-                "account": ["get_by_id", "query_by_account"],
-                "course": ["query_by_course"],
+                "account": ["get_by_id", "query_audit_by_account"],
+                "course": ["query_audit_by_course"],
             }
             register_uris(requires, m)
 
             self.account = self.canvas.get_account(1)
 
             # isolate one of the CourseEvent objects
-            self.query_by_account = self.account.query_by_account()[0]
+            self.query_audit_by_account = self.account.query_audit_by_account()[0]
 
     # __str__()
     def test__str__(self, m):
-        string = str(self.query_by_account)
+        string = str(self.query_audit_by_account)
         self.assertIsInstance(string, str)

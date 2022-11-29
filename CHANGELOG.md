@@ -2,9 +2,13 @@
 
 ## [Unreleased]
 
+### General
+
+- Added support for Course Events; new Course Event class. (Thanks, [dmols](https://github.com/dmols))
+
 ### New Endpoint Coverage
 
-- Query Course Events (Thanks, [damols](https://github.com/dmols))
+- Query Course Events (Thanks, [dmols](https://github.com/dmols))
     - Query by course
     - Query by account
 

@@ -755,11 +755,11 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(discussion_by_obj.course_id, 1)
 
     # get query by course
-    def test_query_by_course(self, m):
-        register_uris({"course": ["query_by_course"]}, m)
+    def test_query_audit_by_course(self, m):
+        register_uris({"course": ["query_audit_by_course"]}, m)
 
         # Get paginated list and convert to list
-        query = self.course.query_by_course()
+        query = self.course.query_audit_by_course()
         query_list = list(query)
 
         # Check that list contains objects of type CourseEvent

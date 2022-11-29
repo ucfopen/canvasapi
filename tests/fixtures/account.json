@@ -405,7 +405,7 @@
 		"status_code": 200
 	},
 
-	"query_by_account": {
+	"query_audit_by_account": {
 			"method": "GET",
 			"endpoint": "audit/course/accounts/1",
 			"data": [

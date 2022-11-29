@@ -1690,7 +1690,7 @@
 		]
 	},
 
-	"query_by_course": {
+	"query_audit_by_course": {
 			"method": "GET",
 			"endpoint": "audit/course/courses/1",
 			"data": [

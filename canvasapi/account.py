@@ -1728,7 +1728,7 @@ class Account(CanvasObject):
             if is_path:
                 attachment.close()
 
-    def query_by_account(self, **kwargs):
+    def query_audit_by_account(self, **kwargs):
         """
         List course change events for a specific account.
 

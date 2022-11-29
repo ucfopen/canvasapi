@@ -2383,7 +2383,7 @@ class Course(CanvasObject):
         )
         return response.json().get("html", "")
 
-    def query_by_course(self, **kwargs):
+    def query_audit_by_course(self, **kwargs):
         """
         Lists course change events for a specific course.
 

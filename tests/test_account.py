@@ -330,11 +330,11 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(str(reports_list[0]), str)
 
     # get query by account
-    def test_query_by_account(self, m):
-        register_uris({"account": ["query_by_account"]}, m)
+    def test_query_audit_by_account(self, m):
+        register_uris({"account": ["query_audit_by_account"]}, m)
 
         # Get paginated list and convert to list
-        query = self.account.query_by_account()
+        query = self.account.query_audit_by_account()
         query_list = list(query)
 
         # Check that list contains objects of type CourseEvent
