@@ -8,9 +8,6 @@
 
 ### New Endpoint Coverage
 
-<<<<<<< HEAD
-- Query Course Events (Thanks, [dmols](https://github.com/dmols))
-=======
 - Account Calendars (Thanks, [@dmols](https://github.com/dmols))
     - List available account calendars
     - Get a single account calendar
@@ -18,7 +15,6 @@
     - Update many calendars' visibility
     - List all account calendars
 - Query Course Events (Thanks, [damols](https://github.com/dmols))
->>>>>>> 7c874fab65dd992e16074b999251f2accec200f1
     - Query by course
     - Query by account
 
