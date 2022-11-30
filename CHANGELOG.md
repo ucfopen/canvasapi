@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General 
+
+- Added support for JWT class objects. (Thanks, [dmols](https://github.com/dmols))
+
 ### New Endpoint Coverage
 
 - Account Calendars (Thanks, [@dmols](https://github.com/dmols))

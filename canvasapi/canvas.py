@@ -306,7 +306,7 @@ class Canvas(object):
         :calls: `POST /api/v1/jwts \
         <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.create>`_
 
-        :rtype: JWT object
+        :rtype: list of :class:`canvasapi.JWT`
         """
         response = self.__requester.request(
             "POST", "JWTs", _kwargs=combine_kwargs(**kwargs)
@@ -1293,7 +1293,7 @@ class Canvas(object):
         :calls: `POST /api/v1/jwts/refresh \
         <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.refresh>`_
 
-        :rtype: JWT object
+        :rtype: list of :class:`canvasapi.JWT`
         """
         response = self.__requester.request(
             "POST", "jwts/refresh", _kwargs=combine_kwargs(**kwargs)
