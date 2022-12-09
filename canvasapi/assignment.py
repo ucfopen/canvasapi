@@ -563,7 +563,7 @@ class AssignmentOverride(CanvasObject):
         """
         Delete this assignment override.
 
-        :calls: `DELETE /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        :calls: `DELETE /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.destroy>`_
 
         :returns: The previous content of the now-deleted assignment override.
@@ -588,7 +588,7 @@ class AssignmentOverride(CanvasObject):
 
         Note: All current overridden values must be supplied if they are to be retained.
 
-        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.update>`_
 
         :rtype: :class:`canvasapi.assignment.AssignmentOverride`
