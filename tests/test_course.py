@@ -1666,8 +1666,8 @@ class TestCourse(unittest.TestCase):
 
         enabled_features = self.course.get_enabled_features()
 
-        self.assertIsInstance(enabled_features, PaginatedList)
-        self.assertIsInstance(enabled_features[0], Feature)
+        self.assertIsInstance(enabled_features, list)
+        self.assertIsInstance(enabled_features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):
