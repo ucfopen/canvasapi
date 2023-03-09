@@ -1157,7 +1157,6 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_id(self, m):
-
         register_uris({"account": ["import_outcome"]}, m)
 
         outcome_import = self.account.import_outcome(1)
@@ -1395,8 +1394,8 @@ class TestAccountReport(unittest.TestCase):
 
         features = self.account.get_enabled_features()
 
-        self.assertIsInstance(features, PaginatedList)
-        self.assertIsInstance(features[0], Feature)
+        self.assertIsInstance(features, list)
+        self.assertIsInstance(features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):

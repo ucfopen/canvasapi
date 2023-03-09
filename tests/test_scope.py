@@ -17,6 +17,5 @@ class TestGradingPeriod(unittest.TestCase):
         )
 
     def test_str(self, m):
-
         test_str = str(self.scope)
         self.assertIsInstance(test_str, str)

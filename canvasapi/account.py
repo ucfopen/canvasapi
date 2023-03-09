@@ -978,17 +978,15 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/features/enabled \
         <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.feature.Feature`
+        :rtype: `list` of `str`
         """
-        return PaginatedList(
-            Feature,
-            self._requester,
+        response = self._requester.request(
             "GET",
             "accounts/{}/features/enabled".format(self.id),
-            {"account_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
+
+        return response.json()
 
     def get_enrollment(self, enrollment, **kwargs):
         """

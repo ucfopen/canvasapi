@@ -1542,7 +1542,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_id(self, m):
-
         register_uris({"course": ["import_outcome"]}, m)
 
         outcome_import = self.course.import_outcome(1)
@@ -1666,8 +1665,8 @@ class TestCourse(unittest.TestCase):
 
         enabled_features = self.course.get_enabled_features()
 
-        self.assertIsInstance(enabled_features, PaginatedList)
-        self.assertIsInstance(enabled_features[0], Feature)
+        self.assertIsInstance(enabled_features, list)
+        self.assertIsInstance(enabled_features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):
