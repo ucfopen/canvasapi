@@ -812,7 +812,6 @@ class TestCanvas(unittest.TestCase):
 
     # get_epub_exports()
     def test_get_epub_exports(self, m):
-
         register_uris({"course": ["get_epub_exports"]}, m)
 
         epub_export_list = self.canvas.get_epub_exports()
