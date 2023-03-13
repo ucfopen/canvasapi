@@ -1274,5 +1274,11 @@
 			}
         ],
 		"status_code": 200
+	},
+	"terminate_sessions": {
+		"method": "DELETE",
+		"endpoint": "users/1/sessions",
+		"data": "ok",
+		"status_code": 200
 	}
 }

@@ -32,7 +32,6 @@ from tests.util import cleanup_file, register_uris
 @requests_mock.Mocker()
 class TestUser(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -656,6 +655,12 @@ class TestUser(unittest.TestCase):
         pairing_code = self.user.create_pairing_code()
         self.assertIsInstance(pairing_code, PairingCode)
         self.assertEqual("abc123", pairing_code.code)
+
+    # terminate_sessions()
+    def test_terminate_sessions(self, m):
+        register_uris({"user": ["terminate_sessions"]}, m)
+        resp = self.user.terminate_sessions()
+        self.assertEqual(resp, "ok")
 
 
 @requests_mock.Mocker()
