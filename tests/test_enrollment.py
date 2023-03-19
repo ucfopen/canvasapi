@@ -44,3 +44,19 @@ class TestEnrollment(unittest.TestCase):
         target_enrollment = self.enrollment.reactivate()
 
         self.assertIsInstance(target_enrollment, Enrollment)
+
+    # accept()
+    def test_accept(self, m):
+        register_uris({"enrollment": ["accept"]}, m)
+
+        enrollment_accepted = self.enrollment.accept()
+
+        self.assertIsInstance(enrollment_accepted, bool)
+
+    # reject()
+    def test_reject(self, m):
+        register_uris({"enrollment": ["reject"]}, m)
+
+        enrollment_rejected = self.enrollment.reject()
+
+        self.assertIsInstance(enrollment_rejected, bool)
