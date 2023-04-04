@@ -109,7 +109,6 @@ class CommunicationChannel(CanvasObject):
         :rtype: :class:`canvasapi.notification_preference.NotificationPreference`
         """
         if isinstance(notification_preferences, dict) and notification_preferences:
-
             for key, value in notification_preferences.items():
                 try:
                     if not value["frequency"]:
