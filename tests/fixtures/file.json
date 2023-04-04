@@ -32,5 +32,14 @@
         "endpoint": "ANY",
         "data": "file contents are here",
         "status_code": 200
+    },
+    "update_file": {
+        "method": "PUT",
+        "endpoint": "files/1",
+        "data": {
+            "id": 1,
+            "display_name": "New filename.docx"
+        },
+        "status_code": 200
     }
 }
