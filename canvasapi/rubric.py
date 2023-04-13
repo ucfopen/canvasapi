@@ -34,10 +34,11 @@ class RubricAssessment(CanvasObject):
         """
         Delete a single RubricAssessment.
 
-        :calls: `DELETE /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.destroy>`_ # noqa
+        :calls: `DELETE /api/v1/courses/:course_id/rubric_associations\
+        /:rubric_association_id/rubric_assessments/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.destroy>`_
 
-       :rtype: :class: `canvasapi.rubric.RubricAssessment`
+        :rtype: :class:`canvasapi.rubric.RubricAssessment`
         """
         from canvasapi.rubric import RubricAssessment
 
@@ -46,6 +47,7 @@ class RubricAssessment(CanvasObject):
             "courses/{}/rubric_associations/{}/rubric_assessments/{}".format(
                 self.course_id, self.rubric_association_id, self.id
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return RubricAssessment(self._requester, response.json())
@@ -54,10 +56,11 @@ class RubricAssessment(CanvasObject):
         """
         Update a single RubricAssessment.
 
-        :calls: `PUT /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments/:id \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.update>`_ # noqa
+        :calls: `PUT /api/v1/courses/:course_id/rubric_associations\
+        /:rubric_association_id/rubric_assessments/:id \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.update>`_
 
-        :rtype: :class: `canvasapi.rubric.RubricAssessment`
+        :rtype: :class:`canvasapi.rubric.RubricAssessment`
         """
         from canvasapi.rubric import RubricAssessment
 
@@ -80,8 +83,9 @@ class RubricAssociation(CanvasObject):
         """
         Create a single RubricAssessment.
 
-        :calls: `POST /api/v1/courses/:course_id/rubric_associations/:rubric_association_id/rubric_assessments \
-        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.create>`_ # noqa
+        :calls: `POST /api/v1/courses/:course_id/rubric_associations\
+        /:rubric_association_id/rubric_assessments \
+        <https://canvas.instructure.com/doc/api/rubrics.html#method.rubric_assessments.create>`_
 
         :rtype: :class:`canvasapi.rubric.RubricAssessment`
         """
