@@ -306,10 +306,10 @@ class Canvas(object):
         :calls: `POST /api/v1/jwts \
         <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.create>`_
 
-        :rtype: list of :class:`canvasapi.JWT`
+        :rtype: list of :class:`canvasapi.jwt.JWT`
         """
         response = self.__requester.request(
-            "POST", "JWTs", _kwargs=combine_kwargs(**kwargs)
+            "POST", "jwts", _kwargs=combine_kwargs(**kwargs)
         )
 
         return JWT(self.__requester, response.json())
@@ -1285,7 +1285,7 @@ class Canvas(object):
 
         return response.json()
 
-    def refresh_jwt(self, **kwargs):
+    def refresh_jwt(self, jwt, **kwargs):
         """
         Refreshes a JWT for reuse with other canvas services. It generates a
         different JWT each time it's called; expires after one hour.
@@ -1293,10 +1293,15 @@ class Canvas(object):
         :calls: `POST /api/v1/jwts/refresh \
         <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.refresh>`_
 
-        :rtype: list of :class:`canvasapi.JWT`
+        :param jwt: An existing JWT to refresh.
+        :type jwt: str or :class:`canvasapi.jwt.JWT`
+        :rtype: :class:`canvasapi.jwt.JWT`
         """
+        if isinstance(jwt, JWT):
+            jwt = jwt.token
+
         response = self.__requester.request(
-            "POST", "jwts/refresh", _kwargs=combine_kwargs(**kwargs)
+            "POST", "jwts/refresh", jwt=jwt, _kwargs=combine_kwargs(**kwargs)
         )
 
         return JWT(self.__requester, response.json())

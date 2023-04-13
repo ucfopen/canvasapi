@@ -38,6 +38,7 @@ Class Reference
     grading-period-ref
     grade-change-log-ref
     group-ref
+    jwt-ref
     login-ref
     license-ref
     module-ref

@@ -109,7 +109,7 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(jwt.token, "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg==")
 
     # refresh token
-    def test_refresh_jwt(self, m):
+    def test_refresh_jwt_str(self, m):
         register_uris({"jwt": ["refresh_jwt"]}, m)
 
         old_token = "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg=="
@@ -117,6 +117,22 @@ class TestCanvas(unittest.TestCase):
 
         # verify returned object is of type JWT
         jwt = self.canvas.refresh_jwt(jwt=old_token)
+        self.assertIsInstance(jwt, JWT)
+
+        # check the token is correct and we received the right object
+        self.assertEqual(jwt.token, new_token)
+
+    def test_refresh_jwt_obj(self, m):
+        register_uris({"jwt": ["create_jwt", "refresh_jwt"]}, m)
+
+        old_token = "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg=="
+        new_token = "O3MzNjpPKWc+fmFfMXRJJiEoR1VbSDVDT1IzUF1IJUpjJ3JSe0lrMHw8OUlX"
+
+        old_jwt = self.canvas.create_jwt()
+        self.assertEqual(old_jwt.token, old_token)
+
+        # verify returned object is of type JWT
+        jwt = self.canvas.refresh_jwt(jwt=old_jwt)
         self.assertIsInstance(jwt, JWT)
 
         # check the token is correct and we received the right object
