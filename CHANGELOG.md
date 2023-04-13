@@ -2,10 +2,6 @@
 
 ## [Unreleased]
 
-### General
-
-- Added support for Course Events; new Course Event class. (Thanks, [dmols](https://github.com/dmols))
-
 ### New Endpoint Coverage
 
 - Account Calendars (Thanks, [@dmols](https://github.com/dmols))
@@ -14,6 +10,9 @@
     - Update a calendar's visibility
     - Update many calendars' visibility
     - List all account calendars
+- JWTs (Thanks [@dmols](https://github.com/dmols))
+    - Create JWTs
+    - Refresh JWTs
 - Query Course Events (Thanks, [@dmols](https://github.com/dmols))
     - Query by course
     - Query by account
