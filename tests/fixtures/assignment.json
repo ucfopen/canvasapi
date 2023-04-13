@@ -490,5 +490,33 @@
 		"data": {
 			"message": "OK"
 		}
+	},
+	"get_students_selected_moderation": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/moderated_students",
+		"data": [
+			{
+				"id": 1,
+				"name": "John Doe"
+			},
+			{
+				"id": 2,
+				"name": "John Smith"
+			}
+		]
+	},
+	"select_students_for_moderation": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/moderated_students",
+		"data": [
+			{
+				"id": 11,
+				"name": "Joyce Smith"
+			},
+			{
+				"id": 12,
+				"name": "Jane Doe"
+			}
+		]
 	}
 }

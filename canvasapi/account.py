@@ -1696,7 +1696,7 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/audit/course/accounts/:account_id \
         <https://canvas.instructure.com/doc/api/course_audit_log.html#method.course_audit_api.for_account>`_
 
-        :rtype: list of :class:`canvasapi.course.CourseEvent`
+        :rtype: list of :class:`canvasapi.course_event.CourseEvent`
         """
 
         return PaginatedList(

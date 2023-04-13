@@ -471,26 +471,24 @@
 		],
 		"status_code": 200
 	},
-
 	"query_audit_by_account": {
-			"method": "GET",
-			"endpoint": "audit/course/accounts/1",
-			"data": [
-				{
-					"id": 1,
-					"name": "UCF",
-					"start_at": "2022-11-18T15:00:00-06:00",
-					"conclude_at": "2022-11-18T15:00:00-08:00"
-				},
-				{
-					"id": 2,
-					"name": "FSU",
-					"start_at": "2022-11-18T15:00:00-06:00",
-					"conclude_at": "2022-11-18T15:00:00-08:00"
-				}
-			]
+		"method": "GET",
+		"endpoint": "audit/course/accounts/1",
+		"data": [
+			{
+				"id": 1,
+				"name": "UCF",
+				"start_at": "2022-11-18T05:00:00-06:00",
+				"conclude_at": "2022-11-18T15:00:00-06:00"
+			},
+			{
+				"id": 2,
+				"name": "FSU",
+				"start_at": "2022-11-18T05:00:00-06:00",
+				"conclude_at": "2022-11-18T15:00:00-06:00"
+			}
+		]
 	},
-
 	"multiple": {
 		"method": "GET",
 		"endpoint": "accounts",
