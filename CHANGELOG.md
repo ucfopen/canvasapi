@@ -2,10 +2,6 @@
 
 ## [Unreleased]
 
-### General 
-
-- Added support for JWT class objects. (Thanks, [dmols](https://github.com/dmols))
-
 ### New Endpoint Coverage
 
 - Account Calendars (Thanks, [@dmols](https://github.com/dmols))
@@ -17,6 +13,12 @@
 - JWTs (Thanks [@dmols](https://github.com/dmols))
     - Create JWTs
     - Refresh JWTs
+- Query Course Events (Thanks, [@dmols](https://github.com/dmols))
+    - Query by course
+    - Query by account
+- Moderation Grading (Moderation Set)
+    - List students selected for moderation
+    - Select students for moderation
 
 ### General
 

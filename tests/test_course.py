@@ -13,6 +13,7 @@ from canvasapi.content_export import ContentExport
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course, CourseNickname, LatePolicy, Page
 from canvasapi.course_epub_export import CourseEpubExport
+from canvasapi.course_event import CourseEvent
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.enrollment import Enrollment
@@ -752,6 +753,27 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(discussion_by_obj, DiscussionTopic)
         self.assertTrue(hasattr(discussion_by_obj, "course_id"))
         self.assertEqual(discussion_by_obj.course_id, 1)
+
+    # get query by course
+    def test_query_audit_by_course(self, m):
+        register_uris({"course": ["query_audit_by_course"]}, m)
+
+        # Get paginated list and convert to list
+        query = self.course.query_audit_by_course()
+        query_list = list(query)
+
+        # Check that list contains objects of type CourseEvent
+        self.assertEqual(len(query_list), 2)
+        self.assertIsInstance(query_list[0], CourseEvent)
+        self.assertIsInstance(query_list[1], CourseEvent)
+
+        # Verify contents of first object
+        self.assertEqual(query_list[0].id, 1)
+        self.assertEqual(query_list[0].name, "FIU")
+
+        # Verify contents of second object
+        self.assertEqual(query_list[1].id, 2)
+        self.assertEqual(query_list[1].name, "UNF")
 
     # get_file()
     def test_get_file(self, m):
@@ -1542,7 +1564,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_id(self, m):
-
         register_uris({"course": ["import_outcome"]}, m)
 
         outcome_import = self.course.import_outcome(1)
