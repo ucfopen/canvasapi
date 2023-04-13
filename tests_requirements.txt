@@ -1,6 +1,6 @@
 -r requirements.txt
 
-black
+black>=23.3.0
 coverage
 flake8
 isort

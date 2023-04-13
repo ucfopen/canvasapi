@@ -27,7 +27,6 @@ class PaginatedList(object):
         _root=None,
         **kwargs
     ):
-
         self._elements = list()
 
         self._requester = requester

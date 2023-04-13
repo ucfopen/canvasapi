@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General
+
+- Added support for Course Events; new Course Event class. (Thanks, [dmols](https://github.com/dmols))
+
 ### New Endpoint Coverage
 
 - Account Calendars (Thanks, [@dmols](https://github.com/dmols))
@@ -10,6 +14,9 @@
     - Update a calendar's visibility
     - Update many calendars' visibility
     - List all account calendars
+- Query Course Events (Thanks, [@dmols](https://github.com/dmols))
+    - Query by course
+    - Query by account
 - Moderation Grading (Moderation Set)
     - List students selected for moderation
     - Select students for moderation
