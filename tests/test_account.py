@@ -1179,7 +1179,6 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_id(self, m):
-
         register_uris({"account": ["import_outcome"]}, m)
 
         outcome_import = self.account.import_outcome(1)

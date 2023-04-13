@@ -25,7 +25,6 @@ class TestFavorite(unittest.TestCase):
 
     # __str__()
     def test_uncapitalized___str__(self, m):
-
         register_uris(
             {
                 "current_user": [
@@ -46,7 +45,6 @@ class TestFavorite(unittest.TestCase):
         self.assertIsInstance(string, str)
 
     def test_capitalized___str__(self, m):
-
         register_uris(
             {
                 "current_user": [
@@ -68,7 +66,6 @@ class TestFavorite(unittest.TestCase):
 
     # remove()
     def test_remove_uncapitalized_favorite_course(self, m):
-
         register_uris(
             {
                 "current_user": [
@@ -88,7 +85,6 @@ class TestFavorite(unittest.TestCase):
         self.assertEqual(evnt.context_id, 1)
 
     def test_remove_uncapitalized_favorite_group(self, m):
-
         register_uris(
             {
                 "current_user": [
@@ -108,7 +104,6 @@ class TestFavorite(unittest.TestCase):
         self.assertEqual(evnt.context_id, 1)
 
     def test_remove_capitalized_favorite_course(self, m):
-
         register_uris(
             {
                 "current_user": [
@@ -128,7 +123,6 @@ class TestFavorite(unittest.TestCase):
         self.assertEqual(evnt.context_id, 1)
 
     def test_remove_capitalized_favorite_group(self, m):
-
         register_uris(
             {
                 "current_user": [
