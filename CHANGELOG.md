@@ -10,9 +10,18 @@
     - Update a calendar's visibility
     - Update many calendars' visibility
     - List all account calendars
+- JWTs (Thanks [@dmols](https://github.com/dmols))
+    - Create JWTs
+    - Refresh JWTs
 - Moderation Grading (Moderation Set)
     - List students selected for moderation
     - Select students for moderation
+- Query Course Events (Thanks, [@dmols](https://github.com/dmols))
+    - Query by course
+    - Query by account
+- Rubrics (Thanks, [@bennettscience](https://github.com/bennettscience))
+    - Create, Update, and Delete Rubric Assessments
+    - Create a Rubric Association
 
 ### General
 

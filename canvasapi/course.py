@@ -6,6 +6,7 @@ from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
 from canvasapi.content_export import ContentExport
 from canvasapi.course_epub_export import CourseEpubExport
+from canvasapi.course_event import CourseEvent
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
@@ -2367,6 +2368,24 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return response.json().get("html", "")
+
+    def query_audit_by_course(self, **kwargs):
+        """
+        Lists course change events for a specific course.
+
+        :calls: `GET /api/v1/audit/course/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/course_audit_log.html#method.course_audit_api.for_course>`_
+
+        :rtype: list of :class:`canvasapi.course_event.CourseEvent`
+        """
+
+        return PaginatedList(
+            CourseEvent,
+            self._requester,
+            "GET",
+            "audit/course/courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def remove_usage_rights(self, **kwargs):
         """
