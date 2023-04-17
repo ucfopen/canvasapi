@@ -183,16 +183,16 @@
 		"status_code": 200
 	},
 	"create_folder": {
-        "method": "POST",
-        "endpoint": "users/1/folders",
-        "data": {
-            "id": 2,
-            "name": "Test String",
-            "locked": false,
-            "hidden": false
-        },
-        "status_code": 200
-    },
+		"method": "POST",
+		"endpoint": "users/1/folders",
+		"data": {
+			"id": 2,
+			"name": "Test String",
+			"locked": false,
+			"hidden": false
+		},
+		"status_code": 200
+	},
 	"edit": {
 		"method": "PUT",
 		"endpoint": "users/1",
@@ -243,39 +243,39 @@
 			"size": 1024
 		},
 		"status_code": 200
-    },
-    "get_file_quota": {
-        "method": "GET",
-        "endpoint": "users/1/files/quota",
-        "data": {
-            "quota": 889234510,
-            "quota_used": 476231098
-        },
-        "status_code": 200
-    },
+	},
+	"get_file_quota": {
+		"method": "GET",
+		"endpoint": "users/1/files/quota",
+		"data": {
+			"quota": 889234510,
+			"quota_used": 476231098
+		},
+		"status_code": 200
+	},
 	"get_folder": {
-        "method": "GET",
-        "endpoint": "users/1/folders/1",
-        "data": {
-            "id": 1,
-            "files_count": 10,
-            "folders_count": 2,
-            "name": "Folder 1",
-            "full_name": "Folder 1"
-        },
-        "status_code": 200
-    },
+		"method": "GET",
+		"endpoint": "users/1/folders/1",
+		"data": {
+			"id": 1,
+			"files_count": 10,
+			"folders_count": 2,
+			"name": "Folder 1",
+			"full_name": "Folder 1"
+		},
+		"status_code": 200
+	},
 	"get_folder_2": {
-        "method": "GET",
-        "endpoint": "users/1/folders/2",
-        "data": {
-            "id": 2,
-            "files_count": 10,
-            "folders_count": 2,
-            "name": "Folder 2",
-            "full_name": "Folder 1"
-        },
-        "status_code": 200
+		"method": "GET",
+		"endpoint": "users/1/folders/2",
+		"data": {
+			"id": 2,
+			"files_count": 10,
+			"folders_count": 2,
+			"name": "Folder 2",
+			"full_name": "Folder 1"
+		},
+		"status_code": 200
 	},
 	"observer_pairing_codes": {
 		"method": "POST",
@@ -479,26 +479,26 @@
 		"status_code": 200
 	},
 	"list_folders": {
-        "method": "GET",
-        "endpoint": "users/1/folders",
-        "data": [
-            {
-                "id": 2,
-                "files_count": 0,
-                "folders_count": 0,
-                "name": "Folder 2",
-                "full_name": "user_files/Folder 2"
-            },
-            {
-                "id": 3,
-                "files_count": 0,
-                "folders_count": 0,
-                "name": "Folder 3",
-                "full_name": "user_files/Folder 3"
-            }
-        ],
-        "status_code": 200
-    },
+		"method": "GET",
+		"endpoint": "users/1/folders",
+		"data": [
+			{
+				"id": 2,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder 2",
+				"full_name": "user_files/Folder 2"
+			},
+			{
+				"id": 3,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder 3",
+				"full_name": "user_files/Folder 3"
+			}
+		],
+		"status_code": 200
+	},
 	"merge": {
 		"method": "PUT",
 		"endpoint": "users/1/merge_into/2",
@@ -804,18 +804,22 @@
 		"method": "GET",
 		"endpoint": "search/recipients",
 		"data": [
-  			{
-  				"id": "group_1",
-  				"name": "the group",
-  				"type": "context",
-  				"user_count": 3
-  			},
-  			{
-  				"id": 2,
-  				"name": "greg",
-  				"common_courses": {},
-  				"common_groups": {"1": ["Member"]}
-  			}
+			{
+				"id": "group_1",
+				"name": "the group",
+				"type": "context",
+				"user_count": 3
+			},
+			{
+				"id": 2,
+				"name": "greg",
+				"common_courses": {},
+				"common_groups": {
+					"1": [
+						"Member"
+					]
+				}
+			}
 		],
 		"status_code": 200
 	},
@@ -915,7 +919,9 @@
 						"grading_type": "points",
 						"course_id": 1,
 						"name": "Test assignment",
-						"submission_types": ["online_text_entry"]
+						"submission_types": [
+							"online_text_entry"
+						]
 					}
 				],
 				"courses": [
@@ -996,7 +1002,9 @@
 						"grading_type": "points",
 						"course_id": 1,
 						"name": "Test assignment",
-						"submission_types": ["online_text_entry"]
+						"submission_types": [
+							"online_text_entry"
+						]
 					}
 				],
 				"courses": [
@@ -1132,16 +1140,8 @@
 		"method": "GET",
 		"endpoint": "users/1/features/enabled",
 		"data": [
-			{
-				"name": "feature_one",
-				"display_name": "Feature One",
-				"applies_to": "User"
-			},
-			{
-				"name": "feature_two",
-				"display_name": "Feature Two",
-				"applies_to": "User"
-			}
+			"feature_one",
+			"feature_two"
 		],
 		"status_code": 200
 	},
@@ -1196,7 +1196,10 @@
 			"use_justification": "fair_use",
 			"license": "private",
 			"message": "2 files updated",
-			"file_ids": [1,2]
+			"file_ids": [
+				1,
+				2
+			]
 		},
 		"status_code": 200
 	},
@@ -1205,7 +1208,10 @@
 		"endpoint": "users/1/usage_rights",
 		"data": {
 			"message": "2 files updated",
-			"file_ids": [1,2]
+			"file_ids": [
+				1,
+				2
+			]
 		},
 		"status_code": 200
 	},
@@ -1226,11 +1232,11 @@
 		],
 		"status_code": 200
 	},
-    "resolve_path": {
+	"resolve_path": {
 		"method": "GET",
 		"endpoint": "users/1/folders/by_path/Folder_Level_1/Folder_Level_2/Folder_Level_3",
 		"data": [
-            {
+			{
 				"id": 2,
 				"files_count": 0,
 				"folders_count": 1,
@@ -1261,18 +1267,18 @@
 		],
 		"status_code": 200
 	},
-    "resolve_path_null": {
+	"resolve_path_null": {
 		"method": "GET",
 		"endpoint": "users/1/folders/by_path",
 		"data": [
-            {
+			{
 				"id": 2,
 				"files_count": 0,
 				"folders_count": 1,
 				"name": "my_files",
 				"full_name": "my_files"
 			}
-        ],
+		],
 		"status_code": 200
 	},
 	"terminate_sessions": {
