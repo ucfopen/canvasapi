@@ -1012,8 +1012,8 @@ class User(CanvasObject):
         """
         Terminate all sessions for a user.
 
-        This includes all browser-based sessions and all access tokens, including manually generated ones.
-
+        This includes all browser-based sessions and all access tokens,
+        including manually generated ones.
 
         :calls: `DELETE /api/v1/users/:id/sessions \
         <https://canvas.instructure.com/doc/api/users.html#method.users.terminate_sessions>`_

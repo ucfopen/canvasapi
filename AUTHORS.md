@@ -63,6 +63,7 @@ Patches and Suggestions
 - Lawrence Oks [@ljoks](https://github.com/ljoks)
 - Lee Fent [@lafent](https://github.com/lafent)
 - Leonard Camacho [@lcamacho](https://github.com/lcamacho)
+- Lucas Salas [@lucas-salas](https://github.com/lucas-salas)
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
 - Markus [@elec3647](https://github.com/elec3647)
 - Matthew Fedder [@matthewf-ucsd](https://github.com/matthewf-ucsd)

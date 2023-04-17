@@ -22,6 +22,8 @@
 - Rubrics (Thanks, [@bennettscience](https://github.com/bennettscience))
     - Create, Update, and Delete Rubric Assessments
     - Create a Rubric Association
+- Users
+    - Terminate all user sessions (Thanks, [@lucas-salas](https://github.com/lucas-salas))
 
 ### General
 
