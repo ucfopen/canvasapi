@@ -32,7 +32,6 @@ from tests.util import cleanup_file, register_uris
 @requests_mock.Mocker()
 class TestUser(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -551,8 +550,8 @@ class TestUser(unittest.TestCase):
 
         features = self.user.get_enabled_features()
 
-        self.assertIsInstance(features, PaginatedList)
-        self.assertIsInstance(features[0], Feature)
+        self.assertIsInstance(features, list)
+        self.assertIsInstance(features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):

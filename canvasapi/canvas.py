@@ -15,6 +15,7 @@ from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
+from canvasapi.jwt import JWT
 from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.planner import PlannerNote, PlannerOverride
@@ -297,6 +298,21 @@ class Canvas(object):
             "POST", "groups", _kwargs=combine_kwargs(**kwargs)
         )
         return Group(self.__requester, response.json())
+
+    def create_jwt(self, **kwargs):
+        """
+        Creates a unique JWT to use with other Canvas services.
+
+        :calls: `POST /api/v1/jwts \
+        <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.create>`_
+
+        :rtype: list of :class:`canvasapi.jwt.JWT`
+        """
+        response = self.__requester.request(
+            "POST", "jwts", _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return JWT(self.__requester, response.json())
 
     def create_planner_note(self, **kwargs):
         """
@@ -1268,6 +1284,27 @@ class Canvas(object):
         )
 
         return response.json()
+
+    def refresh_jwt(self, jwt, **kwargs):
+        """
+        Refreshes a JWT for reuse with other canvas services. It generates a
+        different JWT each time it's called; expires after one hour.
+
+        :calls: `POST /api/v1/jwts/refresh \
+        <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.refresh>`_
+
+        :param jwt: An existing JWT to refresh.
+        :type jwt: str or :class:`canvasapi.jwt.JWT`
+        :rtype: :class:`canvasapi.jwt.JWT`
+        """
+        if isinstance(jwt, JWT):
+            jwt = jwt.token
+
+        response = self.__requester.request(
+            "POST", "jwts/refresh", jwt=jwt, _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return JWT(self.__requester, response.json())
 
     def reserve_time_slot(self, calendar_event, participant_id=None, **kwargs):
         """

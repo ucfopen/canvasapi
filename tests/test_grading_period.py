@@ -20,7 +20,6 @@ class TestGradingPeriod(unittest.TestCase):
         )
 
     def test_str(self, m):
-
         test_str = str(self.grading_period)
         self.assertIsInstance(test_str, str)
 
