@@ -52,6 +52,7 @@ class TestEnrollment(unittest.TestCase):
         enrollment_accepted = self.enrollment.accept()
 
         self.assertIsInstance(enrollment_accepted, bool)
+        self.assertTrue(enrollment_accepted)
 
     # reject()
     def test_reject(self, m):
@@ -60,3 +61,4 @@ class TestEnrollment(unittest.TestCase):
         enrollment_rejected = self.enrollment.reject()
 
         self.assertIsInstance(enrollment_rejected, bool)
+        self.assertTrue(enrollment_rejected)

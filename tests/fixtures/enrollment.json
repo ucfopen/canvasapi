@@ -34,7 +34,7 @@
 		},
 		"status_code": 200
 	},
-    "accept": {
+	"accept": {
 		"method": "POST",
 		"endpoint": "courses/1/enrollments/1/accept",
 		"data": {
@@ -42,7 +42,7 @@
 		},
 		"status_code": 200
 	},
-    "reject": {
+	"reject": {
 		"method": "POST",
 		"endpoint": "courses/1/enrollments/1/reject",
 		"data": {

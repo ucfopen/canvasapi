@@ -10,7 +10,6 @@ class Enrollment(CanvasObject):
         """
         Accept a pending course invitation.
 
-        POST /api/v1/courses/:course_id/enrollments/:id/accept
         :calls: `POST /api/v1/courses/:course_id/enrollments/:id/accept \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.accept>`_
 
@@ -76,7 +75,6 @@ class Enrollment(CanvasObject):
         """
         Reject a pending course invitation.
 
-        POST /api/v1/courses/:course_id/enrollments/:id/reject
         :calls: `POST /api/v1/courses/:course_id/enrollments/:id/reject \
         <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reject>`_
 

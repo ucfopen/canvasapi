@@ -83,6 +83,7 @@ Patches and Suggestions
 - Stephen Woosley [@stephenwoosley](https://github.com/stephenwoosley)
 - Steven Bell [@stevenbell](https://github.com/stevenbell)
 - Steven Williams [@onomou](https://github.com/onomou)
+- [@svanderwulp](https://github.com/svanderwulp)
 - Tinson Lai [@laitingsheng](https://github.com/laitingsheng)
 - Toan Vu [@vutoan1245](https://github.com/vutoan1245)
 - [@Tobiaqs](https://github.com/Tobiaqs)
