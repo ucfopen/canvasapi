@@ -1416,8 +1416,8 @@ class TestAccountReport(unittest.TestCase):
 
         features = self.account.get_enabled_features()
 
-        self.assertIsInstance(features, PaginatedList)
-        self.assertIsInstance(features[0], Feature)
+        self.assertIsInstance(features, list)
+        self.assertIsInstance(features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):

@@ -31,6 +31,7 @@
 
 - Fixed an issue where kwargs were not passed along to Canvas in `Course.get_module()`. (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
+- Fixed an issue with `Course.get_enabled_features()` where it would throw an error trying to paginate. It now returns a list of strings directly. (Thanks, [@bennettscience](https://github.com/bennettscience))
 
 ## [3.0.0] - 2022-09-21
 
