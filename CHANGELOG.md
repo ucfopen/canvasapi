@@ -10,9 +10,20 @@
     - Update a calendar's visibility
     - Update many calendars' visibility
     - List all account calendars
+- JWTs (Thanks [@dmols](https://github.com/dmols))
+    - Create JWTs
+    - Refresh JWTs
 - Moderation Grading (Moderation Set)
     - List students selected for moderation
     - Select students for moderation
+- Query Course Events (Thanks, [@dmols](https://github.com/dmols))
+    - Query by course
+    - Query by account
+- Rubrics (Thanks, [@bennettscience](https://github.com/bennettscience))
+    - Create, Update, and Delete Rubric Assessments
+    - Create a Rubric Association
+- Users
+    - Terminate all user sessions (Thanks, [@lucas-salas](https://github.com/lucas-salas))
 
 ### General
 
@@ -22,6 +33,8 @@
 
 - Fixed an issue where kwargs were not passed along to Canvas in `Course.get_module()`. (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
+- Fixed an issue with `Course.get_enabled_features()` where it would throw an error trying to paginate. It now returns a list of strings directly. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Added missing docs for `AssignmentOverride`. (Thanks, [@lafent](https://github.com/lafent))
 
 ## [3.0.0] - 2022-09-21
 

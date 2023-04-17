@@ -19,6 +19,7 @@ from canvasapi.eportfolio import EPortfolio
 from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
+from canvasapi.jwt import JWT
 from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.poll import Poll
@@ -95,6 +96,47 @@ class TestCanvas(unittest.TestCase):
         self.assertIsInstance(account, Account)
         self.assertTrue(hasattr(account, "name"))
         self.assertEqual(account.name, name)
+
+    # test token creation
+    def test_create_jwt(self, m):
+        register_uris({"jwt": ["create_jwt"]}, m)
+
+        # verify returned object is of type JWT
+        jwt = self.canvas.create_jwt()
+        self.assertIsInstance(jwt, JWT)
+
+        # check the token is correct and we received the right object
+        self.assertEqual(jwt.token, "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg==")
+
+    # refresh token
+    def test_refresh_jwt_str(self, m):
+        register_uris({"jwt": ["refresh_jwt"]}, m)
+
+        old_token = "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg=="
+        new_token = "O3MzNjpPKWc+fmFfMXRJJiEoR1VbSDVDT1IzUF1IJUpjJ3JSe0lrMHw8OUlX"
+
+        # verify returned object is of type JWT
+        jwt = self.canvas.refresh_jwt(jwt=old_token)
+        self.assertIsInstance(jwt, JWT)
+
+        # check the token is correct and we received the right object
+        self.assertEqual(jwt.token, new_token)
+
+    def test_refresh_jwt_obj(self, m):
+        register_uris({"jwt": ["create_jwt", "refresh_jwt"]}, m)
+
+        old_token = "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg=="
+        new_token = "O3MzNjpPKWc+fmFfMXRJJiEoR1VbSDVDT1IzUF1IJUpjJ3JSe0lrMHw8OUlX"
+
+        old_jwt = self.canvas.create_jwt()
+        self.assertEqual(old_jwt.token, old_token)
+
+        # verify returned object is of type JWT
+        jwt = self.canvas.refresh_jwt(jwt=old_jwt)
+        self.assertIsInstance(jwt, JWT)
+
+        # check the token is correct and we received the right object
+        self.assertEqual(jwt.token, new_token)
 
     # create_poll()
     def test_create_poll(self, m):
@@ -812,7 +854,6 @@ class TestCanvas(unittest.TestCase):
 
     # get_epub_exports()
     def test_get_epub_exports(self, m):
-
         register_uris({"course": ["get_epub_exports"]}, m)
 
         epub_export_list = self.canvas.get_epub_exports()

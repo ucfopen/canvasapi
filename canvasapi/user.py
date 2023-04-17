@@ -451,17 +451,15 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/features/enabled \
         <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.feature.Feature`
+        :rtype: `list` of `str`
         """
-        return PaginatedList(
-            Feature,
-            self._requester,
+        response = self._requester.request(
             "GET",
             "users/{}/features/enabled".format(self.id),
-            {"user_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
+
+        return response.json()
 
     def get_enrollments(self, **kwargs):
         """
@@ -1009,6 +1007,26 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
+
+    def terminate_sessions(self, **kwargs):
+        """
+        Terminate all sessions for a user.
+
+        This includes all browser-based sessions and all access tokens,
+        including manually generated ones.
+
+        :calls: `DELETE /api/v1/users/:id/sessions \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.terminate_sessions>`_
+
+        :rtype: str
+        """
+
+        response = self._requester.request(
+            "DELETE",
+            "users/{}/sessions".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.json()
 
     def update_color(self, asset_string, hexcode, **kwargs):
         """
