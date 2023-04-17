@@ -10,6 +10,9 @@
     - Update a calendar's visibility
     - Update many calendars' visibility
     - List all account calendars
+- Enrollments (Thanks, [@svanderwulp](https://github.com/svanderwulp))
+    - Accept Course Invitation
+    - Reject Course Invitation
 - JWTs (Thanks [@dmols](https://github.com/dmols))
     - Create JWTs
     - Refresh JWTs
