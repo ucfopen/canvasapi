@@ -656,6 +656,12 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(pairing_code, PairingCode)
         self.assertEqual("abc123", pairing_code.code)
 
+    # terminate_sessions()
+    def test_terminate_sessions(self, m):
+        register_uris({"user": ["terminate_sessions"]}, m)
+        resp = self.user.terminate_sessions()
+        self.assertEqual(resp, "ok")
+
 
 @requests_mock.Mocker()
 class TestUserDisplay(unittest.TestCase):

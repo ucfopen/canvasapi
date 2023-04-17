@@ -1008,6 +1008,26 @@ class User(CanvasObject):
         )
         return User(self._requester, response.json())
 
+    def terminate_sessions(self, **kwargs):
+        """
+        Terminate all sessions for a user.
+
+        This includes all browser-based sessions and all access tokens,
+        including manually generated ones.
+
+        :calls: `DELETE /api/v1/users/:id/sessions \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.terminate_sessions>`_
+
+        :rtype: str
+        """
+
+        response = self._requester.request(
+            "DELETE",
+            "users/{}/sessions".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.json()
+
     def update_color(self, asset_string, hexcode, **kwargs):
         """
         Update a custom color for this user for a given context.
