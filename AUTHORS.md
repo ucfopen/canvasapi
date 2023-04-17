@@ -61,6 +61,7 @@ Patches and Suggestions
 - Kenny Perez [@kennygperez](https://github.com/kennygperez)
 - [@kensler](https://github.com/kensler)
 - Lawrence Oks [@ljoks](https://github.com/ljoks)
+- Lee Fent [@lafent](https://github.com/lafent)
 - Leonard Camacho [@lcamacho](https://github.com/lcamacho)
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
 - Markus [@elec3647](https://github.com/elec3647)
