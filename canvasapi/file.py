@@ -50,9 +50,9 @@ class File(CanvasObject):
         Update some settings on the specified file.
 
         :calls: `PUT /api/v1/files/:id \
-                <https://canvas.instructure.com/doc/api/files.html#method.files.api_update>`_
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_update>`_
 
-        :rtype: `canvasapi.file.File`
+        :rtype: :class:`canvasapi.file.File`
         """
         response = self._requester.request(
             "PUT", "files/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)

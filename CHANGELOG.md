@@ -13,6 +13,8 @@
 - Enrollments (Thanks, [@svanderwulp](https://github.com/svanderwulp))
     - Accept Course Invitation
     - Reject Course Invitation
+- File (Thanks, [@bennettscience](https://github.com/bennettscience))
+    - Update File
 - JWTs (Thanks [@dmols](https://github.com/dmols))
     - Create JWTs
     - Refresh JWTs
