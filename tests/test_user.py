@@ -550,8 +550,8 @@ class TestUser(unittest.TestCase):
 
         features = self.user.get_enabled_features()
 
-        self.assertIsInstance(features, PaginatedList)
-        self.assertIsInstance(features[0], Feature)
+        self.assertIsInstance(features, list)
+        self.assertIsInstance(features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):
@@ -655,6 +655,12 @@ class TestUser(unittest.TestCase):
         pairing_code = self.user.create_pairing_code()
         self.assertIsInstance(pairing_code, PairingCode)
         self.assertEqual("abc123", pairing_code.code)
+
+    # terminate_sessions()
+    def test_terminate_sessions(self, m):
+        register_uris({"user": ["terminate_sessions"]}, m)
+        resp = self.user.terminate_sessions()
+        self.assertEqual(resp, "ok")
 
 
 @requests_mock.Mocker()

@@ -6,6 +6,23 @@ class Enrollment(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.type, self.id)
 
+    def accept(self, **kwargs):
+        """
+        Accept a pending course invitation.
+
+        :calls: `POST /api/v1/courses/:course_id/enrollments/:id/accept \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.accept>`_
+
+        :returns: True if the course invitation was accepted.
+        :rtype: bool
+        """
+        response = self._requester.request(
+            "POST",
+            "courses/{}/enrollments/{}/accept".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.json().get("success", False)
+
     def deactivate(self, task, **kwargs):
         """
         Delete, conclude, or deactivate an enrollment.
@@ -53,3 +70,20 @@ class Enrollment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return Enrollment(self._requester, response.json())
+
+    def reject(self, **kwargs):
+        """
+        Reject a pending course invitation.
+
+        :calls: `POST /api/v1/courses/:course_id/enrollments/:id/reject \
+        <https://canvas.instructure.com/doc/api/enrollments.html#method.enrollments_api.reject>`_
+
+        :returns: True if the course invitation was rejected.
+        :rtype: bool
+        """
+        response = self._requester.request(
+            "POST",
+            "courses/{}/enrollments/{}/reject".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.json().get("success", False)

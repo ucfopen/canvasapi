@@ -4,6 +4,7 @@ from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course
+from canvasapi.course_event import CourseEvent
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
@@ -978,17 +979,15 @@ class Account(CanvasObject):
         :calls: `GET /api/v1/accounts/:account_id/features/enabled \
         <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.feature.Feature`
+        :rtype: `list` of `str`
         """
-        return PaginatedList(
-            Feature,
-            self._requester,
+        response = self._requester.request(
             "GET",
             "accounts/{}/features/enabled".format(self.id),
-            {"account_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
+
+        return response.json()
 
     def get_enrollment(self, enrollment, **kwargs):
         """
@@ -1687,6 +1686,24 @@ class Account(CanvasObject):
         finally:
             if is_path:
                 attachment.close()
+
+    def query_audit_by_account(self, **kwargs):
+        """
+        List course change events for a specific account.
+
+        :calls: `GET /api/v1/audit/course/accounts/:account_id \
+        <https://canvas.instructure.com/doc/api/course_audit_log.html#method.course_audit_api.for_account>`_
+
+        :rtype: list of :class:`canvasapi.course_event.CourseEvent`
+        """
+
+        return PaginatedList(
+            CourseEvent,
+            self._requester,
+            "GET",
+            "audit/course/accounts/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def show_account_auth_settings(self, **kwargs):
         """
