@@ -40,6 +40,7 @@
 - Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
 - Fixed an issue with `Course.get_enabled_features()` where it would throw an error trying to paginate. It now returns a list of strings directly. (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Added missing docs for `AssignmentOverride`. (Thanks, [@lafent](https://github.com/lafent))
+- Fixed a typo in `Canvas.create_calendar_event()` where an error message improperly listed the missing key as 'context_codes' instead of 'context_code'. (Thanks, [@dmols](https://github.com/dmols) and [@mikesuhan](https://github.com/mikesuhan))
 
 ## [3.0.0] - 2022-09-21
 
@@ -60,7 +61,6 @@
 ### Bugfixes
 
 - Fixed an issue where kwargs were not passed along to Canvas in `User.get_profile()`. (Thanks, [@breed](https://github.com/breed))
-- Fixed a typo in `Canvas.create_calendar_event()` where an error message improperly listed the missing key as 'context_codes' instead of 'context_code'. (Thanks, [@dmols](https://github.com/dmols) and [@mikesuhan](https://github.com/mikesuhan))
 
 ### Breaking Changes
 
