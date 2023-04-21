@@ -3,7 +3,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.rubric import Rubric, RubricAssociation
+from canvasapi.rubric import Rubric, RubricAssessment, RubricAssociation
 from tests import settings
 from tests.util import register_uris
 
@@ -57,6 +57,52 @@ class TestGradingStandard(unittest.TestCase):
     def test__str__(self, m):
         string = str(self.rubric)
         self.assertIsInstance(string, str)
+
+
+@requests_mock.Mocker()
+class TestRubricAssessment(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris(
+                {
+                    "course": [
+                        "get_by_id",
+                        "create_rubric_with_association",
+                        "create_rubric_association",
+                    ],
+                    "rubric": ["create_rubric_assessment"],
+                },
+                m,
+            )
+
+            self.course = self.canvas.get_course(1)
+            self.rubric = self.course.create_rubric()
+            self.association = self.course.create_rubric_association()
+            self.assessment = self.association.create_rubric_assessment()
+
+    def test__str__(self, m):
+        string = str(self.assessment)
+        self.assertIsInstance(string, str)
+
+    def test_update(self, m):
+        register_uris({"rubric": ["update_rubric_assessment"]}, m)
+
+        self.assertEqual(self.assessment.provisional, "false")
+
+        updated_assessment = self.assessment.update(provisional=True)
+
+        self.assertEqual(updated_assessment.id, 1)
+        self.assertEqual(updated_assessment.provisional, "true")
+
+    def test_delete(self, m):
+        register_uris({"rubric": ["delete_rubric_assessment"]}, m)
+
+        deleted_assessment = self.assessment.delete()
+
+        self.assertEqual(deleted_assessment.id, 1)
+        self.assertIsInstance(deleted_assessment, RubricAssessment)
 
 
 @requests_mock.Mocker()

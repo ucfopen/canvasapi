@@ -6,7 +6,7 @@ class EnrollmentTerm(CanvasObject):
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete this Enrollment Term.
 
@@ -16,7 +16,9 @@ class EnrollmentTerm(CanvasObject):
         :rtype: :class:`canvasapi.enrollment_term.EnrollmentTerm`
         """
         response = self._requester.request(
-            "DELETE", "accounts/{}/terms/{}".format(self.account_id, self.id)
+            "DELETE",
+            "accounts/{}/terms/{}".format(self.account_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
         return EnrollmentTerm(self._requester, response.json())
 
