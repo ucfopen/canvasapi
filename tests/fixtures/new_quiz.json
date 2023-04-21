@@ -1,0 +1,29 @@
+{
+	"get_new_quiz": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes/1",
+		"data": {
+			"id": 1,
+			"title": "New Quiz One",
+			"instructions": "<p>This is the first New Quiz. Good luck!</p>"
+		},
+		"status_code": 200
+	},
+	"get_new_quizzes": {
+		"method": "GET",
+		"endpoint": "courses/1/quizzes",
+		"data": [
+			{
+				"id": 1,
+				"title": "New Quiz One",
+				"instructions": "<p>This is the first New Quiz. Good luck!</p>"
+			},
+			{
+				"id": 2,
+				"title": "New Quiz Two",
+				"instructions": "<p>This is the second New Quiz. Good luck!</p>"
+			}
+		],
+		"status_code": 200
+	}
+}

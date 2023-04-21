@@ -25,6 +25,7 @@ class PaginatedList(object):
         first_url,
         extra_attribs=None,
         _root=None,
+        _url_override=None,
         **kwargs
     ):
         self._elements = list()
@@ -39,6 +40,7 @@ class PaginatedList(object):
         self._extra_attribs = extra_attribs or {}
         self._request_method = request_method
         self._root = _root
+        self._url_override = _url_override
 
     def __iter__(self):
         for element in self._elements:
@@ -53,7 +55,10 @@ class PaginatedList(object):
 
     def _get_next_page(self):
         response = self._requester.request(
-            self._request_method, self._next_url, **self._next_params
+            self._request_method,
+            self._next_url,
+            _url=self._url_override,
+            **self._next_params,
         )
         data = response.json()
         self._next_url = None

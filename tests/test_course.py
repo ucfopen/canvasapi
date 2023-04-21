@@ -35,6 +35,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.license import License
 from canvasapi.module import Module
+from canvasapi.new_quiz import NewQuiz
 from canvasapi.outcome import OutcomeGroup, OutcomeLink, OutcomeResult
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
@@ -389,6 +390,36 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(quiz_list[0], Quiz)
         self.assertTrue(hasattr(quiz_list[0], "course_id"))
         self.assertEqual(quiz_list[0].course_id, self.course.id)
+
+    # get_new_quiz()
+    def test_get_new_quiz(self, m):
+        register_uris(
+            {"new_quiz": ["get_new_quiz"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        new_quiz = self.course.get_new_quiz(1)
+
+        self.assertIsInstance(new_quiz, NewQuiz)
+        self.assertTrue(hasattr(new_quiz, "title"))
+        self.assertEqual(new_quiz.title, "New Quiz One")
+
+    # get_new_quizzes()
+    def test_get_new_quizzes(self, m):
+        register_uris(
+            {"new_quiz": ["get_new_quizzes"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        new_quizzes = self.course.get_new_quizzes()
+        new_quiz_list = list(new_quizzes)
+
+        self.assertEqual(len(new_quiz_list), 2)
+        self.assertIsInstance(new_quiz_list[0], NewQuiz)
+        self.assertTrue(hasattr(new_quiz_list[0], "title"))
+        self.assertEqual(new_quiz_list[0].title, "New Quiz One")
 
     # get_modules()
     def test_get_modules(self, m):
