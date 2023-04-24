@@ -1,0 +1,17 @@
+{
+  "create_jwt": {
+    "method": "POST",
+    "endpoint": "jwts",
+    "data": {
+      "token": "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg=="
+    }
+  },
+
+  "refresh_jwt": {
+    "method": "POST",
+    "endpoint": "jwts/refresh",
+    "data": {
+      "token": "O3MzNjpPKWc+fmFfMXRJJiEoR1VbSDVDT1IzUF1IJUpjJ3JSe0lrMHw8OUlX"
+    }
+  }
+}

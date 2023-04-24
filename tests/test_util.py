@@ -92,7 +92,6 @@ class TestUtil(unittest.TestCase):
 
     # combine_kwargs()
     def test_combine_kwargs_empty(self, m):
-
         result = combine_kwargs()
         self.assertIsInstance(result, list)
         self.assertEqual(len(result), 0)

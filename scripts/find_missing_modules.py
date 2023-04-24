@@ -6,7 +6,6 @@ sys.path.append(os.path.join(sys.path[0], ".."))
 
 import canvasapi  # noqa
 
-
 exempt_files = ("__init__",)
 
 

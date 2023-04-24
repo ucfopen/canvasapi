@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.1.0] - 2023-04-21
+
 ### New Endpoint Coverage
 
 - Account Calendars (Thanks, [@dmols](https://github.com/dmols))
@@ -10,9 +12,25 @@
     - Update a calendar's visibility
     - Update many calendars' visibility
     - List all account calendars
+- Enrollments (Thanks, [@svanderwulp](https://github.com/svanderwulp))
+    - Accept Course Invitation
+    - Reject Course Invitation
+- File (Thanks, [@bennettscience](https://github.com/bennettscience))
+    - Update File
+- JWTs (Thanks [@dmols](https://github.com/dmols))
+    - Create JWTs
+    - Refresh JWTs
 - Moderation Grading (Moderation Set)
     - List students selected for moderation
     - Select students for moderation
+- Query Course Events (Thanks, [@dmols](https://github.com/dmols))
+    - Query by course
+    - Query by account
+- Rubrics (Thanks, [@bennettscience](https://github.com/bennettscience))
+    - Create, Update, and Delete Rubric Assessments
+    - Create a Rubric Association
+- Users
+    - Terminate all user sessions (Thanks, [@lucas-salas](https://github.com/lucas-salas))
 
 ### General
 
@@ -22,6 +40,9 @@
 
 - Fixed an issue where kwargs were not passed along to Canvas in `Course.get_module()`. (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
+- Fixed an issue with `Course.get_enabled_features()` where it would throw an error trying to paginate. It now returns a list of strings directly. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Added missing docs for `AssignmentOverride`. (Thanks, [@lafent](https://github.com/lafent))
+- Fixed a typo in `Canvas.create_calendar_event()` where an error message improperly listed the missing key as 'context_codes' instead of 'context_code'. (Thanks, [@dmols](https://github.com/dmols) and [@mikesuhan](https://github.com/mikesuhan))
 
 ## [3.0.0] - 2022-09-21
 
@@ -42,7 +63,6 @@
 ### Bugfixes
 
 - Fixed an issue where kwargs were not passed along to Canvas in `User.get_profile()`. (Thanks, [@breed](https://github.com/breed))
-- Fixed a typo in `Canvas.create_calendar_event()` where an error message improperly listed the missing key as 'context_codes' instead of 'context_code'. (Thanks, [@dmols](https://github.com/dmols) and [@mikesuhan](https://github.com/mikesuhan))
 
 ### Breaking Changes
 
@@ -585,7 +605,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.0.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.1.0...develop
+[3.1.0]: https://github.com/ucfopen/canvasapi/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...v2.1.0

@@ -33,5 +33,21 @@
 			"state": "active"
 		},
 		"status_code": 200
+	},
+	"accept": {
+		"method": "POST",
+		"endpoint": "courses/1/enrollments/1/accept",
+		"data": {
+			"success": true
+		},
+		"status_code": 200
+	},
+	"reject": {
+		"method": "POST",
+		"endpoint": "courses/1/enrollments/1/reject",
+		"data": {
+			"success": true
+		},
+		"status_code": 200
 	}
 }

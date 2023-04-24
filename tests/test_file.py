@@ -55,3 +55,13 @@ class TestFile(unittest.TestCase):
         self.assertEqual(contents, '"Hello there"')
         contents_binary = self.file.get_contents(binary=True)
         self.assertEqual(contents_binary, b'"Hello there"')
+
+    # update()
+    def test_update_file(self, m):
+        register_uris({"file": ["update_file"]}, m)
+
+        updated_file = self.file.update(name="New filename.docx")
+
+        self.assertIsInstance(updated_file, File)
+        self.assertTrue(hasattr(updated_file, "display_name"))
+        self.assertEqual(updated_file.display_name, "New filename.docx")
