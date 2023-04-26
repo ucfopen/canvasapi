@@ -57,8 +57,23 @@ class PaginatedList(object):
         )
         data = response.json()
         self._next_url = None
+        # Check the response headers first. This is the normal Canvas convention
+        # for pagination, but there are endpoints which return a `meta` property
+        # for pagination instead.
+        # See https://github.com/ucfopen/canvasapi/discussions/605
+        if response.links:
+            next_link = response.links.get("next")
+        elif type(data) is dict and data.get("meta") is not None:
+            # requests parses headers into dicts, this returns the same
+            # structure so the regex will still work.
+            next_link = (
+                {"url": data.get("meta").get("pagination").get("next"), "rel": "next"}
+                if data["meta"]["pagination"]["next"]
+                else None
+            )
+        else:
+            next_link = None
 
-        next_link = response.links.get("next")
         regex = r"{}(.*)".format(re.escape(self._requester.base_url))
 
         self._next_url = (
@@ -73,8 +88,9 @@ class PaginatedList(object):
             try:
                 data = data[self._root]
             except KeyError:
-                # TODO: Fix this message to make more sense to an end user.
-                raise ValueError("Invalid root value specified.")
+                raise ValueError(
+                    "The key <{}> does not exist in the response.".format(self._root)
+                )
 
         for element in data:
             if element is not None:
