@@ -63,14 +63,13 @@ class PaginatedList(object):
         # See https://github.com/ucfopen/canvasapi/discussions/605
         if response.links:
             next_link = response.links.get("next")
-        elif type(data) is dict and data.get("meta") is not None:
+        elif isinstance(data, dict) and "meta" in data:
             # requests parses headers into dicts, this returns the same
             # structure so the regex will still work.
-            next_link = (
-                {"url": data.get("meta").get("pagination").get("next"), "rel": "next"}
-                if data["meta"]["pagination"]["next"]
-                else None
-            )
+            try:
+                next_link = {"url": data["meta"]["pagination"]["next"], "rel": "next"}
+            except KeyError:
+                next_link = None
         else:
             next_link = None
 
