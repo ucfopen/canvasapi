@@ -231,3 +231,5 @@ class TestPaginatedList(unittest.TestCase):
         )
 
         self.assertIsInstance(pag_list, PaginatedList)
+        self.assertEqual(len(list(pag_list)), 2)
+        self.assertIsInstance(pag_list[0], User)

@@ -158,7 +158,16 @@
 		"method": "ANY",
 		"endpoint": "no_header_no_next_key",
 		"data": {
-			"assessments": [],
+			"assessments": [
+				{
+					"id": "1",
+					"name": "object 1"
+				},
+				{
+					"id": "2",
+					"name": "object 2"
+				}
+			],
 			"meta": {
 				"pagination": {
 					"prev": "https://example.com/api/v1/previous"
