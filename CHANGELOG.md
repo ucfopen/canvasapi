@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- New Quizzes
+
 ### General
 
 - Added support for pagination with metadata when headers are missing (Thanks, [@bennettscience](https://github.com/bennettscience))

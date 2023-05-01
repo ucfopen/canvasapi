@@ -471,8 +471,10 @@ class Course(CanvasObject):
             _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
             _kwargs=combine_kwargs(**kwargs),
         )
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
 
-        return NewQuiz(self._requester, response.json())
+        return NewQuiz(self._requester, response_json)
 
     def create_page(self, wiki_page, **kwargs):
         """
@@ -1747,8 +1749,10 @@ class Course(CanvasObject):
             _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
             _kwargs=combine_kwargs(**kwargs),
         )
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
 
-        return NewQuiz(self._requester, response.json())
+        return NewQuiz(self._requester, response_json)
 
     def get_new_quizzes(self, **kwargs):
         """

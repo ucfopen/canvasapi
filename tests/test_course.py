@@ -334,6 +334,23 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.course.create_quiz({})
 
+    # create_new_quiz()
+    def test_create_new_quiz(self, m):
+        register_uris(
+            {"new_quiz": ["create_new_quiz"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        title = "New Quiz One"
+        new_new_quiz = self.course.create_new_quiz(quiz={"title": title})
+
+        self.assertIsInstance(new_new_quiz, NewQuiz)
+        self.assertTrue(hasattr(new_new_quiz, "title"))
+        self.assertEqual(new_new_quiz.title, title)
+        self.assertTrue(hasattr(new_new_quiz, "course_id"))
+        self.assertEqual(new_new_quiz.course_id, self.course.id)
+
     # get_quiz()
     def test_get_quiz(self, m):
         register_uris({"course": ["get_quiz"]}, m)
@@ -404,6 +421,8 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(new_quiz, NewQuiz)
         self.assertTrue(hasattr(new_quiz, "title"))
         self.assertEqual(new_quiz.title, "New Quiz One")
+        self.assertTrue(hasattr(new_quiz, "course_id"))
+        self.assertEqual(new_quiz.course_id, self.course.id)
 
     # get_new_quizzes()
     def test_get_new_quizzes(self, m):
