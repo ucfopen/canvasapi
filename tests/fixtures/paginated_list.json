@@ -114,5 +114,66 @@
 			}
 		],
 		"status_code": 200
-	}
+	},
+	"no_header_4_2_pages_p1": {
+		"method": "ANY",
+		"endpoint": "no_header_four_objects_two_pages",
+		"data": {
+			"assessments": [
+				{
+					"id": "1",
+					"name": "object 1"
+				},
+				{
+					"id": "2",
+					"name": "object 2"
+				}
+			],
+			"meta": {
+				"pagination": {
+					"next": "https://example.com/api/v1/no_header_four_objects_two_pages?page=2"
+				}
+			}
+		},
+		"status_code": 200
+	},
+	"no_header_4_2_pages_p2": {
+		"method": "ANY",
+		"endpoint": "no_header_four_objects_two_pages?page=2",
+		"data": {
+			"assessments": [
+				{
+					"id": "3",
+					"name": "object 3"
+				},
+				{
+					"id": "4",
+					"name": "object 4"
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"no_header_no_next_key": {
+		"method": "ANY",
+		"endpoint": "no_header_no_next_key",
+		"data": {
+			"assessments": [
+				{
+					"id": "1",
+					"name": "object 1"
+				},
+				{
+					"id": "2",
+					"name": "object 2"
+				}
+			],
+			"meta": {
+				"pagination": {
+					"prev": "https://example.com/api/v1/previous"
+				}
+			}
+		}
+	},
+	"status_code": 200
 }
