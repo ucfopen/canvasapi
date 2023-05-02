@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General
+
+- Added support for pagination with metadata when headers are missing (Thanks, [@bennettscience](https://github.com/bennettscience))
+
 ## [3.1.0] - 2023-04-21
 
 ### New Endpoint Coverage

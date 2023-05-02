@@ -156,6 +156,9 @@ class TestPaginatedList(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             pag_list[0]
+            self.assertEqual(
+                pag_list[0], "The key <wrong> does not exist in the response."
+            )
 
     def test_root_element(self, m):
         register_uris({"account": ["get_enrollment_terms"]}, m)
@@ -202,3 +205,31 @@ class TestPaginatedList(unittest.TestCase):
 
         with self.assertRaises(IndexError):
             pag_list[:-1]
+
+    def test_paginated_list_no_header(self, m):
+        register_uris(
+            {"paginated_list": ["no_header_4_2_pages_p1", "no_header_4_2_pages_p2"]}, m
+        )
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            "GET",
+            "no_header_four_objects_two_pages",
+            _root="assessments",
+        )
+
+        self.assertIsInstance(pag_list, PaginatedList)
+        self.assertEqual(len(list(pag_list)), 4)
+        self.assertIsInstance(pag_list[0], User)
+
+    def test_paginated_list_no_header_no_next(self, m):
+        register_uris({"paginated_list": ["no_header_no_next_key"]}, m)
+
+        pag_list = PaginatedList(
+            User, self.requester, "GET", "no_header_no_next_key", _root="assessments"
+        )
+
+        self.assertIsInstance(pag_list, PaginatedList)
+        self.assertEqual(len(list(pag_list)), 2)
+        self.assertIsInstance(pag_list[0], User)
