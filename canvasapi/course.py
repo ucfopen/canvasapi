@@ -279,25 +279,37 @@ class Course(CanvasObject):
 
         return CustomGradebookColumn(self._requester, column_json)
 
-    def create_discussion_topic(self, **kwargs):
+    def create_discussion_topic(self, attachment=None, **kwargs):
         """
         Creates a new discussion topic for the course or group.
 
         :calls: `POST /api/v1/courses/:course_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
 
+        :param attachment: (Optional) A file handler or path of the file to import.
+        :type attachment: file or str
+
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
-        response = self._requester.request(
-            "POST",
-            "courses/{}/discussion_topics".format(self.id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
+        if attachment is not None:
+            attachment_file, is_path = file_or_path(attachment)
+            attachment = {"attachment": attachment_file}
 
-        response_json = response.json()
-        response_json.update({"course_id": self.id})
+        try:
+            response = self._requester.request(
+                "POST",
+                "courses/{}/discussion_topics".format(self.id),
+                file=attachment,
+                _kwargs=combine_kwargs(**kwargs),
+            )
 
-        return DiscussionTopic(self._requester, response_json)
+            response_json = response.json()
+            response_json.update({"course_id": self.id})
+
+            return DiscussionTopic(self._requester, response_json)
+        finally:
+            if attachment is not None and is_path:
+                attachment_file.close()
 
     def create_epub_export(self, **kwargs):
         """

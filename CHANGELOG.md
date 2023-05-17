@@ -10,6 +10,10 @@
 
 - Added support for pagination with metadata when headers are missing (Thanks, [@bennettscience](https://github.com/bennettscience))
 
+### Bugfixes
+
+- Fixed an issue where `Course.create_discussion_topic` wouldn't accept attachment files.
+
 ## [3.1.0] - 2023-04-21
 
 ### New Endpoint Coverage
