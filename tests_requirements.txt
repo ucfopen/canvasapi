@@ -5,3 +5,4 @@ coverage
 flake8
 isort
 requests-mock
+urllib3<2
