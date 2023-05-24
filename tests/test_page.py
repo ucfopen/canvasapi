@@ -33,6 +33,7 @@ class TestPage(unittest.TestCase):
         string = str(self.page_course)
         self.assertIsInstance(string, str)
 
+    # edit()
     def test_edit(self, m):
         register_uris({"page": ["edit"]}, m)
 
@@ -43,6 +44,7 @@ class TestPage(unittest.TestCase):
         self.assertTrue(hasattr(self.page_course, "title"))
         self.assertEqual(self.page_course.title, new_title)
 
+    # delete()
     def test_delete_course(self, m):
         register_uris({"page": ["delete_page_course"]}, m)
 
