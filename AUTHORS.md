@@ -1,14 +1,17 @@
-Authors
-=======
+# Authors
 
-Development Lead
-----------------
+## Original Authors
 
 - Matthew Emond <me@ucf.edu> [@Thetwam](https://github.com/Thetwam)
 - Jesse McBride <jm@ucf.edu> [@jessemcbride](https://github.com/jessemcbride)
 
-Patches and Suggestions
------------------------
+## Maintainers
+
+- Matthew Emond [@Thetwam](https://github.com/Thetwam) (Lead)
+- Brian Bennett [@bennettscience](https://github.com/bennettscience)
+- Matthew Jones [@jonespm](https://github.com/jonespm)
+
+## Patches and Suggestions
 
 - Abrahan Nevarez [@zenith110](https://github.com/zenith110)
 - Adrian Goetz [@a-goetz](https://github.com/a-goetz)
@@ -24,7 +27,6 @@ Patches and Suggestions
 - [@Birdmaaan4](https://github.com/Birdmaaan4)
 - [@blepabyte](https://github.com/blepabyte)
 - Bradford Lynch [@bradfordlynch](https://github.com/bradfordlynch)
-- Brian Bennett [@bennettscience](https://github.com/bennettscience)
 - Bruce Spang [@brucespang](https://github.com/brucespang)
 - Caitlin Fabian [@Caitlin-Fabian](https://github.com/Caitlin-Fabian)
 - Cameron Cuff [@ctcuff](https://github.com/ctcuff)
@@ -68,7 +70,6 @@ Patches and Suggestions
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
 - Markus [@elec3647](https://github.com/elec3647)
 - Matthew Fedder [@matthewf-ucsd](https://github.com/matthewf-ucsd)
-- Matthew Jones [@jonespm](https://github.com/jonespm)
 - Michael Phelps [@nottheswimmer](https://github.com/nottheswimmer)
 - Mike Nahmias [@Mike-Nahmias](https://github.com/Mike-Nahmias)
 - Mike Suhan [@mikesuhan](https://github.com/mikesuhan)
