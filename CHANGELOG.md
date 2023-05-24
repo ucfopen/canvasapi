@@ -5,6 +5,7 @@
 ### New Endpoint Coverage
 
 - New Quizzes
+- Delete Page in Groups (Thanks, [@Caitlin-Fabian](https://github.com/Caitlin-Fabian))
 
 ### General
 
