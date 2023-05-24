@@ -43,10 +43,18 @@ class TestPage(unittest.TestCase):
         self.assertTrue(hasattr(self.page_course, "title"))
         self.assertEqual(self.page_course.title, new_title)
 
-    def test_delete(self, m):
-        register_uris({"page": ["delete_page"]}, m)
+    def test_delete_course(self, m):
+        register_uris({"page": ["delete_page_course"]}, m)
 
         page = self.page_course
+        deleted_page = page.delete()
+
+        self.assertIsInstance(deleted_page, Page)
+
+    def test_delete_group(self, m):
+        register_uris({"page": ["delete_page_group"]}, m)
+
+        page = self.page_group
         deleted_page = page.delete()
 
         self.assertIsInstance(deleted_page, Page)

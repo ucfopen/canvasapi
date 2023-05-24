@@ -12,13 +12,19 @@ class Page(CanvasObject):
         Delete this page.
 
         :calls: `DELETE /api/v1/courses/:course_id/pages/:url \
-        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.destroy>`_
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.destroy>`
 
-        :rtype: :class:`canvasapi.page.Page`
+        or
+        
+        :calls: `DELETE /api/v1/groups/:group_id/pages/:url \
+        <https://canvas.instructure.com/doc/api/pages.html#method.wiki_pages_api.destroy>`
+
+        :rtype: :class:`canvasapi.group.Group` or :class:`canvasapi.page.Page`
         """
+
         response = self._requester.request(
             "DELETE",
-            "courses/{}/pages/{}".format(self.course_id, self.url),
+            "{}s/{}/pages/{}".format(self.parent_type, self.parent_id, self.url),
             _kwargs=combine_kwargs(**kwargs),
         )
         return Page(self._requester, response.json())
