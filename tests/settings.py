@@ -1,5 +1,6 @@
 BASE_URL = "https://example.com"
 BASE_URL_GRAPHQL = "https://example.com/api/"
+BASE_URL_NEW_QUIZZES = "https://example.com/api/quiz/v1/"
 BASE_URL_WITH_VERSION = "https://example.com/api/v1/"
 BASE_URL_AS_HTTP = "http://example.com"
 BASE_URL_AS_BLANK = ""

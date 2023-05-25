@@ -1,3 +1,4 @@
+import os
 import unittest
 import uuid
 import warnings
@@ -35,6 +36,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.license import License
 from canvasapi.module import Module
+from canvasapi.new_quiz import NewQuiz
 from canvasapi.outcome import OutcomeGroup, OutcomeLink, OutcomeResult
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
@@ -333,6 +335,23 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.course.create_quiz({})
 
+    # create_new_quiz()
+    def test_create_new_quiz(self, m):
+        register_uris(
+            {"new_quiz": ["create_new_quiz"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        title = "New Quiz One"
+        new_new_quiz = self.course.create_new_quiz(quiz={"title": title})
+
+        self.assertIsInstance(new_new_quiz, NewQuiz)
+        self.assertTrue(hasattr(new_new_quiz, "title"))
+        self.assertEqual(new_new_quiz.title, title)
+        self.assertTrue(hasattr(new_new_quiz, "course_id"))
+        self.assertEqual(new_new_quiz.course_id, self.course.id)
+
     # get_quiz()
     def test_get_quiz(self, m):
         register_uris({"course": ["get_quiz"]}, m)
@@ -389,6 +408,38 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(quiz_list[0], Quiz)
         self.assertTrue(hasattr(quiz_list[0], "course_id"))
         self.assertEqual(quiz_list[0].course_id, self.course.id)
+
+    # get_new_quiz()
+    def test_get_new_quiz(self, m):
+        register_uris(
+            {"new_quiz": ["get_new_quiz"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        new_quiz = self.course.get_new_quiz(1)
+
+        self.assertIsInstance(new_quiz, NewQuiz)
+        self.assertTrue(hasattr(new_quiz, "title"))
+        self.assertEqual(new_quiz.title, "New Quiz One")
+        self.assertTrue(hasattr(new_quiz, "course_id"))
+        self.assertEqual(new_quiz.course_id, self.course.id)
+
+    # get_new_quizzes()
+    def test_get_new_quizzes(self, m):
+        register_uris(
+            {"new_quiz": ["get_new_quizzes"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        new_quizzes = self.course.get_new_quizzes()
+        new_quiz_list = list(new_quizzes)
+
+        self.assertEqual(len(new_quiz_list), 2)
+        self.assertIsInstance(new_quiz_list[0], NewQuiz)
+        self.assertTrue(hasattr(new_quiz_list[0], "title"))
+        self.assertEqual(new_quiz_list[0].title, "New Quiz One")
 
     # get_modules()
     def test_get_modules(self, m):
@@ -848,11 +899,45 @@ class TestCourse(unittest.TestCase):
             self.course.create_custom_column(column={})
 
     # create_discussion_topic()
-    def test_create_discussion_topic(self, m):
+    def test_create_discussion_topic_no_file(self, m):
         register_uris({"course": ["create_discussion_topic"]}, m)
 
         title = "Topic 1"
         discussion = self.course.create_discussion_topic()
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertTrue(hasattr(discussion, "course_id"))
+        self.assertEqual(title, discussion.title)
+        self.assertEqual(discussion.course_id, 1)
+
+    def test_create_discussion_topic_file_path(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "generic_file.txt")
+
+        title = "Topic 1"
+        discussion = self.course.create_discussion_topic(attachment=filepath)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertTrue(hasattr(discussion, "course_id"))
+        self.assertEqual(title, discussion.title)
+        self.assertEqual(discussion.course_id, 1)
+
+    def test_create_discussion_topic_file_path_invalid(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = "this/path/doesnt/exist"
+
+        with self.assertRaises(IOError):
+            self.course.create_discussion_topic(attachment=filepath)
+
+    def test_create_discussion_topic_file_obj(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "generic_file.txt")
+
+        title = "Topic 1"
+        with open(filepath, "rb") as f:
+            discussion = self.course.create_discussion_topic(attachment=f)
+
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, "course_id"))
         self.assertEqual(title, discussion.title)
@@ -1533,8 +1618,6 @@ class TestCourse(unittest.TestCase):
 
     # import_outcome()
     def test_import_outcome_filepath(self, m):
-        import os
-
         register_uris({"course": ["import_outcome"]}, m)
 
         filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
@@ -1548,8 +1631,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_binary(self, m):
-        import os
-
         register_uris({"course": ["import_outcome"]}, m)
 
         filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")

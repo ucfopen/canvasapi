@@ -24,6 +24,7 @@ from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
 from canvasapi.module import Module
+from canvasapi.new_quiz import NewQuiz
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
@@ -278,25 +279,37 @@ class Course(CanvasObject):
 
         return CustomGradebookColumn(self._requester, column_json)
 
-    def create_discussion_topic(self, **kwargs):
+    def create_discussion_topic(self, attachment=None, **kwargs):
         """
         Creates a new discussion topic for the course or group.
 
         :calls: `POST /api/v1/courses/:course_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
 
+        :param attachment: (Optional) A file handler or path of the file to import.
+        :type attachment: file or str
+
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
-        response = self._requester.request(
-            "POST",
-            "courses/{}/discussion_topics".format(self.id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
+        if attachment is not None:
+            attachment_file, is_path = file_or_path(attachment)
+            attachment = {"attachment": attachment_file}
 
-        response_json = response.json()
-        response_json.update({"course_id": self.id})
+        try:
+            response = self._requester.request(
+                "POST",
+                "courses/{}/discussion_topics".format(self.id),
+                file=attachment,
+                _kwargs=combine_kwargs(**kwargs),
+            )
 
-        return DiscussionTopic(self._requester, response_json)
+            response_json = response.json()
+            response_json.update({"course_id": self.id})
+
+            return DiscussionTopic(self._requester, response_json)
+        finally:
+            if attachment is not None and is_path:
+                attachment_file.close()
 
     def create_epub_export(self, **kwargs):
         """
@@ -451,6 +464,29 @@ class Course(CanvasObject):
         module_json.update({"course_id": self.id})
 
         return Module(self._requester, module_json)
+
+    def create_new_quiz(self, **kwargs):
+        """
+        Create a new quiz for the course.
+
+        :calls: `POST /api/quiz/v1/courses/:course_id/quizzes \
+        <https://canvas.instructure.com/doc/api/new_quizzes.html#method.new_quizzes/quizzes_api.create>`_
+
+        :returns: The newly-created New Quiz object
+        :rtype: :class:`canvasapi.new_quiz.NewQuiz`
+        """
+        endpoint = "courses/{}/quizzes".format(self.id)
+
+        response = self._requester.request(
+            "POST",
+            endpoint,
+            _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return NewQuiz(self._requester, response_json)
 
     def create_page(self, wiki_page, **kwargs):
         """
@@ -1701,6 +1737,56 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_new_quiz(self, assignment, **kwargs):
+        """
+        Get details about a single new quiz.
+
+        :calls: `GET /api/quiz/v1/courses/:course_id/quizzes/:assignment_id \
+        <https://canvas.instructure.com/doc/api/new_quizzes.html#method.new_quizzes/quizzes_api.show>`_
+
+        :param assignment: The id of the assignment associated with the quiz.
+        :type assignment: :class:`canvasapi.assignment.Assignment`
+            or :class:`canvasapi.new_quiz.NewQuiz` or int
+
+        :returns: A New Quiz object.
+        :rtype: :class:`canvasapi.new_quiz.NewQuiz`
+        """
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment, NewQuiz))
+        endpoint = "courses/{}/quizzes/{}".format(self.id, assignment_id)
+
+        response = self._requester.request(
+            "GET",
+            endpoint,
+            _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return NewQuiz(self._requester, response_json)
+
+    def get_new_quizzes(self, **kwargs):
+        """
+        Get a list of new quizzes.
+
+        :calls: `GET /api/quiz/v1/courses/:course_id/quizzes \
+        <https://canvas.instructure.com/doc/api/new_quizzes.html#method.new_quizzes/quizzes_api.index>`_
+
+        :returns: A paginated list of New Quiz objects.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList`
+            of :class:`canvasapi.new_quiz.NewQuiz`
+        """
+        endpoint = "courses/{}/quizzes".format(self.id)
+        return PaginatedList(
+            NewQuiz,
+            self._requester,
+            "GET",
+            endpoint,
+            _url_override=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_outcome_group(self, group, **kwargs):
         """
         Returns the details of the Outcome Group with the given id.
@@ -1719,7 +1805,9 @@ class Course(CanvasObject):
         outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
 
         response = self._requester.request(
-            "GET", "courses/{}/outcome_groups/{}".format(self.id, outcome_group_id)
+            "GET",
+            "courses/{}/outcome_groups/{}".format(self.id, outcome_group_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self._requester, response.json())

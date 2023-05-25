@@ -25,6 +25,7 @@ class PaginatedList(object):
         first_url,
         extra_attribs=None,
         _root=None,
+        _url_override=None,
         **kwargs
     ):
         self._elements = list()
@@ -39,6 +40,7 @@ class PaginatedList(object):
         self._extra_attribs = extra_attribs or {}
         self._request_method = request_method
         self._root = _root
+        self._url_override = _url_override
 
     def __iter__(self):
         for element in self._elements:
@@ -53,12 +55,29 @@ class PaginatedList(object):
 
     def _get_next_page(self):
         response = self._requester.request(
-            self._request_method, self._next_url, **self._next_params
+            self._request_method,
+            self._next_url,
+            _url=self._url_override,
+            **self._next_params,
         )
         data = response.json()
         self._next_url = None
+        # Check the response headers first. This is the normal Canvas convention
+        # for pagination, but there are endpoints which return a `meta` property
+        # for pagination instead.
+        # See https://github.com/ucfopen/canvasapi/discussions/605
+        if response.links:
+            next_link = response.links.get("next")
+        elif isinstance(data, dict) and "meta" in data:
+            # requests parses headers into dicts, this returns the same
+            # structure so the regex will still work.
+            try:
+                next_link = {"url": data["meta"]["pagination"]["next"], "rel": "next"}
+            except KeyError:
+                next_link = None
+        else:
+            next_link = None
 
-        next_link = response.links.get("next")
         regex = r"{}(.*)".format(re.escape(self._requester.base_url))
 
         self._next_url = (
@@ -73,8 +92,9 @@ class PaginatedList(object):
             try:
                 data = data[self._root]
             except KeyError:
-                # TODO: Fix this message to make more sense to an end user.
-                raise ValueError("Invalid root value specified.")
+                raise ValueError(
+                    "The key <{}> does not exist in the response.".format(self._root)
+                )
 
         for element in data:
             if element is not None:
