@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.0] - 2023-05-25
+
 ### New Endpoint Coverage
 
 - New Quizzes
@@ -619,7 +621,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.1.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.2.0...develop
+[3.2.0]: https://github.com/ucfopen/canvasapi/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/ucfopen/canvasapi/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...v2.2.0
