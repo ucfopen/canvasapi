@@ -10,6 +10,7 @@
 ### General
 
 - Added support for pagination with metadata when headers are missing (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Added support for Python 3.11
 
 ### Bugfixes
 
