@@ -73,6 +73,34 @@ class CustomGradebookColumn(CanvasObject):
         )
 
         return response.json().get("reorder")
+    
+    def update_custom_column_entry(self, user_id, column_data, **kwargs):
+        """
+        Sets the content of a custom column or create them if inexistent.
+
+        :calls: `PUT /api/v1/courses/:course_id/custom_gradebook_columns/:id/data/:user_id \
+            <https://canvas.instructure.com/doc/api/custom_gradebook_columns.html#method.custom_gradebook_column_data_api.update>`_
+
+        :param column_data: The content in the column.
+        :type column_data: str
+        :param user_id: The id for the user to be updated.
+        :type column_data: int
+
+        :rtype: :class:`canvasapi.custom_gradebook_columns.ColumnData`
+        """
+
+        kwargs["column_data"] = {"content": column_data}
+
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/custom_gradebook_columns/{}/data/{}".format(
+                self.course_id, self.id, user_id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        if response.json().get("content"):
+            return ColumnData(self._requester, response.json())
 
     def update_custom_column(self, **kwargs):
         """
@@ -113,7 +141,7 @@ class ColumnData(CanvasObject):
         :rtype: :class:`canvasapi.custom_gradebook_columns.ColumnData`
         """
 
-        kwargs["column_data"] = column_data
+        kwargs["column_data"] = {"content": column_data}
 
         response = self._requester.request(
             "PUT",
