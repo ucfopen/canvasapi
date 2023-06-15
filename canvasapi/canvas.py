@@ -72,7 +72,9 @@ class Canvas(object):
         access_token = access_token.strip()
         base_url = get_institution_url(base_url)
 
-        self.__requester = Requester(base_url, access_token, default_timeout=default_timeout)
+        self.__requester = Requester(
+            base_url, access_token, default_timeout=default_timeout
+        )
 
     def clear_course_nicknames(self, **kwargs):
         """

@@ -53,7 +53,9 @@ class Requester(object):
         :param data: The data to send with this request.
         :type data: dict
         """
-        return self._session.delete(url, headers=headers, data=data, timeout=self._default_timeout)
+        return self._session.delete(
+            url, headers=headers, data=data, timeout=self._default_timeout
+        )
 
     def _get_request(self, url, headers, params=None, **kwargs):
         """
@@ -66,7 +68,9 @@ class Requester(object):
         :param params: The parameters to send with this request.
         :type params: dict
         """
-        return self._session.get(url, headers=headers, params=params, timeout=self._default_timeout)
+        return self._session.get(
+            url, headers=headers, params=params, timeout=self._default_timeout
+        )
 
     def _patch_request(self, url, headers, data=None, **kwargs):
         """
@@ -79,7 +83,9 @@ class Requester(object):
         :param data: The data to send with this request.
         :type data: dict
         """
-        return self._session.patch(url, headers=headers, data=data, timeout=self._default_timeout)
+        return self._session.patch(
+            url, headers=headers, data=data, timeout=self._default_timeout
+        )
 
     def _post_request(self, url, headers, data=None, json=False):
         """
@@ -95,7 +101,9 @@ class Requester(object):
         :type json: bool
         """
         if json:
-            return self._session.post(url, headers=headers, json=dict(data), timeout=self._default_timeout)
+            return self._session.post(
+                url, headers=headers, json=dict(data), timeout=self._default_timeout
+            )
 
         # Grab file from data.
         files = None
@@ -110,7 +118,9 @@ class Requester(object):
         # Remove file entry from data.
         data[:] = [tup for tup in data if tup[0] != "file"]
 
-        return self._session.post(url, headers=headers, data=data, files=files, timeout=self._default_timeout)
+        return self._session.post(
+            url, headers=headers, data=data, files=files, timeout=self._default_timeout
+        )
 
     def _put_request(self, url, headers, data=None, **kwargs):
         """
@@ -123,7 +133,9 @@ class Requester(object):
         :param data: The data to send with this request.
         :type data: dict
         """
-        return self._session.put(url, headers=headers, data=data, timeout=self._default_timeout)
+        return self._session.put(
+            url, headers=headers, data=data, timeout=self._default_timeout
+        )
 
     def request(
         self,
