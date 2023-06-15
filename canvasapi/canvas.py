@@ -33,12 +33,14 @@ class Canvas(object):
     The main class to be instantiated to provide access to Canvas's API.
     """
 
-    def __init__(self, base_url, access_token):
+    def __init__(self, base_url, access_token, default_timeout=None):
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
         :param access_token: The API key to authenticate requests with.
         :type access_token: str
+        :param default_timeout: The default timeout for all requests in seconds.
+        :type default_timeout: int
         """
         if "api/v1" in base_url:
             raise ValueError(
@@ -70,7 +72,9 @@ class Canvas(object):
         access_token = access_token.strip()
         base_url = get_institution_url(base_url)
 
-        self.__requester = Requester(base_url, access_token)
+        self.__requester = Requester(
+            base_url, access_token, default_timeout=default_timeout
+        )
 
     def clear_course_nicknames(self, **kwargs):
         """
