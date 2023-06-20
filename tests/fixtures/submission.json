@@ -51,12 +51,33 @@
 		},
 		"status_code": 200
 	},
+	"get_by_id_with_attachments": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/submissions/1",
+		"data": {
+			"id": 1,
+			"assignment_id": 1,
+			"user_id": 1,
+			"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
+			"submission_type": "online_upload",
+			"attachments": [
+				{
+					"id": 123,
+					"display_name": "attachment.jpeg",
+					"content-type": "image/jpeg",
+					"url": "attachment_file",
+					"size": 3543
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"get_times": {
 		"method": "GET",
 		"endpoint": "courses/1/quizzes/1/submissions/1/time",
 		"data": {
-		    "end_at": "9999-99-99T59:59:59Z",
-		    "time_left": 0
+			"end_at": "9999-99-99T59:59:59Z",
+			"time_left": 0
 		},
 		"status_code": 200
 	},

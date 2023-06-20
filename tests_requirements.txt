@@ -1,7 +1,8 @@
 -r requirements.txt
 
-black; python_version >= '3.6'
+black>=23.3.0
 coverage
 flake8
 isort
 requests-mock
+urllib3<2

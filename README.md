@@ -2,9 +2,9 @@
 [![License](https://img.shields.io/pypi/l/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![Python Versions](https://img.shields.io/pypi/pyversions/canvasapi.svg)](https://pypi.python.org/pypi/canvasapi)
 [![Documentation Status](https://readthedocs.org/projects/canvasapi/badge/?version=stable)](http://canvasapi.readthedocs.io/en/stable/?badge=stable)
-[![Build Status](https://travis-ci.org/ucfopen/canvasapi.svg?branch=master)](https://travis-ci.org/ucfopen/canvasapi)
-[![Coverage Status](https://coveralls.io/repos/github/ucfopen/canvasapi/badge.svg?branch=master)](https://coveralls.io/github/ucfopen/canvasapi?branch=master)
-[![Join UCF Open Slack Discussions](https://ucf-open-slackin.herokuapp.com/badge.svg)](https://ucf-open-slackin.herokuapp.com/)
+[![Build Status](https://github.com/ucfopen/canvasapi/actions/workflows/run-tests.yml/badge.svg?branch=develop)](https://github.com/ucfopen/canvasapi/actions)
+[![codecov](https://codecov.io/gh/ucfopen/canvasapi/branch/develop/graph/badge.svg?token=CFNpp8f56M)](https://codecov.io/gh/ucfopen/canvasapi)
+[![Join UCF Open Slack Discussions](https://badgen.net/badge/icon/ucfopen?icon=slack&label=slack&color=pink)](https://dl.ucf.edu/join-ucfopen)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # CanvasAPI
@@ -13,19 +13,19 @@ CanvasAPI is a Python library for accessing Instructure’s [Canvas LMS API](htt
 
 ## Table of Contents
 
-* [CanvasAPI](#canvasapi)
-    * [Table of Contents](#table-of-contents)
-    * [Installation](#installation)
-    * [Documentation](#documentation)
-    * [Contributing](#contributing)
-    * [Quickstart](#quickstart)
-        * [Working with Canvas Objects](#working-with-canvas-objects)
-            * [Course objects](#course-objects)
-            * [User objects](#user-objects)
-            * [Paginated Lists](#paginated-lists)
-            * [Keyword arguments](#keyword-arguments)
-    * [CanvasAPI Projects](#canvasapi-projects)
-    * [Contact Us](#contact-us)
+- [CanvasAPI](#canvasapi)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Documentation](#documentation)
+  - [Contributing](#contributing)
+  - [Quickstart](#quickstart)
+    - [Working with Canvas Objects](#working-with-canvas-objects)
+      - [Course objects](#course-objects)
+      - [User objects](#user-objects)
+      - [Paginated Lists](#paginated-lists)
+      - [Keyword arguments](#keyword-arguments)
+  - [CanvasAPI Projects](#canvasapi-projects)
+  - [Contact Us](#contact-us)
 
 ## Installation
 
@@ -156,15 +156,15 @@ For a more detailed description of how CanvasAPI handles more complex keyword ar
 
 Since its initial release in June 2016, CanvasAPI has amassed over 100 [dependent repositories](https://github.com/ucfopen/canvasapi/network/dependents). Many of these include various tools used to enhance the Canvas experience for both instructors and students. Here are a few popular repositories that use CanvasAPI:
 
-* [Canvas Grab](https://github.com/skyzh/canvas_grab)
-    * Canvas Grab is the most popular project using CanvasAPI. This tool, with one click, copies all files from Canvas LMS to local directory. CanvasAPI is used in this project to connect to a course and grab its files.
-* [Clanvas](https://github.com/marklalor/clanvas)
-    * Clanvas is a command-line client for Canvas. It uses the already available bash commands plus some additional ones to interact with various features of Canvas from the commmand line.
-* [CS221Bot](https://github.com/Person314159/cs221bot)
-    * CS221Bot is a Discord bot for the CPCS 221 course at University of British Columbia. CanvasAPI is used in this project to connect to and synchronize with a course and get its data, such as announcements, new assignments, and more.
+- [Canvas Grab](https://github.com/skyzh/canvas_grab)
+  - Canvas Grab is the most popular project using CanvasAPI. This tool, with one click, copies all files from Canvas LMS to local directory. CanvasAPI is used in this project to connect to a course and grab its files.
+- [Clanvas](https://github.com/marklalor/clanvas)
+  - Clanvas is a command-line client for Canvas. It uses the already available bash commands plus some additional ones to interact with various features of Canvas from the commmand line.
+- [CS221Bot](https://github.com/Person314159/cs221bot)
+  - CS221Bot is a Discord bot for the CPCS 221 course at University of British Columbia. CanvasAPI is used in this project to connect to and synchronize with a course and get its data, such as announcements, new assignments, and more.
 
 If you have a project that uses CanvasAPI that you'd like to promote, please contact us!
 
 ## Contact Us
 
-Need help? Have an idea? Feel free to check out our [Discussions](https://github.com/ucfopen/canvasapi/discussions) board. Just want to say hi or get extended spport? Come join us on the [UCF Open Slack Channel](https://ucf-open-slackin.herokuapp.com) and join the `#canvasapi` channel!
+Need help? Have an idea? Feel free to check out our [Discussions](https://github.com/ucfopen/canvasapi/discussions) board. Just want to say hi or get extended spport? Come join us on the [UCF Open Slack Channel](https://dl.ucf.edu/join-ucfopen) and join the `#canvasapi` channel!

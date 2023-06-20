@@ -4,6 +4,7 @@ import uuid
 import requests_mock
 
 from canvasapi import Canvas
+from canvasapi.file import File
 from canvasapi.peer_review import PeerReview
 from canvasapi.submission import GroupedSubmission, Submission
 from tests import settings
@@ -13,7 +14,6 @@ from tests.util import cleanup_file, register_uris
 @requests_mock.Mocker()
 class TestSubmission(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -29,6 +29,19 @@ class TestSubmission(unittest.TestCase):
             self.course = self.canvas.get_course(1)
             self.assignment = self.course.get_assignment(1)
             self.submission = self.assignment.get_submission(1)
+
+    # __init__()
+    def test__init__attachments(self, m):
+        register_uris({"submission": ["get_by_id_with_attachments"]}, m)
+
+        submission = self.assignment.get_submission(1)
+
+        self.assertTrue(hasattr(submission, "attachments"))
+        self.assertIsInstance(submission.attachments, list)
+        self.assertEqual(len(submission.attachments), 1)
+        self.assertIsInstance(submission.attachments[0], File)
+        self.assertTrue(hasattr(submission.attachments[0], "id"))
+        self.assertEqual(submission.attachments[0].id, 123)
 
     # __str__()
     def test__str__(self, m):

@@ -1,3 +1,4 @@
+import os
 import unittest
 import uuid
 import warnings
@@ -13,6 +14,7 @@ from canvasapi.content_export import ContentExport
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course, CourseNickname, LatePolicy, Page
 from canvasapi.course_epub_export import CourseEpubExport
+from canvasapi.course_event import CourseEvent
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.enrollment import Enrollment
@@ -34,6 +36,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.license import License
 from canvasapi.module import Module
+from canvasapi.new_quiz import NewQuiz
 from canvasapi.outcome import OutcomeGroup, OutcomeLink, OutcomeResult
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
@@ -332,6 +335,23 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(RequiredFieldMissing):
             self.course.create_quiz({})
 
+    # create_new_quiz()
+    def test_create_new_quiz(self, m):
+        register_uris(
+            {"new_quiz": ["create_new_quiz"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        title = "New Quiz One"
+        new_new_quiz = self.course.create_new_quiz(quiz={"title": title})
+
+        self.assertIsInstance(new_new_quiz, NewQuiz)
+        self.assertTrue(hasattr(new_new_quiz, "title"))
+        self.assertEqual(new_new_quiz.title, title)
+        self.assertTrue(hasattr(new_new_quiz, "course_id"))
+        self.assertEqual(new_new_quiz.course_id, self.course.id)
+
     # get_quiz()
     def test_get_quiz(self, m):
         register_uris({"course": ["get_quiz"]}, m)
@@ -388,6 +408,38 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(quiz_list[0], Quiz)
         self.assertTrue(hasattr(quiz_list[0], "course_id"))
         self.assertEqual(quiz_list[0].course_id, self.course.id)
+
+    # get_new_quiz()
+    def test_get_new_quiz(self, m):
+        register_uris(
+            {"new_quiz": ["get_new_quiz"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        new_quiz = self.course.get_new_quiz(1)
+
+        self.assertIsInstance(new_quiz, NewQuiz)
+        self.assertTrue(hasattr(new_quiz, "title"))
+        self.assertEqual(new_quiz.title, "New Quiz One")
+        self.assertTrue(hasattr(new_quiz, "course_id"))
+        self.assertEqual(new_quiz.course_id, self.course.id)
+
+    # get_new_quizzes()
+    def test_get_new_quizzes(self, m):
+        register_uris(
+            {"new_quiz": ["get_new_quizzes"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        new_quizzes = self.course.get_new_quizzes()
+        new_quiz_list = list(new_quizzes)
+
+        self.assertEqual(len(new_quiz_list), 2)
+        self.assertIsInstance(new_quiz_list[0], NewQuiz)
+        self.assertTrue(hasattr(new_quiz_list[0], "title"))
+        self.assertEqual(new_quiz_list[0].title, "New Quiz One")
 
     # get_modules()
     def test_get_modules(self, m):
@@ -753,6 +805,27 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(discussion_by_obj, "course_id"))
         self.assertEqual(discussion_by_obj.course_id, 1)
 
+    # get query by course
+    def test_query_audit_by_course(self, m):
+        register_uris({"course": ["query_audit_by_course"]}, m)
+
+        # Get paginated list and convert to list
+        query = self.course.query_audit_by_course()
+        query_list = list(query)
+
+        # Check that list contains objects of type CourseEvent
+        self.assertEqual(len(query_list), 2)
+        self.assertIsInstance(query_list[0], CourseEvent)
+        self.assertIsInstance(query_list[1], CourseEvent)
+
+        # Verify contents of first object
+        self.assertEqual(query_list[0].id, 1)
+        self.assertEqual(query_list[0].name, "FIU")
+
+        # Verify contents of second object
+        self.assertEqual(query_list[1].id, 2)
+        self.assertEqual(query_list[1].name, "UNF")
+
     # get_file()
     def test_get_file(self, m):
         register_uris({"course": ["get_file"]}, m)
@@ -826,11 +899,45 @@ class TestCourse(unittest.TestCase):
             self.course.create_custom_column(column={})
 
     # create_discussion_topic()
-    def test_create_discussion_topic(self, m):
+    def test_create_discussion_topic_no_file(self, m):
         register_uris({"course": ["create_discussion_topic"]}, m)
 
         title = "Topic 1"
         discussion = self.course.create_discussion_topic()
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertTrue(hasattr(discussion, "course_id"))
+        self.assertEqual(title, discussion.title)
+        self.assertEqual(discussion.course_id, 1)
+
+    def test_create_discussion_topic_file_path(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "generic_file.txt")
+
+        title = "Topic 1"
+        discussion = self.course.create_discussion_topic(attachment=filepath)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertTrue(hasattr(discussion, "course_id"))
+        self.assertEqual(title, discussion.title)
+        self.assertEqual(discussion.course_id, 1)
+
+    def test_create_discussion_topic_file_path_invalid(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = "this/path/doesnt/exist"
+
+        with self.assertRaises(IOError):
+            self.course.create_discussion_topic(attachment=filepath)
+
+    def test_create_discussion_topic_file_obj(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "generic_file.txt")
+
+        title = "Topic 1"
+        with open(filepath, "rb") as f:
+            discussion = self.course.create_discussion_topic(attachment=f)
+
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, "course_id"))
         self.assertEqual(title, discussion.title)
@@ -1511,8 +1618,6 @@ class TestCourse(unittest.TestCase):
 
     # import_outcome()
     def test_import_outcome_filepath(self, m):
-        import os
-
         register_uris({"course": ["import_outcome"]}, m)
 
         filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
@@ -1526,8 +1631,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_binary(self, m):
-        import os
-
         register_uris({"course": ["import_outcome"]}, m)
 
         filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
@@ -1542,7 +1645,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_id(self, m):
-
         register_uris({"course": ["import_outcome"]}, m)
 
         outcome_import = self.course.import_outcome(1)
@@ -1666,8 +1768,8 @@ class TestCourse(unittest.TestCase):
 
         enabled_features = self.course.get_enabled_features()
 
-        self.assertIsInstance(enabled_features, PaginatedList)
-        self.assertIsInstance(enabled_features[0], Feature)
+        self.assertIsInstance(enabled_features, list)
+        self.assertIsInstance(enabled_features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):

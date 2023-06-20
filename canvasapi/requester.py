@@ -98,7 +98,7 @@ class Requester(object):
         files = None
         for field, value in data:
             if field == "file":
-                if isinstance(value, dict):
+                if isinstance(value, dict) or value is None:
                     files = value
                 else:
                     files = {"file": value}

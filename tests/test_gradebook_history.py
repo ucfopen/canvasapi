@@ -10,7 +10,6 @@ from tests.util import register_uris
 @requests_mock.Mocker()
 class TestDay(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -29,7 +28,6 @@ class TestDay(unittest.TestCase):
 @requests_mock.Mocker()
 class TestGrader(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -50,7 +48,6 @@ class TestGrader(unittest.TestCase):
 @requests_mock.Mocker()
 class TestSubmissionHistory(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -71,7 +68,6 @@ class TestSubmissionHistory(unittest.TestCase):
 @requests_mock.Mocker()
 class TestSubmissionVersion(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:

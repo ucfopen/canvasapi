@@ -44,3 +44,17 @@ class File(CanvasObject):
             return response.content
         else:
             return response.text
+
+    def update(self, **kwargs):
+        """
+        Update some settings on the specified file.
+
+        :calls: `PUT /api/v1/files/:id \
+        <https://canvas.instructure.com/doc/api/files.html#method.files.api_update>`_
+
+        :rtype: :class:`canvasapi.file.File`
+        """
+        response = self._requester.request(
+            "PUT", "files/{}".format(self.id), _kwargs=combine_kwargs(**kwargs)
+        )
+        return File(self._requester, response.json())

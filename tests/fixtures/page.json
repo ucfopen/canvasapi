@@ -1,116 +1,126 @@
 {
-	"get_page": {
-		"method": "GET",
-		"endpoint": "courses/1/pages/my-url",
-		"data": {
-			"id": 1,
-			"url": "my-url",
-			"title": "Awesome Page"
-		},
-		"status_code": 200
-	},
-	"edit": {
-		"method": "PUT",
-		"endpoint": "courses/1/pages/my-url",
-		"data": {
-			"id": 1,
-			"title": "New Page",
-			"url": "my-url"
-		},
-		"status_code": 200
-	},
-	"delete_page": {
-		"method": "DELETE",
-		"endpoint": "courses/1/pages/my-url",
-		"data": {
-			"id": 1,
-			"title": "Page To Be Deleted",
-			"url": "my-url"
-		},
-		"status_code": 200
-	},
-	"list_revisions": {
-		"method": "GET",
-		"endpoint": "courses/1/pages/my-url/revisions",
-		"data": [
-			{
-				"id": 1,
-				"title": "Revision 1"
-			},
-			{
-				"id": 2,
-				"title": "Revision 2"
-			}
-		],
-		"status_code": 200,
-		"headers": {
-			"Link": "<https://example.com/api/v1/courses/1/pages/my-url/revisions?page=2&per_page=2>; rel=\"next\""
-		}
-	},
-	"list_revisions2": {
-		"method": "GET",
-		"endpoint": "courses/1/pages/my-url/revisions?page=2&per_page=2",
-		"data": [
-			{
-				"id": 3,
-				"title": "Revision 3"
-			},
-			{
-				"id": 4,
-				"title": "Revision 4"
-			}
-		],
-		"status_code": 200
-	},
-	"latest_revision": {
-		"method": "GET",
-		"endpoint": "courses/1/pages/my-url/revisions/latest",
-		"data": {
-			"id": 1,
-			"title": "Latest Revision",
-			"url": "my-url"
-		},
-		"status_code": 200
-	},
-	"get_latest_rev_by_id": {
-		"method": "GET",
-		"endpoint": "courses/1/pages/my-url/revisions/2",
-		"data": {
-			"id": 2,
-			"updated_at": "2012-08-07T11:23:58-06:00",
-			"revision_id": 2,
-			"url": "my-url"
-		},
-		"status_code": 200
-	},
-	"get_latest_rev_by_id_group": {
-		"method": "GET",
-		"endpoint": "groups/1/pages/my-url/revisions/2",
-		"data": {
-			"id": 2,
-			"revision_id": 2,
-			"url": "my-url"
-		},
-		"status_code": 200
-	},
-	"revert_to_revision": {
-		"method": "POST",
-		"endpoint": "courses/1/pages/my-url/revisions/3",
-		"data": {
-			"id": 1,
-			"revision_id": 3,
-			"url": "my-url"
-		},
-		"status_code": 200
-	},
-	"revert_to_revision_group": {
-		"method": "POST",
-		"endpoint": "groups/1/pages/my-url/revisions/3",
-		"data": {
-			"id": 1,
-			"revision_id": 3,
-			"url": "my-url"
-		},
-		"status_code": 200
-	}
+    "get_page": {
+        "method": "GET",
+        "endpoint": "courses/1/pages/my-url",
+        "data": {
+            "id": 1,
+            "url": "my-url",
+            "title": "Awesome Page"
+        },
+        "status_code": 200
+    },
+    "edit": {
+        "method": "PUT",
+        "endpoint": "courses/1/pages/my-url",
+        "data": {
+            "id": 1,
+            "title": "New Page",
+            "url": "my-url"
+        },
+        "status_code": 200
+    },
+    "delete_page_course": {
+        "method": "DELETE",
+        "endpoint": "courses/1/pages/my-url",
+        "data": {
+            "id": 1,
+            "title": "Page To Be Deleted",
+            "url": "my-url"
+        },
+        "status_code": 200
+    },
+    "delete_page_group": {
+        "method": "DELETE",
+        "endpoint": "groups/1/pages/my-url",
+        "data": {
+            "id": 1,
+            "title": "Page To Be Deleted",
+            "url": "my-url"
+        },
+        "status_code": 200
+    },
+    "list_revisions": {
+        "method": "GET",
+        "endpoint": "courses/1/pages/my-url/revisions",
+        "data": [
+            {
+                "id": 1,
+                "title": "Revision 1"
+            },
+            {
+                "id": 2,
+                "title": "Revision 2"
+            }
+        ],
+        "status_code": 200,
+        "headers": {
+            "Link": "<https://example.com/api/v1/courses/1/pages/my-url/revisions?page=2&per_page=2>; rel=\"next\""
+        }
+    },
+    "list_revisions2": {
+        "method": "GET",
+        "endpoint": "courses/1/pages/my-url/revisions?page=2&per_page=2",
+        "data": [
+            {
+                "id": 3,
+                "title": "Revision 3"
+            },
+            {
+                "id": 4,
+                "title": "Revision 4"
+            }
+        ],
+        "status_code": 200
+    },
+    "latest_revision": {
+        "method": "GET",
+        "endpoint": "courses/1/pages/my-url/revisions/latest",
+        "data": {
+            "id": 1,
+            "title": "Latest Revision",
+            "url": "my-url"
+        },
+        "status_code": 200
+    },
+    "get_latest_rev_by_id": {
+        "method": "GET",
+        "endpoint": "courses/1/pages/my-url/revisions/2",
+        "data": {
+            "id": 2,
+            "updated_at": "2012-08-07T11:23:58-06:00",
+            "revision_id": 2,
+            "url": "my-url"
+        },
+        "status_code": 200
+    },
+    "get_latest_rev_by_id_group": {
+        "method": "GET",
+        "endpoint": "groups/1/pages/my-url/revisions/2",
+        "data": {
+            "id": 2,
+            "revision_id": 2,
+            "url": "my-url"
+        },
+        "status_code": 200
+    },
+    "revert_to_revision": {
+        "method": "POST",
+        "endpoint": "courses/1/pages/my-url/revisions/3",
+        "data": {
+            "id": 1,
+            "revision_id": 3,
+            "url": "my-url"
+        },
+        "status_code": 200
+    },
+    "revert_to_revision_group": {
+        "method": "POST",
+        "endpoint": "groups/1/pages/my-url/revisions/3",
+        "data": {
+            "id": 1,
+            "revision_id": 3,
+            "url": "my-url"
+        },
+        "status_code": 200
+    }
 }

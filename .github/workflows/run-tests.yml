@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
     steps:
       - uses: actions/checkout@v2
@@ -33,11 +33,14 @@ jobs:
         run: coverage run -m unittest discover
       - name: Lint markdown files
         uses: bewuethr/mdl-action@v1
+      - name: Check if all modules are visible to inspect
+        run: python scripts/find_missing_modules.py
       - name: Check if methods are alphabetical
         run: python scripts/alphabetic.py
       - name: Check for missing kwargs
         run: python scripts/find_missing_kwargs.py
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}

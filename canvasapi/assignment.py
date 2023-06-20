@@ -207,6 +207,26 @@ class Assignment(CanvasObject):
 
         return request_json.get("needs_provisional_grade")
 
+    def get_students_selected_for_moderation(self, **kwargs):
+        """
+        Get a list of students selected for moderation.
+
+        :calls: `GET /api/v1/courses/:course_id/assignments/:assignment_id/moderated_students \
+        <https://canvas.instructure.com/doc/api/moderated_grading.html#method.moderation_set.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+        return PaginatedList(
+            User,
+            self._requester,
+            "GET",
+            "courses/{}/assignments/{}/moderated_students".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_submission(self, user, **kwargs):
         """
         Get a single submission, based on user id.
@@ -276,6 +296,27 @@ class Assignment(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
+
+    def select_students_for_moderation(self, **kwargs):
+        """
+        Select student(s) for moderation.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/moderated_students \
+        <https://canvas.instructure.com/doc/api/moderated_grading.html#method.moderation_set.create>`_
+
+        :returns: The list of users that were selected
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+        return PaginatedList(
+            User,
+            self._requester,
+            "POST",
+            "courses/{}/assignments/{}/moderated_students".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def selected_provisional_grade(self, provisional_grade_id, **kwargs):
         """
@@ -522,7 +563,7 @@ class AssignmentOverride(CanvasObject):
         """
         Delete this assignment override.
 
-        :calls: `DELETE /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        :calls: `DELETE /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.destroy>`_
 
         :returns: The previous content of the now-deleted assignment override.
@@ -547,7 +588,7 @@ class AssignmentOverride(CanvasObject):
 
         Note: All current overridden values must be supplied if they are to be retained.
 
-        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id
+        :calls: `PUT /api/v1/courses/:course_id/assignments/:assignment_id/overrides/:id \
         <https://canvas.instructure.com/doc/api/assignments.html#method.assignment_overrides.update>`_
 
         :rtype: :class:`canvasapi.assignment.AssignmentOverride`

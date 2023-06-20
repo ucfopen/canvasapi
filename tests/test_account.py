@@ -13,10 +13,12 @@ from canvasapi.account import (
     Role,
     SSOSettings,
 )
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.authentication_event import AuthenticationEvent
 from canvasapi.authentication_provider import AuthenticationProvider
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course
+from canvasapi.course_event import CourseEvent
 from canvasapi.enrollment import Enrollment
 from canvasapi.enrollment_term import EnrollmentTerm
 from canvasapi.exceptions import CanvasException, RequiredFieldMissing
@@ -152,6 +154,23 @@ class TestAccount(unittest.TestCase):
         with self.assertRaises(CanvasException):
             self.account.delete()
 
+    # delete_admin()
+    def test_delete_admin(self, m):
+        register_uris({"account": ["delete_admin"]}, m)
+
+        user_id = 123
+        deleted_admin = self.account.delete_admin(user=user_id)
+
+        self.assertIsInstance(deleted_admin, Admin)
+        self.assertTrue(hasattr(deleted_admin, "id"))
+        self.assertTrue(hasattr(deleted_admin, "role"))
+        self.assertTrue(hasattr(deleted_admin, "role_id"))
+        self.assertTrue(hasattr(deleted_admin, "workflow_state"))
+        self.assertEqual(deleted_admin.user["login_id"], "jdoe")
+        self.assertEqual(deleted_admin.role, "AccountAdmin")
+        self.assertEqual(deleted_admin.role_id, 1)
+        self.assertEqual(deleted_admin.workflow_state, "deleted")
+
     # delete_user()
     def test_delete_user_id(self, m):
         register_uris({"account": ["delete_user"]}, m)
@@ -274,6 +293,39 @@ class TestAccount(unittest.TestCase):
         self.assertTrue(hasattr(report, "status"))
         self.assertEqual(report.status, "deleted")
 
+    # get account calendar
+    def test_get_account_calendar(self, m):
+        register_uris({"account": ["get_account_calendar"]}, m)
+
+        # Check object is of type AccountCalendar
+        account_calendar = self.account.get_account_calendar()
+        self.assertIsInstance(account_calendar, AccountCalendar)
+
+        # Verify contents of object
+        self.assertEqual(account_calendar.id, 10)
+        self.assertEqual(account_calendar.name, "Department of Computer Science")
+
+    # get all account calendars
+    def test_get_all_account_calendars(self, m):
+        register_uris({"account": ["get_all_account_calendars"]}, m)
+
+        # Get paginated list and convert to list
+        account_calendars = self.account.get_all_account_calendars()
+        account_calendars_list = list(account_calendars)
+
+        # Check that list contains objects of type AccountCalendar
+        self.assertEqual(len(account_calendars_list), 2)
+        self.assertIsInstance(account_calendars_list[0], AccountCalendar)
+        self.assertIsInstance(account_calendars_list[1], AccountCalendar)
+
+        # Verify contents of first object
+        self.assertEqual(account_calendars_list[0].id, 1)
+        self.assertEqual(account_calendars_list[0].name, "FSU")
+
+        # Verify contents of second object
+        self.assertEqual(account_calendars_list[1].id, 2)
+        self.assertEqual(account_calendars_list[1].name, "Full Sail")
+
     # get_report
     def test_get_report(self, m):
         required = {"account": ["get_report"]}
@@ -310,6 +362,27 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(reports_list[0], AccountReport)
         self.assertTrue(hasattr(reports_list[0], "id"))
         self.assertIsInstance(str(reports_list[0]), str)
+
+    # get query by account
+    def test_query_audit_by_account(self, m):
+        register_uris({"account": ["query_audit_by_account"]}, m)
+
+        # Get paginated list and convert to list
+        query = self.account.query_audit_by_account()
+        query_list = list(query)
+
+        # Check that list contains objects of type CourseEvent
+        self.assertEqual(len(query_list), 2)
+        self.assertIsInstance(query_list[0], CourseEvent)
+        self.assertIsInstance(query_list[1], CourseEvent)
+
+        # Verify contents of first object
+        self.assertEqual(query_list[0].id, 1)
+        self.assertEqual(query_list[0].name, "UCF")
+
+        # Verify contents of second object
+        self.assertEqual(query_list[1].id, 2)
+        self.assertEqual(query_list[1].name, "FSU")
 
     # get_subaccounts()
     def test_get_subaccounts(self, m):
@@ -1106,7 +1179,6 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_id(self, m):
-
         register_uris({"account": ["import_outcome"]}, m)
 
         outcome_import = self.account.import_outcome(1)
@@ -1206,6 +1278,32 @@ class TestAccount(unittest.TestCase):
         self.assertIsInstance(updated_notif, AccountNotification)
         self.assertTrue(hasattr(updated_notif, "subject"))
         self.assertEqual(updated_notif.subject, "subject")
+
+    # update account calendar visibility
+    def test_update_account_calendar_visibility(self, m):
+        register_uris({"account": ["update_account_calendar_visibility"]}, m)
+
+        # verify object is of type AccountCalendar
+        account_calendar = self.account.update_account_calendar_visibility()
+        self.assertIsInstance(account_calendar, AccountCalendar)
+
+        # verify contents of object
+        self.assertEqual(account_calendar.id, 102)
+        self.assertEqual(account_calendar.name, "Department of Aerospace Engineering")
+        self.assertTrue(account_calendar.visible)
+
+    # update many account calendars' visibility
+    def test_update_many_account_calendars_visibility(self, m):
+        register_uris({"account": ["update_many_account_calendars_visibility"]}, m)
+
+        # verify the returned object is of type AccountCalendar
+        account_calendar = self.account.update_many_account_calendars_visibility()
+        self.assertIsInstance(account_calendar, AccountCalendar)
+
+        # Verify contents of object
+        self.assertEqual(account_calendar.id, 1)
+        self.assertEqual(account_calendar.name, "Biology Department")
+        self.assertTrue(account_calendar.visible)
 
     def test_update_global_notification_missing_field(self, m):
         register_uris({"account": ["update_notification"]}, m)
@@ -1318,8 +1416,8 @@ class TestAccountReport(unittest.TestCase):
 
         features = self.account.get_enabled_features()
 
-        self.assertIsInstance(features, PaginatedList)
-        self.assertIsInstance(features[0], Feature)
+        self.assertIsInstance(features, list)
+        self.assertIsInstance(features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):
