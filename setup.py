@@ -29,7 +29,7 @@ setup(
     license="MIT License",
     packages=["canvasapi"],
     include_package_data=True,
-    install_requires=["pytz", "requests"],
+    install_requires=["arrow", "pytz", "requests"],
     zip_safe=False,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -39,10 +39,11 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Software Development :: Libraries",
     ],
 )

@@ -5,6 +5,7 @@ Class Reference
 
     canvas-ref
     account-ref
+    account-calendar-ref
     appointment-group-ref
     assignment-ref
     authentication-event-ref
@@ -21,19 +22,23 @@ Class Reference
     conversation-ref
     course-ref
     course-epub-export-ref
+    course-event-ref
     current-user-ref
     custom-gradebook-columns-ref
     discussion-entry-ref
     discussion-topic-ref
     enrollment-ref
     enrollment-term-ref
+    eportfolio-ref
     external-tool-ref
     favorite-ref
     feature-ref
     file-ref
     folder-ref
     grading-period-ref
+    grade-change-log-ref
     group-ref
+    jwt-ref
     login-ref
     license-ref
     module-ref

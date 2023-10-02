@@ -13,9 +13,11 @@ from canvasapi.content_export import ContentExport
 from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.course import Course
 from canvasapi.enrollment import Enrollment
+from canvasapi.eportfolio import EPortfolio
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.license import License
 from canvasapi.login import Login
 from canvasapi.page_view import PageView
@@ -30,7 +32,6 @@ from tests.util import cleanup_file, register_uris
 @requests_mock.Mocker()
 class TestUser(unittest.TestCase):
     def setUp(self):
-
         self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
 
         with requests_mock.Mocker() as m:
@@ -71,6 +72,34 @@ class TestUser(unittest.TestCase):
 
         self.assertEqual(len(course_list), 4)
         self.assertIsInstance(course_list[0], Course)
+
+    # get_grade_change_events_for_student()
+    def test_get_grade_change_events_for_student(self, m):
+        register_uris({"user": ["get_grade_change_events_for_student"]}, m)
+
+        response = self.user.get_grade_change_events_for_student()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertEqual(len([event for event in response]), 2)
+
+        for event in response:
+            self.assertEqual(event.links["course"], self.user.id)
+            self.assertIsInstance(event, GradeChangeEvent)
+            self.assertEqual(event.event_type, "grade_change")
+
+    # get_grade_change_events_for_grader()
+    def test_get_grade_change_events_for_grader(self, m):
+        register_uris({"user": ["get_grade_change_events_for_grader"]}, m)
+
+        response = self.user.get_grade_change_events_for_grader()
+
+        self.assertIsInstance(response, PaginatedList)
+        self.assertEqual(len([event for event in response]), 2)
+
+        for event in response:
+            self.assertEqual(event.links["course"], self.user.id)
+            self.assertIsInstance(event, GradeChangeEvent)
+            self.assertEqual(event.event_type, "grade_change")
 
     # get_missing_submissions()
     def test_get_missing_submissions(self, m):
@@ -250,6 +279,40 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(new_channel, CommunicationChannel)
 
+    # get_eportfolios()
+    def test_get_eportfolios(self, m):
+        register_uris({"user": ["get_eportfolios"]}, m)
+
+        eportfolios = self.user.get_eportfolios()
+        eportfolio_list = [portfolio for portfolio in eportfolios]
+        self.assertIsInstance(eportfolios, PaginatedList)
+        self.assertIsInstance(eportfolios[0], EPortfolio)
+        self.assertEqual(len(eportfolio_list), 2)
+        self.assertEqual(eportfolios[0].name, "ePortfolio 1")
+
+    def test_get_eportfolios_with_deleted(self, m):
+        register_uris({"user": ["get_eportfolios_include_deleted"]}, m)
+
+        eportfolios = self.user.get_eportfolios()
+        eportfolio_list = [portfolio for portfolio in eportfolios]
+        self.assertIsInstance(eportfolios, PaginatedList)
+        self.assertIsInstance(eportfolios[0], EPortfolio)
+        self.assertEqual(len(eportfolio_list), 3)
+        self.assertEqual(eportfolios[2].name, "ePortfolio 3")
+        self.assertEqual(eportfolios[2].workflow_state, "deleted")
+
+    def test_moderate_user_eportfolios(self, m):
+        register_uris({"user": ["moderate_user_eportfolios"]}, m)
+
+        spam_eportfolios = self.user.moderate_all_eportfolios(
+            spam_status="marked_as_spam"
+        )
+        eportfolio_list = [portfolio for portfolio in spam_eportfolios]
+        self.assertIsInstance(spam_eportfolios, PaginatedList)
+        self.assertIsInstance(spam_eportfolios[0], EPortfolio)
+        self.assertEqual(len(eportfolio_list), 2)
+        self.assertEqual(spam_eportfolios[0].spam_status, "marked_as_spam")
+
     # get_files()
     def test_get_files(self, m):
         register_uris({"user": ["get_user_files", "get_user_files2"]}, m)
@@ -332,6 +395,16 @@ class TestUser(unittest.TestCase):
 
         self.assertIsInstance(observees_list[0], User)
         self.assertEqual(len(observees_list), 4)
+
+    def test_get_observers(self, m):
+        requires = {"user": ["list_observers", "list_observers"]}
+        register_uris(requires, m)
+
+        response = self.user.get_observers()
+        observers_list = [observers for observers in response]
+
+        self.assertIsInstance(observers_list[0], User)
+        self.assertEqual(len(observers_list), 2)
 
     # add_observee_with_credentials()
     def test_add_observee_with_credentials(self, m):
@@ -477,8 +550,8 @@ class TestUser(unittest.TestCase):
 
         features = self.user.get_enabled_features()
 
-        self.assertIsInstance(features, PaginatedList)
-        self.assertIsInstance(features[0], Feature)
+        self.assertIsInstance(features, list)
+        self.assertIsInstance(features[0], str)
 
     # get_feature_flag()
     def test_get_feature_flag(self, m):
@@ -582,6 +655,12 @@ class TestUser(unittest.TestCase):
         pairing_code = self.user.create_pairing_code()
         self.assertIsInstance(pairing_code, PairingCode)
         self.assertEqual("abc123", pairing_code.code)
+
+    # terminate_sessions()
+    def test_terminate_sessions(self, m):
+        register_uris({"user": ["terminate_sessions"]}, m)
+        resp = self.user.terminate_sessions()
+        self.assertEqual(resp, "ok")
 
 
 @requests_mock.Mocker()

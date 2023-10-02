@@ -4,12 +4,16 @@ from canvasapi.assignment import Assignment, AssignmentGroup
 from canvasapi.blueprint import BlueprintSubscription
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.collaboration import Collaboration
+from canvasapi.content_export import ContentExport
 from canvasapi.course_epub_export import CourseEpubExport
+from canvasapi.course_event import CourseEvent
 from canvasapi.custom_gradebook_columns import CustomGradebookColumn
 from canvasapi.discussion_topic import DiscussionTopic
 from canvasapi.exceptions import RequiredFieldMissing
+from canvasapi.external_feed import ExternalFeed
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.gradebook_history import (
     Day,
     Grader,
@@ -19,6 +23,8 @@ from canvasapi.gradebook_history import (
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
+from canvasapi.module import Module
+from canvasapi.new_quiz import NewQuiz
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
@@ -273,25 +279,37 @@ class Course(CanvasObject):
 
         return CustomGradebookColumn(self._requester, column_json)
 
-    def create_discussion_topic(self, **kwargs):
+    def create_discussion_topic(self, attachment=None, **kwargs):
         """
         Creates a new discussion topic for the course or group.
 
         :calls: `POST /api/v1/courses/:course_id/discussion_topics \
         <https://canvas.instructure.com/doc/api/discussion_topics.html#method.discussion_topics.create>`_
 
+        :param attachment: (Optional) A file handler or path of the file to import.
+        :type attachment: file or str
+
         :rtype: :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
-        response = self._requester.request(
-            "POST",
-            "courses/{}/discussion_topics".format(self.id),
-            _kwargs=combine_kwargs(**kwargs),
-        )
+        if attachment is not None:
+            attachment_file, is_path = file_or_path(attachment)
+            attachment = {"attachment": attachment_file}
 
-        response_json = response.json()
-        response_json.update({"course_id": self.id})
+        try:
+            response = self._requester.request(
+                "POST",
+                "courses/{}/discussion_topics".format(self.id),
+                file=attachment,
+                _kwargs=combine_kwargs(**kwargs),
+            )
 
-        return DiscussionTopic(self._requester, response_json)
+            response_json = response.json()
+            response_json.update({"course_id": self.id})
+
+            return DiscussionTopic(self._requester, response_json)
+        finally:
+            if attachment is not None and is_path:
+                attachment_file.close()
 
     def create_epub_export(self, **kwargs):
         """
@@ -321,8 +339,6 @@ class Course(CanvasObject):
         :type url: str
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
-        from canvasapi.external_feed import ExternalFeed
-
         response = self._requester.request(
             "POST",
             "courses/{}/external_feeds".format(self.id),
@@ -434,8 +450,6 @@ class Course(CanvasObject):
         :returns: The created module.
         :rtype: :class:`canvasapi.module.Module`
         """
-        from canvasapi.module import Module
-
         if isinstance(module, dict) and "name" in module:
             kwargs["module"] = module
         else:
@@ -450,6 +464,29 @@ class Course(CanvasObject):
         module_json.update({"course_id": self.id})
 
         return Module(self._requester, module_json)
+
+    def create_new_quiz(self, **kwargs):
+        """
+        Create a new quiz for the course.
+
+        :calls: `POST /api/quiz/v1/courses/:course_id/quizzes \
+        <https://canvas.instructure.com/doc/api/new_quizzes.html#method.new_quizzes/quizzes_api.create>`_
+
+        :returns: The newly-created New Quiz object
+        :rtype: :class:`canvasapi.new_quiz.NewQuiz`
+        """
+        endpoint = "courses/{}/quizzes".format(self.id)
+
+        response = self._requester.request(
+            "POST",
+            endpoint,
+            _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return NewQuiz(self._requester, response_json)
 
     def create_page(self, wiki_page, **kwargs):
         """
@@ -528,6 +565,7 @@ class Course(CanvasObject):
 
         if "rubric" in dictionary:
             r_dict = dictionary["rubric"]
+            r_dict.update({"course_id": self.id})
             rubric = Rubric(self._requester, r_dict)
 
             rubric_dict = {"rubric": rubric}
@@ -594,8 +632,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.external_feed.ExternalFeed`
         """
-        from canvasapi.external_feed import ExternalFeed
-
         feed_id = obj_or_id(feed, "feed", (ExternalFeed,))
 
         response = self._requester.request(
@@ -693,8 +729,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         kwargs["export_type"] = export_type
 
         response = self._requester.request(
@@ -925,8 +959,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         export_id = obj_or_id(content_export, "content_export", (ContentExport,))
 
         response = self._requester.request(
@@ -947,8 +979,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         return PaginatedList(
             ContentExport,
             self._requester,
@@ -1050,16 +1080,18 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/analytics/student_summaries \
         <https://canvas.instructure.com/doc/api/analytics.html#method.analytics_api.course_student_summaries>`_
 
-        :rtype: dict
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.course.CourseStudentSummary`
         """
 
-        response = self._requester.request(
+        return PaginatedList(
+            CourseStudentSummary,
+            self._requester,
             "GET",
             "courses/{}/analytics/student_summaries".format(self.id),
+            {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
-
-        return response.json()
 
     def get_custom_columns(self, **kwargs):
         """
@@ -1131,17 +1163,15 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/features/enabled \
         <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.feature.Feature`
+        :rtype: `list` of `str`
         """
-        return PaginatedList(
-            Feature,
-            self._requester,
+        response = self._requester.request(
             "GET",
             "courses/{}/features/enabled".format(self.id),
-            {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
+
+        return response.json()
 
     def get_enrollments(self, **kwargs):
         """
@@ -1196,8 +1226,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.external_feed.ExternalFeed`
         """
-        from canvasapi.external_feed import ExternalFeed
-
         return PaginatedList(
             ExternalFeed,
             self._requester,
@@ -1410,6 +1438,26 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return response.json()
+
+    def get_grade_change_events(self, **kwargs):
+        """
+        Returns the grade change events for the course.
+
+        :calls: `GET /api/v1/audit/grade_change/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_course>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
+        """
+
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/courses/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_gradebook_history_dates(self, **kwargs):
         """
@@ -1629,13 +1677,14 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.module.Module`
         """
-        from canvasapi.module import Module
-
         module_id = obj_or_id(module, "module", (Module,))
 
         response = self._requester.request(
-            "GET", "courses/{}/modules/{}".format(self.id, module_id)
+            "GET",
+            "courses/{}/modules/{}".format(self.id, module_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
+
         module_json = response.json()
         module_json.update({"course_id": self.id})
 
@@ -1651,8 +1700,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.module.Module`
         """
-        from canvasapi.module import Module
-
         return PaginatedList(
             Module,
             self._requester,
@@ -1690,6 +1737,56 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_new_quiz(self, assignment, **kwargs):
+        """
+        Get details about a single new quiz.
+
+        :calls: `GET /api/quiz/v1/courses/:course_id/quizzes/:assignment_id \
+        <https://canvas.instructure.com/doc/api/new_quizzes.html#method.new_quizzes/quizzes_api.show>`_
+
+        :param assignment: The id of the assignment associated with the quiz.
+        :type assignment: :class:`canvasapi.assignment.Assignment`
+            or :class:`canvasapi.new_quiz.NewQuiz` or int
+
+        :returns: A New Quiz object.
+        :rtype: :class:`canvasapi.new_quiz.NewQuiz`
+        """
+
+        assignment_id = obj_or_id(assignment, "assignment", (Assignment, NewQuiz))
+        endpoint = "courses/{}/quizzes/{}".format(self.id, assignment_id)
+
+        response = self._requester.request(
+            "GET",
+            endpoint,
+            _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return NewQuiz(self._requester, response_json)
+
+    def get_new_quizzes(self, **kwargs):
+        """
+        Get a list of new quizzes.
+
+        :calls: `GET /api/quiz/v1/courses/:course_id/quizzes \
+        <https://canvas.instructure.com/doc/api/new_quizzes.html#method.new_quizzes/quizzes_api.index>`_
+
+        :returns: A paginated list of New Quiz objects.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList`
+            of :class:`canvasapi.new_quiz.NewQuiz`
+        """
+        endpoint = "courses/{}/quizzes".format(self.id)
+        return PaginatedList(
+            NewQuiz,
+            self._requester,
+            "GET",
+            endpoint,
+            _url_override=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_outcome_group(self, group, **kwargs):
         """
         Returns the details of the Outcome Group with the given id.
@@ -1708,7 +1805,9 @@ class Course(CanvasObject):
         outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
 
         response = self._requester.request(
-            "GET", "courses/{}/outcome_groups/{}".format(self.id, outcome_group_id)
+            "GET",
+            "courses/{}/outcome_groups/{}".format(self.id, outcome_group_id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self._requester, response.json())
@@ -1791,16 +1890,19 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/outcome_results \
         <https://canvas.instructure.com/doc/api/outcome_results.html#method.outcome_results.index>`_
 
-        :returns: List of potential related outcome result dicts.
-        :rtype: dict
+        :returns: :class:`canvasapi.paginated_list.PaginatedList`
+            of :class:`canvasapi.outcome.OutcomeResult`
         """
-        response = self._requester.request(
+        from canvasapi.outcome import OutcomeResult
+
+        return PaginatedList(
+            OutcomeResult,
+            self._requester,
             "GET",
             "courses/{}/outcome_results".format(self.id),
+            _root="outcome_results",
             _kwargs=combine_kwargs(**kwargs),
         )
-
-        return response.json()
 
     def get_page(self, url, **kwargs):
         """
@@ -1971,7 +2073,10 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        return Rubric(self._requester, response.json())
+        response_json = response.json()
+        response_json.update({"course_id": self.id})
+
+        return Rubric(self._requester, response_json)
 
     def get_rubrics(self, **kwargs):
         """
@@ -1988,6 +2093,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/%s/rubrics" % (self.id),
+            {"course_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -2351,6 +2457,24 @@ class Course(CanvasObject):
         )
         return response.json().get("html", "")
 
+    def query_audit_by_course(self, **kwargs):
+        """
+        Lists course change events for a specific course.
+
+        :calls: `GET /api/v1/audit/course/courses/:course_id \
+        <https://canvas.instructure.com/doc/api/course_audit_log.html#method.course_audit_api.for_course>`_
+
+        :rtype: list of :class:`canvasapi.course_event.CourseEvent`
+        """
+
+        return PaginatedList(
+            CourseEvent,
+            self._requester,
+            "GET",
+            "audit/course/courses/{}".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def remove_usage_rights(self, **kwargs):
         """
         Removes the usage rights for specified files that are under the current course scope
@@ -2659,6 +2783,11 @@ class CourseNickname(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return CourseNickname(self._requester, response.json())
+
+
+class CourseStudentSummary(CanvasObject):
+    def __str__(self):
+        return "Course Student Summary {}".format(self.id)
 
 
 class LatePolicy(CanvasObject):

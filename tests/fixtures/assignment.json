@@ -162,6 +162,87 @@
 		},
 		"status_code": 200
 	},
+	"get_grade_change_events": {
+		"method": "GET",
+		"endpoint": "audit/grade_change/assignments/1",
+		"data": {
+			"links": {
+				"events.assignment": "https://canvas.com/api/v1/assignment/test",
+				"events.course": "https://canvas.com/api/v1/assignment/course",
+				"events.student": {
+					"href": null,
+					"type": "user"
+				},
+				"events.grader": {
+					"href": null,
+					"type": "user"
+				},
+				"events.page_view": null
+			},
+			"events": [
+				{
+					"id": "dd5-6a",
+					"event_type": "grade_change",
+					"grade_before": "5",
+					"grade_after": "2",
+					"version_number": 2,
+					"links": {
+						"assignment": 10,
+						"course": 1,
+						"student": 100,
+						"grader": 200,
+						"page_view": null
+					}
+				},
+				{
+					"id": "fg-43",
+					"created_at": "2019-10-25T14:08:46Z",
+					"event_type": "grade_change",
+					"grade_before": null,
+					"grade_after": "5",
+					"version_number": 1,
+					"links": {
+						"assignment": 10,
+						"course": 1,
+						"student": 100,
+						"grader": 200,
+						"page_view": null
+					}
+				}
+			],
+			"linked": {
+				"page_views": [],
+				"assignments": [
+					{
+						"id": 10,
+						"description": "This is a test assignment",
+						"points_possible": 10.0,
+						"grading_type": "points",
+						"course_id": 1,
+						"name": "Test assignment",
+						"submission_types": ["online_text_entry"]
+					}
+				],
+				"courses": [
+					{
+						"id": 10,
+						"name": "Dev Course"
+					}
+				],
+				"users": [
+					{
+						"id": 100,
+						"name": "John Smith"
+					},
+					{
+						"id": 200,
+						"name": "Billy Smith"
+					}
+				]
+			}
+		},
+		"status_code": 200
+	},
 	"list_assignment_groups": {
 		"method": "GET",
 		"endpoint": "courses/1/assignment_groups",
@@ -409,5 +490,33 @@
 		"data": {
 			"message": "OK"
 		}
+	},
+	"get_students_selected_moderation": {
+		"method": "GET",
+		"endpoint": "courses/1/assignments/1/moderated_students",
+		"data": [
+			{
+				"id": 1,
+				"name": "John Doe"
+			},
+			{
+				"id": 2,
+				"name": "John Smith"
+			}
+		]
+	},
+	"select_students_for_moderation": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/moderated_students",
+		"data": [
+			{
+				"id": 11,
+				"name": "Joyce Smith"
+			},
+			{
+				"id": 12,
+				"name": "Jane Doe"
+			}
+		]
 	}
 }

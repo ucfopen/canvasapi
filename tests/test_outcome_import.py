@@ -17,6 +17,5 @@ class TestOutcomeImport(unittest.TestCase):
         )
 
     def test_str(self, m):
-
         test_str = str(self.outcome_import)
         self.assertIsInstance(test_str, str)

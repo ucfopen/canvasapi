@@ -39,7 +39,7 @@ class OutcomeLink(CanvasObject):
         elif self.context_type == "Account":
             return "accounts/{}".format(self.context_id)
 
-    def get_outcome(self):
+    def get_outcome(self, **kwargs):
         """
         Return the linked outcome
 
@@ -50,11 +50,13 @@ class OutcomeLink(CanvasObject):
         :rtype: :class:`canvasapi.outcome.Outcome`
         """
         oid = self.outcome["id"]
-        response = self._requester.request("GET", "outcomes/{}".format(oid))
+        response = self._requester.request(
+            "GET", "outcomes/{}".format(oid), _kwargs=combine_kwargs(**kwargs)
+        )
 
         return Outcome(self._requester, response.json())
 
-    def get_outcome_group(self):
+    def get_outcome_group(self, **kwargs):
         """
         Return the linked outcome group
 
@@ -70,7 +72,9 @@ class OutcomeLink(CanvasObject):
         """
         ogid = self.outcome_group["id"]
         response = self._requester.request(
-            "GET", "{}/outcome_groups/{}".format(self.context_ref(), ogid)
+            "GET",
+            "{}/outcome_groups/{}".format(self.context_ref(), ogid),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeGroup(self._requester, response.json())
@@ -88,32 +92,33 @@ class OutcomeGroup(CanvasObject):
         elif self.context_type is None:
             return "global"
 
-    def update(self, **kwargs):
+    def create_subgroup(self, title, **kwargs):
         """
-        Update an outcome group.
+        Create a subgroup of the current group
 
-        :calls: `PUT /api/v1/global/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
-            or `PUT /api/v1/accounts/:account_id/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
-            or `PUT /api/v1/courses/:course_id/outcome_groups/:id \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
+        :calls: `POST /api/v1/global/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.create>`_
+            or `POST /api/v1/accounts/:account_id/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.create>`_
+            or `POST /api/v1/courses/:course_id/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.create>`_
 
-        :returns: True if updated, False otherwise.
-        :rtype: bool
+        :param title: The title of the subgroup.
+        :type title: str
+
+        :returns: Itself as an OutcomeGroup object.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
         response = self._requester.request(
-            "PUT",
-            "{}/outcome_groups/{}".format(self.context_ref(), self.id),
+            "POST",
+            "{}/outcome_groups/{}/subgroups".format(self.context_ref(), self.id),
+            title=title,
             _kwargs=combine_kwargs(**kwargs),
         )
 
-        if "id" in response.json():
-            super(OutcomeGroup, self).set_attributes(response.json())
+        return OutcomeGroup(self._requester, response.json())
 
-        return "id" in response.json()
-
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Delete an outcome group.
 
@@ -128,7 +133,9 @@ class OutcomeGroup(CanvasObject):
         :rtype: bool
         """
         response = self._requester.request(
-            "DELETE", "{}/outcome_groups/{}".format(self.context_ref(), self.id)
+            "DELETE",
+            "{}/outcome_groups/{}".format(self.context_ref(), self.id),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if "id" in response.json():
@@ -159,7 +166,61 @@ class OutcomeGroup(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def link_existing(self, outcome):
+    def get_subgroups(self, **kwargs):
+        """
+        List subgroups.
+
+        :calls: `GET /api/v1/global/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
+            or `GET /api/v1/accounts/:account_id/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
+            or `GET /api/v1/courses/:course_id/outcome_groups/:id/subgroups \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
+
+        :returns: Paginated List of OutcomeGroups linked to the current group.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        return PaginatedList(
+            OutcomeGroup,
+            self._requester,
+            "GET",
+            "{}/outcome_groups/{}/subgroups".format(self.context_ref(), self.id),
+            {"context_type": self.context_type, "context_id": self.context_id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def import_outcome_group(self, outcome_group, **kwargs):
+        """
+        Import an outcome group as a subgroup into the current outcome group
+
+        :calls: `POST /api/v1/global/outcome_groups/:id/import \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.import>`_
+            or `POST /api/v1/accounts/:account_id/outcome_groups/:id/import \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.import>`_
+            or `POST /api/v1/courses/:course_id/outcome_groups/:id/import \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.import>`_
+
+        :param outcome: The object or ID of the outcome group to import.
+        :type outcome: :class:`canvasapi.outcome.OutcomeGroup` or int
+
+        :returns: Itself as an OutcomeGroup object.
+        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
+        """
+        source_outcome_group_id = obj_or_id(
+            outcome_group, "outcome_group", (OutcomeGroup,)
+        )
+
+        response = self._requester.request(
+            "POST",
+            "{}/outcome_groups/{}/import".format(self.context_ref(), self.id),
+            source_outcome_group_id=source_outcome_group_id,
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return OutcomeGroup(self._requester, response.json())
+
+    def link_existing(self, outcome, **kwargs):
         """
         Link to an existing Outcome.
 
@@ -181,8 +242,11 @@ class OutcomeGroup(CanvasObject):
         response = self._requester.request(
             "PUT",
             "{}/outcome_groups/{}/outcomes/{}".format(
-                self.context_ref(), self.id, outcome_id
+                self.context_ref(),
+                self.id,
+                outcome_id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         return OutcomeLink(self._requester, response.json())
@@ -213,7 +277,7 @@ class OutcomeGroup(CanvasObject):
 
         return OutcomeLink(self._requester, response.json())
 
-    def unlink_outcome(self, outcome):
+    def unlink_outcome(self, outcome, **kwargs):
         """
         Remove an Outcome from and OutcomeLink
 
@@ -235,8 +299,11 @@ class OutcomeGroup(CanvasObject):
         response = self._requester.request(
             "DELETE",
             "{}/outcome_groups/{}/outcomes/{}".format(
-                self.context_ref(), self.id, outcome_id
+                self.context_ref(),
+                self.id,
+                outcome_id,
             ),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
         if "context_id" in response.json():
@@ -244,81 +311,32 @@ class OutcomeGroup(CanvasObject):
 
         return "context_id" in response.json()
 
-    def get_subgroups(self, **kwargs):
+    def update(self, **kwargs):
         """
-        List subgroups.
+        Update an outcome group.
 
-        :calls: `GET /api/v1/global/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
-            or `GET /api/v1/accounts/:account_id/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
-            or `GET /api/v1/courses/:course_id/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.subgroups>`_
+        :calls: `PUT /api/v1/global/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
+            or `PUT /api/v1/accounts/:account_id/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
+            or `PUT /api/v1/courses/:course_id/outcome_groups/:id \
+            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.update>`_
 
-        :returns: Paginated List of OutcomeGroups linked to the current group.
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.outcome.OutcomeGroup`
+        :returns: True if updated, False otherwise.
+        :rtype: bool
         """
-        return PaginatedList(
-            OutcomeGroup,
-            self._requester,
-            "GET",
-            "{}/outcome_groups/{}/subgroups".format(self.context_ref(), self.id),
-            {"context_type": self.context_type, "context_id": self.context_id},
+        response = self._requester.request(
+            "PUT",
+            "{}/outcome_groups/{}".format(self.context_ref(), self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
-    def create_subgroup(self, title, **kwargs):
-        """
-        Create a subgroup of the current group
+        if "id" in response.json():
+            super(OutcomeGroup, self).set_attributes(response.json())
 
-        :calls: `POST /api/v1/global/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.create>`_
-            or `POST /api/v1/accounts/:account_id/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.create>`_
-            or `POST /api/v1/courses/:course_id/outcome_groups/:id/subgroups \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.create>`_
+        return "id" in response.json()
 
-        :param title: The title of the subgroup.
-        :type title: str
 
-        :returns: Itself as an OutcomeGroup object.
-        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
-        """
-        response = self._requester.request(
-            "POST",
-            "{}/outcome_groups/{}/subgroups".format(self.context_ref(), self.id),
-            title=title,
-            _kwargs=combine_kwargs(**kwargs),
-        )
-
-        return OutcomeGroup(self._requester, response.json())
-
-    def import_outcome_group(self, outcome_group):
-        """
-        Import an outcome group as a subgroup into the current outcome group
-
-        :calls: `POST /api/v1/global/outcome_groups/:id/import \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.import>`_
-            or `POST /api/v1/accounts/:account_id/outcome_groups/:id/import \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.import>`_
-            or `POST /api/v1/courses/:course_id/outcome_groups/:id/import \
-            <https://canvas.instructure.com/doc/api/outcome_groups.html#method.outcome_groups_api.import>`_
-
-        :param outcome: The object or ID of the outcome group to import.
-        :type outcome: :class:`canvasapi.outcome.OutcomeGroup` or int
-
-        :returns: Itself as an OutcomeGroup object.
-        :rtype: :class:`canvasapi.outcome.OutcomeGroup`
-        """
-        source_outcome_group_id = obj_or_id(
-            outcome_group, "outcome_group", (OutcomeGroup,)
-        )
-
-        response = self._requester.request(
-            "POST",
-            "{}/outcome_groups/{}/import".format(self.context_ref(), self.id),
-            source_outcome_group_id=source_outcome_group_id,
-        )
-
-        return OutcomeGroup(self._requester, response.json())
+class OutcomeResult(CanvasObject):
+    def __str__(self):
+        return "{} ({})".format(self.id, self.score)

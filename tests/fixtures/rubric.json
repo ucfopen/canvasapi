@@ -1,4 +1,64 @@
 {
+	"create_rubric_assessment": {
+		"method": "POST",
+		"endpoint": "courses/1/rubric_associations/4/rubric_assessments",
+		"data": {
+			"id": 1,
+			"rubric_id": 1,
+			"rubric_association_id": 4,
+			"score": 5.0,
+			"artifact_type": "Submission",
+			"artifact_id": 3,
+			"artifact_attempt": 2,
+			"assessment_type": "grading",
+			"assessor_id": 6,
+			"provisional": "false"
+		},
+		"status_code": 200
+	},
+	"update_rubric_assessment": {
+		"method": "PUT",
+		"endpoint": "courses/4/rubric_associations/4/rubric_assessments/1",
+		"data": {
+			"id": 1,
+			"rubric_id": 1,
+			"rubric_association_id": 4,
+			"score": 5.0,
+			"artifact_type": "Submission",
+			"artifact_id": 3,
+			"artifact_attempt": 2,
+			"assessment_type": "grading",
+			"assessor_id": 6,
+			"provisional": "true"
+		},
+		"status_code": 200
+	},
+	"delete_rubric_assessment": {
+		"method": "DELETE",
+		"endpoint": "courses/4/rubric_associations/4/rubric_assessments/1",
+		"data": {
+			"id": 1,
+			"rubric_id": 1,
+			"rubric_association_id": 4,
+			"score": 5.0,
+			"artifact_type": "Submission",
+			"artifact_id": 3,
+			"artifact_attempt": 2,
+			"assessment_type": "grading",
+			"assessor_id": 6,
+			"provisional": "false"
+		},
+		"status_code": 200
+	},
+	"create_rubric_association": {
+		"method": "POST",
+		"endpoint": "courses/1/rubric_associations/",
+		"data": {
+			"id": 5,
+			"association_type": "Assignment"
+		},
+		"status_code": 200
+	},
 	"update_rubric_association": {
 		"method": "PUT",
 		"endpoint": "courses/1/rubric_associations/4",
@@ -14,6 +74,22 @@
 		"data": {
 			"id": 4,
 			"association_type": "Assignment"
+		},
+		"status_code": 200
+	},
+	"delete_rubric": {
+		"method": "DELETE",
+		"endpoint": "courses/1/rubrics/1",
+		"data": {
+			"id": 1,
+			"title": "Course Rubric 1",
+			"context_id": 1,
+			"context_type": "Course",
+			"points_possible": 10.0,
+			"reusable": false,
+			"read_only": true,
+			"free_form_critereon_comments": true,
+			"hide_score_total": true
 		},
 		"status_code": 200
 	}

@@ -8,7 +8,7 @@
 			"start_at": "2015-04-01T00:00:00Z",
 			"end_at": "2018-04-01T00:00:00Z"
 		},
-		"status_code":  200
+		"status_code": 200
 	},
 	"create": {
 		"method": "POST",
@@ -149,6 +149,68 @@
 			"user": null
 		},
 		"status_code": 200
+	},
+	"get_account_calendars": {
+		"method": "GET",
+		"endpoint": "account_calendars",
+		"data": [
+			{
+				"id": 1,
+				"name": "CDL",
+				"calendar_event_url": "calendarURL",
+				"visible": true
+			},
+			{
+				"id": 2,
+				"name": "DDL",
+				"calendar_event_url": "calendarURL2",
+				"visible": true
+			}
+		]
+	},
+	"get_account_calendar": {
+		"method": "GET",
+		"endpoint": "account_calendars/1",
+		"data": {
+			"id": 10,
+			"name": "Department of Computer Science",
+			"calendar_event_url": "calendarURL",
+			"visible": true
+		}
+	},
+	"get_all_account_calendars": {
+		"method": "GET",
+		"endpoint": "accounts/1/account_calendars",
+		"data": [
+			{
+				"id": 1,
+				"name": "FSU"
+			},
+			{
+				"id": 2,
+				"name": "Full Sail"
+			}
+		]
+	},
+	"update_account_calendar_visibility": {
+		"method": "PUT",
+		"endpoint": "account_calendars/1",
+		"data": {
+			"id": 102,
+			"name": "Department of Aerospace Engineering",
+			"calendar_event_url": "calendarURL",
+			"visible": true
+		}
+	},
+	"update_many_account_calendars_visibility": {
+		"method": "PUT",
+		"endpoint": "accounts/1/account_calendars",
+		"data": {
+			"id": 1,
+			"name": "Biology Department",
+			"calendar_event_url": "calendarURL",
+			"visible": true
+		}
 	},
 	"get_by_id": {
 		"method": "GET",
@@ -329,48 +391,53 @@
 		"endpoint": "accounts/1/terms",
 		"data": {
 			"enrollment_terms": [
-			{
-				"id": 1,
-				"name": "Enrollment Term 1"
-			},
-			{
-				"id": 2,
-				"name": "Enrollment Term 2"
-			}]
+				{
+					"id": 1,
+					"name": "Enrollment Term 1"
+				},
+				{
+					"id": 2,
+					"name": "Enrollment Term 2"
+				}
+			]
 		},
 		"status_code": 200
 	},
 	"get_notification": {
 		"method": "GET",
 		"endpoint": "accounts/1/account_notifications/1",
-		"data":{
-  			"subject": "Attention Students",
-  			"message": "This is a test of the notification system.",
-  			"start_at": "2013-08-28T23:59:00-06:00",
-  			"end_at": "2013-08-29T23:59:00-06:00",
-  			"icon": "information",
-  			"roles": ["StudentEnrollment"],
-  			"role_ids": [1]
+		"data": {
+			"subject": "Attention Students",
+			"message": "This is a test of the notification system.",
+			"start_at": "2013-08-28T23:59:00-06:00",
+			"end_at": "2013-08-29T23:59:00-06:00",
+			"icon": "information",
+			"roles": [
+				"StudentEnrollment"
+			],
+			"role_ids": [
+				1
+			]
 		},
 		"status_code": 200
 	},
 	"get_grading_periods": {
-        "method": "GET",
-        "endpoint": "accounts/1/grading_periods",
-        "data": {
-            "grading_periods": [
-                {
-                    "title": "Grading period 1",
-                    "id": 1
-                },
-                {
-                    "title": "Grading period 2",
-                    "id": 2
-                }
-            ]
-        },
-        "status_code": 200
-    },
+		"method": "GET",
+		"endpoint": "accounts/1/grading_periods",
+		"data": {
+			"grading_periods": [
+				{
+					"title": "Grading period 1",
+					"id": 1
+				},
+				{
+					"title": "Grading period 2",
+					"id": 2
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"get_groups_context": {
 		"method": "GET",
 		"endpoint": "accounts/1/groups",
@@ -403,6 +470,24 @@
 			}
 		],
 		"status_code": 200
+	},
+	"query_audit_by_account": {
+		"method": "GET",
+		"endpoint": "audit/course/accounts/1",
+		"data": [
+			{
+				"id": 1,
+				"name": "UCF",
+				"start_at": "2022-11-18T05:00:00-06:00",
+				"conclude_at": "2022-11-18T15:00:00-06:00"
+			},
+			{
+				"id": 2,
+				"name": "FSU",
+				"start_at": "2022-11-18T05:00:00-06:00",
+				"conclude_at": "2022-11-18T15:00:00-06:00"
+			}
+		]
 	},
 	"multiple": {
 		"method": "GET",
@@ -458,9 +543,9 @@
 		],
 		"status_code": 200
 	},
-	"get_outcome_import_status":{
-		"method" : "GET",
-		"endpoint" : "accounts/1/outcome_imports/1",
+	"get_outcome_import_status": {
+		"method": "GET",
+		"endpoint": "accounts/1/outcome_imports/1",
 		"data": {
 			"id": 1,
 			"created_at": "2013-12-01T23:59:00-06:00",
@@ -475,9 +560,9 @@
 		},
 		"status_code": 200
 	},
-	"get_outcome_import_status_latest":{
-		"method" : "GET",
-		"endpoint" : "accounts/1/outcome_imports/latest",
+	"get_outcome_import_status_latest": {
+		"method": "GET",
+		"endpoint": "accounts/1/outcome_imports/latest",
 		"data": {
 			"id": 1,
 			"created_at": "2013-12-01T23:59:00-06:00",
@@ -492,93 +577,93 @@
 		},
 		"status_code": 200
 	},
-	"create_report":{
+	"create_report": {
 		"method": "POST",
 		"endpoint": "accounts/1/reports/zero_activity_csv",
 		"data": {
-        	"title": "Zero Activity",
-        	"parameters": {
-            	"enrollment_term_id": {
-                	"required": false,
-                	"description": "The canvas id of the term to get grades from"
-            	},
-            	"start_at": {
-                	"required": false,
-                	"description": "The first date in the date range, the second date is the time the report is run."
-            	},
-            	"course_id": {
-                	"required": false,
-                	"description": "The course to report on"
-            	}
-        },
-        "report": "zero_activity_csv",
-        "last_run": null
+			"title": "Zero Activity",
+			"parameters": {
+				"enrollment_term_id": {
+					"required": false,
+					"description": "The canvas id of the term to get grades from"
+				},
+				"start_at": {
+					"required": false,
+					"description": "The first date in the date range, the second date is the time the report is run."
+				},
+				"course_id": {
+					"required": false,
+					"description": "The course to report on"
+				}
+			},
+			"report": "zero_activity_csv",
+			"last_run": null
 		},
 		"status_code": 200
 	},
-	"delete_report":{
+	"delete_report": {
 		"method": "DELETE",
 		"endpoint": "accounts/1/reports/zero_activity_csv/1",
 		"data": {
-    		"id": 1,
-    		"progress": 100,
-    		"parameters": {
-    		    "extra_text": "Term: All Terms;"
-    		},
-    		"current_line": 1,
-    		"status": "deleted",
-    		"report": "zero_activity_csv",
-    		"created_at": "2019-08-13T15:23:15-04:00",
-    		"started_at": "2019-08-13T15:23:17-04:00",
-    		"ended_at": "2019-08-13T15:23:17-04:00",
-    		"file_url": "xxxxxxxxxxxxxxxxxxxxxxx",
-    		"attachment": {
-    		    "id": 1,
-    		    "uuid": "CCVh71fQEPsDqc4VOoGBr5llCbzAeLEpBcWcAe88",
-    		    "folder_id": 1,
-    		    "display_name": "zero_activity_csv_xxxxxxxxxxxxxxxxxxxxxxx.csv",
-    		    "filename": "zero_activity_csv_xxxxxxxxxxxxxxxxxxxxxxx.csv",
-    		    "workflow_state": "processed",
-    		    "upload_status": "success",
-    		    "content-type": "text/csv",
-    		    "url": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    		    "size": 100,
-    		    "created_at": "2019-08-13T19:23:17Z",
-    		    "updated_at": "2019-08-13T19:23:17Z",
-    		    "unlock_at": null,
-    		    "locked": false,
-    		    "hidden": false,
-    		    "lock_at": null,
-    		    "hidden_for_user": false,
-    		    "thumbnail_url": null,
-    		    "modified_at": "2019-08-13T19:23:17Z",
-    		    "mime_class": "file",
-    		    "media_entry_id": null,
-    		    "locked_for_user": false
-    			}
+			"id": 1,
+			"progress": 100,
+			"parameters": {
+				"extra_text": "Term: All Terms;"
+			},
+			"current_line": 1,
+			"status": "deleted",
+			"report": "zero_activity_csv",
+			"created_at": "2019-08-13T15:23:15-04:00",
+			"started_at": "2019-08-13T15:23:17-04:00",
+			"ended_at": "2019-08-13T15:23:17-04:00",
+			"file_url": "xxxxxxxxxxxxxxxxxxxxxxx",
+			"attachment": {
+				"id": 1,
+				"uuid": "CCVh71fQEPsDqc4VOoGBr5llCbzAeLEpBcWcAe88",
+				"folder_id": 1,
+				"display_name": "zero_activity_csv_xxxxxxxxxxxxxxxxxxxxxxx.csv",
+				"filename": "zero_activity_csv_xxxxxxxxxxxxxxxxxxxxxxx.csv",
+				"workflow_state": "processed",
+				"upload_status": "success",
+				"content-type": "text/csv",
+				"url": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+				"size": 100,
+				"created_at": "2019-08-13T19:23:17Z",
+				"updated_at": "2019-08-13T19:23:17Z",
+				"unlock_at": null,
+				"locked": false,
+				"hidden": false,
+				"lock_at": null,
+				"hidden_for_user": false,
+				"thumbnail_url": null,
+				"modified_at": "2019-08-13T19:23:17Z",
+				"mime_class": "file",
+				"media_entry_id": null,
+				"locked_for_user": false
+			}
 		}
 	},
-	"get_report":{
+	"get_report": {
 		"method": "GET",
 		"endpoint": "accounts/1/reports/zero_activity_csv/1",
-		"data":{
-        	"title": "Zero Activity",
-        	"parameters": {
-            	"enrollment_term_id": {
-                	"required": false,
-                	"description": "The canvas id of the term to get grades from"
-            	},
-            	"start_at": {
-                	"required": false,
-                	"description": "The first date in the date range, the second date is the time the report is run."
-            	},
-            	"course_id": {
-                	"required": false,
-                	"description": "The course to report on"
-            	}
-        },
-        "report": "zero_activity_csv",
-        "last_run": null
+		"data": {
+			"title": "Zero Activity",
+			"parameters": {
+				"enrollment_term_id": {
+					"required": false,
+					"description": "The canvas id of the term to get grades from"
+				},
+				"start_at": {
+					"required": false,
+					"description": "The first date in the date range, the second date is the time the report is run."
+				},
+				"course_id": {
+					"required": false,
+					"description": "The course to report on"
+				}
+			},
+			"report": "zero_activity_csv",
+			"last_run": null
 		},
 		"status_code": 200
 	},
@@ -780,10 +865,10 @@
 		"method": "PUT",
 		"endpoint": "accounts/1/account_notifications/1",
 		"data": {
-            "subject": "subject",
-            "message": "Message",
-            "start_at": "2015-04-01T00:00:00Z",
-            "end_at": "2018-04-01T00:00:00Z"
+			"subject": "subject",
+			"message": "Message",
+			"start_at": "2015-04-01T00:00:00Z",
+			"end_at": "2018-04-01T00:00:00Z"
 		},
 		"status_code": 200
 	},
@@ -872,7 +957,7 @@
 	"create_role": {
 		"method": "POST",
 		"endpoint": "accounts/1/roles",
-		"data":{
+		"data": {
 			"id": 1,
 			"role": "StudentEnrollment",
 			"label": "Student"
@@ -1030,22 +1115,22 @@
 		"endpoint": "accounts/1/analytics/terms/1/grades",
 		"data": [
 			{
-			  "0": "13435",
-			  "1": "41",
-			  "2": "58",
-			  "3": "27",
-			  "68": "1387",
-			  "69": "1412",
-			  "70": "2199",
-			  "85": "5575",
-			  "86": "6543",
-			  "87": "6144",
-			  "88": "7198",
-			  "89": "6561",
-			  "90": "8854",
-			  "91": "7745",
-			  "92": "8800",
-			  "93": "7798"
+				"0": "13435",
+				"1": "41",
+				"2": "58",
+				"3": "27",
+				"68": "1387",
+				"69": "1412",
+				"70": "2199",
+				"85": "5575",
+				"86": "6543",
+				"87": "6144",
+				"88": "7198",
+				"89": "6561",
+				"90": "8854",
+				"91": "7745",
+				"92": "8800",
+				"93": "7798"
 			}
 		]
 	},
@@ -1054,22 +1139,22 @@
 		"endpoint": "accounts/1/analytics/current/grades",
 		"data": [
 			{
-			  "0": "13435",
-			  "1": "41",
-			  "2": "58",
-			  "3": "27",
-			  "68": "1387",
-			  "69": "1412",
-			  "70": "2199",
-			  "85": "5575",
-			  "86": "6543",
-			  "87": "6144",
-			  "88": "7198",
-			  "89": "6561",
-			  "90": "8854",
-			  "91": "7745",
-			  "92": "8800",
-			  "93": "7798"
+				"0": "13435",
+				"1": "41",
+				"2": "58",
+				"3": "27",
+				"68": "1387",
+				"69": "1412",
+				"70": "2199",
+				"85": "5575",
+				"86": "6543",
+				"87": "6144",
+				"88": "7198",
+				"89": "6561",
+				"90": "8854",
+				"91": "7745",
+				"92": "8800",
+				"93": "7798"
 			}
 		]
 	},
@@ -1078,22 +1163,22 @@
 		"endpoint": "accounts/1/analytics/completed/grades",
 		"data": [
 			{
-			  "0": "13435",
-			  "1": "41",
-			  "2": "58",
-			  "3": "27",
-			  "68": "1387",
-			  "69": "1412",
-			  "70": "2199",
-			  "85": "5575",
-			  "86": "6543",
-			  "87": "6144",
-			  "88": "7198",
-			  "89": "6561",
-			  "90": "8854",
-			  "91": "7745",
-			  "92": "8800",
-			  "93": "7798"
+				"0": "13435",
+				"1": "41",
+				"2": "58",
+				"3": "27",
+				"68": "1387",
+				"69": "1412",
+				"70": "2199",
+				"85": "5575",
+				"86": "6543",
+				"87": "6144",
+				"88": "7198",
+				"89": "6561",
+				"90": "8854",
+				"91": "7745",
+				"92": "8800",
+				"93": "7798"
 			}
 		]
 	},
@@ -1185,7 +1270,7 @@
 	"add_authentication_providers": {
 		"method": "POST",
 		"endpoint": "accounts/1/authentication_providers",
-		"data":{
+		"data": {
 			"id": 1,
 			"auth_type": "saml",
 			"position": 1
@@ -1227,11 +1312,20 @@
 			"context_id": 1,
 			"context_type": "Account",
 			"grading_scheme": [
-			  {"name": "A", "value": 0.9},
-			  {"name": "B", "value": 0.8},
-			  {"name": "C", "value": 0.7}
+				{
+					"name": "A",
+					"value": 0.9
+				},
+				{
+					"name": "B",
+					"value": 0.8
+				},
+				{
+					"name": "C",
+					"value": 0.7
+				}
 			]
-		  },
+		},
 		"status_code": 200
 	},
 	"get_grading_standards": {
@@ -1239,38 +1333,53 @@
 		"endpoint": "accounts/1/grading_standards",
 		"data": [
 			{
-			"title": "Grading Standard 1",
-			"id": 1,
-			"context_id": 1,
-			"context_type": "Account",
-			"grading_scheme": [
-			  {"name": "A", "value": 0.9},
-			  {"name": "B", "value": 0.8},
-			  {"name": "C", "value": 0.7}
-			]
-		  },
-		  {
-			"title": "Grading Standard 2",
-			"id": 2,
-			"context_id": 1,
-			"context_type": "Account",
-			"grading_scheme": [
-			  {"name": "D", "value": 0.6},
-			  {"name": "F", "value": 0.5}
-			]
-		  }
+				"title": "Grading Standard 1",
+				"id": 1,
+				"context_id": 1,
+				"context_type": "Account",
+				"grading_scheme": [
+					{
+						"name": "A",
+						"value": 0.9
+					},
+					{
+						"name": "B",
+						"value": 0.8
+					},
+					{
+						"name": "C",
+						"value": 0.7
+					}
+				]
+			},
+			{
+				"title": "Grading Standard 2",
+				"id": 2,
+				"context_id": 1,
+				"context_type": "Account",
+				"grading_scheme": [
+					{
+						"name": "D",
+						"value": 0.6
+					},
+					{
+						"name": "F",
+						"value": 0.5
+					}
+				]
+			}
 		],
 		"status_code": 200
 	},
 	"delete_grading_period": {
-        "method": "DELETE",
-        "endpoint": "accounts/1/grading_periods/1",
-        "data": {
-            "delete": true
-        },
-        "status_code": 200
-    },
-		"get_rubric_single": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/grading_periods/1",
+		"data": {
+			"delete": true
+		},
+		"status_code": 200
+	},
+	"get_rubric_single": {
 		"method": "GET",
 		"endpoint": "accounts/1/rubrics/1",
 		"data": {
@@ -1324,37 +1433,46 @@
 			"context_id": 1,
 			"context_type": "Account",
 			"grading_scheme": [
-			  {"name": "A", "value": 0.9},
-			  {"name": "B", "value": 0.8},
-			  {"name": "C", "value": 0.7}
+				{
+					"name": "A",
+					"value": 0.9
+				},
+				{
+					"name": "B",
+					"value": 0.8
+				},
+				{
+					"name": "C",
+					"value": 0.7
+				}
 			]
-		  },
+		},
 		"status_code": 200
 	},
 	"get_scopes": {
-	"method": "GET",
-	"endpoint": "accounts/1/scopes",
-	"data": [
-		{
-        	"controller": "users",
-        	"action": "settings",
-        	"verb": "PUT",
-        	"path": "/api/v1/users/:id/settings",
-        	"scope": "url:PUT|/api/v1/users/:id/settings",
-        	"resource": "users",
-        	"resource_name": "Users"
-		},
-		{
-        	"controller": "course_nicknames",
-        	"action": "show",
-        	"verb": "GET",
-        	"path": "/api/v1/users/self/course_nicknames/:course_id",
-        	"scope": "url:GET|/api/v1/users/self/course_nicknames/:course_id",
-        	"resource": "users",
-        	"resource_name": "Users"
-		}
-	],
-	"status_code": 200
+		"method": "GET",
+		"endpoint": "accounts/1/scopes",
+		"data": [
+			{
+				"controller": "users",
+				"action": "settings",
+				"verb": "PUT",
+				"path": "/api/v1/users/:id/settings",
+				"scope": "url:PUT|/api/v1/users/:id/settings",
+				"resource": "users",
+				"resource_name": "Users"
+			},
+			{
+				"controller": "course_nicknames",
+				"action": "show",
+				"verb": "GET",
+				"path": "/api/v1/users/self/course_nicknames/:course_id",
+				"scope": "url:GET|/api/v1/users/self/course_nicknames/:course_id",
+				"resource": "users",
+				"resource_name": "Users"
+			}
+		],
+		"status_code": 200
 	},
 	"create_content_migration": {
 		"method": "POST",
@@ -1663,8 +1781,7 @@
 	"abort_sis_imports_pending_blank": {
 		"method": "PUT",
 		"endpoint": "accounts/1/sis_imports/abort_all_pending",
-		"data": {
-		},
+		"data": {},
 		"status_code": 200
 	},
 	"create_admin": {
@@ -1685,6 +1802,26 @@
 				"login_id": "jdoe"
 			},
 			"workflow_state": "active"
+		}
+	},
+	"delete_admin": {
+		"method": "DELETE",
+		"endpoint": "accounts/1/admins/123",
+		"data": {
+			"id": 100,
+			"role": "AccountAdmin",
+			"role_id": 1,
+			"user": {
+				"id": 123,
+				"name": "John Doe",
+				"sortable_name": "John Doe",
+				"short_name": "J Doe",
+				"sis_user_id": null,
+				"integration_id": null,
+				"sis_import_id": null,
+				"login_id": "jdoe"
+			},
+			"workflow_state": "deleted"
 		}
 	},
 	"get_features": {
@@ -1708,16 +1845,8 @@
 		"method": "GET",
 		"endpoint": "accounts/1/features/enabled",
 		"data": [
-			{
-				"name": "feature_one",
-				"display_name": "Feature One",
-				"applies_to": "Account"
-			},
-			{
-				"name": "feature_two",
-				"display_name": "Feature Two",
-				"applies_to": "Account"
-			}
+			"feature_one",
+			"feature_two"
 		],
 		"status_code": 200
 	},

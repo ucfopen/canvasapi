@@ -481,3 +481,28 @@ class TestOutcomeGroup(unittest.TestCase):
         self.assertEqual(
             result_by_obj.parent_outcome_group["title"], self.course_outcome_group.title
         )
+
+
+@requests_mock.Mocker()
+class TestOutcomeResult(unittest.TestCase):
+    def setUp(self):
+        self.canvas = Canvas(settings.BASE_URL, settings.API_KEY)
+
+        with requests_mock.Mocker() as m:
+            register_uris(
+                {
+                    "course": ["get_by_id"],
+                    "outcome": ["outcome_example", "outcome_result_example"],
+                },
+                m,
+            )
+
+            self.course = self.canvas.get_course(1)
+            self.course_outcome_results = self.course.get_outcome_results()
+            self.outcome_result_example = self.course_outcome_results[0]
+            # self.example_outcome = self.course_outcome_links[0].get_outcome()
+
+    # __str__()
+    def test__str__(self, m):
+        string = str(self.outcome_result_example)
+        self.assertIsInstance(string, str)

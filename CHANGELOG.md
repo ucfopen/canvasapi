@@ -2,6 +2,93 @@
 
 ## [Unreleased]
 
+## [3.2.0] - 2023-05-25
+
+### New Endpoint Coverage
+
+- New Quizzes
+- Delete Page in Groups (Thanks, [@Caitlin-Fabian](https://github.com/Caitlin-Fabian))
+
+### General
+
+- Added support for pagination with metadata when headers are missing (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Added support for Python 3.11
+
+### Bugfixes
+
+- Fixed an issue where `Course.create_discussion_topic` wouldn't accept attachment files.
+
+## [3.1.0] - 2023-04-21
+
+### New Endpoint Coverage
+
+- Account Calendars (Thanks, [@dmols](https://github.com/dmols))
+  - List available account calendars
+  - Get a single account calendar
+  - Update a calendar's visibility
+  - Update many calendars' visibility
+  - List all account calendars
+- Enrollments (Thanks, [@svanderwulp](https://github.com/svanderwulp))
+  - Accept Course Invitation
+  - Reject Course Invitation
+- File (Thanks, [@bennettscience](https://github.com/bennettscience))
+  - Update File
+- JWTs (Thanks [@dmols](https://github.com/dmols))
+  - Create JWTs
+  - Refresh JWTs
+- Moderation Grading (Moderation Set)
+  - List students selected for moderation
+  - Select students for moderation
+- Query Course Events (Thanks, [@dmols](https://github.com/dmols))
+  - Query by course
+  - Query by account
+- Rubrics (Thanks, [@bennettscience](https://github.com/bennettscience))
+  - Create, Update, and Delete Rubric Assessments
+  - Create a Rubric Association
+- Users
+  - Terminate all user sessions (Thanks, [@lucas-salas](https://github.com/lucas-salas))
+
+### General
+
+- Updated Codecov action to v3
+
+### Bugfixes
+
+- Fixed an issue where kwargs were not passed along to Canvas in `Course.get_module()`. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Fixed an issue where not all functions allowed arbitrary keyword arguments. Added a test to detect and prevent this for the future.
+- Fixed an issue with `Course.get_enabled_features()` where it would throw an error trying to paginate. It now returns a list of strings directly. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Added missing docs for `AssignmentOverride`. (Thanks, [@lafent](https://github.com/lafent))
+- Fixed a typo in `Canvas.create_calendar_event()` where an error message improperly listed the missing key as 'context_codes' instead of 'context_code'. (Thanks, [@dmols](https://github.com/dmols) and [@mikesuhan](https://github.com/mikesuhan))
+
+## [3.0.0] - 2022-09-21
+
+### New Endpoint Coverage
+
+- Delete a Rubric (Thanks, [@ggarfink](https://github.com/ggarfink))
+- Grade Change Log for Assignments, Courses, and Users (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+- Content Migrations: List items for selective import (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+- List observers of a User (Thanks, [@bennettscience](https://github.com/bennettscience))
+- ePortfolio endpoints (Thanks, [@Birdmaaan4](https://github.com/Birdmaaan4) and [@bennettscience](https://github.com/bennettscience))
+- Delete an Admin from an Account (Thanks, [@shaneros](https://github.com/shaneros))
+
+### General
+
+- Added support for Python 3.10
+- Smart DateTimes now support any ISO 8601 format, including time offsets. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+
+### Bugfixes
+
+- Fixed an issue where kwargs were not passed along to Canvas in `User.get_profile()`. (Thanks, [@breed](https://github.com/breed))
+
+### Breaking Changes
+
+- Dropped support for Python 3.6
+- Update `QuizSubmission.get_submission_events` to return a `PaginatedList`. (Thanks, [@stevenbell](https://github.com/stevenbell))
+- Update `Course.get_course_level_student_summary_data` to return a `PaginatedList` of `CourseStudentSummary` items instead of a dictionary. (Thanks, [@craigdsthompson](https://github.com/craigdsthompson))
+- Update `Course.get_outcome_results` to return a `PaginatedList` of `OutcomeResult` items instead of a dictionary. (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Remove unnecessary `id` parameter from `delete`, `reorder_question_group`, and `update` methods in `QuizGroup` class. (Thanks, [@kailukaitisBrendan](https://github.com/kailukaitisBrendan))
+- Update `Submission` to return attachments as `File` objects instead of dictionaries. (Thanks, [@laitingsheng](https://github.com/laitingsheng))
+
 ## [2.2.0] - 2021-03-25
 
 ### New Endpoint Coverage
@@ -59,11 +146,11 @@
 
 - Custom Gradebook Columns (Thanks,[@aileenpongnon](https://github.com/aileenpongnon))
 - Files
-    - Resolve Path (Thanks,[@dsavransky](https://github.com/dsavransky))
+  - Resolve Path (Thanks,[@dsavransky](https://github.com/dsavransky))
 
 ### Bugfixes
 
-- Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID.  (Thanks,[@hcolclou](https://github.com/hcolclou))
+- Fixed an issue where `Quiz.get_quiz_group` incorrectly set `course_id` to the quiz ID. (Thanks,[@hcolclou](https://github.com/hcolclou))
 - Fixed an issue where `Course.create_external_tool` didn't accept `client_id` (LTI 1.3 support).
 - Fixed an issue where `Module.create_module_item` didn't (Thanks,[@aileenpongnon](https://github.com/aileenpongnon) and [@onomou](https://github.com/onomou))
 - Fixed an issue where `Page.revert_to_revision` would incorrectly always set `group_id` to the page ID. Now correctly sets `group_id` or `course_id` appropriately.
@@ -99,9 +186,9 @@
 ### New Endpoint Coverage
 
 - Enrollment Terms
-    - Get a Single Enrollment Term (Thanks, [@lcamacho](https://github.com/lcamacho))
+  - Get a Single Enrollment Term (Thanks, [@lcamacho](https://github.com/lcamacho))
 - Files
-    - Resolve Path for Course (Thanks,[@dsavransky](https://github.com/dsavransky))
+  - Resolve Path for Course (Thanks,[@dsavransky](https://github.com/dsavransky))
 - GraphQL (Thanks,[@jonespm](https://github.com/jonespm))
 - Late Policy (Thanks, [@kennygperez](https://github.com/kennygperez))
 - Quiz Assignment Overrides (Thanks, [@kennygperez](https://github.com/kennygperez))
@@ -114,11 +201,11 @@
 ### Deprecation Warnings
 
 - :warning: **_This is the final release with support for Python 2.7_** :warning:
-    - [Python 2.7 is end-of-life as of January 2020](https://www.python.org/doc/sunset-python-2/)
-    - Future releases of CanvasAPI will *NOT* support any version of Python 2
+  - [Python 2.7 is end-of-life as of January 2020](https://www.python.org/doc/sunset-python-2/)
+  - Future releases of CanvasAPI will _NOT_ support any version of Python 2
 - :warning: **_This is the final release with support for Python 3.4_** :warning:
-    - [Python 3.4 is end-of-life as of March 2019](https://www.python.org/downloads/release/python-3410/)
-    - Future releases of CanvasAPI will *NOT* support Python 3.4 or below
+  - [Python 3.4 is end-of-life as of March 2019](https://www.python.org/downloads/release/python-3410/)
+  - Future releases of CanvasAPI will _NOT_ support Python 3.4 or below
 - This is the final deprecation warning for all methods marked as deprecated in this changelog or in our documentation. They will be removed in the next release.
 
 ### Bugfixes
@@ -137,7 +224,7 @@
 
 - Assignment Extensions (Thanks, [@ljoks](https://github.com/ljoks))
 - AssignmentGroup (Thanks, [@ctcuff](https://github.com/ctcuff))
-    - List Assignments
+  - List Assignments
 - Authentications Log (Thanks, [@weining-li](https://github.com/weining-li))
 - Brand Configs (Thanks, [@bennettscience](https://github.com/bennettscience))
 - Comm Messages (Thanks, [@ljoks](https://github.com/ljoks))
@@ -171,30 +258,30 @@
 ### New Endpoint Coverage
 
 - API Token scopes (Thanks, [@jrsilveti](https://github.com/jrsilveti))
-    - List scopes
+  - List scopes
 - Account Notifications (Thanks, [@jrsilveti](https://github.com/jrsilveti))
-    - Show a global notification
-    - Update a global notification
+  - Show a global notification
+  - Update a global notification
 - Account Reports (Thanks, [@jrsilveti](https://github.com/jrsilveti))
-    - Start a report
-    - Status of a report
-    - Delete a report
+  - Start a report
+  - Status of a report
+  - Delete a report
 - Collaborations (Thanks, [@jrsilveti](https://github.com/jrsilveti))
-    - List collaborations
-    - List members of a collaboration
+  - List collaborations
+  - List members of a collaboration
 - Feature Flags (Thanks, [@cat0698](https://github.com/cat0698))
-    - List features
-    - List enabled features
-    - Get feature flag
-    - Set feature flag
-    - Remove feature flag
+  - List features
+  - List enabled features
+  - Get feature flag
+  - Set feature flag
+  - Remove feature flag
 - Rubric (Thanks, [@cat0698](https://github.com/cat0698))
-    - Create a single rubric
+  - Create a single rubric
 
 ### General
 
 - Removed overzealous global enabling of `DeprecationWarning`. (Thanks, [@Screeeech](https://github.com/Screeeech))
-    - *Note:* `DeprecationWarnings` are disabled by default, so you may need to run your code with `python -Wd` to see them.
+  - _Note:_ `DeprecationWarnings` are disabled by default, so you may need to run your code with `python -Wd` to see them.
 
 ## [0.13.0] - 2019-07-08
 
@@ -207,14 +294,14 @@
 - Outcome Import (Thanks, [@jrsilveti](https://github.com/jrsilveti))
 - Peer Reviews (Thanks, [@vutoan1245](https://github.com/vutoan1245))
 - Planner (Thanks, [@weining-li](https://github.com/weining-li))
-    - Planner
-    - Planner Notes
-    - Planner Overrides
+  - Planner
+  - Planner Notes
+  - Planner Overrides
 - Polls (Thanks, [@Goff-Davis](https://github.com/Goff-Davis))
-    - Poll
-    - PollChoice
-    - PollSession
-    - PollSubmission
+  - Poll
+  - PollChoice
+  - PollSession
+  - PollSubmission
 - Quiz Submission Questions (Thanks, [@bradfordlynch](https://github.com/bradfordlynch))
 
 ### General
@@ -320,12 +407,12 @@
 ### Deprecation Warnings
 
 - :warning: **_Dropped support for Python 3.3_** :warning:
-    - [Python 3.3 is end-of-life as of September 2017](https://www.python.org/dev/peps/pep-0398/#lifespan)
-    - Should continue to function in 3.3, but compatibility cannot be guaranteed going forward.
+  - [Python 3.3 is end-of-life as of September 2017](https://www.python.org/dev/peps/pep-0398/#lifespan)
+  - Should continue to function in 3.3, but compatibility cannot be guaranteed going forward.
 - Several methods in the `Course` and `Section` classes relating to assignments and submissions have been deprecated.
-    - Comparable methods have been implemented in the `Assignment` and `Submission` classes, as appropriate.
-    - The deprecated methods now include a warning in the documentation with reference to the replacement. Additionally, the deprecated methods will raise a `DeprecationWarning`.
-    - These methods will be removed in a future release.
+  - Comparable methods have been implemented in the `Assignment` and `Submission` classes, as appropriate.
+  - The deprecated methods now include a warning in the documentation with reference to the replacement. Additionally, the deprecated methods will raise a `DeprecationWarning`.
+  - These methods will be removed in a future release.
 - `Course.list_sections()` has been deprecated. Use `Course.get_sections()` instead.
 
 ### Bugfixes
@@ -356,12 +443,12 @@
 ### New Endpoint Coverage
 
 - Account
-    - Delete a sub account
+  - Delete a sub account
 - Grading Standards (Thanks, [@JonGuilbe](https://github.com/JonGuilbe))
 - Notification Preferences (Thanks, [@a-goetz](https://github.com/a-goetz))
-    - Update a preference
-    - Update preferences by category
-    - Update multiple preferences
+  - Update a preference
+  - Update preferences by category
+  - Update multiple preferences
 - Outcomes (Thanks, [@a-goetz](https://github.com/a-goetz))
 - Quiz Question Groups (Thanks, [@JonGuilbe](https://github.com/JonGuilbe))
 - Rubric (Thanks, [@sigurdurb](https://github.com/sigurdurb))
@@ -372,8 +459,8 @@
 - For many endpoints that accept an "object id", either a CanvasAPI Object or integer ID can now be passed. (Thanks, [@a-goetz](https://github.com/a-goetz))
 - Added a requester cache that remembers the last 5 requests to Canvas. It can be accessed as the attribute `_cache` of the `requester object`. (e.g. `course._requester._cache`)
 - Files can now be downloaded directly from the `File` object in one of two ways: (Thanks, [@DanBrink91](https://github.com/DanBrink91))
-    1. `get_contents` will directly return the contents of the file. (e.g. `file.get_contents()`)
-    2. `download` will download the file and save it to the provided path. (e.g. `file.download('example.txt')`)
+  1. `get_contents` will directly return the contents of the file. (e.g. `file.get_contents()`)
+  2. `download` will download the file and save it to the provided path. (e.g. `file.download('example.txt')`)
 - Moved several methods exclusive to the API Key owner's user from the `User` class to a new class called `CurrentUser`. There is a new method in the `Canvas` class called `get_current_user` to access this object. (e.g. `canvas.get_current_user()`) (Thanks, [@DanBrink91](https://github.com/DanBrink91))
 
 ### Bugfixes
@@ -524,9 +611,9 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Added contribution guide
 - Added Docker container for testing (e.g. with Jenkins)
 - Split requirements files into three:
-    - dev_requirements.txt
-    - tests_requirements.txt
-    - requirements.txt
+  - dev_requirements.txt
+  - tests_requirements.txt
+  - requirements.txt
 
 ### Bugfixes
 
@@ -534,7 +621,10 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.2.0...develop
+[3.2.0]: https://github.com/ucfopen/canvasapi/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/ucfopen/canvasapi/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/ucfopen/canvasapi/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/ucfopen/canvasapi/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/ucfopen/canvasapi/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ucfopen/canvasapi/compare/v1.0.0...v2.0.0

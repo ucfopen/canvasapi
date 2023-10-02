@@ -183,16 +183,16 @@
 		"status_code": 200
 	},
 	"create_folder": {
-        "method": "POST",
-        "endpoint": "users/1/folders",
-        "data": {
-            "id": 2,
-            "name": "Test String",
-            "locked": false,
-            "hidden": false
-        },
-        "status_code": 200
-    },
+		"method": "POST",
+		"endpoint": "users/1/folders",
+		"data": {
+			"id": 2,
+			"name": "Test String",
+			"locked": false,
+			"hidden": false
+		},
+		"status_code": 200
+	},
 	"edit": {
 		"method": "PUT",
 		"endpoint": "users/1",
@@ -243,39 +243,39 @@
 			"size": 1024
 		},
 		"status_code": 200
-    },
-    "get_file_quota": {
-        "method": "GET",
-        "endpoint": "users/1/files/quota",
-        "data": {
-            "quota": 889234510,
-            "quota_used": 476231098
-        },
-        "status_code": 200
-    },
+	},
+	"get_file_quota": {
+		"method": "GET",
+		"endpoint": "users/1/files/quota",
+		"data": {
+			"quota": 889234510,
+			"quota_used": 476231098
+		},
+		"status_code": 200
+	},
 	"get_folder": {
-        "method": "GET",
-        "endpoint": "users/1/folders/1",
-        "data": {
-            "id": 1,
-            "files_count": 10,
-            "folders_count": 2,
-            "name": "Folder 1",
-            "full_name": "Folder 1"
-        },
-        "status_code": 200
-    },
+		"method": "GET",
+		"endpoint": "users/1/folders/1",
+		"data": {
+			"id": 1,
+			"files_count": 10,
+			"folders_count": 2,
+			"name": "Folder 1",
+			"full_name": "Folder 1"
+		},
+		"status_code": 200
+	},
 	"get_folder_2": {
-        "method": "GET",
-        "endpoint": "users/1/folders/2",
-        "data": {
-            "id": 2,
-            "files_count": 10,
-            "folders_count": 2,
-            "name": "Folder 2",
-            "full_name": "Folder 1"
-        },
-        "status_code": 200
+		"method": "GET",
+		"endpoint": "users/1/folders/2",
+		"data": {
+			"id": 2,
+			"files_count": 10,
+			"folders_count": 2,
+			"name": "Folder 2",
+			"full_name": "Folder 1"
+		},
+		"status_code": 200
 	},
 	"observer_pairing_codes": {
 		"method": "POST",
@@ -479,26 +479,26 @@
 		"status_code": 200
 	},
 	"list_folders": {
-        "method": "GET",
-        "endpoint": "users/1/folders",
-        "data": [
-            {
-                "id": 2,
-                "files_count": 0,
-                "folders_count": 0,
-                "name": "Folder 2",
-                "full_name": "user_files/Folder 2"
-            },
-            {
-                "id": 3,
-                "files_count": 0,
-                "folders_count": 0,
-                "name": "Folder 3",
-                "full_name": "user_files/Folder 3"
-            }
-        ],
-        "status_code": 200
-    },
+		"method": "GET",
+		"endpoint": "users/1/folders",
+		"data": [
+			{
+				"id": 2,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder 2",
+				"full_name": "user_files/Folder 2"
+			},
+			{
+				"id": 3,
+				"files_count": 0,
+				"folders_count": 0,
+				"name": "Folder 3",
+				"full_name": "user_files/Folder 3"
+			}
+		],
+		"status_code": 200
+	},
 	"merge": {
 		"method": "PUT",
 		"endpoint": "users/1/merge_into/2",
@@ -543,6 +543,24 @@
 			}
 		],
 		"status_code": 200
+	},
+	"moderate_user_eportfolios": {
+		"method": "PUT",
+		"endpoint": "users/1/eportfolios",
+		"data": [
+			{
+				"name": "ePortfolio 1",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z",
+				"spam_status": "marked_as_spam"
+			},
+			{
+				"name": "ePortfolio 2",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z",
+				"spam_status": "marked_as_spam"
+			}
+		]
 	},
 	"page_views": {
 		"method": "GET",
@@ -735,6 +753,21 @@
 		],
 		"status_code": 200
 	},
+	"list_observers": {
+		"method": "GET",
+		"endpoint": "users/1/observers",
+		"data": [
+			{
+				"id": 3,
+				"name": "User 3"
+			},
+			{
+				"id": 4,
+				"name": "User 4"
+			}
+		],
+		"status_code": 200
+	},
 	"add_observee_with_credentials": {
 		"method": "POST",
 		"endpoint": "users/1/observees",
@@ -771,18 +804,22 @@
 		"method": "GET",
 		"endpoint": "search/recipients",
 		"data": [
-  			{
-  				"id": "group_1",
-  				"name": "the group",
-  				"type": "context",
-  				"user_count": 3
-  			},
-  			{
-  				"id": 2,
-  				"name": "greg",
-  				"common_courses": {},
-  				"common_groups": {"1": ["Member"]}
-  			}
+			{
+				"id": "group_1",
+				"name": "the group",
+				"type": "context",
+				"user_count": 3
+			},
+			{
+				"id": 2,
+				"name": "greg",
+				"common_courses": {},
+				"common_groups": {
+					"1": [
+						"Member"
+					]
+				}
+			}
 		],
 		"status_code": 200
 	},
@@ -822,6 +859,172 @@
 				"migration_type_title": "Dummy Importer"
 			}
 		],
+		"status_code": 200
+	},
+	"get_grade_change_events_for_student": {
+		"method": "GET",
+		"endpoint": "audit/grade_change/students/1",
+		"data": {
+			"links": {
+				"events.assignment": "https://canvas.com/api/v1/assignment/test",
+				"events.course": "https://canvas.com/api/v1/assignment/course",
+				"events.student": {
+					"href": null,
+					"type": "user"
+				},
+				"events.grader": {
+					"href": null,
+					"type": "user"
+				},
+				"events.page_view": null
+			},
+			"events": [
+				{
+					"id": "dd5-6a",
+					"event_type": "grade_change",
+					"grade_before": "5",
+					"grade_after": "2",
+					"version_number": 2,
+					"links": {
+						"assignment": 10,
+						"course": 1,
+						"student": 100,
+						"grader": 200,
+						"page_view": null
+					}
+				},
+				{
+					"id": "fg-43",
+					"created_at": "2019-10-25T14:08:46Z",
+					"event_type": "grade_change",
+					"grade_before": null,
+					"grade_after": "5",
+					"version_number": 1,
+					"links": {
+						"assignment": 10,
+						"course": 1,
+						"student": 100,
+						"grader": 200,
+						"page_view": null
+					}
+				}
+			],
+			"linked": {
+				"page_views": [],
+				"assignments": [
+					{
+						"id": 10,
+						"description": "This is a test assignment",
+						"points_possible": 10.0,
+						"grading_type": "points",
+						"course_id": 1,
+						"name": "Test assignment",
+						"submission_types": [
+							"online_text_entry"
+						]
+					}
+				],
+				"courses": [
+					{
+						"id": 10,
+						"name": "Dev Course"
+					}
+				],
+				"users": [
+					{
+						"id": 100,
+						"name": "John Smith"
+					},
+					{
+						"id": 200,
+						"name": "Billy Smith"
+					}
+				]
+			}
+		},
+		"status_code": 200
+	},
+	"get_grade_change_events_for_grader": {
+		"method": "GET",
+		"endpoint": "audit/grade_change/graders/1",
+		"data": {
+			"links": {
+				"events.assignment": "https://canvas.com/api/v1/assignment/test",
+				"events.course": "https://canvas.com/api/v1/assignment/course",
+				"events.student": {
+					"href": null,
+					"type": "user"
+				},
+				"events.grader": {
+					"href": null,
+					"type": "user"
+				},
+				"events.page_view": null
+			},
+			"events": [
+				{
+					"id": "dd5-6a",
+					"event_type": "grade_change",
+					"grade_before": "5",
+					"grade_after": "2",
+					"version_number": 2,
+					"links": {
+						"assignment": 10,
+						"course": 1,
+						"student": 100,
+						"grader": 200,
+						"page_view": null
+					}
+				},
+				{
+					"id": "fg-43",
+					"created_at": "2019-10-25T14:08:46Z",
+					"event_type": "grade_change",
+					"grade_before": null,
+					"grade_after": "5",
+					"version_number": 1,
+					"links": {
+						"assignment": 10,
+						"course": 1,
+						"student": 100,
+						"grader": 200,
+						"page_view": null
+					}
+				}
+			],
+			"linked": {
+				"page_views": [],
+				"assignments": [
+					{
+						"id": 10,
+						"description": "This is a test assignment",
+						"points_possible": 10.0,
+						"grading_type": "points",
+						"course_id": 1,
+						"name": "Test assignment",
+						"submission_types": [
+							"online_text_entry"
+						]
+					}
+				],
+				"courses": [
+					{
+						"id": 10,
+						"name": "Dev Course"
+					}
+				],
+				"users": [
+					{
+						"id": 100,
+						"name": "John Smith"
+					},
+					{
+						"id": 200,
+						"name": "Billy Smith"
+					}
+				]
+			}
+		},
 		"status_code": 200
 	},
 	"get_migration_systems_multiple": {
@@ -878,6 +1081,44 @@
 		},
 		"status_code": 200
 	},
+	"get_eportfolios": {
+		"method": "GET",
+		"endpoint": "users/1/eportfolios",
+		"data": [
+			{
+				"name": "ePortfolio 1",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z"
+			},
+			{
+				"name": "ePortfolio 2",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z"
+			}
+		]
+	},
+	"get_eportfolios_include_deleted": {
+		"method": "GET",
+		"endpoint": "users/1/eportfolios",
+		"data": [
+			{
+				"name": "ePortfolio 1",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z"
+			},
+			{
+				"name": "ePortfolio 2",
+				"workflow_state": "active",
+				"created_at": "2022-07-05T21:00:00Z"
+			},
+			{
+				"name": "ePortfolio 3",
+				"workflow_state": "deleted",
+				"created_at": "2022-07-05T21:00:00Z",
+				"deleted_at": "2022-07-06T18:00:00Z"
+			}
+		]
+	},
 	"get_features": {
 		"method": "GET",
 		"endpoint": "users/1/features",
@@ -899,16 +1140,8 @@
 		"method": "GET",
 		"endpoint": "users/1/features/enabled",
 		"data": [
-			{
-				"name": "feature_one",
-				"display_name": "Feature One",
-				"applies_to": "User"
-			},
-			{
-				"name": "feature_two",
-				"display_name": "Feature Two",
-				"applies_to": "User"
-			}
+			"feature_one",
+			"feature_two"
 		],
 		"status_code": 200
 	},
@@ -963,7 +1196,10 @@
 			"use_justification": "fair_use",
 			"license": "private",
 			"message": "2 files updated",
-			"file_ids": [1,2]
+			"file_ids": [
+				1,
+				2
+			]
 		},
 		"status_code": 200
 	},
@@ -972,7 +1208,10 @@
 		"endpoint": "users/1/usage_rights",
 		"data": {
 			"message": "2 files updated",
-			"file_ids": [1,2]
+			"file_ids": [
+				1,
+				2
+			]
 		},
 		"status_code": 200
 	},
@@ -993,11 +1232,11 @@
 		],
 		"status_code": 200
 	},
-    "resolve_path": {
+	"resolve_path": {
 		"method": "GET",
 		"endpoint": "users/1/folders/by_path/Folder_Level_1/Folder_Level_2/Folder_Level_3",
 		"data": [
-            {
+			{
 				"id": 2,
 				"files_count": 0,
 				"folders_count": 1,
@@ -1028,18 +1267,24 @@
 		],
 		"status_code": 200
 	},
-    "resolve_path_null": {
+	"resolve_path_null": {
 		"method": "GET",
 		"endpoint": "users/1/folders/by_path",
 		"data": [
-            {
+			{
 				"id": 2,
 				"files_count": 0,
 				"folders_count": 1,
 				"name": "my_files",
 				"full_name": "my_files"
 			}
-        ],
+		],
+		"status_code": 200
+	},
+	"terminate_sessions": {
+		"method": "DELETE",
+		"endpoint": "users/1/sessions",
+		"data": "ok",
 		"status_code": 200
 	}
 }

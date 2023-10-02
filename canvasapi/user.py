@@ -1,9 +1,15 @@
+from canvasapi.authentication_event import AuthenticationEvent
+from canvasapi.avatar import Avatar
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.communication_channel import CommunicationChannel
+from canvasapi.content_export import ContentExport
+from canvasapi.content_migration import ContentMigration, Migrator
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.folder import Folder
+from canvasapi.grade_change_log import GradeChangeEvent
 from canvasapi.license import License
+from canvasapi.page_view import PageView
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.pairing_code import PairingCode
 from canvasapi.upload import FileOrPathLike, Uploader
@@ -24,7 +30,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(
@@ -80,8 +86,6 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.content_migration.ContentMigration`
         """
-        from canvasapi.content_migration import ContentMigration, Migrator
-
         if isinstance(migration_type, Migrator):
             kwargs["migration_type"] = migration_type.type
         elif isinstance(migration_type, str):
@@ -164,8 +168,6 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         kwargs["export_type"] = export_type
 
         response = self._requester.request(
@@ -212,8 +214,6 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.authentication_event.AuthenticationEvent`
         """
-        from canvasapi.authentication_event import AuthenticationEvent
-
         return PaginatedList(
             AuthenticationEvent,
             self._requester,
@@ -232,8 +232,6 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.avatar.Avatar`
         """
-        from canvasapi.avatar import Avatar
-
         return PaginatedList(
             Avatar,
             self._requester,
@@ -348,8 +346,6 @@ class User(CanvasObject):
 
         :rtype: :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         export_id = obj_or_id(content_export, "content_export", (ContentExport,))
 
         response = self._requester.request(
@@ -370,8 +366,6 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.content_export.ContentExport`
         """
-        from canvasapi.content_export import ContentExport
-
         return PaginatedList(
             ContentExport,
             self._requester,
@@ -457,17 +451,15 @@ class User(CanvasObject):
         :calls: `GET /api/v1/users/:user_id/features/enabled \
         <https://canvas.instructure.com/doc/api/feature_flags.html#method.feature_flags.enabled_features>`_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
-            :class:`canvasapi.feature.Feature`
+        :rtype: `list` of `str`
         """
-        return PaginatedList(
-            Feature,
-            self._requester,
+        response = self._requester.request(
             "GET",
             "users/{}/features/enabled".format(self.id),
-            {"user_id": self.id},
             _kwargs=combine_kwargs(**kwargs),
         )
+
+        return response.json()
 
     def get_enrollments(self, **kwargs):
         """
@@ -486,6 +478,25 @@ class User(CanvasObject):
             self._requester,
             "GET",
             "users/{}/enrollments".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_eportfolios(self, **kwargs):
+        """
+        Returns a list of ePortfolios for a user.
+
+        :calls: `GET /api/v1/users/:user_id/eportfolios \
+            <https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.index>`_
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.eportfolio.EPortfolio`
+        """
+        from canvasapi.eportfolio import EPortfolio
+
+        return PaginatedList(
+            EPortfolio,
+            self._requester,
+            "GET",
+            "users/{}/eportfolios".format(self.id),
             _kwargs=combine_kwargs(**kwargs),
         )
 
@@ -632,6 +643,45 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_grade_change_events_for_grader(self, **kwargs):
+        """
+        Returns the grade change events for a grader.
+
+        :calls: `/api/v1/audit/grade_change/graders/:grader_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_grader>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
+        """
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/graders/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+    def get_grade_change_events_for_student(self, **kwargs):
+        """
+        Returns the grade change events for the current student.
+
+        :calls: `/api/v1/audit/grade_change/students/:student_id \
+        <https://canvas.instructure.com/doc/api/grade_change_log.html#method.grade_change_audit_api.for_student>`_
+
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.grade_change_log.GradeChangeEvent`
+        """
+        return PaginatedList(
+            GradeChangeEvent,
+            self._requester,
+            "GET",
+            "audit/grade_change/students/{}".format(self.id),
+            _root="events",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_licenses(self, **kwargs):
         """
         Returns a paginated list of the licenses that can be applied to the
@@ -712,6 +762,25 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_observers(self, **kwargs):
+        """
+        List the users that are observing the given user.
+
+        :calls:  `GET /api/v1/users/:user_id/observers \
+        <https://canvas.instructure.com/doc/api/user_observees.html#method.user_observees.observers>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.user.User`
+        """
+
+        return PaginatedList(
+            User,
+            self._requester,
+            "GET",
+            "users/{}/observers".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_open_poll_sessions(self, **kwargs):
         """
         Returns a paginated list of all opened poll sessions available to the current user.
@@ -743,8 +812,6 @@ class User(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.course.PageView`
         """
-        from canvasapi.page_view import PageView
-
         return PaginatedList(
             PageView,
             self._requester,
@@ -762,7 +829,9 @@ class User(CanvasObject):
 
         :rtype: dict
         """
-        response = self._requester.request("GET", "users/{}/profile".format(self.id))
+        response = self._requester.request(
+            "GET", "users/{}/profile".format(self.id), _kwargs=combine_kwargs(**kwargs)
+        )
         return response.json()
 
     def get_user_logins(self, **kwargs):
@@ -807,6 +876,31 @@ class User(CanvasObject):
         super(User, self).set_attributes(response.json())
         return self
 
+    def moderate_all_eportfolios(self, **kwargs):
+        """
+        Update the spam_status for all active eportfolios of a user.
+        Only available to admins who can moderate_user_content.
+
+        :param eportfolio: The object or ID of the ePortfolio to retrieve.
+        :type eportfolio: :class:`canvasapi.eportfolio.EPortfolio` or int
+
+        :calls: `PUT /api/v1/users/:user_id/eportfolios \
+            <https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.moderate_all>`_
+
+        :returns: A list of all user ePortfolios.
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.eportfolio.EPortfolio`
+        """
+        from canvasapi.eportfolio import EPortfolio
+
+        return PaginatedList(
+            EPortfolio,
+            self._requester,
+            "PUT",
+            "users/{}/eportfolios".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def remove_observee(self, observee_id, **kwargs):
         """
         Unregisters a user as being observed by the given user.
@@ -816,7 +910,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(
@@ -904,7 +998,7 @@ class User(CanvasObject):
 
         :param observee_id: The login id for the user to observe.
         :type observee_id: int
-        :rtype: :class: `canvasapi.user.User`
+        :rtype: :class:`canvasapi.user.User`
         """
 
         response = self._requester.request(
@@ -913,6 +1007,26 @@ class User(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
         return User(self._requester, response.json())
+
+    def terminate_sessions(self, **kwargs):
+        """
+        Terminate all sessions for a user.
+
+        This includes all browser-based sessions and all access tokens,
+        including manually generated ones.
+
+        :calls: `DELETE /api/v1/users/:id/sessions \
+        <https://canvas.instructure.com/doc/api/users.html#method.users.terminate_sessions>`_
+
+        :rtype: str
+        """
+
+        response = self._requester.request(
+            "DELETE",
+            "users/{}/sessions".format(self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return response.json()
 
     def update_color(self, asset_string, hexcode, **kwargs):
         """

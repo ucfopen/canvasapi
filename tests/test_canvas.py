@@ -7,6 +7,7 @@ import requests_mock
 
 from canvasapi import Canvas
 from canvasapi.account import Account
+from canvasapi.account_calendar import AccountCalendar
 from canvasapi.appointment_group import AppointmentGroup
 from canvasapi.calendar_event import CalendarEvent
 from canvasapi.comm_message import CommMessage
@@ -14,9 +15,11 @@ from canvasapi.conversation import Conversation
 from canvasapi.course import Course, CourseNickname
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.eportfolio import EPortfolio
 from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
 from canvasapi.file import File
 from canvasapi.group import Group, GroupCategory
+from canvasapi.jwt import JWT
 from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.poll import Poll
@@ -94,6 +97,47 @@ class TestCanvas(unittest.TestCase):
         self.assertTrue(hasattr(account, "name"))
         self.assertEqual(account.name, name)
 
+    # test token creation
+    def test_create_jwt(self, m):
+        register_uris({"jwt": ["create_jwt"]}, m)
+
+        # verify returned object is of type JWT
+        jwt = self.canvas.create_jwt()
+        self.assertIsInstance(jwt, JWT)
+
+        # check the token is correct and we received the right object
+        self.assertEqual(jwt.token, "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg==")
+
+    # refresh token
+    def test_refresh_jwt_str(self, m):
+        register_uris({"jwt": ["refresh_jwt"]}, m)
+
+        old_token = "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg=="
+        new_token = "O3MzNjpPKWc+fmFfMXRJJiEoR1VbSDVDT1IzUF1IJUpjJ3JSe0lrMHw8OUlX"
+
+        # verify returned object is of type JWT
+        jwt = self.canvas.refresh_jwt(jwt=old_token)
+        self.assertIsInstance(jwt, JWT)
+
+        # check the token is correct and we received the right object
+        self.assertEqual(jwt.token, new_token)
+
+    def test_refresh_jwt_obj(self, m):
+        register_uris({"jwt": ["create_jwt", "refresh_jwt"]}, m)
+
+        old_token = "ZjM0UTZmLyVNSjdqb10wLV9jQSxeUiogXUlCWUs7Tg=="
+        new_token = "O3MzNjpPKWc+fmFfMXRJJiEoR1VbSDVDT1IzUF1IJUpjJ3JSe0lrMHw8OUlX"
+
+        old_jwt = self.canvas.create_jwt()
+        self.assertEqual(old_jwt.token, old_token)
+
+        # verify returned object is of type JWT
+        jwt = self.canvas.refresh_jwt(jwt=old_jwt)
+        self.assertIsInstance(jwt, JWT)
+
+        # check the token is correct and we received the right object
+        self.assertEqual(jwt.token, new_token)
+
     # create_poll()
     def test_create_poll(self, m):
         register_uris({"poll": ["create_poll"]}, m)
@@ -122,6 +166,26 @@ class TestCanvas(unittest.TestCase):
 
         account_by_obj = self.canvas.get_account(account_by_id)
         self.assertIsInstance(account_by_obj, Account)
+
+    # get account calendars
+    def test_get_account_calendars(self, m):
+        register_uris({"account": ["get_account_calendars"]}, m)
+
+        # Convert to list for further testing
+        account_calendars = self.canvas.get_account_calendars()
+        account_calendars_list = list(account_calendars)
+
+        # Check that list contains objects of type AccountCalendar
+        self.assertEqual(len(account_calendars_list), 2)
+        self.assertIsInstance(account_calendars_list[0], AccountCalendar)
+
+        # Verify contents of first object
+        self.assertEqual(account_calendars_list[0].id, 1)
+        self.assertEqual(account_calendars_list[0].name, "CDL")
+
+        # Verify contents of second object
+        self.assertEqual(account_calendars_list[1].id, 2)
+        self.assertEqual(account_calendars_list[1].name, "DDL")
 
     def test_get_account_sis_id(self, m):
         register_uris({"account": ["get_by_sis_id"]}, m)
@@ -779,9 +843,17 @@ class TestCanvas(unittest.TestCase):
         self.assertEqual(announcements[0]._parent_type, "course")
         self.assertEqual(announcements[0]._parent_id, "1")
 
+    # get_eportfolio()
+    def test_get_eportfolio(self, m):
+        register_uris({"eportfolio": ["get_eportfolio_by_id"]}, m)
+
+        eportfolio = self.canvas.get_eportfolio(1)
+
+        self.assertIsInstance(eportfolio, EPortfolio)
+        self.assertEqual(eportfolio.name, "ePortfolio 1")
+
     # get_epub_exports()
     def test_get_epub_exports(self, m):
-
         register_uris({"course": ["get_epub_exports"]}, m)
 
         epub_export_list = self.canvas.get_epub_exports()

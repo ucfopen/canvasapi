@@ -1,15 +1,26 @@
 import warnings
 
 from canvasapi.account import Account
+from canvasapi.account_calendar import AccountCalendar
+from canvasapi.appointment_group import AppointmentGroup
+from canvasapi.calendar_event import CalendarEvent
 from canvasapi.comm_message import CommMessage
-from canvasapi.course import Course
+from canvasapi.conversation import Conversation
+from canvasapi.course import Course, CourseNickname
 from canvasapi.course_epub_export import CourseEpubExport
 from canvasapi.current_user import CurrentUser
+from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.eportfolio import EPortfolio
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.file import File
 from canvasapi.folder import Folder
 from canvasapi.group import Group, GroupCategory
+from canvasapi.jwt import JWT
+from canvasapi.outcome import Outcome, OutcomeGroup
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.planner import PlannerNote, PlannerOverride
+from canvasapi.poll import Poll
+from canvasapi.progress import Progress
 from canvasapi.requester import Requester
 from canvasapi.section import Section
 from canvasapi.todo import Todo
@@ -92,9 +103,6 @@ class Canvas(object):
         :type event: `str`
         :rtype: :class:`canvasapi.progress.Progress`
         """
-
-        from canvasapi.progress import Progress
-
         ALLOWED_EVENTS = [
             "mark_as_read",
             "mark_as_unread",
@@ -205,8 +213,6 @@ class Canvas(object):
         :type title: `str`
         :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
-        from canvasapi.appointment_group import AppointmentGroup
-
         if (
             isinstance(appointment_group, dict)
             and "context_codes" in appointment_group
@@ -242,13 +248,11 @@ class Canvas(object):
         :type calendar_event: `dict`
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
-        from canvasapi.calendar_event import CalendarEvent
-
         if isinstance(calendar_event, dict) and "context_code" in calendar_event:
             kwargs["calendar_event"] = calendar_event
         else:
             raise RequiredFieldMissing(
-                "Dictionary with key 'context_codes' is required."
+                "Dictionary with key 'context_code' is required."
             )
 
         response = self.__requester.request(
@@ -273,8 +277,6 @@ class Canvas(object):
         :type body: `str`
         :rtype: list of :class:`canvasapi.conversation.Conversation`
         """
-        from canvasapi.conversation import Conversation
-
         kwargs["recipients"] = recipients
         kwargs["body"] = body
 
@@ -297,6 +299,21 @@ class Canvas(object):
         )
         return Group(self.__requester, response.json())
 
+    def create_jwt(self, **kwargs):
+        """
+        Creates a unique JWT to use with other Canvas services.
+
+        :calls: `POST /api/v1/jwts \
+        <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.create>`_
+
+        :rtype: list of :class:`canvasapi.jwt.JWT`
+        """
+        response = self.__requester.request(
+            "POST", "jwts", _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return JWT(self.__requester, response.json())
+
     def create_planner_note(self, **kwargs):
         """
         Create a planner note for the current user
@@ -306,8 +323,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.planner.PlannerNote`
         """
-        from canvasapi.planner import PlannerNote
-
         response = self.__requester.request(
             "POST", "planner_notes", _kwargs=combine_kwargs(**kwargs)
         )
@@ -328,8 +343,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.planner.PlannerOverride`
         """
-        from canvasapi.planner import PlannerOverride
-
         if isinstance(plannable_type, str):
             kwargs["plannable_type"] = plannable_type
         else:
@@ -355,8 +368,6 @@ class Canvas(object):
         :type polls: list of dict
         :rtype: :class:`canvasapi.poll.Poll`
         """
-        from canvasapi.poll import Poll
-
         if (
             isinstance(polls, list)
             and isinstance(polls[0], dict)
@@ -399,6 +410,24 @@ class Canvas(object):
             "GET", uri_str.format(account_id), _kwargs=combine_kwargs(**kwargs)
         )
         return Account(self.__requester, response.json())
+
+    def get_account_calendars(self, **kwargs):
+        """
+        Returns a paginated list of account calendars available to the user.
+
+        :calls: `GET /api/v1/account_calendars \
+        <https://canvas.instructure.com/doc/api/account_calendars.html#method.account_calendars_api.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.account_calendar.AccountCalendar`
+        """
+        return PaginatedList(
+            AccountCalendar,
+            self.__requester,
+            "GET",
+            "account_calendars",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def get_accounts(self, **kwargs):
         """
@@ -451,8 +480,6 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
                 :class:`canvasapi.discussion_topic.DiscussionTopic`
         """
-        from canvasapi.discussion_topic import DiscussionTopic
-
         if type(context_codes) is not list or len(context_codes) == 0:
             raise RequiredFieldMissing("context_codes need to be passed as a list")
 
@@ -492,8 +519,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
-        from canvasapi.appointment_group import AppointmentGroup
-
         appointment_group_id = obj_or_id(
             appointment_group, "appointment_group", (AppointmentGroup,)
         )
@@ -515,8 +540,6 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.appointment_group.AppointmentGroup`
         """
-        from canvasapi.appointment_group import AppointmentGroup
-
         return PaginatedList(
             AppointmentGroup,
             self.__requester,
@@ -552,8 +575,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
-        from canvasapi.calendar_event import CalendarEvent
-
         calendar_event_id = obj_or_id(
             calendar_event, "calendar_event", (CalendarEvent,)
         )
@@ -575,8 +596,6 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.calendar_event.CalendarEvent`
         """
-        from canvasapi.calendar_event import CalendarEvent
-
         return PaginatedList(
             CalendarEvent,
             self.__requester,
@@ -623,8 +642,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.conversation.Conversation`
         """
-        from canvasapi.conversation import Conversation
-
         conversation_id = obj_or_id(conversation, "conversation", (Conversation,))
 
         response = self.__requester.request(
@@ -644,8 +661,6 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of \
         :class:`canvasapi.conversation.Conversation`
         """
-        from canvasapi.conversation import Conversation
-
         return PaginatedList(
             Conversation,
             self.__requester,
@@ -715,8 +730,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.course.CourseNickname`
         """
-        from canvasapi.course import CourseNickname
-
         course_id = obj_or_id(course, "course", (Course,))
 
         response = self.__requester.request(
@@ -736,8 +749,6 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.course.CourseNickname`
         """
-        from canvasapi.course import CourseNickname
-
         return PaginatedList(
             CourseNickname,
             self.__requester,
@@ -770,6 +781,27 @@ class Canvas(object):
         :rtype: :class:`canvasapi.current_user.CurrentUser`
         """
         return CurrentUser(self.__requester)
+
+    def get_eportfolio(self, eportfolio, **kwargs):
+        """
+        Get an eportfolio by ID.
+
+        :param eportfolio: The object or ID of the eportfolio to retrieve.
+        :type eportfolio: :class: `canvasapi.eportfolio.EPortfolio` or int
+
+        :calls: `GET /api/v1/eportfolios/:id` \
+            `<https://canvas.instructure.com/doc/api/e_portfolios.html#method.eportfolios_api.show>`_
+
+        :rtype: :class:`canvasapi.eportfolio.EPortfolio`
+        """
+        eportfolio_id = obj_or_id(eportfolio, "eportfolio", (EPortfolio,))
+        response = self.__requester.request(
+            "GET",
+            "eportfolios/{}".format(eportfolio_id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
+        return EPortfolio(self.__requester, response.json())
 
     def get_epub_exports(self, **kwargs):
         """
@@ -892,9 +924,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.group.Group`
         """
-        from canvasapi.appointment_group import AppointmentGroup
-        from canvasapi.group import Group
-
         appointment_group_id = obj_or_id(
             appointment_group, "appointment_group", (AppointmentGroup,)
         )
@@ -920,8 +949,6 @@ class Canvas(object):
         :returns: An Outcome object.
         :rtype: :class:`canvasapi.outcome.Outcome`
         """
-        from canvasapi.outcome import Outcome
-
         outcome_id = obj_or_id(outcome, "outcome", (Outcome,))
         response = self.__requester.request(
             "GET", "outcomes/{}".format(outcome_id), _kwargs=combine_kwargs(**kwargs)
@@ -941,8 +968,6 @@ class Canvas(object):
         :returns: An outcome group object.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        from canvasapi.outcome import OutcomeGroup
-
         outcome_group_id = obj_or_id(group, "group", (OutcomeGroup,))
 
         response = self.__requester.request(
@@ -965,8 +990,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.planner.PlannerNote`
         """
-        from canvasapi.planner import PlannerNote
-
         if isinstance(planner_note, int) or isinstance(planner_note, PlannerNote):
             planner_note_id = obj_or_id(planner_note, "planner_note", (PlannerNote,))
         else:
@@ -992,8 +1015,6 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.planner.PlannerNote`
         """
-        from canvasapi.planner import PlannerNote
-
         return PaginatedList(
             PlannerNote,
             self.__requester,
@@ -1014,8 +1035,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.planner.PlannerOverride`
         """
-        from canvasapi.planner import PlannerOverride
-
         if isinstance(planner_override, int) or isinstance(
             planner_override, PlannerOverride
         ):
@@ -1045,8 +1064,6 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.planner.PlannerOverride`
         """
-        from canvasapi.planner import PlannerOverride
-
         return PaginatedList(
             PlannerOverride,
             self.__requester,
@@ -1066,8 +1083,6 @@ class Canvas(object):
         :type poll: int
         :rtype: :class:`canvasapi.poll.Poll`
         """
-        from canvasapi.poll import Poll
-
         poll_id = obj_or_id(poll, "poll", (Poll,))
 
         response = self.__requester.request(
@@ -1085,8 +1100,6 @@ class Canvas(object):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.poll.Poll`
         """
-        from canvasapi.poll import Poll
-
         return PaginatedList(
             Poll,
             self.__requester,
@@ -1108,9 +1121,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.progress.Progress`
         """
-
-        from canvasapi.progress import Progress
-
         progress_id = obj_or_id(progress, "progress", (Progress,))
 
         response = self.__requester.request(
@@ -1128,8 +1138,6 @@ class Canvas(object):
         :returns: The OutcomeGroup of the context.
         :rtype: :class:`canvasapi.outcome.OutcomeGroup`
         """
-        from canvasapi.outcome import OutcomeGroup
-
         response = self.__requester.request(
             "GET", "global/root_outcome_group", _kwargs=combine_kwargs(**kwargs)
         )
@@ -1238,9 +1246,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of :class:`canvasapi.user.User`
         """
-        from canvasapi.appointment_group import AppointmentGroup
-        from canvasapi.user import User
-
         appointment_group_id = obj_or_id(
             appointment_group, "appointment_group", (AppointmentGroup,)
         )
@@ -1280,6 +1285,27 @@ class Canvas(object):
 
         return response.json()
 
+    def refresh_jwt(self, jwt, **kwargs):
+        """
+        Refreshes a JWT for reuse with other canvas services. It generates a
+        different JWT each time it's called; expires after one hour.
+
+        :calls: `POST /api/v1/jwts/refresh \
+        <https://canvas.instructure.com/doc/api/jw_ts.html#method.jwts.refresh>`_
+
+        :param jwt: An existing JWT to refresh.
+        :type jwt: str or :class:`canvasapi.jwt.JWT`
+        :rtype: :class:`canvasapi.jwt.JWT`
+        """
+        if isinstance(jwt, JWT):
+            jwt = jwt.token
+
+        response = self.__requester.request(
+            "POST", "jwts/refresh", jwt=jwt, _kwargs=combine_kwargs(**kwargs)
+        )
+
+        return JWT(self.__requester, response.json())
+
     def reserve_time_slot(self, calendar_event, participant_id=None, **kwargs):
         """
         Return single Calendar Event by id
@@ -1295,8 +1321,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.calendar_event.CalendarEvent`
         """
-        from canvasapi.calendar_event import CalendarEvent
-
         calendar_event_id = obj_or_id(
             calendar_event, "calendar_event", (CalendarEvent,)
         )
@@ -1378,8 +1402,6 @@ class Canvas(object):
 
         :rtype: :class:`canvasapi.course.CourseNickname`
         """
-        from canvasapi.course import CourseNickname
-
         course_id = obj_or_id(course, "course", (Course,))
 
         kwargs["nickname"] = nickname

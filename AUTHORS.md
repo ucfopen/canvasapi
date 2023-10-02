@@ -1,14 +1,17 @@
-Authors
-=======
+# Authors
 
-Development Lead
-----------------
+## Original Authors
 
 - Matthew Emond <me@ucf.edu> [@Thetwam](https://github.com/Thetwam)
 - Jesse McBride <jm@ucf.edu> [@jessemcbride](https://github.com/jessemcbride)
 
-Patches and Suggestions
------------------------
+## Maintainers
+
+- Matthew Emond [@Thetwam](https://github.com/Thetwam) (Lead)
+- Brian Bennett [@bennettscience](https://github.com/bennettscience)
+- Matthew Jones [@jonespm](https://github.com/jonespm)
+
+## Patches and Suggestions
 
 - Abrahan Nevarez [@zenith110](https://github.com/zenith110)
 - Adrian Goetz [@a-goetz](https://github.com/a-goetz)
@@ -19,17 +22,21 @@ Patches and Suggestions
 - Anthony Rodriguez [@AnthonyRodriguez726](https://github.com/AnthonyRodriguez726)
 - Ashutosh Saxena [@Xx-Ashutosh-xX](https://github.com/Xx-Ashutosh-xX)
 - Ben Liblit [@liblit](https://github.com/liblit)
+- Benjamin Reed [@breed](https://github.com/breed)
 - Bill Wrbican [@wjw27](https://github.com/wjw27)
+- [@Birdmaaan4](https://github.com/Birdmaaan4)
 - [@blepabyte](https://github.com/blepabyte)
 - Bradford Lynch [@bradfordlynch](https://github.com/bradfordlynch)
-- Brian Bennett [@bennettscience](https://github.com/bennettscience)
 - Bruce Spang [@brucespang](https://github.com/brucespang)
-- Catherine Abbruzzese [@cat0698](https://github.com/cat0698))
+- Caitlin Fabian [@Caitlin-Fabian](https://github.com/Caitlin-Fabian)
 - Cameron Cuff [@ctcuff](https://github.com/ctcuff)
+- Catherine Abbruzzese [@cat0698](https://github.com/cat0698)
+- Craig Thompson [@craigdsthompson](https://github.com/craigdsthompson)
 - Dalton Durst [@UniversalSuperBox](https://github.com/UniversalSuperBox)
 - Damian Sweeney [@damianfs](https://github.com/damianfs)
 - Daniel Brinkman [@DanBrink91](https://github.com/DanBrink91)
 - Daniel Grobani [@dgrobani](https://github.com/dgrobani)
+- Daniel Molares [@dmols](https://github.com/dmols)
 - David Warden [@dfwarden](https://github.com/dfwarden)
 - Davis Goff [@Goff-Davis](https://github.com/Goff-Davis)
 - Deundre Williams [@deundrewilliams](https://github.com/deundrewilliams)
@@ -39,6 +46,7 @@ Patches and Suggestions
 - Elli Howard [@qwertynerd97](https://github.com/qwertynerd97)
 - Erik Tews [@eriktews](https://github.com/eriktews)
 - Ethan Finlay [@atarisafari](https://github.com/atarisafari)
+- Gabriel Garfinkel [@ggarfink](https://github.com/ggarfink)
 - Gabriela Dijkhoffz [@gdijkhoffz](https://github.com/gdijkhoffz)
 - Harlan Colclough [@hcolclou](https://github.com/hcolclou)
 - Henry Acevedo [@Colombiangmr](https://github.com/Colombiangmr)
@@ -51,27 +59,34 @@ Patches and Suggestions
 - Jonathan Guilbe [@JonGuilbe](https://github.com/JonGuilbe)
 - Jose Silveti [@jrsilveti](https://github.com/jrsilveti)
 - Joshua Salzedo [@theunkn0wn1](https://github.com/theunkn0wn1)
+- [@kailukaitisBrendan](https://github.com/kailukaitisBrendan)
 - Keegan Berry [@keeeeeegan](https://github.com/keeeeeegan)
 - Kenny Perez [@kennygperez](https://github.com/kennygperez)
 - [@kensler](https://github.com/kensler)
 - Lawrence Oks [@ljoks](https://github.com/ljoks)
+- Lee Fent [@lafent](https://github.com/lafent)
 - Leonard Camacho [@lcamacho](https://github.com/lcamacho)
+- Lucas Salas [@lucas-salas](https://github.com/lucas-salas)
 - Mark Lalor [@MarkLalor](https://github.com/MarkLalor)
 - Markus [@elec3647](https://github.com/elec3647)
 - Matthew Fedder [@matthewf-ucsd](https://github.com/matthewf-ucsd)
-- Matthew Jones [@jonespm](https://github.com/jonespm)
 - Michael Phelps [@nottheswimmer](https://github.com/nottheswimmer)
 - Mike Nahmias [@Mike-Nahmias](https://github.com/Mike-Nahmias)
+- Mike Suhan [@mikesuhan](https://github.com/mikesuhan)
 - Nathan Dabu [@nathaned](https://github.com/nathaned)
 - Petar Nikolovski [@petarGitNik](https://github.com/petarGitNik)
 - Philip Austin [@phaustin](https://github.com/phaustin)
 - Philip Carter [@phillyc](https://github.com/phillyc)
 - Ralph Baird [@rmanbaird](https://github.com/rmanbaird)
 - [@Screeeech](https://github.com/Screeeech)
+- Shane Rosenkrantz [@shaneros](https://github.com/shaneros)
 - Sigurður Baldursson [@sigurdurb](https://github.com/sigurdurb)
 - Spencer Rogers [@spencer1248](https://github.com/spencer1248)
 - Stephen Woosley [@stephenwoosley](https://github.com/stephenwoosley)
+- Steven Bell [@stevenbell](https://github.com/stevenbell)
 - Steven Williams [@onomou](https://github.com/onomou)
+- [@svanderwulp](https://github.com/svanderwulp)
+- Tinson Lai [@laitingsheng](https://github.com/laitingsheng)
 - Toan Vu [@vutoan1245](https://github.com/vutoan1245)
 - [@Tobiaqs](https://github.com/Tobiaqs)
 - Tuan Pham [@tuanvpham](https://github.com/tuanvpham)

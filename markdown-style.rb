@@ -6,4 +6,4 @@ exclude_rule 'no-duplicate-header'
 
 rule 'no-trailing-punctuation', :punctuation => '.,;:!'
 rule 'ol-prefix', :style => 'ordered'
-rule 'ul-indent', :indent => 4
+rule 'ul-indent', :indent => 2
