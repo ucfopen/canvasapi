@@ -57,6 +57,23 @@ class Assignment(CanvasObject):
         )
         return Assignment(self._requester, response.json())
 
+    def duplicate(self, **kwargs):
+        """
+        Duplicate this assignment.
+
+        :calls: `POST /api/v1/courses/:course_id/assignments/:assignment_id/duplicate \
+        <https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.duplicate>`_
+
+        :rtype: :class:`canvasapi.assignment.Assignment`
+        """
+
+        response = self._requester.request(
+            "POST",
+            "courses/{}/assignments/{}/duplicate".format(self.course_id, self.id),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return Assignment(self._requester, response.json())
+
     def edit(self, **kwargs):
         """
         Modify this assignment.

@@ -65,6 +65,15 @@ class TestAssignment(unittest.TestCase):
 
         self.assertIsInstance(deleted_assignment, Assignment)
 
+    # duplicate()
+    def test_duplicate_assignments(self, m):
+        register_uris({"assignment": ["duplicate_assignment"]}, m)
+
+        duplicated_assignment = self.assignment.duplicate()
+
+        self.assertIsInstance(duplicated_assignment, Assignment)
+        self.assertTrue(duplicated_assignment.name == f"{self.assignment.name} Copy")
+
     # edit()
     def test_edit_assignment(self, m):
         register_uris({"assignment": ["edit_assignment"]}, m)
