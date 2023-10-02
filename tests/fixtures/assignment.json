@@ -121,6 +121,17 @@
 		},
 		"status_code": 200
 	},
+	"duplicate_assignment": {
+		"method": "POST",
+		"endpoint": "courses/1/assignments/1/duplicate",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "Assignment 1 Copy",
+			"description": "Duplicate assignment"
+		},
+		"status_code": 200
+	},
 	"edit_assignment": {
 		"method": "PUT",
 		"endpoint": "courses/1/assignments/1",
