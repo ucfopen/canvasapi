@@ -177,7 +177,11 @@ class Submission(CanvasObject):
         ).start()
 
         if response[0]:
-            self.edit(comment={"file_ids": [response[1]["id"]]})
+            if "comment" in kwargs:
+                kwargs["comment"].update({"file_ids": [response[1]["id"]]})
+            else:
+                kwargs["comment"] = {"file_ids": [response[1]["id"]]}
+            self.edit(**kwargs)
         return response
 
 
