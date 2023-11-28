@@ -9,6 +9,7 @@ from canvasapi.peer_review import PeerReview
 from canvasapi.submission import GroupedSubmission, Submission
 from tests import settings
 from tests.util import cleanup_file, register_uris
+from unittest.mock import patch
 
 
 @requests_mock.Mocker()
@@ -111,14 +112,24 @@ class TestSubmission(unittest.TestCase):
         )
 
         filename = "testfile_submission_{}".format(uuid.uuid4().hex)
+        text_comment = "Here is my file comment"
 
         try:
             with open(filename, "w+") as file:
-                response = self.submission.upload_comment(file)
+                with patch.object(self.submission, 'edit') as mock_edit:
+                    response = self.submission.upload_comment(file, text_comment=text_comment)
 
-            self.assertTrue(response[0])
-            self.assertIsInstance(response[1], dict)
-            self.assertIn("url", response[1])
+                    self.assertTrue(response[0])
+                    self.assertIsInstance(response[1], dict)
+                    self.assertIn("url", response[1])
+
+                    # Verify if the edit method was called with the correct arguments
+                    mock_edit.assert_called_once()
+                    _, kwargs = mock_edit.call_args
+                    self.assertIn("comment", kwargs)
+                    self.assertIn("text_comment", kwargs["comment"])
+                    self.assertEqual(kwargs["comment"]["text_comment"], text_comment)
+
         finally:
             cleanup_file(filename)
 
