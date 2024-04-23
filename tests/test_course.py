@@ -1,3 +1,4 @@
+import os
 import unittest
 import uuid
 import warnings
@@ -898,11 +899,45 @@ class TestCourse(unittest.TestCase):
             self.course.create_custom_column(column={})
 
     # create_discussion_topic()
-    def test_create_discussion_topic(self, m):
+    def test_create_discussion_topic_no_file(self, m):
         register_uris({"course": ["create_discussion_topic"]}, m)
 
         title = "Topic 1"
         discussion = self.course.create_discussion_topic()
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertTrue(hasattr(discussion, "course_id"))
+        self.assertEqual(title, discussion.title)
+        self.assertEqual(discussion.course_id, 1)
+
+    def test_create_discussion_topic_file_path(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "generic_file.txt")
+
+        title = "Topic 1"
+        discussion = self.course.create_discussion_topic(attachment=filepath)
+        self.assertIsInstance(discussion, DiscussionTopic)
+        self.assertTrue(hasattr(discussion, "course_id"))
+        self.assertEqual(title, discussion.title)
+        self.assertEqual(discussion.course_id, 1)
+
+    def test_create_discussion_topic_file_path_invalid(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = "this/path/doesnt/exist"
+
+        with self.assertRaises(IOError):
+            self.course.create_discussion_topic(attachment=filepath)
+
+    def test_create_discussion_topic_file_obj(self, m):
+        register_uris({"course": ["create_discussion_topic"]}, m)
+
+        filepath = os.path.join("tests", "fixtures", "generic_file.txt")
+
+        title = "Topic 1"
+        with open(filepath, "rb") as f:
+            discussion = self.course.create_discussion_topic(attachment=f)
+
         self.assertIsInstance(discussion, DiscussionTopic)
         self.assertTrue(hasattr(discussion, "course_id"))
         self.assertEqual(title, discussion.title)
@@ -1583,8 +1618,6 @@ class TestCourse(unittest.TestCase):
 
     # import_outcome()
     def test_import_outcome_filepath(self, m):
-        import os
-
         register_uris({"course": ["import_outcome"]}, m)
 
         filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
@@ -1598,8 +1631,6 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(outcome_import.data["import_type"], "instructure_csv")
 
     def test_import_outcome_binary(self, m):
-        import os
-
         register_uris({"course": ["import_outcome"]}, m)
 
         filepath = os.path.join("tests", "fixtures", "test_import_outcome.csv")
