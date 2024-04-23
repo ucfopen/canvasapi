@@ -52,6 +52,33 @@ class TestCanvasObject(unittest.TestCase):
 
         self.assertTrue(hasattr(self.canvas_object, "half_offset_date"))
         self.assertEqual(self.canvas_object.half_offset_date, offset_time)
+    
+    # set_attributes with a hyphen
+    def test_set_attributes_with_hyphens(self, m):
+        attributes = {
+            "content-type": "application/json",
+            "filename": "example.json",
+            "start-at": "2012-05-05T00:00:00Z",
+            "end-at": "2012-08-05",
+        }
+
+        start_date = datetime.strptime(
+            attributes["start-at"], "%Y-%m-%dT%H:%M:%SZ"
+        ).replace(tzinfo=pytz.utc)
+        end_date = datetime.strptime(attributes["end-at"], "%Y-%m-%d").replace(
+            tzinfo=pytz.utc
+        )
+
+        self.canvas_object.set_attributes(attributes)
+
+        self.assertTrue(hasattr(self.canvas_object, "start_at_date"))
+        self.assertEqual(self.canvas_object.start_at_date, start_date)
+        self.assertTrue(hasattr(self.canvas_object, "end_at_date"))
+        self.assertEqual(self.canvas_object.end_at_date, end_date)
+        self.assertTrue(hasattr(self.canvas_object, "content_type"))
+        self.assertEqual(self.canvas_object.content_type, "application/json")
+        self.assertTrue(hasattr(self.canvas_object, "filename"))
+        self.assertEqual(self.canvas_object.filename, "example.json")
 
     def test_set_attributes_invalid_date(self, m):
         attributes = {"start_at": "2017-01-01T00:00+00:00:00", "end_at": "2012-08-0"}

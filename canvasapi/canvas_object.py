@@ -59,12 +59,13 @@ class CanvasObject(object):
         :type attributes: dict
         """
         for attribute, value in attributes.items():
-            self.__setattr__(attribute, value)
+            safe_attribute = attribute.replace("-", "_")
+            self.__setattr__(safe_attribute, value)
 
             try:
                 naive = arrow.get(str(value)).datetime
                 aware = naive.replace(tzinfo=pytz.utc) - naive.utcoffset()
-                self.__setattr__(attribute + "_date", aware)
+                self.__setattr__(safe_attribute + "_date", aware)
             except arrow.ParserError:
                 pass
             except ValueError:
