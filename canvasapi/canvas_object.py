@@ -1,5 +1,6 @@
 import arrow
 import pytz
+import warnings
 
 
 class CanvasObject(object):
@@ -59,13 +60,22 @@ class CanvasObject(object):
         :type attributes: dict
         """
         for attribute, value in attributes.items():
-            safe_attribute = attribute.replace("-", "_")
-            self.__setattr__(safe_attribute, value)
+            self.__setattr__(attribute, value)
+            if attribute == "content-type":
+                self.__setattr__("content_type", value)
+                warnings.warn(
+                    (
+                        "The 'content-type' attribute will be removed "
+                        "in a future version. Please use "
+                        "'content_type' instead."
+                    ),
+                    UserWarning,
+                )
 
             try:
                 naive = arrow.get(str(value)).datetime
                 aware = naive.replace(tzinfo=pytz.utc) - naive.utcoffset()
-                self.__setattr__(safe_attribute + "_date", aware)
+                self.__setattr__(attribute + "_date", aware)
             except arrow.ParserError:
                 pass
             except ValueError:
