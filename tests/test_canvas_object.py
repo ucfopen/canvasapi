@@ -81,3 +81,22 @@ class TestCanvasObject(unittest.TestCase):
         self.assertEqual(self.canvas_object.content_type, "another_application/json")
         self.assertTrue(hasattr(self.canvas_object, "filename"))
         self.assertEqual(self.canvas_object.filename, "example.json")
+
+    def test_set_attributes_with_content_type_reversed(self, m):
+        # Reversed the order of the attributes to test overwrite behavior
+        attributes = {
+            "content_type": "another_application/json",
+            "content-type": "application/json",
+            "filename": "example.json",
+        }
+
+        self.canvas_object.set_attributes(attributes)
+
+        self.assertTrue(hasattr(self.canvas_object, "content-type"))
+        self.assertEqual(
+            getattr(self.canvas_object, "content-type"), "application/json"
+        )
+        self.assertTrue(hasattr(self.canvas_object, "content_type"))
+        self.assertEqual(self.canvas_object.content_type, "another_application/json")
+        self.assertTrue(hasattr(self.canvas_object, "filename"))
+        self.assertEqual(self.canvas_object.filename, "example.json")
