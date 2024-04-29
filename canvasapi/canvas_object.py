@@ -1,6 +1,7 @@
+import warnings
+
 import arrow
 import pytz
-import warnings
 
 
 class CanvasObject(object):
