@@ -102,7 +102,7 @@ class TestCanvasObject(unittest.TestCase):
         self.assertTrue(hasattr(self.canvas_object, "filename"))
         self.assertEqual(self.canvas_object.filename, "example.json")
 
-    def test__getattribute__content_type(self, m):
+    def test__getattribute__content_type_warns(self, m):
         attributes = {"content-type": "application/json"}
         self.canvas_object.set_attributes(attributes)
 

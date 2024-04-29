@@ -13,6 +13,15 @@ class CanvasObject(object):
     """
 
     def __getattribute__(self, name):
+        if name == "content-type":
+            warnings.warn(
+                (
+                    "The 'content-type' attribute will be removed "
+                    "in a future version. Please use "
+                    "'content_type' instead."
+                ),
+                DeprecationWarning,
+            )
         return super(CanvasObject, self).__getattribute__(name)
 
     def __init__(self, requester, attributes):
@@ -64,14 +73,6 @@ class CanvasObject(object):
             self.__setattr__(attribute, value)
             if attribute == "content-type":
                 self.__setattr__("content_type", value)
-                warnings.warn(
-                    (
-                        "The 'content-type' attribute will be removed "
-                        "in a future version. Please use "
-                        "'content_type' instead."
-                    ),
-                    UserWarning,
-                )
 
             try:
                 naive = arrow.get(str(value)).datetime
