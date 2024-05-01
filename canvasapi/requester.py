@@ -35,7 +35,7 @@ class Requester(object):
         # Preserve the original base url and add "/api/v1" to it
         self.original_url = base_url
         self.base_url = base_url + "/api/v1/"
-        self.new_quizzes_url = base_url + "/api/quiz/v1"
+        self.new_quizzes_url = base_url + "/api/quiz/v1/"
         self.graphql = base_url + "/api/graphql"
         self.access_token = access_token
         self._session = requests.Session()
@@ -171,11 +171,12 @@ class Requester(object):
         # specified, do nothing and move on.
         # See https://github.com/ucfopen/canvasapi/issues/619
         if _url == "new_quizzes":
-            request_url = self.new_quizzes_url
+            request_url = "{}{}".format(self.new_quizzes_url, endpoint)
         elif _url == "graphql":
             request_url = self.graphql
         else:
-            pass
+            # This is kind of a hacky way to make sure request_url has SOME kind of value before moving to the full_url declaration
+            request_url = ""
 
         full_url = request_url if _url else "{}{}".format(self.base_url, endpoint)
 
