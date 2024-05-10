@@ -175,8 +175,8 @@ class Requester(object):
         elif _url == "graphql":
             request_url = self.graphql
         else:
-            # This is kind of a hacky way to make sure request_url has SOME kind of value before moving to the full_url declaration
-            request_url = ""
+            # It isn't a special URL case, so assign it to what the user requested.
+            request_url = _url
 
         full_url = request_url if _url else "{}{}".format(self.base_url, endpoint)
 

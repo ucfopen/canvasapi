@@ -1279,7 +1279,7 @@ class Canvas(object):
             _kwargs=combine_kwargs(**kwargs)
             + [("query", query), ("variables", variables)],
             # Needs to call special endpoint without api/v1
-            _url=self.__requester.original_url + "/api/graphql",
+            _url="graphql",
             json=True,
         )
 
