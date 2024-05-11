@@ -4,7 +4,7 @@ import re
 class PaginatedList(object):
     """
     Abstracts `pagination of Canvas API \
-    <https://canvas.instructure.com/doc/api/file.pagination.html>`_.
+    <https://canvas.instructure.com/doc/api/file.pagination.html>`_. Returns a complete list of all results of a specified type.
     """
 
     def __getitem__(self, index):
@@ -28,6 +28,24 @@ class PaginatedList(object):
         _url_override=None,
         **kwargs
     ):
+        """
+        :param content_class: The expected type to return in the list. This can be any valid class name.
+        :type content_class: class
+        :param requester: The requester to pass HTTP requests through.
+        :type requester: :class:`canvasapi.requester.Requester`
+        :param request_method: HTTP request method
+        :type request_method: str
+        :param first_url: Canvas endpoint for the initial request
+        :type first_url: str
+        :param extra_attribs: Extra data to include in the request
+        :type extra_attribs: dict
+        :param _root: Specify a nested property from Canvas to use for the resulting list.
+        :type _root: str
+        :param _url_override: "new_quizzes" or "graphql" for specific Canvas endpoints. Other URLs may be specified for third-party requests.
+        :type _url_override: str
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of type content_class
+        """
         self._elements = list()
 
         self._requester = requester
