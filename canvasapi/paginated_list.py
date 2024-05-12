@@ -5,7 +5,6 @@ class PaginatedList(object):
     """
     Abstracts `pagination of Canvas API \
     <https://canvas.instructure.com/doc/api/file.pagination.html>`_.
-    Returns a complete list of all results of a specified type.
     """
 
     def __getitem__(self, index):
