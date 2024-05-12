@@ -36,7 +36,7 @@ class Requester(object):
         self.original_url = base_url
         self.base_url = base_url + "/api/v1/"
         self.new_quizzes_url = base_url + "/api/quiz/v1/"
-        self.graphql = base_url + "/api/graphql"
+e       self.graphql = base_url + "/api/graphql"
         self.access_token = access_token
         self._session = requests.Session()
         self._cache = []
@@ -169,14 +169,14 @@ class Requester(object):
         """
         # Check for specific URL endpoints available from Canvas. If not
         # specified, pass the given URL and move on.
-        if _url == "new_quizzes":
-            request_url = "{}{}".format(self.new_quizzes_url, endpoint)
+        if not _url:
+            full_url = "{}{}".format(self.base_url, endpoint)
+        elif _url == "new_quizzes":
+            full_url = "{}{}"".format(self.new_quizzes_url, endpoint)
         elif _url == "graphql":
-            request_url = self.graphql
+            full_url_url = self.graphql
         else:
-            request_url = _url
-
-        full_url = request_url if _url else "{}{}".format(self.base_url, endpoint)
+            full_url = _url
 
         if not headers:
             headers = {}
