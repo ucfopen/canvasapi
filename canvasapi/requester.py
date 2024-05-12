@@ -36,7 +36,7 @@ class Requester(object):
         self.original_url = base_url
         self.base_url = base_url + "/api/v1/"
         self.new_quizzes_url = base_url + "/api/quiz/v1/"
-e       self.graphql = base_url + "/api/graphql"
+        self.graphql = base_url + "/api/graphql"
         self.access_token = access_token
         self._session = requests.Session()
         self._cache = []
@@ -172,9 +172,9 @@ e       self.graphql = base_url + "/api/graphql"
         if not _url:
             full_url = "{}{}".format(self.base_url, endpoint)
         elif _url == "new_quizzes":
-            full_url = "{}{}"".format(self.new_quizzes_url, endpoint)
+            full_url = "{}{}".format(self.new_quizzes_url, endpoint)
         elif _url == "graphql":
-            full_url_url = self.graphql
+            full_url = self.graphql
         else:
             full_url = _url
 
