@@ -4,6 +4,8 @@ import re
 import typing as t
 from itertools import islice
 
+from requests.models import Response
+
 if t.TYPE_CHECKING:
     from canvasapi.requester import Requester  # pragma: no cover
 
@@ -32,6 +34,29 @@ class PaginatedList(t.Generic[ContentClass]):
     :rtype: :class:`canvasapi.paginated_list.PaginatedList` of type content_class
     """
 
+    @t.overload
+    def __getitem__(self, index: int) -> ContentClass:  # pragma: no cover
+        ...
+
+    @t.overload
+    def __getitem__(self, index: slice) -> t.List[ContentClass]:  # pragma: no cover
+        ...
+
+    def __getitem__(self, index: int | slice):
+        assert isinstance(
+            index, (int, slice)
+        ), "`index` must be either an integer or a slice."
+        if isinstance(index, int):
+            if index < 0:
+                return list(self)[index]
+            return list(islice(self, index + 1))[index]
+        # if no negatives, islice can be used
+        if not any(
+            v is not None and v < 0 for v in (index.start, index.stop, index.step)
+        ):
+            return list(islice(self, index.start, index.stop, index.step))
+        return list(self)[index]
+
     def __init__(
         self,
         content_class: type[ContentClass],
@@ -40,6 +65,7 @@ class PaginatedList(t.Generic[ContentClass]):
         first_url: str,
         extra_attribs: t.Optional[t.Dict[str, t.Any]] = None,
         _root: t.Optional[str] = None,
+        _url_override: t.Optional[str] = None,
         **kwargs: t.Any,
     ):
 
@@ -68,29 +94,6 @@ class PaginatedList(t.Generic[ContentClass]):
         else:
             yield from iter(self._elements)
 
-    @t.overload
-    def __getitem__(self, index: int) -> ContentClass:  # pragma: no cover
-        ...
-
-    @t.overload
-    def __getitem__(self, index: slice) -> t.List[ContentClass]:  # pragma: no cover
-        ...
-
-    def __getitem__(self, index: int | slice):
-        assert isinstance(
-            index, (int, slice)
-        ), "`index` must be either an integer or a slice."
-        if isinstance(index, int):
-            if index < 0:
-                return list(self)[index]
-            return list(islice(self, index + 1))[index]
-        # if no negatives, islice can be used
-        if not any(
-            v is not None and v < 0 for v in (index.start, index.stop, index.step)
-        ):
-            return list(islice(self, index.start, index.stop, index.step))
-        return list(self)[index]
-
     def __repr__(self):
         return f"<PaginatedList of type {self._content_class.__name__}>"
 
@@ -100,7 +103,6 @@ class PaginatedList(t.Generic[ContentClass]):
             try:
                 data = data[self._root]
             except KeyError:
-                # TODO: Raise a better error message to the user.
                 raise ValueError(
                     "The specified _root value was not found in the response."
                 )
@@ -120,6 +122,7 @@ class PaginatedList(t.Generic[ContentClass]):
         response: t.Any = self._requester.request(
             self._request_method,
             self._next_url,
+            _url=self._url_override,
             **self._next_params,
         )
         self._next_params = {}
@@ -129,11 +132,15 @@ class PaginatedList(t.Generic[ContentClass]):
         # See https://github.com/ucfopen/canvasapi/discussions/605
         if response.links:
             next_link = response.links.get("next")
-        elif isinstance(data, dict) and "meta" in data:
+        elif isinstance(response, Response) and "meta" in response.json():
+            data = response.json()
             # requests parses headers into dicts, this returns the same
             # structure so the regex will still work.
             try:
-                next_link = {"url": data["meta"]["pagination"]["next"], "rel": "next"}
+                next_link = {
+                    "url": data["meta"]["pagination"]["next"],
+                    "rel": "next",
+                }
             except KeyError:
                 next_link = None
         else:

@@ -177,35 +177,6 @@ class TestPaginatedList(unittest.TestCase):
 
         self.assertIsInstance(pag_list[0], EnrollmentTerm)
 
-    def test_negative_index(self, m):
-        # Regression test for https://github.com/ucfopen/canvasapi/issues/305
-        # Ensure that we can use negative indexing, even after loading a page
-
-        register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
-        pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
-        pag_list[0]
-        self.assertEqual(pag_list[-1].id, "4")
-
-    def test_negative_index_for_slice_start(self, m):
-        # Regression test for https://github.com/ucfopen/canvasapi/issues/305
-        # Ensure that we can slice using a negative index as the start item
-
-        register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
-        pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
-        pag_list[0]
-        self.assertEqual(pag_list[-1:1], [])
-
-    def test_negative_index_for_slice_end(self, m):
-        # Regression test for https://github.com/ucfopen/canvasapi/issues/305
-        # Ensure that we can slice using a negative index as the end item
-
-        register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
-        pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
-        pag_list[0]
-
-        with self.assertRaises(IndexError):
-            pag_list[:-1]
-
     def test_paginated_list_no_header(self, m):
         register_uris(
             {"paginated_list": ["no_header_4_2_pages_p1", "no_header_4_2_pages_p2"]}, m
@@ -233,4 +204,31 @@ class TestPaginatedList(unittest.TestCase):
         self.assertIsInstance(pag_list, PaginatedList)
         self.assertEqual(len(list(pag_list)), 2)
         self.assertIsInstance(pag_list[0], User)
+
+    # Negative indicies
+    def test_negative_index(self, m):
+        # Regression test for https://github.com/ucfopen/canvasapi/issues/305
+        # Ensure that we can use negative indexing, even after loading a page
+
+        register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
+        pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
+        pag_list[0]
+        self.assertEqual(pag_list[-1].id, "4")
+
+    def test_negative_index_for_slice_start(self, m):
+        # Regression test for https://github.com/ucfopen/canvasapi/issues/305
+        # Ensure that we can slice using a negative index as the start item
+
+        register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
+        pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
+        pag_list[0]
+        self.assertEqual(pag_list[-1:1], [])
+
+    def test_negative_index_for_slice_end(self, m):
+        # Regression test for https://github.com/ucfopen/canvasapi/issues/305
+        # Ensure that we can slice using a negative index as the end item
+        register_uris({"paginated_list": ["4_2_pages_p1", "4_2_pages_p2"]}, m)
+        pag_list = PaginatedList(User, self.requester, "GET", "four_objects_two_pages")
+        pag_list[0]
+
         self.assertEqual([elem.id for elem in pag_list[:-1]], list("123"))
