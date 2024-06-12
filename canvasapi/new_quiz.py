@@ -21,7 +21,7 @@ class NewQuiz(CanvasObject):
         response = self._requester.request(
             "DELETE",
             endpoint,
-            _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _url="new_quizzes",
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
@@ -44,7 +44,7 @@ class NewQuiz(CanvasObject):
         response = self._requester.request(
             "PATCH",
             endpoint,
-            _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _url="new_quizzes",
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
