@@ -97,7 +97,9 @@ class PaginatedList(object):
             next_link = None
 
         regex = r"(?:{}|{})(.*)".format(
-                re.escape(self._requester.base_url), re.escape(self._requester.new_quizzes_url))
+            re.escape(self._requester.base_url),
+            re.escape(self._requester.new_quizzes_url),
+        )
 
         self._next_url = (
             re.search(regex, next_link["url"]).group(1) if next_link else None
