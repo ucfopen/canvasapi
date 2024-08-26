@@ -481,7 +481,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             "POST",
             endpoint,
-            _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _url="new_quizzes",
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
@@ -1759,7 +1759,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             "GET",
             endpoint,
-            _url=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _url="new_quizzes",
             _kwargs=combine_kwargs(**kwargs),
         )
         response_json = response.json()
@@ -1784,7 +1784,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             endpoint,
-            _url_override=self._requester.original_url + "/api/quiz/v1/" + endpoint,
+            _url_override="new_quizzes",
             _kwargs=combine_kwargs(**kwargs),
         )
 
