@@ -28,6 +28,24 @@ class PaginatedList(object):
         _url_override=None,
         **kwargs
     ):
+        """
+        :param content_class: The expected type to return in the list.
+        :type content_class: class
+        :param requester: The requester to pass HTTP requests through.
+        :type requester: :class:`canvasapi.requester.Requester`
+        :param request_method: HTTP request method
+        :type request_method: str
+        :param first_url: Canvas endpoint for the initial request
+        :type first_url: str
+        :param extra_attribs: Extra data to include in the request
+        :type extra_attribs: dict
+        :param _root: Specify a nested property from Canvas to use for the resulting list.
+        :type _root: str
+        :param _url_override: "new_quizzes" or "graphql" for specific Canvas endpoints.
+        Other URLs may be specified for third-party requests.
+        :type _url_override: str
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of type content_class
+        """
         self._elements = list()
 
         self._requester = requester
@@ -78,7 +96,10 @@ class PaginatedList(object):
         else:
             next_link = None
 
-        regex = r"{}(.*)".format(re.escape(self._requester.base_url))
+        regex = r"(?:{}|{})(.*)".format(
+            re.escape(self._requester.base_url),
+            re.escape(self._requester.new_quizzes_url),
+        )
 
         self._next_url = (
             re.search(regex, next_link["url"]).group(1) if next_link else None

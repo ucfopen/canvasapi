@@ -35,6 +35,8 @@ class Requester(object):
         # Preserve the original base url and add "/api/v1" to it
         self.original_url = base_url
         self.base_url = base_url + "/api/v1/"
+        self.new_quizzes_url = base_url + "/api/quiz/v1/"
+        self.graphql = base_url + "/api/graphql"
         self.access_token = access_token
         self._session = requests.Session()
         self._cache = []
@@ -145,10 +147,16 @@ class Requester(object):
         :param use_auth: Optional flag to remove the authentication
             header from the request.
         :type use_auth: bool
-        :param _url: Optional argument to send a request to a URL
-            outside of the Canvas API. If this is selected and an
-            endpoint is provided, the endpoint will be ignored and
-            only the _url argument will be used.
+        :param _url: Optional argument to specify a request type to Canvas
+            or to send a request to a URL outside of the Canvas API.
+            If set to "new_quizzes", the new quizzes endpoint will be used.
+            If set to "graphql", a graphql POST request will be sent.
+            If any string URL is provided, it will be used instead of the
+            base REST URL.
+            If omitted or set to None, the base_url for the instance REST
+            endpoint will be used.
+            If this is selected and an endpoint is provided, the endpoint
+            will be ignored and only the `_url` argument will be used..
         :type _url: str
         :param _kwargs: A list of 2-tuples representing processed
             keyword arguments to be sent to Canvas as params or data.
@@ -159,7 +167,16 @@ class Requester(object):
         :type json: `bool`
         :rtype: :class:`requests.Response`
         """
-        full_url = _url if _url else "{}{}".format(self.base_url, endpoint)
+        # Check for specific URL endpoints available from Canvas. If not
+        # specified, pass the given URL and move on.
+        if not _url:
+            full_url = "{}{}".format(self.base_url, endpoint)
+        elif _url == "new_quizzes":
+            full_url = "{}{}".format(self.new_quizzes_url, endpoint)
+        elif _url == "graphql":
+            full_url = self.graphql
+        else:
+            full_url = _url
 
         if not headers:
             headers = {}
