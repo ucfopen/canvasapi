@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Backstage
+
+- Updated deploy Action to use more modern processes.
+
 ## [3.3.0] - 2023-08-27
 
 ### General
