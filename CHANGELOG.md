@@ -11,11 +11,11 @@
 ### General
 
 - Added documentation for PaginatedList
-- Rework requester URLs to accomodate graphql and new quizzes endpoints (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Rework requester URLs to accommodate graphql and new quizzes endpoints (Thanks, [@bennettscience](https://github.com/bennettscience))
 
 ### Bugfixes
 
-- Fixed PaginatedList not respecting new quizzes endpoints (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+- Fixed PaginatedList not respecting new quizzes endpoints (Thanks, [@jonespm](https://github.com/jonespm))
 
 ### Backstage
 
