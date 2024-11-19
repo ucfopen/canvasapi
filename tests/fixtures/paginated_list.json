@@ -175,5 +175,75 @@
 			}
 		},
 		"status_code": 200
+	},
+	"21_2_pages_p1": {
+		"method": "ANY",
+		"endpoint": "twenty_one_objects_two_pages",
+		"data": [
+			{"id": "1", "name": "object 1"},
+			{"id": "2", "name": "object 2"},
+			{"id": "3", "name": "object 3"},
+			{"id": "4", "name": "object 4"},
+			{"id": "5", "name": "object 5"},
+			{"id": "6", "name": "object 6"},
+			{"id": "7", "name": "object 7"},
+			{"id": "8", "name": "object 8"},
+			{"id": "9", "name": "object 9"},
+			{"id": "10", "name": "object 10"},
+			{"id": "11", "name": "object 11"},
+			{"id": "12", "name": "object 12"},
+			{"id": "13", "name": "object 13"},
+			{"id": "14", "name": "object 14"},
+			{"id": "15", "name": "object 15"},
+			{"id": "16", "name": "object 16"},
+			{"id": "17", "name": "object 17"},
+			{"id": "18", "name": "object 18"},
+			{"id": "19", "name": "object 19"},
+			{"id": "20", "name": "object 20"}
+		],
+		"headers": {
+			"Link": "<https://example.com/api/v1/twenty_one_objects_two_pages?page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"21_2_pages_p2": {
+		"method": "ANY",
+		"endpoint": "twenty_one_objects_two_pages?page=2",
+		"data": [
+			{"id": "21", "name": "object 21"}
+		],
+		"status_code": 200
+	},
+	"no_per_page_4_2_pages_p1": {
+		"method": "ANY",
+		"endpoint": "no_per_page_four_objects_two_pages",
+		"data": [
+			{
+				"id": "1",
+				"name": "object 1"
+			},
+			{
+				"id": "2",
+				"name": "object 2"
+			},
+			{
+				"id": "3",
+				"name": "object 3"
+			},
+			{
+				"id": "4",
+				"name": "object 4"
+			}
+		],
+		"headers": {
+			"Link": "<https://example.com/api/v1/no_per_page_four_objects_two_pages?page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"no_per_page_4_2_pages_p2": {
+		"method": "ANY",
+		"endpoint": "no_per_page_four_objects_two_pages?page=2",
+		"data": [],
+		"status_code": 200
 	}
 }

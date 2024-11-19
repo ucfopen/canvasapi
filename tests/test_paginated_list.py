@@ -233,3 +233,39 @@ class TestPaginatedList(unittest.TestCase):
         self.assertIsInstance(pag_list, PaginatedList)
         self.assertEqual(len(list(pag_list)), 2)
         self.assertIsInstance(pag_list[0], User)
+    
+    # per_page param
+    def test_default_per_page_value(self, m):
+        register_uris(
+            {"paginated_list": ["21_2_pages_p1", "21_2_pages_p2"]}, m
+        )
+
+        pag_list = PaginatedList(
+            User,
+            self.requester,
+            "GET",
+            "twenty_one_objects_two_pages"
+        )
+
+        # check that default per_page value is set to 20
+        self.assertEqual(pag_list._first_params["per_page"], 20)
+
+        item_list = [item for item in pag_list]
+        self.assertEqual(len(item_list), 21)
+        self.assertIsInstance(item_list[0], User)
+    
+    def test_overriden_per_page_value(self, m):
+        register_uris({"paginated_list": ["no_per_page_4_2_pages_p1", "no_per_page_4_2_pages_p2"]}, m)
+        
+        pag_list = PaginatedList(User, self.requester, "GET", "no_per_page_four_objects_two_pages", per_page=2)
+
+        # check that per_page value is overriden to 2
+        self.assertEqual(pag_list._first_params["per_page"], 2)
+
+        item_list = [item for item in pag_list]
+        self.assertEqual(len(item_list), 4)
+        self.assertIsInstance(item_list[0], User)
+
+    
+
+
