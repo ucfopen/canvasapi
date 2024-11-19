@@ -173,7 +173,7 @@
 					"prev": "https://example.com/api/v1/previous"
 				}
 			}
-		}
-	},
-	"status_code": 200
+		},
+		"status_code": 200
+	}
 }
