@@ -52,7 +52,7 @@ class PaginatedList(object):
         self._content_class = content_class
         self._first_url = first_url
         self._first_params = kwargs or {}
-        self._first_params["per_page"] = kwargs.get("per_page", 100)
+        self._first_params["per_page"] = kwargs.get("per_page", 20)
         self._next_url = first_url
         self._next_params = self._first_params
         self._extra_attribs = extra_attribs or {}
