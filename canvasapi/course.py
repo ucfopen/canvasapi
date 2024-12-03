@@ -2761,7 +2761,6 @@ class Course(CanvasObject):
         return Uploader(
             self._requester, "courses/{}/files".format(self.id), file, **kwargs
         ).start()
-    
 
     def get_lti_resource_links(self, **kwargs):
         """
@@ -2773,15 +2772,15 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList`
         """
         from canvasapi.lti_resource_link import LTIResourceLink
-        
+
         return PaginatedList(
             LTIResourceLink,
             self._requester,
             "GET",
             f"courses/{self.id}/lti_resource_links",
-            kwargs=combine_kwargs(**kwargs)
+            kwargs=combine_kwargs(**kwargs),
         )
-    
+
     def get_lti_resource_link(self, lti_resource_link, **kwargs):
         """
         Return details about the specified resource link.
@@ -2796,15 +2795,17 @@ class Course(CanvasObject):
         """
         from canvasapi.lti_resource_link import LTIResourceLink
 
-        lti_resource_link_id = obj_or_id(lti_resource_link, "lti_resource_link", (LTIResourceLink,))
+        lti_resource_link_id = obj_or_id(
+            lti_resource_link, "lti_resource_link", (LTIResourceLink,)
+        )
 
         response = self._requester.request(
             "GET",
             f"courses/{self.id}/lti_resource_links/{lti_resource_link_id}",
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return LTIResourceLink(self._requester, response.json())
-    
+
     def create_lti_resource_link(self, url, title=None, custom=None, **kwargs):
         """
         Create a new LTI resource link.
@@ -2827,7 +2828,7 @@ class Course(CanvasObject):
 
         if not url:
             raise RequiredFieldMissing("The 'url' paramter is required.")
-        
+
         kwargs["url"] = url
         if title:
             kwargs["title"] = title
@@ -2837,7 +2838,7 @@ class Course(CanvasObject):
         response = self._requester.request(
             "POST",
             f"courses/{self.id}/lti_resource_links",
-            _kwargs=combine_kwargs(**kwargs)
+            _kwargs=combine_kwargs(**kwargs),
         )
         return LTIResourceLink(self._requester, response.json())
 

@@ -1890,12 +1890,13 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(root_folder_list), 1)
         self.assertIsInstance(root_folder_list[0], Folder)
         self.assertEqual("course_files", root_folder_list[0].name)
-    
+
     # create_lti_resource_link()
     def test_create_lti_resource_link(self, m):
         register_uris({"lti_resource_link": ["create_lti_resource_link"]}, m)
         evnt = self.course.create_lti_resource_link(
-           url="https://example.com/lti/launch/content_item/123", title="Test LTI Resource Link", 
+            url="https://example.com/lti/launch/content_item/123",
+            title="Test LTI Resource Link",
         )
         self.assertIsInstance(evnt, LTIResourceLink)
         self.assertEqual(evnt.title, "Test LTI Resource Link")
@@ -1917,9 +1918,12 @@ class TestCourse(unittest.TestCase):
         lti_resource_link_by_id = self.course.get_lti_resource_link(45)
         self.assertIsInstance(lti_resource_link_by_id, LTIResourceLink)
         self.assertEqual(lti_resource_link_by_id.title, "Test LTI Resource Link")
-        lti_resource_link_by_obj = self.course.get_lti_resource_link(lti_resource_link_by_id)
+        lti_resource_link_by_obj = self.course.get_lti_resource_link(
+            lti_resource_link_by_id
+        )
         self.assertIsInstance(lti_resource_link_by_obj, LTIResourceLink)
         self.assertEqual(lti_resource_link_by_obj.title, "Test LTI Resource Link")
+
 
 @requests_mock.Mocker()
 class TestCourseNickname(unittest.TestCase):
