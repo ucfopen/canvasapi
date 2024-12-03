@@ -1,0 +1,48 @@
+{
+	"create_lti_resource_link": {
+		"method": "POST",
+		"endpoint": "courses/1/lti_resource_links",
+		"data": {
+			"id": 45,
+            "context_id": 1,
+            "context_type": "Course",
+            "context_external_tool_id": 1,
+            "resource_type": "assignment",
+            "canvas_launch_url": "https://example.instructure.com/courses/1/external_tools/retrieve?resource_link_lookup_uuid=ae43ba23-d238-49bc-ab55-ba7f79f77896",
+            "resource_link_uuid": "ae43ba23-d238-49bc-ab55-ba7f79f77896",
+            "lookup_uuid": "c522554a-d4be-49ef-b163-9c87fdc6ad6f",
+            "title": "Test LTI Resource Link",
+            "url": "https://example.com/lti/launch/content_item/123"
+		},
+		"status_code": 200
+	},
+
+	"get_lti_resource_link": {
+		"method": "GET",
+		"endpoint": "courses/1/lti_resource_links/45",
+		"data": {
+			"id": 45,
+            "title": "Test LTI Resource Link"
+		},
+		"status_code": 200
+	},
+	"list_lti_resource_links": {
+		"method": "GET",
+		"endpoint": "courses/1/lti_resource_links",
+		"data": [
+            {
+				"id": 45,
+                "title": "Test LTI Resource Link"
+			},
+			{
+				"id": 56,
+                "title": "Test LTI Resource Link 2"
+			},
+			{
+				"id": 67,
+                "title": "Test LTI Resource Link 3"
+			}
+		],
+		"status_code": 200
+	}
+}
