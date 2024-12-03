@@ -1,5 +1,3 @@
-import os
-from canvasapi import Canvas
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.util import combine_kwargs, obj_or_id
@@ -85,20 +83,3 @@ class ExtendedCourse(Course):
             _kwargs=combine_kwargs(**kwargs)
         )
         return LTIResourceLink(self._requester, response.json())
-
-# local testing
-API_URL = os.getenv('CANVAS_API_URL')
-API_KEY = os.getenv('CANVAS_API_KEY')
-
-if not API_URL or not API_KEY:
-    print("Error: Please set the CANVAS_API_URL and CANVAS_API_KEY environment variables.")
-    exit(1)
-
-canvas = Canvas(API_URL, API_KEY)
-
-course_id = 10791957
-course = ExtendedCourse(canvas._Canvas__requester, {'id': course_id})
-
-lti_resource_links = course.get_lti_resource_links()
-for link in lti_resource_links:
-    print(link)
