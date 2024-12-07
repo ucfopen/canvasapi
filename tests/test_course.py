@@ -21,7 +21,6 @@ from canvasapi.enrollment import Enrollment
 from canvasapi.exceptions import RequiredFieldMissing, ResourceDoesNotExist
 from canvasapi.external_feed import ExternalFeed
 from canvasapi.external_tool import ExternalTool
-from canvasapi.lti_resource_link import LTIResourceLink
 from canvasapi.feature import Feature, FeatureFlag
 from canvasapi.file import File
 from canvasapi.folder import Folder
@@ -36,6 +35,7 @@ from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.license import License
+from canvasapi.lti_resource_link import LTIResourceLink
 from canvasapi.module import Module
 from canvasapi.new_quiz import NewQuiz
 from canvasapi.outcome import OutcomeGroup, OutcomeLink, OutcomeResult
