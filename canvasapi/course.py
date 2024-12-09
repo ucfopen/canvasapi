@@ -23,6 +23,7 @@ from canvasapi.gradebook_history import (
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
+from canvasapi.lti_resource_link import LTIResourceLink
 from canvasapi.module import Module
 from canvasapi.new_quiz import NewQuiz
 from canvasapi.outcome_import import OutcomeImport
@@ -2771,7 +2772,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.paginated_list.PaginatedList`
         """
-        from canvasapi.lti_resource_link import LTIResourceLink
 
         return PaginatedList(
             LTIResourceLink,
@@ -2793,7 +2793,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.lti_resource_link.LTIResourceLink`
         """
-        from canvasapi.lti_resource_link import LTIResourceLink
 
         lti_resource_link_id = obj_or_id(
             lti_resource_link, "lti_resource_link", (LTIResourceLink,)
@@ -2824,7 +2823,6 @@ class Course(CanvasObject):
 
         :rtype: :class:`canvasapi.lti_resource_link.LTIResourceLink`
         """
-        from canvasapi.lti_resource_link import LTIResourceLink
 
         if not url:
             raise RequiredFieldMissing("The 'url' paramter is required.")
