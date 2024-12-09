@@ -446,8 +446,6 @@ class Course(CanvasObject):
         :calls: `POST /api/v1/courses/:course_id/lti_resource_links \
         <https://canvas.instructure.com/doc/api/lti_resource_links.html#method.lti/resource_links.create>`_
 
-        :param course_id: The ID of the course.
-        :type course_id: `int`
         :param url: The launch URL for the resource link.
         :type url: `str`
         :param title: The title of the resource link.
@@ -1712,7 +1710,8 @@ class Course(CanvasObject):
         :calls: `GET /api/v1/courses/:course_id/lti_resource_links \
         <https://canvas.instructure.com/doc/api/lti_resource_links.html#method.lti/resource_links.index>`_
 
-        :rtype: :class:`canvasapi.paginated_list.PaginatedList`
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.lti_resource_link.LTIResourceLink`
         """
 
         return PaginatedList(
