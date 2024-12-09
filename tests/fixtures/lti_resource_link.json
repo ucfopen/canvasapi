@@ -22,7 +22,8 @@
 		"endpoint": "courses/1/lti_resource_links/45",
 		"data": {
 			"id": 45,
-            "title": "Test LTI Resource Link"
+            "title": "Test LTI Resource Link",
+			"url": "https://example.com/lti/launch/content_item/123"
 		},
 		"status_code": 200
 	},

@@ -459,7 +459,7 @@ class Course(CanvasObject):
         """
 
         if not url:
-            raise RequiredFieldMissing("The 'url' paramter is required.")
+            raise RequiredFieldMissing("url is required as a str.")
 
         kwargs["url"] = url
         if title:

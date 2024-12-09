@@ -1894,13 +1894,21 @@ class TestCourse(unittest.TestCase):
     # create_lti_resource_link()
     def test_create_lti_resource_link(self, m):
         register_uris({"lti_resource_link": ["create_lti_resource_link"]}, m)
+        custom_dict = {"hello": "world"}
+
         evnt = self.course.create_lti_resource_link(
             url="https://example.com/lti/launch/content_item/123",
             title="Test LTI Resource Link",
+            custom=custom_dict,
         )
         self.assertIsInstance(evnt, LTIResourceLink)
+
         self.assertEqual(evnt.title, "Test LTI Resource Link")
         self.assertEqual(evnt.url, "https://example.com/lti/launch/content_item/123")
+
+    def test_create_lti_resource_link_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_lti_resource_link({})
 
     # get_lti_resource_links()
     def test_get_lti_resource_links(self, m):
@@ -1916,6 +1924,7 @@ class TestCourse(unittest.TestCase):
         register_uris({"lti_resource_link": ["get_lti_resource_link"]}, m)
 
         lti_resource_link_by_id = self.course.get_lti_resource_link(45)
+
         self.assertIsInstance(lti_resource_link_by_id, LTIResourceLink)
         self.assertEqual(lti_resource_link_by_id.title, "Test LTI Resource Link")
         lti_resource_link_by_obj = self.course.get_lti_resource_link(
