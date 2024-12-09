@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### New Endpoint Coverage
+
+- LTI Resource Links (Thanks, [@jsmnhou](https://github.com/jsmnhou))
+
 ### Backstage
 
 - Updated deploy Action to use more modern processes.

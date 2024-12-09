@@ -41,6 +41,7 @@ Class Reference
     jwt-ref
     login-ref
     license-ref
+    lti-resource-link-ref
     module-ref
     outcome-ref
     outcome-import-ref

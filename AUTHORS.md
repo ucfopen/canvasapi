@@ -53,6 +53,7 @@
 - Ian Altgilbers [@altgilbers](https://github.com/altgilbers)
 - Ian Turgeon [@iturgeon](https://github.com/iturgeon)
 - [@jackrsteiner](https://github.com/jackrsteiner)
+- Jasmine Hou [@jsmnhou](https://github.com/jsmnhou)
 - John Raible [@rebelaide](https://github.com/rebelaide)
 - Joon Ro [@joonro](https://github.com/joonro)
 - Jonah Majumder [@jonahmajumder](https://github.com/jonahmajumder)
