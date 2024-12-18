@@ -1,8 +1,9 @@
 from __future__ import annotations
 import re
-from typing import TypeVar, Iterable, Iterator
+from typing import TypeVar, Iterable, Iterator, Type
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class PaginatedList(Iterable[T]):
     """
@@ -22,14 +23,14 @@ class PaginatedList(Iterable[T]):
 
     def __init__(
         self,
-        content_class:T,
+        content_class: Type[T],
         requester,
         request_method,
         first_url,
         extra_attribs=None,
         _root=None,
         _url_override=None,
-        **kwargs
+        **kwargs,
     ):
         """
         :param content_class: The expected type to return in the list.
