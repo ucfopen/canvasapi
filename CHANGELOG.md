@@ -9,6 +9,7 @@
 ### Backstage
 
 - Updated deploy Action to use more modern processes.
+- Updated `PaginatedList` to be type-aware, showing which class is included in the response. (Thanks [@HandcartCactus](https://github.com/HandcartCactus))
 
 ## [3.3.0] - 2023-08-27
 

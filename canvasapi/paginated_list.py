@@ -1,7 +1,12 @@
+from __future__ import annotations
+
 import re
+from typing import Iterable, Iterator, Type, TypeVar
+
+T = TypeVar("T")
 
 
-class PaginatedList(object):
+class PaginatedList(Iterable[T]):
     """
     Abstracts `pagination of Canvas API \
     <https://canvas.instructure.com/doc/api/file.pagination.html>`_.
@@ -19,14 +24,14 @@ class PaginatedList(object):
 
     def __init__(
         self,
-        content_class,
+        content_class: Type[T],
         requester,
         request_method,
         first_url,
         extra_attribs=None,
         _root=None,
         _url_override=None,
-        **kwargs
+        **kwargs,
     ):
         """
         :param content_class: The expected type to return in the list.
@@ -60,7 +65,7 @@ class PaginatedList(object):
         self._root = _root
         self._url_override = _url_override
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[T]:
         for element in self._elements:
             yield element
         while self._has_next():

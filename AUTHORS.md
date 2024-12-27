@@ -42,6 +42,7 @@
 - Deundre Williams [@deundrewilliams](https://github.com/deundrewilliams)
 - Devin Singh [@devints47](https://github.com/devints47)
 - Dmitry Savransky [@dsavransky](https://github.com/dsavransky)
+- Elias [@HandcartCactus](https://github.com/HandcartCactus)
 - Elise Heron [@thedarkestknight](https://github.com/thedarkestknight)
 - Elli Howard [@qwertynerd97](https://github.com/qwertynerd97)
 - Erik Tews [@eriktews](https://github.com/eriktews)
