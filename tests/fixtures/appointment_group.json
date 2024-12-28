@@ -67,6 +67,23 @@
 		],
 		"status_code": 200
 	},
+	"list_manageable_appointment_groups": {
+		"method": "GET",
+		"endpoint": "appointment_groups",
+		"data": [
+			{
+				"id": 999,
+				"context_codes": ["course_123"],
+				"title": "Test Group 1"
+			},
+			{
+				"id": 888,
+				"context_codes": ["course_456"],
+				"title": "Test Group 2"
+			}
+		],
+		"status_code": 200
+	},
 	"list_user_participants": {
 		"method": "GET",
 		"endpoint": "appointment_groups/222/users",
