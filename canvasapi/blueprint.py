@@ -103,7 +103,7 @@ class BlueprintTemplate(CanvasObject):
             "courses/{}/blueprint_templates/{}/unsynced_changes".format(
                 self.course_id, self.id
             ),
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def list_blueprint_migrations(self, **kwargs):
@@ -126,7 +126,7 @@ class BlueprintTemplate(CanvasObject):
                 self.course_id, self.id
             ),
             {"course_id": self.course_id},
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def show_blueprint_migration(self, migration, **kwargs):
@@ -201,7 +201,7 @@ class BlueprintMigration(CanvasObject):
             "courses/{}/blueprint_templates/{}/migrations/{}/details".format(
                 self.course_id, self.template_id, self.id
             ),
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_import_details(self, **kwargs):
@@ -224,7 +224,7 @@ class BlueprintMigration(CanvasObject):
             "courses/{}/blueprint_subscriptions/{}/migrations/{}/details".format(
                 self.course_id, self.subscription_id, self.id
             ),
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
 
@@ -258,7 +258,7 @@ class BlueprintSubscription(CanvasObject):
                 self.course_id, self.id
             ),
             {"course_id": self.id},
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def show_blueprint_import(self, migration, **kwargs):

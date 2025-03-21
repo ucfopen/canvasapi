@@ -978,7 +978,7 @@ class Course(CanvasObject):
             "GET",
             "courses/{}/collaborations".format(self.id),
             _root="collaborations",
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_content_export(self, content_export, **kwargs):
@@ -1018,7 +1018,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/content_exports".format(self.id),
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_content_migration(self, content_migration, **kwargs):
@@ -1535,7 +1535,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/gradebook_history/{}".format(self.id, date),
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_grading_period(self, grading_period, **kwargs):
@@ -1579,7 +1579,7 @@ class Course(CanvasObject):
             "courses/{}/grading_periods".format(self.id),
             {"course_id": self.id},
             _root="grading_periods",
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_grading_standards(self, **kwargs):
@@ -1719,7 +1719,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             f"courses/{self.id}/lti_resource_links",
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_migration_systems(self, **kwargs):
@@ -2279,7 +2279,7 @@ class Course(CanvasObject):
             "courses/{}/gradebook_history/{}/graders/{}/assignments/{}/submissions".format(
                 self.id, date, grader_id, assignment_id
             ),
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_tabs(self, **kwargs):
@@ -2341,7 +2341,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             "courses/{}/gradebook_history/feed".format(self.id),
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_user(self, user, user_id_type=None, **kwargs):
@@ -2511,7 +2511,7 @@ class Course(CanvasObject):
             "GET",
             "courses/{}/blueprint_subscriptions".format(self.id),
             {"course_id": self.id},
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def preview_html(self, html, **kwargs):
