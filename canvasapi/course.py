@@ -2744,6 +2744,33 @@ class Course(CanvasObject):
 
         return Page(self._requester, page_json)
 
+    def smartsearch(self, query, **kwargs):
+        """
+        AI-powered course content search.
+
+        :calls: `GET /api/v1/courses/:course_id/smartsearch \
+        <https://canvas.instructure.com/doc/api/smart_search.html#method.smart_search.search>`_
+
+        :param query: The search query string.
+        :type query: str
+        :param kwargs: Optional query parameters (e.g., filter, per_page).
+        :type kwargs: dict
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.searchresult.SearchResult`
+        """
+        from canvasapi.searchresult import SearchResult
+
+        kwargs["q"] = query
+
+        return PaginatedList(
+            SearchResult,
+            self._requester,
+            "GET",
+            f"courses/{self.id}/smartsearch",
+            {"course_id": self.id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def submissions_bulk_update(self, **kwargs):
         """
         Update the grading and comments on multiple student's assignment
