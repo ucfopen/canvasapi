@@ -149,7 +149,7 @@ class TestQuiz(unittest.TestCase):
 
     # create_question()
     def test_create_question(self, m):
-        register_uris({"quiz": ["create_question"]}, m)
+        register_uris({"quiz": ["create_question", "edit"]}, m)
 
         question_dict = {
             "question_name": "Pick Correct Answer",
@@ -164,6 +164,25 @@ class TestQuiz(unittest.TestCase):
         self.assertIsInstance(question, QuizQuestion)
         self.assertTrue(hasattr(question, "question_name"))
         self.assertEqual(question.question_name, question_dict["question_name"])
+
+        
+    def test_create_question_autosaves(self, m):
+        register_uris({"quiz": ["create_question", "edit"]}, m)
+
+        question_dict = {
+            "question_name": "Pick Correct Answer",
+            "question_type": "multiple_choice_question",
+            "question_text": "What is the right answer?",
+            "points_possible": 10,
+            "correct_comments": "That's correct!",
+            "incorrect_comments": "That's wrong!",
+        }
+
+        question = self.quiz.create_question(question=question_dict)
+
+        self.assertIsInstance(question, QuizQuestion)
+        self.assertEqual(question.question_name, question_dict["question_name"])
+
 
     # get_question()
     def test_get_question(self, m):
