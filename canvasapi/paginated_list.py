@@ -47,6 +47,7 @@ class PaginatedList(Iterable[T]):
         :param _root: Specify a nested property from Canvas to use for the resulting list.
         :type _root: str
         :param _url_override: "new_quizzes" or "graphql" for specific Canvas endpoints.
+
         Other URLs may be specified for third-party requests.
         :type _url_override: str
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of type content_class
