@@ -5,6 +5,7 @@
 ### New Endpoint Coverage
 
 - LTI Resource Links (Thanks, [@jsmnhou](https://github.com/jsmnhou))
+- Smart Search API [BETA] (Thanks, [@alportoricensis](https://github.com/alportoricensis))
 
 ### General
 

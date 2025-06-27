@@ -5,7 +5,7 @@ from canvasapi.canvas_object import CanvasObject
 # on code changes. If you've landed here on an error, it could be the API was updated.
 class SearchResult(CanvasObject):
     """
-    Represents a result (which can be of multiple types) return from the SmartSearch API.
+    Represents a result (which can be of multiple types) return from the `SmartSearch API. \
     <https://canvas.instructure.com/doc/api/smart_search.html#method.smart_search.search>`_
     """
 
