@@ -1,5 +1,7 @@
 import unittest
+
 import requests_mock
+
 from canvasapi import Canvas
 from canvasapi.searchresult import SearchResult
 from tests import settings

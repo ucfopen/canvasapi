@@ -32,6 +32,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
 from canvasapi.rubric import Rubric, RubricAssociation
+from canvasapi.searchresult import SearchResult
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.todo import Todo
@@ -2758,8 +2759,6 @@ class Course(CanvasObject):
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.searchresult.SearchResult`
         """
-        from canvasapi.searchresult import SearchResult
-
         kwargs["q"] = query
 
         return PaginatedList(

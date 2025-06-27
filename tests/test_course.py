@@ -44,13 +44,13 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizAssignmentOverrideSet, QuizExtension
 from canvasapi.rubric import Rubric, RubricAssociation
+from canvasapi.searchresult import SearchResult
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.todo import Todo
 from canvasapi.usage_rights import UsageRights
 from canvasapi.user import User
-from canvasapi.searchresult import SearchResult
 from tests import settings
 from tests.util import cleanup_file, register_uris
 

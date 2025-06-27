@@ -1,8 +1,8 @@
 from canvasapi.canvas_object import CanvasObject
 
 
-# NOTE - As of April 25th, 2025, the SmartSearch API is experimental, and may cause breaks
-#        on code changes. If you've landed here on an error, it could be the API was updated.
+# As of April 25th, 2025, the SmartSearch API is experimental, and may cause breaks
+# on code changes. If you've landed here on an error, it could be the API was updated.
 class SearchResult(CanvasObject):
     """
     Represents a result (which can be of multiple types) return from the SmartSearch API.
@@ -19,12 +19,12 @@ class SearchResult(CanvasObject):
             raise ValueError("SearchResult missing required fields: {}".format(missing))
 
     def __str__(self):
-        # NOTE - Using Untitiled as a fallback in the event the API changes.
+        # Using Untitled as a fallback in the event the API changes.
         return "<SearchResult: {} - {}>".format(
             self.content_type, getattr(self, "title", "Untitled")
         )
 
-    def resolve(self, course):
+    def resolve(self, course, **kwargs):
         """
         Resolve this SearchResult into the corresponding Canvas object.
 
@@ -41,18 +41,19 @@ class SearchResult(CanvasObject):
             )
 
         content_type = self.content_type.lower()
-        types = [
-            ("page", course.get_page),
-            ("assignment", course.get_assignment),
-            ("discussion", course.get_discussion_topic),
-            ("announcement", course.get_discussion_topic),
-        ]
+        types = {
+            "page": course.get_page,
+            "assignment": course.get_assignment,
+            "discussiontopic": course.get_discussion_topic,
+            "announcement": course.get_discussion_topic,
+        }
 
-        for keyword, resolver in types:
-            if keyword in content_type:
-                return resolver(self.content_id)
+        resolver = types.get(content_type)
+        if not resolver:
+            raise ValueError(
+                "Resolution not supported for content_type: {}".format(
+                    self.content_type
+                )
+            )
 
-        # See NOTE above.
-        raise ValueError(
-            "Resolution not supported for content_type: {}".format(self.content_type)
-        )
+        return resolver(self.content_id, **kwargs)
