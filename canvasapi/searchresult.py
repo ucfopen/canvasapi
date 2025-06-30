@@ -1,7 +1,7 @@
 from canvasapi.canvas_object import CanvasObject
 
 
-# As of April 25th, 2025, the SmartSearch API is experimental, and may cause breaks
+# As of June 30th, 2025, the SmartSearch API is experimental, and may cause breaks
 # on code changes. If you've landed here on an error, it could be the API was updated.
 class SearchResult(CanvasObject):
     """
@@ -38,7 +38,7 @@ class SearchResult(CanvasObject):
                 "SearchResult is missing 'content_type' or 'content_id' for resolution"
             )
 
-        # use course_id to create a "fake" Course object to work from
+        # Use course_id set from Course.smartsearch to create a "fake" Course object to work from
         from canvasapi.course import Course
 
         course = Course(self._requester, {"id": self.course_id})
