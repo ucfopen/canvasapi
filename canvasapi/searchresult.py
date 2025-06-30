@@ -24,12 +24,10 @@ class SearchResult(CanvasObject):
             self.content_type, getattr(self, "title", "Untitled")
         )
 
-    def resolve(self, course):
+    def resolve(self):
         """
         Resolve this SearchResult into the corresponding Canvas object.
 
-        :param course: The Course instance to resolve against.
-        :type course: :class:`canvasapi.course.Course`
         :return: The full object (e.g., Page, Assignment, DiscussionTopic), or None if
                 resolution fails.
         :rtype: :class:`canvasapi.page.Page`, :class:`canvasapi.assignment.Assignment`,
@@ -39,6 +37,11 @@ class SearchResult(CanvasObject):
             raise ValueError(
                 "SearchResult is missing 'content_type' or 'content_id' for resolution"
             )
+
+        # use course_id to create a "fake" Course object to work from
+        from canvasapi.course import Course
+
+        course = Course(self._requester, {"id": self.course_id})
 
         types = {
             "WikiPage": course.get_page,

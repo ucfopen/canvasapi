@@ -49,12 +49,12 @@ class TestSearchResult(unittest.TestCase):
 
     def test_resolve_page(self, m):
         register_uris({"course": ["get_page_smartsearch_variant"]}, m)
-        resolved = self.basic_result.resolve(self.course)
+        resolved = self.basic_result.resolve()
         self.assertEqual(resolved.title, "Nicolaus Copernicus")
 
     def test_resolve_assignment(self, m):
         register_uris({"course": ["get_assignment_smartsearch_variant"]}, m)
-        resolved = self.assignment_result.resolve(self.course)
+        resolved = self.assignment_result.resolve()
         self.assertIsInstance(resolved, Assignment)
         self.assertEqual(resolved.name, "Derivatives HW")
 
@@ -67,9 +67,10 @@ class TestSearchResult(unittest.TestCase):
                 "content_type": "DiscussionTopic",
                 "title": "Intro Discussion",
                 "html_url": "https://canvas.example.com/discussion",
+                "course_id": 1,
             },
         )
-        resolved = result.resolve(self.course)
+        resolved = result.resolve()
         self.assertEqual(resolved.title, "Please Discuss")
 
     def test_resolve_announcement(self, m):
@@ -89,9 +90,10 @@ class TestSearchResult(unittest.TestCase):
                 "content_type": "Announcement",
                 "title": "Class Cancelled",
                 "html_url": "https://canvas.example.com/announcements",
+                "course_id": 1,
             },
         )
-        resolved = result.resolve(self.course)
+        resolved = result.resolve()
         self.assertEqual(resolved.title, "Class Cancelled")
 
     def test_resolve_unknown_type_raises(self, m):
@@ -102,15 +104,16 @@ class TestSearchResult(unittest.TestCase):
                 "content_type": "MysteryThing",
                 "title": "Mystery",
                 "html_url": "https://canvas.example.com/unknown",
+                "course_id": 1,
             },
         )
         with self.assertRaises(ValueError):
-            result.resolve(self.course)
+            result.resolve()
 
     def test_resolve_missing_attrs_raises(self, m):
         with self.assertRaises(ValueError):
             result = SearchResult(self.basic_result._requester, {"title": "Incomplete"})
-            result.resolve(self.course)
+            result.resolve()
 
     def test_resolve_raises_if_missing_attrs(self, m):
         result = SearchResult(
@@ -120,11 +123,12 @@ class TestSearchResult(unittest.TestCase):
                 "content_type": "Assignment",
                 "title": "Partial Result",
                 "html_url": "https://canvas.example.com",
+                "course_id": 1,
             },
         )
         delattr(result, "content_id")
         with self.assertRaises(ValueError) as ctx:
-            result.resolve(self.course)
+            result.resolve()
         self.assertIn("content_type", str(ctx.exception))
 
     def test_resolve_multiple_types(self, m):
@@ -144,13 +148,13 @@ class TestSearchResult(unittest.TestCase):
         self.assertEqual(len(results), 4)
 
         # WikiPage
-        self.assertIsInstance(results[0].resolve(self.course), Page)
+        self.assertIsInstance(results[0].resolve(), Page)
 
         # Assignment
-        self.assertIsInstance(results[1].resolve(self.course), Assignment)
+        self.assertIsInstance(results[1].resolve(), Assignment)
 
         # DiscussionTopic
-        self.assertIsInstance(results[2].resolve(self.course), DiscussionTopic)
+        self.assertIsInstance(results[2].resolve(), DiscussionTopic)
 
         # Announcement (uses DiscussionTopic)
-        self.assertIsInstance(results[3].resolve(self.course), DiscussionTopic)
+        self.assertIsInstance(results[3].resolve(), DiscussionTopic)
