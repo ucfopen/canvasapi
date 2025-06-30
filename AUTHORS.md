@@ -17,6 +17,7 @@
 - Adrian Goetz [@a-goetz](https://github.com/a-goetz)
 - Aileen Pongnon [@aileenpongnon](https://github.com/aileenpongnon)
 - Alyssa Davis [@allygator](https://github.com/allygator)
+- Alex Gabriel Nunez-Carrasquillo [@alportoricensis](https://github.com/alportoricensis)
 - [@amorqiu](https://github.com/amorqiu)
 - Andrew Gardener [@andrew-gardener](https://github.com/andrew-gardener)
 - Anthony Rodriguez [@AnthonyRodriguez726](https://github.com/AnthonyRodriguez726)

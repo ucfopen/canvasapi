@@ -32,6 +32,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
 from canvasapi.rubric import Rubric, RubricAssociation
+from canvasapi.searchresult import SearchResult
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.todo import Todo
@@ -2743,6 +2744,32 @@ class Course(CanvasObject):
         page_json.update({"course_id": self.id})
 
         return Page(self._requester, page_json)
+
+    def smartsearch(self, q, **kwargs):
+        """
+        AI-powered course content search.
+
+        :calls: `GET /api/v1/courses/:course_id/smartsearch \
+        <https://canvas.instructure.com/doc/api/smart_search.html#method.smart_search.search>`_
+
+        :param q: The search query string.
+        :type q: str
+        :param kwargs: Optional query parameters (e.g., filter, per_page).
+        :type kwargs: dict
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.searchresult.SearchResult`
+        """
+        kwargs["q"] = q
+
+        return PaginatedList(
+            SearchResult,
+            self._requester,
+            "GET",
+            f"courses/{self.id}/smartsearch",
+            {"course_id": self.id},
+            _root="results",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def submissions_bulk_update(self, **kwargs):
         """
