@@ -3,6 +3,9 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
+from canvasapi.assignment import Assignment
+from canvasapi.discussion_topic import DiscussionTopic
+from canvasapi.page import Page
 from canvasapi.searchresult import SearchResult
 from tests import settings
 from tests.util import register_uris
@@ -19,11 +22,6 @@ class TestSearchResult(unittest.TestCase):
                         "get_by_id",
                         "smartsearch_basic",
                         "smartsearch_with_filter",
-                        "get_page",
-                        "get_assignment",
-                        "get_discussion_topic",
-                        "get_announcement",
-                        "get_disc_topic",
                     ]
                 },
                 m,
@@ -35,9 +33,8 @@ class TestSearchResult(unittest.TestCase):
             )[0]
 
     def test_str_representation(self, m):
-        register_uris({"course": ["smartsearch_basic"]}, m)
         self.assertEqual(
-            str(self.basic_result), "<SearchResult: Assignment - Chain Rule Practice>"
+            str(self.basic_result), "<SearchResult: WikiPage - Nicolaus Copernicus>"
         )
 
     def test_str_fallback(self, m):
@@ -51,17 +48,18 @@ class TestSearchResult(unittest.TestCase):
             SearchResult(self.basic_result._requester, {"content_type": "WikiPage"})
 
     def test_resolve_page(self, m):
-        register_uris({"course": ["get_assignment"]}, m)
+        register_uris({"course": ["get_page_smartsearch_variant"]}, m)
         resolved = self.basic_result.resolve(self.course)
-        self.assertEqual(resolved.title, "Derivatives HW")
+        self.assertEqual(resolved.title, "Nicolaus Copernicus")
 
     def test_resolve_assignment(self, m):
-        register_uris({"course": ["get_assignment"]}, m)
+        register_uris({"course": ["get_assignment_smartsearch_variant"]}, m)
         resolved = self.assignment_result.resolve(self.course)
-        self.assertEqual(resolved.title, "Derivatives HW")
+        self.assertIsInstance(resolved, Assignment)
+        self.assertEqual(resolved.name, "Derivatives HW")
 
     def test_resolve_discussion(self, m):
-        register_uris({"course": ["get_disc_topic"]}, m)
+        register_uris({"course": ["get_disc_topic_smartsearch_variant"]}, m)
         result = SearchResult(
             self.basic_result._requester,
             {
@@ -72,10 +70,18 @@ class TestSearchResult(unittest.TestCase):
             },
         )
         resolved = result.resolve(self.course)
-        self.assertEqual(resolved.title, "Class Cancelled")
+        self.assertEqual(resolved.title, "Please Discuss")
 
     def test_resolve_announcement(self, m):
-        register_uris({"course": ["get_discussion_topic", "get_announcement"]}, m)
+        register_uris(
+            {
+                "course": [
+                    "get_disc_topic_smartsearch_variant",
+                    "get_announcement_smartsearch_variant",
+                ]
+            },
+            m,
+        )
         result = SearchResult(
             self.basic_result._requester,
             {
@@ -120,3 +126,31 @@ class TestSearchResult(unittest.TestCase):
         with self.assertRaises(ValueError) as ctx:
             result.resolve(self.course)
         self.assertIn("content_type", str(ctx.exception))
+
+    def test_resolve_multiple_types(self, m):
+        register_uris(
+            {
+                "course": [
+                    "smartssearch_multiple_results",
+                    "get_page_smartsearch_variant",
+                    "get_assignment_smartsearch_variant",
+                    "get_disc_topic_smartsearch_variant",
+                    "get_announcement_smartsearch_variant",
+                ]
+            },
+            m,
+        )
+        results = list(self.course.smartsearch("multiple"))
+        self.assertEqual(len(results), 4)
+
+        # WikiPage
+        self.assertIsInstance(results[0].resolve(self.course), Page)
+
+        # Assignment
+        self.assertIsInstance(results[1].resolve(self.course), Assignment)
+
+        # DiscussionTopic
+        self.assertIsInstance(results[2].resolve(self.course), DiscussionTopic)
+
+        # Announcement (uses DiscussionTopic)
+        self.assertIsInstance(results[3].resolve(self.course), DiscussionTopic)

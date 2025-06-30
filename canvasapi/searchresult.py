@@ -24,7 +24,7 @@ class SearchResult(CanvasObject):
             self.content_type, getattr(self, "title", "Untitled")
         )
 
-    def resolve(self, course, **kwargs):
+    def resolve(self, course):
         """
         Resolve this SearchResult into the corresponding Canvas object.
 
@@ -40,15 +40,14 @@ class SearchResult(CanvasObject):
                 "SearchResult is missing 'content_type' or 'content_id' for resolution"
             )
 
-        content_type = self.content_type.lower()
         types = {
-            "page": course.get_page,
-            "assignment": course.get_assignment,
-            "discussiontopic": course.get_discussion_topic,
-            "announcement": course.get_discussion_topic,
+            "WikiPage": course.get_page,
+            "Assignment": course.get_assignment,
+            "DiscussionTopic": course.get_discussion_topic,
+            "Announcement": course.get_discussion_topic,
         }
 
-        resolver = types.get(content_type)
+        resolver = types.get(self.content_type)
         if not resolver:
             raise ValueError(
                 "Resolution not supported for content_type: {}".format(
@@ -56,4 +55,4 @@ class SearchResult(CanvasObject):
                 )
             )
 
-        return resolver(self.content_id, **kwargs)
+        return resolver(self.content_id)

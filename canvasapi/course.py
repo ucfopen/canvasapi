@@ -2745,21 +2745,21 @@ class Course(CanvasObject):
 
         return Page(self._requester, page_json)
 
-    def smartsearch(self, query, **kwargs):
+    def smartsearch(self, q, **kwargs):
         """
         AI-powered course content search.
 
         :calls: `GET /api/v1/courses/:course_id/smartsearch \
         <https://canvas.instructure.com/doc/api/smart_search.html#method.smart_search.search>`_
 
-        :param query: The search query string.
-        :type query: str
+        :param q: The search query string.
+        :type q: str
         :param kwargs: Optional query parameters (e.g., filter, per_page).
         :type kwargs: dict
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.searchresult.SearchResult`
         """
-        kwargs["q"] = query
+        kwargs["q"] = q
 
         return PaginatedList(
             SearchResult,
@@ -2767,6 +2767,7 @@ class Course(CanvasObject):
             "GET",
             f"courses/{self.id}/smartsearch",
             {"course_id": self.id},
+            _root="results",
             _kwargs=combine_kwargs(**kwargs),
         )
 

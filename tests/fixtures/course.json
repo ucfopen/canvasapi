@@ -2443,54 +2443,105 @@
 	},
 	"smartsearch_basic": {
 		"method": "GET",
-		"endpoint": "courses/1/smartsearch",
-		"data": [
-			{
-			"content_id": 2,
-			"content_type": "WikiPage",
-			"title": "Nicolaus Copernicus",
-			"body": "...",
-			"html_url": "https://canvas.example.com/courses/123/pages/nicolaus-copernicus",
-			"distance": 0.212
-			}
-		]
+		"endpoint": "courses/1/smartsearch?q=Copernicus",
+		"data": {
+			"results": [
+				{
+					"content_id": 2,
+					"content_type": "WikiPage",
+					"title": "Nicolaus Copernicus",
+					"body": "...",
+					"html_url": "https://canvas.example.com/courses/1/pages/nicolaus-copernicus",
+					"distance": 0.212
+				}
+			]
+		}
 	},
 	"smartsearch_with_filter": {
 		"method": "GET",
-		"endpoint": "courses/1/smartsearch",
-		"data": [
-			{
-			"content_id": 5,
-			"content_type": "Assignment",
-			"title": "Chain Rule Practice",
-			"html_url": "https://canvas.example.com/courses/123/assignments/5",
-			"distance": 0.112
-			}
-		]
+		"endpoint": "courses/1/smartsearch?q=derivatives&filter[]=assignments",
+		"data": {
+			"results": [
+				{
+					"content_id": 5,
+					"content_type": "Assignment",
+					"title": "Chain Rule Practice",
+					"html_url": "https://canvas.example.com/courses/1/assignments/5",
+					"distance": 0.112
+				}
+			]
+		}
 	},
-	"get_assignment": {
+	"smartssearch_multiple_results": {
+		"method": "GET",
+		"endpoint": "courses/1/smartsearch?q=multiple",
+		"data": {
+			"results": [
+				{
+					"content_id": 2,
+					"content_type": "WikiPage",
+					"title": "Nicolaus Copernicus",
+					"body": "...",
+					"html_url": "https://canvas.example.com/courses/1/pages/nicolaus-copernicus",
+					"distance": 0.212
+				},
+				{
+					"content_id": 5,
+					"content_type": "Assignment",
+					"title": "Chain Rule Practice",
+					"html_url": "https://canvas.example.com/courses/1/assignments/5",
+					"distance": 0.112
+				},
+				{
+					"content_id": 7,
+					"content_type": "DiscussionTopic",
+					"title": "Class Cancelled",
+					"html_url": "https://canvas.example.com/courses/1/discussion_topics/7",
+					"distance": 0.312
+				},
+				{
+					"content_id": 6,
+					"content_type": "Announcement",
+					"title": "Class Cancelled",
+					"html_url": "https://canvas.example.com/courses/1/discussion_topics/6",
+					"distance": 0.412
+				}
+			]
+		}
+	},
+	"get_page_smartsearch_variant": {
+		"method": "GET",
+		"endpoint": "courses/1/pages/2",
+		"data": {
+			"page_id": 2,
+			"url": "nicolaus-copernicus",
+			"title": "Nicolaus Copernicus",
+			"body": "...",
+			"html_url": "https://canvas.example.com/courses/1/pages/nicolaus-copernicus"
+		}
+	},
+	"get_assignment_smartsearch_variant": {
 		"method": "GET",
 		"endpoint": "courses/1/assignments/5",
 		"data": {
 			"id": 5,
-			"title": "Derivatives HW"
+			"name": "Derivatives HW"
 		}
 	},
-	"get_announcement": {
+	"get_disc_topic_smartsearch_variant": {
+		"method": "GET",
+		"endpoint": "courses/1/discussion_topics/6",
+		"data": {
+			"id": 6,
+			"title": "Please Discuss"
+		}
+	},
+	"get_announcement_smartsearch_variant": {
 		"method": "GET",
 		"endpoint": "courses/1/discussion_topics/7",
 		"data": {
 			"id": 7,
 			"title": "Class Cancelled"
 		}
-	},
-	"get_disc_topic": {
-		"method": "GET",
-		"endpoint": "courses/1/discussion_topics/6",
-		"data": {
-			"id": 7,
-			"title": "Class Cancelled"
-		}
 	}
 }
-

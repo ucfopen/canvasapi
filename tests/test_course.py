@@ -1557,7 +1557,7 @@ class TestCourse(unittest.TestCase):
 
     def test_smartsearch_with_filter(self, m):
         register_uris({"course": ["smartsearch_with_filter"]}, m)
-        results = self.course.smartsearch("derivatives", kwargs=["assignments"])
+        results = self.course.smartsearch("derivatives", filter=["assignments"])
         results = list(results)
         self.assertTrue(results)
         self.assertTrue(all(isinstance(r, SearchResult) for r in results))
