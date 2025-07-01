@@ -1,7 +1,6 @@
 -r tests_requirements.txt
 
-docutils==0.15.2
 pre-commit
-Sphinx
+Sphinx~=8.2.3
 sphinx-rtd-theme
 sphinx-version-warning

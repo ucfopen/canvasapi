@@ -44,6 +44,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizAssignmentOverrideSet, QuizExtension
 from canvasapi.rubric import Rubric, RubricAssociation
+from canvasapi.searchresult import SearchResult
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
@@ -1546,6 +1547,21 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(extension[1].user_id, "2")
         self.assertTrue(hasattr(extension[1], "extra_attempts"))
         self.assertEqual(extension[1].extra_attempts, 3)
+
+    def test_smartsearch(self, m):
+        register_uris({"course": ["smartsearch_basic"]}, m)
+        results = self.course.smartsearch("Copernicus")
+        self.assertTrue(results)
+        self.assertTrue(all(isinstance(r, SearchResult) for r in results))
+        self.assertEqual(results[0].title, "Nicolaus Copernicus")
+
+    def test_smartsearch_with_filter(self, m):
+        register_uris({"course": ["smartsearch_with_filter"]}, m)
+        results = self.course.smartsearch("derivatives", filter=["assignments"])
+        results = list(results)
+        self.assertTrue(results)
+        self.assertTrue(all(isinstance(r, SearchResult) for r in results))
+        self.assertEqual(results[0].title, "Chain Rule Practice")
 
     def test_set_extensions_not_list(self, m):
         with self.assertRaises(ValueError):

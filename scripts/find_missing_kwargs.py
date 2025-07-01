@@ -17,6 +17,7 @@ WHITELIST = (
     "Uploader.upload",
     "OutcomeGroup.context_ref",
     "OutcomeLink.context_ref",
+    "SearchResult.resolve",
 )
 
 
