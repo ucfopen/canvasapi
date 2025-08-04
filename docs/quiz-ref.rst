@@ -33,6 +33,13 @@ QuizReport
 .. autoclass:: canvasapi.quiz.QuizReport
     :members:
 
+=============
+QuizStatistic
+=============
+
+.. autoclass:: canvasapi.quiz.QuizStatistic
+    :members:
+
 ==============
 QuizSubmission
 ==============
