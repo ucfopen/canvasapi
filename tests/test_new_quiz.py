@@ -3,7 +3,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
-from canvasapi.new_quiz import NewQuiz
+from canvasapi.new_quiz import AccommodationResponse, NewQuiz
 from tests import settings
 from tests.util import register_uris
 
@@ -45,6 +45,36 @@ class TestNewQuiz(unittest.TestCase):
         self.assertTrue(hasattr(deleted_quiz, "course_id"))
         self.assertEqual(deleted_quiz.course_id, self.course.id)
 
+    # set_accommodations()
+    def test_set_accommodations(self, m):
+        register_uris(
+            {"new_quiz": ["set_new_quizzes_accomodations_quiz_level"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        accommodations = [
+            {
+                "user_id": 123,
+                "extra_time": 30,
+                "extra_attempts": 1,
+                "reduce_choices_enabled": True,
+            }
+        ]
+
+        response = self.new_quiz.set_accommodations(accommodations)
+
+        self.assertIsInstance(response, AccommodationResponse)
+        self.assertTrue(hasattr(response, "message"))
+        self.assertEqual(response.message, "Accommodations processed")
+        self.assertTrue(hasattr(response, "successful"))
+        self.assertIsInstance(response.successful, list)
+        self.assertEqual(len(response.successful), 1)
+        self.assertEqual(response.successful[0], {"user_id": 123})
+        self.assertTrue(hasattr(response, "failed"))
+        self.assertIsInstance(response.failed, list)
+        self.assertEqual(len(response.failed), 0)
+
     # update()
     def test_update(self, m):
         register_uris(
@@ -66,3 +96,17 @@ class TestNewQuiz(unittest.TestCase):
         self.assertEqual(new_quiz.instructions, new_instructions)
         self.assertTrue(hasattr(new_quiz, "course_id"))
         self.assertEqual(new_quiz.course_id, self.course.id)
+
+
+class TestAccommodationResponse(unittest.TestCase):
+    def setUp(self):
+        self.response_data = {
+            "message": "Accommodations processed",
+            "successful": [{"user_id": 123}],
+            "failed": [],
+        }
+        self.accommodation_response = AccommodationResponse(None, self.response_data)
+
+    def test_str(self):
+        expected_str = "Accommodations processed"
+        self.assertEqual(str(self.accommodation_response), expected_str)

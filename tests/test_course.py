@@ -37,7 +37,7 @@ from canvasapi.group import Group, GroupCategory
 from canvasapi.license import License
 from canvasapi.lti_resource_link import LTIResourceLink
 from canvasapi.module import Module
-from canvasapi.new_quiz import NewQuiz
+from canvasapi.new_quiz import AccommodationResponse, NewQuiz
 from canvasapi.outcome import OutcomeGroup, OutcomeLink, OutcomeResult
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
@@ -442,6 +442,33 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(new_quiz_list[0], NewQuiz)
         self.assertTrue(hasattr(new_quiz_list[0], "title"))
         self.assertEqual(new_quiz_list[0].title, "New Quiz One")
+
+    # set_new_quizzes_accommodations()
+    def test_set_new_quizzes_accommodations(self, m):
+        register_uris(
+            {"new_quiz": ["set_new_quizzes_accomodations_course_level"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        accommodations = [
+            {
+                "user_id": 456,
+                "extra_time": 240,
+            }
+        ]
+        response = self.course.set_new_quizzes_accommodations(accommodations)
+
+        self.assertIsInstance(response, AccommodationResponse)
+        self.assertTrue(hasattr(response, "message"))
+        self.assertEqual(response.message, "Accommodations processed")
+        self.assertTrue(hasattr(response, "successful"))
+        self.assertIsInstance(response.successful, list)
+        self.assertEqual(len(response.successful), 1)
+        self.assertEqual(response.successful[0], {"user_id": 456})
+        self.assertTrue(hasattr(response, "failed"))
+        self.assertIsInstance(response.failed, list)
+        self.assertEqual(len(response.failed), 0)
 
     # get_modules()
     def test_get_modules(self, m):

@@ -43,6 +43,7 @@ Class Reference
     license-ref
     lti-resource-link-ref
     module-ref
+    new-quiz-ref
     outcome-ref
     outcome-import-ref
     page-ref

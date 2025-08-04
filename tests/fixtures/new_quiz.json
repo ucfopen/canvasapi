@@ -55,5 +55,33 @@
 			"instructions": "<p>This is the updated New Quiz. You got this!</p>"
 		},
 		"status_code": 200
+	},
+	"set_new_quizzes_accomodations_quiz_level": {
+		"method": "POST",
+		"endpoint": "courses/1/quizzes/1/accommodations",
+		"data": {
+			"message": "Accommodations processed",
+			"successful": [
+				{
+					"user_id": 123
+				}
+			],
+			"failed": []
+		},
+		"status_code": 200
+	},
+	"set_new_quizzes_accomodations_course_level": {
+		"method": "POST",
+		"endpoint": "courses/1/accommodations",
+		"data": {
+			"message": "Accommodations processed",
+			"successful": [
+				{
+					"user_id": 456
+				}
+			],
+			"failed": []
+		},
+		"status_code": 200
 	}
 }

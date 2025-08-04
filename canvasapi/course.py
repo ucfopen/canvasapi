@@ -25,7 +25,7 @@ from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
 from canvasapi.lti_resource_link import LTIResourceLink
 from canvasapi.module import Module
-from canvasapi.new_quiz import NewQuiz
+from canvasapi.new_quiz import AccommodationResponse, NewQuiz
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
@@ -1846,7 +1846,7 @@ class Course(CanvasObject):
 
     def get_new_quizzes(self, **kwargs):
         """
-        Get a list of new quizzes.
+        Get a list of new quizzes in this course.
 
         :calls: `GET /api/quiz/v1/courses/:course_id/quizzes \
         <https://canvas.instructure.com/doc/api/new_quizzes.html#method.new_quizzes/quizzes_api.index>`_
@@ -1861,6 +1861,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             endpoint,
+            {"course_id": self.id},
             _url_override="new_quizzes",
             _kwargs=combine_kwargs(**kwargs),
         )
@@ -2653,6 +2654,33 @@ class Course(CanvasObject):
                 "courses/{0}/folders/by_path".format(self.id),
                 _kwargs=combine_kwargs(**kwargs),
             )
+
+    def set_new_quizzes_accommodations(self, accommodations, **kwargs):
+        """
+        Apply accommodations to New Quizzes at the **course level** for
+        students enrolled in this course.
+
+        :calls: `POST /api/quiz/v1/courses/:course_id/accommodations \
+        <https://developerdocs.instructure.com/services/canvas/resources/new_quizzes_accommodations#method.new_quizzes-accommodation_api.course_level_accommodations>`_
+
+        :param accommodations: A list of dictionaries containing accommodation details
+            for each user. Each dictionary must contain `user_id` and can optionally include
+            `extra_time`, `apply_to_in_progress_quiz_sessions`, and/or `reduce_choices_enabled`.
+        :type accommodations: list of dict
+
+        :returns: AccommodationResponse object containing the status of the accommodation request.
+        :rtype: :class:`canvasapi.new_quiz.AccommodationResponse`
+        """
+        endpoint = "courses/{}/accommodations".format(self.id)
+
+        response = self._requester.request(
+            "POST",
+            endpoint,
+            _url="new_quizzes",
+            _kwargs=combine_kwargs(**kwargs),
+            json=accommodations,
+        )
+        return AccommodationResponse(self._requester, response.json())
 
     def set_quiz_extensions(self, quiz_extensions, **kwargs):
         """
