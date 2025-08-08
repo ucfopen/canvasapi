@@ -446,7 +446,7 @@ class TestCourse(unittest.TestCase):
     # set_new_quizzes_accommodations()
     def test_set_new_quizzes_accommodations(self, m):
         register_uris(
-            {"new_quiz": ["set_new_quizzes_accomodations_course_level"]},
+            {"new_quiz": ["set_new_quizzes_accommodations_course_level"]},
             m,
             base_url=settings.BASE_URL_NEW_QUIZZES,
         )

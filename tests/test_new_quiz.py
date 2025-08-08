@@ -48,7 +48,7 @@ class TestNewQuiz(unittest.TestCase):
     # set_accommodations()
     def test_set_accommodations(self, m):
         register_uris(
-            {"new_quiz": ["set_new_quizzes_accomodations_quiz_level"]},
+            {"new_quiz": ["set_new_quizzes_accommodations_quiz_level"]},
             m,
             base_url=settings.BASE_URL_NEW_QUIZZES,
         )
