@@ -6,6 +6,7 @@
 
 - LTI Resource Links (Thanks, [@jsmnhou](https://github.com/jsmnhou))
 - Smart Search API [BETA] (Thanks, [@alportoricensis](https://github.com/alportoricensis))
+- New Quizzes Accommodations
 
 ### General
 
@@ -17,6 +18,7 @@
 - Updated deploy Action to use more modern processes.
 - Updated `PaginatedList` to be type-aware, showing which class is included in the response. (Thanks [@HandcartCactus](https://github.com/HandcartCactus))
 - Updated Sphinx
+- Reworked how `Requester` handles JSON-only POST requests (currently, only New Quizzes Accommodations and GraphQL)
 
 ## [3.3.0] - 2023-08-27
 
