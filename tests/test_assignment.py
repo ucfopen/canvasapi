@@ -43,6 +43,141 @@ class TestAssignment(unittest.TestCase):
         self.assertEqual(len(assignment.overrides), 1)
         self.assertIsInstance(assignment.overrides[0], AssignmentOverride)
 
+    # bulk_submit()
+    def test_bulk_submit(self, m):
+        register_uris({"assignment": ["submit"]}, m)
+
+        sub_type = "online_upload"
+        sub_dict = {"submission_type": sub_type}
+        submission = self.assignment.bulk_submit(sub_dict)
+
+        self.assertIsInstance(submission, Submission)
+        self.assertTrue(hasattr(submission, "submission_type"))
+        self.assertEqual(submission.submission_type, sub_type)
+
+    def test_bulk_submit_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.assignment.bulk_submit({})
+
+    def test_bulk_submit_file(self, m):
+        register_uris({"assignment": ["submit", "upload", "upload_final"]}, m)
+
+        filename = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        try:
+            with open(filename, "w+") as file:
+                sub_type = "online_upload"
+                sub_dict = {"submission_type": sub_type}
+                submission = self.assignment.bulk_submit(sub_dict, file)
+
+            self.assertIsInstance(submission, Submission)
+            self.assertTrue(hasattr(submission, "submission_type"))
+            self.assertEqual(submission.submission_type, sub_type)
+        finally:
+            cleanup_file(filename)
+
+    def test_bulk_submit_multiple_files(self, m):
+        register_uris({"assignment": ["submit", "upload", "upload_final"]}, m)
+
+        filename_one = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        filename_two = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        try:
+            with open(filename_one, "w+") as f1, open(filename_two, "w+") as f2:
+                files = [f1, f2]
+
+                sub_type = "online_upload"
+                sub_dict = {"submission_type": sub_type}
+                submission = self.assignment.bulk_submit(sub_dict, files)
+
+            self.assertIsInstance(submission, Submission)
+            self.assertTrue(hasattr(submission, "submission_type"))
+            self.assertEqual(submission.submission_type, sub_type)
+        finally:
+            cleanup_file(filename_one)
+            cleanup_file(filename_two)
+
+    def test_bulk_submit_wrong_type(self, m):
+        filename = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        sub_type = "online_text_entry"
+        sub_dict = {"submission_type": sub_type}
+
+        with self.assertRaises(ValueError):
+            self.assignment.bulk_submit(sub_dict, filename)
+
+    def test_bulk_submit_upload_failure(self, m):
+        register_uris({"assignment": ["submit", "upload", "upload_fail"]}, m)
+
+        filename_one = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        filename_two = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        try:
+            with open(filename_one, "w+") as f1, open(filename_two, "w+") as f2:
+                files = [f1, f2]
+
+                sub_type = "online_upload"
+                sub_dict = {"submission_type": sub_type}
+                with self.assertRaises(CanvasException):
+                    self.assignment.bulk_submit(sub_dict, files)
+        finally:
+            cleanup_file(filename_one)
+            cleanup_file(filename_two)
+
+    # bulk_upload()
+    def test_bulk_upload_self(self, m):
+        register_uris({"assignment": ["upload", "upload_final"]}, m)
+
+        filename_one = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        filename_two = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        try:
+            with open(filename_one, "w+") as f1, open(filename_two, "w+") as f2:
+                files = [f1, f2]
+
+                file_ids = self.assignment.bulk_upload(files)
+
+            self.assertIsNotNone(file_ids)
+            self.assertIsInstance(file_ids, list)
+        finally:
+            cleanup_file(filename_one)
+            cleanup_file(filename_two)
+
+    def test_bulk_upload_failure(self, m):
+        register_uris({"assignment": ["upload", "upload_fail"]}, m)
+
+        filename_one = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        filename_two = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        try:
+            with open(filename_one, "w+") as f1, open(filename_two, "w+") as f2:
+                files = [f1, f2]
+
+                with self.assertRaises(CanvasException):
+                    self.assignment.bulk_upload(files)
+        finally:
+            cleanup_file(filename_one)
+            cleanup_file(filename_two)
+
+    def test_bulk_upload_user(self, m):
+        register_uris({"assignment": ["upload_by_id", "upload_final"]}, m)
+
+        filename_one = "testfile_assignment_{}".format(uuid.uuid4().hex)
+        filename_two = "testfile_assignment_{}".format(uuid.uuid4().hex)
+
+        user_id = 1
+
+        try:
+            with open(filename_one, "w+") as f1, open(filename_two, "w+") as f2:
+                files = [f1, f2]
+
+                file_ids = self.assignment.bulk_upload(files, user_id)
+
+            self.assertIsNotNone(file_ids)
+            self.assertIsInstance(file_ids, list)
+        finally:
+            cleanup_file(filename_one)
+            cleanup_file(filename_two)
+
     # create_override()
     def test_create_override(self, m):
         register_uris({"assignment": ["create_override"]}, m)
