@@ -662,12 +662,19 @@ class QuizSubmission(CanvasObject):
         :returns: The updated quiz.
         :rtype: :class:`canvasapi.quiz.QuizSubmission`
         """
+        args = dict(**kwargs)
+        if 'quiz_submissions' not in args:
+            # we need to wrap the parameters in a quiz_submissions list.
+            # there will only be one element because this object represents one attempt.
+            args['attempt'] = self.attempt
+            args = {'quiz_submissions': [ args ]}
+
         response = self._requester.request(
             "PUT",
             "courses/{}/quizzes/{}/submissions/{}".format(
                 self.course_id, self.quiz_id, self.id
             ),
-            _kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**args),
         )
         response_json = response.json()["quiz_submissions"][0]
         response_json.update({"course_id": self.course_id})
