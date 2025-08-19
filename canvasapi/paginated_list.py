@@ -104,7 +104,7 @@ class PaginatedList(Iterable[T]):
 
         regex = r"(?:{}|{})(.*)".format(
             re.escape(self._requester.base_url),
-            re.escape(self._requester.new_quizzes_url),
+            re.escape(getattr(self._requester, "new_quizzes_url", "")),
         )
 
         self._next_url = (
