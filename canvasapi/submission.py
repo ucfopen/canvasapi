@@ -153,7 +153,7 @@ class Submission(CanvasObject):
         )
         return response.status_code == 204
 
-    def upload_comment(self, file: FileOrPathLike, **kwargs):
+    def upload_comment(self, file: FileOrPathLike, text_comment=None, **kwargs):
         """
         Upload a file to attach to this submission as a comment.
 
@@ -177,7 +177,10 @@ class Submission(CanvasObject):
         ).start()
 
         if response[0]:
-            self.edit(comment={"file_ids": [response[1]["id"]]})
+            comment = {"file_ids": [response[1]["id"]]}
+            if text_comment:
+                comment["text_comment"] = text_comment
+            self.edit(comment=comment)
         return response
 
 
