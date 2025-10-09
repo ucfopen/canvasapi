@@ -1276,11 +1276,13 @@ class Canvas(object):
             "POST",
             "graphql",
             headers={"Content-Type": "application/json"},
-            _kwargs=combine_kwargs(**kwargs)
-            + [("query", query), ("variables", variables)],
+            _kwargs=combine_kwargs(**kwargs),
             # Needs to call special endpoint without api/v1
             _url="graphql",
-            json=True,
+            json={
+                "query": query,
+                "variables": variables if variables else {},
+            },
         )
 
         return response.json()

@@ -80,7 +80,7 @@ class Requester(object):
         """
         return self._session.patch(url, headers=headers, data=data)
 
-    def _post_request(self, url, headers, data=None, json=False):
+    def _post_request(self, url, headers, data=None, json=None):
         """
         Issue a POST request to the specified endpoint with the data provided.
 
@@ -90,11 +90,11 @@ class Requester(object):
         :type headers: dict
         :param data: The data to send with this request.
         :type data: dict
-        :param json: Whether or not to send the data as json
-        :type json: bool
+        :param json: JSON-encoded data to send in the body of the request.
+        :type json: dict
         """
         if json:
-            return self._session.post(url, headers=headers, json=dict(data))
+            return self._session.post(url, headers=headers, params=data, json=json)
 
         # Grab file from data.
         files = None
@@ -221,6 +221,9 @@ class Requester(object):
 
         if _kwargs:
             logger.debug("Data: {data}".format(data=pformat(_kwargs)))
+
+        if json:
+            logger.debug("JSON: {json}".format(json=pformat(json)))
 
         response = req_method(full_url, headers, _kwargs, json=json)
         logger.info(

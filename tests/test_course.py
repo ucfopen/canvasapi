@@ -35,14 +35,16 @@ from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.group import Group, GroupCategory
 from canvasapi.license import License
+from canvasapi.lti_resource_link import LTIResourceLink
 from canvasapi.module import Module
-from canvasapi.new_quiz import NewQuiz
+from canvasapi.new_quiz import AccommodationResponse, NewQuiz
 from canvasapi.outcome import OutcomeGroup, OutcomeLink, OutcomeResult
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import Quiz, QuizAssignmentOverrideSet, QuizExtension
 from canvasapi.rubric import Rubric, RubricAssociation
+from canvasapi.searchresult import SearchResult
 from canvasapi.section import Section
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
@@ -450,6 +452,33 @@ class TestCourse(unittest.TestCase):
         self.assertIsInstance(new_quiz_list[0], NewQuiz)
         self.assertTrue(hasattr(new_quiz_list[0], "title"))
         self.assertEqual(new_quiz_list[0].title, "New Quiz One")
+
+    # set_new_quizzes_accommodations()
+    def test_set_new_quizzes_accommodations(self, m):
+        register_uris(
+            {"new_quiz": ["set_new_quizzes_accommodations_course_level"]},
+            m,
+            base_url=settings.BASE_URL_NEW_QUIZZES,
+        )
+
+        accommodations = [
+            {
+                "user_id": 456,
+                "extra_time": 240,
+            }
+        ]
+        response = self.course.set_new_quizzes_accommodations(accommodations)
+
+        self.assertIsInstance(response, AccommodationResponse)
+        self.assertTrue(hasattr(response, "message"))
+        self.assertEqual(response.message, "Accommodations processed")
+        self.assertTrue(hasattr(response, "successful"))
+        self.assertIsInstance(response.successful, list)
+        self.assertEqual(len(response.successful), 1)
+        self.assertEqual(response.successful[0], {"user_id": 456})
+        self.assertTrue(hasattr(response, "failed"))
+        self.assertIsInstance(response.failed, list)
+        self.assertEqual(len(response.failed), 0)
 
     # get_modules()
     def test_get_modules(self, m):
@@ -1556,6 +1585,21 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(extension[1], "extra_attempts"))
         self.assertEqual(extension[1].extra_attempts, 3)
 
+    def test_smartsearch(self, m):
+        register_uris({"course": ["smartsearch_basic"]}, m)
+        results = self.course.smartsearch("Copernicus")
+        self.assertTrue(results)
+        self.assertTrue(all(isinstance(r, SearchResult) for r in results))
+        self.assertEqual(results[0].title, "Nicolaus Copernicus")
+
+    def test_smartsearch_with_filter(self, m):
+        register_uris({"course": ["smartsearch_with_filter"]}, m)
+        results = self.course.smartsearch("derivatives", filter=["assignments"])
+        results = list(results)
+        self.assertTrue(results)
+        self.assertTrue(all(isinstance(r, SearchResult) for r in results))
+        self.assertEqual(results[0].title, "Chain Rule Practice")
+
     def test_set_extensions_not_list(self, m):
         with self.assertRaises(ValueError):
             self.course.set_quiz_extensions({"user_id": 1, "extra_time": 60})
@@ -1899,6 +1943,48 @@ class TestCourse(unittest.TestCase):
         self.assertEqual(len(root_folder_list), 1)
         self.assertIsInstance(root_folder_list[0], Folder)
         self.assertEqual("course_files", root_folder_list[0].name)
+
+    # create_lti_resource_link()
+    def test_create_lti_resource_link(self, m):
+        register_uris({"lti_resource_link": ["create_lti_resource_link"]}, m)
+        custom_dict = {"hello": "world"}
+
+        evnt = self.course.create_lti_resource_link(
+            url="https://example.com/lti/launch/content_item/123",
+            title="Test LTI Resource Link",
+            custom=custom_dict,
+        )
+        self.assertIsInstance(evnt, LTIResourceLink)
+
+        self.assertEqual(evnt.title, "Test LTI Resource Link")
+        self.assertEqual(evnt.url, "https://example.com/lti/launch/content_item/123")
+
+    def test_create_lti_resource_link_fail(self, m):
+        with self.assertRaises(RequiredFieldMissing):
+            self.course.create_lti_resource_link({})
+
+    # get_lti_resource_links()
+    def test_get_lti_resource_links(self, m):
+        register_uris({"lti_resource_link": ["list_lti_resource_links"]}, m)
+
+        lti_resource_links = self.course.get_lti_resource_links()
+        lti_resource_link_list = [link for link in lti_resource_links]
+        self.assertEqual(len(lti_resource_link_list), 3)
+        self.assertIsInstance(lti_resource_link_list[0], LTIResourceLink)
+
+    # get_lti_resource_link()
+    def test_get_lti_resource_link(self, m):
+        register_uris({"lti_resource_link": ["get_lti_resource_link"]}, m)
+
+        lti_resource_link_by_id = self.course.get_lti_resource_link(45)
+
+        self.assertIsInstance(lti_resource_link_by_id, LTIResourceLink)
+        self.assertEqual(lti_resource_link_by_id.title, "Test LTI Resource Link")
+        lti_resource_link_by_obj = self.course.get_lti_resource_link(
+            lti_resource_link_by_id
+        )
+        self.assertIsInstance(lti_resource_link_by_obj, LTIResourceLink)
+        self.assertEqual(lti_resource_link_by_obj.title, "Test LTI Resource Link")
 
 
 @requests_mock.Mocker()

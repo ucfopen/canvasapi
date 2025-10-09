@@ -5,13 +5,13 @@
 		"data": {
 			"term": {
 				"coursesConnection": {
-				  "nodes": [
-					{
-						"_id": "1",
-						"assignmentsConnection": {
-							"nodes": []
+					"nodes": [
+						{
+							"_id": "1",
+							"assignmentsConnection": {
+								"nodes": []
+							}
 						}
-					}
 					]
 				}
 			}
