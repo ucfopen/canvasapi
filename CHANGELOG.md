@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.4.0] - 2025-11-10
+
 ### New Endpoint Coverage
 
 - LTI Resource Links (Thanks, [@jsmnhou](https://github.com/jsmnhou))
@@ -654,7 +656,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.3.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.4.0...develop
+[3.4.0]: https://github.com/ucfopen/canvasapi/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/ucfopen/canvasapi/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/ucfopen/canvasapi/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/ucfopen/canvasapi/compare/v3.0.0...v3.1.0
