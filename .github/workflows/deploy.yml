@@ -9,13 +9,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
+
+      - name: Install build dependency
+        run: pip install build
 
       - name: Create source distribution
-        run: python setup.py sdist
+        run: python -m build
 
       - name: Publish distribution to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

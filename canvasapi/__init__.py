@@ -4,4 +4,4 @@ from canvasapi.canvas import Canvas
 
 __all__ = ["Canvas"]
 
-__version__ = "3.3.0"
+__version__ = "3.4.0"

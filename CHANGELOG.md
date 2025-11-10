@@ -2,16 +2,36 @@
 
 ## [Unreleased]
 
+## [3.4.0] - 2025-11-10
+
+### New Endpoint Coverage
+
+- LTI Resource Links (Thanks, [@jsmnhou](https://github.com/jsmnhou))
+- Smart Search API [BETA] (Thanks, [@alportoricensis](https://github.com/alportoricensis))
+- New Quizzes Accommodations
+
+### General
+
+- Added support for Python 3.12 and 3.13
+- Dropped support for Python 3.7 and 3.8
+
+### Backstage
+
+- Updated deploy Action to use more modern processes.
+- Updated `PaginatedList` to be type-aware, showing which class is included in the response. (Thanks [@HandcartCactus](https://github.com/HandcartCactus))
+- Updated Sphinx
+- Reworked how `Requester` handles JSON-only POST requests (currently, only New Quizzes Accommodations and GraphQL)
+
 ## [3.3.0] - 2023-08-27
 
 ### General
 
 - Added documentation for PaginatedList
-- Rework requester URLs to accomodate graphql and new quizzes endpoints (Thanks, [@bennettscience](https://github.com/bennettscience))
+- Rework requester URLs to accommodate graphql and new quizzes endpoints (Thanks, [@bennettscience](https://github.com/bennettscience))
 
 ### Bugfixes
 
-- Fixed PaginatedList not respecting new quizzes endpoints (Thanks, [@matthewf-ucsd](https://github.com/matthewf-ucsd))
+- Fixed PaginatedList not respecting new quizzes endpoints (Thanks, [@jonespm](https://github.com/jonespm))
 
 ### Backstage
 
@@ -636,7 +656,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.3.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.4.0...develop
+[3.4.0]: https://github.com/ucfopen/canvasapi/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/ucfopen/canvasapi/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/ucfopen/canvasapi/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/ucfopen/canvasapi/compare/v3.0.0...v3.1.0

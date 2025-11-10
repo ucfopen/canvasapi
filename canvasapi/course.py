@@ -23,14 +23,16 @@ from canvasapi.gradebook_history import (
 from canvasapi.grading_period import GradingPeriod
 from canvasapi.grading_standard import GradingStandard
 from canvasapi.license import License
+from canvasapi.lti_resource_link import LTIResourceLink
 from canvasapi.module import Module
-from canvasapi.new_quiz import NewQuiz
+from canvasapi.new_quiz import AccommodationResponse, NewQuiz
 from canvasapi.outcome_import import OutcomeImport
 from canvasapi.page import Page
 from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.quiz import QuizExtension
 from canvasapi.rubric import Rubric, RubricAssociation
+from canvasapi.searchresult import SearchResult
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.tab import Tab
 from canvasapi.todo import Todo
@@ -437,6 +439,39 @@ class Course(CanvasObject):
         late_policy_json = response.json()
 
         return LatePolicy(self._requester, late_policy_json["late_policy"])
+
+    def create_lti_resource_link(self, url, title=None, custom=None, **kwargs):
+        """
+        Create a new LTI resource link.
+
+        :calls: `POST /api/v1/courses/:course_id/lti_resource_links \
+        <https://canvas.instructure.com/doc/api/lti_resource_links.html#method.lti/resource_links.create>`_
+
+        :param url: The launch URL for the resource link.
+        :type url: `str`
+        :param title: The title of the resource link.
+        :type title: `str`, optional
+        :param custom: Custom parameters to send to the tool.
+        :type custom: `dict`, optional
+
+        :rtype: :class:`canvasapi.lti_resource_link.LTIResourceLink`
+        """
+
+        if not url:
+            raise RequiredFieldMissing("url is required as a str.")
+
+        kwargs["url"] = url
+        if title:
+            kwargs["title"] = title
+        if custom:
+            kwargs["custom"] = custom
+
+        response = self._requester.request(
+            "POST",
+            f"courses/{self.id}/lti_resource_links",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return LTIResourceLink(self._requester, response.json())
 
     def create_module(self, module, **kwargs):
         """
@@ -1645,6 +1680,49 @@ class Course(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_lti_resource_link(self, lti_resource_link, **kwargs):
+        """
+        Return details about the specified resource link.
+
+        :calls: `GET /api/v1/courses/:course_id/lti_resource_links/:id \
+        <https://canvas.instructure.com/doc/api/lti_resource_links.html#method.lti/resource_links.show>`_
+
+        :param lti_resource_link: The object or ID of the LTI resource link.
+        :type lti_resource_link: :class:`canvasapi.lti_resource_link.LTIResourceLink` or int
+
+        :rtype: :class:`canvasapi.lti_resource_link.LTIResourceLink`
+        """
+
+        lti_resource_link_id = obj_or_id(
+            lti_resource_link, "lti_resource_link", (LTIResourceLink,)
+        )
+
+        response = self._requester.request(
+            "GET",
+            f"courses/{self.id}/lti_resource_links/{lti_resource_link_id}",
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        return LTIResourceLink(self._requester, response.json())
+
+    def get_lti_resource_links(self, **kwargs):
+        """
+        Returns all LTI resource links for this course as a PaginatedList.
+
+        :calls: `GET /api/v1/courses/:course_id/lti_resource_links \
+        <https://canvas.instructure.com/doc/api/lti_resource_links.html#method.lti/resource_links.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.lti_resource_link.LTIResourceLink`
+        """
+
+        return PaginatedList(
+            LTIResourceLink,
+            self._requester,
+            "GET",
+            f"courses/{self.id}/lti_resource_links",
+            kwargs=combine_kwargs(**kwargs),
+        )
+
     def get_migration_systems(self, **kwargs):
         """
         Return a list of migration systems.
@@ -1768,7 +1846,7 @@ class Course(CanvasObject):
 
     def get_new_quizzes(self, **kwargs):
         """
-        Get a list of new quizzes.
+        Get a list of new quizzes in this course.
 
         :calls: `GET /api/quiz/v1/courses/:course_id/quizzes \
         <https://canvas.instructure.com/doc/api/new_quizzes.html#method.new_quizzes/quizzes_api.index>`_
@@ -1783,6 +1861,7 @@ class Course(CanvasObject):
             self._requester,
             "GET",
             endpoint,
+            {"course_id": self.id},
             _url_override="new_quizzes",
             _kwargs=combine_kwargs(**kwargs),
         )
@@ -2576,6 +2655,33 @@ class Course(CanvasObject):
                 _kwargs=combine_kwargs(**kwargs),
             )
 
+    def set_new_quizzes_accommodations(self, accommodations, **kwargs):
+        """
+        Apply accommodations to New Quizzes at the **course level** for
+        students enrolled in this course.
+
+        :calls: `POST /api/quiz/v1/courses/:course_id/accommodations \
+        <https://developerdocs.instructure.com/services/canvas/resources/new_quizzes_accommodations#method.new_quizzes-accommodation_api.course_level_accommodations>`_
+
+        :param accommodations: A list of dictionaries containing accommodation details
+            for each user. Each dictionary must contain `user_id` and can optionally include
+            `extra_time`, `apply_to_in_progress_quiz_sessions`, and/or `reduce_choices_enabled`.
+        :type accommodations: list of dict
+
+        :returns: AccommodationResponse object containing the status of the accommodation request.
+        :rtype: :class:`canvasapi.new_quiz.AccommodationResponse`
+        """
+        endpoint = "courses/{}/accommodations".format(self.id)
+
+        response = self._requester.request(
+            "POST",
+            endpoint,
+            _url="new_quizzes",
+            _kwargs=combine_kwargs(**kwargs),
+            json=accommodations,
+        )
+        return AccommodationResponse(self._requester, response.json())
+
     def set_quiz_extensions(self, quiz_extensions, **kwargs):
         """
         Set extensions for student all quiz submissions in a course.
@@ -2666,6 +2772,32 @@ class Course(CanvasObject):
         page_json.update({"course_id": self.id})
 
         return Page(self._requester, page_json)
+
+    def smartsearch(self, q, **kwargs):
+        """
+        AI-powered course content search.
+
+        :calls: `GET /api/v1/courses/:course_id/smartsearch \
+        <https://canvas.instructure.com/doc/api/smart_search.html#method.smart_search.search>`_
+
+        :param q: The search query string.
+        :type q: str
+        :param kwargs: Optional query parameters (e.g., filter, per_page).
+        :type kwargs: dict
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.searchresult.SearchResult`
+        """
+        kwargs["q"] = q
+
+        return PaginatedList(
+            SearchResult,
+            self._requester,
+            "GET",
+            f"courses/{self.id}/smartsearch",
+            {"course_id": self.id},
+            _root="results",
+            _kwargs=combine_kwargs(**kwargs),
+        )
 
     def submissions_bulk_update(self, **kwargs):
         """
