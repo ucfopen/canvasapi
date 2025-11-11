@@ -309,7 +309,7 @@ class Group(CanvasObject):
             "GET",
             "groups/{}/collaborations".format(self.id),
             _root="collaborations",
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_content_export(self, content_export, **kwargs):
@@ -353,7 +353,7 @@ class Group(CanvasObject):
             self._requester,
             "GET",
             "groups/{}/content_exports".format(self.id),
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_content_migration(self, content_migration, **kwargs):

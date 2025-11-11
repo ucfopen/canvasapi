@@ -31,6 +31,7 @@ class PaginatedList(Iterable[T]):
         extra_attribs=None,
         _root=None,
         _url_override=None,
+        _kwargs=None,
         **kwargs,
     ):
         """
@@ -51,14 +52,24 @@ class PaginatedList(Iterable[T]):
         Other URLs may be specified for third-party requests.
         :type _url_override: str
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of type content_class
+        :param _kwargs: A list of 2-tuples representing processed
+            keyword arguments to be sent to Canvas as params or data.
+        :type _kwargs: list[tuple[str, Any]]
         """
         self._elements = list()
 
         self._requester = requester
         self._content_class = content_class
         self._first_url = first_url
-        self._first_params = kwargs or {}
-        self._first_params["per_page"] = kwargs.get("per_page", 100)
+        _kwargs = _kwargs or []
+        for key, value in _kwargs:
+            if key == "per_page":
+                break
+        else:
+            # change kwargs such that if per_page is given as a keyword argument,
+            # we don't override it.
+            kwargs.setdefault("per_page", 100)
+        self._first_params = {"_kwargs": _kwargs, **kwargs}
         self._next_url = first_url
         self._next_params = self._first_params
         self._extra_attribs = extra_attribs or {}

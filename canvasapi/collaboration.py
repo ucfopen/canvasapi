@@ -22,7 +22,7 @@ class Collaboration(CanvasObject):
             "GET",
             "collaborations/{}/members".format(self.id),
             _root="collaborators",
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
 

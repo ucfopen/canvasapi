@@ -90,7 +90,7 @@ Let’s look at how we can use the :code:`PaginatedList` returned by our :code:`
     # Access the first element in our list.
     #
     # You'll notice the first call takes a moment, but the next N-1
-    # elements (where N = the per_page argument supplied; the default is 10)
+    # elements (where N = the per_page argument supplied; the default in canvasapi is 100)
     # will be instantly accessible.
     >>> print(courses[0])
     TST101 Test Course (1234567)
