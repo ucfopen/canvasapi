@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "canvasapi"
+version = "3.3.0"
+description = "Fork to support sis_login_id"
+authors = ["Nico de Groot <ndegroot0@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0.0"
+
+[tool.poetry.group.dev.dependencies]
+poetry-core = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

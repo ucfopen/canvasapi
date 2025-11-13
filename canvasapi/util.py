@@ -166,6 +166,50 @@ def obj_or_str(obj, attr, object_types):
         raise TypeError("Parameter {} must be of type {}.".format(obj, obj_type_list))
 
 
+def obj_or_id_or_sis_str(parameter, param_name, object_types):
+    """
+    Accepts either an int (or long or str representation of an integer) or
+    a 'sis_*_id:[some id]' format string or an object. If it is an int or
+    a format string, return it.
+    If it is an object and the object is of correct type, return the object's id. Otherwise,
+    throw an exception.
+
+    :param parameter: int, str, long, or object
+    :param param_name: str
+    :param object_types: tuple
+    :rtype: int
+    """
+    from canvasapi.user import User
+
+    try:
+        return int(parameter)
+    except (ValueError, TypeError):
+        # Special case where 'self' is a valid ID of a User object
+        if User in object_types and parameter == "self":
+            return parameter
+
+        if (
+            isinstance(parameter, str)
+            and parameter.startswith("sis_")
+            and "_id:" in parameter
+        ):
+            # not foolproof
+            return parameter
+
+        for obj_type in object_types:
+            if isinstance(parameter, obj_type):
+                try:
+                    return int(parameter.id)
+                except Exception:
+                    break
+
+        obj_type_list = ",".join([obj_type.__name__ for obj_type in object_types])
+        message = "Parameter {} must be of type {} or int or a sis_*_id: format string".format(
+            param_name, obj_type_list
+        )
+        raise TypeError(message)
+
+
 def get_institution_url(base_url):
     """
     Clean up a given base URL.
