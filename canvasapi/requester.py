@@ -262,21 +262,19 @@ class Requester(object):
             else:
                 raise Unauthorized(response.json())
         elif response.status_code == 403:
-            if b"Rate Limit Exceeded" in response.content:
-                remaining = str(
-                    response.headers.get("X-Rate-Limit-Remaining", "Unknown")
-                )
-                raise RateLimitExceeded(
-                    "Rate Limit Exceeded. X-Rate-Limit-Remaining: {}".format(remaining)
-                )
-            else:
-                raise Forbidden(response.text)
+            raise Forbidden(response.text)
         elif response.status_code == 404:
             raise ResourceDoesNotExist("Not Found")
         elif response.status_code == 409:
             raise Conflict(response.text)
         elif response.status_code == 422:
             raise UnprocessableEntity(response.text)
+        elif response.status_code == 429:
+            raise RateLimitExceeded(
+                "Rate Limit Exceeded. X-Rate-Limit-Remaining: {}".format(
+                    response.headers.get("X-Rate-Limit-Remaining", "Unknown")
+                )
+            )
         elif response.status_code > 400:
             # generic catch-all for error codes
             raise CanvasException(
