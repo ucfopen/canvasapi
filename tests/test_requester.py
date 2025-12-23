@@ -153,28 +153,6 @@ class TestRequester(unittest.TestCase):
         with self.assertRaises(Forbidden):
             self.requester.request("GET", "403")
 
-    def test_request_403_RateLimitExeeded(self, m):
-        register_uris({"requests": ["403_rate_limit"]}, m)
-
-        with self.assertRaises(RateLimitExceeded) as exc:
-            self.requester.request("GET", "403_rate_limit")
-
-        self.assertEqual(
-            exc.exception.message,
-            "Rate Limit Exceeded. X-Rate-Limit-Remaining: 3.14159265359",
-        )
-
-    def test_request_403_RateLimitExeeded_no_remaining_header(self, m):
-        register_uris({"requests": ["403_rate_limit_no_remaining_header"]}, m)
-
-        with self.assertRaises(RateLimitExceeded) as exc:
-            self.requester.request("GET", "403_rate_limit_no_remaining_header")
-
-        self.assertEqual(
-            exc.exception.message,
-            "Rate Limit Exceeded. X-Rate-Limit-Remaining: Unknown",
-        )
-
     def test_request_404(self, m):
         register_uris({"requests": ["404"]}, m)
 
@@ -192,6 +170,28 @@ class TestRequester(unittest.TestCase):
 
         with self.assertRaises(UnprocessableEntity):
             self.requester.request("GET", "422")
+
+    def test_request_429_RateLimitExeeded(self, m):
+        register_uris({"requests": ["429_rate_limit"]}, m)
+
+        with self.assertRaises(RateLimitExceeded) as exc:
+            self.requester.request("GET", "429_rate_limit")
+
+        self.assertEqual(
+            exc.exception.message,
+            "Rate Limit Exceeded. X-Rate-Limit-Remaining: 3.14159265359",
+        )
+
+    def test_request_429_RateLimitExeeded_no_remaining_header(self, m):
+        register_uris({"requests": ["429_rate_limit_no_remaining_header"]}, m)
+
+        with self.assertRaises(RateLimitExceeded) as exc:
+            self.requester.request("GET", "429_rate_limit_no_remaining_header")
+
+        self.assertEqual(
+            exc.exception.message,
+            "Rate Limit Exceeded. X-Rate-Limit-Remaining: Unknown",
+        )
 
     def test_request_500(self, m):
         register_uris({"requests": ["500"]}, m)
