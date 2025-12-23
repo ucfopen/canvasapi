@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General
+
+- Add a default User-Agent header
+
 ## [3.4.0] - 2025-11-10
 
 ### New Endpoint Coverage
