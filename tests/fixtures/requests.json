@@ -26,25 +26,6 @@
 		"data": {},
 		"status_code": 403
 	},
-	"403_rate_limit": {
-		"method": "ANY",
-		"endpoint": "403_rate_limit",
-		"data": "403 Forbidden (Rate Limit Exceeded)",
-		"headers": {
-			"X-Rate-Limit-Remaining": "3.14159265359",
-			"X-Request-Cost": "1.61803398875"
-		},
-		"status_code": 403
-	},
-	"403_rate_limit_no_remaining_header": {
-		"method": "ANY",
-		"endpoint": "403_rate_limit_no_remaining_header",
-		"data": "403 Forbidden (Rate Limit Exceeded)",
-		"headers": {
-			"X-Request-Cost": "1.61803398875"
-		},
-		"status_code": 403
-	},
 	"404": {
 		"method": "ANY",
 		"endpoint": "404",
@@ -62,6 +43,29 @@
 		"endpoint": "422",
 		"data": {},
 		"status_code": 422
+	},
+	"429_rate_limit": {
+		"method": "ANY",
+		"endpoint": "429_rate_limit",
+		"data": {
+			"error": "Rate limit exceeded. Please wait and try again."
+		},
+		"headers": {
+			"X-Rate-Limit-Remaining": "3.14159265359",
+			"X-Request-Cost": "1.61803398875"
+		},
+		"status_code": 429
+	},
+	"429_rate_limit_no_remaining_header": {
+		"method": "ANY",
+		"endpoint": "429_rate_limit_no_remaining_header",
+		"data": {
+			"error": "Rate limit exceeded. Please wait and try again."
+		},
+		"headers": {
+			"X-Request-Cost": "1.61803398875"
+		},
+		"status_code": 429
 	},
 	"500": {
 		"method": "ANY",

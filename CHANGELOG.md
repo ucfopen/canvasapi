@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### General
+
+- Updated `RateLimitExceeded` exception to trigger on HTTP 429 instead of old 403.
+
 ## [3.4.0] - 2025-11-10
 
 ### New Endpoint Coverage
