@@ -133,7 +133,7 @@ class Requester(object):
         _url=None,
         _kwargs=None,
         json=False,
-        **kwargs
+        **kwargs,
     ):
         """
         Make a request to the Canvas API and return the response.
@@ -167,6 +167,8 @@ class Requester(object):
         :type json: `bool`
         :rtype: :class:`requests.Response`
         """
+        from canvasapi import __version__
+
         # Check for specific URL endpoints available from Canvas. If not
         # specified, pass the given URL and move on.
         if not _url:
@@ -184,6 +186,9 @@ class Requester(object):
         if use_auth:
             auth_header = {"Authorization": "Bearer {}".format(self.access_token)}
             headers.update(auth_header)
+
+        if "User-Agent" not in headers:
+            headers["User-Agent"] = f"python-canvasapi/{__version__}"
 
         # Convert kwargs into list of 2-tuples and combine with _kwargs.
         _kwargs = _kwargs or []

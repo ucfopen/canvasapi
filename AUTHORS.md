@@ -35,6 +35,7 @@
 - Craig Thompson [@craigdsthompson](https://github.com/craigdsthompson)
 - Dalton Durst [@UniversalSuperBox](https://github.com/UniversalSuperBox)
 - Damian Sweeney [@damianfs](https://github.com/damianfs)
+- Daniel Bosk [@dbosk](https://github.com/dbosk)
 - Daniel Brinkman [@DanBrink91](https://github.com/DanBrink91)
 - Daniel Grobani [@dgrobani](https://github.com/dgrobani)
 - Daniel Molares [@dmols](https://github.com/dmols)
