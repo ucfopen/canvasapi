@@ -7,6 +7,10 @@
 - Updated `RateLimitExceeded` exception to trigger on HTTP 429 instead of old 403.
 - Add a default User-Agent header
 
+### Bugfixes
+
+- `QuizGroup` fixed to have `course_id` of the quiz's `course_id`, instead of the `quiz_id` (Thanks, [@cjnitta](https://github.com/cjnitta) and [@dgwn](https://github.com/dgwn))
+
 ## [3.4.0] - 2025-11-10
 
 ### New Endpoint Coverage
