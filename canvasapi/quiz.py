@@ -112,7 +112,7 @@ class Quiz(CanvasObject):
         )
 
         response_json = response.json()
-        response_json["quiz_groups"][0].update({"course_id": self.id})
+        response_json["quiz_groups"][0].update({"course_id": self.course_id})
 
         return QuizGroup(self._requester, response_json.get("quiz_groups")[0])
 

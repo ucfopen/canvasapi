@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [3.5.0] - 2026-03-12
+
+### General
+
+- Updated `RateLimitExceeded` exception to trigger on HTTP 429 instead of old 403.
+- Add a default User-Agent header
+
+### Bugfixes
+
+- `QuizGroup` fixed to have `course_id` of the quiz's `course_id`, instead of the `quiz_id` (Thanks, [@cjnitta](https://github.com/cjnitta) and [@dgwn](https://github.com/dgwn))
+
 ## [3.4.0] - 2025-11-10
 
 ### New Endpoint Coverage
@@ -656,7 +667,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.4.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.5.0...develop
+[3.5.0]: https://github.com/ucfopen/canvasapi/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/ucfopen/canvasapi/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/ucfopen/canvasapi/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/ucfopen/canvasapi/compare/v3.1.0...v3.2.0
