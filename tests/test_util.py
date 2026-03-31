@@ -431,6 +431,12 @@ class TestUtil(unittest.TestCase):
             obj_or_id("self", "user_id", (CourseNickname,))
 
     # obj_or_str()
+    def test_obj_or_str_str(self, m):
+        name = obj_or_str("test", "name", (User,))
+
+        self.assertIsInstance(name, str)
+        self.assertEqual(name, "test")
+
     def test_obj_or_str_obj_attr(self, m):
         register_uris({"user": ["get_by_id"]}, m)
 
@@ -467,8 +473,12 @@ class TestUtil(unittest.TestCase):
             obj_or_str(user, user, (User,))
 
     def test_obj_or_str_invalid_obj_type(self, m):
+        register_uris({"course": ["get_by_id"]}, m)
+
+        course = self.canvas.get_course(1)
+
         with self.assertRaises(TypeError):
-            obj_or_str("user", "name", (User,))
+            obj_or_str(course, "name", (User,))
 
     # get_institution_url()
     def test_get_institution_url(self, m):
