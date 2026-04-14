@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### General
+
+- Added support for Python 3.14
+- Dropped support for Python 3.9
+
 ### Bugfixes
 
 - Fixed unexpected behavior from the `obj_or_str` utility function that prevented `Feature`-related functions from accepting `str` arguments.
