@@ -17,6 +17,7 @@
 
 - Updated minimum `black` version to avoid CVE-2026-32274
 - Updated various GitHub Actions
+- Update readthedocs config to include build info
 
 ## [3.5.0] - 2026-03-12
 
