@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Bugfixes
+
+- Fixed unexpected behavior from the `obj_or_str` utility function that prevented `Feature`-related functions from accepting `str` arguments.
+
+### Backstage
+
+- Updated minimum `black` version to avoid CVE-2026-32274
+
 ## [3.5.0] - 2026-03-12
 
 ### General
