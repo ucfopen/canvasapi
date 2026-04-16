@@ -25,7 +25,7 @@ class Requester(object):
     Responsible for handling HTTP requests.
     """
 
-    def __init__(self, base_url, access_token):
+    def __init__(self, base_url, access_token, new_quizzes_url = None):
         """
         :param base_url: The base URL of the Canvas instance's API.
         :type base_url: str
@@ -35,7 +35,7 @@ class Requester(object):
         # Preserve the original base url and add "/api/v1" to it
         self.original_url = base_url
         self.base_url = base_url + "/api/v1/"
-        self.new_quizzes_url = base_url + "/api/quiz/v1/"
+        self.new_quizzes_url = new_quizzes_url or (base_url + "/api/quiz/v1/")
         self.graphql = base_url + "/api/graphql"
         self.access_token = access_token
         self._session = requests.Session()

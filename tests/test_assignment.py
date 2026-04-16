@@ -171,6 +171,19 @@ class TestAssignment(unittest.TestCase):
         self.assertEqual(len(submission_list_by_id), 2)
         self.assertIsInstance(submission_list_by_id[0], Submission)
 
+    def test_get_submissions_without_new_quizzes_url(self, m):
+        register_uris({"submission": ["list_submissions"]}, m)
+
+        # Explicitly remove the `new_quizzes_url` attribute to simulate the base case
+        if hasattr(self.canvas._Canvas__requester, "new_quizzes_url"):
+            del self.canvas._Canvas__requester.new_quizzes_url
+
+        submissions = self.assignment.get_submissions()
+        submission_list = list(submissions)
+
+        self.assertEqual(len(submission_list), 2)
+        self.assertIsInstance(submission_list[0], Submission)
+        
     # set_extensions()
     def test_set_extensions(self, m):
         register_uris({"assignment": ["set_extensions"]}, m)
