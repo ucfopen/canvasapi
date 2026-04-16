@@ -33,7 +33,7 @@
 	},
 	"4_2_pages_p1": {
 		"method": "ANY",
-		"endpoint": "four_objects_two_pages",
+		"endpoint": "four_objects_two_pages?per_page=2",
 		"data": [
 			{
 				"id": "1",
@@ -66,7 +66,7 @@
 	},
 	"6_3_pages_p1": {
 		"method": "ANY",
-		"endpoint": "six_objects_three_pages",
+		"endpoint": "six_objects_three_pages?per_page=2",
 		"data": [
 			{
 				"id": "1",
@@ -117,7 +117,7 @@
 	},
 	"no_header_4_2_pages_p1": {
 		"method": "ANY",
-		"endpoint": "no_header_four_objects_two_pages",
+		"endpoint": "no_header_four_objects_two_pages?per_page=2",
 		"data": {
 			"assessments": [
 				{
@@ -131,7 +131,7 @@
 			],
 			"meta": {
 				"pagination": {
-					"next": "https://example.com/api/v1/no_header_four_objects_two_pages?page=2"
+					"next": "https://example.com/api/v1/no_header_four_objects_two_pages?page=2&per_page=2"
 				}
 			}
 		},
@@ -139,7 +139,7 @@
 	},
 	"no_header_4_2_pages_p2": {
 		"method": "ANY",
-		"endpoint": "no_header_four_objects_two_pages?page=2",
+		"endpoint": "no_header_four_objects_two_pages?page=2&per_page=2",
 		"data": {
 			"assessments": [
 				{

@@ -1168,7 +1168,7 @@ class Account(CanvasObject):
             "accounts/{}/grading_periods".format(self.id),
             {"account_id": self.id},
             _root="grading_periods",
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_grading_standards(self, **kwargs):

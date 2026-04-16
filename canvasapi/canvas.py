@@ -820,7 +820,7 @@ class Canvas(object):
             "GET",
             "epub_exports",
             _root="courses",
-            kwargs=combine_kwargs(**kwargs),
+            _kwargs=combine_kwargs(**kwargs),
         )
 
     def get_file(self, file, **kwargs):
