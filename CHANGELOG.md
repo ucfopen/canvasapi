@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+## [3.6.0] - 2026-04-16
+
+### General
+
+- Added support for Python 3.14
+- Dropped support for Python 3.9
+
+### Bugfixes
+
+- Fixed unexpected behavior from the `obj_or_str` utility function that prevented `Feature`-related functions from accepting `str` arguments.
+
+### Backstage
+
+- Updated minimum `black` version to avoid CVE-2026-32274
+- Updated various GitHub Actions
+- Update readthedocs config to include build info
+
 ## [3.5.0] - 2026-03-12
 
 ### General
@@ -667,7 +684,8 @@ Huge thanks to [@liblit](https://github.com/liblit) for lots of issues, suggesti
 - Fixed some incorrectly defined parameters
 - Fixed an issue where tests would fail due to an improperly configured requires block
 
-[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.5.0...develop
+[Unreleased]: https://github.com/ucfopen/canvasapi/compare/v3.6.0...develop
+[3.6.0]: https://github.com/ucfopen/canvasapi/compare/v3.5.0...v3.6.0
 [3.5.0]: https://github.com/ucfopen/canvasapi/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/ucfopen/canvasapi/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/ucfopen/canvasapi/compare/v3.2.0...v3.3.0
