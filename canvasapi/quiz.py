@@ -68,6 +68,8 @@ class Quiz(CanvasObject):
         response_json = response.json()
         response_json.update({"course_id": self.course_id})
 
+        self.edit(quiz={"published": getattr(self, "published", False)})
+
         return QuizQuestion(self._requester, response_json)
 
     def create_question_group(self, quiz_groups, **kwargs):
