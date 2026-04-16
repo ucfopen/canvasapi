@@ -122,6 +122,25 @@ class TestSubmission(unittest.TestCase):
         finally:
             cleanup_file(filename)
 
+    def test_upload_comment_with_kwargs(self, m):
+        register_uris(
+            {"submission": ["upload_comment", "upload_comment_final", "edit"]}, m
+        )
+
+        filename = "testfile_submission_{}".format(uuid.uuid4().hex)
+
+        try:
+            with open(filename, "w+") as file:
+                response = self.submission.upload_comment(
+                    file, comment={"attempt": 1, "text_comment": "This is just a test."}
+                )
+
+            self.assertTrue(response[0])
+            self.assertIsInstance(response[1], dict)
+            self.assertIn("url", response[1])
+        finally:
+            cleanup_file(filename)
+
 
 class TestGroupedSubmission(unittest.TestCase):
     def setUp(self):
