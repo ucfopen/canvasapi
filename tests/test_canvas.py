@@ -635,6 +635,14 @@ class TestCanvas(unittest.TestCase):
         appt_groups_list = [appt_group for appt_group in appt_groups]
         self.assertEqual(len(appt_groups_list), 2)
 
+    # get_appointment_group(), not reservable
+    def test_get_manageable_appointment_groups(self, m):
+        register_uris({"appointment_group": ["list_manageable_appointment_groups"]}, m)
+
+        appt_groups = self.canvas.get_appointment_groups(group_type="manageable")
+        appt_groups_list = [appt_group for appt_group in appt_groups]
+        self.assertEqual(len(appt_groups_list), 2)
+
     # get_appointment_group()
     def test_get_appointment_group(self, m):
         register_uris({"appointment_group": ["get_appointment_group"]}, m)
@@ -655,6 +663,17 @@ class TestCanvas(unittest.TestCase):
 
         evnt = self.canvas.create_appointment_group(
             {"context_codes": ["course_123"], "title": "Test Group"}
+        )
+
+        self.assertIsInstance(evnt, AppointmentGroup)
+        self.assertEqual(evnt.context_codes[0], "course_123")
+        self.assertEqual(evnt.id, 234)
+
+    def test_create_appointment_group_with_course_ids(self, m):
+        register_uris({"appointment_group": ["create_appointment_group"]}, m)
+
+        evnt = self.canvas.create_appointment_group(
+            {"context_codes": [123], "title": "Test Group"}
         )
 
         self.assertIsInstance(evnt, AppointmentGroup)

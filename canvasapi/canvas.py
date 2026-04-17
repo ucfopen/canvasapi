@@ -211,6 +211,8 @@ class Canvas(object):
         :type appointment_group: `dict`
         :param title: The title of the appointment group.
         :type title: `str`
+        :param context_codes: Course IDs for the appointment group.
+        :type context_codes: `list`
         :rtype: :class:`canvasapi.appointment_group.AppointmentGroup`
         """
         if (
@@ -218,6 +220,24 @@ class Canvas(object):
             and "context_codes" in appointment_group
             and "title" in appointment_group
         ):
+            # Both properties exist, check the context codes list
+            if (
+                isinstance(appointment_group["context_codes"][0], str)
+                and "course_" in appointment_group["context_codes"][0]
+            ):
+                # Legacy support for context codes passed as list of `course_123`-style strings
+                # Everything is formatted correctly, so go ahead and move on
+                pass
+            else:
+                # The type of object in `context_codes` is taken care of by obj_or_id, extracting
+                # the course ID from a <Course> object or by returning plain strings.
+                course_ids = [
+                    obj_or_id(course_id, "context_codes", (Course,))
+                    for course_id in appointment_group["context_codes"]
+                ]
+                appointment_group["context_codes"] = course_ids
+
+            # Everything is formatted properly to send.
             kwargs["appointment_group"] = appointment_group
 
         elif (
@@ -530,16 +550,24 @@ class Canvas(object):
         )
         return AppointmentGroup(self.__requester, response.json())
 
-    def get_appointment_groups(self, **kwargs):
+    def get_appointment_groups(self, group_type="reservable", **kwargs):
         """
         List appointment groups.
+
+        This returns "reservable" appointment groups by default,
+        but will result in an empty list for teachers.
+        Set the `group_type` parameter to "manageable" to override.
 
         :calls: `GET /api/v1/appointment_groups \
         <https://canvas.instructure.com/doc/api/appointment_groups.html#method.appointment_groups.index>`_
 
+        :param group_type: Type of `AppointmentGroup` objects to return. Defaults to "reservable".
+        :type group_type: `str`
         :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
             :class:`canvasapi.appointment_group.AppointmentGroup`
         """
+        kwargs["scope"] = group_type
+
         return PaginatedList(
             AppointmentGroup,
             self.__requester,
