@@ -4,7 +4,7 @@ from canvasapi.paginated_list import PaginatedList
 from canvasapi.progress import Progress
 from canvasapi.submission import GroupedSubmission, Submission
 from canvasapi.user import User
-from canvasapi.util import combine_kwargs, normalize_bool, obj_or_id
+from canvasapi.util import combine_kwargs, normalize_bool, obj_or_id, obj_or_id_or_sis_str
 
 
 class Section(CanvasObject):
@@ -94,7 +94,7 @@ class Section(CanvasObject):
         :rtype: :class:`canvasapi.enrollment.Enrollment`
         """
 
-        kwargs["enrollment[user_id]"] = obj_or_id(user, "user", (User,))
+        kwargs["enrollment[user_id]"] = obj_or_id_or_sis_str(user, "user", (User,))
 
         response = self._requester.request(
             "POST",

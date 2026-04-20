@@ -150,3 +150,12 @@ class TestSection(unittest.TestCase):
         self.assertIsInstance(enrollment_by_obj, Enrollment)
         self.assertTrue(hasattr(enrollment_by_obj, "type"))
         self.assertEqual(enrollment_by_obj.type, enrollment_type)
+
+        # by user pecified as sis_login_id
+        enrollment_by_sis_str = self.section.enroll_user(
+            "sis_login_id:u123456" , enrollment={"type": enrollment_type}
+        )
+
+        self.assertIsInstance(enrollment_by_sis_str, Enrollment)
+        self.assertTrue(hasattr(enrollment_by_sis_str, "type"))
+        self.assertEqual(enrollment_by_sis_str.type, enrollment_type)

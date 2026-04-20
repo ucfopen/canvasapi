@@ -229,6 +229,16 @@ class TestCourse(unittest.TestCase):
         self.assertTrue(hasattr(enrollment_by_obj, "type"))
         self.assertEqual(enrollment_by_obj.type, enrollment_type)
 
+        # by sis_str: str could be {'login',
+        enrollment_by_sis_str = self.course.enroll_user(
+            "sis_login_id:u123456", enrollment={"type": enrollment_type}
+        )
+
+        self.assertIsInstance(enrollment_by_sis_str, Enrollment)
+        self.assertTrue(hasattr(enrollment_by_sis_str, "type"))
+        self.assertEqual(enrollment_by_sis_str.type, enrollment_type)
+
+
     def test_enroll_user_legacy(self, m):
         warnings.simplefilter("always", DeprecationWarning)
 
