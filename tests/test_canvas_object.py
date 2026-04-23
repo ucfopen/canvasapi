@@ -1,4 +1,5 @@
 import unittest
+import warnings
 from datetime import datetime
 
 import pytz
@@ -62,3 +63,53 @@ class TestCanvasObject(unittest.TestCase):
         self.assertFalse(hasattr(self.canvas_object, "end_at_date"))
         self.assertTrue(hasattr(self.canvas_object, "start_at"))
         self.assertTrue(hasattr(self.canvas_object, "end_at"))
+
+    # set_attributes 'content-type'
+    def test_set_attributes_with_content_type(self, m):
+        attributes = {
+            "content-type": "application/json",
+            "content_type": "another_application/json",
+            "filename": "example.json",
+        }
+
+        self.canvas_object.set_attributes(attributes)
+
+        self.assertTrue(hasattr(self.canvas_object, "content-type"))
+        self.assertEqual(
+            getattr(self.canvas_object, "content-type"), "application/json"
+        )
+        self.assertTrue(hasattr(self.canvas_object, "content_type"))
+        self.assertEqual(self.canvas_object.content_type, "another_application/json")
+        self.assertTrue(hasattr(self.canvas_object, "filename"))
+        self.assertEqual(self.canvas_object.filename, "example.json")
+
+    def test_set_attributes_with_content_type_reversed(self, m):
+        # Reversed the order of the attributes to test overwrite behavior
+        attributes = {
+            "content_type": "another_application/json",
+            "content-type": "application/json",
+            "filename": "example.json",
+        }
+
+        self.canvas_object.set_attributes(attributes)
+
+        self.assertTrue(hasattr(self.canvas_object, "content-type"))
+        self.assertEqual(
+            getattr(self.canvas_object, "content-type"), "application/json"
+        )
+        self.assertTrue(hasattr(self.canvas_object, "content_type"))
+        self.assertEqual(self.canvas_object.content_type, "another_application/json")
+        self.assertTrue(hasattr(self.canvas_object, "filename"))
+        self.assertEqual(self.canvas_object.filename, "example.json")
+
+    def test__getattribute__content_type_warns(self, m):
+        attributes = {"content-type": "application/json"}
+        self.canvas_object.set_attributes(attributes)
+
+        warnings.simplefilter("always", DeprecationWarning)
+
+        with warnings.catch_warnings(record=True) as warning_list:
+            self.canvas_object.__getattribute__("content-type")
+
+        self.assertEqual(len(warning_list), 1)
+        self.assertEqual(warning_list[0].category, DeprecationWarning)
