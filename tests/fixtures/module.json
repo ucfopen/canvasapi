@@ -152,6 +152,98 @@
 
 		},
 		"status_code": 200
+	},
+	"get_module_override": {
+		"method": "GET",
+		"endpoint": "courses/1/modules/1/assignment_overrides/1",
+		"data": {
+			"id": 1,
+			"context_module_id": 1,
+			"student_ids": [1],
+			"group_id": 1,
+			"course_section_id": 1,
+			"title": "Module Assignment Override 1"
+		},
+		"status_code": 200
+	},
+	"get_module_with_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/modules/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "Module 1",
+			"overrides": [
+				{
+					"id": 1,
+					"context_module_id": 1,
+					"student_ids": [1],
+					"group_id": 1,
+					"course_section_id": 1,
+					"title": "Module Assignment Override 1"
+				}
+			]
+		},
+		"status_code": 200
+	},
+	"list_module_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/modules/1/assignment_overrides",
+		"data": [
+			{
+				"id": 1,
+				"context_module_id": 1,
+				"student_ids": [1],
+				"group_id": 1,
+				"course_section_id": 1,
+				"title": "Module Assignment Override 1"
+			},
+			{
+				"id": 2,
+				"context_module_id": 1,
+				"student_ids": [2, 3],
+				"group_id": 1,
+				"course_section_id": 1,
+				"title": "Module Assignment Override 2"
+			}
+		],
+		"headers": {
+			"Link": "<https://example.com/api/v1/courses/1/modules/1/assignment_overrides?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"list_module_overrides_p2": {
+		"method": "GET",
+		"endpoint": "courses/1/modules/1/assignment_overrides?page=2&per_page=2",
+		"data": [
+			{
+				"id": 3,
+				"context_module_id": 1,
+				"student_ids": [4, 5, 6],
+				"group_id": 1,
+				"course_section_id": 1,
+				"title": "Module Assignment Override 3"
+			},
+			{
+				"id": 2,
+				"context_module_id": 1,
+				"student_ids": [7],
+				"group_id": 1,
+				"course_section_id": 1,
+				"title": "Module Assignment Override 4"
+			}
+		],
+		"status_code": 200
+	},
+	"update_override": {
+		"method": "PUT",
+		"endpoint": "courses/1/modules/1/assignment_overrides",
+		"data": {
+			"id": 10,
+			"context_module_id": 1,
+			"student_ids": [1, 2, 3],
+			"title": "New Module Override"
+		},
+		"status_code": 200
 	}
 }
-
