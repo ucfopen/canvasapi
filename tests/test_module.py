@@ -3,6 +3,7 @@ import unittest
 import requests_mock
 
 from canvasapi import Canvas
+from canvasapi.assignment import AssignmentOverride
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.module import Module, ModuleItem
 from tests import settings
@@ -19,6 +20,16 @@ class TestModule(unittest.TestCase):
 
             self.course = self.canvas.get_course(1)
             self.module = self.course.get_module(1)
+
+    def test__init__overrides(self, m):
+        register_uris({"module": ["get_module_with_overrides"]}, m)
+
+        module = self.course.get_module(1)
+
+        self.assertTrue(hasattr(module, "overrides"))
+        self.assertIsInstance(module.overrides, list)
+        self.assertEqual(len(module.overrides), 1)
+        self.assertIsInstance(module.overrides[0], AssignmentOverride)
 
     # edit()
     def test_edit_module(self, m):
@@ -106,6 +117,39 @@ class TestModule(unittest.TestCase):
 
         module_item = self.module.create_module_item(module_item={"type": "SubHeader"})
         self.assertIsInstance(module_item, ModuleItem)
+
+    # get_overrides()
+    def test_get_overrides(self, m):
+        register_uris(
+            {
+                "module": [
+                    "list_module_overrides",
+                    "list_module_overrides_p2",
+                ]
+            },
+            m,
+        )
+
+        overrides = self.module.get_overrides()
+        override_list = [override for override in overrides]
+
+        self.assertEqual(len(override_list), 4)
+        self.assertIsInstance(override_list[0], AssignmentOverride)
+        self.assertIsInstance(override_list[3], AssignmentOverride)
+
+    # update_override()
+    def test_update_override(self, m):
+        register_uris({"module": ["update_override"]}, m)
+
+        override = self.module.update_overrides(
+            overrides={
+                "student_ids": [1, 2, 3],
+                "title": "New Module Override",
+            }
+        )
+
+        self.assertIsInstance(override, AssignmentOverride)
+        self.assertEqual(override.title, "New Module Override")
 
     # __str__
     def test__str__(self, m):

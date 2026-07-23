@@ -1,10 +1,20 @@
 from canvasapi.canvas_object import CanvasObject
 from canvasapi.exceptions import RequiredFieldMissing
 from canvasapi.paginated_list import PaginatedList
+from canvasapi.assignment import AssignmentOverride
 from canvasapi.util import combine_kwargs, obj_or_id
 
 
 class Module(CanvasObject):
+    def __init__(self, requester, attributes):
+        super(Module, self).__init__(requester, attributes)
+
+        if "overrides" in attributes:
+            self.overrides = [
+                AssignmentOverride(requester, override)
+                for override in attributes["overrides"]
+            ]
+
     def __str__(self):
         return "{} ({})".format(self.name, self.id)
 
@@ -127,6 +137,27 @@ class Module(CanvasObject):
             _kwargs=combine_kwargs(**kwargs),
         )
 
+    def get_overrides(self, **kwargs):
+        """
+        List all of the overrides for this module that target sections/groups/students visible to the current user.
+
+        :calls: `GET /api/v1/courses/:course_id/modules/:context_module_id/assignment_overrides \
+        <https://developerdocs.instructure.com/services/canvas/resources/modules#method.module_assignment_overrides.index>`_
+
+        :rtype: :class:`canvasapi.paginated_list.PaginatedList` of
+            :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        return PaginatedList(
+            AssignmentOverride,
+            self._requester,
+            "GET",
+            "courses/{}/modules/{}/assignment_overrides".format(
+                self.course_id, self.id
+            ),
+            {"course_id": self.course_id},
+            _kwargs=combine_kwargs(**kwargs),
+        )
+
     def relock(self, **kwargs):
         """
         Reset module progressions to their default locked state and recalculates
@@ -149,6 +180,26 @@ class Module(CanvasObject):
         module_json.update({"course_id": self.course_id})
 
         return Module(self._requester, module_json)
+
+    def update_overrides(self, **kwargs):
+        """
+        Update the overrides for this module.
+
+        :calls: `PUT /api/v1/courses/:course_id/modules/:context_module_id/assignment_overrides \
+        <https://developerdocs.instructure.com/services/canvas/resources/modules#method.module_assignment_overrides.bulk_update>`_
+
+        :rtype: :class:`canvasapi.assignment.AssignmentOverride`
+        """
+        response = self._requester.request(
+            "PUT",
+            "courses/{}/modules/{}/assignment_overrides".format(
+                self.course_id, self.id
+            ),
+            _kwargs=combine_kwargs(**kwargs),
+        )
+        response_json = response.json()
+        response_json.update(course_id=self.course_id)
+        return AssignmentOverride(self._requester, response_json)
 
 
 class ModuleItem(CanvasObject):
