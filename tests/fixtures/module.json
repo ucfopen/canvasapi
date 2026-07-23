@@ -166,6 +166,26 @@
 		},
 		"status_code": 200
 	},
+	"get_module_with_overrides": {
+		"method": "GET",
+		"endpoint": "courses/1/modules/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "Module 1",
+			"overrides": [
+				{
+					"id": 1,
+					"context_module_id": 1,
+					"student_ids": [1],
+					"group_id": 1,
+					"course_section_id": 1,
+					"title": "Module Assignment Override 1"
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"list_module_overrides": {
 		"method": "GET",
 		"endpoint": "courses/1/modules/1/assignment_overrides",
