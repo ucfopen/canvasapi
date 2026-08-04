@@ -65,6 +65,10 @@ class PaginatedList(Iterable[T]):
         self._request_method = request_method
         self._root = _root
         self._url_override = _url_override
+        # Compound-document sideloaded data (e.g. the "linked" section of the
+        # grade change log). Collected across every page so callers can resolve
+        # identifiers like sis_user_id without extra API calls. See issue #709.
+        self._linked = {}
 
     def __iter__(self) -> Iterator[T]:
         for element in self._elements:
@@ -115,6 +119,21 @@ class PaginatedList(Iterable[T]):
 
         content = []
 
+        # Collect compound-document sideloaded data (the "linked" section) before
+        # any _root extraction, so it is not discarded. See issue #709: the grade
+        # change log returns sideloaded users/courses/assignments that resolve
+        # identifiers such as sis_user_id without extra API calls.
+        if isinstance(data, dict) and "linked" in data:
+            for key, items in data["linked"].items():
+                if items is None:
+                    continue
+                self._linked.setdefault(key, [])
+                existing_ids = {i.get("id") for i in self._linked[key]}
+                for item in items:
+                    if item.get("id") not in existing_ids:
+                        self._linked[key].append(item)
+                        existing_ids.add(item.get("id"))
+
         if self._root:
             try:
                 data = data[self._root]
@@ -129,6 +148,20 @@ class PaginatedList(Iterable[T]):
                 content.append(self._content_class(self._requester, element))
 
         return content
+
+    @property
+    def linked(self):
+        """
+        Sideloaded data from the Canvas compound-document response.
+
+        For endpoints that return a ``linked`` section (e.g. the grade change
+        log), this is a dict keyed by type (``users``, ``courses``,
+        ``assignments``) containing every sideloaded object across all pages.
+        Returns an empty dict when the response had no ``linked`` section.
+
+        :rtype: dict
+        """
+        return self._linked
 
     def _get_up_to_index(self, index):
         while len(self._elements) <= index and self._has_next():

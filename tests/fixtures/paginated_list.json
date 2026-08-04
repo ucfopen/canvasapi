@@ -175,5 +175,62 @@
 			}
 		}
 	},
+	"compound_linked_single_page": {
+		"method": "ANY",
+		"endpoint": "compound_linked",
+		"data": {
+			"events": [
+				{
+					"id": "1",
+					"event_type": "grade_change",
+					"sis_user_id": "U1"
+				},
+				{
+					"id": "2",
+					"event_type": "grade_change",
+					"sis_user_id": "U2"
+				}
+			],
+			"linked": {
+				"users": [
+					{"id": "U1", "name": "Alice"},
+					{"id": "U2", "name": "Bob"}
+				],
+				"courses": [
+					{"id": "C1", "name": "Math"}
+				]
+			}
+		},
+		"status_code": 200
+	},
+	"compound_linked_two_pages_p1": {
+		"method": "ANY",
+		"endpoint": "compound_linked_two_pages",
+		"data": {
+			"events": [
+				{"id": "1", "event_type": "grade_change", "sis_user_id": "U1"}
+			],
+			"linked": {
+				"users": [{"id": "U1", "name": "Alice"}]
+			}
+		},
+		"headers": {
+			"Link": "<https://example.com/api/v1/compound_linked_two_pages?page=2&per_page=2>; rel=\"next\""
+		},
+		"status_code": 200
+	},
+	"compound_linked_two_pages_p2": {
+		"method": "ANY",
+		"endpoint": "compound_linked_two_pages?page=2&per_page=2",
+		"data": {
+			"events": [
+				{"id": "2", "event_type": "grade_change", "sis_user_id": "U2"}
+			],
+			"linked": {
+				"users": [{"id": "U2", "name": "Bob"}]
+			}
+		},
+		"status_code": 200
+	},
 	"status_code": 200
 }

@@ -233,3 +233,47 @@ class TestPaginatedList(unittest.TestCase):
         self.assertIsInstance(pag_list, PaginatedList)
         self.assertEqual(len(list(pag_list)), 2)
         self.assertIsInstance(pag_list[0], User)
+
+    def test_paginated_list_compound_linked_single_page(self, m):
+        # Issue #709: compound-document responses with a "linked" section must
+        # not discard the sideloaded data.
+        from canvasapi.grade_change_log import GradeChangeEvent
+
+        register_uris({"paginated_list": ["compound_linked_single_page"]}, m)
+
+        pag_list = PaginatedList(
+            GradeChangeEvent, self.requester, "GET", "compound_linked", _root="events"
+        )
+
+        self.assertIsInstance(pag_list, PaginatedList)
+        self.assertEqual(len(list(pag_list)), 2)
+        self.assertIsInstance(pag_list[0], GradeChangeEvent)
+        # linked data must be preserved
+        self.assertIn("users", pag_list.linked)
+        self.assertIn("courses", pag_list.linked)
+        user_names = {u["name"] for u in pag_list.linked["users"]}
+        self.assertEqual(user_names, {"Alice", "Bob"})
+        self.assertEqual(pag_list.linked["courses"][0]["name"], "Math")
+
+    def test_paginated_list_compound_linked_two_pages(self, m):
+        # Issue #709: linked data must be merged across all pages.
+        from canvasapi.grade_change_log import GradeChangeEvent
+
+        register_uris(
+            {"paginated_list": ["compound_linked_two_pages_p1", "compound_linked_two_pages_p2"]},
+            m,
+        )
+
+        pag_list = PaginatedList(
+            GradeChangeEvent,
+            self.requester,
+            "GET",
+            "compound_linked_two_pages",
+            _root="events",
+        )
+
+        self.assertEqual(len(list(pag_list)), 2)
+        # linked users from both pages merged, no duplicates
+        self.assertEqual(len(pag_list.linked["users"]), 2)
+        user_names = {u["name"] for u in pag_list.linked["users"]}
+        self.assertEqual(user_names, {"Alice", "Bob"})
