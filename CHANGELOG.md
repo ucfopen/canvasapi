@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Bugfixes
+
+- `Submission.edit` now keeps `attachments` as `File` objects and `Assignment.edit` keeps `overrides` as `AssignmentOverride` objects, instead of replacing them with dicts from the response.
+
 ## [3.6.0] - 2026-04-16
 
 ### General

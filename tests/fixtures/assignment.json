@@ -132,6 +132,27 @@
 		},
 		"status_code": 200
 	},
+	"edit_assignment_with_overrides": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1",
+		"data": {
+			"id": 1,
+			"course_id": 1,
+			"name": "New Name",
+			"description": "Edit this assignment",
+			"overrides": [
+				{
+					"id": 1,
+					"assignment_id": 1,
+					"student_ids": [1],
+					"group_id": 1,
+					"course_section_id": 1,
+					"title": "Assignment Override 1"
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"edit_assignment_group": {
 		"method": "PUT",
 		"endpoint": "courses/1/assignment_groups/5",
