@@ -76,6 +76,15 @@ class TestAssignment(unittest.TestCase):
         self.assertTrue(hasattr(edited_assignment, "name"))
         self.assertEqual(edited_assignment.name, name)
 
+    def test_edit_assignment_overrides(self, m):
+        register_uris({"assignment": ["edit_assignment_with_overrides"]}, m)
+
+        self.assignment.edit(assignment={"name": "New Name"})
+
+        self.assertIsInstance(self.assignment.overrides, list)
+        self.assertEqual(len(self.assignment.overrides), 1)
+        self.assertIsInstance(self.assignment.overrides[0], AssignmentOverride)
+
     # get_gradeable_students()
     def test_get_gradeable_students(self, m):
         register_uris({"course": ["list_gradeable_students"]}, m)

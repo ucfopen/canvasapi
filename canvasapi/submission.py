@@ -8,12 +8,17 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 class Submission(CanvasObject):
     def __init__(self, requester, attributes):
+        self.attachments = []
         super(Submission, self).__init__(requester, attributes)
 
-        self.attachments = [
-            File(requester, attachment)
-            for attachment in attributes.get("attachments", [])
-        ]
+    def set_attributes(self, attributes):
+        super(Submission, self).set_attributes(attributes)
+
+        if "attachments" in attributes:
+            self.attachments = [
+                File(self._requester, attachment)
+                for attachment in attributes["attachments"]
+            ]
 
     def __str__(self):
         return "{}-{}".format(self.assignment_id, self.user_id)
@@ -91,7 +96,7 @@ class Submission(CanvasObject):
 
         response_json.update(course_id=self.course_id)
 
-        super(Submission, self).set_attributes(response_json)
+        self.set_attributes(response_json)
         return self
 
     def get_submission_peer_reviews(self, **kwargs):

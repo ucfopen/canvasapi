@@ -11,12 +11,12 @@ from canvasapi.util import combine_kwargs, obj_or_id
 
 
 class Assignment(CanvasObject):
-    def __init__(self, requester, attributes):
-        super(Assignment, self).__init__(requester, attributes)
+    def set_attributes(self, attributes):
+        super(Assignment, self).set_attributes(attributes)
 
         if "overrides" in attributes:
             self.overrides = [
-                AssignmentOverride(requester, override)
+                AssignmentOverride(self._requester, override)
                 for override in attributes["overrides"]
             ]
 
@@ -73,7 +73,7 @@ class Assignment(CanvasObject):
         )
 
         if "name" in response.json():
-            super(Assignment, self).set_attributes(response.json())
+            self.set_attributes(response.json())
 
         return Assignment(self._requester, response.json())
 

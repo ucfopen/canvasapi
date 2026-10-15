@@ -171,6 +171,28 @@
 		},
 		"status_code": 200
 	},
+	"edit_with_attachments": {
+		"method": "PUT",
+		"endpoint": "courses/1/assignments/1/submissions/1",
+		"data": {
+			"id": 1,
+			"assignment_id": 1,
+			"user_id": 1,
+			"html_url": "https://example.com/courses/1/assignments/1/submissions/1",
+			"submission_type": "online_upload",
+			"grade": "complete",
+			"attachments": [
+				{
+					"id": 123,
+					"display_name": "attachment.jpeg",
+					"content-type": "image/jpeg",
+					"url": "attachment_file",
+					"size": 3543
+				}
+			]
+		},
+		"status_code": 200
+	},
 	"get_submission_questions": {
 		"method": "GET",
 		"endpoint": "quiz_submissions/1/questions",

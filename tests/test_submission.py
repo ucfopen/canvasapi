@@ -78,6 +78,26 @@ class TestSubmission(unittest.TestCase):
         self.assertTrue(hasattr(self.submission, "excused"))
         self.assertTrue(self.submission.excused)
 
+    def test_edit_attachments(self, m):
+        register_uris({"submission": ["edit_with_attachments"]}, m)
+
+        self.submission.edit(submission={"posted_grade": "complete"})
+
+        self.assertIsInstance(self.submission.attachments, list)
+        self.assertEqual(len(self.submission.attachments), 1)
+        self.assertIsInstance(self.submission.attachments[0], File)
+        self.assertEqual(self.submission.attachments[0].id, 123)
+
+    def test_edit_keeps_attachments(self, m):
+        register_uris({"submission": ["get_by_id_with_attachments", "edit"]}, m)
+
+        submission = self.assignment.get_submission(1)
+        submission.edit(submission={"excuse": True})
+
+        self.assertEqual(len(submission.attachments), 1)
+        self.assertIsInstance(submission.attachments[0], File)
+        self.assertEqual(submission.attachments[0].id, 123)
+
     # get_submission_peer_reviews()
     def test_get_submission_peer_reviews(self, m):
         register_uris({"submission": ["list_submission_peer_reviews"]}, m)
